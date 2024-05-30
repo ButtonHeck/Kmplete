@@ -1,0 +1,29 @@
+*.log
+*.user*
+desktop.ini
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# CMake files
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+Makefile
+
+# Executables
+*.exe
+*.out
+*.app
+
+/out
+/build
+
+/CMakeSettings.json
+
+*.mo
+*.pot
