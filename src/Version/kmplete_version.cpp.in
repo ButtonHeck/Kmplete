@@ -1,0 +1,36 @@
+#include "kmplete_version.h"
+
+namespace Kmplete
+{
+    std::string getKmpleteVersion()
+    {
+        return "@Kmplete_VERSION@";
+    }
+
+    unsigned int getKmpleteVersionMajor()
+    {
+        return @Kmplete_VERSION_MAJOR@;
+    }
+    
+    unsigned int getKmpleteVersionMinor()
+    {
+        return @Kmplete_VERSION_MINOR@ + 0;
+    }
+    
+    unsigned int getKmpleteVersionPatch()
+    {
+        return @Kmplete_VERSION_PATCH@ + 0;
+    }
+    
+    unsigned int getKmpleteVersionTweak()
+    {
+        return @Kmplete_VERSION_TWEAK@ + 0;
+    }
+    
+    std::string getKmpleteGitHash()
+    {
+        return "@Kmplete_GIT_HASH@";
+    }
+}
+
+

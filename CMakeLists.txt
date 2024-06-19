@@ -3,7 +3,7 @@
 # Preamble
 cmake_minimum_required(VERSION 3.20)
 enable_testing()
-project(FMNCV 
+project(Kmplete 
     VERSION 0.1.0
     LANGUAGES CXX
 )
@@ -21,5 +21,5 @@ include(CompilerChecks)
 add_subdirectory(dependencies)
 
 
-# FMNCV main targets
+# Kmplete main targets
 add_subdirectory(src)

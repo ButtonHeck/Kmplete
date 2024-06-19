@@ -5,14 +5,26 @@ cmake_minimum_required(VERSION 3.20)
 find_package(Git REQUIRED)
 execute_process(
     COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+    WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
     RESULT_VARIABLE result
-    OUTPUT_VARIABLE FMNCV_GIT_HASH
+    OUTPUT_VARIABLE Kmplete_GIT_HASH
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
 if(result)
     message(FATAL_ERROR "Failed to get git hash: ${result}")
 endif()
 
-configure_file(fmncv_version.cpp.in fmncv_version.cpp @ONLY)
-add_library(FMNCV_Version STATIC ${CMAKE_CURRENT_BINARY_DIR}/fmncv_version.cpp)
-set_target_properties(FMNCV_Version PROPERTIES FOLDER FMNCV)
+configure_file(kmplete_version.cpp.in kmplete_version.cpp @ONLY)
+
+add_library(Kmplete_Version STATIC 
+    ${CMAKE_CURRENT_LIST_DIR}/kmplete_version.h
+    ${CMAKE_CURRENT_BINARY_DIR}/kmplete_version.cpp
+)
+
+set_target_properties(Kmplete_Version PROPERTIES 
+    FOLDER Kmplete
+)
+
+target_include_directories(Kmplete_Version 
+    PUBLIC ${CMAKE_CURRENT_LIST_DIR}
+)
