@@ -181,6 +181,7 @@ if(NOT freetype_POPULATED)
     FetchContent_Populate(freetype)
     
     set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
+    set(FT_DISABLE_BROTLI ON CACHE BOOL "" FORCE)
     
     add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
     
