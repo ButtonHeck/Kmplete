@@ -9,19 +9,6 @@ add_subdirectory(glad)
 set_target_properties(glad PROPERTIES FOLDER Dependencies/glad)
 
 
-# Boost
-message("---- Kmplete dependencies: Boost")
-set(Boost_NO_SYSTEM_PATHS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_LIBS ON)
-
-find_package(Boost REQUIRED COMPONENTS 
-	locale 
-	program_options 
-	REQUIRED
-)
-
-
 ## Dependencies fetched via FetchContent
 ## --------------------------------------------------------
 include(FetchContent)
