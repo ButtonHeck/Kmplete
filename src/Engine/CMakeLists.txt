@@ -2,10 +2,19 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-add_library(Kmplete_Engine)
+project(Kmplete_Engine LANGUAGES CXX)
 
-add_subdirectory(src)
-add_subdirectory(include)
+set(Kmplete_Engine_CORE
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
+)
+source_group("Core" FILES ${Kmplete_Engine_CORE})
+
+add_library(Kmplete_Engine
+    ${Kmplete_Engine_CORE}
+)
 
 set(Boost_NO_SYSTEM_PATHS ON)
 set(Boost_USE_MULTITHREADED ON)

@@ -42,7 +42,7 @@ namespace Kmplete
 
     void ProgramOptions::ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser)
     {
-        boost::program_options::options_description optDescription("Storyteller options");
+        boost::program_options::options_description optDescription("Kmplete options");
         optDescription.add_options()
             ("config,C", boost::program_options::value<std::string>(), "Path to configuration file")
             ;
