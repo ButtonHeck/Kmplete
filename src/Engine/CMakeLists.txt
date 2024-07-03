@@ -31,9 +31,20 @@ set(Kmplete_Engine_UTILS
 )
 source_group("Utils" FILES ${Kmplete_Engine_UTILS})
 
+set(Kmplete_Engine_EVENT
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_event.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_codes.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_event.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_codes.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/window_event.h
+)
+source_group("Event" FILES ${Kmplete_Engine_EVENT})
+
 add_library(Kmplete_Engine
     ${Kmplete_Engine_CORE}
     ${Kmplete_Engine_UTILS}
+    ${Kmplete_Engine_EVENT}
 )
 
 
