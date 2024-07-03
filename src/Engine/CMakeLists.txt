@@ -4,17 +4,38 @@ cmake_minimum_required(VERSION 3.20)
 
 project(Kmplete_Engine LANGUAGES CXX)
 
+
 set(Kmplete_Engine_CORE
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/platform.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/filesystem.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/application.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/pointers.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_application.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 
+set(Kmplete_Engine_UTILS
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Utils/string_utils.cpp
+)
+source_group("Utils" FILES ${Kmplete_Engine_UTILS})
+
 add_library(Kmplete_Engine
     ${Kmplete_Engine_CORE}
+    ${Kmplete_Engine_UTILS}
 )
+
 
 set(Boost_NO_SYSTEM_PATHS ON)
 set(Boost_USE_MULTITHREADED ON)
@@ -33,11 +54,18 @@ target_include_directories(Kmplete_Engine
 
     PUBLIC "${Boost_INCLUDE_DIR}"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
-    PRIVATE "${pfd_SOURCE_DIR}"
+)
+
+target_compile_options(Kmplete_Engine PUBLIC
+    $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t>
+    $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t>
+    $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor>
 )
 
 target_link_libraries(Kmplete_Engine 
     PUBLIC ${Boost_LIBRARIES}
+    PUBLIC Kmplete_Version
+    PRIVATE portable_file_dialogs
 )
 
 set_target_properties(Kmplete_Engine PROPERTIES 
