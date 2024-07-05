@@ -15,12 +15,17 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/pointers.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/macro.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 
