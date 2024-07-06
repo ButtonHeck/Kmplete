@@ -9,7 +9,7 @@ namespace Kmplete
     namespace Utils
     {
         template<typename... Ts>
-        KMPLETE_API std::string Concatenate(Ts&&... args)
+        std::string Concatenate(Ts&&... args)
         {
             std::ostringstream oss;
             (oss << ... << std::forward<Ts>(args));
@@ -18,7 +18,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         template<typename... Ts>
-        KMPLETE_API std::ostringstream& ToSStream(std::ostringstream& oss, Ts&&... args)
+        std::ostringstream& ToSStream(std::ostringstream& oss, Ts&&... args)
         {
             (oss << ... << std::forward<Ts>(args));
             return oss;
