@@ -18,6 +18,8 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/macro.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_reader.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_writer.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
@@ -26,6 +28,8 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_reader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_writer.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 
@@ -70,6 +74,9 @@ target_include_directories(Kmplete_Engine
 
     PUBLIC "${Boost_INCLUDE_DIR}"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
+    PUBLIC "${RapidJSON_SOURCE_DIR}/include"
+    
+    PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
 )
 
 target_compile_options(Kmplete_Engine PUBLIC
@@ -81,7 +88,6 @@ target_compile_options(Kmplete_Engine PUBLIC
 target_link_libraries(Kmplete_Engine 
     PUBLIC ${Boost_LIBRARIES}
     PUBLIC Kmplete_Version
-    PRIVATE portable_file_dialogs
 )
 
 set_target_properties(Kmplete_Engine PROPERTIES 

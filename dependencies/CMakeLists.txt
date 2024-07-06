@@ -201,19 +201,3 @@ if(NOT openal-soft_POPULATED)
     set_target_properties(OpenAL PROPERTIES FOLDER Dependencies/OpenAL)
     set_target_properties(openal-info PROPERTIES FOLDER Dependencies/OpenAL)
 endif()
-
-
-## Publish all dependecies
-FetchContent_MakeAvailable(
-    glfw
-    imgui
-    pfd
-    rapidjson
-    spdlog
-    catch2
-    glm
-    entt
-    freetype
-    openal-soft
-)
-## --------------------------------------------------
