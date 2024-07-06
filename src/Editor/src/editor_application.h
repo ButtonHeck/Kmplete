@@ -15,6 +15,18 @@ namespace Kmplete
 
         bool Initialize(const std::string& configPath) override;
         void Run() override;
+
+    protected:
+        void OnEvent(Event& event) override;
+
+        bool OnWindowCloseEvent(WindowCloseEvent& event) override;
+        bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) override;
+
+        bool OnKeyPressEvent(KeyPressEvent& event) override;
+
+    private:
+        void SaveSettings() const;
+        void LoadSettings();
     };
     //--------------------------------------------------------------------------
 }
