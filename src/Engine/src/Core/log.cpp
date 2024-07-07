@@ -1,5 +1,6 @@
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/platform.h"
+#include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -13,29 +14,64 @@
 
 namespace Kmplete
 {
+    void LogSettings::SaveSettings(const Ptr<Settings> settings) const
+    {
+        settings->StartSaveGroup("Log");
+
+        settings->SaveString("Filename", filename);
+        settings->SaveBool("Enabled", enabled);
+        settings->SaveBool("Truncate", truncate);
+        settings->SaveBool("OutputConsole", outputConsole);
+        settings->SaveBool("OutputFile", outputFile);
+        settings->SaveBool("OutputStringBuffer", outputStringBuffer);
+        settings->SaveInt("CoreLevel", coreLevel);
+        settings->SaveInt("ClientLevel", clientLevel);
+
+        settings->EndSaveGroup();
+    }
+    //--------------------------------------------------------------------------
+
+    void LogSettings::LoadSettings(const Ptr<Settings> settings)
+    {
+        settings->StartLoadGroup("Log");
+
+        filename = settings->GetString("Filename", "Kmplete_log.txt");
+        enabled = settings->GetBool("Enabled", true);
+        truncate = settings->GetBool("Truncate", false);
+        outputConsole = settings->GetBool("OutputConsole", true);
+        outputFile = settings->GetBool("OutputFile", true);
+        outputStringBuffer = settings->GetBool("OutputStringBuffer", false);
+        coreLevel = settings->GetInt("CoreLevel", spdlog::level::trace);
+        clientLevel = settings->GetInt("ClientLevel", spdlog::level::trace);
+
+        settings->EndLoadGroup();
+    }
+    //--------------------------------------------------------------------------
+
+
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
     std::stringstream Log::_ss;
 
-    void Log::Initialize(const LogConfig& config)
+    void Log::Initialize(const LogSettings& settings)
     {
         std::vector<spdlog::sink_ptr> logSinks;
 
-        if (config.outputConsole)
+        if (settings.outputConsole)
         {
             const auto stdoutLog = CreatePtr<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::automatic);
             stdoutLog->set_pattern("%^[%T.%e] [%l] %n: %v%$");
             logSinks.push_back(stdoutLog);
         }
 
-        if (config.outputFile)
+        if (settings.outputFile)
         {
-            const auto fileLog = CreatePtr<spdlog::sinks::basic_file_sink_mt>(config.filename, config.truncate);
+            const auto fileLog = CreatePtr<spdlog::sinks::basic_file_sink_mt>(settings.filename, settings.truncate);
             fileLog->set_pattern("[%T.%e] [%l] %n: %v");
             logSinks.push_back(fileLog);
         }
 
-        if (config.outputStringBuffer)
+        if (settings.outputStringBuffer)
         {
             const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_ss);
             stringBufferLog->set_pattern("[%T.%e] [%l] %n: %v");
@@ -45,10 +81,10 @@ namespace Kmplete
         _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
         _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
 
-        if (config.enabled)
+        if (settings.enabled)
         {
-            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(config.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
-            const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(config.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
 
             _coreLogger->set_level(coreLevel);
             _coreLogger->flush_on(coreLevel);
@@ -65,7 +101,7 @@ namespace Kmplete
         spdlog::register_logger(_clientLogger);
 
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        KMPLETE_CORE_LOG_INFO("-------{}", Utils::Concatenate(std::put_time(localtime(&now), "%F %T")));
+        Log::CoreInfo("-------{}", Utils::Concatenate(std::put_time(localtime(&now), "%F %T")));
     }
     //--------------------------------------------------------------------------
 

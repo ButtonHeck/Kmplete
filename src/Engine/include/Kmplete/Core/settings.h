@@ -4,6 +4,7 @@
 #include "Kmplete/Core/pointers.h"
 
 #include <string>
+#include <filesystem>
 
 namespace Kmplete
 {
@@ -13,7 +14,9 @@ namespace Kmplete
     class KMPLETE_API Settings
     {
     public:
-        explicit Settings(const std::string& name);
+        explicit Settings(const std::filesystem::path& name);
+
+        bool Initialize();
 
         bool StartSave();
         bool EndSave();
@@ -40,9 +43,6 @@ namespace Kmplete
         bool SaveString(const std::string& name, const std::string& value);
 
 
-        bool StartLoad();
-        bool EndLoad();
-
         bool StartLoadGroup(const std::string& groupName);
         bool EndLoadGroup();
 
@@ -65,7 +65,7 @@ namespace Kmplete
         std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
-        const std::string _filename;
+        const std::filesystem::path _filename;
         const Ptr<JsonReader> _reader;
         const Ptr<JsonWriter> _writer;
     };

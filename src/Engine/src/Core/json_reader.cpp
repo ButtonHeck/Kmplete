@@ -20,13 +20,13 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::Start()
+    bool JsonReader::Initialize()
     {
-        KMPLETE_CORE_LOG_INFO("JsonReader: loading from '{}'", Filesystem::ToU8String(_path));
+        Log::CoreInfo("JsonReader: loading from '{}'", Filesystem::ToU8String(_path));
 
         if (!Filesystem::PathExists(_path))
         {
-            KMPLETE_CORE_LOG_WARN("JsonReader: insufficient path");
+            Log::CoreWarn("JsonReader: insufficient path");
             return false;
         }
 
@@ -42,18 +42,12 @@ namespace Kmplete
 
         if (_document.HasParseError())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: JSON parsing error '{}'", rapidjson::GetParseError_En(_document.GetParseError()));
+            Log::CoreError("JsonReader: JSON parsing error '{}'", rapidjson::GetParseError_En(_document.GetParseError()));
             return false;
         }
 
         _currentObject = rapidjson::Pointer("").Get(_document);
 
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool JsonReader::End()
-    {
         return true;
     }
     //--------------------------------------------------------------------------
@@ -67,7 +61,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsObject())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
             return false;
         }
 
@@ -90,7 +84,7 @@ namespace Kmplete
             return true;
         }
 
-        KMPLETE_CORE_LOG_ERROR("JsonReader: cannot end load array object, already at the root");
+        Log::CoreError("JsonReader: cannot end load array object, already at the root");
         return false;
     }
     //--------------------------------------------------------------------------
@@ -104,20 +98,20 @@ namespace Kmplete
 
         if (groupName.empty())
         {
-            KMPLETE_CORE_LOG_WARN("JsonReader: group name should not be empty!");
+            Log::CoreWarn("JsonReader: group name should not be empty!");
             return false;
         }
 
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
         if (!_currentObject)
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot fetch object pointer for '{}'", _scopeString);
+            Log::CoreError("JsonReader: cannot fetch object pointer for '{}'", _scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(groupName.c_str()) || !(*_currentObject)[groupName.c_str()].IsObject())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find member '{}', or the member is not an object type", groupName);
+            Log::CoreError("JsonReader: cannot find member '{}', or the member is not an object type", groupName);
             return false;
         }
 
@@ -140,7 +134,7 @@ namespace Kmplete
             return true;
         }
 
-        KMPLETE_CORE_LOG_ERROR("JsonReader: cannot end load group, already at the root");
+        Log::CoreError("JsonReader: cannot end load group, already at the root");
         return false;
     }
     //--------------------------------------------------------------------------
@@ -154,20 +148,20 @@ namespace Kmplete
 
         if (arrayName.empty())
         {
-            KMPLETE_CORE_LOG_WARN("JsonReader: array name should not be empty!");
+            Log::CoreWarn("JsonReader: array name should not be empty!");
             return 0;
         }
 
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
         if (!_currentObject)
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot fetch object pointer for '{}'", _scopeString);
+            Log::CoreError("JsonReader: cannot fetch object pointer for '{}'", _scopeString);
             return 0;
         }
 
         if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find member '{}', or the member is not an array type", arrayName);
+            Log::CoreError("JsonReader: cannot find member '{}', or the member is not an array type", arrayName);
             return 0;
         }
 
@@ -194,7 +188,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsBool())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not a bool", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not a bool", _scopeString, index);
             return defaultValue;
         }
 
@@ -211,7 +205,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsBool())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find bool for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find bool for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -228,7 +222,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsInt())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not an int", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an int", _scopeString, index);
             return defaultValue;
         }
 
@@ -245,7 +239,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find int for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find int for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -262,7 +256,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsUint())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not an uint", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an uint", _scopeString, index);
             return defaultValue;
         }
 
@@ -279,7 +273,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find uint for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find uint for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -296,7 +290,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsInt64())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not an int64", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an int64", _scopeString, index);
             return defaultValue;
         }
 
@@ -313,7 +307,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt64())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find int64 for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find int64 for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -330,7 +324,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsUint64())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not an uint64", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an uint64", _scopeString, index);
             return defaultValue;
         }
 
@@ -347,7 +341,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint64())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find uint64 for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find uint64 for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -364,7 +358,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsDouble())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not a double", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not a double", _scopeString, index);
             return defaultValue;
         }
 
@@ -381,7 +375,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsDouble())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find double for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find double for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -398,7 +392,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsString())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: '{}[{}]' is not a string", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not a string", _scopeString, index);
             return defaultValue;
         }
 
@@ -415,7 +409,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsString())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: cannot find string for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find string for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -443,13 +437,13 @@ namespace Kmplete
 
         if (!_currentObject->IsArray())
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: current object '{}' is not an array", _scopeString);
+            Log::CoreError("JsonReader: current object '{}' is not an array", _scopeString);
             return false;
         }
 
         if (index >= _currentObject->Size() || index < 0)
         {
-            KMPLETE_CORE_LOG_ERROR("JsonReader: invalid index [{}] for '{}'", index, _scopeString);
+            Log::CoreError("JsonReader: invalid index [{}] for '{}'", index, _scopeString);
             return false;
         }
 

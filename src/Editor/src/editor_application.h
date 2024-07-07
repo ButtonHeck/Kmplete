@@ -13,7 +13,7 @@ namespace Kmplete
 
         std::string GetApplicationName() const override;
 
-        bool Initialize(const std::string& configPath) override;
+        bool Initialize(const std::string& settingsPath) override;
         void Run() override;
 
     protected:

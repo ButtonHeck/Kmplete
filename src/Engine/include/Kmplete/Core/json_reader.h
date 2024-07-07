@@ -15,8 +15,7 @@ namespace Kmplete
     public:
         explicit JsonReader(const std::filesystem::path& path);
 
-        bool Start();
-        bool End();
+        bool Initialize();
 
         bool StartArrayObject(int index);
         bool EndArrayObject();

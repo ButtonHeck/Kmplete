@@ -14,11 +14,11 @@ namespace Kmplete
 
     bool JsonWriter::Start()
     {
-        KMPLETE_CORE_LOG_INFO("JsonWriter: saving to '{}'", Filesystem::ToU8String(_path));
+        Log::CoreInfo("JsonWriter: saving to '{}'", Filesystem::ToU8String(_path));
 
         if (!Filesystem::CreatePathTree(_path))
         {
-            KMPLETE_CORE_LOG_WARN("JsonWriter: insufficient path");
+            Log::CoreWarn("JsonWriter: insufficient path");
             return false;
         }
 
@@ -33,7 +33,7 @@ namespace Kmplete
         std::ofstream outputStream(_path, std::ios::out | std::ios::trunc);
         if (!outputStream.is_open() || !outputStream.good())
         {
-            KMPLETE_CORE_LOG_WARN("JsonWriter: failed to open file stream");
+            Log::CoreWarn("JsonWriter: failed to open file stream");
             return false;
         }
 
@@ -60,7 +60,7 @@ namespace Kmplete
     {
         if (groupName.empty())
         {
-            KMPLETE_CORE_LOG_WARN("JsonWriter: group name should not be empty!");
+            Log::CoreWarn("JsonWriter: group name should not be empty!");
             return false;
         }
 
@@ -69,7 +69,7 @@ namespace Kmplete
             return _writer.StartObject();
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot start saving group '{}'", groupName);
+        Log::CoreWarn("JsonWriter: cannot start saving group '{}'", groupName);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -87,7 +87,7 @@ namespace Kmplete
             return _writer.StartArray();
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save array '{}'", arrayName);
+        Log::CoreWarn("JsonWriter: cannot save array '{}'", arrayName);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -111,7 +111,7 @@ namespace Kmplete
             return _writer.Bool(value);
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -129,7 +129,7 @@ namespace Kmplete
             return _writer.Int(value);
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -147,7 +147,7 @@ namespace Kmplete
             return _writer.Uint(value);
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -165,7 +165,7 @@ namespace Kmplete
             return _writer.Int64(value);
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -183,7 +183,7 @@ namespace Kmplete
             return _writer.Uint64(value);
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -201,7 +201,7 @@ namespace Kmplete
             return _writer.Double(value);
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -219,7 +219,7 @@ namespace Kmplete
             return _writer.String(value.c_str());
         }
 
-        KMPLETE_CORE_LOG_WARN("JsonWriter: cannot save '{}'", name);
+        Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
     }
     //--------------------------------------------------------------------------

@@ -5,11 +5,17 @@
 
 namespace Kmplete
 {
-    Settings::Settings(const std::string& name)
-        : _filename(Filesystem::ToString(Filesystem::GetCurrentPath().append(name + ".json")))
+    Settings::Settings(const std::filesystem::path& name)
+        : _filename(name)
         , _reader(CreatePtr<JsonReader>(_filename))
         , _writer(CreatePtr<JsonWriter>(_filename))
     {}
+    //--------------------------------------------------------------------------
+
+    bool Settings::Initialize()
+    {
+        return _reader->Initialize();
+    }
     //--------------------------------------------------------------------------
 
     bool Settings::StartSave()
@@ -129,18 +135,6 @@ namespace Kmplete
     bool Settings::SaveString(const std::string& name, const std::string& value)
     {
         return _writer->SaveString(name, value);
-    }
-    //--------------------------------------------------------------------------
-
-    bool Settings::StartLoad()
-    {
-        return _reader->Start();
-    }
-    //--------------------------------------------------------------------------
-
-    bool Settings::EndLoad()
-    {
-        return _reader->End();
     }
     //--------------------------------------------------------------------------
 

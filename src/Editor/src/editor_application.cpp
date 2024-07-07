@@ -27,9 +27,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::Initialize(const std::string& configPath)
+    bool EditorApplication::Initialize(const std::string& settingsPath)
     {
-        if (!WindowApplication::Initialize(configPath))
+        if (!WindowApplication::Initialize(settingsPath))
         {
             return false;
         }
