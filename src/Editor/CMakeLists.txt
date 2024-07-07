@@ -45,3 +45,21 @@ endif()
 set_target_properties(Kmplete_Editor PROPERTIES 
     FOLDER Kmplete
 )
+
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
+    CONTENT
+    [=[
+    if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
+    execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
+        "${resources_folder}/Kmplete_settings_example.json"
+        "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
+    endif() 
+    ]=]
+)
+
+add_custom_command(
+    TARGET Kmplete_Editor
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "CopySettings$<CONFIG>.cmake"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
