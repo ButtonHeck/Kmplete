@@ -1,6 +1,7 @@
 #pragma once
 
 #include "kmplete_export.h"
+#include "Kmplete/Core/pointers.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/key_event.h"
 
@@ -8,6 +9,8 @@
 
 namespace Kmplete
 {
+    class Settings;
+
     class KMPLETE_API Application
     {
     public:
@@ -26,6 +29,9 @@ namespace Kmplete
         virtual bool OnKeyPressEvent(KeyPressEvent& event) { return true; }
         virtual bool OnKeyReleaseEvent(KeyReleaseEvent& event) { return true; }
         virtual bool OnKeyCharEvent(KeyCharEvent& event) { return true; }
+
+    protected:
+        Ptr<Settings> _settings;
     };
     //--------------------------------------------------------------------------
 

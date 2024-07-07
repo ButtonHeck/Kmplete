@@ -20,6 +20,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_reader.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_writer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
@@ -30,6 +31,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_reader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_writer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 
