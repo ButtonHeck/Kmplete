@@ -3,7 +3,7 @@
 namespace Kmplete
 {
     ProgramOptions::ProgramOptions()
-        : _configPath("")
+        : _settingsFilePath("")
     {}
     //--------------------------------------------------------------------------
 
@@ -21,9 +21,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const std::string& ProgramOptions::GetConfigPath() const
+    const std::string& ProgramOptions::GetSettingsFilePath() const
     {
-        return _configPath;
+        return _settingsFilePath;
     }
     //--------------------------------------------------------------------------
 
@@ -44,14 +44,14 @@ namespace Kmplete
     {
         boost::program_options::options_description optDescription("Kmplete options");
         optDescription.add_options()
-            ("config,C", boost::program_options::value<std::string>(), "Path to configuration file")
+            ("settngs,S", boost::program_options::value<std::string>(), "Path to settings file")
             ;
 
         boost::program_options::variables_map vm;
         boost::program_options::store(cmdParser.options(optDescription).run(), vm);
         boost::program_options::notify(vm);
 
-        _configPath = vm.count("config") ? vm["config"].as<std::string>() : "";
+        _settingsFilePath = vm.count("settings") ? vm["settings"].as<std::string>() : "";
     }
     //--------------------------------------------------------------------------
 }

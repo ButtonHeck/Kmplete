@@ -6,9 +6,9 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool WindowApplication::Initialize(const std::string& configPath)
+    bool WindowApplication::Initialize(const std::string& settingsFilePath)
     {
-        if (!Application::Initialize(configPath))
+        if (!Application::Initialize(settingsFilePath))
         {
             return false;
         }

@@ -35,7 +35,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
         return 1;
     }
 
-    if (!app->Initialize(programOptions.GetConfigPath()))
+    if (!app->Initialize(programOptions.GetSettingsFilePath()))
     {
         delete app;
         return 2;

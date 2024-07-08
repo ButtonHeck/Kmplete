@@ -20,7 +20,7 @@ namespace Kmplete
 
         virtual std::string GetApplicationName() const = 0;
 
-        virtual bool Initialize(const std::string& settingsPath);
+        virtual bool Initialize(const std::string& settingsFilePath);
         virtual void Run() = 0;
 
     protected:

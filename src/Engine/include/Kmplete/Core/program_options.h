@@ -11,18 +11,23 @@ namespace Kmplete
     public:
         ProgramOptions();
 
+        // WinMain entryPoint
         void ProcessCommandLine(char* lpCmdLine);
+        // main entryPoint
         void ProcessCommandLine(int argc, char** argv);
 
-        const std::string& GetConfigPath() const;
+        const std::string& GetSettingsFilePath() const;
 
     private:
+        // WinMain entryPoint
         boost::program_options::command_line_parser CreateCmdParser(char* lpCmdLine) const;
+        // main entryPoint
         boost::program_options::command_line_parser CreateCmdParser(int argc, char** argv) const;
+
         void ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser);
 
     private:
-        std::string _configPath;
+        std::string _settingsFilePath;
     };
     //--------------------------------------------------------------------------
 }

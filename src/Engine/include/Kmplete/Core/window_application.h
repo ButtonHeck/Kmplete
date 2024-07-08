@@ -13,7 +13,7 @@ namespace Kmplete
     public:
         WindowApplication();
 
-        bool Initialize(const std::string& configPath) override;
+        bool Initialize(const std::string& settingsFilePath) override;
 
     protected:
         virtual bool OnWindowMoveEvent(WindowMoveEvent& event) { return true; }
