@@ -51,10 +51,33 @@ namespace Kmplete
 
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
-    std::stringstream Log::_ss;
+    std::stringstream Log::_stringStream;
+
+    void Log::InitializeTemporarySink()
+    {
+        const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
+        stringBufferLog->set_pattern("%v");
+
+        _coreLogger = CreatePtr<spdlog::logger>("CORE", stringBufferLog);
+        _clientLogger = CreatePtr<spdlog::logger>("CLIENT", stringBufferLog);
+
+        _coreLogger->set_level(spdlog::level::trace);
+        _coreLogger->flush_on(spdlog::level::trace);
+        _clientLogger->set_level(spdlog::level::trace);
+        _clientLogger->flush_on(spdlog::level::trace);
+
+        spdlog::register_logger(_coreLogger);
+        spdlog::register_logger(_clientLogger);
+    }
+    //--------------------------------------------------------------------------
 
     void Log::Initialize(const LogSettings& settings)
     {
+        const auto temporaryLogBuffer = _stringStream.str();
+        _stringStream.clear();
+
+        spdlog::drop_all();
+
         std::vector<spdlog::sink_ptr> logSinks;
 
         if (settings.outputConsole)
@@ -73,7 +96,7 @@ namespace Kmplete
 
         if (settings.outputStringBuffer)
         {
-            const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_ss);
+            const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
             stringBufferLog->set_pattern("[%T.%e] [%l] %n: %v");
             logSinks.push_back(stringBufferLog);
         }
@@ -81,6 +104,7 @@ namespace Kmplete
         _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
         _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
 
+        //todo: simplify logging to empty sink
         if (settings.enabled)
         {
             const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
@@ -102,6 +126,7 @@ namespace Kmplete
 
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         Log::CoreInfo("-------{}", Utils::Concatenate(std::put_time(localtime(&now), "%F %T")));
+        Log::CoreInfo("{}", temporaryLogBuffer);
     }
     //--------------------------------------------------------------------------
 
@@ -119,7 +144,7 @@ namespace Kmplete
 
     std::string_view Log::StringLogOutput()
     {
-        return _ss.view();
+        return _stringStream.view();
     }
     //--------------------------------------------------------------------------
 }

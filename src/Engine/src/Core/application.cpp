@@ -12,6 +12,7 @@ namespace Kmplete
     bool Application::Initialize(const std::string& settingsPath)
     {
         Filesystem::Initialize();
+        Log::InitializeTemporarySink();
 
         _settings.reset(new Settings(settingsPath.empty() ? Filesystem::GetCurrentPath().append("Kmplete_settings.json") : settingsPath));
         if (!_settings->Initialize())

@@ -35,6 +35,7 @@ namespace Kmplete
     class KMPLETE_API Log
     {
     public:
+        static void InitializeTemporarySink();
         static void Initialize(const LogSettings& settings);
 
         static Ptr<spdlog::logger>& CoreLogger();
@@ -82,7 +83,7 @@ namespace Kmplete
     private:
         static Ptr<spdlog::logger> _coreLogger;
         static Ptr<spdlog::logger> _clientLogger;
-        static std::stringstream _ss;
+        static std::stringstream _stringStream;
     };
     //--------------------------------------------------------------------------
 }
