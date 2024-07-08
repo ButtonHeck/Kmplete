@@ -6,6 +6,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/ostream_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/sinks/null_sink.h>
 
 #include <chrono>
 #if defined KMPLETE_PLATFORM_LINUX || defined KMPLETE_COMPILER_MINGW
@@ -78,35 +79,34 @@ namespace Kmplete
 
         spdlog::drop_all();
 
-        std::vector<spdlog::sink_ptr> logSinks;
-
-        if (settings.outputConsole)
-        {
-            const auto stdoutLog = CreatePtr<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::automatic);
-            stdoutLog->set_pattern("%^[%T.%e] [%l] %n: %v%$");
-            logSinks.push_back(stdoutLog);
-        }
-
-        if (settings.outputFile)
-        {
-            const auto fileLog = CreatePtr<spdlog::sinks::basic_file_sink_mt>(settings.filename, settings.truncate);
-            fileLog->set_pattern("[%T.%e] [%l] %n: %v");
-            logSinks.push_back(fileLog);
-        }
-
-        if (settings.outputStringBuffer)
-        {
-            const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
-            stringBufferLog->set_pattern("[%T.%e] [%l] %n: %v");
-            logSinks.push_back(stringBufferLog);
-        }
-
-        _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
-        _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
-
-        //todo: simplify logging to empty sink
         if (settings.enabled)
         {
+            std::vector<spdlog::sink_ptr> logSinks;
+
+            if (settings.outputConsole)
+            {
+                const auto stdoutLog = CreatePtr<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::automatic);
+                stdoutLog->set_pattern("%^[%T.%e] [%l] %n: %v%$");
+                logSinks.push_back(stdoutLog);
+            }
+
+            if (settings.outputFile)
+            {
+                const auto fileLog = CreatePtr<spdlog::sinks::basic_file_sink_mt>(settings.filename, settings.truncate);
+                fileLog->set_pattern("[%T.%e] [%l] %n: %v");
+                logSinks.push_back(fileLog);
+            }
+
+            if (settings.outputStringBuffer)
+            {
+                const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
+                stringBufferLog->set_pattern("[%T.%e] [%l] %n: %v");
+                logSinks.push_back(stringBufferLog);
+            }
+
+            _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
+            _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
+
             const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
             const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
 
@@ -117,16 +117,21 @@ namespace Kmplete
         }
         else
         {
-            _coreLogger->set_level(spdlog::level::off);
-            _clientLogger->set_level(spdlog::level::off);
-        }
+            const auto nullSink = CreatePtr<spdlog::sinks::null_sink_mt>();
+            _coreLogger = CreatePtr<spdlog::logger>("CORE", nullSink);
+            _clientLogger = CreatePtr<spdlog::logger>("CLIENT", nullSink);
+        }        
 
         spdlog::register_logger(_coreLogger);
         spdlog::register_logger(_clientLogger);
 
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
         Log::CoreInfo("-------{}", Utils::Concatenate(std::put_time(localtime(&now), "%F %T")));
-        Log::CoreInfo("{}", temporaryLogBuffer);
+
+        if (!temporaryLogBuffer.empty())
+        {
+            Log::CoreInfo("{}", temporaryLogBuffer);
+        }
     }
     //--------------------------------------------------------------------------
 
