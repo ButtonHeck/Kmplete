@@ -6,7 +6,7 @@
 
 int Main(const Kmplete::ProgramOptions& programOptions);
 
-#if defined KMPLETE_WINMAIN
+#if defined KMP_WINMAIN
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     Kmplete::ProgramOptions programOptions;

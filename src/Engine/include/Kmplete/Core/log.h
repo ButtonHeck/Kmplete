@@ -1,10 +1,10 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/pointers.h"
 
-#if defined (KMPLETE_COMPILER_MSVC)
+#if defined (KMP_COMPILER_MSVC)
     #pragma warning(disable : 4996)
 #endif
 #include <spdlog/spdlog.h>
@@ -15,7 +15,7 @@ namespace Kmplete
 {
     class Settings;
 
-    struct KMPLETE_API LogSettings
+    struct KMP_API LogSettings
     {
         std::string filename = "Kmplete_log.txt";
         bool enabled = true;
@@ -32,7 +32,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    class KMPLETE_API Log
+    class KMP_API Log
     {
     public:
         static void InitializeTemporarySink();

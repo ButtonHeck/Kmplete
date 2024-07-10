@@ -1,12 +1,12 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 
 #include <filesystem>
 
 namespace Kmplete
 {
-    class KMPLETE_API Filesystem
+    class KMP_API Filesystem
     {
     public:
         static void Initialize();

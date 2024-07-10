@@ -1,12 +1,12 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 
 #include <cstdint>
 
 namespace Kmplete
 {
-    class KMPLETE_API UUID
+    class KMP_API UUID
     {
     public:
         static UUID InvalidUuid;

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 
 #include <boost/program_options.hpp>
 
 namespace Kmplete
 {
-    class KMPLETE_API ProgramOptions
+    class KMP_API ProgramOptions
     {
     public:
         ProgramOptions();

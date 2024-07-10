@@ -49,10 +49,10 @@ namespace Kmplete
     {
         EventDispatcher dispatcher(event);
 
-        dispatcher.Dispatch<WindowCloseEvent>(KMPLETE_BIND(EditorApplication::OnWindowCloseEvent));
-        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMPLETE_BIND(EditorApplication::OnWindowFramebufferRefreshEvent));
+        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorApplication::OnWindowCloseEvent));
+        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorApplication::OnWindowFramebufferRefreshEvent));
 
-        dispatcher.Dispatch<KeyPressEvent>(KMPLETE_BIND(EditorApplication::OnKeyPressEvent));
+        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorApplication::OnKeyPressEvent));
     }
     //--------------------------------------------------------------------------
 

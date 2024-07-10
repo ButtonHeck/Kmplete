@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/key_event.h"
@@ -11,7 +11,7 @@ namespace Kmplete
 {
     class Settings;
 
-    class KMPLETE_API Application
+    class KMP_API Application
     {
     public:
         Application();

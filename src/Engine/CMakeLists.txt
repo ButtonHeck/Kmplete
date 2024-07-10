@@ -7,6 +7,7 @@ project(Kmplete_Engine LANGUAGES CXX)
 
 set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/kmplete_api.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/platform.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
@@ -72,7 +73,6 @@ find_package(Boost REQUIRED COMPONENTS
 
 target_include_directories(Kmplete_Engine
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
-    PUBLIC "${CMAKE_CURRENT_BINARY_DIR}"
 
     PUBLIC "${Boost_INCLUDE_DIR}"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
@@ -87,6 +87,11 @@ target_compile_options(Kmplete_Engine PUBLIC
     $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor>
 )
 
+target_compile_definitions(Kmplete_Engine
+    PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Kmplete_Engine_STATIC>
+    PRIVATE Kmplete_Engine_EXPORTS
+)
+
 target_link_libraries(Kmplete_Engine 
     PUBLIC ${Boost_LIBRARIES}
     PUBLIC Kmplete_Version
@@ -94,10 +99,4 @@ target_link_libraries(Kmplete_Engine
 
 set_target_properties(Kmplete_Engine PROPERTIES 
     FOLDER Kmplete
-)
-
-include(GenerateExportHeader)
-generate_export_header(Kmplete_Engine 
-    BASE_NAME Kmplete
-    EXPORT_MACRO_NAME KMPLETE_API
 )

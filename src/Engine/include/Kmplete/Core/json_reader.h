@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/filesystem.h"
 
 #include <rapidjson/document.h>
@@ -10,7 +10,7 @@
 
 namespace Kmplete
 {
-    class KMPLETE_API JsonReader
+    class KMP_API JsonReader
     {
     public:
         explicit JsonReader(const std::filesystem::path& path);

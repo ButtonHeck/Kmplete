@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 
 #include <sstream>
 
@@ -25,16 +25,16 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        KMPLETE_API std::wstring NarrowToWide(const std::string& str);
+        KMP_API std::wstring NarrowToWide(const std::string& str);
         //--------------------------------------------------------------------------
 
-        KMPLETE_API std::string WideToNarrow(const std::wstring& wstr);
+        KMP_API std::string WideToNarrow(const std::wstring& wstr);
         //--------------------------------------------------------------------------
 
-        KMPLETE_API std::string NarrowToU8(const std::string& str);
+        KMP_API std::string NarrowToU8(const std::string& str);
         //--------------------------------------------------------------------------
 
-        KMPLETE_API std::string U8ToNarrow(const std::string& str);
+        KMP_API std::string U8ToNarrow(const std::string& str);
         //--------------------------------------------------------------------------
     }
 }

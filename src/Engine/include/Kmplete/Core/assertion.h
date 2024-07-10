@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/macro.h"
 #include "Kmplete/Utils/string_utils.h"
 
@@ -8,17 +8,17 @@
 #include <sstream>
 #include <source_location>
 
-#ifndef KMPLETE_ASSERTS_ACTIVE
+#ifndef KMP_ASSERTS_ACTIVE
     #ifdef NDEBUG
-        #define KMPLETE_ASSERTS_ACTIVE false
+        #define KMP_ASSERTS_ACTIVE false
     #else
-        #define KMPLETE_ASSERTS_ACTIVE true
+        #define KMP_ASSERTS_ACTIVE true
     #endif
 #endif
 
 namespace Kmplete
 {
-    class KMPLETE_API Assertion
+    class KMP_API Assertion
     {
     public:
         enum class Consequence
@@ -52,13 +52,13 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#define KMPLETE_ASSERT(expr) (!KMPLETE_ASSERTS_ACTIVE || bool(expr)) ? void(0) : (void)Kmplete::Assertion{ KMPLETE_M_STRINGIFY(expr), std::source_location::current() }
-#define KMPLETE_CHECK(expr) bool(expr) ? void(0) : (void)Kmplete::Assertion{ KMPLETE_M_STRINGIFY(expr), std::source_location::current(), KMPLETE_ASSERTS_ACTIVE ? Kmplete::Assertion::Consequence::Terminate : Kmplete::Assertion::Consequence::Log }
+#define KMP_ASSERT(expr) (!KMP_ASSERTS_ACTIVE || bool(expr)) ? void(0) : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), std::source_location::current() }
+#define KMP_CHECK(expr) bool(expr) ? void(0) : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), std::source_location::current(), KMP_ASSERTS_ACTIVE ? Kmplete::Assertion::Consequence::Terminate : Kmplete::Assertion::Consequence::Log }
 
-#define KMPLETE_ASSERT_WATCH(...) KMPLETE_M_DISPATCH_VA(KMPLETE_AW_, __VA_ARGS__)
-#define KMPLETE_AW_(expr) Watch((expr), KMPLETE_M_STRINGIFY(expr))
-#define KMPLETE_AW_1_(a) KMPLETE_AW_(a)
-#define KMPLETE_AW_2_(a, b) KMPLETE_AW_(a).KMPLETE_AW_(b)
-#define KMPLETE_AW_3_(a, b, c) KMPLETE_AW_(a).KMPLETE_AW_(b).KMPLETE_AW_(c)
-#define KMPLETE_AW_4_(a, b, c, d) KMPLETE_AW_(a).KMPLETE_AW_(b).KMPLETE_AW_(c).KMPLETE_AW_(d)
-#define KMPLETE_AW_5_(a, b, c, d, e) KMPLETE_AW_(a).KMPLETE_AW_(b).KMPLETE_AW_(c).KMPLETE_AW_(d).KMPLETE_AW_(e)
+#define KMP_ASSERT_WATCH(...) KMP_M_DISPATCH_VA(KMP_AW_, __VA_ARGS__)
+#define KMP_AW_(expr) Watch((expr), KMP_M_STRINGIFY(expr))
+#define KMP_AW_1_(a) KMP_AW_(a)
+#define KMP_AW_2_(a, b) KMP_AW_(a).KMP_AW_(b)
+#define KMP_AW_3_(a, b, c) KMP_AW_(a).KMP_AW_(b).KMP_AW_(c)
+#define KMP_AW_4_(a, b, c, d) KMP_AW_(a).KMP_AW_(b).KMP_AW_(c).KMP_AW_(d)
+#define KMP_AW_5_(a, b, c, d, e) KMP_AW_(a).KMP_AW_(b).KMP_AW_(c).KMP_AW_(d).KMP_AW_(e)

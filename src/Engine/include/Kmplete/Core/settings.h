@@ -1,6 +1,6 @@
 #pragma once 
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 
 #include <string>
@@ -11,7 +11,7 @@ namespace Kmplete
     class JsonReader;
     class JsonWriter;
 
-    class KMPLETE_API Settings
+    class KMP_API Settings
     {
     public:
         explicit Settings(const std::filesystem::path& name);

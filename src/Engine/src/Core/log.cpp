@@ -9,7 +9,7 @@
 #include <spdlog/sinks/null_sink.h>
 
 #include <chrono>
-#if defined KMPLETE_PLATFORM_LINUX || defined KMPLETE_COMPILER_MINGW
+#if defined KMP_PLATFORM_LINUX || defined KMP_COMPILER_MINGW
 #include <iomanip>
 #endif
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kmplete_export.h"
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/filesystem.h"
 
 #include <rapidjson/prettywriter.h>
@@ -10,7 +10,7 @@
 
 namespace Kmplete
 {
-    class KMPLETE_API JsonWriter
+    class KMP_API JsonWriter
     {
     public:
         explicit JsonWriter(const std::filesystem::path& path);
