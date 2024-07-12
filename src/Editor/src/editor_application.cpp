@@ -4,9 +4,9 @@
 
 namespace Kmplete
 {
-    Application* CreateApplication()
+    UPtr<Application> CreateApplication()
     {
-        return new EditorApplication();
+        return CreateUPtr<EditorApplication>();
     }
     //--------------------------------------------------------------------------
 

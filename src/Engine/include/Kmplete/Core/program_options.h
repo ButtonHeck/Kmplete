@@ -16,13 +16,13 @@ namespace Kmplete
         // main entryPoint
         void ProcessCommandLine(int argc, char** argv);
 
-        const std::string& GetSettingsFilePath() const;
+        KMP_NODISCARD const std::string& GetSettingsFilePath() const;
 
     private:
         // WinMain entryPoint
-        boost::program_options::command_line_parser CreateCmdParser(char* lpCmdLine) const;
+        KMP_NODISCARD boost::program_options::command_line_parser CreateCmdParser(char* lpCmdLine) const;
         // main entryPoint
-        boost::program_options::command_line_parser CreateCmdParser(int argc, char** argv) const;
+        KMP_NODISCARD boost::program_options::command_line_parser CreateCmdParser(int argc, char** argv) const;
 
         void ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser);
 

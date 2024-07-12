@@ -15,12 +15,12 @@ namespace Kmplete
     {
         if (_consequence == Consequence::Terminate)
         {
-            Log::CoreCritical("!!! [file {}, function {}, line {}]: {}", _sourceLocation.file_name(), _sourceLocation.function_name(), _sourceLocation.line(), _stream.str());
+            Log::CoreCritical("Assertion: [file {}, function {}, line {}]: {}", _sourceLocation.file_name(), _sourceLocation.function_name(), _sourceLocation.line(), _stream.str());
             std::terminate();
         }
         else
         {
-            Log::CoreError("!!! [file {}, function {}, line {}]: {}", _sourceLocation.file_name(), _sourceLocation.function_name(), _sourceLocation.line(), _stream.str());
+            Log::CoreError("Assertion: [file {}, function {}, line {}]: {}", _sourceLocation.file_name(), _sourceLocation.function_name(), _sourceLocation.line(), _stream.str());
         }
     }
     //--------------------------------------------------------------------------

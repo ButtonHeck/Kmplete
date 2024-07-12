@@ -11,15 +11,15 @@ namespace Kmplete
     public:
         static void Initialize();
 
-        static std::filesystem::path GetCurrentPath();
-        static const std::filesystem::path& GetCurrentPathCRef();
+        KMP_NODISCARD static std::filesystem::path GetCurrentPath();
+        KMP_NODISCARD static const std::filesystem::path& GetCurrentPathCRef();
 
-        static bool PathExists(const std::filesystem::path& path);
-        static bool FilePathIsValid(const std::filesystem::path& path);
-        static bool CreatePathTree(const std::filesystem::path& path);
+        KMP_NODISCARD static bool PathExists(const std::filesystem::path& path);
+        KMP_NODISCARD static bool FilePathIsValid(const std::filesystem::path& path);
+        KMP_NODISCARD static bool CreatePathTree(const std::filesystem::path& path);
 
-        static std::string ToU8String(const std::filesystem::path& path);
-        static std::string ToString(const std::filesystem::path& path);
+        KMP_NODISCARD static std::string ToU8String(const std::filesystem::path& path);
+        KMP_NODISCARD static std::string ToString(const std::filesystem::path& path);
 
     private:
         static std::filesystem::path _currentPath;

@@ -13,21 +13,21 @@ namespace Kmplete
     public:
         WindowApplication();
 
-        bool Initialize(const std::string& settingsFilePath) override;
+        KMP_NODISCARD bool Initialize(const std::string& settingsFilePath) override;
 
     protected:
-        virtual bool OnWindowMoveEvent(WindowMoveEvent& event) { return true; }
-        virtual bool OnWindowCloseEvent(WindowCloseEvent& event) { return true; }
-        virtual bool OnWindowResizeEvent(WindowResizeEvent& event) { return true; }
-        virtual bool OnWindowFocusEvent(WindowFocusEvent& event) { return true; }
-        virtual bool OnWindowIconifyEvent(WindowIconifyEvent& event) { return true; }
-        virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) { return true; }
-        virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& event) { return true; }
 
-        virtual bool OnMouseMoveEvent(MouseMoveEvent& event) { return true; }
-        virtual bool OnMouseScrollEvent(MouseScrollEvent& event) { return true; }
-        virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& event) { return true; }
-        virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent& event) { return true; }
     };
     //--------------------------------------------------------------------------
 }

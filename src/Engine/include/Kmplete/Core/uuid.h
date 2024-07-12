@@ -14,7 +14,7 @@ namespace Kmplete
         UUID();
         explicit UUID(uint64_t uuid);
 
-        operator uint64_t() const;
+        KMP_NODISCARD operator uint64_t() const;
 
     private:
         uint64_t _uuid;

@@ -11,18 +11,18 @@ namespace Kmplete
         EditorApplication();
         ~EditorApplication();
 
-        std::string GetApplicationName() const override;
+        KMP_NODISCARD std::string GetApplicationName() const override;
 
-        bool Initialize(const std::string& settingsPath) override;
+        KMP_NODISCARD bool Initialize(const std::string& settingsPath) override;
         void Run() override;
 
     protected:
         void OnEvent(Event& event) override;
 
-        bool OnWindowCloseEvent(WindowCloseEvent& event) override;
-        bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) override;
+        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event) override;
+        KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) override;
 
-        bool OnKeyPressEvent(KeyPressEvent& event) override;
+        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event) override;
 
     private:
         void SaveSettings() const;

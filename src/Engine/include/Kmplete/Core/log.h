@@ -38,9 +38,9 @@ namespace Kmplete
         static void InitializeTemporarySink();
         static void Initialize(const LogSettings& settings);
 
-        static Ptr<spdlog::logger>& CoreLogger();
-        static Ptr<spdlog::logger>& ClientLogger();
-        static std::string_view StringLogOutput();
+        KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
+        KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
+        KMP_NODISCARD static std::string_view StringLogOutput();
 
         // Core log functions
         template <typename... Args>

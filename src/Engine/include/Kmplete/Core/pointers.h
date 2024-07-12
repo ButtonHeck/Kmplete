@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Kmplete/Core/kmplete_api.h"
+
 #include <memory>
 
 namespace Kmplete
@@ -8,7 +10,7 @@ namespace Kmplete
     using Ptr = std::shared_ptr<T>;
 
     template<typename T, typename... Args>
-    constexpr Ptr<T> CreatePtr(Args&&... args)
+    KMP_CONSTEXPR KMP_NODISCARD Ptr<T> CreatePtr(Args&&... args)
     {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
@@ -18,7 +20,7 @@ namespace Kmplete
     using UPtr = std::unique_ptr<T>;
 
     template<typename T, typename... Args>
-    constexpr UPtr<T> CreateUPtr(Args&&... args)
+    KMP_CONSTEXPR KMP_NODISCARD UPtr<T> CreateUPtr(Args&&... args)
     {
         return std::make_unique<T>(std::forward<Args>(args)...);
     }

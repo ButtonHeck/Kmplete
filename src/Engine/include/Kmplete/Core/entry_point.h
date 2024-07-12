@@ -3,10 +3,12 @@
 #include "Kmplete/Core/application.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/program_options.h"
+#include "Kmplete/Core/pointers.h"
 
 int Main(const Kmplete::ProgramOptions& programOptions);
 
 #if defined KMP_WINMAIN
+#include <Windows.h>
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     Kmplete::ProgramOptions programOptions;
@@ -29,7 +31,7 @@ int main(int argc, char** argv)
 
 int Main(const Kmplete::ProgramOptions& programOptions)
 {
-    Kmplete::Application* app = Kmplete::CreateApplication();
+    auto app = Kmplete::CreateApplication();
     if (!app)
     {
         return 1;
@@ -37,13 +39,13 @@ int Main(const Kmplete::ProgramOptions& programOptions)
 
     if (!app->Initialize(programOptions.GetSettingsFilePath()))
     {
-        delete app;
+        app.release();
         return 2;
     }
 
     app->Run();
 
-    delete app;
+    app.release();
 
     return 0;
 }

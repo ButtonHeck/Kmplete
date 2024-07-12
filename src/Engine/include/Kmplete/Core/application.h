@@ -18,22 +18,22 @@ namespace Kmplete
 
         virtual ~Application() = default;
 
-        virtual std::string GetApplicationName() const = 0;
+        KMP_NODISCARD virtual std::string GetApplicationName() const = 0;
 
-        virtual bool Initialize(const std::string& settingsFilePath);
+        KMP_NODISCARD virtual bool Initialize(const std::string& settingsFilePath);
         virtual void Run() = 0;
 
     protected:
         virtual void OnEvent(Event& event) {}
 
-        virtual bool OnKeyPressEvent(KeyPressEvent& event) { return true; }
-        virtual bool OnKeyReleaseEvent(KeyReleaseEvent& event) { return true; }
-        virtual bool OnKeyCharEvent(KeyCharEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent& event) { return true; }
 
     protected:
         Ptr<Settings> _settings;
     };
     //--------------------------------------------------------------------------
 
-    extern Application* CreateApplication();
+    extern KMP_NODISCARD UPtr<Application> CreateApplication();
 }

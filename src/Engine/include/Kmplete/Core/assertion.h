@@ -41,8 +41,7 @@ namespace Kmplete
             return *this;
         }
 
-        [[noreturn]]
-        void Exception();
+        KMP_NORETURN void Exception();
 
     private:
         const std::source_location _sourceLocation;

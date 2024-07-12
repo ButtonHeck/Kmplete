@@ -15,7 +15,7 @@ namespace Kmplete
     public:
         explicit JsonReader(const std::filesystem::path& path);
 
-        bool Initialize();
+        KMP_NODISCARD bool Initialize();
 
         bool StartArrayObject(int index);
         bool EndArrayObject();
@@ -26,24 +26,24 @@ namespace Kmplete
         int StartArray(const std::string& arrayName);
         bool EndArray();
 
-        bool GetBool(int index, bool defaultValue = false);
-        bool GetBool(const std::string& name, bool defaultValue = false);
-        int GetInt(int index, int defaultValue = 0);
-        int GetInt(const std::string& name, int defaultValue = 0);
-        unsigned int GetUInt(int index, unsigned int defaultValue = 0);
-        unsigned int GetUInt(const std::string& name, unsigned int defaultValue = 0);
-        int64_t GetInt64(int index, int64_t defaultValue = 0);
-        int64_t GetInt64(const std::string& name, int64_t defaultValue = 0);
-        uint64_t GetUInt64(int index, uint64_t defaultValue = 0);
-        uint64_t GetUInt64(const std::string& name, uint64_t defaultValue = 0);
-        double GetDouble(int index, double defaultValue = 0.0);
-        double GetDouble(const std::string& name, double defaultValue = 0.0);
-        std::string GetString(int index, const std::string& defaultValue = "");
-        std::string GetString(const std::string& name, const std::string& defaultValue = "");
+        KMP_NODISCARD bool GetBool(int index, bool defaultValue = false);
+        KMP_NODISCARD bool GetBool(const std::string& name, bool defaultValue = false);
+        KMP_NODISCARD int GetInt(int index, int defaultValue = 0);
+        KMP_NODISCARD int GetInt(const std::string& name, int defaultValue = 0);
+        KMP_NODISCARD unsigned int GetUInt(int index, unsigned int defaultValue = 0);
+        KMP_NODISCARD unsigned int GetUInt(const std::string& name, unsigned int defaultValue = 0);
+        KMP_NODISCARD int64_t GetInt64(int index, int64_t defaultValue = 0);
+        KMP_NODISCARD int64_t GetInt64(const std::string& name, int64_t defaultValue = 0);
+        KMP_NODISCARD uint64_t GetUInt64(int index, uint64_t defaultValue = 0);
+        KMP_NODISCARD uint64_t GetUInt64(const std::string& name, uint64_t defaultValue = 0);
+        KMP_NODISCARD double GetDouble(int index, double defaultValue = 0.0);
+        KMP_NODISCARD double GetDouble(const std::string& name, double defaultValue = 0.0);
+        KMP_NODISCARD std::string GetString(int index, const std::string& defaultValue = "");
+        KMP_NODISCARD std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
-        std::string GetCurrentScopeString() const;
-        bool ValidToGetFromArray(int index) const;
+        KMP_NODISCARD std::string GetCurrentScopeString() const;
+        KMP_NODISCARD bool ValidToGetFromArray(int index) const;
 
     private:
         const std::filesystem::path _path;
