@@ -5,8 +5,8 @@
 
 namespace Kmplete
 {
-    Settings::Settings(const std::filesystem::path& name)
-        : _filename(name)
+    Settings::Settings(const std::filesystem::path& filename)
+        : _filename(filename)
         , _reader(CreatePtr<JsonReader>(_filename))
         , _writer(CreatePtr<JsonWriter>(_filename))
     {}

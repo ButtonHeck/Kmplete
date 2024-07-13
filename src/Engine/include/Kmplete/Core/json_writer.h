@@ -13,7 +13,7 @@ namespace Kmplete
     class KMP_API JsonWriter
     {
     public:
-        explicit JsonWriter(const std::filesystem::path& path);
+        explicit JsonWriter(const std::filesystem::path& filename);
 
         bool Start();
         bool End();
@@ -43,7 +43,7 @@ namespace Kmplete
         bool SaveString(const std::string& name, const std::string& value);
 
     private:
-        const std::filesystem::path _path;
+        const std::filesystem::path _filename;
 
         rapidjson::StringBuffer _stringBuffer;
         rapidjson::PrettyWriter<rapidjson::StringBuffer> _writer;

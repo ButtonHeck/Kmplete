@@ -5,8 +5,8 @@
 
 namespace Kmplete
 {
-    JsonWriter::JsonWriter(const std::filesystem::path& path)
-        : _path(path)
+    JsonWriter::JsonWriter(const std::filesystem::path& filename)
+        : _filename(filename)
         , _stringBuffer()
         , _writer(_stringBuffer)
     {}
@@ -14,12 +14,27 @@ namespace Kmplete
 
     bool JsonWriter::Start()
     {
-        Log::CoreInfo("JsonWriter: saving to '{}'", Filesystem::ToU8String(_path));
+        Log::CoreInfo("JsonWriter: saving to '{}'", Filesystem::ToGenericU8String(_filename));
 
-        if (!Filesystem::CreatePathTree(_path))
+        if (!Filesystem::PathExists(_filename))
         {
-            Log::CoreWarn("JsonWriter: insufficient path");
-            return false;
+            if (!Filesystem::FilePathIsValid(_filename))
+            {
+                Log::CoreWarn("JsonWriter: insufficient path");
+                return false;
+            }
+
+            if (!Filesystem::CreateDirectoriesKmp(_filename.parent_path()))
+            {
+                Log::CoreWarn("JsonWriter: can't create destination directory");
+                return false;
+            }
+
+            if (!Filesystem::CreateFileKmp(_filename))
+            {
+                Log::CoreWarn("JsonWriter: can't create destination file");
+                return false;
+            }
         }
 
         return _writer.StartObject();
@@ -30,7 +45,7 @@ namespace Kmplete
     {
         _writer.EndObject();
 
-        std::ofstream outputStream(_path, std::ios::out | std::ios::trunc);
+        std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
         if (!outputStream.is_open() || !outputStream.good())
         {
             Log::CoreWarn("JsonWriter: failed to open file stream");

@@ -13,7 +13,7 @@ namespace Kmplete
     class KMP_API JsonReader
     {
     public:
-        explicit JsonReader(const std::filesystem::path& path);
+        explicit JsonReader(const std::filesystem::path& filename);
 
         KMP_NODISCARD bool Initialize();
 
@@ -46,7 +46,7 @@ namespace Kmplete
         KMP_NODISCARD bool ValidToGetFromArray(int index) const;
 
     private:
-        const std::filesystem::path _path;
+        const std::filesystem::path _filename;
 
         rapidjson::Document _document;
         std::vector<std::string> _scope;

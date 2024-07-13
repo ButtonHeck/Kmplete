@@ -11,8 +11,8 @@
 
 namespace Kmplete
 {
-    JsonReader::JsonReader(const std::filesystem::path& path)
-        : _path(path)
+    JsonReader::JsonReader(const std::filesystem::path& filename)
+        : _filename(filename)
         , _document()
         , _scope()
         , _scopeString("")
@@ -22,15 +22,15 @@ namespace Kmplete
 
     bool JsonReader::Initialize()
     {
-        Log::CoreInfo("JsonReader: loading from '{}'", Filesystem::ToU8String(_path));
+        Log::CoreInfo("JsonReader: loading from '{}'", Filesystem::ToGenericU8String(_filename));
 
-        if (!Filesystem::PathExists(_path))
+        if (!Filesystem::PathExists(_filename))
         {
             Log::CoreWarn("JsonReader: insufficient path");
             return false;
         }
 
-        std::ifstream inputStream(_path);
+        std::ifstream inputStream(_filename);
         if (!inputStream.is_open() || !inputStream.good())
         {
             return false;

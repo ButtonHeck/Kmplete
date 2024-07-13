@@ -18,7 +18,7 @@ namespace Kmplete
 
         virtual ~Application() = default;
 
-        KMP_NODISCARD virtual std::string GetApplicationName() const = 0;
+        KMP_NODISCARD virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
 
         KMP_NODISCARD virtual bool Initialize(const std::string& settingsFilePath);
         virtual void Run() = 0;

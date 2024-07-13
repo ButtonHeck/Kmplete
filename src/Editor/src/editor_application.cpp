@@ -21,7 +21,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string EditorApplication::GetApplicationName() const
+    std::string EditorApplication::GetApplicationName() const KMP_NOEXCEPT
     {
         return std::string("Kmplete Editor");
     }

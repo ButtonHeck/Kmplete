@@ -14,7 +14,7 @@ namespace Kmplete
     class KMP_API Settings
     {
     public:
-        explicit Settings(const std::filesystem::path& name);
+        explicit Settings(const std::filesystem::path& filename);
 
         KMP_NODISCARD bool Initialize();
 

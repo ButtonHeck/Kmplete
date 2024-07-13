@@ -11,7 +11,7 @@ namespace Kmplete
         EditorApplication();
         ~EditorApplication();
 
-        KMP_NODISCARD std::string GetApplicationName() const override;
+        KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
 
         KMP_NODISCARD bool Initialize(const std::string& settingsPath) override;
         void Run() override;
