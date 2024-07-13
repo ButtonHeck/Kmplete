@@ -441,7 +441,7 @@ namespace Kmplete
             return false;
         }
 
-        if (index >= _currentObject->Size() || index < 0)
+        if (index >= static_cast<int>(_currentObject->Size()) || index < 0)
         {
             Log::CoreError("JsonReader: invalid index [{}] for '{}'", index, _scopeString);
             return false;

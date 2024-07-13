@@ -6,15 +6,15 @@
 
 namespace Kmplete
 {
-    class KMP_API UUID
+    class UUID
     {
     public:
         static UUID InvalidUuid;
 
-        UUID();
-        explicit UUID(uint64_t uuid);
+        KMP_API UUID();
+        KMP_API explicit UUID(uint64_t uuid);
 
-        KMP_NODISCARD operator uint64_t() const;
+        KMP_API KMP_NODISCARD operator uint64_t() const KMP_NOEXCEPT;
 
     private:
         uint64_t _uuid;

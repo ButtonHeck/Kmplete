@@ -25,7 +25,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    UUID::operator uint64_t() const
+    UUID::operator uint64_t() const KMP_NOEXCEPT
     {
         return _uuid;
     }

@@ -16,7 +16,7 @@ add_executable(Kmplete_Editor
 target_compile_options(Kmplete_Editor PRIVATE
     $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t>
     $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t>
-    $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor>
+    $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX>
 )
 
 target_link_libraries(Kmplete_Editor

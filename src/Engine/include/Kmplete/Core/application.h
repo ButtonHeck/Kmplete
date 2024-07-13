@@ -11,24 +11,24 @@ namespace Kmplete
 {
     class Settings;
 
-    class KMP_API Application
+    class Application
     {
     public:
-        Application();
+        KMP_API Application();
 
-        virtual ~Application() = default;
+        KMP_API virtual ~Application() = default;
 
-        KMP_NODISCARD virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
+        KMP_API KMP_NODISCARD virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
 
-        KMP_NODISCARD virtual bool Initialize(const std::string& settingsFilePath);
-        virtual void Run() = 0;
+        KMP_API KMP_NODISCARD virtual bool Initialize(const std::string& settingsFilePath);
+        KMP_API virtual void Run() = 0;
 
     protected:
-        virtual void OnEvent(Event& event) {}
+        virtual void OnEvent(Event&) {}
 
-        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent& event) { return true; }
-        KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent& event) { return true; }
-        KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent& event) { return true; }
+        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { return true; }
+        KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent&) { return true; }
+        KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
 
     protected:
         Ptr<Settings> _settings;

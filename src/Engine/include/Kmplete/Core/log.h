@@ -15,7 +15,7 @@ namespace Kmplete
 {
     class Settings;
 
-    struct KMP_API LogSettings
+    struct LogSettings
     {
         std::string filename = "Kmplete_log.txt";
         bool enabled = true;
@@ -26,21 +26,21 @@ namespace Kmplete
         int coreLevel = spdlog::level::trace;
         int clientLevel = spdlog::level::trace;
 
-        void SaveSettings(const Ptr<Settings> settings) const;
-        void LoadSettings(const Ptr<Settings> settings);
+        KMP_API void SaveSettings(const Ptr<Settings> settings) const;
+        KMP_API void LoadSettings(const Ptr<Settings> settings);
     };
     //--------------------------------------------------------------------------
 
 
-    class KMP_API Log
+    class Log
     {
     public:
-        static void InitializeTemporarySink();
-        static void Initialize(const LogSettings& settings);
+        KMP_API static void InitializeTemporarySink();
+        KMP_API static void Initialize(const LogSettings& settings);
 
-        KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
-        KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
-        KMP_NODISCARD static std::string_view StringLogOutput();
+        KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
+        KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
+        KMP_API KMP_NODISCARD static std::string_view StringLogOutput();
 
         // Core log functions
         template <typename... Args>

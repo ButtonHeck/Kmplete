@@ -6,17 +6,17 @@
 
 namespace Kmplete
 {
-    class KMP_API ProgramOptions
+    class ProgramOptions
     {
     public:
-        ProgramOptions();
+        KMP_API ProgramOptions();
 
         // WinMain entryPoint
-        void ProcessCommandLine(char* lpCmdLine);
+        KMP_API void ProcessCommandLine(char* lpCmdLine);
         // main entryPoint
-        void ProcessCommandLine(int argc, char** argv);
+        KMP_API void ProcessCommandLine(int argc, char** argv);
 
-        KMP_NODISCARD const std::string& GetSettingsFilePath() const;
+        KMP_API KMP_NODISCARD const std::string& GetSettingsFilePath() const;
 
     private:
         // WinMain entryPoint

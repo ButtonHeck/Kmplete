@@ -56,19 +56,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent& event)
+    bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent&)
     {
         return true;
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event)
+    bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
     {
         return true;
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::OnKeyPressEvent(KeyPressEvent& event)
+    bool EditorApplication::OnKeyPressEvent(KeyPressEvent&)
     {
         return true;
     }

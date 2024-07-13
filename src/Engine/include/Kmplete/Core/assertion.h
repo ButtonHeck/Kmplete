@@ -18,7 +18,7 @@
 
 namespace Kmplete
 {
-    class KMP_API Assertion
+    class Assertion
     {
     public:
         enum class Consequence
@@ -29,10 +29,10 @@ namespace Kmplete
         };
 
     public:
-        Assertion(const std::string& expression, const std::source_location& location, Consequence consequence = Consequence::Terminate);
-        ~Assertion();
+        KMP_API Assertion(const std::string& expression, const std::source_location& location, Consequence consequence = Consequence::Terminate);
+        KMP_API ~Assertion();
 
-        Assertion& Message(const std::string& message);
+        KMP_API Assertion& Message(const std::string& message);
 
         template<typename T>
         Assertion& Watch(T&& val, const char* name)
@@ -41,7 +41,7 @@ namespace Kmplete
             return *this;
         }
 
-        KMP_NORETURN void Exception();
+        KMP_NORETURN KMP_API void Exception();
 
     private:
         const std::source_location _sourceLocation;
