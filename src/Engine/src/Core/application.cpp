@@ -6,6 +6,7 @@
 namespace Kmplete
 {
     Application::Application()
+        : _settings(nullptr)
     {}
     //--------------------------------------------------------------------------
 
