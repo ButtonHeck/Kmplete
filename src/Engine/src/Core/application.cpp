@@ -31,7 +31,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    KMP_API KMP_NODISCARD bool Application::Finalize()
+    bool Application::Finalize()
     {
         _settings->StartSave();
         Log::Finalize(_settings);
