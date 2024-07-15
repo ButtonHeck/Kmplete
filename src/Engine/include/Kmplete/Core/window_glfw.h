@@ -40,9 +40,6 @@ namespace Kmplete
         KMP_API void LoadSettings(const Ptr<Settings> settings) override;
 
     private:
-        constexpr static auto _DefaultWidth = 1920;
-        constexpr static auto _DefaultHeight = 1080;
-
         struct UserData
         {
             bool updateContinuously = true;

@@ -194,7 +194,7 @@ namespace Kmplete
         settings->SaveUInt("Height", height);
         settings->SaveUInt("WindowedWidth", userData ? userData->windowedWidth : _DefaultWidth);
         settings->SaveUInt("WindowedHeight", userData ? userData->windowedHeight : _DefaultHeight);
-        settings->SaveInt("ScreenMode", GetScreenMode());
+        settings->SaveString("ScreenMode", Window::ModeToString(GetScreenMode()));
         settings->SaveBool("VSync", IsVSync());
         settings->SaveBool("UpdateContinuously", userData ? userData->updateContinuously : true);
         settings->EndSaveGroup();
@@ -208,7 +208,7 @@ namespace Kmplete
         const auto height = settings->GetUInt("Height", _DefaultHeight);
         const auto windowedWidth = settings->GetUInt("WindowedWidth", _DefaultWidth);
         const auto windowedHeight = settings->GetUInt("WindowedHeight", _DefaultHeight);
-        const auto screenMode = Window::Mode(settings->GetInt("ScreenMode", WindowedMode));
+        const auto screenMode = Window::StringToMode(settings->GetString("ScreenMode", WindowedModeStr));
         const auto vSync = settings->GetBool("VSync", true);
         const auto updateContinuously = settings->GetBool("UpdateContinuously", true);
 

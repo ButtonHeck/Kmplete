@@ -27,6 +27,11 @@ namespace Kmplete
             WindowedMode
         };
 
+        constexpr static auto FullscreenModeStr = "Fullscreen";
+        constexpr static auto WindowedFullscreenModeStr = "WindowedFullscreen";
+        constexpr static auto WindowedModeStr = "Windowed";
+
+    public:
         KMP_API virtual ~Window() = default;
 
         KMP_API KMP_NODISCARD virtual bool Initialize() = 0;
@@ -52,6 +57,14 @@ namespace Kmplete
 
         KMP_API virtual void SaveSettings(Ptr<Settings> settings) const = 0;
         KMP_API virtual void LoadSettings(Ptr<Settings> settings) = 0;
+
+    protected:
+        KMP_NODISCARD static std::string ModeToString(Mode mode) KMP_NOEXCEPT;
+        KMP_NODISCARD static Mode StringToMode(const std::string& modeStr) KMP_NOEXCEPT;
+
+    protected:
+        constexpr static auto _DefaultWidth = 1920;
+        constexpr static auto _DefaultHeight = 1080;
     };
     //--------------------------------------------------------------------------
 }
