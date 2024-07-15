@@ -39,13 +39,19 @@ int Main(const Kmplete::ProgramOptions& programOptions)
 
     if (!app->Initialize(programOptions.GetSettingsFilePath()))
     {
-        app.release();
+        app.reset();
         return 2;
     }
 
     app->Run();
 
-    app.release();
+    if (!app->Finalize())
+    {
+        app.reset();
+        return 3;
+    }    
+
+    app.reset();
 
     return 0;
 }

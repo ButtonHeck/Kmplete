@@ -21,6 +21,8 @@ namespace Kmplete
         KMP_API KMP_NODISCARD virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
 
         KMP_API KMP_NODISCARD virtual bool Initialize(const std::string& settingsFilePath);
+        KMP_API KMP_NODISCARD virtual bool Finalize();
+
         KMP_API virtual void Run() = 0;
 
     protected:
@@ -29,6 +31,9 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { return true; }
         KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent&) { return true; }
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
+
+        virtual void SaveSettings() const = 0;
+        virtual void LoadSettings() = 0;
 
     protected:
         Ptr<Settings> _settings;

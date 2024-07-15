@@ -32,4 +32,5 @@
 #define KMP_NOEXCEPT noexcept
 #define KMP_NORETURN [[noreturn]]
 #define KMP_NODISCARD [[nodiscard]]
+#define KMP_MB_UNUSED [[maybe_unused]]
 

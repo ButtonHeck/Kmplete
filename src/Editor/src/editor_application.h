@@ -9,7 +9,6 @@ namespace Kmplete
     {
     public:
         EditorApplication();
-        ~EditorApplication();
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
 
@@ -24,9 +23,8 @@ namespace Kmplete
 
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event) override;
 
-    private:
-        void SaveSettings() const;
-        void LoadSettings();
+        void SaveSettings() const override;
+        void LoadSettings() override;
     };
     //--------------------------------------------------------------------------
 }

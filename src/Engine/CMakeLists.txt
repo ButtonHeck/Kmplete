@@ -22,6 +22,8 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_reader.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_writer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
@@ -33,6 +35,8 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_reader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/window.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_glfw.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 
@@ -77,6 +81,7 @@ target_include_directories(Kmplete_Engine
     PUBLIC "${Boost_INCLUDE_DIR}"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
     PUBLIC "${RapidJSON_SOURCE_DIR}/include"
+    PUBLIC "${GLFW_SOURCE_DIR}/include"
     
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
 )
@@ -87,6 +92,15 @@ target_compile_options(Kmplete_Engine PUBLIC
     $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX>
 )
 
+option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)
+if(${KMPLETE_USE_WINDOW_BACKEND_GLFW})
+    target_compile_definitions(Kmplete_Engine PUBLIC 
+        KMP_WINDOW_BACKEND_GLFW
+    )
+else()
+    message(SEND_ERROR "No window backend is chosen")
+endif()
+
 target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Kmplete_Engine_STATIC>
     PRIVATE Kmplete_Engine_EXPORTS
@@ -95,6 +109,8 @@ target_compile_definitions(Kmplete_Engine
 target_link_libraries(Kmplete_Engine 
     PUBLIC ${Boost_LIBRARIES}
     PUBLIC Kmplete_Version
+    
+    PRIVATE glfw
 )
 
 set_target_properties(Kmplete_Engine PROPERTIES 

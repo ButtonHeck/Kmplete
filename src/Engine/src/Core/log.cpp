@@ -53,6 +53,7 @@ namespace Kmplete
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
     std::stringstream Log::_stringStream;
+    LogSettings Log::_logSettings;
 
     void Log::InitializeTemporarySink()
     {
@@ -72,32 +73,34 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const LogSettings& settings)
+    void Log::Initialize(const Ptr<Settings> settings)
     {
         const auto temporaryLogBuffer = _stringStream.str();
         _stringStream.clear();
 
         spdlog::drop_all();
 
-        if (settings.enabled)
+        _logSettings.LoadSettings(settings);
+
+        if (_logSettings.enabled)
         {
             std::vector<spdlog::sink_ptr> logSinks;
 
-            if (settings.outputConsole)
+            if (_logSettings.outputConsole)
             {
                 const auto stdoutLog = CreatePtr<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::automatic);
                 stdoutLog->set_pattern("%^[%T.%e] [%l] %n: %v%$");
                 logSinks.push_back(stdoutLog);
             }
 
-            if (settings.outputFile)
+            if (_logSettings.outputFile)
             {
-                const auto fileLog = CreatePtr<spdlog::sinks::basic_file_sink_mt>(settings.filename, settings.truncate);
+                const auto fileLog = CreatePtr<spdlog::sinks::basic_file_sink_mt>(_logSettings.filename, _logSettings.truncate);
                 fileLog->set_pattern("[%T.%e] [%l] %n: %v");
                 logSinks.push_back(fileLog);
             }
 
-            if (settings.outputStringBuffer)
+            if (_logSettings.outputStringBuffer)
             {
                 const auto stringBufferLog = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
                 stringBufferLog->set_pattern("[%T.%e] [%l] %n: %v");
@@ -107,8 +110,8 @@ namespace Kmplete
             _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
             _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
 
-            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
-            const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(settings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
 
             _coreLogger->set_level(coreLevel);
             _coreLogger->flush_on(coreLevel);
@@ -132,6 +135,16 @@ namespace Kmplete
         {
             Log::CoreInfo("{}", temporaryLogBuffer);
         }
+    }
+    //--------------------------------------------------------------------------
+
+    void Log::Finalize(const Ptr<Settings> settings)
+    {
+        _logSettings.SaveSettings(settings);
+
+        _clientLogger->flush();
+        _coreLogger->flush();
+        spdlog::drop_all();
     }
     //--------------------------------------------------------------------------
 

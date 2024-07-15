@@ -36,7 +36,8 @@ namespace Kmplete
     {
     public:
         KMP_API static void InitializeTemporarySink();
-        KMP_API static void Initialize(const LogSettings& settings);
+        KMP_API static void Initialize(const Ptr<Settings> settings);
+        KMP_API static void Finalize(const Ptr<Settings> settings);
 
         KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
         KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
@@ -81,6 +82,7 @@ namespace Kmplete
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->critical(fmt, std::forward<Args>(args)...); }
 
     private:
+        static LogSettings _logSettings;
         static Ptr<spdlog::logger> _coreLogger;
         static Ptr<spdlog::logger> _clientLogger;
         static std::stringstream _stringStream;

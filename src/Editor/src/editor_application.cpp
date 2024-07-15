@@ -1,5 +1,6 @@
 #include "editor_application.h"
 #include "Kmplete/Core/entry_point.h"
+#include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/function_utils.h"
 
 namespace Kmplete
@@ -15,12 +16,6 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    EditorApplication::~EditorApplication()
-    {
-        SaveSettings();
-    }
-    //--------------------------------------------------------------------------
-
     std::string EditorApplication::GetApplicationName() const KMP_NOEXCEPT
     {
         return std::string("Kmplete Editor");
@@ -34,6 +29,9 @@ namespace Kmplete
             return false;
         }
 
+        _window->SetTitle(GetApplicationName());
+        _window->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
+
         LoadSettings();
 
         return true;
@@ -42,6 +40,11 @@ namespace Kmplete
 
     void EditorApplication::Run()
     {
+        while (!_window->ShouldClose())
+        {
+            _window->ProcessEvents();
+            _window->SwapBuffers();
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -58,6 +61,7 @@ namespace Kmplete
 
     bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent&)
     {
+        _window->SetShouldClose(true);
         return true;
     }
     //--------------------------------------------------------------------------
@@ -76,11 +80,13 @@ namespace Kmplete
 
     void EditorApplication::SaveSettings() const
     {
+        _window->SaveSettings(_settings);
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::LoadSettings()
     {
+        _window->LoadSettings(_settings);
     }
     //--------------------------------------------------------------------------
 }

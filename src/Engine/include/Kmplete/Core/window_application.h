@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/application.h"
+#include "Kmplete/Core/window.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/mouse_event.h"
 
@@ -28,6 +29,9 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { return true; }
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent&) { return true; }
         KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { return true; }
+
+    protected:
+        Ptr<Window> _window;
     };
     //--------------------------------------------------------------------------
 }

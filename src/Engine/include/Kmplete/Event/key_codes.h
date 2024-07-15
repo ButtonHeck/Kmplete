@@ -2,8 +2,8 @@
 
 namespace Kmplete
 {
-    using KeyCode = uint16_t;
-    using KeyMode = uint16_t;
+    using KeyCode = int;
+    using KeyMode = int;
 
     namespace Mode
     {

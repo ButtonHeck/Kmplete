@@ -2,7 +2,7 @@
 
 namespace Kmplete
 {
-    using MouseCode = uint16_t;
+    using MouseCode = int;
 
     namespace Mouse
     {

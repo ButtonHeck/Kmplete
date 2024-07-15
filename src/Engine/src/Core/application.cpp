@@ -24,10 +24,18 @@ namespace Kmplete
             return false;
         }
 
-        LogSettings logSettings;
-        logSettings.LoadSettings(_settings);
+        Log::Initialize(_settings);
 
-        Log::Initialize(logSettings);
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    KMP_API KMP_NODISCARD bool Application::Finalize()
+    {
+        _settings->StartSave();
+        Log::Finalize(_settings);
+        SaveSettings();
+        _settings->EndSave();
 
         return true;
     }
