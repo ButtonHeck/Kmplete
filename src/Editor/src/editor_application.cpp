@@ -80,13 +80,13 @@ namespace Kmplete
 
     void EditorApplication::SaveSettings() const
     {
-        _window->SaveSettings(_settings);
+        WindowApplication::SaveSettings();
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::LoadSettings()
     {
-        _window->LoadSettings(_settings);
+        WindowApplication::LoadSettings();
     }
     //--------------------------------------------------------------------------
 }

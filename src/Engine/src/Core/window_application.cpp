@@ -23,4 +23,16 @@ namespace Kmplete
         return true;
     }
     //--------------------------------------------------------------------------
+
+    void WindowApplication::SaveSettings() const
+    {
+        _window->SaveSettings(_settings);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::LoadSettings()
+    {
+        _window->LoadSettings(_settings);
+    }
+    //--------------------------------------------------------------------------
 }

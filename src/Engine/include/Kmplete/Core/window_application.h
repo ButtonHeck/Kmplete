@@ -31,6 +31,10 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { return true; }
 
     protected:
+        KMP_API void SaveSettings() const override;
+        KMP_API void LoadSettings() override;
+
+    protected:
         Ptr<Window> _window;
     };
     //--------------------------------------------------------------------------
