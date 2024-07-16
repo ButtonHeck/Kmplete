@@ -18,7 +18,6 @@ namespace Kmplete
     void LogSettings::SaveSettings(const Ptr<Settings> settings) const
     {
         settings->StartSaveGroup("Log");
-
         settings->SaveString("Filename", filename);
         settings->SaveBool("Enabled", enabled);
         settings->SaveBool("Truncate", truncate);
@@ -27,7 +26,6 @@ namespace Kmplete
         settings->SaveBool("OutputStringBuffer", outputStringBuffer);
         settings->SaveInt("CoreLevel", coreLevel);
         settings->SaveInt("ClientLevel", clientLevel);
-
         settings->EndSaveGroup();
     }
     //--------------------------------------------------------------------------
@@ -35,7 +33,6 @@ namespace Kmplete
     void LogSettings::LoadSettings(const Ptr<Settings> settings)
     {
         settings->StartLoadGroup("Log");
-
         filename = settings->GetString("Filename", "Kmplete_log.txt");
         enabled = settings->GetBool("Enabled", true);
         truncate = settings->GetBool("Truncate", false);
@@ -44,16 +41,15 @@ namespace Kmplete
         outputStringBuffer = settings->GetBool("OutputStringBuffer", false);
         coreLevel = settings->GetInt("CoreLevel", spdlog::level::trace);
         clientLevel = settings->GetInt("ClientLevel", spdlog::level::trace);
-
         settings->EndLoadGroup();
     }
     //--------------------------------------------------------------------------
 
 
+    LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
     std::stringstream Log::_stringStream;
-    LogSettings Log::_logSettings;
 
     void Log::InitializeTemporarySink()
     {

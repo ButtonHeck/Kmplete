@@ -210,6 +210,7 @@ namespace Kmplete
         const auto screenMode = Window::StringToMode(settings->GetString("ScreenMode", WindowedModeStr));
         const auto vSync = settings->GetBool("VSync", true);
         const auto updateContinuously = settings->GetBool("UpdateContinuously", true);
+        settings->EndLoadGroup();
 
         const auto userData = GetUserPointer(_window);
         if (userData)
@@ -226,8 +227,6 @@ namespace Kmplete
         {
             glfwSetWindowSize(_window, width, height);
         }
-
-        settings->EndLoadGroup();
     }
     //--------------------------------------------------------------------------
 
