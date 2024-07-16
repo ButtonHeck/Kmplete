@@ -14,9 +14,6 @@ namespace Kmplete
     class Window
     {
     public:
-        KMP_API KMP_NODISCARD static Window* Create();
-
-    public:
         using EventCallbackFn = std::function<void(Event&)>;
 
     public:

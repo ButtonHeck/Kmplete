@@ -17,20 +17,19 @@ namespace Kmplete
     WindowGlfw::~WindowGlfw()
     {
         glfwDestroyWindow(_window);
-        glfwTerminate();
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::Initialize()
     {
-        if (!glfwInit())
-        {
-            return false;
-        }
-
         InitializeHints();
 
         _window = glfwCreateWindow(_DefaultWidth, _DefaultHeight, "", nullptr, nullptr);
+
+        if (!_window)
+        {
+            return false;
+        }
 
         glfwSetWindowUserPointer(_window, new UserData());
         MakeContextCurrent();

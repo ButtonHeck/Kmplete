@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/application.h"
+#include "Kmplete/Core/window_backend.h"
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/mouse_event.h"
@@ -35,7 +36,8 @@ namespace Kmplete
         KMP_API void LoadSettings() override;
 
     protected:
-        Ptr<Window> _window;
+        Ptr<WindowBackend> _backend;
+        Ptr<Window> _mainWindow;
     };
     //--------------------------------------------------------------------------
 }

@@ -29,8 +29,8 @@ namespace Kmplete
             return false;
         }
 
-        _window->SetTitle(GetApplicationName());
-        _window->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
+        _mainWindow->SetTitle(GetApplicationName());
+        _mainWindow->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         LoadSettings();
 
@@ -40,10 +40,10 @@ namespace Kmplete
 
     void EditorApplication::Run()
     {
-        while (!_window->ShouldClose())
+        while (!_mainWindow->ShouldClose())
         {
-            _window->ProcessEvents();
-            _window->SwapBuffers();
+            _mainWindow->ProcessEvents();
+            _mainWindow->SwapBuffers();
         }
     }
     //--------------------------------------------------------------------------
@@ -61,7 +61,7 @@ namespace Kmplete
 
     bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent&)
     {
-        _window->SetShouldClose(true);
+        _mainWindow->SetShouldClose(true);
         return true;
     }
     //--------------------------------------------------------------------------

@@ -3,7 +3,8 @@
 namespace Kmplete
 {
     WindowApplication::WindowApplication()
-        : _window(nullptr)
+        : _backend(nullptr)
+        , _mainWindow(nullptr)
     {}
     //--------------------------------------------------------------------------
 
@@ -14,8 +15,14 @@ namespace Kmplete
             return false;
         }
 
-        _window.reset(Window::Create());
-        if (!_window || !_window->Initialize())
+        _backend = WindowBackend::Create();
+        if (!_backend || !_backend->Initialize())
+        {
+            return false;
+        }
+
+        _mainWindow = _backend->CreateWindow();
+        if (!_mainWindow || !_mainWindow->Initialize())
         {
             return false;
         }
@@ -26,13 +33,13 @@ namespace Kmplete
 
     void WindowApplication::SaveSettings() const
     {
-        _window->SaveSettings(_settings);
+        _mainWindow->SaveSettings(_settings);
     }
     //--------------------------------------------------------------------------
 
     void WindowApplication::LoadSettings()
     {
-        _window->LoadSettings(_settings);
+        _mainWindow->LoadSettings(_settings);
     }
     //--------------------------------------------------------------------------
 }

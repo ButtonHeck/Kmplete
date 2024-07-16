@@ -23,6 +23,8 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_writer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_backend_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
@@ -36,6 +38,8 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_backend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_backend_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_glfw.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
