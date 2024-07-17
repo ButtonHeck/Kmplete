@@ -15,37 +15,6 @@
 
 namespace Kmplete
 {
-    void LogSettings::SaveSettings(const Ptr<Settings> settings) const
-    {
-        settings->StartSaveGroup("Log");
-        settings->SaveString("Filename", filename);
-        settings->SaveBool("Enabled", enabled);
-        settings->SaveBool("Truncate", truncate);
-        settings->SaveBool("OutputConsole", outputConsole);
-        settings->SaveBool("OutputFile", outputFile);
-        settings->SaveBool("OutputStringBuffer", outputStringBuffer);
-        settings->SaveInt("CoreLevel", coreLevel);
-        settings->SaveInt("ClientLevel", clientLevel);
-        settings->EndSaveGroup();
-    }
-    //--------------------------------------------------------------------------
-
-    void LogSettings::LoadSettings(const Ptr<Settings> settings)
-    {
-        settings->StartLoadGroup("Log");
-        filename = settings->GetString("Filename", "Kmplete_log.txt");
-        enabled = settings->GetBool("Enabled", true);
-        truncate = settings->GetBool("Truncate", false);
-        outputConsole = settings->GetBool("OutputConsole", true);
-        outputFile = settings->GetBool("OutputFile", true);
-        outputStringBuffer = settings->GetBool("OutputStringBuffer", false);
-        coreLevel = settings->GetInt("CoreLevel", spdlog::level::trace);
-        clientLevel = settings->GetInt("ClientLevel", spdlog::level::trace);
-        settings->EndLoadGroup();
-    }
-    //--------------------------------------------------------------------------
-
-
     LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
@@ -76,7 +45,7 @@ namespace Kmplete
 
         spdlog::drop_all();
 
-        _logSettings.LoadSettings(settings);
+        LoadSettings(settings);
 
         if (_logSettings.enabled)
         {
@@ -134,10 +103,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Finalize(const Ptr<Settings> settings)
+    void Log::Finalize()
     {
-        _logSettings.SaveSettings(settings);
-
         _clientLogger->flush();
         _coreLogger->flush();
         spdlog::drop_all();
@@ -159,6 +126,36 @@ namespace Kmplete
     std::string_view Log::StringLogOutput()
     {
         return _stringStream.view();
+    }
+    //--------------------------------------------------------------------------
+
+    KMP_API void Log::SaveSettings(const Ptr<Settings> settings)
+    {
+        settings->StartSaveGroup("Log");
+        settings->SaveString("Filename", _logSettings.filename);
+        settings->SaveBool("Enabled", _logSettings.enabled);
+        settings->SaveBool("Truncate", _logSettings.truncate);
+        settings->SaveBool("OutputConsole", _logSettings.outputConsole);
+        settings->SaveBool("OutputFile", _logSettings.outputFile);
+        settings->SaveBool("OutputStringBuffer", _logSettings.outputStringBuffer);
+        settings->SaveInt("CoreLevel", _logSettings.coreLevel);
+        settings->SaveInt("ClientLevel", _logSettings.clientLevel);
+        settings->EndSaveGroup();
+    }
+    //--------------------------------------------------------------------------
+
+    KMP_API void Log::LoadSettings(const Ptr<Settings> settings)
+    {
+        settings->StartLoadGroup("Log");
+        _logSettings.filename = settings->GetString("Filename", "Kmplete_log.txt");
+        _logSettings.enabled = settings->GetBool("Enabled", true);
+        _logSettings.truncate = settings->GetBool("Truncate", false);
+        _logSettings.outputConsole = settings->GetBool("OutputConsole", true);
+        _logSettings.outputFile = settings->GetBool("OutputFile", true);
+        _logSettings.outputStringBuffer = settings->GetBool("OutputStringBuffer", false);
+        _logSettings.coreLevel = settings->GetInt("CoreLevel", spdlog::level::trace);
+        _logSettings.clientLevel = settings->GetInt("ClientLevel", spdlog::level::trace);
+        settings->EndLoadGroup();
     }
     //--------------------------------------------------------------------------
 }

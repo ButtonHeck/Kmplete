@@ -34,9 +34,11 @@ namespace Kmplete
     bool Application::Finalize()
     {
         _settings->StartSave();
-        Log::Finalize(_settings);
+        Log::SaveSettings(_settings);
         SaveSettings();
         _settings->EndSave();
+
+        Log::Finalize();
 
         return true;
     }

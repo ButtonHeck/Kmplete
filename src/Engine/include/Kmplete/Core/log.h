@@ -25,9 +25,6 @@ namespace Kmplete
         bool outputStringBuffer = false;
         int coreLevel = spdlog::level::trace;
         int clientLevel = spdlog::level::trace;
-
-        KMP_API void SaveSettings(const Ptr<Settings> settings) const;
-        KMP_API void LoadSettings(const Ptr<Settings> settings);
     };
     //--------------------------------------------------------------------------
 
@@ -37,11 +34,14 @@ namespace Kmplete
     public:
         KMP_API static void InitializeTemporarySink();
         KMP_API static void Initialize(const Ptr<Settings> settings);
-        KMP_API static void Finalize(const Ptr<Settings> settings);
+        KMP_API static void Finalize();
 
         KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
         KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
         KMP_API KMP_NODISCARD static std::string_view StringLogOutput();
+
+        KMP_API static void SaveSettings(const Ptr<Settings> settings);
+        KMP_API static void LoadSettings(const Ptr<Settings> settings);
 
         // Core log functions
         template <typename... Args>
