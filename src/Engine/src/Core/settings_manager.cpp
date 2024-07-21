@@ -3,16 +3,17 @@
 #include "Kmplete/Core/filesystem.h"
 
 #include <rapidjson/document.h>
-#include <rapidjson/pointer.h>
 #include <rapidjson/istreamwrapper.h>
-#include <rapidjson/error/en.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
+#include <rapidjson/error/en.h>
 
 #include <fstream>
 
 #ifdef GetObject
+#pragma push_macro("GetObject")
 #undef GetObject
+#define KMP_UNDEF_GetObject
 #endif
 
 namespace Kmplete
@@ -22,17 +23,13 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    SettingsManager::~SettingsManager()
-    {}
-    //--------------------------------------------------------------------------
-
     bool SettingsManager::Initialize()
     {
-        Log::CoreInfo("JsonReader: loading from '{}'", Filesystem::ToGenericU8String(_filename));
+        Log::CoreInfo("SettingsManager: loading from '{}'", Filesystem::ToGenericU8String(_filename));
 
         if (!Filesystem::PathExists(_filename))
         {
-            Log::CoreWarn("JsonReader: insufficient path");
+            Log::CoreWarn("SettingsManager: insufficient path");
             return false;
         }
 
@@ -49,17 +46,17 @@ namespace Kmplete
 
         if (document.HasParseError())
         {
-            Log::CoreError("JsonReader: JSON parsing error '{}'", rapidjson::GetParseError_En(document.GetParseError()));
+            Log::CoreError("SettingsManager: JSON parsing error '{}'", rapidjson::GetParseError_En(document.GetParseError()));
             return false;
         }
 
-        for (auto entry = document.MemberBegin(); entry != document.MemberEnd(); entry++)
+        for (auto settingsEntry = document.MemberBegin(); settingsEntry != document.MemberEnd(); settingsEntry++)
         {
-            const auto entryName = entry->name.GetString();
-            rapidjson::Document subDocument;
-            subDocument.CopyFrom(entry->value, subDocument.GetAllocator());
+            const auto settingsName = settingsEntry->name.GetString();
+            rapidjson::Document settingsEntryDocument;
+            settingsEntryDocument.CopyFrom(settingsEntry->value, settingsEntryDocument.GetAllocator());
 
-            PutSettings(entryName, CreatePtr<Settings>(entryName, std::move(subDocument)));
+            PutSettings(settingsName, CreatePtr<Settings>(settingsName, std::move(settingsEntryDocument)));
         }
 
         return true;
@@ -68,19 +65,19 @@ namespace Kmplete
 
     void SettingsManager::Finalize()
     {
-        rapidjson::Document document;
-        document.SetObject();
+        rapidjson::Document summaryDocument;
+        summaryDocument.SetObject();
 
         for (const auto& settingsEntry : _settings)
         {
-            auto& entryDocument = settingsEntry.second->GetDocument();
-            document.AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), entryDocument.GetObject(), entryDocument.GetAllocator());
+            auto& settingsEntryDocument = settingsEntry.second->GetDocument();
+            summaryDocument.AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
         }
 
         rapidjson::StringBuffer buffer;
         rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 
-        if (document.Accept(writer))
+        if (summaryDocument.Accept(writer))
         {
             std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
             if (!outputStream.is_open() || !outputStream.good())
@@ -91,6 +88,12 @@ namespace Kmplete
 
             outputStream << buffer.GetString();
             outputStream.close();
+
+            Log::CoreInfo("SettingsManager: settings written successfully");
+        }
+        else
+        {
+            Log::CoreWarn("SettingsManager: failed to write settings");
         }
     }
     //--------------------------------------------------------------------------
@@ -117,3 +120,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 }
+
+#ifdef KMP_UNDEF_GetObject
+#pragma pop_macro("GetObject")
+#undef KMP_UNDEF_GetObject
+#endif

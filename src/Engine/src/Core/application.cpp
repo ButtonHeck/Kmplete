@@ -27,20 +27,29 @@ namespace Kmplete
 
         Log::Initialize(_settingsManager);
 
+        LoadSettings();
+
         return true;
     }
     //--------------------------------------------------------------------------
 
-    bool Application::Finalize()
+    void Application::Finalize()
     {
-        Log::SaveSettings(_settingsManager);
         SaveSettings();
 
         _settingsManager->Finalize();
-
         Log::Finalize();
+    }
+    //--------------------------------------------------------------------------
 
-        return true;
+    void Application::SaveSettings() const
+    {
+        Log::SaveSettings(_settingsManager);
+    }
+    //--------------------------------------------------------------------------
+
+    void Application::LoadSettings()
+    {
     }
     //--------------------------------------------------------------------------
 }

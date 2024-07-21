@@ -16,6 +16,7 @@ namespace Kmplete
         KMP_API WindowApplication();
 
         KMP_API KMP_NODISCARD bool Initialize(const std::string& settingsFilePath) override;
+        KMP_API void Finalize() override;
 
     protected:
         KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { return true; }
@@ -31,9 +32,9 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent&) { return true; }
         KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { return true; }
 
-    protected:
-        KMP_API void SaveSettings() const override;
-        KMP_API void LoadSettings() override;
+    private:
+        void SaveSettings() const;
+        void LoadSettings();
 
     protected:
         Ptr<WindowBackend> _backend;

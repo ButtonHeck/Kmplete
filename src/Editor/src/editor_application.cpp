@@ -36,6 +36,13 @@ namespace Kmplete
 
         return true;
     }
+
+    void EditorApplication::Finalize()
+    {
+        SaveSettings();
+
+        WindowApplication::Finalize();
+    }
     //--------------------------------------------------------------------------
 
     void EditorApplication::Run()
@@ -80,13 +87,11 @@ namespace Kmplete
 
     void EditorApplication::SaveSettings() const
     {
-        WindowApplication::SaveSettings();
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::LoadSettings()
     {
-        WindowApplication::LoadSettings();
     }
     //--------------------------------------------------------------------------
 }

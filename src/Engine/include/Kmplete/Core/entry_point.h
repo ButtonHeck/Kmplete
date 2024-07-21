@@ -44,13 +44,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     }
 
     app->Run();
-
-    if (!app->Finalize())
-    {
-        app.reset();
-        return 3;
-    }    
-
+    app->Finalize();
     app.reset();
 
     return 0;

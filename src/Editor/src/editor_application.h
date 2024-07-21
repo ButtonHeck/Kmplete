@@ -13,6 +13,8 @@ namespace Kmplete
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
 
         KMP_NODISCARD bool Initialize(const std::string& settingsPath) override;
+        void Finalize() override;
+
         void Run() override;
 
     protected:
@@ -23,8 +25,9 @@ namespace Kmplete
 
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event) override;
 
-        void SaveSettings() const override;
-        void LoadSettings() override;
+    private:
+        void SaveSettings() const;
+        void LoadSettings();
     };
     //--------------------------------------------------------------------------
 }

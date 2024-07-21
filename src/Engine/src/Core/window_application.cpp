@@ -27,7 +27,17 @@ namespace Kmplete
             return false;
         }
 
+        LoadSettings();
+
         return true;
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::Finalize()
+    {
+        SaveSettings();
+
+        Application::Finalize();
     }
     //--------------------------------------------------------------------------
 
