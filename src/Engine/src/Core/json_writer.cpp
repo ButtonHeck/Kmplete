@@ -12,18 +12,6 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::Start()
-    {
-        return _writer.StartObject();
-    }
-    //--------------------------------------------------------------------------
-
-    bool JsonWriter::End()
-    {
-        return _writer.EndObject();
-    }
-    //--------------------------------------------------------------------------
-
     bool JsonWriter::StartObject()
     {
         return _writer.StartObject();

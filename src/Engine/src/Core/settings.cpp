@@ -22,13 +22,13 @@ namespace Kmplete
 
     bool Settings::StartSave()
     {
-        return _writer->Start();
+        return _writer->StartObject();
     }
     //--------------------------------------------------------------------------
 
     bool Settings::EndSave()
     {
-        return _writer->End();
+        return _writer->EndObject();
     }
     //--------------------------------------------------------------------------
 

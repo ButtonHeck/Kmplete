@@ -16,9 +16,6 @@ namespace Kmplete
     public:
         KMP_API explicit JsonWriter(rapidjson::Document& document);
 
-        KMP_API bool Start();
-        KMP_API bool End();
-
         KMP_API bool StartObject();
         KMP_API bool EndObject();
 
