@@ -5,8 +5,8 @@
 
 namespace Kmplete
 {
-    JsonWriter::JsonWriter(const std::filesystem::path& filename)
-        : _filename(filename)
+    JsonWriter::JsonWriter(rapidjson::Document& document)
+        : _document(document)
         , _stringBuffer()
         , _writer(_stringBuffer)
     {}
@@ -14,48 +14,13 @@ namespace Kmplete
 
     bool JsonWriter::Start()
     {
-        Log::CoreInfo("JsonWriter: saving to '{}'", Filesystem::ToGenericU8String(_filename));
-
-        if (!Filesystem::PathExists(_filename))
-        {
-            if (!Filesystem::FilePathIsValid(_filename))
-            {
-                Log::CoreWarn("JsonWriter: insufficient path");
-                return false;
-            }
-
-            if (!Filesystem::CreateDirectoriesKmp(_filename.parent_path()))
-            {
-                Log::CoreWarn("JsonWriter: can't create destination directory");
-                return false;
-            }
-
-            if (!Filesystem::CreateFileKmp(_filename))
-            {
-                Log::CoreWarn("JsonWriter: can't create destination file");
-                return false;
-            }
-        }
-
         return _writer.StartObject();
     }
     //--------------------------------------------------------------------------
 
     bool JsonWriter::End()
     {
-        _writer.EndObject();
-
-        std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
-        if (!outputStream.is_open() || !outputStream.good())
-        {
-            Log::CoreWarn("JsonWriter: failed to open file stream");
-            return false;
-        }
-
-        outputStream << _stringBuffer.GetString();
-        outputStream.close();
-
-        return true;
+        return _writer.EndObject();
     }
     //--------------------------------------------------------------------------
 
@@ -236,6 +201,14 @@ namespace Kmplete
 
         Log::CoreWarn("JsonWriter: cannot save '{}'", name);
         return false;
+    }
+    //--------------------------------------------------------------------------
+
+    bool JsonWriter::ToDocument()
+    {
+        _document.Parse(_stringBuffer.GetString());
+
+        return !_document.HasParseError();
     }
     //--------------------------------------------------------------------------
 }

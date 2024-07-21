@@ -3,6 +3,8 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 
+#include <rapidjson/document.h>
+
 #include <string>
 #include <filesystem>
 
@@ -14,9 +16,8 @@ namespace Kmplete
     class Settings
     {
     public:
-        KMP_API explicit Settings(const std::filesystem::path& filename);
-
-        KMP_API KMP_NODISCARD bool Initialize();
+        KMP_API Settings(const std::string& name, rapidjson::Document&& document);
+        KMP_API Settings(const std::string& name);
 
         KMP_API bool StartSave();
         KMP_API bool EndSave();
@@ -42,6 +43,9 @@ namespace Kmplete
         KMP_API bool SaveString(const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
+        KMP_API bool ToDocument();
+        KMP_API KMP_NODISCARD rapidjson::Document& GetDocument();
+
 
         KMP_API bool StartLoadGroup(const std::string& groupName);
         KMP_API bool EndLoadGroup();
@@ -65,9 +69,10 @@ namespace Kmplete
         KMP_API KMP_NODISCARD std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
-        const std::filesystem::path _filename;
-        const Ptr<JsonReader> _reader;
-        const Ptr<JsonWriter> _writer;
+        std::string _name;
+        rapidjson::Document _document;
+        Ptr<JsonReader> _reader;
+        Ptr<JsonWriter> _writer;
     };
     //--------------------------------------------------------------------------
 }

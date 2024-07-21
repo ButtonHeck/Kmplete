@@ -11,45 +11,12 @@
 
 namespace Kmplete
 {
-    JsonReader::JsonReader(const std::filesystem::path& filename)
-        : _filename(filename)
-        , _document()
+    JsonReader::JsonReader(rapidjson::Document& document)
+        : _document(document)
         , _scope()
         , _scopeString("")
-        , _currentObject(nullptr)
+        , _currentObject(rapidjson::Pointer("").Get(_document))
     {}
-    //--------------------------------------------------------------------------
-
-    bool JsonReader::Initialize()
-    {
-        Log::CoreInfo("JsonReader: loading from '{}'", Filesystem::ToGenericU8String(_filename));
-
-        if (!Filesystem::PathExists(_filename))
-        {
-            Log::CoreWarn("JsonReader: insufficient path");
-            return false;
-        }
-
-        std::ifstream inputStream(_filename);
-        if (!inputStream.is_open() || !inputStream.good())
-        {
-            return false;
-        }
-
-        rapidjson::IStreamWrapper jsonStream(inputStream);
-        _document.ParseStream(jsonStream);
-        inputStream.close();
-
-        if (_document.HasParseError())
-        {
-            Log::CoreError("JsonReader: JSON parsing error '{}'", rapidjson::GetParseError_En(_document.GetParseError()));
-            return false;
-        }
-
-        _currentObject = rapidjson::Pointer("").Get(_document);
-
-        return true;
-    }
     //--------------------------------------------------------------------------
 
     bool JsonReader::StartArrayObject(int index)

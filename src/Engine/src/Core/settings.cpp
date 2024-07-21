@@ -5,17 +5,19 @@
 
 namespace Kmplete
 {
-    Settings::Settings(const std::filesystem::path& filename)
-        : _filename(filename)
-        , _reader(CreatePtr<JsonReader>(_filename))
-        , _writer(CreatePtr<JsonWriter>(_filename))
+    Settings::Settings(const std::string& name, rapidjson::Document&& document)
+        : _name(name)
+        , _document(std::move(document))
+        , _reader(CreatePtr<JsonReader>(_document))
+        , _writer(CreatePtr<JsonWriter>(_document))
     {}
     //--------------------------------------------------------------------------
 
-    bool Settings::Initialize()
-    {
-        return _reader->Initialize();
-    }
+    Settings::Settings(const std::string& name)
+        : _name(name)
+        , _reader(CreatePtr<JsonReader>(_document))
+        , _writer(CreatePtr<JsonWriter>(_document))
+    {}
     //--------------------------------------------------------------------------
 
     bool Settings::StartSave()
@@ -135,6 +137,18 @@ namespace Kmplete
     bool Settings::SaveString(const std::string& name, const std::string& value)
     {
         return _writer->SaveString(name, value);
+    }
+    //--------------------------------------------------------------------------
+
+    bool Settings::ToDocument()
+    {
+        return _writer->ToDocument();
+    }
+    //--------------------------------------------------------------------------
+
+    rapidjson::Document& Settings::GetDocument()
+    {
+        return _document;
     }
     //--------------------------------------------------------------------------
 

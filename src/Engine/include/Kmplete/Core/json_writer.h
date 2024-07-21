@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/filesystem.h"
 
+#include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
 
@@ -13,7 +14,7 @@ namespace Kmplete
     class JsonWriter
     {
     public:
-        KMP_API explicit JsonWriter(const std::filesystem::path& filename);
+        KMP_API explicit JsonWriter(rapidjson::Document& document);
 
         KMP_API bool Start();
         KMP_API bool End();
@@ -42,9 +43,10 @@ namespace Kmplete
         KMP_API bool SaveString(const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
-    private:
-        const std::filesystem::path _filename;
+        KMP_API bool ToDocument();
 
+    private:
+        rapidjson::Document& _document;
         rapidjson::StringBuffer _stringBuffer;
         rapidjson::PrettyWriter<rapidjson::StringBuffer> _writer;
     };

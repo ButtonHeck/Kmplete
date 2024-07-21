@@ -38,14 +38,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const Ptr<Settings> settings)
+    void Log::Initialize(const Ptr<SettingsManager> settingsManager)
     {
         const auto temporaryLogBuffer = _stringStream.str();
         _stringStream.clear();
 
         spdlog::drop_all();
 
-        LoadSettings(settings);
+        LoadSettings(settingsManager);
 
         if (_logSettings.enabled)
         {
@@ -129,9 +129,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    KMP_API void Log::SaveSettings(const Ptr<Settings> settings)
+    void Log::SaveSettings(const Ptr<SettingsManager> settingsManager)
     {
-        settings->StartSaveGroup("Log");
+        auto settings = CreatePtr<Settings>("Log");
+        settings->StartSave();
         settings->SaveString("Filename", _logSettings.filename);
         settings->SaveBool("Enabled", _logSettings.enabled);
         settings->SaveBool("Truncate", _logSettings.truncate);
@@ -140,22 +141,26 @@ namespace Kmplete
         settings->SaveBool("OutputStringBuffer", _logSettings.outputStringBuffer);
         settings->SaveInt("CoreLevel", _logSettings.coreLevel);
         settings->SaveInt("ClientLevel", _logSettings.clientLevel);
-        settings->EndSaveGroup();
+        settings->EndSave();
+
+        if (settings->ToDocument())
+        {
+            settingsManager->PutSettings("Log", settings);
+        }
     }
     //--------------------------------------------------------------------------
 
-    KMP_API void Log::LoadSettings(const Ptr<Settings> settings)
+    void Log::LoadSettings(const Ptr<SettingsManager> settingsManager)
     {
-        settings->StartLoadGroup("Log");
-        _logSettings.filename = settings->GetString("Filename", "Kmplete_log.txt");
-        _logSettings.enabled = settings->GetBool("Enabled", true);
-        _logSettings.truncate = settings->GetBool("Truncate", false);
-        _logSettings.outputConsole = settings->GetBool("OutputConsole", true);
-        _logSettings.outputFile = settings->GetBool("OutputFile", true);
-        _logSettings.outputStringBuffer = settings->GetBool("OutputStringBuffer", false);
-        _logSettings.coreLevel = settings->GetInt("CoreLevel", spdlog::level::trace);
-        _logSettings.clientLevel = settings->GetInt("ClientLevel", spdlog::level::trace);
-        settings->EndLoadGroup();
+        const auto settings = settingsManager->GetSettings("Log");
+        _logSettings.filename = settings ? settings->GetString("Filename", "Kmplete_log.txt") : "Kmplete_log.txt";
+        _logSettings.enabled = settings ? settings->GetBool("Enabled", true) : true;
+        _logSettings.truncate = settings ? settings->GetBool("Truncate", false) : false;
+        _logSettings.outputConsole = settings ? settings->GetBool("OutputConsole", true) : true;
+        _logSettings.outputFile = settings ? settings->GetBool("OutputFile", true) : true;
+        _logSettings.outputStringBuffer = settings ? settings->GetBool("OutputStringBuffer", false) : false;
+        _logSettings.coreLevel = settings ? settings->GetInt("CoreLevel", spdlog::level::trace) : spdlog::level::trace;
+        _logSettings.clientLevel = settings ? settings->GetInt("ClientLevel", spdlog::level::trace) : spdlog::level::trace;
     }
     //--------------------------------------------------------------------------
 }

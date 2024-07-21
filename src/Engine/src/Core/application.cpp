@@ -6,7 +6,7 @@
 namespace Kmplete
 {
     Application::Application()
-        : _settings(nullptr)
+        : _settingsManager(nullptr)
     {}
     //--------------------------------------------------------------------------
 
@@ -19,13 +19,13 @@ namespace Kmplete
             return false;
         }
 
-        _settings.reset(new Settings(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append("Kmplete_settings.json") : settingsFilePath));
-        if (!_settings->Initialize())
+        _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append("Kmplete_settings.json") : settingsFilePath));
+        if (!_settingsManager->Initialize())
         {
-            return false;
+            Log::CoreWarn("Application: failed to load settings");
         }
 
-        Log::Initialize(_settings);
+        Log::Initialize(_settingsManager);
 
         return true;
     }
@@ -33,10 +33,10 @@ namespace Kmplete
 
     bool Application::Finalize()
     {
-        _settings->StartSave();
-        Log::SaveSettings(_settings);
+        Log::SaveSettings(_settingsManager);
         SaveSettings();
-        _settings->EndSave();
+
+        _settingsManager->Finalize();
 
         Log::Finalize();
 

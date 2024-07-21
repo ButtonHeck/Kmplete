@@ -188,7 +188,6 @@ namespace Kmplete
 
         const auto userData = GetUserPointer(_window);
 
-        settings->StartSaveGroup("Window");
         settings->SaveUInt("Width", width);
         settings->SaveUInt("Height", height);
         settings->SaveUInt("WindowedWidth", userData ? userData->windowedWidth : _DefaultWidth);
@@ -196,21 +195,18 @@ namespace Kmplete
         settings->SaveString("ScreenMode", Window::ModeToString(GetScreenMode()));
         settings->SaveBool("VSync", IsVSync());
         settings->SaveBool("UpdateContinuously", userData ? userData->updateContinuously : true);
-        settings->EndSaveGroup();
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::LoadSettings(const Ptr<Settings> settings)
     {
-        settings->StartLoadGroup("Window");
-        const auto width = settings->GetUInt("Width", _DefaultWidth);
-        const auto height = settings->GetUInt("Height", _DefaultHeight);
-        const auto windowedWidth = settings->GetUInt("WindowedWidth", _DefaultWidth);
-        const auto windowedHeight = settings->GetUInt("WindowedHeight", _DefaultHeight);
-        const auto screenMode = Window::StringToMode(settings->GetString("ScreenMode", WindowedModeStr));
-        const auto vSync = settings->GetBool("VSync", true);
-        const auto updateContinuously = settings->GetBool("UpdateContinuously", true);
-        settings->EndLoadGroup();
+        const auto width = settings ? settings->GetUInt("Width", _DefaultWidth) : _DefaultWidth;
+        const auto height = settings ? settings->GetUInt("Height", _DefaultHeight) : _DefaultHeight;
+        const auto windowedWidth = settings ? settings->GetUInt("WindowedWidth", _DefaultWidth) : _DefaultWidth;
+        const auto windowedHeight = settings ? settings->GetUInt("WindowedHeight", _DefaultHeight) : _DefaultHeight;
+        const auto screenMode = settings ? Window::StringToMode(settings->GetString("ScreenMode", WindowedModeStr)) : WindowedMode;
+        const auto vSync = settings ? settings->GetBool("VSync", true) : true;
+        const auto updateContinuously = settings ? settings->GetBool("UpdateContinuously", true) : true;
 
         const auto userData = GetUserPointer(_window);
         if (userData)

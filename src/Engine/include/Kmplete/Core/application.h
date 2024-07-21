@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/key_event.h"
 
@@ -36,7 +37,7 @@ namespace Kmplete
         virtual void LoadSettings() = 0;
 
     protected:
-        Ptr<Settings> _settings;
+        Ptr<SettingsManager> _settingsManager;
     };
     //--------------------------------------------------------------------------
 

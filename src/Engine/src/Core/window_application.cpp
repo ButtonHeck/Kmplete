@@ -33,13 +33,21 @@ namespace Kmplete
 
     void WindowApplication::SaveSettings() const
     {
-        _mainWindow->SaveSettings(_settings);
+        Ptr<Settings> settings = CreatePtr<Settings>("Window");
+        settings->StartSave();
+        _mainWindow->SaveSettings(settings);
+        settings->EndSave();
+
+        if (settings->ToDocument())
+        {
+            _settingsManager->PutSettings("Window", settings);
+        }
     }
     //--------------------------------------------------------------------------
 
     void WindowApplication::LoadSettings()
     {
-        _mainWindow->LoadSettings(_settings);
+        _mainWindow->LoadSettings(_settingsManager->GetSettings("Window"));
     }
     //--------------------------------------------------------------------------
 }

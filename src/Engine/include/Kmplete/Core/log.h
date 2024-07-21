@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/settings_manager.h"
 
 #if defined (KMP_COMPILER_MSVC)
     #pragma warning(disable : 4996)
@@ -33,15 +34,15 @@ namespace Kmplete
     {
     public:
         KMP_API static void InitializeTemporarySink();
-        KMP_API static void Initialize(const Ptr<Settings> settings);
+        KMP_API static void Initialize(const Ptr<SettingsManager> settingsManager);
         KMP_API static void Finalize();
 
         KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
         KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
         KMP_API KMP_NODISCARD static std::string_view StringLogOutput();
 
-        KMP_API static void SaveSettings(const Ptr<Settings> settings);
-        KMP_API static void LoadSettings(const Ptr<Settings> settings);
+        KMP_API static void SaveSettings(const Ptr<SettingsManager> settingsManager);
+        KMP_API static void LoadSettings(const Ptr<SettingsManager> settingsManager);
 
         // Core log functions
         template <typename... Args>
