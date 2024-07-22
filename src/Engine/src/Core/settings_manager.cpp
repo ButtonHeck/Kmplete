@@ -63,7 +63,43 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::Finalize()
+    void SettingsManager::Finalize() const
+    {
+        SaveSettings();
+    }
+    //--------------------------------------------------------------------------
+
+    void SettingsManager::PutSettings(const std::string& name, const Ptr<Settings>& settings)
+    {
+        if (_settings.contains(name))
+        {
+            _settings.erase(name);
+        }
+
+        _settings.insert({ name, settings });
+    }
+    //--------------------------------------------------------------------------
+
+    Ptr<Settings> SettingsManager::PutSettings(const std::string& name)
+    {
+        auto settings = CreatePtr<Settings>(name);
+        PutSettings(name, settings);
+        return settings;
+    }
+    //--------------------------------------------------------------------------
+
+    Ptr<Settings> SettingsManager::GetSettings(const std::string& name) const
+    {
+        if (_settings.contains(name))
+        {
+            return _settings.at(name);
+        }
+
+        return nullptr;
+    }
+    //--------------------------------------------------------------------------
+
+    void SettingsManager::SaveSettings() const
     {
         rapidjson::Document summaryDocument;
         summaryDocument.SetObject();
@@ -101,33 +137,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::PutSettings(const std::string& name, const Ptr<Settings>& settings)
+    void SettingsManager::SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT
     {
-        if (_settings.contains(name))
-        {
-            _settings.erase(name);
-        }
-
-        _settings.insert({ name, settings });
+        _filename = filename;
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Settings> SettingsManager::PutSettings(const std::string& name)
+    std::filesystem::path SettingsManager::GetFilename() const KMP_NOEXCEPT
     {
-        auto settings = CreatePtr<Settings>(name);
-        PutSettings(name, settings);
-        return settings;
-    }
-    //--------------------------------------------------------------------------
-
-    Ptr<Settings> SettingsManager::GetSettings(const std::string& name) const
-    {
-        if (_settings.contains(name))
-        {
-            return _settings.at(name);
-        }
-
-        return nullptr;
+        return _filename;
     }
     //--------------------------------------------------------------------------
 }
