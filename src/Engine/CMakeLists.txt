@@ -87,8 +87,8 @@ target_include_directories(Kmplete_Engine
     PUBLIC "${Boost_INCLUDE_DIR}"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
     PUBLIC "${RapidJSON_SOURCE_DIR}/include"
-    PUBLIC "${GLFW_SOURCE_DIR}/include"
     
+    PRIVATE "${GLFW_SOURCE_DIR}/include"    
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
 )
 
