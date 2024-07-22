@@ -131,7 +131,7 @@ namespace Kmplete
 
     void Log::SaveSettings(const Ptr<SettingsManager> settingsManager)
     {
-        auto settings = CreatePtr<Settings>("Log");
+        auto settings = settingsManager->PutSettings("Log");
         settings->StartSave();
         settings->SaveString("Filename", _logSettings.filename);
         settings->SaveBool("Enabled", _logSettings.enabled);
@@ -142,11 +142,6 @@ namespace Kmplete
         settings->SaveInt("CoreLevel", _logSettings.coreLevel);
         settings->SaveInt("ClientLevel", _logSettings.clientLevel);
         settings->EndSave();
-
-        if (settings->ToDocument())
-        {
-            settingsManager->PutSettings("Log", settings);
-        }
     }
     //--------------------------------------------------------------------------
 

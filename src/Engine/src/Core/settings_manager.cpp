@@ -70,8 +70,11 @@ namespace Kmplete
 
         for (const auto& settingsEntry : _settings)
         {
-            auto& settingsEntryDocument = settingsEntry.second->GetDocument();
-            summaryDocument.AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
+            if (settingsEntry.second->ParseToDocument())
+            {
+                auto& settingsEntryDocument = settingsEntry.second->GetDocument();
+                summaryDocument.AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
+            }
         }
 
         rapidjson::StringBuffer buffer;
@@ -106,6 +109,14 @@ namespace Kmplete
         }
 
         _settings.insert({ name, settings });
+    }
+    //--------------------------------------------------------------------------
+
+    Ptr<Settings> SettingsManager::PutSettings(const std::string& name)
+    {
+        auto settings = CreatePtr<Settings>(name);
+        PutSettings(name, settings);
+        return settings;
     }
     //--------------------------------------------------------------------------
 

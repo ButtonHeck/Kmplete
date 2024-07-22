@@ -40,7 +40,7 @@ namespace Kmplete
         KMP_API bool SaveString(const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
-        KMP_API bool ToDocument();
+        KMP_API bool ParseToDocument();
 
     private:
         rapidjson::Document& _document;

@@ -18,6 +18,7 @@ namespace Kmplete
         KMP_API void Finalize();
 
         KMP_API void PutSettings(const std::string& name, const Ptr<Settings>& settings);
+        KMP_API KMP_NODISCARD Ptr<Settings> PutSettings(const std::string& name);
         KMP_API KMP_NODISCARD Ptr<Settings> GetSettings(const std::string& name) const;
 
     private:

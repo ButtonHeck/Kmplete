@@ -1,6 +1,8 @@
 #include "Kmplete/Core/json_writer.h"
 #include "Kmplete/Core/log.h"
 
+#include <rapidjson/error/en.h>
+
 #include <fstream>
 
 namespace Kmplete
@@ -192,11 +194,17 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::ToDocument()
+    bool JsonWriter::ParseToDocument()
     {
         _document.Parse(_stringBuffer.GetString());
 
-        return !_document.HasParseError();
+        if (_document.HasParseError())
+        {
+            Log::CoreWarn("JsonWriter: failed to parse JSON document from buffer: '{}'", rapidjson::GetParseError_En(_document.GetParseError()));
+            return false;
+        }
+
+        return true;
     }
     //--------------------------------------------------------------------------
 }

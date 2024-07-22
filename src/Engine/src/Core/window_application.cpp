@@ -43,15 +43,10 @@ namespace Kmplete
 
     void WindowApplication::SaveSettings() const
     {
-        Ptr<Settings> settings = CreatePtr<Settings>("Window");
+        auto settings = _settingsManager->PutSettings("Window");
         settings->StartSave();
         _mainWindow->SaveSettings(settings);
         settings->EndSave();
-
-        if (settings->ToDocument())
-        {
-            _settingsManager->PutSettings("Window", settings);
-        }
     }
     //--------------------------------------------------------------------------
 

@@ -17,7 +17,9 @@ namespace Kmplete
         : _name(name)
         , _reader(CreatePtr<JsonReader>(_document))
         , _writer(CreatePtr<JsonWriter>(_document))
-    {}
+    {
+        _document.SetObject();
+    }
     //--------------------------------------------------------------------------
 
     bool Settings::StartSave()
@@ -140,9 +142,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::ToDocument()
+    bool Settings::ParseToDocument()
     {
-        return _writer->ToDocument();
+        return _writer->ParseToDocument();
     }
     //--------------------------------------------------------------------------
 
