@@ -2,7 +2,6 @@
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/filesystem.h"
 
-#include <rapidjson/document.h>
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/prettywriter.h>
 #include <rapidjson/stringbuffer.h>
@@ -101,6 +100,13 @@ namespace Kmplete
 
     void SettingsManager::SaveSettings() const
     {
+        const rapidjson::Document summaryDocument = AssembleDocument();
+        WriteDocument(summaryDocument);
+    }
+    //--------------------------------------------------------------------------
+
+    rapidjson::Document SettingsManager::AssembleDocument() const
+    {
         rapidjson::Document summaryDocument;
         summaryDocument.SetObject();
 
@@ -113,10 +119,16 @@ namespace Kmplete
             }
         }
 
+        return summaryDocument;
+    }
+    //--------------------------------------------------------------------------
+
+    void SettingsManager::WriteDocument(const rapidjson::Document& document) const
+    {
         rapidjson::StringBuffer buffer;
         rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 
-        if (summaryDocument.Accept(writer))
+        if (document.Accept(writer))
         {
             std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
             if (!outputStream.is_open() || !outputStream.good())
