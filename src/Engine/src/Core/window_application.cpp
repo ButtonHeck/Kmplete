@@ -2,6 +2,8 @@
 
 namespace Kmplete
 {
+    constexpr static auto WindowSettingsEntryName = "Window";
+
     WindowApplication::WindowApplication()
         : _backend(nullptr)
         , _mainWindow(nullptr)
@@ -43,16 +45,16 @@ namespace Kmplete
 
     void WindowApplication::SaveSettings() const
     {
-        auto settings = _settingsManager->PutSettings("Window");
-        settings->StartSave();
+        auto settings = _settingsManager->PutSettings(WindowSettingsEntryName);
+        settings->StartSaveObject();
         _mainWindow->SaveSettings(settings);
-        settings->EndSave();
+        settings->EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void WindowApplication::LoadSettings()
     {
-        _mainWindow->LoadSettings(_settingsManager->GetSettings("Window"));
+        _mainWindow->LoadSettings(_settingsManager->GetSettings(WindowSettingsEntryName));
     }
     //--------------------------------------------------------------------------
 }

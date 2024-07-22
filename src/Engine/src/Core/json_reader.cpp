@@ -56,16 +56,16 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::StartGroup(const std::string& groupName)
+    bool JsonReader::StartObject(const std::string& objectName)
     {
         if (!_currentObject)
         {
             return false;
         }
 
-        if (groupName.empty())
+        if (objectName.empty())
         {
-            Log::CoreWarn("JsonReader: group name should not be empty!");
+            Log::CoreWarn("JsonReader: object name should not be empty!");
             return false;
         }
 
@@ -76,13 +76,13 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(groupName.c_str()) || !(*_currentObject)[groupName.c_str()].IsObject())
+        if (!_currentObject->HasMember(objectName.c_str()) || !(*_currentObject)[objectName.c_str()].IsObject())
         {
-            Log::CoreError("JsonReader: cannot find member '{}', or the member is not an object type", groupName);
+            Log::CoreError("JsonReader: cannot find member '{}', or the member is not an object type", objectName);
             return false;
         }
 
-        _scope.push_back(groupName);
+        _scope.push_back(objectName);
         _scopeString = GetCurrentScopeString();
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
 
@@ -90,7 +90,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::EndGroup()
+    bool JsonReader::EndObject()
     {
         if (!_scope.empty())
         {
@@ -101,7 +101,7 @@ namespace Kmplete
             return true;
         }
 
-        Log::CoreError("JsonReader: cannot end load group, already at the root");
+        Log::CoreError("JsonReader: cannot end load object, already at the root");
         return false;
     }
     //--------------------------------------------------------------------------
@@ -142,7 +142,7 @@ namespace Kmplete
 
     bool JsonReader::EndArray()
     {
-        return EndGroup();
+        return EndObject();
     }
     //--------------------------------------------------------------------------
 

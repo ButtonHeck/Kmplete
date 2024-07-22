@@ -15,6 +15,16 @@
 
 namespace Kmplete
 {
+    constexpr static auto LogSettingsEntryName = "Log";
+    constexpr static auto LogFilenameStr = "Filename";
+    constexpr static auto LogEnabledStr = "Enabled";
+    constexpr static auto LogTruncateStr = "Truncate";
+    constexpr static auto LogOutputConsoleStr = "OutputConsole";
+    constexpr static auto LogOutputFileStr = "OutputFile";
+    constexpr static auto LogOutputStringBufferStr = "OutputStringBuffer";
+    constexpr static auto LogCoreLevelStr = "CoreLevel";
+    constexpr static auto LogClientLevelStr = "ClientLevel";
+
     LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
@@ -131,31 +141,31 @@ namespace Kmplete
 
     void Log::SaveSettings(const Ptr<SettingsManager> settingsManager)
     {
-        auto settings = settingsManager->PutSettings("Log");
-        settings->StartSave();
-        settings->SaveString("Filename", _logSettings.filename);
-        settings->SaveBool("Enabled", _logSettings.enabled);
-        settings->SaveBool("Truncate", _logSettings.truncate);
-        settings->SaveBool("OutputConsole", _logSettings.outputConsole);
-        settings->SaveBool("OutputFile", _logSettings.outputFile);
-        settings->SaveBool("OutputStringBuffer", _logSettings.outputStringBuffer);
-        settings->SaveInt("CoreLevel", _logSettings.coreLevel);
-        settings->SaveInt("ClientLevel", _logSettings.clientLevel);
-        settings->EndSave();
+        auto settings = settingsManager->PutSettings(LogSettingsEntryName);
+        settings->StartSaveObject();
+        settings->SaveString(LogFilenameStr, _logSettings.filename);
+        settings->SaveBool(LogEnabledStr, _logSettings.enabled);
+        settings->SaveBool(LogTruncateStr, _logSettings.truncate);
+        settings->SaveBool(LogOutputConsoleStr, _logSettings.outputConsole);
+        settings->SaveBool(LogOutputFileStr, _logSettings.outputFile);
+        settings->SaveBool(LogOutputStringBufferStr, _logSettings.outputStringBuffer);
+        settings->SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
+        settings->SaveInt(LogClientLevelStr, _logSettings.clientLevel);
+        settings->EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void Log::LoadSettings(const Ptr<SettingsManager> settingsManager)
     {
-        const auto settings = settingsManager->GetSettings("Log");
-        _logSettings.filename = settings ? settings->GetString("Filename", "Kmplete_log.txt") : "Kmplete_log.txt";
-        _logSettings.enabled = settings ? settings->GetBool("Enabled", true) : true;
-        _logSettings.truncate = settings ? settings->GetBool("Truncate", false) : false;
-        _logSettings.outputConsole = settings ? settings->GetBool("OutputConsole", true) : true;
-        _logSettings.outputFile = settings ? settings->GetBool("OutputFile", true) : true;
-        _logSettings.outputStringBuffer = settings ? settings->GetBool("OutputStringBuffer", false) : false;
-        _logSettings.coreLevel = settings ? settings->GetInt("CoreLevel", spdlog::level::trace) : spdlog::level::trace;
-        _logSettings.clientLevel = settings ? settings->GetInt("ClientLevel", spdlog::level::trace) : spdlog::level::trace;
+        const auto settings = settingsManager->GetSettings(LogSettingsEntryName);
+        _logSettings.filename = settings ? settings->GetString(LogFilenameStr, "Kmplete_log.txt") : "Kmplete_log.txt";
+        _logSettings.enabled = settings ? settings->GetBool(LogEnabledStr, true) : true;
+        _logSettings.truncate = settings ? settings->GetBool(LogTruncateStr, false) : false;
+        _logSettings.outputConsole = settings ? settings->GetBool(LogOutputConsoleStr, true) : true;
+        _logSettings.outputFile = settings ? settings->GetBool(LogOutputFileStr, true) : true;
+        _logSettings.outputStringBuffer = settings ? settings->GetBool(LogOutputStringBufferStr, false) : false;
+        _logSettings.coreLevel = settings ? settings->GetInt(LogCoreLevelStr, spdlog::level::trace) : spdlog::level::trace;
+        _logSettings.clientLevel = settings ? settings->GetInt(LogClientLevelStr, spdlog::level::trace) : spdlog::level::trace;
     }
     //--------------------------------------------------------------------------
 }

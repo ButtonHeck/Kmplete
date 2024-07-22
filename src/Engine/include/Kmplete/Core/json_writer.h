@@ -16,11 +16,8 @@ namespace Kmplete
     public:
         KMP_API explicit JsonWriter(rapidjson::Document& document);
 
-        KMP_API bool StartObject();
+        KMP_API bool StartObject(const std::string& objectName = std::string(""));
         KMP_API bool EndObject();
-
-        KMP_API bool StartGroup(const std::string& groupName);
-        KMP_API bool EndGroup();
 
         KMP_API bool StartArray(const std::string& arrayName);
         KMP_API bool EndArray();

@@ -22,27 +22,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSave()
+    bool Settings::StartSaveObject(const std::string& objectName)
     {
-        return _writer->StartObject();
-    }
-    //--------------------------------------------------------------------------
-
-    bool Settings::EndSave()
-    {
-        return _writer->EndObject();
-    }
-    //--------------------------------------------------------------------------
-
-    bool Settings::StartSaveGroup(const std::string& groupName)
-    {
-        return _writer->StartGroup(groupName);
+        return _writer->StartObject(objectName);
     }
     //--------------------------------------------------------------------------    
 
-    bool Settings::EndSaveGroup()
+    bool Settings::EndSaveObject()
     {
-        return _writer->EndGroup();
+        return _writer->EndObject();
     }
     //--------------------------------------------------------------------------
 
@@ -154,15 +142,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartLoadGroup(const std::string& groupName)
+    bool Settings::StartLoadObject(const std::string& objectName)
     {
-        return _reader->StartGroup(groupName);
+        return _reader->StartObject(objectName);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::EndLoadGroup()
+    bool Settings::EndLoadObject()
     {
-        return _reader->EndGroup();
+        return _reader->EndObject();
     }
     //--------------------------------------------------------------------------
 

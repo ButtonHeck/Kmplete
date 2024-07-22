@@ -14,37 +14,24 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartObject()
+    bool JsonWriter::StartObject(const std::string& objectName)
     {
-        return _writer.StartObject();
-    }
-    //--------------------------------------------------------------------------
-
-    bool JsonWriter::EndObject()
-    {
-        return _writer.EndObject();
-    }
-    //--------------------------------------------------------------------------
-
-    bool JsonWriter::StartGroup(const std::string& groupName)
-    {
-        if (groupName.empty())
-        {
-            Log::CoreWarn("JsonWriter: group name should not be empty!");
-            return false;
-        }
-
-        if (_writer.Key(groupName.c_str()))
+        if (objectName.empty())
         {
             return _writer.StartObject();
         }
 
-        Log::CoreWarn("JsonWriter: cannot start saving group '{}'", groupName);
+        if (_writer.Key(objectName.c_str()))
+        {
+            return _writer.StartObject();
+        }
+
+        Log::CoreWarn("JsonWriter: cannot start saving object '{}'", objectName);
         return false;
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::EndGroup()
+    bool JsonWriter::EndObject()
     {
         return _writer.EndObject();
     }

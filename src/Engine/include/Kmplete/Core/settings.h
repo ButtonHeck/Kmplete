@@ -19,11 +19,8 @@ namespace Kmplete
         KMP_API Settings(const std::string& name, rapidjson::Document&& document);
         KMP_API Settings(const std::string& name);
 
-        KMP_API bool StartSave();
-        KMP_API bool EndSave();
-
-        KMP_API bool StartSaveGroup(const std::string& groupName);
-        KMP_API bool EndSaveGroup();
+        KMP_API bool StartSaveObject(const std::string& objectName = std::string(""));
+        KMP_API bool EndSaveObject();
 
         KMP_API bool StartSaveArray(const std::string& arrayName);
         KMP_API bool EndSaveArray();
@@ -47,8 +44,8 @@ namespace Kmplete
         KMP_API KMP_NODISCARD rapidjson::Document& GetDocument();
 
 
-        KMP_API bool StartLoadGroup(const std::string& groupName);
-        KMP_API bool EndLoadGroup();
+        KMP_API bool StartLoadObject(const std::string& objectName);
+        KMP_API bool EndLoadObject();
 
         KMP_API int StartLoadArray(const std::string& arrayName);
         KMP_API bool EndLoadArray();

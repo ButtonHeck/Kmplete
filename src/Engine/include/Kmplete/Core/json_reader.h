@@ -18,8 +18,8 @@ namespace Kmplete
         KMP_API bool StartArrayObject(int index);
         KMP_API bool EndArrayObject();
 
-        KMP_API bool StartGroup(const std::string& groupName);
-        KMP_API bool EndGroup();
+        KMP_API bool StartObject(const std::string& objectName);
+        KMP_API bool EndObject();
 
         KMP_API int StartArray(const std::string& arrayName);
         KMP_API bool EndArray();
