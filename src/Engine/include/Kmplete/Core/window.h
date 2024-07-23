@@ -16,6 +16,14 @@ namespace Kmplete
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
+        constexpr static auto WidthStr = "Width";
+        constexpr static auto HeightStr = "Height";
+        constexpr static auto WindowedWidthStr = "WindowedWidth";
+        constexpr static auto WindowedHeightStr = "WindowedHeight";
+        constexpr static auto ScreenModeStr = "ScreenMode";
+        constexpr static auto VSyncStr = "VSync";
+        constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
+
     public:
         enum Mode
         {
