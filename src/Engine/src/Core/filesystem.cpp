@@ -3,6 +3,12 @@
 
 #include <fstream>
 
+#ifdef CreateFile
+#pragma push_macro("CreateFile")
+#undef CreateFile
+#define KMP_UNDEF_CreateFile
+#endif
+
 namespace Kmplete
 {
     std::filesystem::path Filesystem::_applicationPath;
@@ -68,7 +74,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectoriesKmp(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::CreateDirectories(const std::filesystem::path& path) KMP_NOEXCEPT
     {
         try
         {
@@ -83,7 +89,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateFileKmp(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::CreateFile(const std::filesystem::path& path) KMP_NOEXCEPT
     {
         try
         {
@@ -150,3 +156,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 }
+
+#ifdef KMP_UNDEF_CreateFile
+#pragma pop_macro("CreateFile")
+#undef KMP_UNDEF_CreateFile
+#endif
