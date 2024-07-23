@@ -50,7 +50,7 @@ namespace Kmplete
 
     void Log::Initialize(const Ptr<SettingsManager> settingsManager)
     {
-        const auto temporaryLogBuffer = _stringStream.str();
+        auto temporaryLogBuffer = _stringStream.str();
         _stringStream.clear();
 
         spdlog::drop_all();
@@ -108,6 +108,7 @@ namespace Kmplete
 
         if (!temporaryLogBuffer.empty())
         {
+            temporaryLogBuffer.pop_back();
             Log::CoreInfo("{}", temporaryLogBuffer);
         }
     }
