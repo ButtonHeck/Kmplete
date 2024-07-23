@@ -60,8 +60,8 @@ namespace Kmplete
 
         KMP_API KMP_NODISCARD virtual void* GetImplPointer() const KMP_NOEXCEPT = 0;
 
-        KMP_API virtual void SaveSettings(Ptr<Settings> settings) const = 0;
-        KMP_API virtual void LoadSettings(Ptr<Settings> settings) = 0;
+        KMP_API virtual void SaveSettings(const Ptr<Settings> settings) const = 0;
+        KMP_API virtual void LoadSettings(const Ptr<Settings> settings) = 0;
 
     protected:
         KMP_NODISCARD static std::string ModeToString(Mode mode) KMP_NOEXCEPT;
