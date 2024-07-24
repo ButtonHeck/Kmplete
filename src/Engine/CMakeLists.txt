@@ -108,6 +108,8 @@ else()
 endif()
 
 target_compile_definitions(Kmplete_Engine
+    PUBLIC $<$<CONFIG:Production>:KMP_LOG_DISABLED>
+    PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Kmplete_Engine_STATIC>
     PRIVATE Kmplete_Engine_EXPORTS
 )
