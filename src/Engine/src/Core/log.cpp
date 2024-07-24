@@ -142,6 +142,7 @@ namespace Kmplete
 
     void Log::SaveSettings(const Ptr<SettingsManager> settingsManager)
     {
+#ifndef KMP_LOG_DISABLED
         auto settings = settingsManager->PutSettings(LogSettingsEntryName);
         settings->StartSaveObject();
         settings->SaveString(LogFilenameStr, _logSettings.filename);
@@ -153,11 +154,15 @@ namespace Kmplete
         settings->SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
         settings->SaveInt(LogClientLevelStr, _logSettings.clientLevel);
         settings->EndSaveObject();
+#else
+        (void)settingsManager;
+#endif
     }
     //--------------------------------------------------------------------------
 
     void Log::LoadSettings(const Ptr<SettingsManager> settingsManager)
     {
+#ifndef KMP_LOG_DISABLED
         const auto settings = settingsManager->GetSettings(LogSettingsEntryName);
         _logSettings.filename = settings ? settings->GetString(LogFilenameStr, "Kmplete_log.txt") : "Kmplete_log.txt";
         _logSettings.enabled = settings ? settings->GetBool(LogEnabledStr, true) : true;
@@ -167,6 +172,9 @@ namespace Kmplete
         _logSettings.outputStringBuffer = settings ? settings->GetBool(LogOutputStringBufferStr, false) : false;
         _logSettings.coreLevel = settings ? settings->GetInt(LogCoreLevelStr, spdlog::level::trace) : spdlog::level::trace;
         _logSettings.clientLevel = settings ? settings->GetInt(LogClientLevelStr, spdlog::level::trace) : spdlog::level::trace;
+#else
+        (void)settingsManager;
+#endif
     }
     //--------------------------------------------------------------------------
 }

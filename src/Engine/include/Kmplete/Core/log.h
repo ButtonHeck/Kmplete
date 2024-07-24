@@ -44,6 +44,7 @@ namespace Kmplete
         KMP_API static void SaveSettings(const Ptr<SettingsManager> settingsManager);
         KMP_API static void LoadSettings(const Ptr<SettingsManager> settingsManager);
 
+#ifndef KMP_LOG_DISABLED
         // Core log functions
         template <typename... Args>
         static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->trace(fmt, std::forward<Args>(args)...); }
@@ -81,6 +82,46 @@ namespace Kmplete
 
         template <typename... Args>
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->critical(fmt, std::forward<Args>(args)...); }
+
+#else
+        // Core log functions
+        template <typename... Args>
+        static void CoreTrace(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void CoreDebug(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void CoreInfo(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void CoreWarn(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void CoreError(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void CoreCritical(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        // Client log functions
+        template <typename... Args>
+        static void Trace(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void Debug(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void Info(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void Warn(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void Error(spdlog::format_string_t<Args...>, Args&&...) {}
+
+        template <typename... Args>
+        static void Critical(spdlog::format_string_t<Args...>, Args&&...) {}
+#endif
 
     private:
         static LogSettings _logSettings;
