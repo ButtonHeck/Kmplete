@@ -9,6 +9,14 @@ namespace Kmplete
     class WindowBackend
     {
     public:
+        struct MonitorVideoMode
+        {
+            int width;
+            int height;
+            int refreshRate;
+        };
+
+    public:
         KMP_API KMP_NODISCARD static Ptr<WindowBackend> Create();
 
     public:
@@ -18,6 +26,11 @@ namespace Kmplete
         KMP_API virtual void Finalize() const = 0;
 
         KMP_API KMP_NODISCARD virtual Ptr<Window> CreateWindow() const = 0;
+
+        KMP_API KMP_NODISCARD virtual int GetMonitorCount() const = 0;
+        KMP_API KMP_NODISCARD virtual std::vector<std::string> GetMonitorNames() const = 0;
+        KMP_API KMP_NODISCARD virtual std::vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const = 0;
+        KMP_API KMP_NODISCARD virtual std::vector<MonitorVideoMode> GetMonitorVideoModes(int index) const = 0;
     };
     //--------------------------------------------------------------------------
 }

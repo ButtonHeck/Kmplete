@@ -12,6 +12,34 @@
 
 namespace Kmplete
 {
+    namespace
+    {
+        std::vector<WindowBackend::MonitorVideoMode> GetVideoModes(GLFWmonitor* monitor)
+        {
+            std::vector<WindowBackend::MonitorVideoMode> outputModes;
+
+            if (!monitor)
+            {
+                return outputModes;
+            }
+
+            int modesCount = 0;
+            auto modes = glfwGetVideoModes(monitor, &modesCount);
+            if (modesCount && modes)
+            {
+                for (auto i = 0; i < modesCount; i++)
+                {
+                    auto mode = modes[i];
+                    outputModes.push_back(WindowBackend::MonitorVideoMode{ .width = mode.width, .height = mode.height, .refreshRate = mode.refreshRate });
+                }
+            }
+
+            return outputModes;
+        }
+        //--------------------------------------------------------------------------
+    }
+
+
     WindowBackendGlfw::~WindowBackendGlfw()
     {
         Finalize();
@@ -41,6 +69,62 @@ namespace Kmplete
     Ptr<Window> WindowBackendGlfw::CreateWindow() const
     {
         return CreatePtr<WindowGlfw>();
+    }
+    //--------------------------------------------------------------------------
+
+    int WindowBackendGlfw::GetMonitorCount() const
+    {
+        int count = 0;
+        glfwGetMonitors(&count);
+        return count;
+    }
+    //--------------------------------------------------------------------------
+
+    std::vector<std::string> WindowBackendGlfw::GetMonitorNames() const
+    {
+        int count = 0;
+        const auto monitors = glfwGetMonitors(&count);
+
+        std::vector<std::string> names;
+        if (count && monitors)
+        {
+            for (auto i = 0; i < count; i++)
+            {
+                const auto monitor = monitors[i];
+                if (monitor)
+                {
+                    names.push_back(glfwGetMonitorName(monitor));
+                }
+            }
+        }
+
+        return names;
+    }
+    //--------------------------------------------------------------------------
+
+    std::vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const
+    {
+        const auto monitor = glfwGetPrimaryMonitor();
+        return GetVideoModes(monitor);
+    }
+    //--------------------------------------------------------------------------
+
+    std::vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(int index) const
+    {
+        if (index == 0)
+        {
+            return GetPrimaryMonitorVideoModes();
+        }
+
+        int count = 0;
+        const auto monitors = glfwGetMonitors(&count);
+        if (monitors && index < count)
+        {
+            const auto monitor = monitors[index];
+            return GetVideoModes(monitor);
+        }
+
+        return std::vector<WindowBackend::MonitorVideoMode>();
     }
     //--------------------------------------------------------------------------
 }
