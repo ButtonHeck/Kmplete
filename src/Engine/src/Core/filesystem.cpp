@@ -40,7 +40,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    KMP_NODISCARD std::filesystem::path Filesystem::GetCurrentPath() KMP_NOEXCEPT
+    std::filesystem::path Filesystem::GetCurrentPath() KMP_NOEXCEPT
     {
         try
         {
