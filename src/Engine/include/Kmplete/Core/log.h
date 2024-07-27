@@ -37,9 +37,9 @@ namespace Kmplete
         KMP_API static void Initialize(const Ptr<SettingsManager> settingsManager);
         KMP_API static void Finalize();
 
-        KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& CoreLogger();
-        KMP_API KMP_NODISCARD static Ptr<spdlog::logger>& ClientLogger();
-        KMP_API KMP_NODISCARD static std::string_view StringLogOutput();
+        KMP_NODISCARD KMP_API static Ptr<spdlog::logger>& CoreLogger();
+        KMP_NODISCARD KMP_API static Ptr<spdlog::logger>& ClientLogger();
+        KMP_NODISCARD KMP_API static std::string_view StringLogOutput();
 
         KMP_API static void SaveSettings(const Ptr<SettingsManager> settingsManager);
         KMP_API static void LoadSettings(const Ptr<SettingsManager> settingsManager);

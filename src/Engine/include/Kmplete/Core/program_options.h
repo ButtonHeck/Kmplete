@@ -16,7 +16,7 @@ namespace Kmplete
         // main entryPoint
         KMP_API void ProcessCommandLine(int argc, char** argv);
 
-        KMP_API KMP_NODISCARD const std::string& GetSettingsFilePath() const;
+        KMP_NODISCARD KMP_API const std::string& GetSettingsFilePath() const;
 
     private:
         // WinMain entryPoint

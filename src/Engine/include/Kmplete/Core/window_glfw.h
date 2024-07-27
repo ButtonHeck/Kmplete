@@ -15,26 +15,26 @@ namespace Kmplete
         KMP_API WindowGlfw();
         KMP_API ~WindowGlfw();
 
-        KMP_API KMP_NODISCARD bool Initialize() override;
+        KMP_NODISCARD KMP_API bool Initialize() override;
 
         KMP_API void SetTitle(const std::string& title) override;
         KMP_API void SetIcon(const std::string& path) override;
 
         KMP_API void SetShouldClose(bool close) override;
-        KMP_API KMP_NODISCARD bool ShouldClose() const override;
+        KMP_NODISCARD KMP_API bool ShouldClose() const override;
 
         KMP_API void SetScreenMode(Mode mode) override;
-        KMP_API KMP_NODISCARD Mode GetScreenMode() const override;
+        KMP_NODISCARD KMP_API Mode GetScreenMode() const override;
 
         KMP_API void SetVSync(bool vSync) override;
-        KMP_API KMP_NODISCARD bool IsVSync() const override;
+        KMP_NODISCARD KMP_API bool IsVSync() const override;
 
         KMP_API void ProcessEvents() override;
         KMP_API void SwapBuffers() const override;
         KMP_API void MakeContextCurrent() override;
         KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
 
-        KMP_API KMP_NODISCARD void* GetImplPointer() const KMP_NOEXCEPT override;
+        KMP_NODISCARD KMP_API void* GetImplPointer() const KMP_NOEXCEPT override;
 
         KMP_API void SaveSettings(const Ptr<Settings> settings) const override;
         KMP_API void LoadSettings(const Ptr<Settings> settings) override;

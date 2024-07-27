@@ -19,9 +19,9 @@ namespace Kmplete
 
         KMP_API virtual ~Application() = default;
 
-        KMP_API KMP_NODISCARD virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD KMP_API virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
 
-        KMP_API KMP_NODISCARD virtual bool Initialize(const std::string& settingsFilePath);
+        KMP_NODISCARD KMP_API virtual bool Initialize(const std::string& settingsFilePath);
         KMP_API virtual void Finalize();
 
         KMP_API virtual void Run() = 0;
@@ -41,5 +41,5 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    extern KMP_NODISCARD UPtr<Application> CreateApplication();
+    KMP_NODISCARD extern UPtr<Application> CreateApplication();
 }

@@ -39,26 +39,26 @@ namespace Kmplete
     public:
         KMP_API virtual ~Window() = default;
 
-        KMP_API KMP_NODISCARD virtual bool Initialize() = 0;
+        KMP_NODISCARD KMP_API virtual bool Initialize() = 0;
 
         KMP_API virtual void SetTitle(const std::string& title) = 0;
         KMP_API virtual void SetIcon(const std::string& path) = 0;
 
         KMP_API virtual void SetShouldClose(bool close) = 0;
-        KMP_API KMP_NODISCARD virtual bool ShouldClose() const = 0;
+        KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;
 
         KMP_API virtual void SetScreenMode(Mode mode) = 0;
-        KMP_API KMP_NODISCARD virtual Mode GetScreenMode() const = 0;
+        KMP_NODISCARD KMP_API virtual Mode GetScreenMode() const = 0;
 
         KMP_API virtual void SetVSync(bool vSync) = 0;
-        KMP_API KMP_NODISCARD virtual bool IsVSync() const = 0;
+        KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;
 
         KMP_API virtual void ProcessEvents() = 0;
         KMP_API virtual void SwapBuffers() const = 0;
         KMP_API virtual void MakeContextCurrent() = 0;
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 
-        KMP_API KMP_NODISCARD virtual void* GetImplPointer() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD KMP_API virtual void* GetImplPointer() const KMP_NOEXCEPT = 0;
 
         KMP_API virtual void SaveSettings(const Ptr<Settings> settings) const = 0;
         KMP_API virtual void LoadSettings(const Ptr<Settings> settings) = 0;
