@@ -7,7 +7,7 @@ namespace Kmplete
     class WindowBackendGlfw : public WindowBackend
     {
     public:
-        KMP_API ~WindowBackendGlfw();
+        KMP_API ~WindowBackendGlfw() = default;
 
         KMP_NODISCARD KMP_API bool Initialize() const override;
         KMP_API void Finalize() const override;

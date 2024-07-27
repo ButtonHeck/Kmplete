@@ -39,6 +39,8 @@ namespace Kmplete
     {
         SaveSettings();
 
+        _backend->Finalize();
+
         Application::Finalize();
     }
     //--------------------------------------------------------------------------

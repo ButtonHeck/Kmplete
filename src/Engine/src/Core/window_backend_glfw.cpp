@@ -40,12 +40,6 @@ namespace Kmplete
     }
 
 
-    WindowBackendGlfw::~WindowBackendGlfw()
-    {
-        Finalize();
-    }
-    //--------------------------------------------------------------------------
-
     bool WindowBackendGlfw::Initialize() const
     {
         if (!glfwInit())

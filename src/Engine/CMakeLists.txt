@@ -124,3 +124,6 @@ target_link_libraries(Kmplete_Engine
 set_target_properties(Kmplete_Engine PROPERTIES 
     FOLDER Kmplete
 )
+
+include(ClangTidy)
+AddClangTidy(Kmplete_Engine)
