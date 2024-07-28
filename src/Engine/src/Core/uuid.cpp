@@ -1,6 +1,7 @@
 #include "Kmplete/Core/uuid.h"
 
 #include <random>
+#include <cstdint>
 
 namespace Kmplete
 {

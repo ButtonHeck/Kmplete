@@ -39,6 +39,7 @@ namespace Kmplete
     {
         SaveSettings();
 
+        _mainWindow.reset(); // TODO: maybe delegate finalization to backend
         _backend->Finalize();
 
         Application::Finalize();

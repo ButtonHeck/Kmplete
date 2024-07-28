@@ -93,8 +93,8 @@ target_include_directories(Kmplete_Engine
 )
 
 target_compile_options(Kmplete_Engine PUBLIC
-    $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t>
-    $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t>
+    $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Werror>
+    $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Werror>
     $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX>
 )
 
@@ -124,6 +124,3 @@ target_link_libraries(Kmplete_Engine
 set_target_properties(Kmplete_Engine PROPERTIES 
     FOLDER Kmplete
 )
-
-include(ClangTidy)
-AddClangTidy(Kmplete_Engine)
