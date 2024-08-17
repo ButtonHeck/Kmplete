@@ -40,6 +40,7 @@ namespace Kmplete
         KMP_API virtual ~Window() = default;
 
         KMP_NODISCARD KMP_API virtual bool Initialize() = 0;
+        KMP_API virtual void Finalize() = 0;
 
         KMP_API virtual void SetTitle(const std::string& title) = 0;
         KMP_API virtual void SetIcon(const std::string& path) = 0;

@@ -14,12 +14,6 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    WindowGlfw::~WindowGlfw()
-    {
-        glfwDestroyWindow(_window);
-    }
-    //--------------------------------------------------------------------------
-
     bool WindowGlfw::Initialize()
     {
         InitializeHints();
@@ -37,6 +31,12 @@ namespace Kmplete
         InitializeCallbacks();
 
         return true;
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::Finalize()
+    {
+        glfwDestroyWindow(_window);
     }
     //--------------------------------------------------------------------------
 

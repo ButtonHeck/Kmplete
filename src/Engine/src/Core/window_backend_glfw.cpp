@@ -1,6 +1,7 @@
 #include "Kmplete/Core/window_backend_glfw.h"
 #include "Kmplete/Core/window_glfw.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Core/assertion.h"
 
 #include <GLFW/glfw3.h>
 
@@ -40,6 +41,11 @@ namespace Kmplete
     }
 
 
+    WindowBackendGlfw::WindowBackendGlfw()
+        : _mainWindow(nullptr)
+    {}
+    //--------------------------------------------------------------------------
+
     bool WindowBackendGlfw::Initialize() const
     {
         if (!glfwInit())
@@ -56,13 +62,22 @@ namespace Kmplete
 
     void WindowBackendGlfw::Finalize() const
     {
+        KMP_ASSERT(_mainWindow);
+        _mainWindow->Finalize();
         glfwTerminate();
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Window> WindowBackendGlfw::CreateWindow() const
+    Ptr<Window> WindowBackendGlfw::CreateMainWindow()
     {
-        return CreatePtr<WindowGlfw>();
+        if (_mainWindow)
+        {
+            Log::CoreWarn("WindowBackendGlfw: main window has already been created!");
+            return _mainWindow;
+        }
+
+        _mainWindow.reset(new WindowGlfw());
+        return _mainWindow;
     }
     //--------------------------------------------------------------------------
 
@@ -119,6 +134,22 @@ namespace Kmplete
         }
 
         return std::vector<WindowBackend::MonitorVideoMode>();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowBackendGlfw::SaveSettings(const Ptr<Settings> settings) const
+    {
+        settings->StartSaveObject(MainWindowEntryName);
+        _mainWindow->SaveSettings(settings);
+        settings->EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowBackendGlfw::LoadSettings(const Ptr<Settings> settings)
+    {
+        settings->StartLoadObject(MainWindowEntryName);
+        _mainWindow->LoadSettings(settings);
+        settings->EndLoadObject();
     }
     //--------------------------------------------------------------------------
 }
