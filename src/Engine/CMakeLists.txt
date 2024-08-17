@@ -70,21 +70,11 @@ add_library(Kmplete_Engine
 )
 
 
-set(Boost_NO_SYSTEM_PATHS ON)
-set(Boost_USE_MULTITHREADED ON)
-set(Boost_USE_STATIC_LIBS ON)
-set(Boost_NO_WARN_NEW_VERSIONS ON)
-
-find_package(Boost REQUIRED COMPONENTS 
-    locale 
-    program_options 
-    REQUIRED
-)
+SetupBoost(Kmplete_Engine)
 
 target_include_directories(Kmplete_Engine
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
 
-    PUBLIC "${Boost_INCLUDE_DIR}"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
     PUBLIC "${RapidJSON_SOURCE_DIR}/include"
     
@@ -115,7 +105,6 @@ target_compile_definitions(Kmplete_Engine
 )
 
 target_link_libraries(Kmplete_Engine 
-    PUBLIC ${Boost_LIBRARIES}
     PUBLIC Kmplete_Version
     
     PRIVATE glfw

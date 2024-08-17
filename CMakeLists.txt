@@ -22,7 +22,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 include(NoInSourceBuilds)
 include(ConfigurationsSetup)
 include(CompilerChecks)
-
+include(Boost)
 
 # Dependencies
 add_subdirectory(dependencies)
