@@ -2,7 +2,6 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/window.h"
-#include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/pointers.h"
 
 struct GLFWwindow;
@@ -15,7 +14,7 @@ namespace Kmplete
         KMP_API WindowGlfw();
         KMP_API ~WindowGlfw() = default;
 
-        KMP_NODISCARD KMP_API bool Initialize() override;
+        KMP_NODISCARD KMP_API bool Initialize(const Ptr<Settings> settings) override;
         KMP_API void Finalize() override;
 
         KMP_API void SetTitle(const std::string& title) override;
@@ -45,8 +44,8 @@ namespace Kmplete
         {
             bool updateContinuously = true;
             Mode screenMode = WindowedMode;
-            int width = _DefaultWidth;
-            int height = _DefaultHeight;
+            int width = DefaultWidth;
+            int height = DefaultHeight;
             int windowedWidth = width;
             int windowedHeight = height;
             bool vSync = true;

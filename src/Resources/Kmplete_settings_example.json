@@ -10,14 +10,16 @@
 		"ClientLevel": 0
 	},
     "WindowApplication": {
-        "MainWindow": {
-            "Width": 1920,
-            "Height": 1080,
-            "WindowedWidth": 1920,
-            "WindowedHeight": 1080,
-            "ScreenMode": "Windowed",
-            "VSync": true,
-            "UpdateContinuously": true
+        "WindowBackend": {
+            "MainWindow": {
+                "Width": 1920,
+                "Height": 1080,
+                "WindowedWidth": 1920,
+                "WindowedHeight": 1080,
+                "ScreenMode": "Windowed",
+                "VSync": true,
+                "UpdateContinuously": true
+            }
         }
     }
 }

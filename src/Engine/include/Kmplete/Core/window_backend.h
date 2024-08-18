@@ -9,7 +9,8 @@ namespace Kmplete
     class WindowBackend
     {
     public:
-        constexpr static auto MainWindowEntryName = "MainWindow";
+        constexpr static auto WindowBackendSettingsStr = "WindowBackend";
+        constexpr static auto MainWindowStr = "MainWindow";
 
     public:
         struct MonitorVideoMode
@@ -25,10 +26,10 @@ namespace Kmplete
     public:
         KMP_API virtual ~WindowBackend() = default;
 
-        KMP_NODISCARD KMP_API virtual bool Initialize() const = 0;
+        KMP_NODISCARD KMP_API virtual bool Initialize(const Ptr<Settings> settings) = 0;
         KMP_API virtual void Finalize() const = 0;
 
-        KMP_NODISCARD KMP_API virtual Ptr<Window> CreateMainWindow() = 0;
+        KMP_NODISCARD KMP_API virtual Ptr<Window> GetMainWindow() = 0;
 
         KMP_NODISCARD KMP_API virtual int GetMonitorCount() const = 0;
         KMP_NODISCARD KMP_API virtual std::vector<std::string> GetMonitorNames() const = 0;

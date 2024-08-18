@@ -3,6 +3,11 @@
 
 namespace Kmplete
 {
+    Window::Window()
+        : _settings(CreatePtr<WindowSettings>())
+    {}
+    //--------------------------------------------------------------------------
+
     std::string Window::ModeToString(Mode mode) KMP_NOEXCEPT
     {
         switch (mode)

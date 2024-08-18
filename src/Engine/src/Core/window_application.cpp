@@ -18,18 +18,16 @@ namespace Kmplete
         }
 
         _backend = WindowBackend::Create();
-        if (!_backend || !_backend->Initialize())
+        if (!_backend || !_backend->Initialize(_settingsManager->GetSettings(WindowAppSettingsEntryName)))
         {
             return false;
         }
 
-        _mainWindow = _backend->CreateMainWindow();
-        if (!_mainWindow || !_mainWindow->Initialize())
+        _mainWindow = _backend->GetMainWindow();
+        if (!_mainWindow)
         {
             return false;
         }
-
-        LoadSettings();
 
         return true;
     }
@@ -52,12 +50,6 @@ namespace Kmplete
         settings->StartSaveObject();
         _backend->SaveSettings(settings);
         settings->EndSaveObject();
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::LoadSettings()
-    {
-        _backend->LoadSettings(_settingsManager->GetSettings(WindowAppSettingsEntryName));
     }
     //--------------------------------------------------------------------------
 }

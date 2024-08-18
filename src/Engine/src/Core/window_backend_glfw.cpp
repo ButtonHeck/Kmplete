@@ -42,17 +42,25 @@ namespace Kmplete
 
 
     WindowBackendGlfw::WindowBackendGlfw()
-        : _mainWindow(nullptr)
+        : _mainWindow(CreatePtr<WindowGlfw>())
     {}
     //--------------------------------------------------------------------------
 
-    bool WindowBackendGlfw::Initialize() const
+    bool WindowBackendGlfw::Initialize(const Ptr<Settings> settings)
     {
+        LoadSettings(settings);
+
         if (!glfwInit())
         {
             const char* description;
             const auto errorCode = glfwGetError(&description);
             Log::CoreCritical("WindowBackendGlfw: initialization error: code '{}', description '{}'", errorCode, description ? description : "");
+            return false;
+        }
+
+        if (!_mainWindow->Initialize(settings))
+        {
+            Log::CoreCritical("WindowBackendGlfw: main window initialization failed");
             return false;
         }
 
@@ -68,15 +76,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Window> WindowBackendGlfw::CreateMainWindow()
+    Ptr<Window> WindowBackendGlfw::GetMainWindow()
     {
-        if (_mainWindow)
-        {
-            Log::CoreWarn("WindowBackendGlfw: main window has already been created!");
-            return _mainWindow;
-        }
-
-        _mainWindow.reset(new WindowGlfw());
         return _mainWindow;
     }
     //--------------------------------------------------------------------------
@@ -139,16 +140,20 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(const Ptr<Settings> settings) const
     {
-        settings->StartSaveObject(MainWindowEntryName);
+        settings->StartSaveObject(WindowBackendSettingsStr);
+        settings->StartSaveObject(MainWindowStr);
         _mainWindow->SaveSettings(settings);
+        settings->EndSaveObject();
         settings->EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void WindowBackendGlfw::LoadSettings(const Ptr<Settings> settings)
     {
-        settings->StartLoadObject(MainWindowEntryName);
+        settings->StartLoadObject(WindowBackendSettingsStr);
+        settings->StartLoadObject(MainWindowStr);
         _mainWindow->LoadSettings(settings);
+        settings->EndLoadObject();
         settings->EndLoadObject();
     }
     //--------------------------------------------------------------------------

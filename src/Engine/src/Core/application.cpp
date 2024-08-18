@@ -27,8 +27,6 @@ namespace Kmplete
 
         Log::Initialize(_settingsManager);
 
-        LoadSettings();
-
         return true;
     }
     //--------------------------------------------------------------------------
@@ -45,11 +43,6 @@ namespace Kmplete
     void Application::SaveSettings() const
     {
         Log::SaveSettings(_settingsManager);
-    }
-    //--------------------------------------------------------------------------
-
-    void Application::LoadSettings()
-    {
     }
     //--------------------------------------------------------------------------
 }

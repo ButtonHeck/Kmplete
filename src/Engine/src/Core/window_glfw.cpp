@@ -14,11 +14,11 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool WindowGlfw::Initialize()
+    bool WindowGlfw::Initialize(const Ptr<Settings> settings)
     {
         InitializeHints();
 
-        _window = glfwCreateWindow(_DefaultWidth, _DefaultHeight, "", nullptr, nullptr);
+        _window = glfwCreateWindow(_settings->width, _settings->height, "", nullptr, nullptr);
 
         if (!_window)
         {
@@ -29,6 +29,22 @@ namespace Kmplete
         MakeContextCurrent();
 
         InitializeCallbacks();
+
+        const auto userData = GetUserPointer(_window);
+        if (userData)
+        {
+            userData->windowedWidth = _settings->windowedWidth;
+            userData->windowedHeight = _settings->windowedHeight;
+            userData->updateContinuously = _settings->updateContinuously;
+        }
+
+        SetVSync(_settings->vSync);
+        SetScreenMode(Window::StringToMode(_settings->screenMode));
+
+        if (Window::StringToMode(_settings->screenMode) == WindowedMode)
+        {
+            glfwSetWindowSize(_window, _settings->windowedWidth, _settings->windowedHeight);
+        }
 
         return true;
     }
@@ -190,8 +206,8 @@ namespace Kmplete
 
         settings->SaveUInt(WidthStr, width);
         settings->SaveUInt(HeightStr, height);
-        settings->SaveUInt(WindowedWidthStr, userData ? userData->windowedWidth : _DefaultWidth);
-        settings->SaveUInt(WindowedHeightStr, userData ? userData->windowedHeight : _DefaultHeight);
+        settings->SaveUInt(WindowedWidthStr, userData ? userData->windowedWidth : DefaultWidth);
+        settings->SaveUInt(WindowedHeightStr, userData ? userData->windowedHeight : DefaultHeight);
         settings->SaveString(ScreenModeStr, Window::ModeToString(GetScreenMode()));
         settings->SaveBool(VSyncStr, IsVSync());
         settings->SaveBool(UpdateContinuouslyStr, userData ? userData->updateContinuously : true);
@@ -200,29 +216,13 @@ namespace Kmplete
 
     void WindowGlfw::LoadSettings(const Ptr<Settings> settings)
     {
-        const auto width = settings ? settings->GetUInt(WidthStr, _DefaultWidth) : _DefaultWidth;
-        const auto height = settings ? settings->GetUInt(HeightStr, _DefaultHeight) : _DefaultHeight;
-        const auto windowedWidth = settings ? settings->GetUInt(WindowedWidthStr, _DefaultWidth) : _DefaultWidth;
-        const auto windowedHeight = settings ? settings->GetUInt(WindowedHeightStr, _DefaultHeight) : _DefaultHeight;
-        const auto screenMode = settings ? Window::StringToMode(settings->GetString(ScreenModeStr, WindowedModeStr)) : WindowedMode;
-        const auto vSync = settings ? settings->GetBool(VSyncStr, true) : true;
-        const auto updateContinuously = settings ? settings->GetBool(UpdateContinuouslyStr, true) : true;
-
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            userData->windowedWidth = windowedWidth;
-            userData->windowedHeight = windowedHeight;
-            userData->updateContinuously = updateContinuously;
-        }
-
-        SetVSync(vSync);
-        SetScreenMode(screenMode);
-
-        if (screenMode == WindowedMode)
-        {
-            glfwSetWindowSize(_window, width, height);
-        }
+        _settings->width = settings ? settings->GetUInt(WidthStr, DefaultWidth) : DefaultWidth;
+        _settings->height = settings ? settings->GetUInt(HeightStr, DefaultHeight) : DefaultHeight;
+        _settings->windowedWidth = settings ? settings->GetUInt(WindowedWidthStr, DefaultWidth) : DefaultWidth;
+        _settings->windowedHeight = settings ? settings->GetUInt(WindowedHeightStr, DefaultHeight) : DefaultHeight;
+        _settings->screenMode = settings ? settings->GetString(ScreenModeStr, WindowedModeStr) : WindowedModeStr;
+        _settings->vSync = settings ? settings->GetBool(VSyncStr, true) : true;
+        _settings->updateContinuously = settings ? settings->GetBool(UpdateContinuouslyStr, true) : true;
     }
     //--------------------------------------------------------------------------
 

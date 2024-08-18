@@ -34,7 +34,6 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
 
         void SaveSettings() const;
-        void LoadSettings();
 
     protected:
         Ptr<SettingsManager> _settingsManager;

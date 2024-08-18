@@ -34,7 +34,6 @@ namespace Kmplete
 
     private:
         void SaveSettings() const;
-        void LoadSettings();
 
     protected:
         Ptr<WindowBackend> _backend;
