@@ -140,7 +140,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(const Ptr<Settings> settings) const
     {
-        settings->StartSaveObject(WindowBackendSettingsStr);
+        settings->StartSaveObject(WindowBackendSettingsEntryName);
         settings->StartSaveObject(MainWindowStr);
         _mainWindow->SaveSettings(settings);
         settings->EndSaveObject();
@@ -150,7 +150,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadSettings(const Ptr<Settings> settings)
     {
-        settings->StartLoadObject(WindowBackendSettingsStr);
+        settings->StartLoadObject(WindowBackendSettingsEntryName);
         settings->StartLoadObject(MainWindowStr);
         _mainWindow->LoadSettings(settings);
         settings->EndLoadObject();

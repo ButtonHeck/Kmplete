@@ -5,7 +5,7 @@ namespace Kmplete
     constexpr static auto WindowAppSettingsEntryName = "WindowApplication";
 
     WindowApplication::WindowApplication()
-        : _backend(nullptr)
+        : _backend(WindowBackend::Create())
         , _mainWindow(nullptr)
     {}
     //--------------------------------------------------------------------------
@@ -17,7 +17,6 @@ namespace Kmplete
             return false;
         }
 
-        _backend = WindowBackend::Create();
         if (!_backend || !_backend->Initialize(_settingsManager->GetSettings(WindowAppSettingsEntryName)))
         {
             return false;

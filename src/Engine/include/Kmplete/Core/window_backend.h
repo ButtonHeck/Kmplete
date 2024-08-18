@@ -8,8 +8,8 @@ namespace Kmplete
 {
     class WindowBackend
     {
-    public:
-        constexpr static auto WindowBackendSettingsStr = "WindowBackend";
+    protected:
+        constexpr static auto WindowBackendSettingsEntryName = "WindowBackend";
         constexpr static auto MainWindowStr = "MainWindow";
 
     public:
