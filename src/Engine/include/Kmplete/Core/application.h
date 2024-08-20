@@ -14,7 +14,6 @@ namespace Kmplete
     {
     public:
         KMP_API Application();
-
         KMP_API virtual ~Application() = default;
 
         KMP_NODISCARD KMP_API virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;

@@ -9,6 +9,7 @@ namespace Kmplete
     {
     public:
         EditorApplication();
+        virtual ~EditorApplication() = default;
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
 

@@ -14,6 +14,7 @@ namespace Kmplete
     {
     public:
         KMP_API WindowApplication();
+        KMP_API virtual ~WindowApplication() = default;
 
         KMP_NODISCARD KMP_API bool Initialize(const std::string& settingsFilePath) override;
         KMP_API void Finalize() override;
