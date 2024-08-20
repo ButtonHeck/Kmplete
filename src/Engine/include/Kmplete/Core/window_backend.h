@@ -6,6 +6,8 @@
 
 namespace Kmplete
 {
+    class Settings;
+
     class WindowBackend
     {
     protected:
@@ -21,12 +23,12 @@ namespace Kmplete
         };
 
     public:
-        KMP_NODISCARD KMP_API static Ptr<WindowBackend> Create();
+        KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create();
 
     public:
         KMP_API virtual ~WindowBackend() = default;
 
-        KMP_NODISCARD KMP_API virtual bool Initialize(const Ptr<Settings> settings) = 0;
+        KMP_NODISCARD KMP_API virtual bool Initialize() = 0;
         KMP_API virtual void Finalize() const = 0;
 
         KMP_NODISCARD KMP_API virtual Ptr<Window> GetMainWindow() = 0;

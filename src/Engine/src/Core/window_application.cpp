@@ -17,7 +17,9 @@ namespace Kmplete
             return false;
         }
 
-        if (!_backend || !_backend->Initialize(_settingsManager->GetSettings(WindowAppSettingsEntryName)))
+        LoadSettings();
+
+        if (!_backend || !_backend->Initialize())
         {
             return false;
         }
@@ -46,9 +48,26 @@ namespace Kmplete
     void WindowApplication::SaveSettings() const
     {
         auto settings = _settingsManager->PutSettings(WindowAppSettingsEntryName);
+        if (!settings)
+        {
+            return;
+        }
+
         settings->StartSaveObject();
         _backend->SaveSettings(settings);
         settings->EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::LoadSettings() const
+    {
+        const auto settings = _settingsManager->GetSettings(WindowAppSettingsEntryName);
+        if (!settings)
+        {
+            return;
+        }
+
+        _backend->LoadSettings(settings);
     }
     //--------------------------------------------------------------------------
 }

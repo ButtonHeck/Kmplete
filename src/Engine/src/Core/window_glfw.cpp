@@ -1,6 +1,8 @@
 #include "Kmplete/Core/window_glfw.h"
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
@@ -14,7 +16,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool WindowGlfw::Initialize(const Ptr<Settings> settings)
+    bool WindowGlfw::Initialize()
     {
         InitializeHints();
 
@@ -198,6 +200,8 @@ namespace Kmplete
 
     void WindowGlfw::SaveSettings(const Ptr<Settings> settings) const
     {
+        KMP_ASSERT(settings);
+
         int width;
         int height;
         glfwGetWindowSize(_window, &width, &height);
@@ -216,13 +220,15 @@ namespace Kmplete
 
     void WindowGlfw::LoadSettings(const Ptr<Settings> settings)
     {
-        _settings->width = settings ? settings->GetUInt(WidthStr, DefaultWidth) : DefaultWidth;
-        _settings->height = settings ? settings->GetUInt(HeightStr, DefaultHeight) : DefaultHeight;
-        _settings->windowedWidth = settings ? settings->GetUInt(WindowedWidthStr, DefaultWidth) : DefaultWidth;
-        _settings->windowedHeight = settings ? settings->GetUInt(WindowedHeightStr, DefaultHeight) : DefaultHeight;
-        _settings->screenMode = settings ? settings->GetString(ScreenModeStr, WindowedModeStr) : WindowedModeStr;
-        _settings->vSync = settings ? settings->GetBool(VSyncStr, true) : true;
-        _settings->updateContinuously = settings ? settings->GetBool(UpdateContinuouslyStr, true) : true;
+        KMP_ASSERT(settings);
+
+        _settings->width = settings->GetUInt(WidthStr, DefaultWidth);
+        _settings->height = settings->GetUInt(HeightStr, DefaultHeight);
+        _settings->windowedWidth = settings->GetUInt(WindowedWidthStr, DefaultWidth);
+        _settings->windowedHeight = settings->GetUInt(WindowedHeightStr, DefaultHeight);
+        _settings->screenMode = settings->GetString(ScreenModeStr, WindowedModeStr);
+        _settings->vSync = settings->GetBool(VSyncStr, true);
+        _settings->updateContinuously = settings->GetBool(UpdateContinuouslyStr, true);
     }
     //--------------------------------------------------------------------------
 

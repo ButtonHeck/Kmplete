@@ -1,5 +1,6 @@
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/platform.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/string_utils.h"
 
@@ -25,7 +26,7 @@ namespace Kmplete
     constexpr static auto LogCoreLevelStr = "CoreLevel";
     constexpr static auto LogClientLevelStr = "ClientLevel";
 
-    LogSettings Log::_logSettings;
+    Log::LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_coreLogger;
     Ptr<spdlog::logger> Log::_clientLogger;
     std::stringstream Log::_stringStream;
@@ -48,14 +49,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const Ptr<SettingsManager> settingsManager)
+    void Log::Initialize()
     {
         auto temporaryLogBuffer = _stringStream.str();
         _stringStream.clear();
 
         spdlog::drop_all();
-
-        LoadSettings(settingsManager);
 
         if (_logSettings.enabled)
         {
@@ -140,11 +139,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::SaveSettings(const Ptr<SettingsManager> KMP_MB_UNUSED settingsManager)
+    void Log::SaveSettings(const Ptr<Settings> KMP_MB_UNUSED settings)
     {
 #ifndef KMP_LOG_DISABLED
-        auto settings = settingsManager->PutSettings(LogSettingsEntryName);
-        settings->StartSaveObject();
+        KMP_ASSERT(settings);
+
+        settings->StartSaveObject(LogSettingsEntryName);
         settings->SaveString(LogFilenameStr, _logSettings.filename);
         settings->SaveBool(LogEnabledStr, _logSettings.enabled);
         settings->SaveBool(LogTruncateStr, _logSettings.truncate);
@@ -158,18 +158,21 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::LoadSettings(const Ptr<SettingsManager> KMP_MB_UNUSED settingsManager)
+    void Log::LoadSettings(const Ptr<Settings> KMP_MB_UNUSED settings)
     {
 #ifndef KMP_LOG_DISABLED
-        const auto settings = settingsManager->GetSettings(LogSettingsEntryName);
-        _logSettings.filename = settings ? settings->GetString(LogFilenameStr, "Kmplete_log.txt") : "Kmplete_log.txt";
-        _logSettings.enabled = settings ? settings->GetBool(LogEnabledStr, true) : true;
-        _logSettings.truncate = settings ? settings->GetBool(LogTruncateStr, false) : false;
-        _logSettings.outputConsole = settings ? settings->GetBool(LogOutputConsoleStr, true) : true;
-        _logSettings.outputFile = settings ? settings->GetBool(LogOutputFileStr, true) : true;
-        _logSettings.outputStringBuffer = settings ? settings->GetBool(LogOutputStringBufferStr, false) : false;
-        _logSettings.coreLevel = settings ? settings->GetInt(LogCoreLevelStr, spdlog::level::trace) : spdlog::level::trace;
-        _logSettings.clientLevel = settings ? settings->GetInt(LogClientLevelStr, spdlog::level::trace) : spdlog::level::trace;
+        KMP_ASSERT(settings);
+
+        settings->StartLoadObject(LogSettingsEntryName);
+        _logSettings.filename = settings->GetString(LogFilenameStr, "Kmplete_log.txt");
+        _logSettings.enabled = settings->GetBool(LogEnabledStr, true);
+        _logSettings.truncate = settings->GetBool(LogTruncateStr, false);
+        _logSettings.outputConsole = settings->GetBool(LogOutputConsoleStr, true);
+        _logSettings.outputFile = settings->GetBool(LogOutputFileStr, true);
+        _logSettings.outputStringBuffer = settings->GetBool(LogOutputStringBufferStr, false);
+        _logSettings.coreLevel = settings->GetInt(LogCoreLevelStr, spdlog::level::trace);
+        _logSettings.clientLevel = settings->GetInt(LogClientLevelStr, spdlog::level::trace);
+        settings->EndLoadObject();
 #endif
     }
     //--------------------------------------------------------------------------

@@ -4,7 +4,7 @@
 namespace Kmplete
 {
     Window::Window()
-        : _settings(CreatePtr<WindowSettings>())
+        : _settings(CreateUPtr<WindowSettings>())
     {}
     //--------------------------------------------------------------------------
 

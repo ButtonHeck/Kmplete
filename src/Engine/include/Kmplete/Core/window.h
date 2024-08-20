@@ -10,7 +10,6 @@
 namespace Kmplete
 {
     class Settings;
-    struct WindowSettings;
 
     class Window
     {
@@ -44,7 +43,7 @@ namespace Kmplete
         KMP_API Window();
         KMP_API virtual ~Window() = default;
 
-        KMP_NODISCARD KMP_API virtual bool Initialize(const Ptr<Settings> settings) = 0;
+        KMP_NODISCARD KMP_API virtual bool Initialize() = 0;
         KMP_API virtual void Finalize() = 0;
 
         KMP_API virtual void SetTitle(const std::string& title) = 0;
@@ -74,20 +73,19 @@ namespace Kmplete
         KMP_NODISCARD static Mode StringToMode(const std::string& modeStr) KMP_NOEXCEPT;
 
     protected:
-        Ptr<WindowSettings> _settings;
-    };
-    //--------------------------------------------------------------------------
+        struct WindowSettings
+        {
+            unsigned int width = DefaultWidth;
+            unsigned int height = DefaultHeight;
+            unsigned int windowedWidth = DefaultWidth;
+            unsigned int windowedHeight = DefaultHeight;
+            std::string screenMode = WindowedModeStr;
+            bool vSync = true;
+            bool updateContinuously = true;
+        };
 
-
-    struct WindowSettings
-    {
-        unsigned int width = Window::DefaultWidth;
-        unsigned int height = Window::DefaultHeight;
-        unsigned int windowedWidth = Window::DefaultWidth;
-        unsigned int windowedHeight = Window::DefaultHeight;
-        std::string screenMode = Window::WindowedModeStr;
-        bool vSync = true;
-        bool updateContinuously = true;
+    protected:
+        UPtr<WindowSettings> _settings;
     };
     //--------------------------------------------------------------------------
 }

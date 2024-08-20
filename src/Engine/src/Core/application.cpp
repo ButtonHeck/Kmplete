@@ -5,6 +5,8 @@
 
 namespace Kmplete
 {
+    constexpr static auto ApplicationSettingsEntryName = "Application";
+
     Application::Application()
         : _settingsManager(nullptr)
     {}
@@ -25,7 +27,9 @@ namespace Kmplete
             Log::CoreWarn("Application: failed to load settings");
         }
 
-        Log::Initialize(_settingsManager);
+        LoadSettings();
+
+        Log::Initialize();
 
         return true;
     }
@@ -42,7 +46,27 @@ namespace Kmplete
 
     void Application::SaveSettings() const
     {
-        Log::SaveSettings(_settingsManager);
+        auto settings = _settingsManager->PutSettings(ApplicationSettingsEntryName);
+        if (!settings)
+        {
+            return;
+        }
+
+        settings->StartSaveObject();
+        Log::SaveSettings(settings);
+        settings->EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void Application::LoadSettings()
+    {
+        const auto settings = _settingsManager->GetSettings(ApplicationSettingsEntryName);
+        if (!settings)
+        {
+            return;
+        }
+
+        Log::LoadSettings(settings);
     }
     //--------------------------------------------------------------------------
 }

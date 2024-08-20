@@ -10,7 +10,7 @@ namespace Kmplete
         KMP_API WindowBackendGlfw();
         KMP_API ~WindowBackendGlfw() = default;
 
-        KMP_NODISCARD KMP_API bool Initialize(const Ptr<Settings> settings) override;
+        KMP_NODISCARD KMP_API bool Initialize() override;
         KMP_API void Finalize() const override;
 
         KMP_NODISCARD KMP_API Ptr<Window> GetMainWindow() override;

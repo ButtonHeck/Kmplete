@@ -1,14 +1,16 @@
 {
-	"Log": {
-		"Filename": "Kmplete_log.txt",
-		"Enabled": true,
-		"Truncate": false,
-		"OutputConsole": true,
-		"OutputFile": true,
-		"OutputStringBuffer": true,
-		"CoreLevel": 0,
-		"ClientLevel": 0
-	},
+    "Application": {
+        "Log": {
+            "Filename": "Kmplete_log.txt",
+            "Enabled": true,
+            "Truncate": false,
+            "OutputConsole": true,
+            "OutputFile": true,
+            "OutputStringBuffer": true,
+            "CoreLevel": 0,
+            "ClientLevel": 0
+        }
+    },
     "WindowApplication": {
         "WindowBackend": {
             "MainWindow": {

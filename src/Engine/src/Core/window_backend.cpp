@@ -3,10 +3,10 @@
 
 namespace Kmplete
 {
-    Ptr<WindowBackend> WindowBackend::Create()
+    UPtr<WindowBackend> WindowBackend::Create()
     {
 #ifdef KMP_WINDOW_BACKEND_GLFW
-        return CreatePtr<WindowBackendGlfw>();
+        return CreateUPtr<WindowBackendGlfw>();
 #else
 #error "No window backend is provided!"
 #endif

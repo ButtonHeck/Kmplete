@@ -1,6 +1,7 @@
 #include "Kmplete/Core/window_backend_glfw.h"
 #include "Kmplete/Core/window_glfw.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
 
 #include <GLFW/glfw3.h>
@@ -46,10 +47,8 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool WindowBackendGlfw::Initialize(const Ptr<Settings> settings)
+    bool WindowBackendGlfw::Initialize()
     {
-        LoadSettings(settings);
-
         if (!glfwInit())
         {
             const char* description;
@@ -58,7 +57,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_mainWindow->Initialize(settings))
+        if (!_mainWindow->Initialize())
         {
             Log::CoreCritical("WindowBackendGlfw: main window initialization failed");
             return false;
@@ -71,6 +70,7 @@ namespace Kmplete
     void WindowBackendGlfw::Finalize() const
     {
         KMP_ASSERT(_mainWindow);
+
         _mainWindow->Finalize();
         glfwTerminate();
     }
@@ -140,6 +140,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(const Ptr<Settings> settings) const
     {
+        KMP_ASSERT(settings);
+
         settings->StartSaveObject(WindowBackendSettingsEntryName);
         settings->StartSaveObject(MainWindowStr);
         _mainWindow->SaveSettings(settings);
@@ -150,6 +152,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadSettings(const Ptr<Settings> settings)
     {
+        KMP_ASSERT(settings);
+
         settings->StartLoadObject(WindowBackendSettingsEntryName);
         settings->StartLoadObject(MainWindowStr);
         _mainWindow->LoadSettings(settings);

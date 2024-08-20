@@ -14,7 +14,7 @@ namespace Kmplete
         KMP_API WindowGlfw();
         KMP_API ~WindowGlfw() = default;
 
-        KMP_NODISCARD KMP_API bool Initialize(const Ptr<Settings> settings) override;
+        KMP_NODISCARD KMP_API bool Initialize() override;
         KMP_API void Finalize() override;
 
         KMP_API void SetTitle(const std::string& title) override;

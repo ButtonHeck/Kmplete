@@ -3,7 +3,6 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/pointers.h"
-#include "Kmplete/Core/settings_manager.h"
 
 #if defined (KMP_COMPILER_MSVC)
     #pragma warning(disable : 4996)
@@ -16,33 +15,19 @@ namespace Kmplete
 {
     class Settings;
 
-    struct LogSettings
-    {
-        std::string filename = "Kmplete_log.txt";
-        bool enabled = true;
-        bool truncate = false;
-        bool outputConsole = true;
-        bool outputFile = true;
-        bool outputStringBuffer = false;
-        int coreLevel = spdlog::level::trace;
-        int clientLevel = spdlog::level::trace;
-    };
-    //--------------------------------------------------------------------------
-
-
     class Log
     {
     public:
         KMP_API static void InitializeTemporarySink();
-        KMP_API static void Initialize(const Ptr<SettingsManager> settingsManager);
+        KMP_API static void Initialize();
         KMP_API static void Finalize();
 
         KMP_NODISCARD KMP_API static Ptr<spdlog::logger>& CoreLogger();
         KMP_NODISCARD KMP_API static Ptr<spdlog::logger>& ClientLogger();
         KMP_NODISCARD KMP_API static std::string_view StringLogOutput();
 
-        KMP_API static void SaveSettings(const Ptr<SettingsManager> KMP_MB_UNUSED settingsManager);
-        KMP_API static void LoadSettings(const Ptr<SettingsManager> KMP_MB_UNUSED settingsManager);
+        KMP_API static void SaveSettings(const Ptr<Settings> KMP_MB_UNUSED settings);
+        KMP_API static void LoadSettings(const Ptr<Settings> KMP_MB_UNUSED settings);
 
 #ifndef KMP_LOG_DISABLED
         // Core log functions
@@ -122,6 +107,19 @@ namespace Kmplete
         template <typename... Args>
         static void Critical(spdlog::format_string_t<Args...>, Args&&...) {}
 #endif
+
+    private:
+        struct LogSettings
+        {
+            std::string filename = "Kmplete_log.txt";
+            bool enabled = true;
+            bool truncate = false;
+            bool outputConsole = true;
+            bool outputFile = true;
+            bool outputStringBuffer = false;
+            int coreLevel = spdlog::level::trace;
+            int clientLevel = spdlog::level::trace;
+        };
 
     private:
         static LogSettings _logSettings;

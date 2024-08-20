@@ -10,8 +10,6 @@
 
 namespace Kmplete
 {
-    class Settings;
-
     class Application
     {
     public:
@@ -34,9 +32,10 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
 
         void SaveSettings() const;
+        void LoadSettings();
 
     protected:
-        Ptr<SettingsManager> _settingsManager;
+        UPtr<SettingsManager> _settingsManager;
     };
     //--------------------------------------------------------------------------
 
