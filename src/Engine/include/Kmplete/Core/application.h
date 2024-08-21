@@ -13,6 +13,8 @@ namespace Kmplete
     class Application
     {
     public:
+        KMP_DISABLE_COPY_MOVE(Application)
+
         KMP_API Application();
         KMP_API virtual ~Application() = default;
 

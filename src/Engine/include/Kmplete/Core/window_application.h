@@ -13,6 +13,8 @@ namespace Kmplete
     class WindowApplication : public Application
     {
     public:
+        KMP_DISABLE_COPY_MOVE(WindowApplication)
+
         KMP_API WindowApplication();
         KMP_API virtual ~WindowApplication() = default;
 

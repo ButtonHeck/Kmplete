@@ -40,6 +40,8 @@ namespace Kmplete
         constexpr static auto WindowedModeStr = "Windowed";
 
     public:
+        KMP_DISABLE_COPY_MOVE(Window)
+
         KMP_API Window();
         KMP_API virtual ~Window() = default;
 

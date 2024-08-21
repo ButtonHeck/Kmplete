@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/window_backend.h"
 
 namespace Kmplete
@@ -7,6 +8,8 @@ namespace Kmplete
     class WindowBackendGlfw : public WindowBackend
     {
     public:
+        KMP_DISABLE_COPY_MOVE(WindowBackendGlfw)
+
         KMP_API WindowBackendGlfw();
         KMP_API ~WindowBackendGlfw() = default;
 

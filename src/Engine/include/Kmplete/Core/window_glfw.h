@@ -11,6 +11,8 @@ namespace Kmplete
     class WindowGlfw : public Window
     {
     public:
+        KMP_DISABLE_COPY_MOVE(WindowGlfw)
+
         KMP_API WindowGlfw();
         KMP_API ~WindowGlfw() = default;
 

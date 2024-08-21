@@ -8,6 +8,8 @@ namespace Kmplete
     class EditorApplication : public WindowApplication
     {
     public:
+        KMP_DISABLE_COPY_MOVE(EditorApplication)
+
         EditorApplication();
         virtual ~EditorApplication() = default;
 

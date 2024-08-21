@@ -26,6 +26,9 @@ namespace Kmplete
         KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create();
 
     public:
+        KMP_DISABLE_COPY_MOVE(WindowBackend)
+
+        KMP_API WindowBackend() = default;
         KMP_API virtual ~WindowBackend() = default;
 
         KMP_NODISCARD KMP_API virtual bool Initialize() = 0;

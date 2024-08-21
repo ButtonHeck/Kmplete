@@ -34,3 +34,8 @@
 #define KMP_NODISCARD [[nodiscard]]
 #define KMP_MB_UNUSED [[maybe_unused]]
 
+#define KMP_DISABLE_COPY_MOVE(ClassName)\
+	ClassName(const ClassName&) = delete;\
+	ClassName(ClassName&&) = delete;\
+	const ClassName& operator=(const ClassName&) = delete;\
+	void operator=(ClassName&&) = delete;

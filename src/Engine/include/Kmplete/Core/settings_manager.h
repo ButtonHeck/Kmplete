@@ -13,6 +13,8 @@ namespace Kmplete
     class SettingsManager
     {
     public:
+        KMP_DISABLE_COPY_MOVE(SettingsManager)
+
         KMP_API SettingsManager(const std::filesystem::path& filename);
         KMP_API ~SettingsManager() = default;
 
