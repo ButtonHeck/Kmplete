@@ -19,6 +19,8 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 
+option(KMPLETE_BUILD_TESTS "Build catch2 tests" ON)
+
 include(NoInSourceBuilds)
 include(ConfigurationsSetup)
 include(CompilerChecks)

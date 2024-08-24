@@ -113,3 +113,7 @@ target_link_libraries(Kmplete_Engine
 set_target_properties(Kmplete_Engine PROPERTIES 
     FOLDER Kmplete
 )
+
+if(${KMPLETE_BUILD_TESTS})
+    add_subdirectory(tests)
+endif()
