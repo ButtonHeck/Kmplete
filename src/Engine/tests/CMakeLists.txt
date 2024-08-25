@@ -7,8 +7,14 @@ set(Kmplete_Engine_Tests_CORE
 )
 source_group("Core" FILES ${Kmplete_Engine_Tests_CORE})
 
+set(Kmplete_Engine_Tests_UTILS
+    ${CMAKE_CURRENT_LIST_DIR}/Utils/function_utils_tests.cpp
+)
+source_group("Utils" FILES ${Kmplete_Engine_Tests_UTILS})
+
 add_executable(Kmplete_Engine_Tests
     ${Kmplete_Engine_Tests_CORE}
+    ${Kmplete_Engine_Tests_UTILS}
 )
 
 
