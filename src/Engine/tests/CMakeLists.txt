@@ -19,6 +19,7 @@ add_executable(Kmplete_Engine_Tests
 
 
 SetupBoost(Kmplete_Engine_Tests)
+SetupCompilerOptions(Kmplete_Engine_Tests)
 
 target_include_directories(Kmplete_Engine_Tests
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
@@ -28,12 +29,6 @@ target_include_directories(Kmplete_Engine_Tests
     
     PRIVATE "${GLFW_SOURCE_DIR}/include"    
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
-)
-
-target_compile_options(Kmplete_Engine_Tests PUBLIC
-    $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
-    $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
-    $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX>
 )
 
 target_link_libraries(Kmplete_Engine_Tests

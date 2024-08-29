@@ -71,6 +71,7 @@ add_library(Kmplete_Engine
 
 
 SetupBoost(Kmplete_Engine)
+SetupCompilerOptions(Kmplete_Engine)
 
 target_include_directories(Kmplete_Engine
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
@@ -80,12 +81,6 @@ target_include_directories(Kmplete_Engine
     
     PRIVATE "${GLFW_SOURCE_DIR}/include"    
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
-)
-
-target_compile_options(Kmplete_Engine PUBLIC
-    $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
-    $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
-    $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX>
 )
 
 option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)

@@ -13,11 +13,8 @@ add_executable(Kmplete_Editor
     ${Kmplete_Editor_SOURCES}
 )
 
-target_compile_options(Kmplete_Editor PRIVATE
-    $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
-    $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
-    $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX>
-)
+
+SetupCompilerOptions(Kmplete_Editor)
 
 target_link_libraries(Kmplete_Editor
     PRIVATE Kmplete_Engine

@@ -24,6 +24,7 @@ option(KMPLETE_BUILD_TESTS "Build catch2 tests" ON)
 include(NoInSourceBuilds)
 include(ConfigurationsSetup)
 include(CompilerChecks)
+include(CompilerOptions)
 include(Boost)
 
 # Dependencies
