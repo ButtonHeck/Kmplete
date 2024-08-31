@@ -42,7 +42,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::string NarrowToU8(const std::string& str)
+        std::string NarrowToUtf8(const std::string& str)
         {
 #if defined KMP_PLATFORM_WINDOWS
             const auto size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(), static_cast<int>(str.length()), nullptr, 0);
@@ -59,7 +59,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::string U8ToNarrow(const std::string& str)
+        std::string Utf8ToNarrow(const std::string& str)
         {
 #if defined KMP_PLATFORM_WINDOWS
             const auto u16Size = MultiByteToWideChar(CP_UTF8, 0, &str[0], static_cast<int>(str.size()), nullptr, 0);

@@ -18,7 +18,7 @@ namespace Kmplete
                 return std::string();
             }
 
-            return Filesystem::ToGenericString(Utils::U8ToNarrow(files.front()));
+            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(files.front()));
         }
         //--------------------------------------------------------------------------
 
@@ -35,7 +35,7 @@ namespace Kmplete
 
             for (const auto& path : files)
             {
-                paths.push_back(Filesystem::ToGenericString(Utils::U8ToNarrow(path)));
+                paths.push_back(Filesystem::ToGenericString(Utils::Utf8ToNarrow(path)));
             }
 
             return paths;
@@ -52,7 +52,7 @@ namespace Kmplete
                 return std::string();
             }
 
-            return Filesystem::ToGenericString(Utils::U8ToNarrow(directories.front()));
+            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(directories.front()));
         }
         //--------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ namespace Kmplete
         {
             pfd::save_file saver(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
-            return Filesystem::ToGenericString(Utils::U8ToNarrow(saver.result()));
+            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(saver.result()));
         }
         //--------------------------------------------------------------------------
     }

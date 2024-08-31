@@ -9,6 +9,7 @@ source_group("Core" FILES ${Kmplete_Engine_Tests_CORE})
 
 set(Kmplete_Engine_Tests_UTILS
     ${CMAKE_CURRENT_LIST_DIR}/Utils/function_utils_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Utils/string_utils_tests.cpp
 )
 source_group("Utils" FILES ${Kmplete_Engine_Tests_UTILS})
 

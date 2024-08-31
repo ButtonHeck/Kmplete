@@ -31,10 +31,10 @@ namespace Kmplete
         KMP_API std::string WideToNarrow(const std::wstring& wstr);
         //--------------------------------------------------------------------------
 
-        KMP_API std::string NarrowToU8(const std::string& str);
+        KMP_API std::string NarrowToUtf8(const std::string& str);
         //--------------------------------------------------------------------------
 
-        KMP_API std::string U8ToNarrow(const std::string& str);
+        KMP_API std::string Utf8ToNarrow(const std::string& str);
         //--------------------------------------------------------------------------
     }
 }
