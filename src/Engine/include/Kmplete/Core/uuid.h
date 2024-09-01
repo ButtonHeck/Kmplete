@@ -9,7 +9,7 @@ namespace Kmplete
     class UUID
     {
     public:
-        static UUID InvalidUuid;
+        KMP_API static UUID InvalidUuid;
 
         KMP_API UUID();
         KMP_API explicit UUID(uint64_t uuid);
