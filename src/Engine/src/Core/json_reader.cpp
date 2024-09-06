@@ -19,33 +19,6 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::StartArrayObject(int index)
-    {
-        if (!ValidToGetFromArray(index))
-        {
-            return false;
-        }
-
-        if (!(*_currentObject)[index].IsObject())
-        {
-            Log::CoreError("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
-            return false;
-        }
-
-        _scope.push_back(std::to_string(index));
-        _scopeString = GetCurrentScopeString();
-        _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool JsonReader::EndArrayObject()
-    {
-        return EndObject();
-    }
-    //--------------------------------------------------------------------------
-
     bool JsonReader::StartObject(const std::string& objectName)
     {
         if (!_currentObject)
@@ -73,6 +46,27 @@ namespace Kmplete
         }
 
         _scope.push_back(objectName);
+        _scopeString = GetCurrentScopeString();
+        _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool JsonReader::StartObject(int index)
+    {
+        if (!ValidToGetFromArray(index))
+        {
+            return false;
+        }
+
+        if (!(*_currentObject)[index].IsObject())
+        {
+            Log::CoreError("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
+            return false;
+        }
+
+        _scope.push_back(std::to_string(index));
         _scopeString = GetCurrentScopeString();
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
 

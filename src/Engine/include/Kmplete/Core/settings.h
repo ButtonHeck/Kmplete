@@ -45,9 +45,11 @@ namespace Kmplete
 
 
         KMP_API bool StartLoadObject(const std::string& objectName);
+        KMP_API bool StartLoadObject(int index);
         KMP_API bool EndLoadObject();
 
         KMP_API int StartLoadArray(const std::string& arrayName);
+        KMP_API int StartLoadArray(int index);
         KMP_API bool EndLoadArray();
 
         KMP_NODISCARD KMP_API bool GetBool(int index, bool defaultValue = false);

@@ -15,10 +15,8 @@ namespace Kmplete
     public:
         KMP_API explicit JsonReader(rapidjson::Document& document);
 
-        KMP_API bool StartArrayObject(int index);
-        KMP_API bool EndArrayObject();
-
         KMP_API bool StartObject(const std::string& objectName);
+        KMP_API bool StartObject(int index);
         KMP_API bool EndObject();
 
         KMP_API int StartArray(const std::string& arrayName);

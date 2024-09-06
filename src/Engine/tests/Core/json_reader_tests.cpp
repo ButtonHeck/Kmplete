@@ -189,6 +189,38 @@ TEST_CASE("Rapidjson malformed json (array with different objects)", "[core][jso
     REQUIRE(error == rapidjson::kParseErrorValueInvalid);
     REQUIRE_FALSE(document.IsObject());
 }
+
+TEST_CASE("Rapidjson malformed json (root with name)", "[core][json][reader]")
+{
+    const char* MalformedJsonStr = R"rjs(
+    "RootNode": {
+        "SubNode": 12
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(MalformedJsonStr);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorDocumentRootNotSingular);
+    REQUIRE_FALSE(document.IsObject());
+}
+
+TEST_CASE("Rapidjson malformed json (unnamed subnode)", "[core][json][reader]")
+{
+    const char* MalformedJsonStr = R"rjs(
+    {
+        { "SubNode1": 12 }
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(MalformedJsonStr);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorObjectMissName);
+    REQUIRE_FALSE(document.IsObject());
+}
 //--------------------------------------------------------------------------
 
 TEST_CASE("Json reader basic", "[core][json][reader]")
@@ -235,7 +267,7 @@ TEST_CASE("Json reader basic", "[core][json][reader]")
         REQUIRE(reader.GetInt("NonExistProp", 64) == 64);
         REQUIRE(reader.GetDouble("", 13.0) == 13.0);
         REQUIRE(reader.GetDouble("") == 0.0);
-        REQUIRE_FALSE(reader.StartArrayObject(3));
+        REQUIRE_FALSE(reader.StartObject(3));
         REQUIRE(reader.StartArray("NonExistArray") == 0);
         REQUIRE_FALSE(reader.EndArray());
 
@@ -252,14 +284,14 @@ TEST_CASE("Json reader basic", "[core][json][reader]")
 
         REQUIRE(reader.StartArray("Prop5") == 1);
             REQUIRE_FALSE(reader.StartObject(""));
-            REQUIRE(reader.StartArrayObject(0));
-            REQUIRE(reader.EndArrayObject());
-            REQUIRE(reader.StartArrayObject(0));
+            REQUIRE(reader.StartObject(0));
+            REQUIRE(reader.EndObject());
+            REQUIRE(reader.StartObject(0));
                 REQUIRE(reader.GetDouble("arrProp") == 11.0);
                 REQUIRE(reader.GetDouble("arrProp", 4456.0) == 11.0);
                 REQUIRE(reader.GetDouble("ArrPROP", 98.0) == 98.0);
             REQUIRE(reader.EndObject());
-            REQUIRE_FALSE(reader.StartArrayObject(1));
+            REQUIRE_FALSE(reader.StartObject(1));
         REQUIRE(reader.EndArray()); // Prop5
         REQUIRE_FALSE(reader.StartObject("Group2"));
     REQUIRE(reader.EndObject()); // Group1
@@ -287,3 +319,4 @@ TEST_CASE("Json reader basic", "[core][json][reader]")
         REQUIRE(reader.EndObject()); // Group4
     REQUIRE(reader.EndObject()); // Group3
 }
+//--------------------------------------------------------------------------

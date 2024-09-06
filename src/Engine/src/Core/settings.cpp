@@ -148,6 +148,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Settings::StartLoadObject(int index)
+    {
+        return _reader->StartObject(index);
+    }
+    //--------------------------------------------------------------------------
+
     bool Settings::EndLoadObject()
     {
         return _reader->EndObject();
@@ -157,6 +163,12 @@ namespace Kmplete
     int Settings::StartLoadArray(const std::string& arrayName)
     {
         return _reader->StartArray(arrayName);
+    }
+    //--------------------------------------------------------------------------
+
+    int Settings::StartLoadArray(int index)
+    {
+        return _reader->StartArray(index);
     }
     //--------------------------------------------------------------------------
 
