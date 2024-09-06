@@ -130,6 +130,27 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    int JsonReader::StartArray(int index)
+    {
+        if (!ValidToGetFromArray(index))
+        {
+            return 0;
+        }
+
+        if (!(*_currentObject)[index].IsArray())
+        {
+            Log::CoreError("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
+            return 0;
+        }
+
+        _scope.push_back(std::to_string(index));
+        _scopeString = GetCurrentScopeString();
+        _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
+
+        return (*_currentObject).GetArray().Size();
+    }
+    //--------------------------------------------------------------------------
+
     bool JsonReader::EndArray()
     {
         if (!_currentObject)

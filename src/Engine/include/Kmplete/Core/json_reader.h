@@ -22,6 +22,7 @@ namespace Kmplete
         KMP_API bool EndObject();
 
         KMP_API int StartArray(const std::string& arrayName);
+        KMP_API int StartArray(int index);
         KMP_API bool EndArray();
 
         KMP_NODISCARD KMP_API bool GetBool(int index, bool defaultValue = false);
