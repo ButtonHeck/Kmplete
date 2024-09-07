@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/filesystem.h"
 
 #include <rapidjson/document.h>
 #include <rapidjson/prettywriter.h>
@@ -14,12 +13,14 @@ namespace Kmplete
     class JsonWriter
     {
     public:
+        KMP_DISABLE_COPY_MOVE(JsonWriter)
+
         KMP_API explicit JsonWriter(rapidjson::Document& document);
 
         KMP_API bool StartObject(const std::string& objectName = std::string(""));
         KMP_API bool EndObject();
 
-        KMP_API bool StartArray(const std::string& arrayName);
+        KMP_API bool StartArray(const std::string& arrayName = std::string(""));
         KMP_API bool EndArray();
 
         KMP_API bool SaveBool(bool value);

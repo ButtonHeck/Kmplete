@@ -39,6 +39,11 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(const std::string& arrayName)
     {
+        if (arrayName.empty())
+        {
+            return _writer.StartArray();
+        }
+
         if (_writer.Key(arrayName.c_str()))
         {
             return _writer.StartArray();

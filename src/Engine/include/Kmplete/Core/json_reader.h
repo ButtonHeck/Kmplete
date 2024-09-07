@@ -13,6 +13,8 @@ namespace Kmplete
     class JsonReader
     {
     public:
+        KMP_DISABLE_COPY_MOVE(JsonReader)
+
         KMP_API explicit JsonReader(rapidjson::Document& document);
 
         KMP_API bool StartObject(const std::string& objectName);
