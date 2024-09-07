@@ -65,6 +65,48 @@ TEST_CASE("Rapidjson basic json", "[core][json][reader]")
     REQUIRE_FALSE(document["Ptr"] == 0);
 }
 
+TEST_CASE("Rapidjson duplicate keys (same type)", "[core][json][reader]")
+{
+    const char* JsonStr = R"rjs(
+    {
+        "Node1": true,
+        "Node1": false
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(JsonStr);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorNone);
+    REQUIRE(document.IsObject());
+
+    REQUIRE(document.HasMember("Node1"));
+    REQUIRE(document["Node1"].IsBool());
+    REQUIRE(document["Node1"] == true);
+}
+
+TEST_CASE("Rapidjson duplicate keys (different types)", "[core][json][reader]")
+{
+    const char* JsonStr = R"rjs(
+    {
+        "Node1": 94,
+        "Node1": false
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(JsonStr);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorNone);
+    REQUIRE(document.IsObject());
+
+    REQUIRE(document.HasMember("Node1"));
+    REQUIRE(document["Node1"].IsInt());
+    REQUIRE(document["Node1"] == 94);
+}
+
 TEST_CASE("Rapidjson arrays", "[core][json][reader]")
 {
     const char* JsonWithArrayStr = R"rjs(
