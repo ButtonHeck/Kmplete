@@ -17,9 +17,7 @@ namespace Kmplete
         : _name(name)
         , _reader(CreatePtr<JsonReader>(_document))
         , _writer(CreatePtr<JsonWriter>(_document))
-    {
-        _document.SetObject();
-    }
+    {}
     //--------------------------------------------------------------------------
 
     bool Settings::StartSaveObject(const std::string& objectName)

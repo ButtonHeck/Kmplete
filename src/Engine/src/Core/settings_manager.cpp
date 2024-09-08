@@ -100,22 +100,22 @@ namespace Kmplete
 
     void SettingsManager::SaveSettings() const
     {
-        const rapidjson::Document summaryDocument = AssembleDocument();
+        auto summaryDocument = AssembleDocument();
         WriteDocument(summaryDocument);
     }
     //--------------------------------------------------------------------------
 
-    rapidjson::Document SettingsManager::AssembleDocument() const
+    Ptr<rapidjson::Document> SettingsManager::AssembleDocument() const
     {
-        rapidjson::Document summaryDocument;
-        summaryDocument.SetObject();
+        auto summaryDocument = CreatePtr<rapidjson::Document>();
+        summaryDocument->SetObject();
 
         for (const auto& settingsEntry : _settings)
         {
             if (settingsEntry.second->ParseToDocument())
             {
                 auto& settingsEntryDocument = settingsEntry.second->GetDocument();
-                summaryDocument.AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
+                summaryDocument->AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
             }
         }
 
@@ -123,12 +123,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::WriteDocument(const rapidjson::Document& document) const
+    void SettingsManager::WriteDocument(const Ptr<rapidjson::Document> document) const
     {
         rapidjson::StringBuffer buffer;
         rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 
-        if (document.Accept(writer))
+        if (document->Accept(writer))
         {
             std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
             if (!outputStream.is_open() || !outputStream.good())

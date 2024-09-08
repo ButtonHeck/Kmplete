@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/pointers.h"
 
 #include <rapidjson/document.h>
 
@@ -30,8 +31,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::filesystem::path GetFilename() const KMP_NOEXCEPT;
 
     private:
-        KMP_NODISCARD rapidjson::Document AssembleDocument() const;
-        void WriteDocument(const rapidjson::Document& document) const;
+        KMP_NODISCARD Ptr<rapidjson::Document> AssembleDocument() const;
+        void WriteDocument(const Ptr<rapidjson::Document> document) const;
 
     private:
         std::filesystem::path _filename;
