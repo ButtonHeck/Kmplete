@@ -6,7 +6,6 @@
 #include <rapidjson/document.h>
 
 #include <string>
-#include <filesystem>
 
 namespace Kmplete
 {
@@ -16,6 +15,8 @@ namespace Kmplete
     class Settings
     {
     public:
+        KMP_DISABLE_COPY_MOVE(Settings)
+
         KMP_API Settings(const std::string& name, rapidjson::Document&& document);
         KMP_API Settings(const std::string& name);
 
