@@ -1,0 +1,13 @@
+{
+    "ObjA": {
+        "PropA": 12
+    },
+    "ObjB": {
+        "PropB": true
+    },
+    "ObjC": {
+        "PropA": "hello",
+        "PropB": -44.55,
+        "PropC": 8
+    }
+}

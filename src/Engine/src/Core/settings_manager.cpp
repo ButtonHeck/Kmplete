@@ -62,9 +62,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::Finalize() const
+    bool SettingsManager::Finalize() const
     {
-        SaveSettings();
+        return SaveSettings();
     }
     //--------------------------------------------------------------------------
 
@@ -98,10 +98,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::SaveSettings() const
+    bool SettingsManager::SaveSettings() const
     {
         auto summaryDocument = AssembleDocument();
-        WriteDocument(summaryDocument);
+        return WriteDocument(summaryDocument);
     }
     //--------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::WriteDocument(const Ptr<rapidjson::Document> document) const
+    bool SettingsManager::WriteDocument(const Ptr<rapidjson::Document> document) const
     {
         rapidjson::StringBuffer buffer;
         rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
@@ -134,18 +134,18 @@ namespace Kmplete
             if (!outputStream.is_open() || !outputStream.good())
             {
                 Log::CoreWarn("SettingsManager: failed to open file stream");
-                return;
+                return false;
             }
 
             outputStream << buffer.GetString();
             outputStream.close();
 
             Log::CoreInfo("SettingsManager: settings written successfully");
+            return true;
         }
-        else
-        {
-            Log::CoreWarn("SettingsManager: failed to write settings");
-        }
+
+        Log::CoreWarn("SettingsManager: failed to write settings");
+        return false;
     }
     //--------------------------------------------------------------------------
 
