@@ -20,6 +20,8 @@ namespace Kmplete
         KMP_API Settings(const std::string& name, rapidjson::Document&& document);
         KMP_API Settings(const std::string& name);
 
+        KMP_NODISCARD KMP_API const std::string& GetName() const;
+
         KMP_API bool StartSaveObject(const std::string& objectName = std::string(""));
         KMP_API bool EndSaveObject();
 
@@ -41,7 +43,7 @@ namespace Kmplete
         KMP_API bool SaveString(const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
-        KMP_API bool ParseToDocument();
+        KMP_NODISCARD KMP_API bool ParseToDocument();
         KMP_NODISCARD KMP_API rapidjson::Document& GetDocument();
 
 
@@ -69,7 +71,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
-        std::string _name;
+        const std::string _name;
         rapidjson::Document _document;
         Ptr<JsonReader> _reader;
         Ptr<JsonWriter> _writer;

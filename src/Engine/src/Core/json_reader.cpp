@@ -110,6 +110,12 @@ namespace Kmplete
             return 0;
         }
 
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonReader: can't start array '{}' from non-object '{}'", arrayName, _scopeString);
+            return 0;
+        }
+
         if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray())
         {
             Log::CoreError("JsonReader: cannot find member '{}', or the member is not an array type", arrayName);

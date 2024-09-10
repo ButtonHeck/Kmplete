@@ -20,6 +20,12 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
+    const std::string& Settings::GetName() const
+    {
+        return _name;
+    }
+    //--------------------------------------------------------------------------
+
     bool Settings::StartSaveObject(const std::string& objectName)
     {
         return _writer->StartObject(objectName);
