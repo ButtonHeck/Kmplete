@@ -2,6 +2,18 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+TEST_CASE("Filesystem initialization", "[core][filesystem]")
+{
+    auto path = Kmplete::Filesystem::GetApplicationPath();
+    REQUIRE(path.empty());
+
+    REQUIRE(Kmplete::Filesystem::Initialize());
+
+    path = Kmplete::Filesystem::GetApplicationPath();
+    REQUIRE(!path.empty());
+}
+//--------------------------------------------------------------------------
+
 TEST_CASE("Filesystem", "[core][filesystem]")
 {
     REQUIRE(Kmplete::Filesystem::Initialize());
