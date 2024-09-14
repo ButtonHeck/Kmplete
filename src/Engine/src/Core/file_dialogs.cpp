@@ -44,15 +44,15 @@ namespace Kmplete
 
         std::string OpenDirectory(const std::string& title)
         {
-            pfd::open_file opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), {}, pfd::opt::force_path);
+            pfd::select_folder opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
 
-            const auto directories = opener.result();
-            if (directories.empty())
+            const auto directory = opener.result();
+            if (directory.empty())
             {
                 return std::string();
             }
 
-            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(directories.front()));
+            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(directory));
         }
         //--------------------------------------------------------------------------
 
