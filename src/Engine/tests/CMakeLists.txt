@@ -11,6 +11,7 @@ set(Kmplete_Engine_Tests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_manager_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/file_dialogs_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/macro_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Core/assertion_tests.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_Tests_CORE})
 

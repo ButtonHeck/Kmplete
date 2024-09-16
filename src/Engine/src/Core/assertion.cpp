@@ -3,8 +3,10 @@
 
 namespace Kmplete
 {
-    Assertion::Assertion(const std::string& expression, const std::source_location& location, Consequence consequence)
-        : _sourceLocation(location)
+    Assertion::Assertion(const std::string& expression, const std::string& file, const std::string& function, int line, Consequence consequence)
+        : _file(file)
+        , _function(function)
+        , _line(line)
         , _consequence(consequence)
     {
         Utils::ToSStream(_stream, "Assertion failed! \"", expression, "\"");
@@ -15,12 +17,12 @@ namespace Kmplete
     {
         if (_consequence == Consequence::Terminate)
         {
-            Log::CoreCritical("Assertion: [file {}, function {}, line {}]: {}", _sourceLocation.file_name(), _sourceLocation.function_name(), _sourceLocation.line(), _stream.str());
+            Log::CoreCritical("Assertion: [file {}, function {}, line {}]: {}", _file, _function, _line, _stream.str());
             std::terminate();
         }
         else
         {
-            Log::CoreError("Assertion: [file {}, function {}, line {}]: {}", _sourceLocation.file_name(), _sourceLocation.function_name(), _sourceLocation.line(), _stream.str());
+            Log::CoreError("Assertion: [file {}, function {}, line {}]: {}", _file, _function, _line, _stream.str());
         }
     }
     //--------------------------------------------------------------------------
