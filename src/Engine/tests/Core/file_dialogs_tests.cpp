@@ -163,7 +163,7 @@ TEST_CASE("File dialog save file (SAVE overwrite)", "[core][file_dialogs][save]"
 
 TEST_CASE("File dialog save file (SAVE new non-matching filter", "[core][file_dialogs][save]")
 {
-    const auto file = Kmplete::FileDialogs::SaveFile("Save to any file that do not match filter", {"JSON files", "*.json"});
+    const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file that do not match filter", {"JSON files", "*.json"});
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
     REQUIRE_FALSE(Kmplete::Filesystem::PathExists(file));
