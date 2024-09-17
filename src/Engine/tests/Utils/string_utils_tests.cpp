@@ -1,6 +1,11 @@
+#include "Kmplete/Core/platform.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
+
+#ifndef KMP_COMPILER_MSVC
+#include <cstddef>
+#endif
 
 TEST_CASE("Concatenate empty", "[utils][string]")
 {
@@ -40,7 +45,7 @@ TEST_CASE("Concatenate", "[utils][string]")
     result = Kmplete::Utils::Concatenate(nullptr);
     REQUIRE(result == std::string("nullptr"));
 
-    result = Kmplete::Utils::Concatenate(nullptr_t{});
+    result = Kmplete::Utils::Concatenate(std::nullptr_t{});
     REQUIRE(result == std::string("nullptr"));
 
     result = std::string("");
@@ -108,7 +113,7 @@ TEST_CASE("ToSStream", "[utils][string]")
     REQUIRE(result == std::string("nullptr"));
 
     oss.str("");
-    Kmplete::Utils::ToSStream(oss, nullptr_t{});
+    Kmplete::Utils::ToSStream(oss, std::nullptr_t{});
     result = oss.str();
     REQUIRE(result == std::string("nullptr"));
 

@@ -139,7 +139,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::SaveSettings(const Ptr<Settings> KMP_MB_UNUSED settings)
+    void Log::SaveSettings(const Ptr<Settings> settings)
     {
 #ifndef KMP_LOG_DISABLED
         KMP_ASSERT(settings);
@@ -158,7 +158,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::LoadSettings(const Ptr<Settings> KMP_MB_UNUSED settings)
+    void Log::LoadSettings(const Ptr<Settings> settings)
     {
 #ifndef KMP_LOG_DISABLED
         KMP_ASSERT(settings);

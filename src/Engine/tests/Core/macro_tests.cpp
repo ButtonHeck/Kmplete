@@ -1,3 +1,4 @@
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/macro.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -10,21 +11,21 @@ TEST_CASE("Stringify macro string", "[core][macro]")
 
 TEST_CASE("Stringify macro variable", "[core][macro]")
 {
-    const auto param = 4;
+    KMP_MB_UNUSED const auto param = 4;
     const auto strMacro = KMP_M_STRINGIFY(param);
     REQUIRE(strMacro == std::string("param"));
 }
 
 TEST_CASE("Stringify macro expression", "[core][macro]")
 {
-    const auto param = 4;
+    KMP_MB_UNUSED const auto param = 4;
     const auto strMacro = KMP_M_STRINGIFY(param == 4);
     REQUIRE(strMacro == std::string("param == 4"));
 }
 
 TEST_CASE("Stringify macro itself", "[core][macro]")
 {
-    const auto param = 4;
+    KMP_MB_UNUSED const auto param = 4;
     const auto strMacro = KMP_M_STRINGIFY(KMP_M_STRINGIFY(param));
     REQUIRE(strMacro == std::string("\"param\""));
 }
@@ -41,9 +42,9 @@ TEST_CASE("Concat macro integers", "[core][macro]")
 
 TEST_CASE("Concat macro variables", "[core][macro]")
 {
-    const auto a = 66;
-    const auto b = 77;
-    const auto ab = "Hello";
+    KMP_MB_UNUSED const auto a = 66;
+    KMP_MB_UNUSED const auto b = 77;
+    KMP_MB_UNUSED const auto ab = "Hello";
 
     auto macroResult = KMP_M_CONCAT(a, b);
     REQUIRE(macroResult == ab);

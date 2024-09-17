@@ -26,8 +26,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API static Ptr<spdlog::logger>& ClientLogger();
         KMP_NODISCARD KMP_API static std::string_view StringLogOutput();
 
-        KMP_API static void SaveSettings(const Ptr<Settings> KMP_MB_UNUSED settings);
-        KMP_API static void LoadSettings(const Ptr<Settings> KMP_MB_UNUSED settings);
+        KMP_API static void SaveSettings(const Ptr<Settings> settings);
+        KMP_API static void LoadSettings(const Ptr<Settings> settings);
 
 #ifndef KMP_LOG_DISABLED
         // Core log functions
