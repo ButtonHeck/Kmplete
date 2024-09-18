@@ -154,6 +154,8 @@ namespace Kmplete
         settings->SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
         settings->SaveInt(LogClientLevelStr, _logSettings.clientLevel);
         settings->EndSaveObject();
+#else
+        (void)settings;
 #endif
     }
     //--------------------------------------------------------------------------
@@ -173,6 +175,8 @@ namespace Kmplete
         _logSettings.coreLevel = settings->GetInt(LogCoreLevelStr, spdlog::level::trace);
         _logSettings.clientLevel = settings->GetInt(LogClientLevelStr, spdlog::level::trace);
         settings->EndLoadObject();
+#else
+        (void)settings;
 #endif
     }
     //--------------------------------------------------------------------------
