@@ -7,7 +7,7 @@ TEST_CASE("SettingsManager basic test", "[core][json][settings][manager]")
 {
     REQUIRE(Kmplete::Filesystem::Initialize());
 
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_tests.json");
+    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsPath);
 
     REQUIRE(!settingsManager.GetFilename().empty());
@@ -40,7 +40,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager
 {
     REQUIRE(Kmplete::Filesystem::Initialize());
 
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_tests.json");
+    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsPath);
 
     REQUIRE(!settingsManager.GetFilename().empty());
