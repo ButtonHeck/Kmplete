@@ -15,7 +15,7 @@ namespace Kmplete
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
 
-        KMP_NODISCARD bool Initialize(const std::string& settingsPath) override;
+        KMP_NODISCARD bool Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName) override;
         void Finalize() override;
 
         void Run() override;

@@ -12,7 +12,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool Application::Initialize(const std::string& settingsFilePath)
+    bool Application::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
     {
         Log::InitializeTemporarySink();
 
@@ -21,7 +21,7 @@ namespace Kmplete
             return false;
         }
 
-        _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append("Kmplete_settings.json") : settingsFilePath));
+        _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath));
         if (!_settingsManager->Initialize())
         {
             Log::CoreWarn("Application: failed to load settings");

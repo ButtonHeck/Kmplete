@@ -20,7 +20,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
 
-        KMP_NODISCARD KMP_API virtual bool Initialize(const std::string& settingsFilePath);
+        KMP_NODISCARD KMP_API virtual bool Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
         KMP_API virtual void Finalize();
 
         KMP_API virtual void Run() = 0;
