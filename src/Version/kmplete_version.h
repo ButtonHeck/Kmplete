@@ -2,11 +2,11 @@
 
 namespace Kmplete
 {
-    std::string getKmpleteVersion();
-    unsigned int getKmpleteVersionMajor();
-    unsigned int getKmpleteVersionMinor();
-    unsigned int getKmpleteVersionPatch();
-    unsigned int getKmpleteVersionTweak();
+    std::string GetKmpleteVersion();
+    unsigned int GetKmpleteVersionMajor();
+    unsigned int GetKmpleteVersionMinor();
+    unsigned int GetKmpleteVersionPatch();
+    unsigned int GetKmpleteVersionTweak();
     
-    std::string getKmpleteGitHash();
+    std::string GetKmpleteGitHash();
 }
