@@ -51,7 +51,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager
     REQUIRE(settings->SaveInt("PropA", 999));
     REQUIRE(settings->EndSaveObject());
 
-    const auto swapSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_tests_swap.json");
+    const auto swapSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests_swap.json");
     settingsManager.SetFilename(swapSettingsPath);
     REQUIRE(settingsManager.SaveSettings());
 
