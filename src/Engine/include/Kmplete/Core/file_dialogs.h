@@ -20,5 +20,37 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API std::string SaveFile(const std::string& title, const std::vector<std::string>& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
         //--------------------------------------------------------------------------
+
+        enum class MessageButton
+        {
+            Cancel = -1,
+            Ok,
+            Yes,
+            No,
+            Abort,
+            Retry,
+            Ignore
+        };
+
+        enum class MessageChoice
+        {
+            Ok = 0,
+            OkCancel,
+            YesNo,
+            YesNoCancel,
+            RetryCancel,
+            AbortRetryIgnore
+        };
+
+        enum class MessageIcon
+        {
+            Info = 0,
+            Warning,
+            Error,
+            Question
+        };
+
+        KMP_NODISCARD KMP_API MessageButton OpenMessage(const std::string& title, const std::string& message, MessageChoice choice = MessageChoice::OkCancel, MessageIcon = MessageIcon::Info);
+        //--------------------------------------------------------------------------
     };
 }

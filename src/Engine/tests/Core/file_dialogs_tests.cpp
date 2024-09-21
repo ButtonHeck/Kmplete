@@ -183,3 +183,108 @@ TEST_CASE("File dialog open folder (CANCEL)", "[core][file_dialogs][folder]")
     REQUIRE(folder.empty());
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Message dialog OK button", "[core][file_dialogs][message]")
+{
+    auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press OK");
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Ok);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press OK", Kmplete::FileDialogs::MessageChoice::Ok);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Ok);
+}
+
+TEST_CASE("Message dialog CANCEL button", "[core][file_dialogs][message]")
+{
+    auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press CANCEL");
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press CANCEL", Kmplete::FileDialogs::MessageChoice::YesNoCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press CANCEL", Kmplete::FileDialogs::MessageChoice::RetryCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
+}
+
+TEST_CASE("Message dialog close button", "[core][file_dialogs][message]")
+{
+    auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect Cancel)");
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect OK)", Kmplete::FileDialogs::MessageChoice::Ok);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Ok);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect Cancel)", Kmplete::FileDialogs::MessageChoice::RetryCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect Cancel)", Kmplete::FileDialogs::MessageChoice::YesNoCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
+}
+
+TEST_CASE("Message dialog YES button", "[core][file_dialogs][message]")
+{
+    auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press YES", Kmplete::FileDialogs::MessageChoice::YesNo);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Yes);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press YES", Kmplete::FileDialogs::MessageChoice::YesNoCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Yes);
+}
+
+TEST_CASE("Message dialog NO button", "[core][file_dialogs][message]")
+{
+    auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press NO", Kmplete::FileDialogs::MessageChoice::YesNo);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::No);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press NO", Kmplete::FileDialogs::MessageChoice::YesNoCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::No);
+}
+
+TEST_CASE("Message dialog RETRY button", "[core][file_dialogs][message]")
+{
+    auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press RETRY", Kmplete::FileDialogs::MessageChoice::RetryCancel);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Retry);
+
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press RETRY", Kmplete::FileDialogs::MessageChoice::AbortRetryIgnore);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Retry);
+}
+
+TEST_CASE("Message dialog ABORT button", "[core][file_dialogs][message]")
+{
+    const auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press ABORT", Kmplete::FileDialogs::MessageChoice::AbortRetryIgnore);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Abort);
+}
+
+TEST_CASE("Message dialog IGNORE button", "[core][file_dialogs][message]")
+{
+    const auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press IGNORE", Kmplete::FileDialogs::MessageChoice::AbortRetryIgnore);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Ignore);
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Message dialog icon INFO", "[core][file_dialogs][message]")
+{
+    const auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press YES if this dialog looks like information dialog", 
+        Kmplete::FileDialogs::MessageChoice::YesNo, Kmplete::FileDialogs::MessageIcon::Info);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Yes);
+}
+
+TEST_CASE("Message dialog icon WARNING", "[core][file_dialogs][message]")
+{
+    const auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press YES if this dialog looks like warning dialog",
+        Kmplete::FileDialogs::MessageChoice::YesNo, Kmplete::FileDialogs::MessageIcon::Warning);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Yes);
+}
+
+TEST_CASE("Message dialog icon ERROR", "[core][file_dialogs][message]")
+{
+    const auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press YES if this dialog looks like error dialog",
+        Kmplete::FileDialogs::MessageChoice::YesNo, Kmplete::FileDialogs::MessageIcon::Error);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Yes);
+}
+
+TEST_CASE("Message dialog icon QUESTION", "[core][file_dialogs][message]")
+{
+    const auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Press YES if this dialog looks like question dialog",
+        Kmplete::FileDialogs::MessageChoice::YesNo, Kmplete::FileDialogs::MessageIcon::Question);
+    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Yes);
+}
+//--------------------------------------------------------------------------

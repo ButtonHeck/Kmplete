@@ -63,5 +63,95 @@ namespace Kmplete
             return Filesystem::ToGenericString(Utils::Utf8ToNarrow(saver.result()));
         }
         //--------------------------------------------------------------------------
+
+        MessageButton OpenMessage(const std::string& title, const std::string& message, MessageChoice choice, MessageIcon icon)
+        {
+            pfd::choice pfdChoice = pfd::choice::ok_cancel;
+            switch (choice)
+            {
+            case MessageChoice::Ok:
+                pfdChoice = pfd::choice::ok;
+                break;
+
+            case MessageChoice::OkCancel:
+                pfdChoice = pfd::choice::ok_cancel;
+                break;
+
+            case MessageChoice::YesNo:
+                pfdChoice = pfd::choice::yes_no;
+                break;
+
+            case MessageChoice::YesNoCancel:
+                pfdChoice = pfd::choice::yes_no_cancel;
+                break;
+
+            case MessageChoice::RetryCancel:
+                pfdChoice = pfd::choice::retry_cancel;
+                break;
+
+            case MessageChoice::AbortRetryIgnore:
+                pfdChoice = pfd::choice::abort_retry_ignore;
+                break;
+
+            default:
+                break;
+            }
+
+            pfd::icon pfdIcon = pfd::icon::info;
+            switch (icon)
+            {
+            case MessageIcon::Info:
+                pfdIcon = pfd::icon::info;
+                break;
+
+            case MessageIcon::Warning:
+                pfdIcon = pfd::icon::warning;
+                break;
+
+            case MessageIcon::Error:
+                pfdIcon = pfd::icon::error;
+                break;
+
+            case MessageIcon::Question:
+                pfdIcon = pfd::icon::question;
+                break;
+
+            default:
+                break;
+            }
+
+            pfd::message pfdMessage(title, message, pfdChoice, pfdIcon);
+
+            const pfd::button pfdButton = pfdMessage.result();
+            switch (pfdButton)
+            {
+            case pfd::button::cancel:
+                return MessageButton::Cancel;
+
+            case pfd::button::ok:
+                return MessageButton::Ok;
+
+            case pfd::button::yes:
+                return MessageButton::Yes;
+
+            case pfd::button::no:
+                return MessageButton::No;
+
+            case pfd::button::abort:
+                return MessageButton::Abort;
+
+            case pfd::button::retry:
+                return MessageButton::Retry;
+
+            case pfd::button::ignore:
+                return MessageButton::Ignore;
+
+            default:
+                break;
+            }
+
+            return MessageButton::Ignore;
+        }
+        //--------------------------------------------------------------------------
     }
 }
