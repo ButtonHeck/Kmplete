@@ -101,6 +101,38 @@ set_target_properties(Kmplete_Engine_File_Dialogs_Tests PROPERTIES
 )
 
 
+# Window Application Tests
+
+set(Kmplete_Engine_Window_Application_Tests_CORE
+    ${CMAKE_CURRENT_LIST_DIR}/Core/window_application_tests.cpp
+)
+source_group("Core" FILES ${Kmplete_Engine_Window_Application_Tests_CORE})
+
+add_executable(Kmplete_Engine_Window_Application_Tests
+    ${Kmplete_Engine_Window_Application_Tests_CORE}
+)
+
+
+SetupCompilerOptions(Kmplete_Engine_Window_Application_Tests)
+
+target_include_directories(Kmplete_Engine_Window_Application_Tests
+    PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
+    
+    PUBLIC "${spdlog_SOURCE_DIR}/include"
+    PUBLIC "${RapidJSON_SOURCE_DIR}/include"
+    PRIVATE "${GLFW_SOURCE_DIR}/include"
+)
+
+target_link_libraries(Kmplete_Engine_Window_Application_Tests
+    PRIVATE Kmplete_Engine
+    PRIVATE Catch2::Catch2WithMain
+)
+
+set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES 
+    FOLDER Kmplete/Tests
+)
+
+
 # Common stuff
 
 if(MSVC)
@@ -110,9 +142,13 @@ if(MSVC)
     set_target_properties(Kmplete_Engine_File_Dialogs_Tests PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
     )
+    set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
+    )
 endif()
 
 list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)
 include(Catch)
 catch_discover_tests(Kmplete_Engine_Unit_Tests)
 catch_discover_tests(Kmplete_Engine_File_Dialogs_Tests)
+catch_discover_tests(Kmplete_Engine_Window_Application_Tests)
