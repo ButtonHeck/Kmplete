@@ -106,6 +106,7 @@ set_target_properties(Kmplete_Engine_File_Dialogs_Tests PROPERTIES
 
 set(Kmplete_Engine_Window_Application_Tests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/window_application_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Core/window_backend_tests.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_Window_Application_Tests_CORE})
 
