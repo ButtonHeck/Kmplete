@@ -4,33 +4,35 @@ namespace Kmplete
 {
     constexpr static auto WindowAppSettingsEntryName = "WindowApplication";
 
-    WindowApplication::WindowApplication()
-        : _backend(WindowBackend::Create())
+    WindowApplication::WindowApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+        : Application(settingsFilePath, defaultSettingsName)
+        , _backend(WindowBackend::Create())
         , _mainWindow(nullptr)
-    {}
+    {
+        Initialize();
+    }
     //--------------------------------------------------------------------------
 
-    bool WindowApplication::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+    WindowApplication::~WindowApplication()
     {
-        if (!Application::Initialize(settingsFilePath, defaultSettingsName))
-        {
-            return false;
-        }
+        Finalize();
+    }
+    //--------------------------------------------------------------------------
 
+    void WindowApplication::Initialize()
+    {
         LoadSettings();
 
         if (!_backend || !_backend->Initialize())
         {
-            return false;
+            throw std::exception("WindowApplication backend initialization failed");
         }
 
         _mainWindow = _backend->GetMainWindow();
         if (!_mainWindow)
         {
-            return false;
+            throw std::exception("WindowApplication main window initialization failed");
         }
-
-        return true;
     }
     //--------------------------------------------------------------------------
 
@@ -40,8 +42,6 @@ namespace Kmplete
 
         _mainWindow.reset();
         _backend->Finalize();
-
-        Application::Finalize();
     }
     //--------------------------------------------------------------------------
 

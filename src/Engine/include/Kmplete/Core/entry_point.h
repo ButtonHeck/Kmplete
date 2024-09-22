@@ -31,20 +31,13 @@ int main(int argc, char** argv)
 
 int Main(const Kmplete::ProgramOptions& programOptions)
 {
-    auto app = Kmplete::CreateApplication();
+    auto app = Kmplete::CreateApplication(programOptions.GetSettingsFilePath());
     if (!app)
     {
         return 1;
     }
 
-    if (!app->Initialize(programOptions.GetSettingsFilePath()))
-    {
-        app.reset();
-        return 2;
-    }
-
     app->Run();
-    app->Finalize();
     app.reset();
 
     return 0;

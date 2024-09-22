@@ -40,6 +40,10 @@ namespace Kmplete
     class TestApplication : public Application
     {
     public:
+        TestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
+            : Application(settingsFilePath, defaultSettingsName)
+        {}
+
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override 
         { 
             return std::string("TestApplication"); 
@@ -88,13 +92,13 @@ namespace Kmplete
 
 TEST_CASE("Test application initialize", "[core][application]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>();
+    {
+        const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
 
-    REQUIRE(application);
-    REQUIRE(application->Initialize("", "Kmplete_unit_tests_settings.json"));
-    REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
+        REQUIRE(application);
+        REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
+    }
 
-    application->Finalize();
     const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_unit_tests_settings.json");
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(settingsPath));
     REQUIRE(Kmplete::Filesystem::PathExists(settingsPath));
@@ -103,10 +107,9 @@ TEST_CASE("Test application initialize", "[core][application]")
 
 TEST_CASE("Test application events", "[core][application]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>();
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
 
     REQUIRE(application);
-    REQUIRE(application->Initialize("", "Kmplete_unit_tests_settings.json"));
 
     const auto eventSender = Kmplete::CreatePtr<Kmplete::EventSender>();
     application->SetSender(eventSender);

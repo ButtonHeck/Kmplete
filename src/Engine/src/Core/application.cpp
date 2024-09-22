@@ -7,18 +7,26 @@ namespace Kmplete
 {
     constexpr static auto ApplicationSettingsEntryName = "Application";
 
-    Application::Application()
+    Application::Application(const std::string& settingsFilePath, const std::string& defaultSettingsName)
         : _settingsManager(nullptr)
-    {}
+    {
+        Initialize(settingsFilePath, defaultSettingsName);
+    }
     //--------------------------------------------------------------------------
 
-    bool Application::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+    Application::~Application()
+    {
+        Finalize();
+    }
+    //--------------------------------------------------------------------------
+
+    void Application::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
     {
         Log::InitializeTemporarySink();
 
         if (!Filesystem::Initialize())
         {
-            return false;
+            throw std::exception("Application initialization failed");
         }
 
         _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath));
@@ -30,8 +38,6 @@ namespace Kmplete
         LoadSettings();
 
         Log::Initialize();
-
-        return true;
     }
     //--------------------------------------------------------------------------
 

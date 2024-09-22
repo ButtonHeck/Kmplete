@@ -15,11 +15,8 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowApplication)
 
-        KMP_API WindowApplication();
-        KMP_API virtual ~WindowApplication() = default;
-
-        KMP_NODISCARD KMP_API bool Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName) override;
-        KMP_API void Finalize() override;
+        KMP_API WindowApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
+        KMP_API virtual ~WindowApplication();
 
     protected:
         KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { return true; }
@@ -36,6 +33,8 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { return true; }
 
     private:
+        void Initialize();
+        void Finalize();
         void SaveSettings() const;
         void LoadSettings() const;
 

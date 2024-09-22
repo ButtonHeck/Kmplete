@@ -10,13 +10,10 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorApplication)
 
-        EditorApplication();
-        virtual ~EditorApplication() = default;
+        EditorApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
+        virtual ~EditorApplication();
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
-
-        KMP_NODISCARD bool Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName) override;
-        void Finalize() override;
 
         void Run() override;
 
@@ -29,6 +26,8 @@ namespace Kmplete
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event) override;
 
     private:
+        void Initialize();
+        void Finalize();
         void SaveSettings() const;
         void LoadSettings();
     };

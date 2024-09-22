@@ -5,15 +5,31 @@
 
 namespace Kmplete
 {
-    UPtr<Application> CreateApplication()
+    UPtr<Application> CreateApplication(const std::string& settingsFilePath)
     {
-        return CreateUPtr<EditorApplication>();
+        try
+        {
+            auto app = CreateUPtr<EditorApplication>(settingsFilePath);
+            return app;
+        }
+        catch (const std::exception&)
+        {
+            return nullptr;
+        }
     }
     //--------------------------------------------------------------------------
 
-    EditorApplication::EditorApplication()
-        : WindowApplication()
-    {}
+    EditorApplication::EditorApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+        : WindowApplication(settingsFilePath, defaultSettingsName)
+    {
+        Initialize();
+    }
+    //--------------------------------------------------------------------------
+
+    EditorApplication::~EditorApplication()
+    {
+        Finalize();
+    }
     //--------------------------------------------------------------------------
 
     std::string EditorApplication::GetApplicationName() const KMP_NOEXCEPT
@@ -22,26 +38,18 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+    void EditorApplication::Initialize()
     {
-        if (!WindowApplication::Initialize(settingsFilePath, defaultSettingsName))
-        {
-            return false;
-        }
-
         _mainWindow->SetTitle(GetApplicationName());
         _mainWindow->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         LoadSettings();
-
-        return true;
     }
+    //--------------------------------------------------------------------------
 
     void EditorApplication::Finalize()
     {
         SaveSettings();
-
-        WindowApplication::Finalize();
     }
     //--------------------------------------------------------------------------
 

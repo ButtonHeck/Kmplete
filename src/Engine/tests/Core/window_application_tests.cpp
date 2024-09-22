@@ -10,6 +10,12 @@ namespace Kmplete
     class TestWindowApplication : public WindowApplication
     {
     public:
+        TestWindowApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+            : WindowApplication(settingsFilePath, defaultSettingsName)
+        {
+            Initialize();
+        }
+
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override
         {
             return std::string("TestApplication");
@@ -24,16 +30,9 @@ namespace Kmplete
             }
         }
 
-        bool Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+        void Initialize()
         {
-            if (!WindowApplication::Initialize(settingsFilePath, defaultSettingsName))
-            {
-                return false;
-            }
-
             _mainWindow->SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
-
-            return true;
         }
 
         bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
@@ -159,13 +158,13 @@ namespace Kmplete
 
 TEST_CASE("Test window application initialize", "[core][window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>();
+    {
+        const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 
-    REQUIRE(application);
-    REQUIRE(application->Initialize("", "Kmplete_window_application_tests_settings.json"));
-    REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
+        REQUIRE(application);
+        REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
+    }
 
-    application->Finalize();
     const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_window_application_tests_settings.json");
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(settingsPath));
     REQUIRE(Kmplete::Filesystem::PathExists(settingsPath));
@@ -174,10 +173,9 @@ TEST_CASE("Test window application initialize", "[core][window_application][appl
 
 TEST_CASE("Test window application key events", "[core][window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>();
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 
     REQUIRE(application);
-    REQUIRE(application->Initialize("", "Kmplete_window_application_tests_settings.json"));
     REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
 
     REQUIRE_FALSE(application->IsKeyPressEventInvoked());
@@ -196,16 +194,13 @@ TEST_CASE("Test window application key events", "[core][window_application][appl
     REQUIRE(application->IsWindowApplicationKeyPressEventInvoked());
     REQUIRE(application->IsWindowApplicationKeyReleaseEventInvoked());
     REQUIRE(application->IsWindowApplicationKeyCharEventInvoked());
-
-    application->Finalize();
 }
 
 TEST_CASE("Test window application mouse events", "[core][window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>();
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 
     REQUIRE(application);
-    REQUIRE(application->Initialize("", "Kmplete_window_application_tests_settings.json"));
     REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
 
     REQUIRE_FALSE(application->IsMouseMoveEventInvoked());
@@ -228,16 +223,13 @@ TEST_CASE("Test window application mouse events", "[core][window_application][ap
     REQUIRE(application->IsWindowApplicationMouseScrollEventInvoked());
     REQUIRE(application->IsWindowApplicationMouseButtonPressEventInvoked());
     REQUIRE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
-
-    application->Finalize();
 }
 
 TEST_CASE("Test window application window events", "[core][window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>();
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 
     REQUIRE(application);
-    REQUIRE(application->Initialize("", "Kmplete_window_application_tests_settings.json"));
     REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
 
     REQUIRE_FALSE(application->IsWindowCloseEventInvoked());
@@ -272,7 +264,5 @@ TEST_CASE("Test window application window events", "[core][window_application][a
     REQUIRE(application->IsWindowApplicationWindowIconifyEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
-
-    application->Finalize();
 }
 //--------------------------------------------------------------------------
