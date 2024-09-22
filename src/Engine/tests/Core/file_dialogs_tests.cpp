@@ -168,6 +168,13 @@ TEST_CASE("File dialog save file (SAVE new non-matching filter", "[core][file_di
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
     REQUIRE_FALSE(Kmplete::Filesystem::PathExists(file));
 }
+
+TEST_CASE("File dialog save file (Cyrillic characters)", "[core][file_dialogs][open]")
+{
+    const auto file = Kmplete::FileDialogs::SaveFile("Save to new file with cyrillic characters");
+    REQUIRE(!file.empty());
+    REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
+}
 //--------------------------------------------------------------------------
 
 TEST_CASE("File dialog open folder (OPEN)", "[core][file_dialogs][folder]")
