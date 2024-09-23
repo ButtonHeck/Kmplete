@@ -47,6 +47,12 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
+    WindowBackendGlfw::~WindowBackendGlfw()
+    {
+        Finalize();
+    }
+    //--------------------------------------------------------------------------
+
     bool WindowBackendGlfw::Initialize()
     {
         if (!glfwInit())
@@ -67,7 +73,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::Finalize() const
+    void WindowBackendGlfw::Finalize()
     {
         KMP_ASSERT(_mainWindow);
 

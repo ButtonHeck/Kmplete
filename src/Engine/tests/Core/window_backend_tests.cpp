@@ -61,7 +61,5 @@ TEST_CASE("Window backend", "[core][window][window_backend]")
     auto nonExistentMonitorVideoModes = std::vector<Kmplete::WindowBackend::MonitorVideoMode>();
     REQUIRE_NOTHROW(nonExistentMonitorVideoModes = windowBackend->GetMonitorVideoModes(monitorsCount));
     REQUIRE(nonExistentMonitorVideoModes.empty());
-
-    windowBackend->Finalize();
 }
 //--------------------------------------------------------------------------

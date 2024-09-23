@@ -41,7 +41,7 @@ namespace Kmplete
         SaveSettings();
 
         _mainWindow.reset();
-        _backend->Finalize();
+        _backend.reset();
     }
     //--------------------------------------------------------------------------
 

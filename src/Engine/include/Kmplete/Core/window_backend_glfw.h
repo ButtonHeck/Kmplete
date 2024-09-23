@@ -11,10 +11,9 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(WindowBackendGlfw)
 
         KMP_API WindowBackendGlfw();
-        KMP_API ~WindowBackendGlfw() = default;
+        KMP_API ~WindowBackendGlfw();
 
         KMP_NODISCARD KMP_API bool Initialize() override;
-        KMP_API void Finalize() const override;
 
         KMP_NODISCARD KMP_API Ptr<Window> GetMainWindow() override;
 
@@ -25,6 +24,9 @@ namespace Kmplete
 
         KMP_API void SaveSettings(const Ptr<Settings> settings) const override;
         KMP_API void LoadSettings(const Ptr<Settings> settings) override;
+
+    private:
+        void Finalize();
 
     private:
         Ptr<Window> _mainWindow;

@@ -32,7 +32,6 @@ namespace Kmplete
         KMP_API virtual ~WindowBackend() = default;
 
         KMP_NODISCARD KMP_API virtual bool Initialize() = 0;
-        KMP_API virtual void Finalize() const = 0;
 
         KMP_NODISCARD KMP_API virtual Ptr<Window> GetMainWindow() = 0;
 
