@@ -1,11 +1,21 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Core/assertion.h"
 
 namespace Kmplete
 {
-    Window::Window()
-        : _settings(CreateUPtr<WindowSettings>())
-    {}
+    Window::Window(const Ptr<WindowSettings> settings)
+        : _settings(settings)
+    {
+        KMP_ASSERT(settings);
+        KMP_ASSERT(!settings->name.empty());
+    }
+    //--------------------------------------------------------------------------
+
+    const std::string& Window::GetName() const
+    {
+        return _settings->name;
+    }
     //--------------------------------------------------------------------------
 
     std::string Window::ModeToString(Mode mode) KMP_NOEXCEPT

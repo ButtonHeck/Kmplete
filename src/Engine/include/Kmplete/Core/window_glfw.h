@@ -13,11 +13,11 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
-        KMP_API WindowGlfw();
-        KMP_API ~WindowGlfw() = default;
+        KMP_API WindowGlfw(const Ptr<WindowSettings> settings);
+        KMP_API ~WindowGlfw();
 
-        KMP_NODISCARD KMP_API bool Initialize() override;
-        KMP_API void Finalize() override;
+        KMP_NODISCARD KMP_API std::pair<int, int> GetSize() const override;
+        KMP_NODISCARD KMP_API std::pair<int, int> GetWindowedSize() const override;
 
         KMP_API void SetTitle(const std::string& title) override;
         KMP_API void SetIcon(const std::string& path) override;
@@ -31,15 +31,15 @@ namespace Kmplete
         KMP_API void SetVSync(bool vSync) override;
         KMP_NODISCARD KMP_API bool IsVSync() const override;
 
+        KMP_API void SetUpdatedContinuously(bool updatedContinuously) override;
+        KMP_NODISCARD KMP_API bool IsUpdatedContinuously() const override;
+
         KMP_API void ProcessEvents() override;
         KMP_API void SwapBuffers() const override;
         KMP_API void MakeContextCurrent() override;
         KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
 
         KMP_NODISCARD KMP_API void* GetImplPointer() const KMP_NOEXCEPT override;
-
-        KMP_API void SaveSettings(const Ptr<Settings> settings) const override;
-        KMP_API void LoadSettings(const Ptr<Settings> settings) override;
 
     private:
         struct UserData
@@ -57,8 +57,10 @@ namespace Kmplete
         KMP_NODISCARD static UserData* GetUserPointer(GLFWwindow* window);
 
     private:
+        void Initialize();
         void InitializeHints() const;
         void InitializeCallbacks() const;
+        void Finalize();
 
     private:
         GLFWwindow* _window;

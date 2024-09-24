@@ -32,7 +32,7 @@ namespace Kmplete
     private:
         void Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName);
         void Finalize();
-        void SaveSettings() const;
+        void SaveSettings() const; //TODO move to public (settings should be able to save during application work)
         void LoadSettings();
 
     protected:

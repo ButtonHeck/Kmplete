@@ -9,13 +9,12 @@
 
 namespace Kmplete
 {
-    class Settings;
-
     class Window
     {
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
+        constexpr static auto NameStr = "Name";
         constexpr static auto WidthStr = "Width";
         constexpr static auto HeightStr = "Height";
         constexpr static auto WindowedWidthStr = "WindowedWidth";
@@ -39,14 +38,31 @@ namespace Kmplete
         constexpr static auto WindowedFullscreenModeStr = "WindowedFullscreen";
         constexpr static auto WindowedModeStr = "Windowed";
 
+        struct WindowSettings
+        {
+            std::string name = "";
+            unsigned int width = DefaultWidth;
+            unsigned int height = DefaultHeight;
+            unsigned int windowedWidth = DefaultWidth;
+            unsigned int windowedHeight = DefaultHeight;
+            std::string screenMode = WindowedModeStr;
+            bool vSync = true;
+            bool updateContinuously = true;
+        };
+
+        KMP_NODISCARD static std::string ModeToString(Mode mode) KMP_NOEXCEPT;
+        KMP_NODISCARD static Mode StringToMode(const std::string& modeStr) KMP_NOEXCEPT;
+
     public:
         KMP_DISABLE_COPY_MOVE(Window)
 
-        KMP_API Window();
+        KMP_API Window(const Ptr<WindowSettings> settings);
         KMP_API virtual ~Window() = default;
 
-        KMP_NODISCARD KMP_API virtual bool Initialize() = 0;
-        KMP_API virtual void Finalize() = 0;
+        KMP_NODISCARD KMP_API const std::string& GetName() const;
+
+        KMP_NODISCARD KMP_API virtual std::pair<int, int> GetSize() const = 0;
+        KMP_NODISCARD KMP_API virtual std::pair<int, int> GetWindowedSize() const = 0;
 
         KMP_API virtual void SetTitle(const std::string& title) = 0;
         KMP_API virtual void SetIcon(const std::string& path) = 0;
@@ -60,6 +76,9 @@ namespace Kmplete
         KMP_API virtual void SetVSync(bool vSync) = 0;
         KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;
 
+        KMP_API virtual void SetUpdatedContinuously(bool updatedContinuously) = 0;
+        KMP_NODISCARD KMP_API virtual bool IsUpdatedContinuously() const = 0;
+
         KMP_API virtual void ProcessEvents() = 0;
         KMP_API virtual void SwapBuffers() const = 0;
         KMP_API virtual void MakeContextCurrent() = 0;
@@ -67,27 +86,8 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API virtual void* GetImplPointer() const KMP_NOEXCEPT = 0;
 
-        KMP_API virtual void SaveSettings(const Ptr<Settings> settings) const = 0;
-        KMP_API virtual void LoadSettings(const Ptr<Settings> settings) = 0;
-
     protected:
-        KMP_NODISCARD static std::string ModeToString(Mode mode) KMP_NOEXCEPT;
-        KMP_NODISCARD static Mode StringToMode(const std::string& modeStr) KMP_NOEXCEPT;
-
-    protected:
-        struct WindowSettings
-        {
-            unsigned int width = DefaultWidth;
-            unsigned int height = DefaultHeight;
-            unsigned int windowedWidth = DefaultWidth;
-            unsigned int windowedHeight = DefaultHeight;
-            std::string screenMode = WindowedModeStr;
-            bool vSync = true;
-            bool updateContinuously = true;
-        };
-
-    protected:
-        UPtr<WindowSettings> _settings;
+        Ptr<WindowSettings> _settings;
     };
     //--------------------------------------------------------------------------
 }

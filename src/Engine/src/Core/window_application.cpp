@@ -1,4 +1,12 @@
 #include "Kmplete/Core/window_application.h"
+#include "Kmplete/Core/assertion.h"
+#include "Kmplete/Core/log.h"
+
+#ifdef CreateWindow
+#pragma push_macro("CreateWindow")
+#undef CreateWindow
+#define KMP_UNDEF_CreateWindow
+#endif
 
 namespace Kmplete
 {
@@ -6,32 +14,35 @@ namespace Kmplete
 
     WindowApplication::WindowApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
         : Application(settingsFilePath, defaultSettingsName)
-        , _backend(WindowBackend::Create())
+        , _backend(nullptr)
         , _mainWindow(nullptr)
     {
         Initialize();
+
+        Log::CoreTrace("WindowApplication: created");
     }
     //--------------------------------------------------------------------------
 
     WindowApplication::~WindowApplication()
     {
         Finalize();
+
+        Log::CoreTrace("WindowApplication: destroyed");
     }
     //--------------------------------------------------------------------------
 
     void WindowApplication::Initialize()
     {
+        _backend = WindowBackend::Create();
+        KMP_ASSERT(_backend);
+
         LoadSettings();
 
-        if (!_backend || !_backend->Initialize())
-        {
-            throw std::exception("WindowApplication backend initialization failed");
-        }
-
-        _mainWindow = _backend->GetMainWindow();
+        _mainWindow = _backend->CreateWindow("Main");
         if (!_mainWindow)
         {
-            throw std::exception("WindowApplication main window initialization failed");
+            Log::CoreCritical("WindowApplication: creation of the main window failed");
+            throw std::exception("WindowApplication creation of the main window failed");
         }
     }
     //--------------------------------------------------------------------------
@@ -71,3 +82,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 }
+
+#ifdef KMP_UNDEF_CreateWindow
+#pragma pop_macro("CreateWindow")
+#undef KMP_UNDEF_CreateWindow
+#endif

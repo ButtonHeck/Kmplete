@@ -43,48 +43,96 @@ namespace Kmplete
 
 
     WindowBackendGlfw::WindowBackendGlfw()
-        : _mainWindow(CreatePtr<WindowGlfw>())
-    {}
+    {
+        Initialize();
+
+        Log::CoreTrace("WindowBackendGlfw: created");
+    }
     //--------------------------------------------------------------------------
 
     WindowBackendGlfw::~WindowBackendGlfw()
     {
         Finalize();
+
+        Log::CoreTrace("WindowBackendGlfw: destroyed");
     }
     //--------------------------------------------------------------------------
 
-    bool WindowBackendGlfw::Initialize()
+    void WindowBackendGlfw::Initialize()
     {
         if (!glfwInit())
         {
             const char* description;
             const auto errorCode = glfwGetError(&description);
             Log::CoreCritical("WindowBackendGlfw: initialization error: code '{}', description '{}'", errorCode, description ? description : "");
-            return false;
+            throw std::exception("WindowBackendGlfw initialization failed");
         }
-
-        if (!_mainWindow->Initialize())
-        {
-            Log::CoreCritical("WindowBackendGlfw: main window initialization failed");
-            return false;
-        }
-
-        return true;
     }
     //--------------------------------------------------------------------------
 
     void WindowBackendGlfw::Finalize()
     {
-        KMP_ASSERT(_mainWindow);
+        for (const auto& windowEntry : _windowsStorage)
+        {
+            KMP_ASSERT(windowEntry.second.window).KMP_ASSERT_WATCH(windowEntry.first);
 
-        _mainWindow->Finalize();
+            if (windowEntry.second.window.use_count() > 1)
+            {
+                Log::CoreWarn("WindowBackendGlfw: window named '{}' is still used somewhere else", windowEntry.second.settings->name);
+            }
+        }
+
+        _windowsStorage.clear();
         glfwTerminate();
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Window> WindowBackendGlfw::GetMainWindow()
+    Ptr<Window> WindowBackendGlfw::CreateWindow(const std::string& windowName)
     {
-        return _mainWindow;
+        if (windowName.empty())
+        {
+            Log::CoreError("WindowBackendGlfw: creation of unnamed windows is prohibited");
+            return nullptr;
+        }
+
+        if (_windowsStorage.contains(windowName))
+        {
+            if (_windowsStorage[windowName].window)
+            {
+                Log::CoreWarn("WindowBackendGlfw: already contains '{}' window, return previously created one", windowName);
+            }
+            else
+            {
+                Log::CoreInfo("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
+                try
+                {
+                    _windowsStorage[windowName].window = CreatePtr<WindowGlfw>(_windowsStorage[windowName].settings);
+                }
+                catch (const std::exception& e)
+                {
+                    Log::CoreError("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
+                    return nullptr;
+                }
+            }
+        }
+        else
+        {
+            Log::CoreInfo("WindowBackendGlfw: creating window '{}' with default settings", windowName);
+            auto windowSettings = CreatePtr<Window::WindowSettings>();
+            windowSettings->name = windowName;
+
+            try
+            {
+                _windowsStorage.insert({ windowName, {windowSettings, CreatePtr<WindowGlfw>(windowSettings)} });
+            }
+            catch (const std::exception& e)
+            {
+                Log::CoreError("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
+                return nullptr;
+            }
+        }
+
+        return _windowsStorage[windowName].window;
     }
     //--------------------------------------------------------------------------
 
@@ -149,9 +197,30 @@ namespace Kmplete
         KMP_ASSERT(settings);
 
         settings->StartSaveObject(WindowBackendSettingsEntryName);
-        settings->StartSaveObject(MainWindowStr);
-        _mainWindow->SaveSettings(settings);
-        settings->EndSaveObject();
+        settings->StartSaveArray(WindowsStr);
+        for (const auto& windowEntry : _windowsStorage)
+        {
+            const auto window = windowEntry.second.window;
+            KMP_ASSERT(window);
+
+            const auto size = window->GetSize();
+            const auto windowedSize = window->GetWindowedSize();
+
+            settings->StartSaveObject();
+
+            settings->SaveString(Window::NameStr, window->GetName());
+            settings->SaveUInt(Window::WidthStr, size.first);
+            settings->SaveUInt(Window::HeightStr, size.second);
+            settings->SaveUInt(Window::WindowedWidthStr, windowedSize.first);
+            settings->SaveUInt(Window::WindowedHeightStr, windowedSize.second);
+            settings->SaveString(Window::ScreenModeStr, Window::ModeToString(window->GetScreenMode()));
+            settings->SaveBool(Window::VSyncStr, window->IsVSync());
+            settings->SaveBool(Window::UpdateContinuouslyStr, window->IsUpdatedContinuously());
+
+            settings->EndSaveObject();
+        }
+
+        settings->EndSaveArray();
         settings->EndSaveObject();
     }
     //--------------------------------------------------------------------------
@@ -161,9 +230,34 @@ namespace Kmplete
         KMP_ASSERT(settings);
 
         settings->StartLoadObject(WindowBackendSettingsEntryName);
-        settings->StartLoadObject(MainWindowStr);
-        _mainWindow->LoadSettings(settings);
-        settings->EndLoadObject();
+        const auto windowsCount = settings->StartLoadArray(WindowsStr);
+        for (auto i = 0; i < windowsCount; i++)
+        {
+            settings->StartLoadObject(i);
+
+            const auto windowName = settings->GetString(Window::NameStr, "");
+            if (windowName.empty())
+            {
+                Log::CoreError("WindowBackendGlfw: loading settings for unnamed window is prohibited, current object would be skipped, remove it from settings");
+            }
+            else
+            {
+                auto windowSettings = CreatePtr<Window::WindowSettings>();
+                windowSettings->name = windowName;
+                windowSettings->width = settings->GetUInt(Window::WidthStr, Window::DefaultWidth);
+                windowSettings->height = settings->GetUInt(Window::HeightStr, Window::DefaultHeight);
+                windowSettings->windowedWidth = settings->GetUInt(Window::WindowedWidthStr, Window::DefaultWidth);
+                windowSettings->windowedHeight = settings->GetUInt(Window::WindowedHeightStr, Window::DefaultHeight);
+                windowSettings->screenMode = settings->GetString(Window::ScreenModeStr, Window::WindowedModeStr);
+                windowSettings->vSync = settings->GetBool(Window::VSyncStr, true);
+                windowSettings->updateContinuously = settings->GetBool(Window::UpdateContinuouslyStr, true);
+                _windowsStorage.insert({ windowName, {windowSettings, nullptr} });
+            }
+
+            settings->EndLoadObject();
+        }
+
+        settings->EndLoadArray();
         settings->EndLoadObject();
     }
     //--------------------------------------------------------------------------

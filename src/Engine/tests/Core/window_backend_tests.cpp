@@ -6,11 +6,9 @@ TEST_CASE("Window backend", "[core][window][window_backend]")
 {
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
-    REQUIRE(windowBackend->Initialize());
 
-    const auto mainWindow = windowBackend->GetMainWindow();
+    const auto mainWindow = windowBackend->CreateWindow("Main");
     REQUIRE(mainWindow);
-    REQUIRE(mainWindow->Initialize());
 
     const auto monitorsCount = windowBackend->GetMonitorCount();
     REQUIRE(monitorsCount > 0);

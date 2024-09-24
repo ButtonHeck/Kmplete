@@ -1,7 +1,5 @@
 #include "Kmplete/Core/window_glfw.h"
 #include "Kmplete/Core/log.h"
-#include "Kmplete/Core/filesystem.h"
-#include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
@@ -11,12 +9,25 @@
 
 namespace Kmplete
 {
-    WindowGlfw::WindowGlfw()
-        : _window(nullptr)
-    {}
+    WindowGlfw::WindowGlfw(const Ptr<WindowSettings> settings)
+        : Window(settings)
+        , _window(nullptr)
+    {
+        Initialize();
+
+        Log::CoreTrace("WindowGlfw: window '{}' created", _settings->name);
+    }
     //--------------------------------------------------------------------------
 
-    bool WindowGlfw::Initialize()
+    WindowGlfw::~WindowGlfw()
+    {
+        Finalize();
+
+        Log::CoreTrace("WindowGlfw: window '{}' destroyed", _settings->name);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::Initialize()
     {
         InitializeHints();
 
@@ -24,7 +35,8 @@ namespace Kmplete
 
         if (!_window)
         {
-            return false;
+            Log::CoreError("WindowGlfw: creation failed");
+            throw std::exception("WindowGlfw creation failed");
         }
 
         glfwSetWindowUserPointer(_window, new UserData());
@@ -40,6 +52,7 @@ namespace Kmplete
             userData->updateContinuously = _settings->updateContinuously;
         }
 
+        SetUpdatedContinuously(_settings->updateContinuously);
         SetVSync(_settings->vSync);
         SetScreenMode(Window::StringToMode(_settings->screenMode));
 
@@ -47,14 +60,33 @@ namespace Kmplete
         {
             glfwSetWindowSize(_window, _settings->windowedWidth, _settings->windowedHeight);
         }
-
-        return true;
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::Finalize()
     {
         glfwDestroyWindow(_window);
+    }
+    //--------------------------------------------------------------------------
+
+    std::pair<int, int> WindowGlfw::GetSize() const
+    {
+        int width;
+        int height;
+        glfwGetWindowSize(_window, &width, &height);
+        return std::pair<int, int>(width, height);
+    }
+    //--------------------------------------------------------------------------
+
+    std::pair<int, int> WindowGlfw::GetWindowedSize() const
+    {
+        const auto userData = GetUserPointer(_window);
+        if (userData)
+        {
+            return std::pair<int, int>(userData->windowedWidth, userData->windowedHeight);
+        }
+
+        return std::pair<int, int>(DefaultWidth, DefaultHeight);
     }
     //--------------------------------------------------------------------------
 
@@ -156,6 +188,28 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowGlfw::SetUpdatedContinuously(bool updatedContinuously)
+    {
+        const auto userData = GetUserPointer(_window);
+        if (userData)
+        {
+            userData->updateContinuously = updatedContinuously;
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    bool WindowGlfw::IsUpdatedContinuously() const
+    {
+        const auto userData = GetUserPointer(_window);
+        if (userData)
+        {
+            return userData->updateContinuously;
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::ProcessEvents()
     {
         const auto userData = GetUserPointer(_window);
@@ -198,43 +252,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SaveSettings(const Ptr<Settings> settings) const
-    {
-        KMP_ASSERT(settings);
-
-        int width;
-        int height;
-        glfwGetWindowSize(_window, &width, &height);
-
-        const auto userData = GetUserPointer(_window);
-
-        settings->SaveUInt(WidthStr, width);
-        settings->SaveUInt(HeightStr, height);
-        settings->SaveUInt(WindowedWidthStr, userData ? userData->windowedWidth : DefaultWidth);
-        settings->SaveUInt(WindowedHeightStr, userData ? userData->windowedHeight : DefaultHeight);
-        settings->SaveString(ScreenModeStr, Window::ModeToString(GetScreenMode()));
-        settings->SaveBool(VSyncStr, IsVSync());
-        settings->SaveBool(UpdateContinuouslyStr, userData ? userData->updateContinuously : true);
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowGlfw::LoadSettings(const Ptr<Settings> settings)
-    {
-        KMP_ASSERT(settings);
-
-        _settings->width = settings->GetUInt(WidthStr, DefaultWidth);
-        _settings->height = settings->GetUInt(HeightStr, DefaultHeight);
-        _settings->windowedWidth = settings->GetUInt(WindowedWidthStr, DefaultWidth);
-        _settings->windowedHeight = settings->GetUInt(WindowedHeightStr, DefaultHeight);
-        _settings->screenMode = settings->GetString(ScreenModeStr, WindowedModeStr);
-        _settings->vSync = settings->GetBool(VSyncStr, true);
-        _settings->updateContinuously = settings->GetBool(UpdateContinuouslyStr, true);
-    }
-    //--------------------------------------------------------------------------
-
     WindowGlfw::UserData* WindowGlfw::GetUserPointer(GLFWwindow* window)
     {
-        return reinterpret_cast<UserData*>(glfwGetWindowUserPointer(window));
+        auto userData = glfwGetWindowUserPointer(window);
+        KMP_ASSERT(userData);
+
+        return reinterpret_cast<UserData*>(userData);
     }
     //--------------------------------------------------------------------------
 
@@ -252,7 +275,7 @@ namespace Kmplete
     void WindowGlfw::InitializeCallbacks() const
     {
         glfwSetErrorCallback([](int code, const char* description) {
-            Log::CoreError("WindowGlfw: Error '{}': {}", code, description);
+            Log::CoreError("WindowGlfw: GLFW internal error '{}': {}", code, description);
             }
         );
 
