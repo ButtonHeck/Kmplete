@@ -74,9 +74,7 @@ namespace Kmplete
     {
         for (const auto& windowEntry : _windowsStorage)
         {
-            KMP_ASSERT(windowEntry.second.window).KMP_ASSERT_WATCH(windowEntry.first);
-
-            if (windowEntry.second.window.use_count() > 1)
+            if (windowEntry.second.window && windowEntry.second.window.use_count() > 1)
             {
                 Log::CoreWarn("WindowBackendGlfw: window named '{}' is still used somewhere else", windowEntry.second.settings->name);
             }
@@ -118,8 +116,7 @@ namespace Kmplete
         else
         {
             Log::CoreInfo("WindowBackendGlfw: creating window '{}' with default settings", windowName);
-            auto windowSettings = CreatePtr<Window::WindowSettings>();
-            windowSettings->name = windowName;
+            auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
 
             try
             {
@@ -242,8 +239,7 @@ namespace Kmplete
             }
             else
             {
-                auto windowSettings = CreatePtr<Window::WindowSettings>();
-                windowSettings->name = windowName;
+                auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
                 windowSettings->width = settings->GetUInt(Window::WidthStr, Window::DefaultWidth);
                 windowSettings->height = settings->GetUInt(Window::HeightStr, Window::DefaultHeight);
                 windowSettings->windowedWidth = settings->GetUInt(Window::WindowedWidthStr, Window::DefaultWidth);

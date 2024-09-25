@@ -40,6 +40,8 @@ namespace Kmplete
 
         struct WindowSettings
         {
+            KMP_API explicit WindowSettings(const std::string& name);
+
             std::string name = "";
             unsigned int width = DefaultWidth;
             unsigned int height = DefaultHeight;
