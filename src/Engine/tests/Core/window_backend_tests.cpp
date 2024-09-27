@@ -116,7 +116,7 @@ struct Callback
             {
                 if (evt.GetKeyCode() == Kmplete::Key::Y)
                 {
-                    updateContinuouslyOk = true;
+                    conditionOk = true;
                 }
                 window->SetShouldClose(true);
                 return true;
@@ -124,7 +124,7 @@ struct Callback
     }
 
     Kmplete::Ptr<Kmplete::Window> window;
-    bool updateContinuouslyOk = false;
+    bool conditionOk = false;
 };
 
 TEST_CASE("Window backend UpdateContinuously ON", "[core][window_backend][window]")
@@ -151,7 +151,7 @@ TEST_CASE("Window backend UpdateContinuously ON", "[core][window_backend][window
             mainWindow->SetTitle(std::to_string(titleCount / 10));
     }
 
-    REQUIRE(mainWindowCb.updateContinuouslyOk);
+    REQUIRE(mainWindowCb.conditionOk);
 }
 
 TEST_CASE("Window backend UpdateContinuously OFF", "[core][window_backend][window]")
@@ -178,7 +178,60 @@ TEST_CASE("Window backend UpdateContinuously OFF", "[core][window_backend][windo
             mainWindow->SetTitle(std::to_string(titleCount / 10));
     }
 
-    REQUIRE(mainWindowCb.updateContinuouslyOk);
+    REQUIRE(mainWindowCb.conditionOk);
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Window backend VSync ON", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window VSync ON test", "Press Y if window title changes once a second (for 60Hz)", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    const auto mainWindow = windowBackend->CreateWindow("Main");
+    REQUIRE(mainWindow);
+    mainWindow->SetTitle("Main Window");
+    mainWindow->SetVSync(true);
+    Callback mainWindowCb(mainWindow);
+
+    int titleCount = 0;
+    while (!mainWindow->ShouldClose())
+    {
+        mainWindow->ProcessEvents();
+        mainWindow->SwapBuffers();
+
+        if (titleCount++ % 60 == 0)
+            mainWindow->SetTitle(std::to_string(titleCount / 60));
+    }
+
+    REQUIRE(mainWindowCb.conditionOk);
+}
+
+TEST_CASE("Window backend VSync OFF", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window VSync OFF test", "Press Y if window title changes fast", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    const auto mainWindow = windowBackend->CreateWindow("Main");
+    REQUIRE(mainWindow);
+    mainWindow->SetTitle("Main Window");
+    mainWindow->SetVSync(false);
+    Callback mainWindowCb(mainWindow);
+
+    int titleCount = 0;
+    while (!mainWindow->ShouldClose())
+    {
+        mainWindow->ProcessEvents();
+        mainWindow->SwapBuffers();
+
+        if (titleCount++ % 60 == 0)
+            mainWindow->SetTitle(std::to_string(titleCount / 60));
+    }
+
+    REQUIRE(mainWindowCb.conditionOk);
 }
 //--------------------------------------------------------------------------
 
