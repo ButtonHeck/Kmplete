@@ -42,7 +42,7 @@ namespace Kmplete
         {
             KMP_API explicit WindowSettings(const std::string& name);
 
-            std::string name = "";
+            const std::string name = "";
             unsigned int width = DefaultWidth;
             unsigned int height = DefaultHeight;
             unsigned int windowedWidth = DefaultWidth;
@@ -85,6 +85,7 @@ namespace Kmplete
         KMP_API virtual void SwapBuffers() const = 0;
         KMP_API virtual void MakeContextCurrent() = 0;
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
+        KMP_API virtual void UpdateSettings() const = 0;
 
         KMP_NODISCARD KMP_API virtual void* GetImplPointer() const KMP_NOEXCEPT = 0;
 

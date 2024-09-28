@@ -16,6 +16,7 @@ namespace Kmplete
         KMP_API ~WindowBackendGlfw();
 
         KMP_NODISCARD KMP_API Ptr<Window> CreateWindow(const std::string& windowName) override;
+        KMP_NODISCARD KMP_API Ptr<Window> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) override;
 
         KMP_NODISCARD KMP_API int GetMonitorCount() const override;
         KMP_NODISCARD KMP_API std::vector<std::string> GetMonitorNames() const override;
@@ -30,13 +31,7 @@ namespace Kmplete
         void Finalize();
 
     private:
-        struct WindowsStorage
-        {
-            Ptr<Window::WindowSettings> settings;
-            Ptr<Window> window;
-        };
-
-        std::unordered_map<std::string, WindowsStorage> _windowsStorage;
+        std::unordered_map<std::string, Ptr<Window::WindowSettings>> _windowsSettings;
     };
     //--------------------------------------------------------------------------
 }

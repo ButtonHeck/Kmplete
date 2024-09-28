@@ -185,7 +185,7 @@ TEST_CASE("Test window application key events", "[core][window_application][appl
     REQUIRE_FALSE(application->IsWindowApplicationKeyReleaseEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationKeyCharEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test", "Press some keys and then press ENTER", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: KEY", "Press some keys and then press ENTER", Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 
     REQUIRE(application->IsKeyPressEventInvoked());
@@ -212,7 +212,7 @@ TEST_CASE("Test window application mouse events", "[core][window_application][ap
     REQUIRE_FALSE(application->IsWindowApplicationMouseButtonPressEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test", "Move mouse cursor, scroll, press/release some mouse button and then press ENTER", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: MOUSE", "Move mouse cursor, scroll, press/release some mouse button and then press ENTER", Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 
     REQUIRE(application->IsMouseMoveEventInvoked());
@@ -247,7 +247,7 @@ TEST_CASE("Test window application window events", "[core][window_application][a
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test", "Move, resize, iconify/deiconify, focus/unfocus window and then close it", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: WINDOW", "Move, resize, iconify/deiconify, focus/unfocus window and then close it", Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 
     REQUIRE(application->IsWindowCloseEventInvoked());

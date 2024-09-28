@@ -49,6 +49,7 @@ namespace Kmplete
 
     void WindowApplication::Finalize()
     {
+        _mainWindow->UpdateSettings();
         SaveSettings();
 
         _mainWindow.reset();

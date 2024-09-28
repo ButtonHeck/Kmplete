@@ -72,15 +72,12 @@ namespace Kmplete
 
     void WindowBackendGlfw::Finalize()
     {
-        for (const auto& windowEntry : _windowsStorage)
+        if (glfwGetCurrentContext())
         {
-            if (windowEntry.second.window && windowEntry.second.window.use_count() > 1)
-            {
-                Log::CoreWarn("WindowBackendGlfw: window named '{}' is still used somewhere else", windowEntry.second.settings->name);
-            }
+            Log::CoreWarn("WindowBackendGlfw: some window's context is still current");
         }
 
-        _windowsStorage.clear();
+        _windowsSettings.clear();
         glfwTerminate();
     }
     //--------------------------------------------------------------------------
@@ -93,34 +90,13 @@ namespace Kmplete
             return nullptr;
         }
 
-        if (_windowsStorage.contains(windowName))
+        if (_windowsSettings.contains(windowName))
         {
-            if (_windowsStorage[windowName].window)
-            {
-                Log::CoreWarn("WindowBackendGlfw: already contains '{}' window, return previously created one", windowName);
-            }
-            else
-            {
-                Log::CoreInfo("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
-                try
-                {
-                    _windowsStorage[windowName].window = CreatePtr<WindowGlfw>(_windowsStorage[windowName].settings);
-                }
-                catch (const std::exception& e)
-                {
-                    Log::CoreError("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
-                    return nullptr;
-                }
-            }
-        }
-        else
-        {
-            Log::CoreInfo("WindowBackendGlfw: creating window '{}' with default settings", windowName);
-            auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
-
+            Log::CoreInfo("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
             try
             {
-                _windowsStorage.insert({ windowName, {windowSettings, CreatePtr<WindowGlfw>(windowSettings)} });
+                const auto newWindow = CreatePtr<WindowGlfw>(_windowsSettings[windowName]);
+                return newWindow;
             }
             catch (const std::exception& e)
             {
@@ -128,8 +104,50 @@ namespace Kmplete
                 return nullptr;
             }
         }
+        else
+        {
+            Log::CoreInfo("WindowBackendGlfw: creating window '{}' with default settings", windowName);
+            auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
+            _windowsSettings[windowName] = windowSettings;
 
-        return _windowsStorage[windowName].window;
+            try
+            {
+                const auto newWindow = CreatePtr<WindowGlfw>(windowSettings);
+                return newWindow;
+            }
+            catch (const std::exception& e)
+            {
+                Log::CoreError("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
+                return nullptr;
+            }
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    Ptr<Window> WindowBackendGlfw::CreateWindow(const Ptr<Window::WindowSettings> windowSettings)
+    {
+        try
+        {
+            KMP_CHECK(windowSettings && !windowSettings->name.empty()).Exception();
+
+            const auto& windowName = windowSettings->name;
+            if (_windowsSettings.contains(windowName))
+            {
+                Log::CoreWarn("WindowBackendGlfw: window '{}' will be created, but settings already contains this name and will be overriden", windowName);
+            }
+            else
+            {
+                Log::CoreInfo("WindowBackendGlfw: window '{}' will be created with provided settings", windowName);
+                _windowsSettings.insert({ windowName, windowSettings });
+            }
+
+            return CreatePtr<WindowGlfw>(windowSettings);
+        }
+        catch (const std::exception& e)
+        {
+            Log::CoreError("WindowBackendGlfw: error creating window '{}', message: '{}'", windowSettings->name, e.what());
+            return nullptr;
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -195,24 +213,21 @@ namespace Kmplete
 
         settings->StartSaveObject(WindowBackendSettingsEntryName);
         settings->StartSaveArray(WindowsStr);
-        for (const auto& windowEntry : _windowsStorage)
+        for (const auto& windowEntry : _windowsSettings)
         {
-            const auto window = windowEntry.second.window;
-            KMP_ASSERT(window);
-
-            const auto size = window->GetSize();
-            const auto windowedSize = window->GetWindowedSize();
+            const auto windowSettings = windowEntry.second;
+            KMP_ASSERT(windowSettings);
 
             settings->StartSaveObject();
 
-            settings->SaveString(Window::NameStr, window->GetName());
-            settings->SaveUInt(Window::WidthStr, size.first);
-            settings->SaveUInt(Window::HeightStr, size.second);
-            settings->SaveUInt(Window::WindowedWidthStr, windowedSize.first);
-            settings->SaveUInt(Window::WindowedHeightStr, windowedSize.second);
-            settings->SaveString(Window::ScreenModeStr, Window::ModeToString(window->GetScreenMode()));
-            settings->SaveBool(Window::VSyncStr, window->IsVSync());
-            settings->SaveBool(Window::UpdateContinuouslyStr, window->IsUpdatedContinuously());
+            settings->SaveString(Window::NameStr, windowSettings->name);
+            settings->SaveUInt(Window::WidthStr, windowSettings->width);
+            settings->SaveUInt(Window::HeightStr, windowSettings->height);
+            settings->SaveUInt(Window::WindowedWidthStr, windowSettings->windowedWidth);
+            settings->SaveUInt(Window::WindowedHeightStr, windowSettings->windowedHeight);
+            settings->SaveString(Window::ScreenModeStr, windowSettings->screenMode);
+            settings->SaveBool(Window::VSyncStr, windowSettings->vSync);
+            settings->SaveBool(Window::UpdateContinuouslyStr, windowSettings->updateContinuously);
 
             settings->EndSaveObject();
         }
@@ -247,7 +262,7 @@ namespace Kmplete
                 windowSettings->screenMode = settings->GetString(Window::ScreenModeStr, Window::WindowedModeStr);
                 windowSettings->vSync = settings->GetBool(Window::VSyncStr, true);
                 windowSettings->updateContinuously = settings->GetBool(Window::UpdateContinuouslyStr, true);
-                _windowsStorage.insert({ windowName, {windowSettings, nullptr} });
+                _windowsSettings.insert({ windowName, windowSettings });
             }
 
             settings->EndLoadObject();

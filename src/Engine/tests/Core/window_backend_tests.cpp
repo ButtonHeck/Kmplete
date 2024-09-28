@@ -71,7 +71,7 @@ TEST_CASE("Window backend single window", "[core][window_backend][window]")
 
     const auto mainWindow = windowBackend->CreateWindow("Main");
     REQUIRE(mainWindow);
-    REQUIRE(mainWindow.use_count() == 2);
+    REQUIRE(mainWindow.use_count() == 1);
     REQUIRE(mainWindow->GetImplPointer());
     REQUIRE(mainWindow->GetName() == std::string("Main"));
 
@@ -95,15 +95,15 @@ TEST_CASE("Window backend single window", "[core][window_backend][window]")
 }
 //--------------------------------------------------------------------------
 
-struct Callback
+struct WindowCallbackUserSingleCondition
 {
-    Callback(const Kmplete::Ptr<Kmplete::Window> window)
+    WindowCallbackUserSingleCondition(const Kmplete::Ptr<Kmplete::Window> window)
         : window(window)
     {
-        window->SetEventCallback(KMP_BIND(Callback::WindowCallback));
+        window->SetEventCallback(KMP_BIND(WindowCallbackUserSingleCondition::Callback));
     }
 
-    void WindowCallback(Kmplete::Event& evt)
+    void Callback(Kmplete::Event& evt)
     {
         Kmplete::EventDispatcher dispatcher(evt);
 
@@ -138,7 +138,7 @@ TEST_CASE("Window backend UpdateContinuously ON", "[core][window_backend][window
     REQUIRE(mainWindow);
     mainWindow->SetTitle("Main Window");
     mainWindow->SetUpdatedContinuously(true);
-    Callback mainWindowCb(mainWindow);
+    WindowCallbackUserSingleCondition mainWindowCb(mainWindow);
 
     int titleCount = 0;
     while (!mainWindow->ShouldClose())
@@ -165,7 +165,7 @@ TEST_CASE("Window backend UpdateContinuously OFF", "[core][window_backend][windo
     REQUIRE(mainWindow);
     mainWindow->SetTitle("Main Window");
     mainWindow->SetUpdatedContinuously(false);
-    Callback mainWindowCb(mainWindow);
+    WindowCallbackUserSingleCondition mainWindowCb(mainWindow);
 
     int titleCount = 0;
     while (!mainWindow->ShouldClose())
@@ -193,7 +193,7 @@ TEST_CASE("Window backend VSync ON", "[core][window_backend][window]")
     REQUIRE(mainWindow);
     mainWindow->SetTitle("Main Window");
     mainWindow->SetVSync(true);
-    Callback mainWindowCb(mainWindow);
+    WindowCallbackUserSingleCondition mainWindowCb(mainWindow);
 
     int titleCount = 0;
     while (!mainWindow->ShouldClose())
@@ -219,7 +219,7 @@ TEST_CASE("Window backend VSync OFF", "[core][window_backend][window]")
     REQUIRE(mainWindow);
     mainWindow->SetTitle("Main Window");
     mainWindow->SetVSync(false);
-    Callback mainWindowCb(mainWindow);
+    WindowCallbackUserSingleCondition mainWindowCb(mainWindow);
 
     int titleCount = 0;
     while (!mainWindow->ShouldClose())
@@ -235,37 +235,227 @@ TEST_CASE("Window backend VSync OFF", "[core][window_backend][window]")
 }
 //--------------------------------------------------------------------------
 
-//TEST_CASE("Window backend multiple windows", "[core][window_backend][window]")
-//{
-//    const auto windowBackend = Kmplete::WindowBackend::Create();
-//    REQUIRE(windowBackend);
-//
-//    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Multiple windows test", "Make sure both windows can be resized, moved, hid. Then close both windows", Kmplete::FileDialogs::MessageChoice::Ok);
-//
-//    const auto mainWindow = windowBackend->CreateWindow("Main");
-//    REQUIRE(mainWindow);
-//    mainWindow->SetTitle("Main Window");
-//    Callback mainWindowCb(mainWindow);
-//
-//    const auto auxWindow = windowBackend->CreateWindow("Aux");
-//    REQUIRE(auxWindow);
-//    auxWindow->SetTitle("Aux window");
-//    Callback auxWindowCb(auxWindow);
-//
-//    while (!mainWindow->ShouldClose() || !auxWindow->ShouldClose())
-//    {
-//        if (!mainWindow->ShouldClose())
-//        {
-//            mainWindow->ProcessEvents();
-//            mainWindow->SwapBuffers();
-//        }
-//        if (!auxWindow->ShouldClose())
-//        {
-//            auxWindow->ProcessEvents();
-//            auxWindow->SwapBuffers();
-//        }
-//    }
-//
-//    SUCCEED();
-//}
+TEST_CASE("Window backend multiple windows", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Multiple windows test", "Make sure both windows can be resized, moved, hid. Then close both windows", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    auto mainWindow = windowBackend->CreateWindow("Main");
+    REQUIRE(mainWindow);
+    mainWindow->SetTitle("Main Window");
+
+    auto auxWindow = windowBackend->CreateWindow("Aux");
+    REQUIRE(auxWindow);
+    auxWindow->SetTitle("Aux window");
+
+    while ((mainWindow && !mainWindow->ShouldClose()) || (auxWindow && !auxWindow->ShouldClose()))
+    {
+        if (mainWindow && !mainWindow->ShouldClose())
+        {
+            mainWindow->ProcessEvents();
+            mainWindow->SwapBuffers();
+        }
+        else
+        {
+            mainWindow.reset();
+        }
+
+        if (auxWindow && !auxWindow->ShouldClose())
+        {
+            auxWindow->ProcessEvents();
+            auxWindow->SwapBuffers();
+        }
+        else
+        {
+            auxWindow.reset();
+        }
+    }
+
+    SUCCEED();
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Window screen mode change", "[core][window_backend][window]")
+{
+    struct WindowCallbackUserSM
+    {
+        WindowCallbackUserSM(const Kmplete::Ptr<Kmplete::Window> window)
+            : window(window)
+        {
+            window->SetEventCallback(KMP_BIND(WindowCallbackUserSM::Callback));
+        }
+
+        void Callback(Kmplete::Event& evt)
+        {
+            Kmplete::EventDispatcher dispatcher(evt);
+
+            dispatcher.Dispatch<Kmplete::WindowCloseEvent>([this](Kmplete::WindowCloseEvent&)
+                {
+                    window->SetShouldClose(true);
+                    return true;
+                });
+            dispatcher.Dispatch<Kmplete::KeyPressEvent>([this](Kmplete::KeyPressEvent& evt)
+                {
+                    if (evt.GetKeyCode() == Kmplete::Key::F)
+                    {
+                        window->SetScreenMode(Kmplete::Window::FullscreenMode);
+                        fullscreenOk = (window->GetScreenMode() == Kmplete::Window::FullscreenMode);
+                    }
+                    else if (evt.GetKeyCode() == Kmplete::Key::W)
+                    {
+                        window->SetScreenMode(Kmplete::Window::WindowedMode);
+                        windowedOk = (window->GetScreenMode() == Kmplete::Window::WindowedMode);
+                    }
+                    else if (evt.GetKeyCode() == Kmplete::Key::E)
+                    {
+                        window->SetScreenMode(Kmplete::Window::WindowedFullscreenMode);
+                        windowedFullscreenOk = (window->GetScreenMode() == Kmplete::Window::WindowedFullscreenMode);
+                    }
+                    else if (evt.GetKeyCode() == Kmplete::Key::Y)
+                    {
+                        allOk = true;
+                        window->SetShouldClose(true);
+                    }
+                    else
+                    {
+                        allOk = false;
+                        window->SetShouldClose(true);
+                    }
+
+                    return true;
+                });
+        }
+
+        Kmplete::Ptr<Kmplete::Window> window;
+        bool fullscreenOk = false;
+        bool windowedOk = false;
+        bool windowedFullscreenOk = false;
+        bool allOk = false;
+    };
+
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window screen mode test", "Press F to fullscreen, W for windowed, E for windowed fullscreen. Try change screen mode and if everything is ok - press Y, otherwise - any other key", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    auto mainWindow = windowBackend->CreateWindow("Main");
+    REQUIRE(mainWindow);
+    mainWindow->SetTitle("Main Window");
+    WindowCallbackUserSM windowCb(mainWindow);
+
+    while (!mainWindow->ShouldClose())
+    {
+        mainWindow->ProcessEvents();
+        mainWindow->SwapBuffers();
+    }
+
+    REQUIRE(windowCb.fullscreenOk);
+    REQUIRE(windowCb.windowedOk);
+    REQUIRE(windowCb.windowedFullscreenOk);
+    REQUIRE(windowCb.allOk);
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Window create via existing valid WindowSettings", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
+    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
+    REQUIRE(settings->name == std::string("SomeWindow"));
+    settings->width = 200;
+    settings->height = 200;
+    settings->windowedWidth = 200;
+    settings->windowedHeight = 200;
+    settings->vSync = true;
+    settings->updateContinuously = true;
+    
+    Kmplete::Ptr<Kmplete::Window> window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings));
+    REQUIRE(window);
+
+    WindowCallbackUserSingleCondition windowCb(window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with premade settings", "Press Y if window is 200x200, otherwise - any other key", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+
+    REQUIRE(windowCb.conditionOk);
+}
+
+TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
+    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>(""));
+    REQUIRE(settings->name == std::string(""));
+
+    Kmplete::Ptr<Kmplete::Window> window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings)); //expect exception during creation but catching it in window backend
+    REQUIRE_FALSE(window);
+
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with invalid settings", "Close this window", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("ValidName-InvalidWidth"));
+    REQUIRE(settings->name == std::string("ValidName-InvalidWidth"));
+    settings->width = 65000;
+    settings->height = 200;
+
+    REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings));
+    REQUIRE(window);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+
+    SUCCEED();
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Window settings update on window destruction", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
+    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
+    REQUIRE(settings->name == std::string("SomeWindow"));
+    settings->width = 200;
+    settings->height = 200;
+    settings->windowedWidth = 200;
+    settings->windowedHeight = 200;
+    settings->vSync = true;
+    settings->updateContinuously = true;
+
+    Kmplete::Ptr<Kmplete::Window> window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings));
+    REQUIRE(window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with premade settings", "Change window size and then close it", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+    window.reset();
+
+    REQUIRE(settings->name == std::string("SomeWindow"));
+    REQUIRE(settings->width != 200);
+    REQUIRE(settings->height != 200);
+    REQUIRE(settings->windowedWidth != 200);
+    REQUIRE(settings->windowedHeight != 200);
+}
 //--------------------------------------------------------------------------

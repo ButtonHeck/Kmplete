@@ -65,6 +65,7 @@ namespace Kmplete
 
     void WindowGlfw::Finalize()
     {
+        UpdateSettings();
         glfwDestroyWindow(_window);
     }
     //--------------------------------------------------------------------------
@@ -249,6 +250,27 @@ namespace Kmplete
         {
             userData->eventCallback = callback;
         }
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::UpdateSettings() const
+    {
+        if (!_window)
+        {
+            Log::CoreWarn("WindowGlfw: can't update settings due to nullptr GLFW window");
+            return;
+        }
+
+        const auto size = GetSize();
+        const auto windowedSize = GetWindowedSize();
+
+        _settings->width = size.first;
+        _settings->height = size.second;
+        _settings->windowedWidth = windowedSize.first;
+        _settings->windowedHeight = windowedSize.second;
+        _settings->screenMode = ModeToString(GetScreenMode());
+        _settings->vSync = IsVSync();
+        _settings->updateContinuously = IsUpdatedContinuously();
     }
     //--------------------------------------------------------------------------
 
