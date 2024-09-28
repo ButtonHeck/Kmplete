@@ -11,7 +11,7 @@ TEST_CASE("SettingsManager basic test", "[core][json][settings][manager]")
     Kmplete::SettingsManager settingsManager(settingsPath);
 
     REQUIRE(!settingsManager.GetFilename().empty());
-    REQUIRE(settingsManager.Initialize());
+    REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettings("NonExisting");
     REQUIRE_FALSE(settings);
@@ -33,6 +33,8 @@ TEST_CASE("SettingsManager basic test", "[core][json][settings][manager]")
     REQUIRE(settings->GetString("PropA") == std::string("hello"));
     REQUIRE(settings->GetDouble("PropB") == -44.55);
     REQUIRE(settings->GetInt("PropC") == 8);
+
+    //REQUIRE(settingsManager.SaveSettings());
 }
 //--------------------------------------------------------------------------
 
@@ -44,7 +46,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager
     Kmplete::SettingsManager settingsManager(settingsPath);
 
     REQUIRE(!settingsManager.GetFilename().empty());
-    REQUIRE(settingsManager.Initialize());
+    REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettings("ObjA");
     REQUIRE(settings->StartSaveObject());
@@ -57,7 +59,8 @@ TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager
 
 
     Kmplete::SettingsManager swapSettingsManager(swapSettingsPath);
-    REQUIRE(swapSettingsManager.Initialize());
+    REQUIRE(!swapSettingsManager.GetFilename().empty());
+    REQUIRE(swapSettingsManager.LoadSettings());
 
     settings = swapSettingsManager.GetSettings("ObjA");
     REQUIRE(settings);

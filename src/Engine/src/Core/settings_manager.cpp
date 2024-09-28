@@ -19,56 +19,18 @@ namespace Kmplete
 {
     SettingsManager::SettingsManager(const std::filesystem::path& filename)
         : _filename(filename)
-    {}
-    //--------------------------------------------------------------------------
-
-    bool SettingsManager::Initialize()
     {
-        Log::CoreInfo("SettingsManager: loading from '{}'", Filesystem::ToGenericU8String(_filename));
-
-        if (!Filesystem::PathExists(_filename))
-        {
-            Log::CoreWarn("SettingsManager: insufficient path");
-            return false;
-        }
-
-        std::ifstream inputStream(_filename);
-        if (!inputStream.is_open() || !inputStream.good())
-        {
-            return false;
-        }
-
-        rapidjson::Document document;
-        rapidjson::IStreamWrapper jsonStream(inputStream);
-        document.ParseStream(jsonStream);
-        inputStream.close();
-
-        if (document.HasParseError())
-        {
-            Log::CoreError("SettingsManager: JSON parsing error '{}'", rapidjson::GetParseError_En(document.GetParseError()));
-            return false;
-        }
-
-        for (auto settingsEntry = document.MemberBegin(); settingsEntry != document.MemberEnd(); settingsEntry++)
-        {
-            const auto settingsName = settingsEntry->name.GetString();
-            rapidjson::Document settingsEntryDocument;
-            settingsEntryDocument.CopyFrom(settingsEntry->value, settingsEntryDocument.GetAllocator());
-
-            PutSettings(settingsName, CreatePtr<Settings>(settingsName, std::move(settingsEntryDocument)));
-        }
-
-        return true;
+        Log::CoreTrace("SettingsManager: created '{}'", Filesystem::ToGenericU8String(_filename));
     }
     //--------------------------------------------------------------------------
 
-    bool SettingsManager::Finalize() const
+    SettingsManager::~SettingsManager()
     {
-        return SaveSettings();
+        Log::CoreTrace("SettingsManager: destroyed '{}'", Filesystem::ToGenericU8String(_filename));
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::PutSettings(const std::string& name, const Ptr<Settings>& settings)
+    void SettingsManager::PutSettings(const std::string& name, const Ptr<Settings> settings)
     {
         if (_settings.contains(name))
         {
@@ -95,6 +57,46 @@ namespace Kmplete
         }
 
         return nullptr;
+    }
+    //--------------------------------------------------------------------------
+
+    bool SettingsManager::LoadSettings()
+    {
+        Log::CoreInfo("SettingsManager: loading from '{}'", Filesystem::ToGenericU8String(_filename));
+
+        if (!Filesystem::PathExists(_filename))
+        {
+            Log::CoreWarn("SettingsManager: failed to load settings due to insufficient path");
+            return false;
+        }
+
+        std::ifstream inputStream(_filename);
+        if (!inputStream.is_open() || !inputStream.good())
+        {
+            return false;
+        }
+
+        rapidjson::Document document;
+        rapidjson::IStreamWrapper jsonStream(inputStream);
+        document.ParseStream(jsonStream);
+        inputStream.close();
+
+        if (document.HasParseError())
+        {
+            Log::CoreError("SettingsManager: failed to load settings due to JSON parsing error '{}'", rapidjson::GetParseError_En(document.GetParseError()));
+            return false;
+        }
+
+        for (auto settingsEntry = document.MemberBegin(); settingsEntry != document.MemberEnd(); settingsEntry++)
+        {
+            const auto settingsName = settingsEntry->name.GetString();
+            rapidjson::Document settingsEntryDocument;
+            settingsEntryDocument.CopyFrom(settingsEntry->value, settingsEntryDocument.GetAllocator());
+
+            PutSettings(settingsName, CreatePtr<Settings>(settingsName, std::move(settingsEntryDocument)));
+        }
+
+        return true;
     }
     //--------------------------------------------------------------------------
 

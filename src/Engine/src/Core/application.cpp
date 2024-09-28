@@ -34,10 +34,6 @@ namespace Kmplete
         }
 
         _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath));
-        if (!_settingsManager->Initialize())
-        {
-            Log::CoreWarn("Application: failed to load settings");
-        }
 
         LoadSettings();
 
@@ -49,7 +45,7 @@ namespace Kmplete
     {
         SaveSettings();
 
-        _settingsManager->Finalize();
+        _settingsManager.reset();
         Log::Finalize();
     }
     //--------------------------------------------------------------------------
@@ -65,11 +61,15 @@ namespace Kmplete
         settings->StartSaveObject();
         Log::SaveSettings(settings);
         settings->EndSaveObject();
+
+        _settingsManager->SaveSettings();
     }
     //--------------------------------------------------------------------------
 
     void Application::LoadSettings()
     {
+        _settingsManager->LoadSettings();
+
         const auto settings = _settingsManager->GetSettings(ApplicationSettingsEntryName);
         if (!settings)
         {
