@@ -1,7 +1,6 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/json_reader.h"
 #include "Kmplete/Core/json_writer.h"
-#include "Kmplete/Core/filesystem.h"
 
 namespace Kmplete
 {
@@ -30,7 +29,13 @@ namespace Kmplete
     {
         return _writer->StartObject(objectName);
     }
-    //--------------------------------------------------------------------------    
+    //--------------------------------------------------------------------------
+
+    bool Settings::StartSaveObject(int index)
+    {
+        return _writer->StartObject(index);
+    }
+    //--------------------------------------------------------------------------
 
     bool Settings::EndSaveObject()
     {
@@ -44,15 +49,21 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Settings::StartSaveArray(int index)
+    {
+        return _writer->StartArray(index);
+    }
+    //--------------------------------------------------------------------------
+
     bool Settings::EndSaveArray()
     {
         return _writer->EndArray();
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveBool(bool value)
+    bool Settings::SaveBool(int index, bool value)
     {
-        return _writer->SaveBool(value);
+        return _writer->SaveBool(index, value);
     }
     //--------------------------------------------------------------------------
 
@@ -62,9 +73,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt(int value)
+    bool Settings::SaveInt(int index, int value)
     {
-        return _writer->SaveInt(value);
+        return _writer->SaveInt(index, value);
     }
     //--------------------------------------------------------------------------
 
@@ -74,9 +85,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt(unsigned int value)
+    bool Settings::SaveUInt(int index, unsigned int value)
     {
-        return _writer->SaveUInt(value);
+        return _writer->SaveUInt(index, value);
     }
     //--------------------------------------------------------------------------
 
@@ -86,9 +97,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt64(int64_t value)
+    bool Settings::SaveInt64(int index, int64_t value)
     {
-        return _writer->SaveInt64(value);
+        return _writer->SaveInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
@@ -98,9 +109,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt64(uint64_t value)
+    bool Settings::SaveUInt64(int index, uint64_t value)
     {
-        return _writer->SaveUInt64(value);
+        return _writer->SaveUInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
@@ -110,9 +121,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveDouble(double value)
+    bool Settings::SaveDouble(int index, double value)
     {
-        return _writer->SaveDouble(value);
+        return _writer->SaveDouble(index, value);
     }
     //--------------------------------------------------------------------------
 
@@ -122,21 +133,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveString(const std::string& value)
+    bool Settings::SaveString(int index, const std::string& value)
     {
-        return _writer->SaveString(value);
+        return _writer->SaveString(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveString(const std::string& name, const std::string& value)
     {
         return _writer->SaveString(name, value);
-    }
-    //--------------------------------------------------------------------------
-
-    bool Settings::ParseToDocument()
-    {
-        return _writer->ParseToDocument();
     }
     //--------------------------------------------------------------------------
 

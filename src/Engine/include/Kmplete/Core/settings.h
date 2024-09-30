@@ -22,28 +22,29 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API const std::string& GetName() const;
 
-        KMP_API bool StartSaveObject(const std::string& objectName = std::string(""));
+        KMP_API bool StartSaveObject(const std::string& objectName);
+        KMP_API bool StartSaveObject(int index);
         KMP_API bool EndSaveObject();
 
-        KMP_API bool StartSaveArray(const std::string& arrayName = std::string(""));
+        KMP_API bool StartSaveArray(const std::string& arrayName);
+        KMP_API bool StartSaveArray(int index);
         KMP_API bool EndSaveArray();
 
-        KMP_API bool SaveBool(bool value);
+        KMP_API bool SaveBool(int index, bool value);
         KMP_API bool SaveBool(const std::string& name, bool value);
-        KMP_API bool SaveInt(int value);
+        KMP_API bool SaveInt(int index, int value);
         KMP_API bool SaveInt(const std::string& name, int value);
-        KMP_API bool SaveUInt(unsigned int value);
+        KMP_API bool SaveUInt(int index, unsigned int value);
         KMP_API bool SaveUInt(const std::string& name, unsigned int value);
-        KMP_API bool SaveInt64(int64_t value);
+        KMP_API bool SaveInt64(int index, int64_t value);
         KMP_API bool SaveInt64(const std::string& name, int64_t value);
-        KMP_API bool SaveUInt64(uint64_t value);
+        KMP_API bool SaveUInt64(int index, uint64_t value);
         KMP_API bool SaveUInt64(const std::string& name, uint64_t value);
-        KMP_API bool SaveDouble(double value);
+        KMP_API bool SaveDouble(int index, double value);
         KMP_API bool SaveDouble(const std::string& name, double value);
-        KMP_API bool SaveString(const std::string& value);
+        KMP_API bool SaveString(int index, const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
-        KMP_NODISCARD KMP_API bool ParseToDocument();
         KMP_NODISCARD KMP_API rapidjson::Document& GetDocument();
 
 

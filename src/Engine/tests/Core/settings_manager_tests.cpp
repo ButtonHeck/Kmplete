@@ -34,7 +34,7 @@ TEST_CASE("SettingsManager basic test", "[core][json][settings][manager]")
     REQUIRE(settings->GetDouble("PropB") == -44.55);
     REQUIRE(settings->GetInt("PropC") == 8);
 
-    //REQUIRE(settingsManager.SaveSettings());
+    REQUIRE(settingsManager.SaveSettings());
 }
 //--------------------------------------------------------------------------
 
@@ -49,9 +49,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager
     REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettings("ObjA");
-    REQUIRE(settings->StartSaveObject());
     REQUIRE(settings->SaveInt("PropA", 999));
-    REQUIRE(settings->EndSaveObject());
 
     const auto swapSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests_swap.json");
     settingsManager.SetFilename(swapSettingsPath);
@@ -68,6 +66,6 @@ TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager
     REQUIRE(settings->GetInt("PropA") == 999);
 
     settings = swapSettingsManager.GetSettings("ObjB");
-    REQUIRE_FALSE(settings);
+    REQUIRE(settings); // didn't change ObjB but expect it to be in swapSettings json file
 }
 //--------------------------------------------------------------------------

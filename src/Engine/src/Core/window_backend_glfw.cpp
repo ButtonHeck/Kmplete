@@ -213,12 +213,13 @@ namespace Kmplete
 
         settings->StartSaveObject(WindowBackendSettingsEntryName);
         settings->StartSaveArray(WindowsStr);
+        int index = 0;
         for (const auto& windowEntry : _windowsSettings)
         {
             const auto windowSettings = windowEntry.second;
             KMP_ASSERT(windowSettings);
 
-            settings->StartSaveObject();
+            settings->StartSaveObject(index);
 
             settings->SaveString(Window::NameStr, windowSettings->name);
             settings->SaveUInt(Window::WidthStr, windowSettings->width);
@@ -230,6 +231,7 @@ namespace Kmplete
             settings->SaveBool(Window::UpdateContinuouslyStr, windowSettings->updateContinuously);
 
             settings->EndSaveObject();
+            ++index;
         }
 
         settings->EndSaveArray();

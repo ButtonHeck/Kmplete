@@ -58,9 +58,7 @@ namespace Kmplete
             return;
         }
 
-        settings->StartSaveObject();
         Log::SaveSettings(settings);
-        settings->EndSaveObject();
 
         _settingsManager->SaveSettings();
     }

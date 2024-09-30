@@ -114,11 +114,8 @@ namespace Kmplete
 
         for (const auto& settingsEntry : _settings)
         {
-            if (settingsEntry.second->ParseToDocument())
-            {
-                auto& settingsEntryDocument = settingsEntry.second->GetDocument();
-                summaryDocument->AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
-            }
+            auto& settingsEntryDocument = settingsEntry.second->GetDocument();
+            summaryDocument->AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
         }
 
         return summaryDocument;

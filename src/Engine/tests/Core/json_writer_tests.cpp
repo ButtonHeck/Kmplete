@@ -28,47 +28,41 @@ TEST_CASE("Json writer", "[core][json][writer]")
     rapidjson::Document document;
     Kmplete::JsonWriter writer(document);
 
-    REQUIRE(writer.StartObject()); // Root
-        REQUIRE(writer.StartObject("Group1"));
-        REQUIRE_FALSE(writer.ParseToDocument());
-            REQUIRE(writer.SaveInt("Prop1", 11));
-            REQUIRE(writer.SaveBool("Prop2", true));
-            REQUIRE(writer.SaveString("Prop3", "string"));
-            REQUIRE(writer.StartArray("Prop4"));
-                REQUIRE(writer.SaveInt(22));
-                REQUIRE(writer.SaveInt(33));
-            REQUIRE(writer.EndArray()); // Prop4
-            REQUIRE(writer.StartArray("Prop5"));
-                REQUIRE(writer.StartObject());
-                    REQUIRE(writer.SaveDouble("arrProp", 11.0));
-                REQUIRE(writer.EndObject());
-            REQUIRE(writer.EndArray()); // Prop5
-        REQUIRE(writer.EndObject()); // Group1
-        REQUIRE(writer.StartArray("Group2"));
-            REQUIRE_FALSE(writer.ParseToDocument());
-            REQUIRE(writer.SaveInt(1));
-            REQUIRE(writer.SaveInt(2));
-            REQUIRE(writer.SaveInt(3));
-        REQUIRE(writer.EndArray()); // Group2
-        REQUIRE_FALSE(writer.ParseToDocument());
-        REQUIRE(writer.StartObject("Group3"));
-            REQUIRE(writer.StartObject("Group4"));
-                REQUIRE(writer.StartArray("Prop1"));
-                    REQUIRE(writer.StartArray());
-                        REQUIRE(writer.SaveInt(42));
-                        REQUIRE(writer.SaveInt(949));
-                    REQUIRE(writer.EndArray());
-                    REQUIRE(writer.StartArray());
-                        REQUIRE(writer.SaveInt(44));
-                        REQUIRE(writer.SaveInt(101));
-                        REQUIRE(writer.SaveInt(202));
-                        REQUIRE(writer.SaveInt(303));
-                        REQUIRE(writer.SaveInt(404));
-                    REQUIRE(writer.EndArray());
-                REQUIRE(writer.EndArray()); // Prop1
-            REQUIRE(writer.EndObject()); // Group4
-        REQUIRE(writer.EndObject()); // Group3
-    REQUIRE(writer.EndObject()); // Root
-    REQUIRE(writer.ParseToDocument());
+    REQUIRE(writer.StartObject("Group1"));
+        REQUIRE(writer.SaveInt("Prop1", 11));
+        REQUIRE(writer.SaveBool("Prop2", true));
+        REQUIRE(writer.SaveString("Prop3", "string"));
+        REQUIRE(writer.StartArray("Prop4"));
+            REQUIRE(writer.SaveInt(0, 22));
+            REQUIRE(writer.SaveInt(1, 33));
+        REQUIRE(writer.EndArray()); // Prop4
+        REQUIRE(writer.StartArray("Prop5"));
+            REQUIRE(writer.StartObject(0));
+                REQUIRE(writer.SaveDouble("arrProp", 11.0));
+            REQUIRE(writer.EndObject());
+        REQUIRE(writer.EndArray()); // Prop5
+    REQUIRE(writer.EndObject()); // Group1
+    REQUIRE(writer.StartArray("Group2"));
+        REQUIRE(writer.SaveInt(0, 1));
+        REQUIRE(writer.SaveInt(1, 2));
+        REQUIRE(writer.SaveInt(2, 3));
+    REQUIRE(writer.EndArray()); // Group2
+    REQUIRE(writer.StartObject("Group3"));
+        REQUIRE(writer.StartObject("Group4"));
+            REQUIRE(writer.StartArray("Prop1"));
+                REQUIRE(writer.StartArray(0));
+                    REQUIRE(writer.SaveInt(0, 42));
+                    REQUIRE(writer.SaveInt(1, 949));
+                REQUIRE(writer.EndArray());
+                REQUIRE(writer.StartArray(1));
+                    REQUIRE(writer.SaveInt(0, 44));
+                    REQUIRE(writer.SaveInt(1, 101));
+                    REQUIRE(writer.SaveInt(2, 202));
+                    REQUIRE(writer.SaveInt(3, 303));
+                    REQUIRE(writer.SaveInt(4, 404));
+                REQUIRE(writer.EndArray());
+            REQUIRE(writer.EndArray()); // Prop1
+        REQUIRE(writer.EndObject()); // Group4
+    REQUIRE(writer.EndObject()); // Group3
 }
 //--------------------------------------------------------------------------

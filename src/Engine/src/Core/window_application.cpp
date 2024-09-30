@@ -65,9 +65,7 @@ namespace Kmplete
             return;
         }
 
-        settings->StartSaveObject();
         _backend->SaveSettings(settings);
-        settings->EndSaveObject();
     }
     //--------------------------------------------------------------------------
 

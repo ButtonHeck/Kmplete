@@ -6,12 +6,11 @@ TEST_CASE("Settings minimal saving", "[core][json][settings]")
 {
     Kmplete::Settings settings("TestSettings");
 
-    REQUIRE_FALSE(settings.ParseToDocument());
-    REQUIRE_FALSE(settings.EndLoadObject());
-    REQUIRE(settings.StartSaveObject());
-    REQUIRE(settings.EndSaveObject());
-    REQUIRE(settings.ParseToDocument());
     REQUIRE(settings.GetName() == std::string("TestSettings"));
+    REQUIRE_FALSE(settings.EndLoadObject());
+    REQUIRE_FALSE(settings.EndSaveObject());
+    REQUIRE_FALSE(settings.StartSaveObject(""));
+    REQUIRE_FALSE(settings.StartSaveArray(""));
 }
 
 TEST_CASE("Settings normal saving", "[core][json][settings]")
@@ -39,48 +38,42 @@ TEST_CASE("Settings normal saving", "[core][json][settings]")
 
     Kmplete::Settings settings("TestSettings");
 
-    REQUIRE(settings.StartSaveObject()); // Root
-        REQUIRE(settings.StartSaveObject("Group1"));
-        REQUIRE_FALSE(settings.ParseToDocument());
-            REQUIRE(settings.SaveInt("Prop1", 11));
-            REQUIRE(settings.SaveBool("Prop2", true));
-            REQUIRE(settings.SaveString("Prop3", "string"));
-            REQUIRE(settings.StartSaveArray("Prop4"));
-                REQUIRE(settings.SaveInt(22));
-                REQUIRE(settings.SaveInt(33));
-            REQUIRE(settings.EndSaveArray()); // Prop4
-            REQUIRE(settings.StartSaveArray("Prop5"));
-                REQUIRE(settings.StartSaveObject());
-                    REQUIRE(settings.SaveDouble("arrProp", 11.0));
-                REQUIRE(settings.EndSaveObject());
-            REQUIRE(settings.EndSaveArray()); // Prop5
-        REQUIRE(settings.EndSaveObject()); // Group1
-        REQUIRE(settings.StartSaveArray("Group2"));
-            REQUIRE_FALSE(settings.ParseToDocument());
-            REQUIRE(settings.SaveInt(1));
-            REQUIRE(settings.SaveInt(2));
-            REQUIRE(settings.SaveInt(3));
-        REQUIRE(settings.EndSaveArray()); // Group2
-        REQUIRE_FALSE(settings.ParseToDocument());
-        REQUIRE(settings.StartSaveObject("Group3"));
-            REQUIRE(settings.StartSaveObject("Group4"));
-                REQUIRE(settings.StartSaveArray("Prop1"));
-                    REQUIRE(settings.StartSaveArray());
-                        REQUIRE(settings.SaveInt(42));
-                        REQUIRE(settings.SaveInt(949));
-                    REQUIRE(settings.EndSaveArray());
-                    REQUIRE(settings.StartSaveArray());
-                        REQUIRE(settings.SaveInt(44));
-                        REQUIRE(settings.SaveInt(101));
-                        REQUIRE(settings.SaveInt(202));
-                        REQUIRE(settings.SaveInt(303));
-                        REQUIRE(settings.SaveInt(404));
-                    REQUIRE(settings.EndSaveArray());
-                REQUIRE(settings.EndSaveArray()); // Prop1
-            REQUIRE(settings.EndSaveObject()); // Group4
-        REQUIRE(settings.EndSaveObject()); // Group3
-    REQUIRE(settings.EndSaveObject()); // Root
-    REQUIRE(settings.ParseToDocument());
+    REQUIRE(settings.StartSaveObject("Group1"));
+        REQUIRE(settings.SaveInt("Prop1", 11));
+        REQUIRE(settings.SaveBool("Prop2", true));
+        REQUIRE(settings.SaveString("Prop3", "string"));
+        REQUIRE(settings.StartSaveArray("Prop4"));
+            REQUIRE(settings.SaveInt(0, 22));
+            REQUIRE(settings.SaveInt(1, 33));
+        REQUIRE(settings.EndSaveArray()); // Prop4
+        REQUIRE(settings.StartSaveArray("Prop5"));
+            REQUIRE(settings.StartSaveObject(0));
+                REQUIRE(settings.SaveDouble("arrProp", 11.0));
+            REQUIRE(settings.EndSaveObject());
+        REQUIRE(settings.EndSaveArray()); // Prop5
+    REQUIRE(settings.EndSaveObject()); // Group1
+    REQUIRE(settings.StartSaveArray("Group2"));
+        REQUIRE(settings.SaveInt(0, 1));
+        REQUIRE(settings.SaveInt(1, 2));
+        REQUIRE(settings.SaveInt(3, 3));
+    REQUIRE(settings.EndSaveArray()); // Group2
+    REQUIRE(settings.StartSaveObject("Group3"));
+        REQUIRE(settings.StartSaveObject("Group4"));
+            REQUIRE(settings.StartSaveArray("Prop1"));
+                REQUIRE(settings.StartSaveArray(0));
+                    REQUIRE(settings.SaveInt(0, 42));
+                    REQUIRE(settings.SaveInt(1, 949));
+                REQUIRE(settings.EndSaveArray());
+                REQUIRE(settings.StartSaveArray(1));
+                    REQUIRE(settings.SaveInt(0, 44));
+                    REQUIRE(settings.SaveInt(1, 101));
+                    REQUIRE(settings.SaveInt(2, 202));
+                    REQUIRE(settings.SaveInt(3, 303));
+                    REQUIRE(settings.SaveInt(4, 404));
+                REQUIRE(settings.EndSaveArray());
+            REQUIRE(settings.EndSaveArray()); // Prop1
+        REQUIRE(settings.EndSaveObject()); // Group4
+    REQUIRE(settings.EndSaveObject()); // Group3
 }
 //--------------------------------------------------------------------------
 
