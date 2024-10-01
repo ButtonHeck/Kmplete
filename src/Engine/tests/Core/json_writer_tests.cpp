@@ -29,37 +29,37 @@ TEST_CASE("Json writer", "[core][json][writer]")
     Kmplete::JsonWriter writer(document);
 
     REQUIRE(writer.StartObject("Group1"));
-        REQUIRE(writer.SaveInt("Prop1", 11));
-        REQUIRE(writer.SaveBool("Prop2", true));
-        REQUIRE(writer.SaveString("Prop3", "string"));
+        REQUIRE(writer.SetInt("Prop1", 11));
+        REQUIRE(writer.SetBool("Prop2", true));
+        REQUIRE(writer.SetString("Prop3", "string"));
         REQUIRE(writer.StartArray("Prop4"));
-            REQUIRE(writer.SaveInt(0, 22));
-            REQUIRE(writer.SaveInt(1, 33));
+            REQUIRE(writer.SetInt(0, 22));
+            REQUIRE(writer.SetInt(1, 33));
         REQUIRE(writer.EndArray()); // Prop4
         REQUIRE(writer.StartArray("Prop5"));
             REQUIRE(writer.StartObject(0));
-                REQUIRE(writer.SaveDouble("arrProp", 11.0));
+                REQUIRE(writer.SetDouble("arrProp", 11.0));
             REQUIRE(writer.EndObject());
         REQUIRE(writer.EndArray()); // Prop5
     REQUIRE(writer.EndObject()); // Group1
     REQUIRE(writer.StartArray("Group2"));
-        REQUIRE(writer.SaveInt(0, 1));
-        REQUIRE(writer.SaveInt(1, 2));
-        REQUIRE(writer.SaveInt(2, 3));
+        REQUIRE(writer.SetInt(0, 1));
+        REQUIRE(writer.SetInt(1, 2));
+        REQUIRE(writer.SetInt(2, 3));
     REQUIRE(writer.EndArray()); // Group2
     REQUIRE(writer.StartObject("Group3"));
         REQUIRE(writer.StartObject("Group4"));
             REQUIRE(writer.StartArray("Prop1"));
                 REQUIRE(writer.StartArray(0));
-                    REQUIRE(writer.SaveInt(0, 42));
-                    REQUIRE(writer.SaveInt(1, 949));
+                    REQUIRE(writer.SetInt(0, 42));
+                    REQUIRE(writer.SetInt(1, 949));
                 REQUIRE(writer.EndArray());
                 REQUIRE(writer.StartArray(1));
-                    REQUIRE(writer.SaveInt(0, 44));
-                    REQUIRE(writer.SaveInt(1, 101));
-                    REQUIRE(writer.SaveInt(2, 202));
-                    REQUIRE(writer.SaveInt(3, 303));
-                    REQUIRE(writer.SaveInt(4, 404));
+                    REQUIRE(writer.SetInt(0, 44));
+                    REQUIRE(writer.SetInt(1, 101));
+                    REQUIRE(writer.SetInt(2, 202));
+                    REQUIRE(writer.SetInt(3, 303));
+                    REQUIRE(writer.SetInt(4, 404));
                 REQUIRE(writer.EndArray());
             REQUIRE(writer.EndArray()); // Prop1
         REQUIRE(writer.EndObject()); // Group4

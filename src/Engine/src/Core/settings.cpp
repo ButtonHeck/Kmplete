@@ -63,85 +63,85 @@ namespace Kmplete
 
     bool Settings::SaveBool(int index, bool value)
     {
-        return _writer->SaveBool(index, value);
+        return _writer->SetBool(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveBool(const std::string& name, bool value)
     {
-        return _writer->SaveBool(name, value);
+        return _writer->SetBool(name, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveInt(int index, int value)
     {
-        return _writer->SaveInt(index, value);
+        return _writer->SetInt(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveInt(const std::string& name, int value)
     {
-        return _writer->SaveInt(name, value);
+        return _writer->SetInt(name, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveUInt(int index, unsigned int value)
     {
-        return _writer->SaveUInt(index, value);
+        return _writer->SetUInt(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveUInt(const std::string& name, unsigned int value)
     {
-        return _writer->SaveUInt(name, value);
+        return _writer->SetUInt(name, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveInt64(int index, int64_t value)
     {
-        return _writer->SaveInt64(index, value);
+        return _writer->SetInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveInt64(const std::string& name, int64_t value)
     {
-        return _writer->SaveInt64(name, value);
+        return _writer->SetInt64(name, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveUInt64(int index, uint64_t value)
     {
-        return _writer->SaveUInt64(index, value);
+        return _writer->SetUInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveUInt64(const std::string& name, uint64_t value)
     {
-        return _writer->SaveUInt64(name, value);
+        return _writer->SetUInt64(name, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveDouble(int index, double value)
     {
-        return _writer->SaveDouble(index, value);
+        return _writer->SetDouble(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveDouble(const std::string& name, double value)
     {
-        return _writer->SaveDouble(name, value);
+        return _writer->SetDouble(name, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveString(int index, const std::string& value)
     {
-        return _writer->SaveString(index, value);
+        return _writer->SetString(index, value);
     }
     //--------------------------------------------------------------------------
 
     bool Settings::SaveString(const std::string& name, const std::string& value)
     {
-        return _writer->SaveString(name, value);
+        return _writer->SetString(name, value);
     }
     //--------------------------------------------------------------------------
 
