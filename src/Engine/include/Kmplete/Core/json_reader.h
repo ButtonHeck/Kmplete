@@ -40,6 +40,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
+        void PushScope(const std::string& entry);
+        KMP_NODISCARD bool PopScope();
         KMP_NODISCARD std::string GetCurrentScopeString() const;
         KMP_NODISCARD bool ValidToGetFromArray(int index) const;
 

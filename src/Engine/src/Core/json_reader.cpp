@@ -2,12 +2,9 @@
 #include "Kmplete/Core/log.h"
 
 #include <rapidjson/pointer.h>
-#include <rapidjson/istreamwrapper.h>
-#include <rapidjson/error/en.h>
 
 #include <algorithm>
 #include <numeric>
-#include <fstream>
 
 namespace Kmplete
 {
@@ -23,19 +20,13 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
+            Log::CoreError("JsonReader: cannot start object '{}' - current object is null", objectName);
             return false;
         }
 
         if (objectName.empty())
         {
-            Log::CoreWarn("JsonReader: object name should not be empty!");
-            return false;
-        }
-
-        _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
-        if (!_currentObject)
-        {
-            Log::CoreError("JsonReader: cannot fetch object pointer for '{}'", _scopeString);
+            Log::CoreError("JsonReader: cannot start object - object's name is empty");
             return false;
         }
 
@@ -45,8 +36,7 @@ namespace Kmplete
             return false;
         }
 
-        _scope.push_back(objectName);
-        _scopeString = GetCurrentScopeString();
+        PushScope(objectName);
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
 
         return true;
@@ -62,12 +52,11 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsObject())
         {
-            Log::CoreError("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not of object type", _scopeString, index);
             return false;
         }
 
-        _scope.push_back(std::to_string(index));
-        _scopeString = GetCurrentScopeString();
+        PushScope(std::to_string(index));
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
 
         return true;
@@ -76,16 +65,12 @@ namespace Kmplete
 
     bool JsonReader::EndObject()
     {
-        if (!_scope.empty())
+        if (PopScope())
         {
-            _scope.pop_back();
-            _scopeString = GetCurrentScopeString();
             _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
-
             return true;
         }
 
-        Log::CoreError("JsonReader: cannot end load object, already at the root");
         return false;
     }
     //--------------------------------------------------------------------------
@@ -94,19 +79,13 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
+            Log::CoreError("JsonReader: cannot start array '{}' - current object is null", arrayName);
             return 0;
         }
 
         if (arrayName.empty())
         {
-            Log::CoreWarn("JsonReader: array name should not be empty!");
-            return 0;
-        }
-
-        _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
-        if (!_currentObject)
-        {
-            Log::CoreError("JsonReader: cannot fetch object pointer for '{}'", _scopeString);
+            Log::CoreError("JsonReader: cannot start array - array's name should not be empty");
             return 0;
         }
 
@@ -122,8 +101,7 @@ namespace Kmplete
             return 0;
         }
 
-        _scope.push_back(arrayName);
-        _scopeString = GetCurrentScopeString();
+        PushScope(arrayName);
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
 
         return (*_currentObject).GetArray().Size();
@@ -139,12 +117,11 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsArray())
         {
-            Log::CoreError("JsonReader: '{}[{}]' is not an array object", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not of array type", _scopeString, index);
             return 0;
         }
 
-        _scope.push_back(std::to_string(index));
-        _scopeString = GetCurrentScopeString();
+        PushScope(std::to_string(index));
         _currentObject = rapidjson::Pointer(_scopeString.c_str()).Get(_document);
 
         return (*_currentObject).GetArray().Size();
@@ -155,11 +132,13 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
+            Log::CoreError("JsonReader: cannot end array - current object is null");
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
+            Log::CoreError("JsonReader: cannot end array - current object '{}' is not of array type", _scopeString);
             return false;
         }
 
@@ -188,6 +167,7 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get bool '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
@@ -222,6 +202,7 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get int '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
@@ -244,7 +225,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsUint())
         {
-            Log::CoreError("JsonReader: '{}[{}]' is not an uint", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an unsigned int", _scopeString, index);
             return defaultValue;
         }
 
@@ -256,12 +237,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get unsigned int '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint())
         {
-            Log::CoreError("JsonReader: cannot find uint for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find unsigned int for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -290,6 +272,7 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get int64 '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
@@ -312,7 +295,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsUint64())
         {
-            Log::CoreError("JsonReader: '{}[{}]' is not an uint64", _scopeString, index);
+            Log::CoreError("JsonReader: '{}[{}]' is not an unsigned int64", _scopeString, index);
             return defaultValue;
         }
 
@@ -324,12 +307,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get unsigned int64 '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint64())
         {
-            Log::CoreError("JsonReader: cannot find uint64 for '{}/{}'", _scopeString, name);
+            Log::CoreError("JsonReader: cannot find unsigned int64 for '{}/{}'", _scopeString, name);
             return defaultValue;
         }
 
@@ -358,6 +342,7 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get double '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
@@ -392,6 +377,7 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
+            Log::CoreError("JsonReader: cannot get string '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
@@ -405,14 +391,38 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void JsonReader::PushScope(const std::string& entry)
+    {
+        _scope.push_back(entry);
+        _scopeString = GetCurrentScopeString();
+    }
+    //--------------------------------------------------------------------------
+
+    bool JsonReader::PopScope()
+    {
+        if (!_scope.empty())
+        {
+            _scope.pop_back();
+            _scopeString = GetCurrentScopeString();
+            return true;
+        }
+
+        Log::CoreError("JsonReader: cannot pop from empty scope");
+        return false;
+    }
+    //--------------------------------------------------------------------------
+
     std::string JsonReader::GetCurrentScopeString() const
     {
-        return _scope.empty()
-            ? ""
-            : std::accumulate(_scope.begin(), _scope.end(), std::string(),
-                [](const std::string& a, const std::string& b) {
-                    return a + '/' + b;
-                });
+        if (_scope.empty())
+        {
+            return "";
+        }
+
+        return std::accumulate(_scope.begin(), _scope.end(), std::string(),
+            [](const std::string& a, const std::string& b) {
+                return a + '/' + b;
+            });
     }
     //--------------------------------------------------------------------------
 

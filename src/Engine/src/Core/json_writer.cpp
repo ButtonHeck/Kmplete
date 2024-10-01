@@ -611,9 +611,9 @@ namespace Kmplete
         }
 
         return std::accumulate(_scope.begin(), _scope.end(), std::string(),
-                [](const std::string& a, const std::string& b) {
-                    return a + '/' + b;
-                });
+            [](const std::string& a, const std::string& b) {
+                return a + '/' + b;
+            });
     }
     //--------------------------------------------------------------------------
 }
