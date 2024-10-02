@@ -30,6 +30,12 @@ namespace Kmplete
             return false;
         }
 
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonReader: cannot start object '{}' - current object '{}' is not of object type", objectName, _scopeString);
+            return false;
+        }
+
         if (!_currentObject->HasMember(objectName.c_str()) || !(*_currentObject)[objectName.c_str()].IsObject())
         {
             Log::CoreError("JsonReader: cannot find member '{}', or the member is not an object type", objectName);
@@ -91,7 +97,7 @@ namespace Kmplete
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonReader: can't start array '{}' from non-object '{}'", arrayName, _scopeString);
+            Log::CoreError("JsonReader: cannot start array '{}' - current object '{}' is not of object type", arrayName, _scopeString);
             return 0;
         }
 

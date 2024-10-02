@@ -2,10 +2,6 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#include <rapidjson/istreamwrapper.h>
-#include <rapidjson/prettywriter.h>
-#include <rapidjson/stringbuffer.h>
-
 TEST_CASE("Rapidjson empty string", "[core][json][reader]")
 {
     const char* EmptyStr = "";
@@ -265,7 +261,7 @@ TEST_CASE("Rapidjson malformed json (unnamed subnode)", "[core][json][reader]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Json reader basic", "[core][json][reader]")
+TEST_CASE("Json reader positive", "[core][json][reader]")
 {
     const char* BasicJson = R"rjs(
     {
@@ -360,5 +356,106 @@ TEST_CASE("Json reader basic", "[core][json][reader]")
             REQUIRE(reader.EndArray()); // Prop1
         REQUIRE(reader.EndObject()); // Group4
     REQUIRE(reader.EndObject()); // Group3
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Json reader negative", "[core][json][reader]")
+{
+    const char* BasicJson = R"rjs(
+    {
+        "Group1":
+        {
+            "Prop1": 11
+        },
+        "Group2": [1, 2, 3]
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(BasicJson);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorNone);
+    REQUIRE(document.IsObject());
+
+    Kmplete::JsonReader reader(document);
+
+    REQUIRE_FALSE(reader.StartObject(""));
+    REQUIRE(reader.StartObject("Group1"));
+        REQUIRE(reader.StartObject("") == false);
+        REQUIRE(reader.StartObject(-1) == false);
+        REQUIRE(reader.StartObject(0) == false);
+
+        REQUIRE(reader.StartArray("") == 0);
+        REQUIRE(reader.StartArray(-1) == 0);
+        REQUIRE(reader.StartArray(0) == 0);
+
+        REQUIRE(reader.GetBool("") == false);
+        REQUIRE(reader.GetBool(-1) == false);
+        REQUIRE(reader.GetBool(0) == false);
+
+        REQUIRE(reader.GetDouble("") == 0.0);
+        REQUIRE(reader.GetDouble(-1) == 0.0);
+        REQUIRE(reader.GetDouble(0) == 0.0);
+
+        REQUIRE(reader.GetInt("") == 0);
+        REQUIRE(reader.GetInt(-1) == 0);
+        REQUIRE(reader.GetInt(0) == 0);
+
+        REQUIRE(reader.GetInt64("") == 0);
+        REQUIRE(reader.GetInt64(-1) == 0);
+        REQUIRE(reader.GetInt64(0) == 0);
+
+        REQUIRE(reader.GetString("") == std::string(""));
+        REQUIRE(reader.GetString(-1) == std::string(""));
+        REQUIRE(reader.GetString(0) == std::string(""));
+
+        REQUIRE(reader.GetUInt("") == 0u);
+        REQUIRE(reader.GetUInt(-1) == 0u);
+        REQUIRE(reader.GetUInt(0) == 0u);
+
+        REQUIRE(reader.GetUInt64("") == 0u);
+        REQUIRE(reader.GetUInt64(-1) == 0u);
+        REQUIRE(reader.GetUInt64(0) == 0u);
+    REQUIRE(reader.EndObject()); // Group1
+
+
+    REQUIRE(reader.StartArray("Group2") == 3);
+        REQUIRE(reader.StartObject("") == false);
+        REQUIRE(reader.StartObject("ValidName") == false);
+        REQUIRE(reader.StartObject(-1) == false);
+
+        REQUIRE(reader.StartArray("") == 0);
+        REQUIRE(reader.StartArray("ValidName") == 0);
+        REQUIRE(reader.StartArray(-1) == 0);
+
+        REQUIRE(reader.GetBool("") == false);
+        REQUIRE(reader.GetBool("ValidName") == false);
+        REQUIRE(reader.GetBool(-1) == false);
+
+        REQUIRE(reader.GetDouble("") == 0.0);
+        REQUIRE(reader.GetDouble("ValidName") == 0.0);
+        REQUIRE(reader.GetDouble(-1) == 0.0);
+
+        REQUIRE(reader.GetInt("") == 0);
+        REQUIRE(reader.GetInt("ValidName") == 0);
+        REQUIRE(reader.GetInt(-1) == 0);
+
+        REQUIRE(reader.GetInt64("") == 0);
+        REQUIRE(reader.GetInt64("ValidName") == 0);
+        REQUIRE(reader.GetInt64(-1) == 0);
+
+        REQUIRE(reader.GetString("") == std::string(""));
+        REQUIRE(reader.GetString("ValidName") == std::string(""));
+        REQUIRE(reader.GetString(-1) == std::string(""));
+
+        REQUIRE(reader.GetUInt("") == 0u);
+        REQUIRE(reader.GetUInt("ValidName") == 0u);
+        REQUIRE(reader.GetUInt(-1) == 0u);
+
+        REQUIRE(reader.GetUInt64("") == 0u);
+        REQUIRE(reader.GetUInt64("ValidName") == 0u);
+        REQUIRE(reader.GetUInt64(-1) == 0u);
+    REQUIRE(reader.EndArray()); // Group2
 }
 //--------------------------------------------------------------------------
