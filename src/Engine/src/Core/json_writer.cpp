@@ -35,6 +35,12 @@ namespace Kmplete
             return false;
         }
 
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot start object '{}' - current object '{}' is not of object type", objectName, _scopeString);
+            return false;
+        }
+
         PushScope(objectName);
 
         if (!_currentObject->HasMember(objectName.c_str()) || !(*_currentObject)[objectName.c_str()].IsObject())
@@ -111,7 +117,7 @@ namespace Kmplete
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: can't start array '{}' from non-object '{}'", arrayName, _scopeString);
+            Log::CoreError("JsonWriter: cannot start array '{}' - current object '{}' is not of object type", arrayName, _scopeString);
             return false;
         }
 
@@ -223,6 +229,18 @@ namespace Kmplete
             return false;
         }
 
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set bool - bool's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set bool '{}' - current object '{}' is not of object type", name, _scopeString);
+            return false;
+        }
+
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsBool())
         {
             const auto newScope = _scopeString + "/" + name;
@@ -277,6 +295,18 @@ namespace Kmplete
         if (!_currentObject)
         {
             Log::CoreError("JsonWriter: cannot set int '{}' - current object is null", name);
+            return false;
+        }
+
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set int - int's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set int '{}' - current object '{}' is not of object type", name, _scopeString);
             return false;
         }
 
@@ -337,6 +367,18 @@ namespace Kmplete
             return false;
         }
 
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set unsigned int - unsigned int's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set unsigned int '{}' - current object '{}' is not of object type", name, _scopeString);
+            return false;
+        }
+
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint())
         {
             const auto newScope = _scopeString + "/" + name;
@@ -391,6 +433,18 @@ namespace Kmplete
         if (!_currentObject)
         {
             Log::CoreError("JsonWriter: cannot set int64 '{}' - current object is null", name);
+            return false;
+        }
+
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set int64 - int64's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set int64 '{}' - current object '{}' is not of object type", name, _scopeString);
             return false;
         }
 
@@ -451,6 +505,18 @@ namespace Kmplete
             return false;
         }
 
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set unsigned int64 - unsigned int64's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set unsigned int64 '{}' - current object '{}' is not of object type", name, _scopeString);
+            return false;
+        }
+
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint64())
         {
             const auto newScope = _scopeString + "/" + name;
@@ -505,6 +571,18 @@ namespace Kmplete
         if (!_currentObject)
         {
             Log::CoreError("JsonWriter: cannot set double '{}' - current object is null", name);
+            return false;
+        }
+
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set double - double's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set double '{}' - current object '{}' is not of object type", name, _scopeString);
             return false;
         }
 
@@ -563,6 +641,18 @@ namespace Kmplete
         if (!_currentObject)
         {
             Log::CoreError("JsonWriter: cannot set string '{}' - current object is null", name);
+            return false;
+        }
+
+        if (name.empty())
+        {
+            Log::CoreError("JsonWriter: cannot set string - string's name should not be empty");
+            return false;
+        }
+
+        if (!_currentObject->IsObject())
+        {
+            Log::CoreError("JsonWriter: cannot set string '{}' - current object '{}' is not of object type", name, _scopeString);
             return false;
         }
 
