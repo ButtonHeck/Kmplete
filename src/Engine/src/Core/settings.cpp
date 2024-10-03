@@ -43,15 +43,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(const std::string& arrayName)
+    bool Settings::StartSaveArray(const std::string& arrayName, bool overwrite)
     {
-        return _writer->StartArray(arrayName);
+        return _writer->StartArray(arrayName, overwrite);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(int index)
+    bool Settings::StartSaveArray(int index, bool overwrite)
     {
-        return _writer->StartArray(index);
+        return _writer->StartArray(index, overwrite);
     }
     //--------------------------------------------------------------------------
 

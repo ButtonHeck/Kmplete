@@ -101,7 +101,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartArray(const std::string& arrayName)
+    bool JsonWriter::StartArray(const std::string& arrayName, bool overwrite)
     {
         if (!_currentObject)
         {
@@ -123,7 +123,7 @@ namespace Kmplete
 
         PushScope(arrayName);
 
-        if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray())
+        if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray() || overwrite)
         {
             Log::CoreDebug("JsonWriter: creating new array '{}' in '{}'", arrayName, _scopeString);
             rapidjson::Pointer(_scopeString.c_str()).Create(_document).SetArray();
@@ -135,7 +135,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartArray(int index)
+    bool JsonWriter::StartArray(int index, bool overwrite)
     {
         if (!_currentObject)
         {
@@ -157,7 +157,7 @@ namespace Kmplete
 
         PushScope(std::to_string(index));
 
-        if (index >= static_cast<int>(_currentObject->Size()))
+        if (index >= static_cast<int>(_currentObject->Size()) || overwrite)
         {
             Log::CoreDebug("JsonWriter: creating new array '{}' in '{}'", index, _scopeString);
             rapidjson::Pointer(_scopeString.c_str()).Create(_document).SetArray();

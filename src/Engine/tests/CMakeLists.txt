@@ -10,6 +10,7 @@ set(Kmplete_Engine_Unit_Tests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/filesystem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/uuid_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/json_reader_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Core/json_reader_writer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/json_writer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_manager_tests.cpp

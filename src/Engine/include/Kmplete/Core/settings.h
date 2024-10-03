@@ -26,8 +26,8 @@ namespace Kmplete
         KMP_API bool StartSaveObject(int index);
         KMP_API bool EndSaveObject();
 
-        KMP_API bool StartSaveArray(const std::string& arrayName);
-        KMP_API bool StartSaveArray(int index);
+        KMP_API bool StartSaveArray(const std::string& arrayName, bool overwrite = true);
+        KMP_API bool StartSaveArray(int index, bool overwrite = true);
         KMP_API bool EndSaveArray();
 
         KMP_API bool SaveBool(int index, bool value);

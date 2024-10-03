@@ -20,8 +20,8 @@ namespace Kmplete
         KMP_API bool StartObject(int index);
         KMP_API bool EndObject();
 
-        KMP_API bool StartArray(const std::string& arrayName);
-        KMP_API bool StartArray(int index);
+        KMP_API bool StartArray(const std::string& arrayName, bool overwrite = true);
+        KMP_API bool StartArray(int index, bool overwrite = true);
         KMP_API bool EndArray();
 
         KMP_API bool SetBool(int index, bool value);
