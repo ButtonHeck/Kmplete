@@ -2,6 +2,7 @@
 #include "Kmplete/Core/platform.h"
 
 #include <string>
+#include <numeric>
 #if defined KMP_PLATFORM_WINDOWS
 #include <Windows.h>
 #else
@@ -12,6 +13,26 @@ namespace Kmplete
 {
     namespace Utils
     {
+        std::string StringVectorToString(const StringVector& stringVector, char delimiter)
+        {
+            return StringVectorToString(stringVector, std::string({delimiter}));
+        }
+        //--------------------------------------------------------------------------
+
+        std::string StringVectorToString(const StringVector& stringVector, const std::string& delimiter)
+        {
+            if (stringVector.empty())
+            {
+                return "";
+            }
+
+            return std::accumulate(stringVector.begin(), stringVector.end(), std::string(),
+                [&delimiter](const std::string& a, const std::string& b) {
+                    return b.empty() ? a : (a + delimiter + b);
+                });
+        }
+        //--------------------------------------------------------------------------
+
         std::wstring NarrowToWide(const std::string& str)
         {
 #if defined KMP_PLATFORM_WINDOWS

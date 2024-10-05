@@ -54,6 +54,91 @@ TEST_CASE("Concatenate", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+TEST_CASE("StringVectorToString empty vector (char delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec;
+    const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
+    REQUIRE(result.empty());
+}
+
+TEST_CASE("StringVectorToString empty vector (string delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec;
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
+    REQUIRE(result.empty());
+}
+
+TEST_CASE("StringVectorToString (char delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{"Hello", "World", "!"};
+    const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
+    REQUIRE(result == std::string("/Hello/World/!"));
+}
+
+TEST_CASE("StringVectorToString (string delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "Hello", "World", "!" };
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
+    REQUIRE(result == std::string("-YAY-Hello-YAY-World-YAY-!"));
+}
+
+TEST_CASE("StringVectorToString with some empty strings (char delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "", "This", "", "Is", "Sparta", ""};
+    const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
+    REQUIRE(result == std::string("/This/Is/Sparta"));
+}
+
+TEST_CASE("StringVectorToString with some empty strings (string delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "", "This", "", "Is", "Sparta", "" };
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
+    REQUIRE(result == std::string("-YAY-This-YAY-Is-YAY-Sparta"));
+}
+
+TEST_CASE("StringVectorToString with all empty strings (char delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "", "", "", "", "", "" };
+    const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
+    REQUIRE(result.empty());
+}
+
+TEST_CASE("StringVectorToString with all empty strings (string delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "", "", "", "", "", "" };
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
+    REQUIRE(result.empty());
+}
+
+TEST_CASE("StringVectorToString single element (char delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{"Alone"};
+    const auto result = Kmplete::Utils::StringVectorToString(vec, ".");
+    REQUIRE(result == std::string(".Alone"));
+}
+
+TEST_CASE("StringVectorToString single element (string delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "Alone" };
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "Home ");
+    REQUIRE(result == std::string("Home Alone"));
+}
+
+TEST_CASE("StringVectorToString (empty delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{"Harry", "Potter"};
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "");
+    REQUIRE(result == std::string("HarryPotter"));
+}
+
+TEST_CASE("StringVectorToString with some empty elements (empty delimiter)", "[utils][string]")
+{
+    std::vector<std::string> vec{ "", "A", "B", "", "C", "", "", "D", "", ""};
+    const auto result = Kmplete::Utils::StringVectorToString(vec, "");
+    REQUIRE(result == std::string("ABCD"));
+}
+//--------------------------------------------------------------------------
+
 TEST_CASE("ToSStream empty", "[utils][string]")
 {
     std::ostringstream oss;

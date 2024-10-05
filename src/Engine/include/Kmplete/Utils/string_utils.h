@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 
 #include <sstream>
 
@@ -23,6 +24,12 @@ namespace Kmplete
             (oss << ... << std::forward<Ts>(args));
             return oss;
         }
+        //--------------------------------------------------------------------------
+
+        KMP_API std::string StringVectorToString(const StringVector& stringVector, char delimiter);
+        //--------------------------------------------------------------------------
+
+        KMP_API std::string StringVectorToString(const StringVector& stringVector, const std::string& delimiter);
         //--------------------------------------------------------------------------
 
         KMP_API std::wstring NarrowToWide(const std::string& str);
