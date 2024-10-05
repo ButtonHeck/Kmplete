@@ -1,10 +1,8 @@
 #include "Kmplete/Core/json_writer.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Utils/string_utils.h"
 
 #include <rapidjson/pointer.h>
-
-#include <algorithm>
-#include <numeric>
 
 namespace Kmplete
 {
@@ -675,7 +673,7 @@ namespace Kmplete
     void JsonWriter::PushScope(const std::string& entry)
     {
         _scope.push_back(entry);
-        _scopeString = GetCurrentScopeString();
+        _scopeString = Kmplete::Utils::StringVectorToString(_scope, '/');
     }
     //--------------------------------------------------------------------------
 
@@ -684,26 +682,12 @@ namespace Kmplete
         if (!_scope.empty())
         {
             _scope.pop_back();
-            _scopeString = GetCurrentScopeString();
+            _scopeString = Kmplete::Utils::StringVectorToString(_scope, '/');
             return true;
         }
         
         Log::CoreError("JsonWriter: cannot pop from empty scope");
         return false;
-    }
-    //--------------------------------------------------------------------------
-
-    std::string JsonWriter::GetCurrentScopeString() const
-    {
-        if (_scope.empty())
-        {
-            return "";
-        }
-
-        return std::accumulate(_scope.begin(), _scope.end(), std::string(),
-            [](const std::string& a, const std::string& b) {
-                return a + '/' + b;
-            });
     }
     //--------------------------------------------------------------------------
 }
