@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/json_reader.h"
@@ -18,15 +20,16 @@ namespace Kmplete
         KMP_API explicit JsonDocument(const std::filesystem::path& filename);
         KMP_API ~JsonDocument();
 
-        KMP_API void SetFilename(const std::filesystem::path& filename);
-        KMP_NODISCARD KMP_API const std::filesystem::path& GetFilename() const;
+        KMP_API void SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const std::filesystem::path& GetFilename() const KMP_NOEXCEPT;
 
         KMP_NODISCARD KMP_API bool Load(const std::filesystem::path& filename);
         KMP_NODISCARD KMP_API bool Load();
         KMP_NODISCARD KMP_API bool Save(const std::filesystem::path& filename);
         KMP_NODISCARD KMP_API bool Save();
 
-        KMP_NODISCARD KMP_API std::vector<Ptr<JsonDocument>> GetChildren() const;
+        KMP_API bool AddChildDocument(const std::string& name, Ptr<JsonDocument> child);
+        KMP_NODISCARD KMP_API std::vector<std::pair<std::string, Ptr<JsonDocument>>> GetChildren() const;
 
         // writer
         KMP_API bool StartSetObject(const std::string& objectName);

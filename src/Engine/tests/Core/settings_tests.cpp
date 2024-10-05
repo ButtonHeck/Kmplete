@@ -107,7 +107,10 @@ TEST_CASE("Settings normal loading", "[core][json][settings]")
     REQUIRE(error == rapidjson::kParseErrorNone);
     REQUIRE(document.IsObject());
 
-    Kmplete::Settings settings("TestSettings", std::move(document));
+    const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
+    REQUIRE(jsonDocument);
+
+    Kmplete::Settings settings("TestSettings", jsonDocument);
     REQUIRE(settings.GetName() == std::string("TestSettings"));
 
     REQUIRE_FALSE(settings.StartLoadObject("Obj"));
@@ -182,7 +185,10 @@ TEST_CASE("Settings loading malformed json", "[core][json][settings]")
     document.Parse(MalformedJsonStr);
     REQUIRE(document.HasParseError());
 
-    Kmplete::Settings settings("SettingsWithError", std::move(document));
+    const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
+    REQUIRE(jsonDocument);
+
+    Kmplete::Settings settings("SettingsWithError", jsonDocument);
 
     REQUIRE_FALSE(settings.GetInt("Hello") == 321);
     REQUIRE_FALSE(settings.GetBool("Var") == true);
@@ -204,7 +210,10 @@ TEST_CASE("Settings loading document with null value", "[core][json][settings]")
 
     REQUIRE(error == rapidjson::kParseErrorNone);
 
-    Kmplete::Settings settings("SettingsWithNull", std::move(document));
+    const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
+    REQUIRE(jsonDocument);
+
+    Kmplete::Settings settings("SettingsWithNull", jsonDocument);
 
     REQUIRE(settings.GetInt("Hello", 99) == 321);
     REQUIRE(settings.GetInt("Ptr", 99) == 99);
@@ -225,7 +234,10 @@ TEST_CASE("Settings loading duplicate values", "[core][json][settings]")
 
     REQUIRE(error == rapidjson::kParseErrorNone);
 
-    Kmplete::Settings settings("SettingsWithDups", std::move(document));
+    const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
+    REQUIRE(jsonDocument);
+
+    Kmplete::Settings settings("SettingsWithDups", jsonDocument);
 
     REQUIRE(settings.GetInt("Hello") == 321);
 }

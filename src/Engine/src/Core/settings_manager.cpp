@@ -1,19 +1,7 @@
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/filesystem.h"
-
-#include <rapidjson/istreamwrapper.h>
-#include <rapidjson/prettywriter.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/error/en.h>
-
-#include <fstream>
-
-#ifdef GetObject
-#pragma push_macro("GetObject")
-#undef GetObject
-#define KMP_UNDEF_GetObject
-#endif
+#include "Kmplete/Core/json_document.h"
 
 namespace Kmplete
 {
@@ -62,38 +50,19 @@ namespace Kmplete
 
     bool SettingsManager::LoadSettings()
     {
-        Log::CoreInfo("SettingsManager: loading from '{}'", Filesystem::ToGenericU8String(_filename));
-
-        if (!Filesystem::PathExists(_filename))
+        JsonDocument document;
+        if (!document.Load(_filename))
         {
-            Log::CoreWarn("SettingsManager: failed to load settings due to insufficient path");
+            Log::CoreWarn("SettingsManager: failed to load settings from '{}'", Filesystem::ToGenericU8String(_filename));
             return false;
         }
 
-        std::ifstream inputStream(_filename);
-        if (!inputStream.is_open() || !inputStream.good())
+        const auto documentChildren = document.GetChildren();
+        for (const auto documentEntry : documentChildren)
         {
-            return false;
-        }
-
-        rapidjson::Document document;
-        rapidjson::IStreamWrapper jsonStream(inputStream);
-        document.ParseStream(jsonStream);
-        inputStream.close();
-
-        if (document.HasParseError())
-        {
-            Log::CoreError("SettingsManager: failed to load settings due to JSON parsing error '{}'", rapidjson::GetParseError_En(document.GetParseError()));
-            return false;
-        }
-
-        for (auto settingsEntry = document.MemberBegin(); settingsEntry != document.MemberEnd(); settingsEntry++)
-        {
-            const auto settingsName = settingsEntry->name.GetString();
-            rapidjson::Document settingsEntryDocument;
-            settingsEntryDocument.CopyFrom(settingsEntry->value, settingsEntryDocument.GetAllocator());
-
-            PutSettings(settingsName, CreatePtr<Settings>(settingsName, std::move(settingsEntryDocument)));
+            const auto& name = documentEntry.first;
+            const auto& childDocument = documentEntry.second;
+            PutSettings(name, CreatePtr<Settings>(name, childDocument));
         }
 
         return true;
@@ -102,49 +71,15 @@ namespace Kmplete
 
     bool SettingsManager::SaveSettings() const
     {
-        auto summaryDocument = AssembleDocument();
-        return WriteDocument(summaryDocument);
-    }
-    //--------------------------------------------------------------------------
-
-    Ptr<rapidjson::Document> SettingsManager::AssembleDocument() const
-    {
-        auto summaryDocument = CreatePtr<rapidjson::Document>();
-        summaryDocument->SetObject();
+        JsonDocument summaryDocument;
 
         for (const auto& settingsEntry : _settings)
         {
-            auto& settingsEntryDocument = settingsEntry.second->GetDocument();
-            summaryDocument->AddMember(rapidjson::GenericStringRef(settingsEntry.first.c_str()), settingsEntryDocument.GetObject(), settingsEntryDocument.GetAllocator());
+            const auto& settingEntryDocument = settingsEntry.second->GetDocument();
+            summaryDocument.AddChildDocument(settingsEntry.first, settingEntryDocument);
         }
 
-        return summaryDocument;
-    }
-    //--------------------------------------------------------------------------
-
-    bool SettingsManager::WriteDocument(const Ptr<rapidjson::Document> document) const
-    {
-        rapidjson::StringBuffer buffer;
-        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
-
-        if (document->Accept(writer))
-        {
-            std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
-            if (!outputStream.is_open() || !outputStream.good())
-            {
-                Log::CoreWarn("SettingsManager: failed to open file stream");
-                return false;
-            }
-
-            outputStream << buffer.GetString();
-            outputStream.close();
-
-            Log::CoreInfo("SettingsManager: settings written successfully");
-            return true;
-        }
-
-        Log::CoreWarn("SettingsManager: failed to write settings");
-        return false;
+        return summaryDocument.Save(_filename);
     }
     //--------------------------------------------------------------------------
 
@@ -160,8 +95,3 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 }
-
-#ifdef KMP_UNDEF_GetObject
-#pragma pop_macro("GetObject")
-#undef KMP_UNDEF_GetObject
-#endif

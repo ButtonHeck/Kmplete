@@ -4,8 +4,6 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/pointers.h"
 
-#include <rapidjson/fwd.h>
-
 #include <filesystem>
 #include <unordered_map>
 
@@ -28,10 +26,6 @@ namespace Kmplete
 
         KMP_API void SetFilename(const std::filesystem::path& path) KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API std::filesystem::path GetFilename() const KMP_NOEXCEPT;
-
-    private:
-        KMP_NODISCARD Ptr<rapidjson::Document> AssembleDocument() const;
-        bool WriteDocument(const Ptr<rapidjson::Document> document) const;
 
     private:
         std::filesystem::path _filename;

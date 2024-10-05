@@ -2,25 +2,22 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
-
-#include <rapidjson/document.h>
+#include "Kmplete/Core/json_document.h"
 
 #include <string>
 
 namespace Kmplete
 {
-    class JsonReader;
-    class JsonWriter;
-
     class Settings
     {
     public:
         KMP_DISABLE_COPY_MOVE(Settings)
 
-        KMP_API Settings(const std::string& name, rapidjson::Document&& document);
-        KMP_API Settings(const std::string& name);
+        KMP_API Settings(const std::string& name, Ptr<JsonDocument> document);
+        KMP_API explicit Settings(const std::string& name);
+        KMP_API ~Settings();
 
-        KMP_NODISCARD KMP_API const std::string& GetName() const;
+        KMP_NODISCARD KMP_API const std::string& GetName() const KMP_NOEXCEPT;
 
         KMP_API bool StartSaveObject(const std::string& objectName);
         KMP_API bool StartSaveObject(int index);
@@ -45,7 +42,7 @@ namespace Kmplete
         KMP_API bool SaveString(int index, const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
-        KMP_NODISCARD KMP_API rapidjson::Document& GetDocument();
+        KMP_NODISCARD KMP_API Ptr<JsonDocument> GetDocument() KMP_NOEXCEPT;
 
 
         KMP_API bool StartLoadObject(const std::string& objectName);
@@ -73,9 +70,7 @@ namespace Kmplete
 
     private:
         const std::string _name;
-        rapidjson::Document _document;
-        Ptr<JsonReader> _reader;
-        Ptr<JsonWriter> _writer;
+        Ptr<JsonDocument> _document;
     };
     //--------------------------------------------------------------------------
 }

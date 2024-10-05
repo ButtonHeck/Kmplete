@@ -9,6 +9,12 @@
 
 #include <fstream>
 
+#ifdef GetObject
+#pragma push_macro("GetObject")
+#undef GetObject
+#define KMP_UNDEF_GetObject
+#endif
+
 namespace Kmplete
 {
     JsonDocument::JsonDocument()
@@ -17,6 +23,8 @@ namespace Kmplete
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
+        _document.SetObject();
+
         Log::CoreTrace("JsonDocument: created default");
     }
     //--------------------------------------------------------------------------
@@ -41,8 +49,10 @@ namespace Kmplete
         {
             Log::CoreError("JsonDocument: creation from '{}' failed", Filesystem::ToGenericU8String(_filename));
         }
-
-        Log::CoreTrace("JsonDocument: created from '{}'", Filesystem::ToGenericU8String(_filename));
+        else
+        {
+            Log::CoreTrace("JsonDocument: created from '{}'", Filesystem::ToGenericU8String(_filename));
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -52,13 +62,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void JsonDocument::SetFilename(const std::filesystem::path& filename)
+    void JsonDocument::SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT
     {
         _filename = filename;
     }
     //--------------------------------------------------------------------------
 
-    const std::filesystem::path& JsonDocument::GetFilename() const
+    const std::filesystem::path& JsonDocument::GetFilename() const KMP_NOEXCEPT
     {
         return _filename;
     }
@@ -142,16 +152,31 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<Ptr<JsonDocument>> JsonDocument::GetChildren() const
+    bool JsonDocument::AddChildDocument(const std::string& name, Ptr<JsonDocument> child)
     {
-        std::vector<Ptr<JsonDocument>> children;
+        auto& jsonDocument = child->_document;
+        if (!jsonDocument.IsObject())
+        {
+            Log::CoreError("JsonDocument: cannot add '{}' child document - not an object", name);
+            return false;
+        }
+
+        _document.AddMember(rapidjson::GenericStringRef(name.c_str()), jsonDocument.GetObject(), jsonDocument.GetAllocator());
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    std::vector<std::pair<std::string, Ptr<JsonDocument>>> JsonDocument::GetChildren() const
+    {
+        std::vector<std::pair<std::string, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
         {
+            const auto childName = child->name.GetString();
             rapidjson::Document childDocument;
             childDocument.CopyFrom(child->value, childDocument.GetAllocator());
 
-            children.push_back(CreatePtr<JsonDocument>(std::move(childDocument)));
+            children.push_back(std::make_pair(childName, CreatePtr<JsonDocument>(std::move(childDocument))));
         }
 
         return children;
@@ -400,3 +425,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
+#ifdef KMP_UNDEF_GetObject
+#pragma pop_macro("GetObject")
+#undef KMP_UNDEF_GetObject
+#endif
