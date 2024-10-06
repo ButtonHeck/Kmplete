@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/window_backend.h"
+#include "Kmplete/Core/types.h"
 
 #include <unordered_map>
 
@@ -19,7 +20,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Ptr<Window> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) override;
 
         KMP_NODISCARD KMP_API int GetMonitorCount() const override;
-        KMP_NODISCARD KMP_API std::vector<std::string> GetMonitorNames() const override;
+        KMP_NODISCARD KMP_API StringVector GetMonitorNames() const override;
         KMP_NODISCARD KMP_API std::vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const override;
         KMP_NODISCARD KMP_API std::vector<MonitorVideoMode> GetMonitorVideoModes(int index) const override;
 

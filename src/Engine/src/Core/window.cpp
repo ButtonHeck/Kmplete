@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    Window::WindowSettings::WindowSettings(const std::string& name)
+    Window::WindowSettings::WindowSettings(const std::string& name) KMP_NOEXCEPT
         : name(name)
     {
         Log::CoreTrace("WindowSettings: created '{}'", name);

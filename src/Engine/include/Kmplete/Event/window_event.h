@@ -7,7 +7,7 @@ namespace Kmplete
 {
     struct WindowEvent : public Event
     {
-        int GetTraits() const override
+        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
         {
             return WindowEventTrait;
         }
@@ -22,22 +22,22 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowResizeEventType)
 
-        WindowResizeEvent(unsigned int width, unsigned int height)
+        WindowResizeEvent(unsigned int width, unsigned int height) KMP_NOEXCEPT
             : _width(width)
             , _height(height)
         {}
 
-        unsigned int GetWidth() const
+        KMP_NODISCARD unsigned int GetWidth() const KMP_NOEXCEPT
         {
             return _width;
         }
 
-        unsigned int GetHeight() const
+        KMP_NODISCARD unsigned int GetHeight() const KMP_NOEXCEPT
         {
             return _height;
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("WindowResizeEvent: ", _width, ", ", _height);
         }
@@ -53,22 +53,22 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowMoveEventType)
 
-        WindowMoveEvent(unsigned int x, unsigned int y)
+        WindowMoveEvent(unsigned int x, unsigned int y) KMP_NOEXCEPT
             : _x(x)
             , _y(y)
         {}
 
-        unsigned int GetX() const
+        KMP_NODISCARD unsigned int GetX() const KMP_NOEXCEPT
         {
             return _x;
         }
 
-        unsigned int GetY() const
+        KMP_NODISCARD unsigned int GetY() const KMP_NOEXCEPT
         {
             return _y;
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("WindowMoveEvent: ", _x, ", ", _y);
         }
@@ -93,16 +93,16 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowFocusEventType)
 
-        explicit WindowFocusEvent(int focused)
+        explicit WindowFocusEvent(int focused) KMP_NOEXCEPT
             : _focused(focused)
         {}
 
-        bool IsFocused() const
+        KMP_NODISCARD bool IsFocused() const KMP_NOEXCEPT
         {
             return bool(_focused);
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("WindowFocusEvent: ", IsFocused());
         }
@@ -117,16 +117,16 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowIconifyEventType)
 
-        explicit WindowIconifyEvent(int iconified)
+        explicit WindowIconifyEvent(int iconified) KMP_NOEXCEPT
             : _iconified(iconified)
         {}
 
-        bool IsIconified() const
+        KMP_NODISCARD bool IsIconified() const KMP_NOEXCEPT
         {
             return bool(_iconified);
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("WindowIconifyEvent: ", IsIconified());
         }
@@ -141,22 +141,22 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowFramebufferResizeEventType)
 
-        WindowFramebufferResizeEvent(unsigned int width, unsigned int height)
+        WindowFramebufferResizeEvent(unsigned int width, unsigned int height) KMP_NOEXCEPT
             : _width(width)
             , _height(height)
         {}
 
-        unsigned int GetWidth() const
+        KMP_NODISCARD unsigned int GetWidth() const KMP_NOEXCEPT
         {
             return _width;
         }
 
-        unsigned int GetHeight() const
+        KMP_NODISCARD unsigned int GetHeight() const KMP_NOEXCEPT
         {
             return _height;
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("WindowFramebufferResizeEvent: ", _width, ", ", _height);
         }

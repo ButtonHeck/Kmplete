@@ -159,12 +159,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<std::string> WindowBackendGlfw::GetMonitorNames() const
+    StringVector WindowBackendGlfw::GetMonitorNames() const
     {
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
 
-        std::vector<std::string> names;
+        StringVector names;
         if (count && monitors)
         {
             for (auto i = 0; i < count; i++)

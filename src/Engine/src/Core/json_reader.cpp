@@ -9,7 +9,15 @@ namespace Kmplete
         : _document(document)
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
-    {}
+    {
+        Log::CoreTrace("JsonReader: created");
+    }
+    //--------------------------------------------------------------------------
+
+    JsonReader::~JsonReader()
+    {
+        Log::CoreTrace("JsonReader: destroyed");
+    }
     //--------------------------------------------------------------------------
 
     bool JsonReader::StartObject(const std::string& objectName)

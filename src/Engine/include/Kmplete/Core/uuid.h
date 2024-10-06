@@ -12,7 +12,7 @@ namespace Kmplete
         KMP_API static UUID InvalidUuid;
 
         KMP_API UUID();
-        KMP_API explicit UUID(uint64_t uuid);
+        KMP_API explicit UUID(uint64_t uuid) KMP_NOEXCEPT;
 
         KMP_NODISCARD KMP_API operator uint64_t() const KMP_NOEXCEPT;
 

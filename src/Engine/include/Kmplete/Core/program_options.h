@@ -9,7 +9,7 @@ namespace Kmplete
     class ProgramOptions
     {
     public:
-        KMP_API ProgramOptions();
+        KMP_API ProgramOptions() KMP_NOEXCEPT;
 
         // WinMain entryPoint
         KMP_API void ProcessCommandLine(char* lpCmdLine);

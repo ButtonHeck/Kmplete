@@ -14,6 +14,14 @@ namespace Kmplete
         {
             _currentObject->SetObject();
         }
+
+        Log::CoreTrace("JsonWriter: created");
+    }
+    //--------------------------------------------------------------------------
+
+    JsonWriter::~JsonWriter()
+    {
+        Log::CoreTrace("JsonWriter: destroyed");
     }
     //--------------------------------------------------------------------------
 

@@ -8,18 +8,18 @@ namespace Kmplete
 {
     struct KeyEvent : public Event
     {
-        int GetTraits() const override
+        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
         {
             return KeyboardEventTrait | InputEventTrait;
         }
 
-        KeyCode GetKeyCode() const
+        KMP_NODISCARD KeyCode GetKeyCode() const KMP_NOEXCEPT
         {
             return _keyCode;
         }
 
     protected:
-        explicit KeyEvent(const KeyCode keyCode)
+        explicit KeyEvent(const KeyCode keyCode) KMP_NOEXCEPT
             : _keyCode(keyCode)
         {}
 
@@ -33,23 +33,23 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(KeyPressEventType)
 
-        KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false)
+        KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false) KMP_NOEXCEPT
             : KeyEvent(keyCode)
             , _mods(mods)
             , _repeat(repeat)
         {}
 
-        bool IsRepeat() const
+        KMP_NODISCARD bool IsRepeat() const KMP_NOEXCEPT
         {
             return _repeat;
         }
 
-        int GetMods() const
+        KMP_NODISCARD int GetMods() const KMP_NOEXCEPT
         {
             return _mods;
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("KeyPressEvent: ", _keyCode, " (repeat = ", _repeat, ", mods = ", _mods, ")");
         }
@@ -65,11 +65,11 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(KeyReleaseEventType)
 
-        explicit KeyReleaseEvent(const KeyCode keyCode)
+        explicit KeyReleaseEvent(const KeyCode keyCode) KMP_NOEXCEPT
             : KeyEvent(keyCode)
         {}
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("KeyReleaseEvent: ", _keyCode);
         }
@@ -81,11 +81,11 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(KeyCharEventType)
 
-        explicit KeyCharEvent(const KeyCode keyCode)
+        explicit KeyCharEvent(const KeyCode keyCode) KMP_NOEXCEPT
             : KeyEvent(keyCode)
         {}
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("KeyCharEvent: ", _keyCode);
         }

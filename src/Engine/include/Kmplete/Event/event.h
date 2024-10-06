@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Kmplete/Core/kmplete_api.h"
+
 #include <string>
 #include <ostream>
 
@@ -40,23 +42,23 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 #define EVENT_CLASS_TYPE(eventType) \
-    static EventType GetStaticType() { return EventType::eventType; } \
-    virtual EventType GetType() const override { return GetStaticType(); } \
-    virtual const char* GetName() const override { return #eventType; }
+    KMP_NODISCARD static EventType GetStaticType() KMP_NOEXCEPT { return EventType::eventType; } \
+    KMP_NODISCARD virtual EventType GetType() const KMP_NOEXCEPT override { return GetStaticType(); } \
+    KMP_NODISCARD virtual const char* GetName() const KMP_NOEXCEPT override { return #eventType; }
 
     struct Event
     {
         virtual ~Event() = default;
 
-        virtual EventType GetType() const = 0;
-        virtual const char* GetName() const = 0;
-        virtual int GetTraits() const = 0;
-        virtual std::string ToString() const
+        KMP_NODISCARD virtual EventType GetType() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD virtual const char* GetName() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD virtual int GetTraits() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD virtual std::string ToString() const
         {
             return GetName();
         }
 
-        bool HasTrait(EventTrait trait) const
+        KMP_NODISCARD bool HasTrait(EventTrait trait) const KMP_NOEXCEPT
         {
             return GetTraits() & trait;
         }
@@ -75,7 +77,7 @@ namespace Kmplete
     class EventDispatcher
     {
     public:
-        explicit EventDispatcher(Event& event)
+        explicit EventDispatcher(Event& event) KMP_NOEXCEPT
             : _event(event)
         {}
 

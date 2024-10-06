@@ -10,27 +10,27 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseMoveEventType)
 
-        int GetTraits() const override
+        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
         {
             return MouseEventTrait | InputEventTrait;
         }
 
-        MouseMoveEvent(float x, float y)
+        MouseMoveEvent(float x, float y) KMP_NOEXCEPT
             : _x(x)
             , _y(y)
         {}
 
-        float GetX() const
+        KMP_NODISCARD float GetX() const KMP_NOEXCEPT
         {
             return _x;
         }
 
-        float GetY() const
+        KMP_NODISCARD float GetY() const KMP_NOEXCEPT
         {
             return _y;
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("MouseMoveEvent: ", _x, ", ", _y);
         }
@@ -46,27 +46,27 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseScrollEventType)
 
-        int GetTraits() const override
+        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
         {
             return MouseEventTrait | InputEventTrait;
         }
 
-        MouseScrollEvent(float xOffset, float yOffset)
+        MouseScrollEvent(float xOffset, float yOffset) KMP_NOEXCEPT
             : _xOffset(xOffset)
             , _yOffset(yOffset)
         {}
 
-        float GetXOffset() const
+        KMP_NODISCARD float GetXOffset() const KMP_NOEXCEPT
         {
             return _xOffset;
         }
 
-        float GetYOffset() const
+        KMP_NODISCARD float GetYOffset() const KMP_NOEXCEPT
         {
             return _yOffset;
         }
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("MouseScrollEvent: ", _xOffset, ", ", _yOffset);
         }
@@ -80,23 +80,23 @@ namespace Kmplete
 
     struct MouseButtonEvent : public Event
     {
-        int GetTraits() const override
+        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
         {
             return MouseEventTrait | InputEventTrait | MouseButtonEventTrait;
         }
 
-        MouseCode GetMouseButton() const
+        KMP_NODISCARD MouseCode GetMouseButton() const KMP_NOEXCEPT
         {
             return _button;
         }
 
-        int GetMods() const
+        KMP_NODISCARD int GetMods() const KMP_NOEXCEPT
         {
             return _mods;
         }
 
     protected:
-        MouseButtonEvent(const MouseCode button, int mods)
+        MouseButtonEvent(const MouseCode button, int mods) KMP_NOEXCEPT
             : _button(button)
             , _mods(mods)
         {}
@@ -112,11 +112,11 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseButtonPressEventType)
 
-        MouseButtonPressEvent(const MouseCode button, int mods)
+        MouseButtonPressEvent(const MouseCode button, int mods) KMP_NOEXCEPT
             : MouseButtonEvent(button, mods)
         {}
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("MouseButtonPressEvent: ", _button);
         }
@@ -128,11 +128,11 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseButtonReleaseEventType)
 
-        MouseButtonReleaseEvent(const MouseCode button, int mods)
+        MouseButtonReleaseEvent(const MouseCode button, int mods) KMP_NOEXCEPT
             : MouseButtonEvent(button, mods)
         {}
 
-        std::string ToString() const override
+        KMP_NODISCARD std::string ToString() const override
         {
             return Utils::Concatenate("MouseButtonReleaseEvent: ", _button);
         }
