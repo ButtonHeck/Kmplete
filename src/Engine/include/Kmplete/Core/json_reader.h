@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Core/json_scope.h"
 
 #include <rapidjson/document.h>
 
@@ -40,14 +40,11 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
-        void PushScope(const std::string& entry);
-        KMP_NODISCARD bool PopScope();
         KMP_NODISCARD bool ValidToGetFromArray(int index) const;
 
     private:
         rapidjson::Document& _document;
-        StringVector _scope;
-        std::string _scopeString;
+        JsonScope _scope;
         rapidjson::Value* _currentObject;
     };
     //--------------------------------------------------------------------------
