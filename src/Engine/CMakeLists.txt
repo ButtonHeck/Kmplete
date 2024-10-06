@@ -20,10 +20,6 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/macro.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_document.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_reader.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_writer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/json_scope.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window.h
@@ -38,10 +34,6 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_document.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_reader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_writer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/json_scope.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window.cpp
@@ -68,10 +60,23 @@ set(Kmplete_Engine_EVENT
 )
 source_group("Event" FILES ${Kmplete_Engine_EVENT})
 
+set(Kmplete_Engine_JSON
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_document.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_reader.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_writer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_scope.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_document.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_reader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_writer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_scope.cpp    
+)
+source_group("Json" FILES ${Kmplete_Engine_JSON})
+
 add_library(Kmplete_Engine
     ${Kmplete_Engine_CORE}
     ${Kmplete_Engine_UTILS}
     ${Kmplete_Engine_EVENT}
+    ${Kmplete_Engine_JSON}
 )
 
 

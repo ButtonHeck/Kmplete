@@ -1,8 +1,8 @@
-#include "Kmplete/Core/json_writer.h"
+#include "Kmplete/Json/json_writer.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Json writer positive", "[core][json][writer]")
+TEST_CASE("Json writer positive", "[json][writer]")
 {
     /* Reference
     {
@@ -68,7 +68,7 @@ TEST_CASE("Json writer positive", "[core][json][writer]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Json writer negative", "[core][json][writer]")
+TEST_CASE("Json writer negative", "[json][writer]")
 {
     rapidjson::Document document;
     Kmplete::JsonWriter writer(document);

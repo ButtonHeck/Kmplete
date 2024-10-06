@@ -2,7 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
-#include "Kmplete/Core/json_document.h"
+#include "Kmplete/Json/json_document.h"
 
 #include <string>
 

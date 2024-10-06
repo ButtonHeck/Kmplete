@@ -3,7 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("SettingsManager basic test", "[core][json][settings][manager]")
+TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 {
     REQUIRE(Kmplete::Filesystem::Initialize());
 
@@ -38,7 +38,7 @@ TEST_CASE("SettingsManager basic test", "[core][json][settings][manager]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("SettingsManager read/write and back", "[core][json][settings][manager]")
+TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
 {
     REQUIRE(Kmplete::Filesystem::Initialize());
 

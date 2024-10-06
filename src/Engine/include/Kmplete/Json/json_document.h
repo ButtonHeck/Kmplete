@@ -2,8 +2,8 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
-#include "Kmplete/Core/json_reader.h"
-#include "Kmplete/Core/json_writer.h"
+#include "Kmplete/Json/json_reader.h"
+#include "Kmplete/Json/json_writer.h"
 
 #include <rapidjson/document.h>
 

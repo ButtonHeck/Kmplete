@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Settings minimal saving", "[core][json][settings]")
+TEST_CASE("Settings minimal saving", "[core][settings]")
 {
     Kmplete::Settings settings("TestSettings");
 
@@ -13,7 +13,7 @@ TEST_CASE("Settings minimal saving", "[core][json][settings]")
     REQUIRE_FALSE(settings.StartSaveArray(""));
 }
 
-TEST_CASE("Settings normal saving", "[core][json][settings]")
+TEST_CASE("Settings normal saving", "[core][settings]")
 {
     /* Reference
     {
@@ -77,7 +77,7 @@ TEST_CASE("Settings normal saving", "[core][json][settings]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Settings normal loading", "[core][json][settings]")
+TEST_CASE("Settings normal loading", "[core][settings]")
 {
     const char* BasicJson = R"rjs(
     {
@@ -171,7 +171,7 @@ TEST_CASE("Settings normal loading", "[core][json][settings]")
     REQUIRE(settings.EndLoadObject()); // Group3
 }
 
-TEST_CASE("Settings loading malformed json", "[core][json][settings]")
+TEST_CASE("Settings loading malformed json", "[core][settings]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -195,7 +195,7 @@ TEST_CASE("Settings loading malformed json", "[core][json][settings]")
     REQUIRE_FALSE(settings.GetString("Str") == std::string("string"));
 }
 
-TEST_CASE("Settings loading document with null value", "[core][json][settings]")
+TEST_CASE("Settings loading document with null value", "[core][settings]")
 {
     const char* BasicJsonStr = R"rjs(
     {
@@ -219,7 +219,7 @@ TEST_CASE("Settings loading document with null value", "[core][json][settings]")
     REQUIRE(settings.GetInt("Ptr", 99) == 99);
 }
 
-TEST_CASE("Settings loading duplicate values", "[core][json][settings]")
+TEST_CASE("Settings loading duplicate values", "[core][settings]")
 {
     const char* BasicJsonStr = R"rjs(
     {

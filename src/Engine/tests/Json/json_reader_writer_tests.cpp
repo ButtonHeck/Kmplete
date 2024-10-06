@@ -1,9 +1,9 @@
-#include "Kmplete/Core/json_writer.h"
-#include "Kmplete/Core/json_reader.h"
+#include "Kmplete/Json/json_writer.h"
+#include "Kmplete/Json/json_reader.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Json Reader/Writer big indices test", "[core][json][reader][writer]")
+TEST_CASE("Json Reader/Writer overwriting", "[json][reader][writer]")
 {
     const char* BasicJson = R"rjs(
     {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/json_scope.h"
+#include "Kmplete/Json/json_scope.h"
 
 #include <rapidjson/document.h>
 

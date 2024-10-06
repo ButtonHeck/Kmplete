@@ -9,9 +9,6 @@ set(Kmplete_Engine_Unit_Tests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/platform_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/filesystem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/uuid_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Core/json_reader_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Core/json_reader_writer_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Core/json_writer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_manager_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/macro_tests.cpp
@@ -26,9 +23,17 @@ set(Kmplete_Engine_Unit_Tests_UTILS
 )
 source_group("Utils" FILES ${Kmplete_Engine_Unit_Tests_UTILS})
 
+set(Kmplete_Engine_Unit_Tests_JSON
+    ${CMAKE_CURRENT_LIST_DIR}/Json/json_reader_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Json/json_reader_writer_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Json/json_writer_tests.cpp
+)
+source_group("Json" FILES ${Kmplete_Engine_Unit_Tests_JSON})
+
 add_executable(Kmplete_Engine_Unit_Tests
     ${Kmplete_Engine_Unit_Tests_CORE}
     ${Kmplete_Engine_Unit_Tests_UTILS}
+    ${Kmplete_Engine_Unit_Tests_JSON}
 )
 
 
