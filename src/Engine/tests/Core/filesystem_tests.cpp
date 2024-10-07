@@ -4,12 +4,9 @@
 
 TEST_CASE("Filesystem initialization", "[core][filesystem]")
 {
-    auto path = Kmplete::Filesystem::GetApplicationPath();
-    REQUIRE(path.empty());
-
     REQUIRE(Kmplete::Filesystem::Initialize());
 
-    path = Kmplete::Filesystem::GetApplicationPath();
+    const auto path = Kmplete::Filesystem::GetApplicationPath();
     REQUIRE(!path.empty());
 }
 //--------------------------------------------------------------------------

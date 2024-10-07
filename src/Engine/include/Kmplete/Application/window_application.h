@@ -1,8 +1,8 @@
 #pragma once
 
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
-#include "Kmplete/Core/application.h"
 #include "Kmplete/Core/window_backend.h"
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Event/window_event.h"

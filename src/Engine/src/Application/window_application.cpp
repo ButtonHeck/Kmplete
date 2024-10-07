@@ -1,6 +1,8 @@
-#include "Kmplete/Core/window_application.h"
+#include "Kmplete/Application/window_application.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Core/log.h"
+
+#include <stdexcept>
 
 #ifdef CreateWindow
 #pragma push_macro("CreateWindow")
@@ -42,7 +44,7 @@ namespace Kmplete
         if (!_mainWindow)
         {
             Log::CoreCritical("WindowApplication: creation of the main window failed");
-            throw std::exception("WindowApplication creation of the main window failed");
+            throw std::runtime_error("WindowApplication creation of the main window failed");
         }
     }
     //--------------------------------------------------------------------------

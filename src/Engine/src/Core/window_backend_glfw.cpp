@@ -6,6 +6,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <stdexcept>
+
 #ifdef CreateWindow
 #pragma push_macro("CreateWindow")
 #undef CreateWindow
@@ -65,7 +67,7 @@ namespace Kmplete
             const char* description;
             const auto errorCode = glfwGetError(&description);
             Log::CoreCritical("WindowBackendGlfw: initialization error: code '{}', description '{}'", errorCode, description ? description : "");
-            throw std::exception("WindowBackendGlfw initialization failed");
+            throw std::runtime_error("WindowBackendGlfw initialization failed");
         }
     }
     //--------------------------------------------------------------------------

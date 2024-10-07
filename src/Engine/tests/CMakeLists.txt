@@ -13,9 +13,13 @@ set(Kmplete_Engine_Unit_Tests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_manager_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/macro_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/assertion_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Core/application_tests.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_Unit_Tests_CORE})
+
+set(Kmplete_Engine_Unit_Tests_APPLICATION
+    ${CMAKE_CURRENT_LIST_DIR}/Application/application_tests.cpp
+)
+source_group("Application" FILES ${Kmplete_Engine_Unit_Tests_APPLICATION})
 
 set(Kmplete_Engine_Unit_Tests_UTILS
     ${CMAKE_CURRENT_LIST_DIR}/Utils/function_utils_tests.cpp
@@ -32,6 +36,7 @@ source_group("Json" FILES ${Kmplete_Engine_Unit_Tests_JSON})
 
 add_executable(Kmplete_Engine_Unit_Tests
     ${Kmplete_Engine_Unit_Tests_CORE}
+    ${Kmplete_Engine_Unit_Tests_APPLICATION}
     ${Kmplete_Engine_Unit_Tests_UTILS}
     ${Kmplete_Engine_Unit_Tests_JSON}
 )
@@ -111,13 +116,18 @@ set_target_properties(Kmplete_Engine_File_Dialogs_Tests PROPERTIES
 # Window Application Tests
 
 set(Kmplete_Engine_Window_Application_Tests_CORE
-    ${CMAKE_CURRENT_LIST_DIR}/Core/window_application_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/window_backend_tests.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_Window_Application_Tests_CORE})
 
+set(Kmplete_Engine_Window_Application_Tests_APPLICATION
+    ${CMAKE_CURRENT_LIST_DIR}/Application/window_application_tests.cpp
+)
+source_group("Application" FILES ${Kmplete_Engine_Window_Application_Tests_APPLICATION})
+
 add_executable(Kmplete_Engine_Window_Application_Tests
     ${Kmplete_Engine_Window_Application_Tests_CORE}
+    ${Kmplete_Engine_Window_Application_Tests_APPLICATION}
 )
 
 

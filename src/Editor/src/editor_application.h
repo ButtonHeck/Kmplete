@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/pointers.h"
-#include "Kmplete/Core/window_application.h"
+#include "Kmplete/Application/window_application.h"
 
 namespace Kmplete
 {

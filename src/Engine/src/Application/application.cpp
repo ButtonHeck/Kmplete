@@ -1,7 +1,9 @@
-#include "Kmplete/Core/application.h"
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/log.h"
+
+#include <stdexcept>
 
 namespace Kmplete
 {
@@ -30,7 +32,7 @@ namespace Kmplete
 
         if (!Filesystem::Initialize())
         {
-            throw std::exception("Application initialization failed");
+            throw std::runtime_error("Application initialization failed");
         }
 
         _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath));

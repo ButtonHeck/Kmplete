@@ -13,9 +13,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/filesystem.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/pointers.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/macro.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
@@ -29,8 +27,6 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/application.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
@@ -42,6 +38,14 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_glfw.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
+
+set(Kmplete_Engine_APPLICATION
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/window_application.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/window_application.cpp
+)
+source_group("Application" FILES ${Kmplete_Engine_APPLICATION})
 
 set(Kmplete_Engine_UTILS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
@@ -74,6 +78,7 @@ source_group("Json" FILES ${Kmplete_Engine_JSON})
 
 add_library(Kmplete_Engine
     ${Kmplete_Engine_CORE}
+    ${Kmplete_Engine_APPLICATION}
     ${Kmplete_Engine_UTILS}
     ${Kmplete_Engine_EVENT}
     ${Kmplete_Engine_JSON}

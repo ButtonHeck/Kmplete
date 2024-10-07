@@ -1,4 +1,4 @@
-#include "Kmplete/Core/window_application.h"
+#include "Kmplete/Application/window_application.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/file_dialogs.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -156,7 +156,7 @@ namespace Kmplete
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Test window application initialize", "[core][window_application][application][window]")
+TEST_CASE("Test window application initialize", "[window_application][application][window]")
 {
     {
         const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
@@ -171,7 +171,7 @@ TEST_CASE("Test window application initialize", "[core][window_application][appl
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Test window application key events", "[core][window_application][application][window]")
+TEST_CASE("Test window application key events", "[window_application][application][window]")
 {
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 
@@ -196,7 +196,7 @@ TEST_CASE("Test window application key events", "[core][window_application][appl
     REQUIRE(application->IsWindowApplicationKeyCharEventInvoked());
 }
 
-TEST_CASE("Test window application mouse events", "[core][window_application][application][window]")
+TEST_CASE("Test window application mouse events", "[window_application][application][window]")
 {
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 
@@ -225,7 +225,7 @@ TEST_CASE("Test window application mouse events", "[core][window_application][ap
     REQUIRE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
 }
 
-TEST_CASE("Test window application window events", "[core][window_application][application][window]")
+TEST_CASE("Test window application window events", "[window_application][application][window]")
 {
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
 

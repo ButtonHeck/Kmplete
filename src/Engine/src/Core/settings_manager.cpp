@@ -58,7 +58,7 @@ namespace Kmplete
         }
 
         const auto documentChildren = document.GetChildren();
-        for (const auto documentEntry : documentChildren)
+        for (const auto& documentEntry : documentChildren)
         {
             const auto& name = documentEntry.first;
             const auto& childDocument = documentEntry.second;

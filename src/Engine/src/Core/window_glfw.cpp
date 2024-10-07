@@ -7,6 +7,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <stdexcept>
+
 namespace Kmplete
 {
     WindowGlfw::WindowGlfw(const Ptr<WindowSettings> settings)
@@ -36,7 +38,7 @@ namespace Kmplete
         if (!_window)
         {
             Log::CoreError("WindowGlfw: creation failed");
-            throw std::exception("WindowGlfw creation failed");
+            throw std::runtime_error("WindowGlfw creation failed");
         }
 
         glfwSetWindowUserPointer(_window, new UserData());

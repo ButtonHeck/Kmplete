@@ -1,4 +1,4 @@
-#include "Kmplete/Core/application.h"
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Utils/function_utils.h"
 
@@ -90,7 +90,7 @@ namespace Kmplete
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Test application initialize", "[core][application]")
+TEST_CASE("Test application initialize", "[application]")
 {
     {
         const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
@@ -105,7 +105,7 @@ TEST_CASE("Test application initialize", "[core][application]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Test application events", "[core][application]")
+TEST_CASE("Test application events", "[application]")
 {
     const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
 
