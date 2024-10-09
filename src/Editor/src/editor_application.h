@@ -17,6 +17,9 @@ namespace Kmplete
 
         void Run() override;
 
+        void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const override;
+        void LoadSettings(const std::filesystem::path& path = std::filesystem::path()) override;
+
     protected:
         void OnEvent(Event& event) override;
 
@@ -28,8 +31,8 @@ namespace Kmplete
     private:
         void Initialize();
         void Finalize();
-        void SaveSettings() const;
-        void LoadSettings();
+        void SaveSettingsInternal() const;
+        void LoadSettingsInternal();
     };
     //--------------------------------------------------------------------------
 }

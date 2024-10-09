@@ -26,6 +26,28 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void Application::SaveSettings(const std::filesystem::path& path) const
+    {
+        if (!path.empty())
+        {
+            _settingsManager->SetFilename(path);
+        }
+
+        SaveSettingsInternal();
+    }
+    //--------------------------------------------------------------------------
+
+    void Application::LoadSettings(const std::filesystem::path& path)
+    {
+        if (!path.empty())
+        {
+            _settingsManager->SetFilename(path);
+        }
+
+        LoadSettingsInternal();
+    }
+    //--------------------------------------------------------------------------
+
     void Application::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
     {
         Log::InitializeTemporarySink();
@@ -37,7 +59,7 @@ namespace Kmplete
 
         _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath));
 
-        LoadSettings();
+        LoadSettingsInternal();
 
         Log::Initialize();
     }
@@ -45,18 +67,19 @@ namespace Kmplete
 
     void Application::Finalize()
     {
-        SaveSettings();
+        SaveSettingsInternal();
 
         _settingsManager.reset();
         Log::Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettings() const
+    void Application::SaveSettingsInternal() const
     {
         auto settings = _settingsManager->PutSettings(ApplicationSettingsEntryName);
         if (!settings)
         {
+            Log::CoreWarn("Application: failed to create settings entry for saving");
             return;
         }
 
@@ -66,13 +89,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::LoadSettings()
+    void Application::LoadSettingsInternal()
     {
         _settingsManager->LoadSettings();
 
         const auto settings = _settingsManager->GetSettings(ApplicationSettingsEntryName);
         if (!settings)
         {
+            Log::CoreWarn("Application: failed to get settings entry for loading");
             return;
         }
 

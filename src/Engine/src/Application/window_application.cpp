@@ -33,12 +33,26 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowApplication::SaveSettings(const std::filesystem::path& path) const
+    {
+        SaveSettingsInternal();
+        Application::SaveSettings(path);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::LoadSettings(const std::filesystem::path& path)
+    {
+        Application::LoadSettings(path);
+        LoadSettingsInternal();
+    }
+    //--------------------------------------------------------------------------
+
     void WindowApplication::Initialize()
     {
         _backend = WindowBackend::Create();
         KMP_ASSERT(_backend);
 
-        LoadSettings();
+        LoadSettingsInternal();
 
         _mainWindow = _backend->CreateWindow("Main");
         if (!_mainWindow)
@@ -51,31 +65,33 @@ namespace Kmplete
 
     void WindowApplication::Finalize()
     {
-        _mainWindow->UpdateSettings();
-        SaveSettings();
+        SaveSettingsInternal();
 
         _mainWindow.reset();
         _backend.reset();
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettings() const
+    void WindowApplication::SaveSettingsInternal() const
     {
         auto settings = _settingsManager->PutSettings(WindowAppSettingsEntryName);
         if (!settings)
         {
+            Log::CoreWarn("WindowApplication: failed to create settings entry for saving");
             return;
         }
 
+        _mainWindow->UpdateSettings();
         _backend->SaveSettings(settings);
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::LoadSettings() const
+    void WindowApplication::LoadSettingsInternal()
     {
         const auto settings = _settingsManager->GetSettings(WindowAppSettingsEntryName);
         if (!settings)
         {
+            Log::CoreWarn("WindowApplication: failed to get setting entry for loading");
             return;
         }
 

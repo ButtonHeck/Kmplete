@@ -63,6 +63,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void EditorApplication::SaveSettings(const std::filesystem::path& path) const
+    {
+        SaveSettingsInternal();
+        WindowApplication::SaveSettings(path);
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorApplication::LoadSettings(const std::filesystem::path& path)
+    {
+        WindowApplication::LoadSettings(path);
+        LoadSettingsInternal();
+    }
+    //--------------------------------------------------------------------------
+
     void EditorApplication::OnEvent(Event& event)
     {
         EventDispatcher dispatcher(event);
@@ -93,12 +107,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::SaveSettings() const
+    void EditorApplication::SaveSettingsInternal() const
     {
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::LoadSettings()
+    void EditorApplication::LoadSettingsInternal()
     {
     }
     //--------------------------------------------------------------------------

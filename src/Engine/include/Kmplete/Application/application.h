@@ -7,6 +7,7 @@
 #include "Kmplete/Event/key_event.h"
 
 #include <string>
+#include <filesystem>
 
 namespace Kmplete
 {
@@ -22,6 +23,9 @@ namespace Kmplete
 
         KMP_API virtual void Run() = 0;
 
+        KMP_API virtual void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const;
+        KMP_API virtual void LoadSettings(const std::filesystem::path& path = std::filesystem::path());
+
     protected:
         virtual void OnEvent(Event&) {}
 
@@ -32,8 +36,8 @@ namespace Kmplete
     private:
         void Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName);
         void Finalize();
-        void SaveSettings() const; //TODO move to public (settings should be able to save during application work)
-        void LoadSettings();
+        void SaveSettingsInternal() const;
+        void LoadSettingsInternal();
 
     protected:
         UPtr<SettingsManager> _settingsManager;

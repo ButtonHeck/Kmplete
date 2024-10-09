@@ -18,6 +18,9 @@ namespace Kmplete
         KMP_API WindowApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
         KMP_API virtual ~WindowApplication();
 
+        KMP_API void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const override;
+        KMP_API void LoadSettings(const std::filesystem::path& path = std::filesystem::path()) override;
+
     protected:
         KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { return true; }
         KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&) { return true; }
@@ -35,8 +38,8 @@ namespace Kmplete
     private:
         void Initialize();
         void Finalize();
-        void SaveSettings() const;
-        void LoadSettings() const;
+        void SaveSettingsInternal() const;
+        void LoadSettingsInternal();
 
     protected:
         UPtr<WindowBackend> _backend;
