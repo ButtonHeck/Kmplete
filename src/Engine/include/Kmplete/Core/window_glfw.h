@@ -34,6 +34,12 @@ namespace Kmplete
         KMP_API void SetUpdatedContinuously(bool updatedContinuously) override;
         KMP_NODISCARD KMP_API bool IsUpdatedContinuously() const override;
 
+        KMP_API void SetResizable(bool resizable) override;
+        KMP_NODISCARD KMP_API bool IsResizable() const override;
+
+        KMP_API void SetDecorated(bool decorated) override;
+        KMP_NODISCARD KMP_API bool IsDecorated() const override;
+
         KMP_API void ProcessEvents() override;
         KMP_API void SwapBuffers() const override;
         KMP_API void MakeContextCurrent() override;

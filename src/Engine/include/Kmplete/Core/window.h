@@ -22,6 +22,8 @@ namespace Kmplete
         constexpr static auto ScreenModeStr = "ScreenMode";
         constexpr static auto VSyncStr = "VSync";
         constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
+        constexpr static auto ResizableStr = "Resizable";
+        constexpr static auto DecoratedStr = "Decorated";
 
         constexpr static auto DefaultWidth = 1920;
         constexpr static auto DefaultHeight = 1080;
@@ -50,6 +52,8 @@ namespace Kmplete
             std::string screenMode = WindowedModeStr;
             bool vSync = true;
             bool updateContinuously = true;
+            bool resizable = true;
+            bool decorated = true;
         };
 
         KMP_NODISCARD static std::string ModeToString(Mode mode) KMP_NOEXCEPT;
@@ -80,6 +84,12 @@ namespace Kmplete
 
         KMP_API virtual void SetUpdatedContinuously(bool updatedContinuously) = 0;
         KMP_NODISCARD KMP_API virtual bool IsUpdatedContinuously() const = 0;
+
+        KMP_API virtual void SetResizable(bool resizable) = 0;
+        KMP_NODISCARD KMP_API virtual bool IsResizable() const = 0;
+
+        KMP_API virtual void SetDecorated(bool decorated) = 0;
+        KMP_NODISCARD KMP_API virtual bool IsDecorated() const = 0;
 
         KMP_API virtual void ProcessEvents() = 0;
         KMP_API virtual void SwapBuffers() const = 0;

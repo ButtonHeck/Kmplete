@@ -459,3 +459,69 @@ TEST_CASE("Window settings update on window destruction", "[core][window_backend
     REQUIRE(settings->windowedHeight != 200);
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Window backend resizable OFF", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
+    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
+    settings->width = 400;
+    settings->height = 400;
+    settings->windowedWidth = 400;
+    settings->windowedHeight = 400;
+    settings->vSync = true;
+    settings->updateContinuously = true;
+    settings->resizable = false;
+
+    Kmplete::Ptr<Kmplete::Window> window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings));
+    REQUIRE(window);
+
+    WindowCallbackUserSingleCondition windowCb(window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window resizable OFF test", "Press Y if window cannot be resized", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+
+    REQUIRE(windowCb.conditionOk);
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Window backend decorated OFF", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
+    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
+    settings->width = 400;
+    settings->height = 400;
+    settings->windowedWidth = 400;
+    settings->windowedHeight = 400;
+    settings->vSync = true;
+    settings->updateContinuously = true;
+    settings->decorated = false;
+
+    Kmplete::Ptr<Kmplete::Window> window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings));
+    REQUIRE(window);
+
+    WindowCallbackUserSingleCondition windowCb(window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window decorated OFF test", "Press Y if window is not decorated", Kmplete::FileDialogs::MessageChoice::Ok);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+
+    REQUIRE(windowCb.conditionOk);
+}
+//--------------------------------------------------------------------------

@@ -231,6 +231,8 @@ namespace Kmplete
             settings->SaveString(Window::ScreenModeStr, windowSettings->screenMode);
             settings->SaveBool(Window::VSyncStr, windowSettings->vSync);
             settings->SaveBool(Window::UpdateContinuouslyStr, windowSettings->updateContinuously);
+            settings->SaveBool(Window::ResizableStr, windowSettings->resizable);
+            settings->SaveBool(Window::DecoratedStr, windowSettings->decorated);
 
             settings->EndSaveObject();
             ++index;
@@ -266,6 +268,8 @@ namespace Kmplete
                 windowSettings->screenMode = settings->GetString(Window::ScreenModeStr, Window::WindowedModeStr);
                 windowSettings->vSync = settings->GetBool(Window::VSyncStr, true);
                 windowSettings->updateContinuously = settings->GetBool(Window::UpdateContinuouslyStr, true);
+                windowSettings->resizable = settings->GetBool(Window::ResizableStr, true);
+                windowSettings->decorated = settings->GetBool(Window::DecoratedStr, true);
                 _windowsSettings.insert({ windowName, windowSettings });
             }
 
