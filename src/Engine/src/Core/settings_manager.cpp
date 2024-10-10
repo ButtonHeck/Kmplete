@@ -50,8 +50,8 @@ namespace Kmplete
 
     bool SettingsManager::LoadSettings()
     {
-        JsonDocument document;
-        if (!document.Load(_filename))
+        JsonDocument document(_filename);
+        if (document.HasError())
         {
             Log::CoreWarn("SettingsManager: failed to load settings from '{}'", Filesystem::ToGenericU8String(_filename));
             return false;

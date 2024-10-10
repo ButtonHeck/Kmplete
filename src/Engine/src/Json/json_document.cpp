@@ -20,6 +20,7 @@ namespace Kmplete
     JsonDocument::JsonDocument()
         : _filename()
         , _document()
+        , _error(false)
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
@@ -32,6 +33,7 @@ namespace Kmplete
     JsonDocument::JsonDocument(rapidjson::Document&& document)
         : _filename()
         , _document(std::move(document))
+        , _error(false)
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
@@ -42,6 +44,7 @@ namespace Kmplete
     JsonDocument::JsonDocument(const std::filesystem::path& filename)
         : _filename(filename)
         , _document()
+        , _error(false)
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
@@ -83,10 +86,12 @@ namespace Kmplete
 
     bool JsonDocument::Load()
     {
+        _error = false;
         const auto filenameStr = Filesystem::ToGenericU8String(_filename);
         if (!Filesystem::PathExists(_filename))
         {
             Log::CoreWarn("JsonDocument: failed to load due to insufficient path '{}'", filenameStr);
+            _error = true;
             return false;
         }
 
@@ -95,6 +100,7 @@ namespace Kmplete
         std::ifstream inputStream(_filename);
         if (!inputStream.is_open() || !inputStream.good())
         {
+            _error = true;
             return false;
         }
 
@@ -106,6 +112,7 @@ namespace Kmplete
         if (newDocument.HasParseError())
         {
             Log::CoreError("JsonDocument: failed to load from '{}', JSON parsing error '{}'", filenameStr, rapidjson::GetParseError_En(newDocument.GetParseError()));
+            _error = true;
             return false;
         }
 
@@ -113,6 +120,7 @@ namespace Kmplete
         _reader.reset(new JsonReader(_document));
         _writer.reset(new JsonWriter(_document));
 
+        _error = false;
         return true;
     }
     //--------------------------------------------------------------------------
@@ -126,6 +134,7 @@ namespace Kmplete
 
     bool JsonDocument::Save()
     {
+        _error = false;
         const auto filenameStr = Filesystem::ToGenericU8String(_filename);
 
         rapidjson::StringBuffer buffer;
@@ -137,6 +146,7 @@ namespace Kmplete
             if (!outputStream.is_open() || !outputStream.good())
             {
                 Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
+                _error = true;
                 return false;
             }
 
@@ -144,11 +154,19 @@ namespace Kmplete
             outputStream.close();
 
             Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
+            _error = false;
             return true;
         }
 
         Log::CoreWarn("JsonDocument: failed to write document in '{}'", filenameStr);
+        _error = true;
         return false;
+    }
+    //--------------------------------------------------------------------------
+
+    bool JsonDocument::HasError() const KMP_NOEXCEPT
+    {
+        return _error;
     }
     //--------------------------------------------------------------------------
 

@@ -28,6 +28,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API bool Save(const std::filesystem::path& filename);
         KMP_NODISCARD KMP_API bool Save();
 
+        KMP_NODISCARD KMP_API bool HasError() const KMP_NOEXCEPT;
+
         KMP_API bool AddChildDocument(const std::string& name, Ptr<JsonDocument> child);
         KMP_NODISCARD KMP_API std::vector<std::pair<std::string, Ptr<JsonDocument>>> GetChildren() const;
 
@@ -83,6 +85,7 @@ namespace Kmplete
     private:
         std::filesystem::path _filename;
         rapidjson::Document _document;
+        bool _error;
         UPtr<JsonReader> _reader;
         UPtr<JsonWriter> _writer;
     };
