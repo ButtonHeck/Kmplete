@@ -33,7 +33,7 @@ namespace Kmplete
     JsonDocument::JsonDocument(rapidjson::Document&& document)
         : _filename()
         , _document(std::move(document))
-        , _error(false)
+        , _error(_document.HasParseError())
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
@@ -125,42 +125,96 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(const std::filesystem::path& filename)
+    bool JsonDocument::Save(const std::filesystem::path& filename, bool pretty)
     {
         SetFilename(filename);
-        return Save();
+        return Save(pretty);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save()
+    bool JsonDocument::Save(bool pretty)
     {
         _error = false;
         const auto filenameStr = Filesystem::ToGenericU8String(_filename);
 
         rapidjson::StringBuffer buffer;
-        rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
 
-        if (_document.Accept(writer))
+        if (pretty)
         {
-            std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
-            if (!outputStream.is_open() || !outputStream.good())
+            rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+            if (_document.Accept(writer))
             {
-                Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
-                _error = true;
-                return false;
+                std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
+                if (!outputStream.is_open() || !outputStream.good())
+                {
+                    Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
+                    _error = true;
+                    return false;
+                }
+
+                outputStream << buffer.GetString();
+                outputStream.close();
+
+                Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
+                _error = false;
+                return true;
             }
+        }
+        else
+        {
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+            if (_document.Accept(writer))
+            {
+                std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
+                if (!outputStream.is_open() || !outputStream.good())
+                {
+                    Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
+                    _error = true;
+                    return false;
+                }
 
-            outputStream << buffer.GetString();
-            outputStream.close();
+                outputStream << buffer.GetString();
+                outputStream.close();
 
-            Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
-            _error = false;
-            return true;
+                Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
+                _error = false;
+                return true;
+            }
         }
 
         Log::CoreWarn("JsonDocument: failed to write document in '{}'", filenameStr);
         _error = true;
         return false;
+    }
+    //--------------------------------------------------------------------------
+
+    std::string JsonDocument::ToString(bool pretty)
+    {
+        _error = false;
+        rapidjson::StringBuffer buffer;
+
+        if (pretty)
+        {
+            rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
+
+            if (_document.Accept(writer))
+            {
+                return std::string(buffer.GetString());
+            }
+        }
+        else
+        {
+            rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+
+            if (_document.Accept(writer))
+            {
+                return std::string(buffer.GetString());
+            }
+        }
+
+        Log::CoreWarn("JsonDocument: failed to write document to string");
+        _error = true;
+        return std::string("");
     }
     //--------------------------------------------------------------------------
 
@@ -170,26 +224,53 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::AddChildDocument(const std::string& name, Ptr<JsonDocument> child)
+    bool JsonDocument::AddChildDocument(const std::string& name, JsonDocument& child, bool overwrite)
     {
-        auto& jsonDocument = child->_document;
-        if (!jsonDocument.IsObject())
+        if (name.empty())
         {
-            Log::CoreError("JsonDocument: cannot add '{}' child document - not an object", name);
+            Log::CoreError("JsonDocument: cannot add child document - name is empty");
             return false;
         }
 
-        _document.AddMember(rapidjson::GenericStringRef(name.c_str()), jsonDocument.GetObject(), jsonDocument.GetAllocator());
+        if (_document.HasMember(name.c_str()))
+        {
+            if (overwrite)
+            {
+                _document.RemoveMember(name.c_str());
+            }
+            else
+            {
+                Log::CoreWarn("JsonDocument: already contains member '{}' and overwrite set to false", name);
+                return false;
+            }
+        }
+
+        auto& childDocument = child._document;
+        if (!childDocument.IsObject() || childDocument.HasParseError())
+        {
+            Log::CoreError("JsonDocument: cannot add '{}' child document - not an object or has errors", name);
+            return false;
+        }
+
+        auto& thisAllocator = _document.GetAllocator();
+        rapidjson::Value childDeepCopy(childDocument, thisAllocator);
+        _document.AddMember(rapidjson::Value(name.c_str(), static_cast<rapidjson::SizeType>(name.length()), thisAllocator).Move(), childDeepCopy, thisAllocator);
+
         return true;
     }
     //--------------------------------------------------------------------------
 
-    std::vector<std::pair<std::string, Ptr<JsonDocument>>> JsonDocument::GetChildren() const
+    std::vector<std::pair<std::string, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects) const
     {
         std::vector<std::pair<std::string, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
         {
+            if (onlyObjects && !child->value.IsObject())
+            {
+                continue;
+            }
+
             const auto childName = child->name.GetString();
             rapidjson::Document childDocument;
             childDocument.CopyFrom(child->value, childDocument.GetAllocator());

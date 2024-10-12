@@ -76,7 +76,7 @@ namespace Kmplete
         for (const auto& settingsEntry : _settings)
         {
             const auto& settingEntryDocument = settingsEntry.second->GetDocument();
-            summaryDocument.AddChildDocument(settingsEntry.first, settingEntryDocument);
+            summaryDocument.AddChildDocument(settingsEntry.first, *settingEntryDocument);
         }
 
         return summaryDocument.Save(_filename);

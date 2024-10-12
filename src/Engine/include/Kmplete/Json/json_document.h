@@ -15,6 +15,8 @@ namespace Kmplete
     class JsonDocument
     {
     public:
+        KMP_DISABLE_COPY_MOVE(JsonDocument)
+
         KMP_API JsonDocument();
         KMP_API explicit JsonDocument(rapidjson::Document&& document);
         KMP_API explicit JsonDocument(const std::filesystem::path& filename);
@@ -25,15 +27,16 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API bool Load(const std::filesystem::path& filename);
         KMP_NODISCARD KMP_API bool Load();
-        KMP_NODISCARD KMP_API bool Save(const std::filesystem::path& filename);
-        KMP_NODISCARD KMP_API bool Save();
+        KMP_NODISCARD KMP_API bool Save(const std::filesystem::path& filename, bool pretty = true);
+        KMP_NODISCARD KMP_API bool Save(bool pretty = true);
+        KMP_NODISCARD KMP_API std::string ToString(bool pretty = true);
 
         KMP_NODISCARD KMP_API bool HasError() const KMP_NOEXCEPT;
 
-        KMP_API bool AddChildDocument(const std::string& name, Ptr<JsonDocument> child);
-        KMP_NODISCARD KMP_API std::vector<std::pair<std::string, Ptr<JsonDocument>>> GetChildren() const;
+        KMP_API bool AddChildDocument(const std::string& name, JsonDocument& child, bool overwrite = true);
+        KMP_NODISCARD KMP_API std::vector<std::pair<std::string, Ptr<JsonDocument>>> GetChildren(bool onlyObjects = true) const;
 
-        // writer
+
         KMP_API bool StartSetObject(const std::string& objectName);
         KMP_API bool StartSetObject(int index);
         KMP_API bool EndSetObject();
@@ -58,7 +61,6 @@ namespace Kmplete
         KMP_API bool SetString(const std::string& name, const std::string& value);
 
 
-        // reader
         KMP_API bool StartGetObject(const std::string& objectName);
         KMP_API bool StartGetObject(int index);
         KMP_API bool EndGetObject();

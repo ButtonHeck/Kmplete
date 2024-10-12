@@ -625,7 +625,7 @@ namespace Kmplete
             return false;
         }
 
-        const auto size = static_cast<unsigned int>(strlen(value.c_str()));
+        const auto size = static_cast<rapidjson::SizeType>(value.length());
         if (index >= static_cast<int>(_currentObject->Size()))
         {
             Log::CoreDebug("JsonWriter: creating new string '{}' in '{}'", index, _scope.scopeString);
@@ -660,7 +660,7 @@ namespace Kmplete
             return false;
         }
 
-        const auto size = static_cast<unsigned int>(strlen(value.c_str()));
+        const auto size = static_cast<rapidjson::SizeType>(value.length());
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsString())
         {
             const auto newScope = _scope.scopeString + "/" + name;

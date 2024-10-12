@@ -31,6 +31,7 @@ set(Kmplete_Engine_Unit_Tests_JSON
     ${CMAKE_CURRENT_LIST_DIR}/Json/json_reader_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Json/json_reader_writer_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Json/json_writer_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Json/json_document_tests.cpp
 )
 source_group("Json" FILES ${Kmplete_Engine_Unit_Tests_JSON})
 
