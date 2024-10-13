@@ -9,8 +9,20 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.cpp
 )
 
+if(WIN32)
+	set(KMPLETE_WIN_ICO_PATH "${CMAKE_SOURCE_DIR}/src/Resources/Kmplete64.ico")
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
+	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/resource.h" "${CMAKE_CURRENT_BINARY_DIR}/resource.h" COPYONLY)
+	set(Kmplete_Editor_WINRC
+		"${CMAKE_CURRENT_BINARY_DIR}/resource.h"
+		"${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc"
+	)
+	source_group("Resources" FILES ${Kmplete_Editor_WINRC})
+endif()
+
 add_executable(Kmplete_Editor
     ${Kmplete_Editor_SOURCES}
+    ${Kmplete_Editor_WINRC}
 )
 
 
