@@ -64,6 +64,16 @@ namespace Kmplete
 
         void Run() override {}
 
+        void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const override
+        {
+            Application::SaveSettings(path);
+        }
+
+        void LoadSettings(const std::filesystem::path& path = std::filesystem::path()) override
+        {
+            Application::LoadSettings(path);
+        }
+
     protected:
         void OnEvent(Event& event) override
         {
@@ -132,5 +142,29 @@ TEST_CASE("Test application events", "[application]")
     eventSender->SendKeyCharEvent();
     REQUIRE(application->IsApplicationKeyCharEventInvoked());
     REQUIRE(application->IsKeyCharEventInvoked());
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test application runtime settings save", "[application]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
+
+    REQUIRE(application);
+
+    const auto newSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_unit_test_settings_runtime.json");
+    application->SaveSettings(newSettingsPath);
+
+    REQUIRE(Kmplete::Filesystem::PathExists(newSettingsPath));
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test application runtime settings load", "[application]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
+
+    REQUIRE(application);
+
+    application->LoadSettings();
+    SUCCEED(); // just check succeed build and no exceptions
 }
 //--------------------------------------------------------------------------
