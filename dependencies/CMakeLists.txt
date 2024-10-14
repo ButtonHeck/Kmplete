@@ -8,6 +8,11 @@ message("---- Kmplete dependencies: glad")
 add_subdirectory(glad)
 set_target_properties(glad PROPERTIES FOLDER Dependencies/glad)
 
+# stb_image
+message("---- Kmplete dependencies: stb_image")
+add_subdirectory(stb_image)
+set_target_properties(stb_image PROPERTIES FOLDER Dependencies/stb_image)
+
 
 ## Dependencies fetched via FetchContent
 ## --------------------------------------------------------
