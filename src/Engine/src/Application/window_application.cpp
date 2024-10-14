@@ -60,6 +60,8 @@ namespace Kmplete
             Log::CoreCritical("WindowApplication: creation of the main window failed");
             throw std::runtime_error("WindowApplication creation of the main window failed");
         }
+
+        _mainWindow->SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
     }
     //--------------------------------------------------------------------------
 

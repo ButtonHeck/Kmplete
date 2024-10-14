@@ -153,6 +153,16 @@ namespace Kmplete
         bool _windowApplicationWindowFramebufferRefreshEventInvoked = false;
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
     };
+
+    class CustomIconApplication : public TestWindowApplication
+    {
+    public:
+        CustomIconApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+            : TestWindowApplication(settingsFilePath, defaultSettingsName)
+        {
+            _mainWindow->SetIcon(KMP_TEST_ICON_PATH);
+        }
+    };
 }
 //--------------------------------------------------------------------------
 
@@ -168,6 +178,26 @@ TEST_CASE("Test window application initialize", "[window_application][applicatio
     const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_window_application_tests_settings.json");
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(settingsPath));
     REQUIRE(Kmplete::Filesystem::PathExists(settingsPath));
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test window application default icon", "[window_application][application][window]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+    REQUIRE(application);
+
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon", Kmplete::FileDialogs::MessageChoice::Ok);
+    application->Run();
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test window application custom icon", "[window_application][application][window]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::CustomIconApplication>("", "Kmplete_window_application_tests_settings.json");
+    REQUIRE(application);
+
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon (red square upper-right and yellow square bottom-left)", Kmplete::FileDialogs::MessageChoice::Ok);
+    application->Run();
 }
 //--------------------------------------------------------------------------
 

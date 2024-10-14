@@ -147,6 +147,10 @@ target_link_libraries(Kmplete_Engine_Window_Application_Tests
     PRIVATE Catch2::Catch2WithMain
 )
 
+target_compile_definitions(Kmplete_Engine_Window_Application_Tests
+    PRIVATE KMP_TEST_ICON_PATH=\"${CMAKE_SOURCE_DIR}/src/Resources/test_icon64.png\"
+)
+
 set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES 
     FOLDER Kmplete/Tests
 )

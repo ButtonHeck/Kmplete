@@ -76,12 +76,19 @@ set(Kmplete_Engine_JSON
 )
 source_group("Json" FILES ${Kmplete_Engine_JSON})
 
+set(Kmplete_Engine_GRAPHICS
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
+)
+source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
+
 add_library(Kmplete_Engine
     ${Kmplete_Engine_CORE}
     ${Kmplete_Engine_APPLICATION}
     ${Kmplete_Engine_UTILS}
     ${Kmplete_Engine_EVENT}
     ${Kmplete_Engine_JSON}
+    ${Kmplete_Engine_GRAPHICS}
 )
 
 
@@ -111,6 +118,7 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<CONFIG:Production>:KMP_LOG_DISABLED>
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Kmplete_Engine_STATIC>
+    PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${CMAKE_SOURCE_DIR}/src/Resources/Kmplete128.png\"
     PRIVATE Kmplete_Engine_EXPORTS
 )
 
@@ -118,6 +126,7 @@ target_link_libraries(Kmplete_Engine
     PUBLIC Kmplete_Version
     
     PRIVATE glfw
+    PRIVATE stb_image
 )
 
 set_target_properties(Kmplete_Engine PROPERTIES 

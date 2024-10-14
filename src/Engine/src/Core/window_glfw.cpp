@@ -4,6 +4,7 @@
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Graphics/image.h"
 
 #include <GLFW/glfw3.h>
 
@@ -99,9 +100,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetIcon(const std::string&)
+    void WindowGlfw::SetIcon(const std::string& path)
     {
-        Log::CoreInfo("WindowGlfw: setIcon not implemented yet");
+        Image img(path, Image::RGBAlpha);
+        GLFWimage icon{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
+
+        if (icon.pixels)
+        {
+            glfwSetWindowIcon(_window, 1, &icon);
+        }
+        else
+        {
+            Log::CoreWarn("WindowGlfw: cannot set window icon");
+        }
     }
     //--------------------------------------------------------------------------
 
