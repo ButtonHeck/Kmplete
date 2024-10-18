@@ -11,6 +11,7 @@ namespace Kmplete
 
     Application::Application(const std::string& settingsFilePath, const std::string& defaultSettingsName)
         : _settingsManager(nullptr)
+        , _systemMetricsManager(nullptr)
     {
         Initialize(settingsFilePath, defaultSettingsName);
 
@@ -51,6 +52,8 @@ namespace Kmplete
     void Application::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
     {
         Log::InitializeTemporarySink();
+
+        _systemMetricsManager.reset(new SystemMetricsManager());
 
         if (!Filesystem::Initialize())
         {

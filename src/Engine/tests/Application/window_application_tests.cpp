@@ -163,6 +163,73 @@ namespace Kmplete
             _mainWindow->SetIcon(KMP_TEST_ICON_PATH);
         }
     };
+
+    class MetricsTestApplication : public WindowApplication
+    {
+    public:
+        MetricsTestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
+            : WindowApplication(settingsFilePath, defaultSettingsName)
+        {
+            _mainWindow->SetEventCallback(KMP_BIND(MetricsTestApplication::OnEvent));
+        }
+
+        KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override
+        {
+            return std::string("MetricsTestApplication");
+        }
+
+        void Run() override {
+            while (!_completed)
+            {
+                _mainWindow->ProcessEvents();
+                _mainWindow->SwapBuffers();
+            }
+        }
+
+        bool IsMetricsUpdatedOk() const { return _metricsUpdatedOk; }
+        bool IsMetricsNumProcessorsOk() const { return _systemMetricsManager->GetMetrics().numProcessors > 0; }
+        bool IsMetricsNumThreadsOk() const { return _systemMetricsManager->GetMetrics().numThreads > 0; }
+        bool IsMetricsCPUUsageOk() const { return _systemMetricsManager->GetMetrics().cpuUsagePercent > 0.0f; }
+        bool IsMetricsTotalPhysicalMemoryOk() const { return _systemMetricsManager->GetMetrics().totalPhysicalMemoryMib > 0.0f; }
+        bool IsMetricsPhysicalMemoryUsedOk() const { return _systemMetricsManager->GetMetrics().physicalMemoryUsedMib > 0.0f; }
+        bool IsMetricsTotalVirtualMemoryOk() const { return _systemMetricsManager->GetMetrics().totalVirtualMemoryMib > 0.0f; }
+        bool IsMetricsVirtualMemoryUsedOk() const { return _systemMetricsManager->GetMetrics().virtualMemoryUsedMib > 0.0f; }
+
+    protected:
+        void OnEvent(Event& event) override
+        {
+            EventDispatcher dispatcher(event);
+            dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(MetricsTestApplication::OnKeyPressEvent));
+        }
+
+        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent& evt) override
+        {
+            if (evt.GetKeyCode() == Kmplete::Key::Y)
+            {
+                _completed = true;
+            }
+            else
+            {
+                _metricsUpdatedOk &= _systemMetricsManager->Update();
+                const auto& metrics = _systemMetricsManager->GetMetrics();
+                const std::string message =
+                    "Processors: " + std::to_string(metrics.numProcessors) + ";\n" +
+                    "Threads: " + std::to_string(metrics.numThreads) + ";\n" +
+                    "TotalVirtualMem: " + std::to_string(metrics.totalVirtualMemoryMib) + " Mib;\n" +
+                    "TotalPhysicalMem: " + std::to_string(metrics.totalPhysicalMemoryMib) + " Mib;\n" +
+                    "VirtualMemUsed: " + std::to_string(metrics.virtualMemoryUsedMib) + " Mib;\n" +
+                    "PhysicalMemUsed: " + std::to_string(metrics.physicalMemoryUsedMib) + " Mib;\n" +
+                    "CPU usage: " + std::to_string(metrics.cpuUsagePercent) + "%";
+                KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Metrics application test", message.c_str(), Kmplete::FileDialogs::MessageChoice::Ok);
+            }
+
+            return WindowApplication::OnKeyPressEvent(evt);
+        }
+
+    private:
+        bool _completed = false;
+        bool _metricsUpdatedOk = true;
+    };
 }
 //--------------------------------------------------------------------------
 
@@ -196,7 +263,7 @@ TEST_CASE("Test window application custom icon", "[window_application][applicati
     const auto application = Kmplete::CreateUPtr<Kmplete::CustomIconApplication>("", "Kmplete_window_application_tests_settings.json");
     REQUIRE(application);
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon (red square upper-right and yellow square bottom-left)", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon (red square upper-left and yellow square bottom-right)", Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 }
 //--------------------------------------------------------------------------
@@ -294,5 +361,26 @@ TEST_CASE("Test window application window events", "[window_application][applica
     REQUIRE(application->IsWindowApplicationWindowIconifyEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Application metrics", "[window_application][application][metrics]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>("", "Kmplete_unit_tests_settings.json");
+
+    REQUIRE(application);
+
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Metrics application test", "Press any key to update metrics, press Y to exit", Kmplete::FileDialogs::MessageChoice::Ok);
+    application->Run();
+
+    REQUIRE(application->IsMetricsUpdatedOk());
+
+    REQUIRE(application->IsMetricsNumProcessorsOk());
+    REQUIRE(application->IsMetricsNumThreadsOk());
+    REQUIRE(application->IsMetricsCPUUsageOk());
+    REQUIRE(application->IsMetricsPhysicalMemoryUsedOk());
+    REQUIRE(application->IsMetricsTotalPhysicalMemoryOk());
+    REQUIRE(application->IsMetricsTotalVirtualMemoryOk());
+    REQUIRE(application->IsMetricsVirtualMemoryUsedOk());
 }
 //--------------------------------------------------------------------------
