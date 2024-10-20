@@ -402,5 +402,9 @@ TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.SetInt("AnInt", 13));
     REQUIRE(rootDoc.Save(settingsPath));
+
+    Kmplete::JsonDocument loadedDoc(settingsPath);
+    REQUIRE_FALSE(loadedDoc.HasError());
+    REQUIRE(loadedDoc.GetInt("AnInt") == 13);
 }
 //--------------------------------------------------------------------------
