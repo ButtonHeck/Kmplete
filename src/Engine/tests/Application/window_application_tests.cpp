@@ -364,6 +364,23 @@ TEST_CASE("Test window application window events", "[window_application][applica
 }
 //--------------------------------------------------------------------------
 
+TEST_CASE("Test window application save settings with cyrillic path", "[window_application][application][metrics]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+
+    REQUIRE(application);
+
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application save", "Save settings to some cyrillic path then close window", Kmplete::FileDialogs::MessageChoice::Ok);
+    const auto filenameSave = Kmplete::FileDialogs::SaveFile("Test window application save", { "JSON Files", "*.json" }, true);
+    application->SaveSettings(filenameSave);
+    application->Run();
+
+    REQUIRE(Kmplete::Filesystem::FilePathIsValid(filenameSave));
+    REQUIRE(Kmplete::Filesystem::PathExists(filenameSave));
+    REQUIRE(Kmplete::Filesystem::IsFile(filenameSave));
+}
+//--------------------------------------------------------------------------
+
 TEST_CASE("Application metrics", "[window_application][application][metrics]")
 {
     const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>("", "Kmplete_unit_tests_settings.json");
