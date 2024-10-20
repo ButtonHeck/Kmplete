@@ -398,11 +398,9 @@ TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][
     REQUIRE(Kmplete::Filesystem::Initialize());
     auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
     auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append(settingsSubPath).append("json_document_test_temp_unescaped.json");
-    std::string ss = settingsPath.generic_string();
-    const auto ff = Kmplete::Utils::Utf8ToNarrow(ss);
 
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.SetInt("AnInt", 13));
-    REQUIRE(rootDoc.Save(ff));
+    REQUIRE(rootDoc.Save(settingsPath));
 }
 //--------------------------------------------------------------------------

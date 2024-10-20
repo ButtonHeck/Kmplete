@@ -68,6 +68,11 @@ namespace Kmplete
     void JsonDocument::SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT
     {
         _filename = filename;
+
+        if (!Filesystem::FilePathIsValid(_filename))
+        {
+            Log::CoreWarn("JsonDocument: invalid filepath was set '{}'", Filesystem::ToGenericU8String(_filename));
+        }
     }
     //--------------------------------------------------------------------------
 
