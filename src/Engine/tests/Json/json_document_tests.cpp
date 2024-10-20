@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -341,6 +342,9 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
         REQUIRE(rootDoc.SetBool("Bool", true));
         REQUIRE(rootDoc.SetInt("Int", 33));
         REQUIRE(rootDoc.SetString("String", "some string"));
+        REQUIRE(rootDoc.SetString("Строка", "Строчечка"));
+        REQUIRE(rootDoc.SetString("StringWithEsc", "\"Quote\" \\\\"));
+        REQUIRE(rootDoc.SetString("RawString", R"rjs("Quote" string)rjs"));
     REQUIRE(rootDoc.EndSetObject());
 
     REQUIRE(rootDoc.Save(settingsPath));
@@ -349,6 +353,12 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     REQUIRE_FALSE(loadedDoc.HasError());
     auto childrenDocuments = loadedDoc.GetChildren();
     REQUIRE(childrenDocuments.size() == 1);
+
+    REQUIRE(loadedDoc.StartGetObject("Obj1"));
+        REQUIRE(loadedDoc.GetString("Строка") == std::string("Строчечка"));
+        REQUIRE(loadedDoc.GetString("StringWithEsc") == std::string("\"Quote\" \\\\"));
+        REQUIRE(loadedDoc.GetString("RawString") == std::string("\"Quote\" string"));
+    REQUIRE(loadedDoc.EndGetObject());
 
     REQUIRE(loadedDoc.StartSetObject("Obj2"));
     REQUIRE(loadedDoc.EndSetObject());
@@ -362,5 +372,37 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     Kmplete::JsonDocument loadedEmptyDoc;
     REQUIRE_FALSE(loadedEmptyDoc.Load());
     REQUIRE_FALSE(loadedEmptyDoc.Load(nonExistSettingsPath));
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][document]")
+{
+    REQUIRE(Kmplete::Filesystem::Initialize());
+    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("json_document_test_temp_unescaped.json");
+
+    Kmplete::JsonDocument rootDoc;
+    const std::string unescaped = R"rjs("Quote" unescaped)rjs";
+    const std::string unsecaped2 = R"rjs("Quote\" unescaped)rjs";
+
+    REQUIRE(rootDoc.SetString("Unescaped", unescaped));
+    REQUIRE(rootDoc.SetString("Unescaped2", unsecaped2));
+    REQUIRE(rootDoc.Save(settingsPath));
+
+    Kmplete::JsonDocument loadedDoc(settingsPath);
+    REQUIRE_FALSE(loadedDoc.HasError());
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][document]")
+{
+    REQUIRE(Kmplete::Filesystem::Initialize());
+    auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
+    auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append(settingsSubPath).append("json_document_test_temp_unescaped.json");
+    std::string ss = settingsPath.generic_string();
+    const auto ff = Kmplete::Utils::Utf8ToNarrow(ss);
+
+    Kmplete::JsonDocument rootDoc;
+    REQUIRE(rootDoc.SetInt("AnInt", 13));
+    REQUIRE(rootDoc.Save(ff));
 }
 //--------------------------------------------------------------------------

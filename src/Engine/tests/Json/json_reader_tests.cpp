@@ -142,6 +142,51 @@ TEST_CASE("Rapidjson arrays", "[json][reader]")
         document["AllArr"][1].IsString() && (strcmp(document["AllArr"][1].GetString(), "str2") == 0) &&
         document["AllArr"][2].IsBool() && (document["AllArr"][2].GetBool() == false)));
 }
+
+TEST_CASE("Rapidjson escaped quotes", "[json][reader]")
+{
+    const char* JsonString = R"rjs(
+    {
+        "SomeObject": "\"OOO\" SuperCompany",
+        "OtherObject": "\\\"Quote\\\""
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(JsonString);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorNone);
+    REQUIRE(document.IsObject());
+
+    REQUIRE(document.HasMember("SomeObject"));
+    REQUIRE(document["SomeObject"].IsString());
+    REQUIRE(document["SomeObject"] == "\"OOO\" SuperCompany");
+
+    REQUIRE(document.HasMember("OtherObject"));
+    REQUIRE(document["OtherObject"].IsString());
+    REQUIRE(document["OtherObject"] == "\\\"Quote\\\"");
+}
+
+TEST_CASE("Rapidjson cyrillic use", "[json][reader]")
+{
+    const char* JsonString = R"rjs(
+    {
+        "Ключ": "Значение"
+    }
+    )rjs";
+
+    rapidjson::Document document;
+    document.Parse(JsonString);
+    const auto error = document.GetParseError();
+
+    REQUIRE(error == rapidjson::kParseErrorNone);
+    REQUIRE(document.IsObject());
+
+    REQUIRE(document.HasMember("Ключ"));
+    REQUIRE(document["Ключ"].IsString());
+    REQUIRE(document["Ключ"] == "Значение");
+}
 //--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json (not closing tag)", "[json][reader]")
