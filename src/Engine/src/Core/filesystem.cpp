@@ -74,12 +74,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectories(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::CreateDirectories(const std::filesystem::path& path, bool pathIsFile) KMP_NOEXCEPT
     {
         try
         {
-            std::filesystem::create_directories(path);
-            return PathExists(path);
+            std::filesystem::create_directories(pathIsFile ? path.parent_path() : path);
+            return PathExists(pathIsFile ? path.parent_path() : path);
         }
         catch (const std::filesystem::filesystem_error& fe)
         {

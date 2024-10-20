@@ -17,7 +17,7 @@ namespace Kmplete
         
         KMP_NODISCARD KMP_API static bool PathExists(const std::filesystem::path& path) KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API static bool FilePathIsValid(const std::filesystem::path& path) KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API static bool CreateDirectories(const std::filesystem::path& path) KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API static bool CreateDirectories(const std::filesystem::path& path, bool pathIsFile = false) KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API static bool CreateFile(const std::filesystem::path& path) KMP_NOEXCEPT;
         
         KMP_NODISCARD KMP_API static bool IsFile(const std::filesystem::path& path) KMP_NOEXCEPT;

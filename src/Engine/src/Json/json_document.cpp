@@ -149,6 +149,13 @@ namespace Kmplete
             rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
+                if (!Filesystem::CreateDirectories(_filename, true))
+                {
+                    Log::CoreWarn("JsonDocument: failed to create directories for '{}'", filenameStr);
+                    _error = true;
+                    return false;
+                }
+
                 std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
                 if (!outputStream.is_open() || !outputStream.good())
                 {
@@ -170,6 +177,13 @@ namespace Kmplete
             rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
+                if (!Filesystem::CreateDirectories(_filename, true))
+                {
+                    Log::CoreWarn("JsonDocument: failed to create directories for '{}'", filenameStr);
+                    _error = true;
+                    return false;
+                }
+
                 std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
                 if (!outputStream.is_open() || !outputStream.good())
                 {
