@@ -5,6 +5,7 @@
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Json/json_writer.h"
 
+#include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
 
 #include <vector>
@@ -83,6 +84,9 @@ namespace Kmplete
         KMP_NODISCARD KMP_API double GetDouble(const std::string& name, double defaultValue = 0.0);
         KMP_NODISCARD KMP_API std::string GetString(int index, const std::string& defaultValue = "");
         KMP_NODISCARD KMP_API std::string GetString(const std::string& name, const std::string& defaultValue = "");
+
+    private:
+        KMP_NODISCARD bool SaveToFile(const rapidjson::StringBuffer& buffer, const std::string& filenameStr);
 
     private:
         std::filesystem::path _filename;

@@ -140,36 +140,16 @@ namespace Kmplete
     bool JsonDocument::Save(bool pretty)
     {
         _error = false;
-        const auto filenameStr = Filesystem::ToGenericU8String(_filename);
-
         rapidjson::StringBuffer buffer;
+
+        const auto filenameStr = Filesystem::ToGenericU8String(_filename);
 
         if (pretty)
         {
             rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
-                if (!Filesystem::CreateDirectories(_filename, true))
-                {
-                    Log::CoreWarn("JsonDocument: failed to create directories for '{}'", filenameStr);
-                    _error = true;
-                    return false;
-                }
-
-                std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
-                if (!outputStream.is_open() || !outputStream.good())
-                {
-                    Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
-                    _error = true;
-                    return false;
-                }
-
-                outputStream << buffer.GetString();
-                outputStream.close();
-
-                Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
-                _error = false;
-                return true;
+                return SaveToFile(buffer, filenameStr);
             }
         }
         else
@@ -177,27 +157,7 @@ namespace Kmplete
             rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
-                if (!Filesystem::CreateDirectories(_filename, true))
-                {
-                    Log::CoreWarn("JsonDocument: failed to create directories for '{}'", filenameStr);
-                    _error = true;
-                    return false;
-                }
-
-                std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
-                if (!outputStream.is_open() || !outputStream.good())
-                {
-                    Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
-                    _error = true;
-                    return false;
-                }
-
-                outputStream << buffer.GetString();
-                outputStream.close();
-
-                Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
-                _error = false;
-                return true;
+                return SaveToFile(buffer, filenameStr);
             }
         }
 
@@ -539,6 +499,32 @@ namespace Kmplete
     std::string JsonDocument::GetString(const std::string& name, const std::string& defaultValue)
     {
         return _reader->GetString(name, defaultValue);
+    }
+    //--------------------------------------------------------------------------
+
+    bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer, const std::string& filenameStr)
+    {
+        if (!Filesystem::CreateDirectories(_filename, true))
+        {
+            Log::CoreWarn("JsonDocument: failed to create directories for '{}'", filenameStr);
+            _error = true;
+            return false;
+        }
+
+        std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
+        if (!outputStream.is_open() || !outputStream.good())
+        {
+            Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
+            _error = true;
+            return false;
+        }
+
+        outputStream << buffer.GetString();
+        outputStream.close();
+
+        Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
+        _error = false;
+        return true;
     }
     //--------------------------------------------------------------------------
 }
