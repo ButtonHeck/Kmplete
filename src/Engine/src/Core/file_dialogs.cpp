@@ -8,59 +8,60 @@ namespace Kmplete
 {
     namespace FileDialogs
     {
-        std::string OpenFile(const std::string& title, const std::vector<std::string>& filters)
+        std::filesystem::path OpenFile(const std::string& title, const std::vector<std::string>& filters)
         {
             pfd::open_file opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::none);
 
             const auto files = opener.result();
             if (files.empty())
             {
-                return std::string();
+                return std::filesystem::path();
             }
 
-            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(files.front()));
+            return std::filesystem::path(Utils::Utf8ToNarrow(files.front()));
         }
         //--------------------------------------------------------------------------
 
-        std::vector<std::string> OpenFiles(const std::string& title, const std::vector<std::string>& filters)
+        std::vector<std::filesystem::path> OpenFiles(const std::string& title, const std::vector<std::string>& filters)
         {
             pfd::open_file opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::multiselect);
 
-            auto paths = std::vector<std::string>();
+            auto paths = std::vector<std::filesystem::path>();
             const auto files = opener.result();
             if (files.empty())
             {
                 return paths;
             }
 
-            for (const auto& path : files)
+            paths.reserve(files.size());
+            for (const auto& file : files)
             {
-                paths.push_back(Filesystem::ToGenericString(Utils::Utf8ToNarrow(path)));
+                paths.emplace_back(Utils::Utf8ToNarrow(file));
             }
 
             return paths;
         }
         //--------------------------------------------------------------------------
 
-        std::string OpenDirectory(const std::string& title)
+        std::filesystem::path OpenDirectory(const std::string& title)
         {
             pfd::select_folder opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
 
             const auto directory = opener.result();
             if (directory.empty())
             {
-                return std::string();
+                return std::filesystem::path();
             }
 
-            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(directory));
+            return std::filesystem::path(Utils::Utf8ToNarrow(directory));
         }
         //--------------------------------------------------------------------------
 
-        std::string SaveFile(const std::string& title, const std::vector<std::string>& filters, bool forceOverwrite)
+        std::filesystem::path SaveFile(const std::string& title, const std::vector<std::string>& filters, bool forceOverwrite)
         {
             pfd::save_file saver(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
-            return Filesystem::ToGenericString(Utils::Utf8ToNarrow(saver.result()));
+            return std::filesystem::path(Utils::Utf8ToNarrow(saver.result()));
         }
         //--------------------------------------------------------------------------
 

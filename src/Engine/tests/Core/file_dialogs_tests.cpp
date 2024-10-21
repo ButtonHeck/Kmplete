@@ -21,7 +21,7 @@ TEST_CASE("File dialog open single file (OPEN json)", "[core][file_dialogs][open
 {
     const auto file = Kmplete::FileDialogs::OpenFile("Open any single json file", { "JSON Files", "*.json" });
     REQUIRE(!file.empty());
-    REQUIRE(file.ends_with(".json"));
+    REQUIRE(Kmplete::Filesystem::ToGenericString(file).ends_with(".json"));
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
     REQUIRE(Kmplete::Filesystem::PathExists(file));
 }
@@ -86,7 +86,7 @@ TEST_CASE("File dialog open multiple files (OPEN json)", "[core][file_dialogs][o
     {
         ok &= Kmplete::Filesystem::FilePathIsValid(file);
         ok &= Kmplete::Filesystem::PathExists(file);
-        ok &= file.ends_with(".json");
+        ok &= Kmplete::Filesystem::ToGenericString(file).ends_with(".json");
 
         if (!ok)
         {
