@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/window.h"
+#include "Kmplete/Core/types.h"
 
 namespace Kmplete
 {
@@ -35,7 +36,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual Ptr<Window> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) = 0;
 
         KMP_NODISCARD KMP_API virtual int GetMonitorCount() const = 0;
-        KMP_NODISCARD KMP_API virtual std::vector<std::string> GetMonitorNames() const = 0;
+        KMP_NODISCARD KMP_API virtual StringVector GetMonitorNames() const = 0;
         KMP_NODISCARD KMP_API virtual std::vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const = 0;
         KMP_NODISCARD KMP_API virtual std::vector<MonitorVideoMode> GetMonitorVideoModes(int index) const = 0;
 

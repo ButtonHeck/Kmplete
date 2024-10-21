@@ -31,10 +31,11 @@ namespace Kmplete
             auto modes = glfwGetVideoModes(monitor, &modesCount);
             if (modesCount && modes)
             {
+                outputModes.reserve(modesCount);
                 for (auto i = 0; i < modesCount; i++)
                 {
                     auto mode = modes[i];
-                    outputModes.push_back(WindowBackend::MonitorVideoMode{ .width = mode.width, .height = mode.height, .refreshRate = mode.refreshRate });
+                    outputModes.emplace_back(mode.width, mode.height, mode.refreshRate);
                 }
             }
 
@@ -169,12 +170,13 @@ namespace Kmplete
         StringVector names;
         if (count && monitors)
         {
+            names.reserve(count);
             for (auto i = 0; i < count; i++)
             {
                 const auto monitor = monitors[i];
                 if (monitor)
                 {
-                    names.push_back(glfwGetMonitorName(monitor));
+                    names.emplace_back(glfwGetMonitorName(monitor));
                 }
             }
         }
