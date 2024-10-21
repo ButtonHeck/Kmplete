@@ -93,6 +93,11 @@ namespace Kmplete
     {
         try
         {
+            if (!CreateDirectories(path, true))
+            {
+                return false;
+            }
+
             std::ofstream(path).flush();
         }
         catch (const std::ios_base::failure& e)

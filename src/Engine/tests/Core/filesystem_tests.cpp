@@ -1,4 +1,5 @@
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/uuid.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -68,9 +69,35 @@ TEST_CASE("Filesystem", "[core][filesystem]")
         REQUIRE(Kmplete::Filesystem::CreateDirectories(path));
     }
 
+    SECTION("CreateDirectories test nested directories")
+    {
+        auto path = Kmplete::Filesystem::GetApplicationPath();
+        path /= "test_nest_0";
+        path /= "test_nest_1";
+        path /= "test_nest_2";
+        REQUIRE(Kmplete::Filesystem::CreateDirectories(path));
+    }
+
     SECTION("CreateDirectories test empty directory")
     {
         REQUIRE_FALSE(Kmplete::Filesystem::CreateDirectories(""));
+    }
+
+    SECTION("CreateFile in existing directory")
+    {
+        auto path = Kmplete::Filesystem::GetApplicationPath();
+        path /= "test_file.txt";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
+    }
+
+    SECTION("CreateFile in non-existent directory")
+    {
+        auto path = Kmplete::Filesystem::GetApplicationPath();
+        path /= "test";
+        Kmplete::UUID uuid;
+        path /= std::to_string(uuid);
+        path /= "test_file.txt";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
     }
 }
 //--------------------------------------------------------------------------
