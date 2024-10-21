@@ -68,7 +68,7 @@ file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
     [=[
     if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Engine_Unit_Tests>/Kmplete_settings_unit_tests.json")
     execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
-        "${resources_folder}/Kmplete_settings_tests_example.json"
+        "${resources_folder}/json/Kmplete_settings_tests_example.json"
         "$<TARGET_FILE_DIR:Kmplete_Engine_Unit_Tests>/Kmplete_settings_unit_tests.json")
     endif() 
     ]=]
@@ -148,7 +148,7 @@ target_link_libraries(Kmplete_Engine_Window_Application_Tests
 )
 
 target_compile_definitions(Kmplete_Engine_Window_Application_Tests
-    PRIVATE KMP_TEST_ICON_PATH=\"${CMAKE_SOURCE_DIR}/src/Resources/test_icon64.png\"
+    PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
 )
 
 set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES 

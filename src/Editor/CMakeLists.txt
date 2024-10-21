@@ -10,7 +10,7 @@ set(Kmplete_Editor_SOURCES
 )
 
 if(WIN32)
-	set(KMPLETE_WIN_ICO_PATH "${CMAKE_SOURCE_DIR}/src/Resources/Kmplete64.ico")
+	set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
 	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
 	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/resource.h" "${CMAKE_CURRENT_BINARY_DIR}/resource.h" COPYONLY)
 	set(Kmplete_Editor_WINRC
@@ -60,7 +60,7 @@ file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
     [=[
     if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
     execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
-        "${resources_folder}/Kmplete_settings_example.json"
+        "${resources_folder}/json/Kmplete_settings_example.json"
         "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
     endif() 
     ]=]

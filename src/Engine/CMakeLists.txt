@@ -120,7 +120,7 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<CONFIG:Production>:KMP_LOG_DISABLED>
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:Kmplete_Engine_STATIC>
-    PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${CMAKE_SOURCE_DIR}/src/Resources/Kmplete128.png\"
+    PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PRIVATE Kmplete_Engine_EXPORTS
 )
 
