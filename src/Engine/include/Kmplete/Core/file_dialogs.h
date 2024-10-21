@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 
 #include <string>
 #include <vector>
@@ -10,16 +11,16 @@ namespace Kmplete
 {
     namespace FileDialogs
     {
-        KMP_NODISCARD KMP_API std::filesystem::path OpenFile(const std::string& title, const std::vector<std::string>& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API std::filesystem::path OpenFile(const std::string& title, const StringVector& filters = { "Any Files", "*.*" });
         //--------------------------------------------------------------------------
 
-        KMP_NODISCARD KMP_API std::vector<std::filesystem::path> OpenFiles(const std::string& title, const std::vector<std::string>& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API std::vector<std::filesystem::path> OpenFiles(const std::string& title, const StringVector& filters = { "Any Files", "*.*" });
         //--------------------------------------------------------------------------
 
         KMP_NODISCARD KMP_API std::filesystem::path OpenDirectory(const std::string& title);
         //--------------------------------------------------------------------------
 
-        KMP_NODISCARD KMP_API std::filesystem::path SaveFile(const std::string& title, const std::vector<std::string>& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
+        KMP_NODISCARD KMP_API std::filesystem::path SaveFile(const std::string& title, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
         //--------------------------------------------------------------------------
 
         enum class MessageButton

@@ -6,11 +6,14 @@
 
 namespace Kmplete
 {
+    static constexpr auto StringToPathConverterFn = Utils::Utf8ToNarrow;
+    static constexpr auto PathToStringConverterFn = Filesystem::ToGenericString;
+
     namespace FileDialogs
     {
-        std::filesystem::path OpenFile(const std::string& title, const std::vector<std::string>& filters)
+        std::filesystem::path OpenFile(const std::string& title, const StringVector& filters)
         {
-            pfd::open_file opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::none);
+            pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::none);
 
             const auto files = opener.result();
             if (files.empty())
@@ -18,13 +21,13 @@ namespace Kmplete
                 return std::filesystem::path();
             }
 
-            return std::filesystem::path(Utils::Utf8ToNarrow(files.front()));
+            return std::filesystem::path(StringToPathConverterFn(files.front()));
         }
         //--------------------------------------------------------------------------
 
-        std::vector<std::filesystem::path> OpenFiles(const std::string& title, const std::vector<std::string>& filters)
+        std::vector<std::filesystem::path> OpenFiles(const std::string& title, const StringVector& filters)
         {
-            pfd::open_file opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::multiselect);
+            pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::multiselect);
 
             auto paths = std::vector<std::filesystem::path>();
             const auto files = opener.result();
@@ -36,7 +39,7 @@ namespace Kmplete
             paths.reserve(files.size());
             for (const auto& file : files)
             {
-                paths.emplace_back(Utils::Utf8ToNarrow(file));
+                paths.emplace_back(StringToPathConverterFn(file));
             }
 
             return paths;
@@ -45,7 +48,7 @@ namespace Kmplete
 
         std::filesystem::path OpenDirectory(const std::string& title)
         {
-            pfd::select_folder opener(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
+            pfd::select_folder opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
 
             const auto directory = opener.result();
             if (directory.empty())
@@ -53,15 +56,15 @@ namespace Kmplete
                 return std::filesystem::path();
             }
 
-            return std::filesystem::path(Utils::Utf8ToNarrow(directory));
+            return std::filesystem::path(StringToPathConverterFn(directory));
         }
         //--------------------------------------------------------------------------
 
-        std::filesystem::path SaveFile(const std::string& title, const std::vector<std::string>& filters, bool forceOverwrite)
+        std::filesystem::path SaveFile(const std::string& title, const StringVector& filters, bool forceOverwrite)
         {
-            pfd::save_file saver(title, Filesystem::ToGenericString(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
+            pfd::save_file saver(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
-            return std::filesystem::path(Utils::Utf8ToNarrow(saver.result()));
+            return std::filesystem::path(StringToPathConverterFn(saver.result()));
         }
         //--------------------------------------------------------------------------
 
