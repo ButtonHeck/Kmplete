@@ -254,7 +254,7 @@ namespace Kmplete
             rapidjson::Document childDocument;
             childDocument.CopyFrom(child->value, childDocument.GetAllocator());
 
-            children.push_back(std::make_pair(childName, CreatePtr<JsonDocument>(std::move(childDocument))));
+            children.emplace_back(childName, CreatePtr<JsonDocument>(std::move(childDocument)));
         }
 
         return children;
