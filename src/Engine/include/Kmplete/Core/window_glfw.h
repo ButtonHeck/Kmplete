@@ -52,12 +52,12 @@ namespace Kmplete
         struct UserData
         {
             bool updateContinuously = true;
+            bool vSync = true;
             Mode screenMode = WindowedMode;
             int width = DefaultWidth;
             int height = DefaultHeight;
             int windowedWidth = width;
             int windowedHeight = height;
-            bool vSync = true;
             EventCallbackFn eventCallback;
         };
 
