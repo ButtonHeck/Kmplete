@@ -53,14 +53,14 @@ namespace Kmplete
     {
         Log::InitializeTemporarySink();
 
-        _systemMetricsManager.reset(new SystemMetricsManager());
+        _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
 
         if (!Filesystem::Initialize())
         {
             throw std::runtime_error("Application initialization failed");
         }
 
-        _settingsManager.reset(new SettingsManager(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath));
+        _settingsManager = CreateUPtr<SettingsManager>(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath);
 
         LoadSettingsInternal();
 
@@ -73,6 +73,7 @@ namespace Kmplete
         SaveSettingsInternal();
 
         _settingsManager.reset();
+        _systemMetricsManager.reset();
         Log::Finalize();
     }
     //--------------------------------------------------------------------------

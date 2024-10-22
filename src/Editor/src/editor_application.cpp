@@ -9,8 +9,7 @@ namespace Kmplete
     {
         try
         {
-            auto app = CreateUPtr<EditorApplication>(settingsFilePath);
-            return app;
+            return CreateUPtr<EditorApplication>(settingsFilePath);
         }
         catch (const std::exception&)
         {
