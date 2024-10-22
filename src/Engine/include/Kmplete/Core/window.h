@@ -6,6 +6,7 @@
 
 #include <string>
 #include <functional>
+#include <filesystem>
 
 namespace Kmplete
 {
@@ -71,7 +72,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual std::pair<int, int> GetWindowedSize() const = 0;
 
         KMP_API virtual void SetTitle(const std::string& title) = 0;
-        KMP_API virtual void SetIcon(const std::string& path) = 0;
+        KMP_API virtual void SetIcon(const std::filesystem::path& path) = 0;
 
         KMP_API virtual void SetShouldClose(bool close) = 0;
         KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;

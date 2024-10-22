@@ -20,7 +20,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::pair<int, int> GetWindowedSize() const override;
 
         KMP_API void SetTitle(const std::string& title) override;
-        KMP_API void SetIcon(const std::string& path) override;
+        KMP_API void SetIcon(const std::filesystem::path& path) override;
 
         KMP_API void SetShouldClose(bool close) override;
         KMP_NODISCARD KMP_API bool ShouldClose() const override;

@@ -1,12 +1,13 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Core/filesystem.h"
 
 #include <stb_image.h>
 
 namespace Kmplete
 {
-    Image::Image(const std::string& filename, Channels desiredChannels, bool flipVertically)
-        : Image(filename.c_str(), desiredChannels, flipVertically)
+    Image::Image(const std::filesystem::path& filename, Channels desiredChannels, bool flipVertically)
+        : Image(Filesystem::ToGenericString(filename).c_str(), desiredChannels, flipVertically)
     {}
     //--------------------------------------------------------------------------
 

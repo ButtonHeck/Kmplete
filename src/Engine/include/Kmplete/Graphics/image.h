@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 
 #include <string>
+#include <filesystem>
 
 namespace Kmplete
 {
@@ -18,7 +19,7 @@ namespace Kmplete
         };
 
     public:
-        KMP_API Image(const std::string& filename, Channels desiredChannels, bool flipVertically = false);
+        KMP_API Image(const std::filesystem::path& filename, Channels desiredChannels, bool flipVertically = false);
         KMP_API Image(const char* filename, Channels desiredChannels, bool flipVertically = false);
         KMP_API ~Image();
 

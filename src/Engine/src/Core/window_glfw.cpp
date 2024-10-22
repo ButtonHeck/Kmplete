@@ -100,7 +100,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetIcon(const std::string& path)
+    void WindowGlfw::SetIcon(const std::filesystem::path& path)
     {
         Image img(path, Image::RGBAlpha);
         GLFWimage icon{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
