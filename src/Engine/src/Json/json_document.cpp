@@ -203,7 +203,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::AddChildDocument(const std::string& name, JsonDocument& child, bool overwrite)
+    bool JsonDocument::AddChildDocument(const std::string& name, const JsonDocument& child, bool overwrite)
     {
         if (name.empty())
         {

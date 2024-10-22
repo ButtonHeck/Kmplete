@@ -151,9 +151,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<JsonDocument> Settings::GetDocument() KMP_NOEXCEPT
+    const JsonDocument& Settings::GetDocument() const
     {
-        return _document;
+        return *_document.get();
     }
     //--------------------------------------------------------------------------
 

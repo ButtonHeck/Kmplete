@@ -71,10 +71,9 @@ namespace Kmplete
     {
         JsonDocument summaryDocument;
 
-        for (const auto& [settingsEntryName, settingsEntryDocument] : _settings)
+        for (const auto& [settingsEntryName, settingsEntry] : _settings)
         {
-            const auto& settingEntryDocument = settingsEntryDocument->GetDocument();
-            summaryDocument.AddChildDocument(settingsEntryName, *settingEntryDocument);
+            summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
         }
 
         return summaryDocument.Save(_filename);

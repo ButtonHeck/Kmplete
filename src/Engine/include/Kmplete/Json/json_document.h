@@ -34,7 +34,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API bool HasError() const KMP_NOEXCEPT;
 
-        KMP_API bool AddChildDocument(const std::string& name, JsonDocument& child, bool overwrite = true);
+        KMP_API bool AddChildDocument(const std::string& name, const JsonDocument& child, bool overwrite = true);
         KMP_NODISCARD KMP_API std::vector<std::pair<std::string, Ptr<JsonDocument>>> GetChildren(bool onlyObjects = true) const;
 
 

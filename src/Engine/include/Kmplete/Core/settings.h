@@ -42,7 +42,7 @@ namespace Kmplete
         KMP_API bool SaveString(int index, const std::string& value);
         KMP_API bool SaveString(const std::string& name, const std::string& value);
 
-        KMP_NODISCARD KMP_API Ptr<JsonDocument> GetDocument() KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const JsonDocument& GetDocument() const;
 
 
         KMP_API bool StartLoadObject(const std::string& objectName);
