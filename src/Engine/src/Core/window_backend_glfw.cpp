@@ -211,51 +211,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveSettings(const Ptr<Settings> settings) const
+    void WindowBackendGlfw::SaveSettings(Settings& settings) const
     {
-        KMP_ASSERT(settings);
-
-        settings->StartSaveObject(WindowBackendSettingsEntryName);
-        settings->StartSaveArray(WindowsStr);
+        settings.StartSaveObject(WindowBackendSettingsEntryName);
+        settings.StartSaveArray(WindowsStr);
         int index = 0;
         for (const auto& windowEntry : _windowsSettings)
         {
             const auto windowSettings = windowEntry.second;
             KMP_ASSERT(windowSettings);
 
-            settings->StartSaveObject(index);
+            settings.StartSaveObject(index);
 
-            settings->SaveString(Window::NameStr, windowSettings->name);
-            settings->SaveUInt(Window::WidthStr, windowSettings->width);
-            settings->SaveUInt(Window::HeightStr, windowSettings->height);
-            settings->SaveUInt(Window::WindowedWidthStr, windowSettings->windowedWidth);
-            settings->SaveUInt(Window::WindowedHeightStr, windowSettings->windowedHeight);
-            settings->SaveString(Window::ScreenModeStr, windowSettings->screenMode);
-            settings->SaveBool(Window::VSyncStr, windowSettings->vSync);
-            settings->SaveBool(Window::UpdateContinuouslyStr, windowSettings->updateContinuously);
-            settings->SaveBool(Window::ResizableStr, windowSettings->resizable);
-            settings->SaveBool(Window::DecoratedStr, windowSettings->decorated);
+            settings.SaveString(Window::NameStr, windowSettings->name);
+            settings.SaveUInt(Window::WidthStr, windowSettings->width);
+            settings.SaveUInt(Window::HeightStr, windowSettings->height);
+            settings.SaveUInt(Window::WindowedWidthStr, windowSettings->windowedWidth);
+            settings.SaveUInt(Window::WindowedHeightStr, windowSettings->windowedHeight);
+            settings.SaveString(Window::ScreenModeStr, windowSettings->screenMode);
+            settings.SaveBool(Window::VSyncStr, windowSettings->vSync);
+            settings.SaveBool(Window::UpdateContinuouslyStr, windowSettings->updateContinuously);
+            settings.SaveBool(Window::ResizableStr, windowSettings->resizable);
+            settings.SaveBool(Window::DecoratedStr, windowSettings->decorated);
 
-            settings->EndSaveObject();
+            settings.EndSaveObject();
             ++index;
         }
 
-        settings->EndSaveArray();
-        settings->EndSaveObject();
+        settings.EndSaveArray();
+        settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadSettings(const Ptr<Settings> settings)
+    void WindowBackendGlfw::LoadSettings(Settings& settings)
     {
-        KMP_ASSERT(settings);
-
-        settings->StartLoadObject(WindowBackendSettingsEntryName);
-        const auto windowsCount = settings->StartLoadArray(WindowsStr);
+        settings.StartLoadObject(WindowBackendSettingsEntryName);
+        const auto windowsCount = settings.StartLoadArray(WindowsStr);
         for (auto i = 0; i < windowsCount; i++)
         {
-            settings->StartLoadObject(i);
+            settings.StartLoadObject(i);
 
-            const auto windowName = settings->GetString(Window::NameStr, "");
+            const auto windowName = settings.GetString(Window::NameStr, "");
             if (windowName.empty())
             {
                 Log::CoreError("WindowBackendGlfw: loading settings for unnamed window is prohibited, current object would be skipped, remove it from settings");
@@ -263,23 +259,23 @@ namespace Kmplete
             else
             {
                 auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
-                windowSettings->width = settings->GetUInt(Window::WidthStr, Window::DefaultWidth);
-                windowSettings->height = settings->GetUInt(Window::HeightStr, Window::DefaultHeight);
-                windowSettings->windowedWidth = settings->GetUInt(Window::WindowedWidthStr, Window::DefaultWidth);
-                windowSettings->windowedHeight = settings->GetUInt(Window::WindowedHeightStr, Window::DefaultHeight);
-                windowSettings->screenMode = settings->GetString(Window::ScreenModeStr, Window::WindowedModeStr);
-                windowSettings->vSync = settings->GetBool(Window::VSyncStr, true);
-                windowSettings->updateContinuously = settings->GetBool(Window::UpdateContinuouslyStr, true);
-                windowSettings->resizable = settings->GetBool(Window::ResizableStr, true);
-                windowSettings->decorated = settings->GetBool(Window::DecoratedStr, true);
+                windowSettings->width = settings.GetUInt(Window::WidthStr, Window::DefaultWidth);
+                windowSettings->height = settings.GetUInt(Window::HeightStr, Window::DefaultHeight);
+                windowSettings->windowedWidth = settings.GetUInt(Window::WindowedWidthStr, Window::DefaultWidth);
+                windowSettings->windowedHeight = settings.GetUInt(Window::WindowedHeightStr, Window::DefaultHeight);
+                windowSettings->screenMode = settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr);
+                windowSettings->vSync = settings.GetBool(Window::VSyncStr, true);
+                windowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
+                windowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
+                windowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
                 _windowsSettings.insert({ windowName, windowSettings });
             }
 
-            settings->EndLoadObject();
+            settings.EndLoadObject();
         }
 
-        settings->EndLoadArray();
-        settings->EndLoadObject();
+        settings.EndLoadArray();
+        settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
 }

@@ -23,8 +23,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const override;
         KMP_NODISCARD KMP_API std::vector<MonitorVideoMode> GetMonitorVideoModes(int index) const override;
 
-        KMP_API void SaveSettings(const Ptr<Settings> settings) const override;
-        KMP_API void LoadSettings(const Ptr<Settings> settings) override;
+        KMP_API void SaveSettings(Settings& settings) const override;
+        KMP_API void LoadSettings(Settings& settings) override;
 
     private:
         void Initialize();

@@ -87,7 +87,7 @@ namespace Kmplete
             return;
         }
 
-        Log::SaveSettings(settings);
+        Log::SaveSettings(*settings.get());
 
         _settingsManager->SaveSettings();
     }
@@ -104,7 +104,7 @@ namespace Kmplete
             return;
         }
 
-        Log::LoadSettings(settings);
+        Log::LoadSettings(*settings.get());
     }
     //--------------------------------------------------------------------------
 }

@@ -84,7 +84,7 @@ namespace Kmplete
         }
 
         _mainWindow->UpdateSettings();
-        _backend->SaveSettings(settings);
+        _backend->SaveSettings(*settings.get());
     }
     //--------------------------------------------------------------------------
 
@@ -97,7 +97,7 @@ namespace Kmplete
             return;
         }
 
-        _backend->LoadSettings(settings);
+        _backend->LoadSettings(*settings.get());
     }
     //--------------------------------------------------------------------------
 }

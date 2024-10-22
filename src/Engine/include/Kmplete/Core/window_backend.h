@@ -40,8 +40,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual std::vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const = 0;
         KMP_NODISCARD KMP_API virtual std::vector<MonitorVideoMode> GetMonitorVideoModes(int index) const = 0;
 
-        KMP_API virtual void SaveSettings(const Ptr<Settings> settings) const = 0;
-        KMP_API virtual void LoadSettings(const Ptr<Settings> settings) = 0;
+        KMP_API virtual void SaveSettings(Settings& settings) const = 0;
+        KMP_API virtual void LoadSettings(Settings& settings) = 0;
     };
     //--------------------------------------------------------------------------
 }

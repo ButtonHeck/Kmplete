@@ -121,60 +121,44 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<spdlog::logger>& Log::CoreLogger()
-    {
-        return _coreLogger;
-    }
-    //--------------------------------------------------------------------------
-
-    Ptr<spdlog::logger>& Log::ClientLogger()
-    {
-        return _clientLogger;
-    }
-    //--------------------------------------------------------------------------
-
     std::string_view Log::StringLogOutput()
     {
         return _stringStream.view();
     }
     //--------------------------------------------------------------------------
 
-    void Log::SaveSettings(const Ptr<Settings> settings)
+    void Log::SaveSettings(Settings& settings)
     {
 #ifndef KMP_LOG_DISABLED
-        KMP_ASSERT(settings);
-
-        settings->StartSaveObject(LogSettingsEntryName);
-        settings->SaveString(LogFilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
-        settings->SaveBool(LogEnabledStr, _logSettings.enabled);
-        settings->SaveBool(LogTruncateStr, _logSettings.truncate);
-        settings->SaveBool(LogOutputConsoleStr, _logSettings.outputConsole);
-        settings->SaveBool(LogOutputFileStr, _logSettings.outputFile);
-        settings->SaveBool(LogOutputStringBufferStr, _logSettings.outputStringBuffer);
-        settings->SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
-        settings->SaveInt(LogClientLevelStr, _logSettings.clientLevel);
-        settings->EndSaveObject();
+        settings.StartSaveObject(LogSettingsEntryName);
+        settings.SaveString(LogFilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
+        settings.SaveBool(LogEnabledStr, _logSettings.enabled);
+        settings.SaveBool(LogTruncateStr, _logSettings.truncate);
+        settings.SaveBool(LogOutputConsoleStr, _logSettings.outputConsole);
+        settings.SaveBool(LogOutputFileStr, _logSettings.outputFile);
+        settings.SaveBool(LogOutputStringBufferStr, _logSettings.outputStringBuffer);
+        settings.SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
+        settings.SaveInt(LogClientLevelStr, _logSettings.clientLevel);
+        settings.EndSaveObject();
 #else
         (void)settings;
 #endif
     }
     //--------------------------------------------------------------------------
 
-    void Log::LoadSettings(const Ptr<Settings> settings)
+    void Log::LoadSettings(Settings& settings)
     {
 #ifndef KMP_LOG_DISABLED
-        KMP_ASSERT(settings);
-
-        settings->StartLoadObject(LogSettingsEntryName);
-        _logSettings.filename = Utils::Utf8ToNarrow(settings->GetString(LogFilenameStr, "Kmplete_log.txt"));
-        _logSettings.enabled = settings->GetBool(LogEnabledStr, true);
-        _logSettings.truncate = settings->GetBool(LogTruncateStr, false);
-        _logSettings.outputConsole = settings->GetBool(LogOutputConsoleStr, true);
-        _logSettings.outputFile = settings->GetBool(LogOutputFileStr, true);
-        _logSettings.outputStringBuffer = settings->GetBool(LogOutputStringBufferStr, false);
-        _logSettings.coreLevel = settings->GetInt(LogCoreLevelStr, spdlog::level::trace);
-        _logSettings.clientLevel = settings->GetInt(LogClientLevelStr, spdlog::level::trace);
-        settings->EndLoadObject();
+        settings.StartLoadObject(LogSettingsEntryName);
+        _logSettings.filename = Utils::Utf8ToNarrow(settings.GetString(LogFilenameStr, "Kmplete_log.txt"));
+        _logSettings.enabled = settings.GetBool(LogEnabledStr, true);
+        _logSettings.truncate = settings.GetBool(LogTruncateStr, false);
+        _logSettings.outputConsole = settings.GetBool(LogOutputConsoleStr, true);
+        _logSettings.outputFile = settings.GetBool(LogOutputFileStr, true);
+        _logSettings.outputStringBuffer = settings.GetBool(LogOutputStringBufferStr, false);
+        _logSettings.coreLevel = settings.GetInt(LogCoreLevelStr, spdlog::level::trace);
+        _logSettings.clientLevel = settings.GetInt(LogClientLevelStr, spdlog::level::trace);
+        settings.EndLoadObject();
 #else
         (void)settings;
 #endif
