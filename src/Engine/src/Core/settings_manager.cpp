@@ -29,19 +29,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Settings> SettingsManager::PutSettings(const std::string& name)
+    Settings* const SettingsManager::PutSettings(const std::string& name)
     {
         auto settings = CreatePtr<Settings>(name);
         PutSettings(name, settings);
-        return settings;
+        return settings.get();
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Settings> SettingsManager::GetSettings(const std::string& name) const
+    Settings* const SettingsManager::GetSettings(const std::string& name) const
     {
         if (_settings.contains(name))
         {
-            return _settings.at(name);
+            return _settings.at(name).get();
         }
 
         return nullptr;

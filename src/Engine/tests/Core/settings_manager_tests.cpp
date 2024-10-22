@@ -18,18 +18,15 @@ TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 
     settings = settingsManager.GetSettings("ObjA");
     REQUIRE(settings);
-    REQUIRE(settings.use_count() == 2); // one inside settingsManager and settings ptr from GetSettings("ObjA")
     REQUIRE(settings->GetInt("PropA") == 12);
 
     settings = settingsManager.GetSettings("ObjB");
     REQUIRE(settings);
-    REQUIRE(settings.use_count() == 2);
     REQUIRE(settings->GetInt("PropA") == 0);
     REQUIRE(settings->GetBool("PropB") == true);
 
     settings = settingsManager.GetSettings("ObjC");
     REQUIRE(settings);
-    REQUIRE(settings.use_count() == 2);
     REQUIRE(settings->GetString("PropA") == std::string("hello"));
     REQUIRE(settings->GetDouble("PropB") == -44.55);
     REQUIRE(settings->GetInt("PropC") == 8);
@@ -62,7 +59,6 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
 
     settings = swapSettingsManager.GetSettings("ObjA");
     REQUIRE(settings);
-    REQUIRE(settings.use_count() == 2);
     REQUIRE(settings->GetInt("PropA") == 999);
 
     settings = swapSettingsManager.GetSettings("ObjB");
