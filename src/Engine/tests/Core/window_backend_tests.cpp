@@ -75,13 +75,13 @@ TEST_CASE("Window backend single window", "[core][window_backend][window]")
     REQUIRE(mainWindow->GetImplPointer());
     REQUIRE(mainWindow->GetName() == std::string("Main"));
 
-    const auto size = mainWindow->GetSize();
-    REQUIRE(size.first > 0); 
-    REQUIRE(size.second > 0);
+    const auto [width, height] = mainWindow->GetSize();
+    REQUIRE(width > 0);
+    REQUIRE(height > 0);
 
-    const auto windowedSize = mainWindow->GetWindowedSize();
-    REQUIRE(windowedSize.first > 0); 
-    REQUIRE(windowedSize.second > 0);
+    const auto [windowedWidth, windowedHeight] = mainWindow->GetWindowedSize();
+    REQUIRE(windowedWidth > 0);
+    REQUIRE(windowedHeight > 0);
 
     mainWindow->SetVSync(true);
     REQUIRE(mainWindow->IsVSync());

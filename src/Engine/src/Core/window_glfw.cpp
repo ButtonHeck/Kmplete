@@ -300,13 +300,13 @@ namespace Kmplete
             return;
         }
 
-        const auto size = GetSize();
-        const auto windowedSize = GetWindowedSize();
+        const auto [width, height] = GetSize();
+        const auto [windowedWidth, windowedHeight] = GetWindowedSize();
 
-        _settings->width = size.first;
-        _settings->height = size.second;
-        _settings->windowedWidth = windowedSize.first;
-        _settings->windowedHeight = windowedSize.second;
+        _settings->width = width;
+        _settings->height = height;
+        _settings->windowedWidth = windowedWidth;
+        _settings->windowedHeight = windowedHeight;
         _settings->screenMode = ModeToString(GetScreenMode());
         _settings->vSync = IsVSync();
         _settings->updateContinuously = IsUpdatedContinuously();

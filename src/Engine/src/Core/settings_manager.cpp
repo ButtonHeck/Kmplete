@@ -58,10 +58,8 @@ namespace Kmplete
         }
 
         const auto documentChildren = document.GetChildren();
-        for (const auto& documentEntry : documentChildren)
+        for (const auto& [name, childDocument] : documentChildren)
         {
-            const auto& name = documentEntry.first;
-            const auto& childDocument = documentEntry.second;
             PutSettings(name, CreatePtr<Settings>(name, childDocument));
         }
 
@@ -73,10 +71,10 @@ namespace Kmplete
     {
         JsonDocument summaryDocument;
 
-        for (const auto& settingsEntry : _settings)
+        for (const auto& [settingsEntryName, settingsEntryDocument] : _settings)
         {
-            const auto& settingEntryDocument = settingsEntry.second->GetDocument();
-            summaryDocument.AddChildDocument(settingsEntry.first, *settingEntryDocument);
+            const auto& settingEntryDocument = settingsEntryDocument->GetDocument();
+            summaryDocument.AddChildDocument(settingsEntryName, *settingEntryDocument);
         }
 
         return summaryDocument.Save(_filename);
