@@ -145,7 +145,7 @@ namespace Kmplete
         KMP_ASSERT(settings);
 
         settings->StartSaveObject(LogSettingsEntryName);
-        settings->SaveString(LogFilenameStr, _logSettings.filename);
+        settings->SaveString(LogFilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
         settings->SaveBool(LogEnabledStr, _logSettings.enabled);
         settings->SaveBool(LogTruncateStr, _logSettings.truncate);
         settings->SaveBool(LogOutputConsoleStr, _logSettings.outputConsole);
@@ -166,7 +166,7 @@ namespace Kmplete
         KMP_ASSERT(settings);
 
         settings->StartLoadObject(LogSettingsEntryName);
-        _logSettings.filename = settings->GetString(LogFilenameStr, "Kmplete_log.txt");
+        _logSettings.filename = Utils::Utf8ToNarrow(settings->GetString(LogFilenameStr, "Kmplete_log.txt"));
         _logSettings.enabled = settings->GetBool(LogEnabledStr, true);
         _logSettings.truncate = settings->GetBool(LogTruncateStr, false);
         _logSettings.outputConsole = settings->GetBool(LogOutputConsoleStr, true);
