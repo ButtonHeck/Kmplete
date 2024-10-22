@@ -17,7 +17,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(Application)
 
-        KMP_API Application(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
+        KMP_API Application(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
         KMP_API virtual ~Application();
 
         KMP_NODISCARD KMP_API virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
@@ -35,7 +35,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
 
     private:
-        void Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName);
+        void Initialize(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName);
         void Finalize();
         void SaveSettingsInternal() const;
         void LoadSettingsInternal();
@@ -46,5 +46,5 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    KMP_NODISCARD extern UPtr<Application> CreateApplication(const std::string& settingsFilePath);
+    KMP_NODISCARD extern UPtr<Application> CreateApplication(const std::filesystem::path& settingsFilePath);
 }

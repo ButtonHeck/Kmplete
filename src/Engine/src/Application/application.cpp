@@ -9,7 +9,7 @@ namespace Kmplete
 {
     constexpr static auto ApplicationSettingsEntryName = "Application";
 
-    Application::Application(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+    Application::Application(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
         : _settingsManager(nullptr)
         , _systemMetricsManager(nullptr)
     {
@@ -49,7 +49,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::Initialize(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+    void Application::Initialize(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
     {
         Log::InitializeTemporarySink();
 

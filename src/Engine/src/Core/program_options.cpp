@@ -3,7 +3,7 @@
 namespace Kmplete
 {
     ProgramOptions::ProgramOptions() KMP_NOEXCEPT
-        : _settingsFilePath("")
+        : _settingsFilePath(std::filesystem::path())
     {}
     //--------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const std::string& ProgramOptions::GetSettingsFilePath() const
+    const std::filesystem::path& ProgramOptions::GetSettingsFilePath() const
     {
         return _settingsFilePath;
     }
@@ -51,7 +51,7 @@ namespace Kmplete
         boost::program_options::store(cmdParser.options(optDescription).run(), vm);
         boost::program_options::notify(vm);
 
-        _settingsFilePath = vm.count("settings") ? vm["settings"].as<std::string>() : "";
+        _settingsFilePath = std::filesystem::path(vm.count("settings") ? vm["settings"].as<std::string>() : "");
     }
     //--------------------------------------------------------------------------
 }

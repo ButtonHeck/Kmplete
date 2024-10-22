@@ -5,7 +5,7 @@
 
 namespace Kmplete
 {
-    UPtr<Application> CreateApplication(const std::string& settingsFilePath)
+    UPtr<Application> CreateApplication(const std::filesystem::path& settingsFilePath)
     {
         try
         {
@@ -19,7 +19,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    EditorApplication::EditorApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
+    EditorApplication::EditorApplication(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
         : WindowApplication(settingsFilePath, defaultSettingsName)
     {
         Initialize();

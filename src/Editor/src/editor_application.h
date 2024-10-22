@@ -10,7 +10,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorApplication)
 
-        EditorApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
+        EditorApplication(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
         virtual ~EditorApplication();
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override;
