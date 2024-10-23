@@ -17,16 +17,12 @@ namespace Kmplete
         , _window(nullptr)
     {
         Initialize();
-
-        Log::CoreTrace("WindowGlfw: window '{}' created", _settings->name);
     }
     //--------------------------------------------------------------------------
 
     WindowGlfw::~WindowGlfw()
     {
         Finalize();
-
-        Log::CoreTrace("WindowGlfw: window '{}' destroyed", _settings->name);
     }
     //--------------------------------------------------------------------------
 

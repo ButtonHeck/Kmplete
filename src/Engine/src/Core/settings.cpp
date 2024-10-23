@@ -1,28 +1,17 @@
 #include "Kmplete/Core/settings.h"
-#include "Kmplete/Core/log.h"
 
 namespace Kmplete
 {
     Settings::Settings(const std::string& name, Ptr<JsonDocument> document)
         : _name(name)
         , _document(document)
-    {
-        Log::CoreTrace("Settings: created '{}' with document", name);
-    }
+    {}
     //--------------------------------------------------------------------------
 
     Settings::Settings(const std::string& name)
         : _name(name)
         , _document(new JsonDocument())
-    {
-        Log::CoreTrace("Settings: created '{}' default", name);
-    }
-    //--------------------------------------------------------------------------
-
-    Settings::~Settings()
-    {
-        Log::CoreTrace("Settings: destroyed '{}'", _name);
-    }
+    {}
     //--------------------------------------------------------------------------
 
     const std::string& Settings::GetName() const KMP_NOEXCEPT

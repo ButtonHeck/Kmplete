@@ -34,7 +34,7 @@ namespace Kmplete
         }
         else
         {
-            Log::CoreTrace("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filename);
+            Log::CoreDebug("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filename);
         }
     }
     //--------------------------------------------------------------------------

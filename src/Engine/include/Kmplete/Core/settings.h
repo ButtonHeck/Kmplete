@@ -15,7 +15,7 @@ namespace Kmplete
 
         KMP_API Settings(const std::string& name, Ptr<JsonDocument> document);
         KMP_API explicit Settings(const std::string& name);
-        KMP_API ~Settings();
+        KMP_API ~Settings() = default;
 
         KMP_NODISCARD KMP_API const std::string& GetName() const KMP_NOEXCEPT;
 

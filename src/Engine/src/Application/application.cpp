@@ -14,16 +14,12 @@ namespace Kmplete
         , _systemMetricsManager(nullptr)
     {
         Initialize(settingsFilePath, defaultSettingsName);
-
-        Log::CoreTrace("Application: created");
     }
     //--------------------------------------------------------------------------
 
     Application::~Application()
     {
         Finalize();
-
-        Log::CoreTrace("Application: destroyed");
     }
     //--------------------------------------------------------------------------
 

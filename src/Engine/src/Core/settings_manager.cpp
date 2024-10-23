@@ -7,15 +7,7 @@ namespace Kmplete
 {
     SettingsManager::SettingsManager(const std::filesystem::path& filename)
         : _filename(filename)
-    {
-        Log::CoreTrace("SettingsManager: created '{}'", Filesystem::ToGenericU8String(_filename));
-    }
-    //--------------------------------------------------------------------------
-
-    SettingsManager::~SettingsManager()
-    {
-        Log::CoreTrace("SettingsManager: destroyed '{}'", Filesystem::ToGenericU8String(_filename));
-    }
+    {}
     //--------------------------------------------------------------------------
 
     Settings* const SettingsManager::PutSettings(const std::string& name)

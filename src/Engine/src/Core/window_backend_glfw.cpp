@@ -48,16 +48,12 @@ namespace Kmplete
     WindowBackendGlfw::WindowBackendGlfw()
     {
         Initialize();
-
-        Log::CoreTrace("WindowBackendGlfw: created");
     }
     //--------------------------------------------------------------------------
 
     WindowBackendGlfw::~WindowBackendGlfw()
     {
         Finalize();
-
-        Log::CoreTrace("WindowBackendGlfw: destroyed");
     }
     //--------------------------------------------------------------------------
 

@@ -21,13 +21,6 @@ namespace Kmplete
 #endif
     {
         Initialize();
-        Log::CoreTrace("SystemMetricsManager: created");
-    }
-    //--------------------------------------------------------------------------
-
-    SystemMetricsManager::~SystemMetricsManager()
-    {
-        Log::CoreTrace("SystemMetricsManager: destroyed");
     }
     //--------------------------------------------------------------------------
 

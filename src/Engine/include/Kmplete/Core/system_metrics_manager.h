@@ -23,7 +23,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(SystemMetricsManager)
 
         KMP_API SystemMetricsManager();
-        KMP_API ~SystemMetricsManager();
+        KMP_API ~SystemMetricsManager() = default;
 
         KMP_API bool Update();
         KMP_NODISCARD KMP_API const SystemMetrics& GetMetrics() const KMP_NOEXCEPT;

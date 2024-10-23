@@ -25,8 +25,6 @@ namespace Kmplete
         , _writer(new JsonWriter(_document))
     {
         _document.SetObject();
-
-        Log::CoreTrace("JsonDocument: created default");
     }
     //--------------------------------------------------------------------------
 
@@ -36,9 +34,7 @@ namespace Kmplete
         , _error(_document.HasParseError())
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
-    {
-        Log::CoreTrace("JsonDocument: created from existing JSON document");
-    }
+    {}
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(const std::filesystem::path& filename)
@@ -52,16 +48,6 @@ namespace Kmplete
         {
             Log::CoreError("JsonDocument: creation from '{}' failed", Filesystem::ToGenericU8String(_filename));
         }
-        else
-        {
-            Log::CoreTrace("JsonDocument: created from '{}'", Filesystem::ToGenericU8String(_filename));
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    JsonDocument::~JsonDocument()
-    {
-        Log::CoreTrace("JsonDocument: destroyed");
     }
     //--------------------------------------------------------------------------
 

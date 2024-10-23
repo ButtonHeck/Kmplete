@@ -20,16 +20,12 @@ namespace Kmplete
         , _mainWindow(nullptr)
     {
         Initialize();
-
-        Log::CoreTrace("WindowApplication: created");
     }
     //--------------------------------------------------------------------------
 
     WindowApplication::~WindowApplication()
     {
         Finalize();
-
-        Log::CoreTrace("WindowApplication: destroyed");
     }
     //--------------------------------------------------------------------------
 
