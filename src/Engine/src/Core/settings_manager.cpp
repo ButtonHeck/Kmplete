@@ -18,22 +18,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::PutSettings(const std::string& name, const Ptr<Settings> settings)
+    Settings* const SettingsManager::PutSettings(const std::string& name)
     {
         if (_settings.contains(name))
         {
             _settings.erase(name);
         }
 
-        _settings.insert({ name, settings });
-    }
-    //--------------------------------------------------------------------------
-
-    Settings* const SettingsManager::PutSettings(const std::string& name)
-    {
-        auto settings = CreatePtr<Settings>(name);
-        PutSettings(name, settings);
-        return settings.get();
+        _settings.insert({ name, CreateUPtr<Settings>(name) });
+        return GetSettings(name);
     }
     //--------------------------------------------------------------------------
 
@@ -60,7 +53,12 @@ namespace Kmplete
         const auto documentChildren = document.GetChildren();
         for (const auto& [name, childDocument] : documentChildren)
         {
-            PutSettings(name, CreatePtr<Settings>(name, childDocument));
+            if (_settings.contains(name))
+            {
+                _settings.erase(name);
+            }
+
+            _settings.insert({ name, CreateUPtr<Settings>(name, childDocument) });
         }
 
         return true;
@@ -86,7 +84,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::filesystem::path SettingsManager::GetFilename() const KMP_NOEXCEPT
+    const std::filesystem::path& SettingsManager::GetFilename() const KMP_NOEXCEPT
     {
         return _filename;
     }

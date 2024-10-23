@@ -24,14 +24,11 @@ namespace Kmplete
         KMP_API bool SaveSettings() const;
 
         KMP_API void SetFilename(const std::filesystem::path& path) KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API std::filesystem::path GetFilename() const KMP_NOEXCEPT;
-
-    private:
-        void PutSettings(const std::string& name, const Ptr<Settings> settings);
+        KMP_NODISCARD KMP_API const std::filesystem::path& GetFilename() const KMP_NOEXCEPT;
 
     private:
         std::filesystem::path _filename;
-        std::unordered_map<std::string, Ptr<Settings>> _settings;
+        std::unordered_map<std::string, UPtr<Settings>> _settings;
     };
     //--------------------------------------------------------------------------
 }
