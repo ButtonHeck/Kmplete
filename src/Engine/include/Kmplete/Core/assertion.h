@@ -1,5 +1,7 @@
 #pragma once
 
+#if !defined (KMP_PRODUCTION_BUILD)
+
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/macro.h"
 #include "Kmplete/Utils/string_utils.h"
@@ -23,8 +25,7 @@ namespace Kmplete
         enum class Consequence
         {
             Log,
-            Terminate,
-            Exception
+            Terminate
         };
 
     public:
@@ -39,8 +40,6 @@ namespace Kmplete
             Utils::ToSStream(_stream, "\n\t", name, " = ", std::forward<T>(val));
             return *this;
         }
-
-        KMP_NORETURN KMP_API void Exception();
 
     private:
         const std::string _file;
@@ -62,3 +61,9 @@ namespace Kmplete
 #define KMP_AW_3_(a, b, c) KMP_AW_(a).KMP_AW_(b).KMP_AW_(c)
 #define KMP_AW_4_(a, b, c, d) KMP_AW_(a).KMP_AW_(b).KMP_AW_(c).KMP_AW_(d)
 #define KMP_AW_5_(a, b, c, d, e) KMP_AW_(a).KMP_AW_(b).KMP_AW_(c).KMP_AW_(d).KMP_AW_(e)
+
+#else
+#define KMP_ASSERT(expr)
+#define KMP_CHECK(expr)
+#define KMP_ASSERT_WATCH(...)
+#endif

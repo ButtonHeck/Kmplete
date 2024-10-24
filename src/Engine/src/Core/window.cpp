@@ -12,8 +12,10 @@ namespace Kmplete
     Window::Window(const Ptr<WindowSettings> settings)
         : _settings(settings)
     {
-        KMP_CHECK(settings).Exception();
-        KMP_CHECK(!settings->name.empty()).Exception();
+        if (!settings || settings->name.empty())
+        {
+            throw std::exception();
+        }
     }
     //--------------------------------------------------------------------------
 

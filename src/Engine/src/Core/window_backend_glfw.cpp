@@ -127,7 +127,10 @@ namespace Kmplete
     {
         try
         {
-            KMP_CHECK(windowSettings && !windowSettings->name.empty()).Exception();
+            if (!windowSettings || windowSettings->name.empty())
+            {
+                throw std::exception();
+            }
 
             const auto& windowName = windowSettings->name;
             if (_windowsSettings.contains(windowName))
