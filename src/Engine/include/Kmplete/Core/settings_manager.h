@@ -17,8 +17,8 @@ namespace Kmplete
         KMP_API explicit SettingsManager(const std::filesystem::path& filename);
         KMP_API ~SettingsManager() = default;
 
-        KMP_NODISCARD KMP_API Settings* const PutSettings(const std::string& name);
-        KMP_NODISCARD KMP_API Settings* const GetSettings(const std::string& name) const;
+        KMP_NODISCARD KMP_API Settings* PutSettings(const std::string& name);
+        KMP_NODISCARD KMP_API Settings* GetSettings(const std::string& name) const;
 
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;

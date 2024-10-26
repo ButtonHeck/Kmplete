@@ -23,6 +23,7 @@ add_library(Kmplete_Version STATIC
 
 set_target_properties(Kmplete_Version PROPERTIES 
     FOLDER Kmplete
+    POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
 )
 
 target_include_directories(Kmplete_Version 

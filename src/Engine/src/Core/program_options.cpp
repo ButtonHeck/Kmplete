@@ -7,12 +7,21 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
+#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN)
     void ProgramOptions::ProcessCommandLine(char* lpCmdLine)
     {
         auto cmdParser = CreateCmdParser(lpCmdLine);
         ProcessCommandLineArgs(cmdParser);
     }
     //--------------------------------------------------------------------------
+
+    boost::program_options::command_line_parser ProgramOptions::CreateCmdParser(char* lpCmdLine) const
+    {
+        const auto args = boost::program_options::split_winmain(lpCmdLine);
+        return boost::program_options::command_line_parser(args);
+    }
+    //--------------------------------------------------------------------------
+#endif
 
     void ProgramOptions::ProcessCommandLine(int argc, char** argv)
     {
@@ -24,13 +33,6 @@ namespace Kmplete
     const std::filesystem::path& ProgramOptions::GetSettingsFilePath() const
     {
         return _settingsFilePath;
-    }
-    //--------------------------------------------------------------------------
-
-    boost::program_options::command_line_parser ProgramOptions::CreateCmdParser(char* lpCmdLine) const
-    {
-        const auto args = boost::program_options::split_winmain(lpCmdLine);
-        return boost::program_options::command_line_parser(args);
     }
     //--------------------------------------------------------------------------
 

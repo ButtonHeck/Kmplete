@@ -113,9 +113,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeTotalMemory()
     {
-        constexpr static auto MibDivisor = 1024.0 * 1024.0;
-
 #if defined KMP_PLATFORM_WINDOWS
+        constexpr static auto MibDivisor = 1024.0 * 1024.0;
         MEMORYSTATUSEX memoryInfo{.dwLength = sizeof(MEMORYSTATUSEX) };
         if (!static_cast<bool>(GlobalMemoryStatusEx(&memoryInfo)))
         {
@@ -228,9 +227,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::UpdateMemoryUsed()
     {
-        constexpr static auto MibDivisor = 1024.0 * 1024.0;
-
 #if defined KMP_PLATFORM_WINDOWS
+        constexpr static auto MibDivisor = 1024.0 * 1024.0;
         PROCESS_MEMORY_COUNTERS_EX pmc;
         if (!static_cast<bool>(GetProcessMemoryInfo(reinterpret_cast<HANDLE>(_windowsProcessHandle), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))))
         {
