@@ -97,6 +97,30 @@ namespace Kmplete
         bool _applicationKeyReleaseEventInvoked = false;
         bool _applicationKeyCharEventInvoked = false;
     };
+
+    class MetricsTestApplication : public Application
+    {
+    public:
+        MetricsTestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
+            : Application(settingsFilePath, defaultSettingsName)
+        {}
+
+        KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override
+        {
+            return std::string("MetricsTestApplication");
+        }
+
+        void Run() override {}
+        bool UpdateMetrics() { return _systemMetricsManager->Update(); }
+
+        bool IsMetricsNumProcessorsOk() const { return _systemMetricsManager->GetMetrics().numProcessors > 0; }
+        bool IsMetricsNumThreadsOk() const { return _systemMetricsManager->GetMetrics().numThreads > 0; }
+        bool IsMetricsCPUUsageOk() const { return _systemMetricsManager->GetMetrics().cpuUsagePercent > 0.0f; }
+        bool IsMetricsTotalPhysicalMemoryOk() const { return _systemMetricsManager->GetMetrics().totalPhysicalMemoryMib > 0.0f; }
+        bool IsMetricsPhysicalMemoryUsedOk() const { return _systemMetricsManager->GetMetrics().physicalMemoryUsedMib > 0.0f; }
+        bool IsMetricsTotalVirtualMemoryOk() const { return _systemMetricsManager->GetMetrics().totalVirtualMemoryMib > 0.0f; }
+        bool IsMetricsVirtualMemoryUsedOk() const { return _systemMetricsManager->GetMetrics().virtualMemoryUsedMib > 0.0f; }
+    };
 }
 //--------------------------------------------------------------------------
 
@@ -166,5 +190,21 @@ TEST_CASE("Test application runtime settings load", "[application]")
 
     application->LoadSettings();
     SUCCEED(); // just check succeed build and no exceptions
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test application metrics update", "[application][metrics]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>("", "Kmplete_unit_tests_settings.json");
+
+    REQUIRE(application);
+    REQUIRE(application->UpdateMetrics());
+    REQUIRE(application->IsMetricsNumProcessorsOk());
+    REQUIRE(application->IsMetricsNumThreadsOk());
+    REQUIRE(application->IsMetricsCPUUsageOk());
+    REQUIRE(application->IsMetricsPhysicalMemoryUsedOk());
+    REQUIRE(application->IsMetricsTotalPhysicalMemoryOk());
+    REQUIRE(application->IsMetricsTotalVirtualMemoryOk());
+    REQUIRE(application->IsMetricsVirtualMemoryUsedOk());
 }
 //--------------------------------------------------------------------------
