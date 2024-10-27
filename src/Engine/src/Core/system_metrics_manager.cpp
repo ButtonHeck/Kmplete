@@ -7,6 +7,10 @@
 #include <Psapi.h>
 #include <TlHelp32.h>
 #else
+#include <sys/types.h>
+#include <sys/sysinfo.h>
+#include <sys/times.h>
+#include <unistd.h>
 #endif
 
 namespace Kmplete
@@ -105,6 +109,7 @@ namespace Kmplete
 #if defined KMP_PLATFORM_WINDOWS
         _currentProcessId = GetCurrentProcessId();
 #else
+        _currentProcessId = getpid();
 #endif
 
         return true;
@@ -113,8 +118,9 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeTotalMemory()
     {
-#if defined KMP_PLATFORM_WINDOWS
         constexpr static auto MibDivisor = 1024.0 * 1024.0;
+        
+#if defined KMP_PLATFORM_WINDOWS
         MEMORYSTATUSEX memoryInfo{.dwLength = sizeof(MEMORYSTATUSEX) };
         if (!static_cast<bool>(GlobalMemoryStatusEx(&memoryInfo)))
         {
@@ -125,6 +131,23 @@ namespace Kmplete
         _systemMetrics.totalVirtualMemoryMib = static_cast<float>(static_cast<double>(memoryInfo.ullTotalPageFile) / MibDivisor);
         _systemMetrics.totalPhysicalMemoryMib = static_cast<float>(static_cast<double>(memoryInfo.ullTotalPhys) / MibDivisor);
 #else
+        struct sysinfo memoryInfo;
+        const auto error = sysinfo(&memoryInfo);
+        if (error != 0)
+        {
+            Log::CoreError("SystemMetricsManager: initialization failed on sysinfo");
+            return false;
+        }
+    
+        unsigned long totalVirtualMemory = memoryInfo.totalram;
+        totalVirtualMemory += memoryInfo.totalswap;
+        totalVirtualMemory *= memoryInfo.mem_unit;
+    
+        unsigned long totalPhysicalMemory = memoryInfo.totalram;
+        totalPhysicalMemory *= memoryInfo.mem_unit;
+    
+        _systemMetrics.totalVirtualMemoryMib = static_cast<float>(static_cast<double>(totalVirtualMemory) / MibDivisor);
+        _systemMetrics.totalPhysicalMemoryMib = static_cast<float>(static_cast<double>(totalPhysicalMemory) / MibDivisor);
 #endif
 
         return true;
@@ -137,7 +160,9 @@ namespace Kmplete
         SYSTEM_INFO systemInfo;
         GetSystemInfo(&systemInfo);
         _systemMetrics.numProcessors = systemInfo.dwNumberOfProcessors;
+#elif defined KMP_PLATFORM_MACOSX
 #else
+        _systemMetrics.numProcessors = sysconf(_SC_NPROCESSORS_ONLN);
 #endif
 
         return true;
@@ -178,6 +203,10 @@ namespace Kmplete
         memcpy(&_lastSysCPUTimestamp, &fSystem, filetimeSize);
         memcpy(&_lastUserCPUTimestamp, &fUser, filetimeSize);
 #else
+        struct tms timeSample;
+        _lastCPUTimestamp = static_cast<decltype(_lastCPUTimestamp)>(times(&timeSample));
+        _lastSysCPUTimestamp = static_cast<decltype(_lastSysCPUTimestamp)>(timeSample.tms_stime);
+        _lastUserCPUTimestamp = static_cast<decltype(_lastUserCPUTimestamp)>(timeSample.tms_utime);        
 #endif
 
         return true;
@@ -219,6 +248,31 @@ namespace Kmplete
 
         _systemMetrics.numThreads = numThreads;
 #else
+        const auto parseLine = [](char* line) {
+            int i = strlen(line);
+            const char* p = line;
+            while (*p <'0' || *p > '9') p++;
+            line[i-3] = '\0';
+            i = atoi(p);
+            return i;
+        };
+        
+        FILE* file = fopen("/proc/self/status", "r");
+        int resultThreads = -1;
+        char line[128] = {0};
+        
+        while (fgets(line, 128, file) != NULL)
+        {
+            if (strncmp(line, "Threads:", 8) == 0)
+            {
+                resultThreads = parseLine(line);
+                break;
+            }
+        }
+        
+        fclose(file);
+        
+        _systemMetrics.numThreads = resultThreads;
 #endif
 
         return true;
@@ -239,6 +293,40 @@ namespace Kmplete
         _systemMetrics.virtualMemoryUsedMib = static_cast<float>(static_cast<double>(pmc.PrivateUsage) / MibDivisor);
         _systemMetrics.physicalMemoryUsedMib = static_cast<float>(static_cast<double>(pmc.WorkingSetSize) / MibDivisor);
 #else
+        const auto parseLine = [](char* line) {
+            int i = strlen(line);
+            const char* p = line;
+            while (*p <'0' || *p > '9') p++;
+            line[i-3] = '\0';
+            i = atoi(p);
+            return i;
+        };
+        
+        FILE* file = fopen("/proc/self/status", "r");
+        int resultVirtual = -1;
+        int resultPhysical = -1;
+        char line[128] = {0};
+        
+        while (fgets(line, 128, file) != NULL)
+        {
+            if (strncmp(line, "VmSize:", 7) == 0)
+            {
+                resultVirtual = parseLine(line);
+            }
+            if (strncmp(line, "VmRSS:", 6) == 0)
+            {
+                resultPhysical = parseLine(line);
+            }
+            if (resultVirtual != -1 && resultPhysical != -1)
+            {
+                break;
+            }
+        }
+        
+        fclose(file);
+        
+        _systemMetrics.virtualMemoryUsedMib = static_cast<float>(static_cast<double>(resultVirtual) / 1024.0);
+        _systemMetrics.physicalMemoryUsedMib = static_cast<float>(static_cast<double>(resultPhysical) / 1024.0);
 #endif
 
         return true;
@@ -247,10 +335,11 @@ namespace Kmplete
 
     bool SystemMetricsManager::UpdateCPUUsed()
     {
+        double cpuPercent = 0.0;
+        
 #if defined KMP_PLATFORM_WINDOWS
         FILETIME fTime, fSystem, fUser;
         ULARGE_INTEGER now, system, user;
-        double cpuPercent;
         const auto filetimeSize = sizeof(FILETIME);
 
         GetSystemTimeAsFileTime(&fTime);
@@ -272,11 +361,29 @@ namespace Kmplete
         _lastCPUTimestamp = static_cast<unsigned long long>(now.QuadPart);
         _lastUserCPUTimestamp = static_cast<unsigned long long>(user.QuadPart);
         _lastSysCPUTimestamp = static_cast<unsigned long long>(system.QuadPart);
-
-        _systemMetrics.cpuUsagePercent = static_cast<float>(cpuPercent);
 #else
+        struct tms timeSample;
+        const clock_t now = times(&timeSample);
+        if (now <= static_cast<clock_t>(_lastCPUTimestamp) || 
+            timeSample.tms_stime < static_cast<clock_t>(_lastSysCPUTimestamp) ||
+            timeSample.tms_utime < static_cast<clock_t>(_lastUserCPUTimestamp))
+        {
+            cpuPercent = -1.0;
+        }
+        else
+        {
+            cpuPercent = (timeSample.tms_stime - static_cast<clock_t>(_lastSysCPUTimestamp)) + (timeSample.tms_utime - static_cast<clock_t>(_lastUserCPUTimestamp));
+            cpuPercent /= (now - static_cast<clock_t>(_lastCPUTimestamp));
+            cpuPercent /= _systemMetrics.numProcessors;
+            cpuPercent *= 100;
+        }
+        
+        _lastCPUTimestamp = static_cast<decltype(_lastCPUTimestamp)>(now);
+        _lastSysCPUTimestamp = static_cast<decltype(_lastSysCPUTimestamp)>(timeSample.tms_stime);
+        _lastUserCPUTimestamp = static_cast<decltype(_lastUserCPUTimestamp)>(timeSample.tms_utime);   
 #endif
 
+        _systemMetrics.cpuUsagePercent = static_cast<float>(cpuPercent);
         return true;
     }
     //--------------------------------------------------------------------------

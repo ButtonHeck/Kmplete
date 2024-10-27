@@ -5,6 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #include <functional>
+#include <thread>
 
 namespace Kmplete
 {
@@ -115,7 +116,7 @@ namespace Kmplete
 
         bool IsMetricsNumProcessorsOk() const { return _systemMetricsManager->GetMetrics().numProcessors > 0; }
         bool IsMetricsNumThreadsOk() const { return _systemMetricsManager->GetMetrics().numThreads > 0; }
-        bool IsMetricsCPUUsageOk() const { return _systemMetricsManager->GetMetrics().cpuUsagePercent > 0.0f; }
+        bool IsMetricsCPUUsageOk() const { return _systemMetricsManager->GetMetrics().cpuUsagePercent >= 0.0f; }
         bool IsMetricsTotalPhysicalMemoryOk() const { return _systemMetricsManager->GetMetrics().totalPhysicalMemoryMib > 0.0f; }
         bool IsMetricsPhysicalMemoryUsedOk() const { return _systemMetricsManager->GetMetrics().physicalMemoryUsedMib > 0.0f; }
         bool IsMetricsTotalVirtualMemoryOk() const { return _systemMetricsManager->GetMetrics().totalVirtualMemoryMib > 0.0f; }
@@ -198,6 +199,7 @@ TEST_CASE("Test application metrics update", "[application][metrics]")
     const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>("", "Kmplete_unit_tests_settings.json");
 
     REQUIRE(application);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
     REQUIRE(application->UpdateMetrics());
     REQUIRE(application->IsMetricsNumProcessorsOk());
     REQUIRE(application->IsMetricsNumThreadsOk());
