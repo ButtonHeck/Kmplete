@@ -224,12 +224,17 @@ TEST_CASE("Utf8ToNarrow cyrillic", "[utils][string]")
     {
         REQUIRE(cyrillicStr.size() == 6);
 
-        // assuming Windows1251 code page
         const auto fromUtf8 = Kmplete::Utils::Utf8ToNarrow(cyrillicStr);
+#if defined (KMP_PLATFORM_WINDOWS)
+        // assuming Windows1251 code page
         REQUIRE((fromUtf8.size() == 3 &&
             static_cast<unsigned char>(fromUtf8[0]) == 0xE0 &&
             static_cast<unsigned char>(fromUtf8[1]) == 0xE1 &&
             static_cast<unsigned char>(fromUtf8[2]) == 0xE2));
+#else
+        // assuming UTF8 code page
+        REQUIRE((fromUtf8.size() == 6 && fromUtf8 == cyrillicStr));
+#endif
     }
 
     cyrillicStr = std::string({ 
@@ -237,12 +242,17 @@ TEST_CASE("Utf8ToNarrow cyrillic", "[utils][string]")
         static_cast<char>(0xD0),static_cast<char>(0xB4), 
         static_cast<char>(0xD0),static_cast<char>(0xB5)});
 
-    // assuming Windows1251 code page
     const auto fromUtf8 = Kmplete::Utils::Utf8ToNarrow(cyrillicStr);
+#if defined (KMP_PLATFORM_WINDOWS)
+    // assuming Windows1251 code page
     REQUIRE((fromUtf8.size() == 3 &&
         static_cast<unsigned char>(fromUtf8[0]) == 0xE3 &&
         static_cast<unsigned char>(fromUtf8[1]) == 0xE4 &&
         static_cast<unsigned char>(fromUtf8[2]) == 0xE5));
+#else
+    // assuming UTF8 code page
+    REQUIRE((fromUtf8.size() == 6 && fromUtf8 == cyrillicStr));
+#endif
 }
 
 TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
@@ -252,8 +262,9 @@ TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
     {
         REQUIRE(mixedString.size() == (4 + 1 + 6));
 
-        // assuming Windows1251 code page
         const auto fromUtf8 = Kmplete::Utils::Utf8ToNarrow(mixedString);
+#if defined (KMP_PLATFORM_WINDOWS)
+        // assuming Windows1251 code page
         REQUIRE((fromUtf8.size() == 8 &&
             static_cast<unsigned char>(fromUtf8[0]) == 98 &&
             static_cast<unsigned char>(fromUtf8[1]) == 101 &&
@@ -263,6 +274,10 @@ TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
             static_cast<unsigned char>(fromUtf8[5]) == 0xE0 &&
             static_cast<unsigned char>(fromUtf8[6]) == 0xE1 &&
             static_cast<unsigned char>(fromUtf8[7]) == 0xE2));
+#else
+        // assuming UTF8 code page
+        REQUIRE((fromUtf8.size() == 11 && fromUtf8 == mixedString));
+#endif
     }
 }
 //--------------------------------------------------------------------------
@@ -279,10 +294,14 @@ TEST_CASE("NarrowToUtf8 cyrillic", "[utils][string]")
 {
     const auto cyrillicStr = std::string({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)});
     const auto toUtf8 = Kmplete::Utils::NarrowToUtf8(cyrillicStr);
+#if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((toUtf8.size() == 6 &&
         static_cast<unsigned char>(toUtf8[0]) == 0xD0 && static_cast<unsigned char>(toUtf8[1]) == 0xB0 &&
         static_cast<unsigned char>(toUtf8[2]) == 0xD0 && static_cast<unsigned char>(toUtf8[3]) == 0xB1 &&
         static_cast<unsigned char>(toUtf8[4]) == 0xD0 && static_cast<unsigned char>(toUtf8[5]) == 0xB2));
+#else
+    REQUIRE((toUtf8.size() == 3 && toUtf8 == cyrillicStr));
+#endif
 }
 
 TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
@@ -298,6 +317,7 @@ TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
         static_cast<char>(0xE2)});
 
     const auto toUtf8 = Kmplete::Utils::NarrowToUtf8(mixedStr);
+#if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((toUtf8.size() == 11 &&
         static_cast<unsigned char>(toUtf8[0]) == 0xD0 && static_cast<unsigned char>(toUtf8[1]) == 0xB0 &&
         static_cast<unsigned char>(toUtf8[2]) == 98 &&
@@ -307,6 +327,9 @@ TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
         static_cast<unsigned char>(toUtf8[6]) == 32 &&
         static_cast<unsigned char>(toUtf8[7]) == 0xD0 && static_cast<unsigned char>(toUtf8[8]) == 0xB1 &&
         static_cast<unsigned char>(toUtf8[9]) == 0xD0 && static_cast<unsigned char>(toUtf8[10]) == 0xB2));
+#else
+    REQUIRE((toUtf8.size() == 8 && toUtf8 == mixedStr));
+#endif
 }
 //--------------------------------------------------------------------------
 
@@ -334,7 +357,15 @@ TEST_CASE("NarrowToWide english", "[utils][string]")
 
 TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
 {
-    auto wstr = Kmplete::Utils::NarrowToWide(std::string({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)}));
+#if defined (KMP_PLATFORM_WINDOWS)
+    const auto narrow = std::string({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)});
+#else
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+    const auto narrow = std::string({static_cast<char>(0xD0), static_cast<char>(0xB0), 
+                                     static_cast<char>(0xD0), static_cast<char>(0xB1),
+                                     static_cast<char>(0xD0), static_cast<char>(0xB2)});
+#endif
+    const auto wstr = Kmplete::Utils::NarrowToWide(narrow);
     REQUIRE((wstr.size() == 3 &&
         wstr[0] == 0x430 &&
         wstr[1] == 0x431 &&
@@ -343,7 +374,13 @@ TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
 
 TEST_CASE("NarrowToWide mixed", "[utils][string]")
 {
-    auto wstr = Kmplete::Utils::NarrowToWide(std::string({static_cast<char>(0xE0), 'a', 'b', 'c', static_cast<char>(0xE1), 'd', 'e'}));
+#if defined (KMP_PLATFORM_WINDOWS)
+    const auto narrow = std::string({static_cast<char>(0xE0), 'a', 'b', 'c', static_cast<char>(0xE1), 'd', 'e'});
+#else
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+    const auto narrow = std::string({static_cast<char>(0xD0), static_cast<char>(0xB0), 'a', 'b', 'c', static_cast<char>(0xD0), static_cast<char>(0xB1), 'd', 'e'});
+#endif
+    const auto wstr = Kmplete::Utils::NarrowToWide(narrow);
     REQUIRE((wstr.size() == 7 &&
         wstr[0] == 0x430 &&
         wstr[1] == 97 &&
@@ -364,18 +401,35 @@ TEST_CASE("WideToNarrow english", "[utils][string]")
 
 TEST_CASE("WideToNarrow cyrillic", "[utils][string]")
 {
+#if !defined (KMP_PLATFORM_WINDOWS)
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+#endif
     const auto wstr = std::wstring({static_cast<wchar_t>(0x430), static_cast<wchar_t>(0x431), static_cast<wchar_t>(0x432)});
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
+#if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((narrow.size() == 3 &&
         static_cast<unsigned char>(narrow[0]) == 0xE0 &&
         static_cast<unsigned char>(narrow[1]) == 0xE1 &&
         static_cast<unsigned char>(narrow[2]) == 0xE2));
+#else
+    REQUIRE((narrow.size() == 6 &&
+        static_cast<unsigned char>(narrow[0]) == 0xD0 &&
+        static_cast<unsigned char>(narrow[1]) == 0xB0 &&
+        static_cast<unsigned char>(narrow[2]) == 0xD0 &&
+        static_cast<unsigned char>(narrow[3]) == 0xB1 &&
+        static_cast<unsigned char>(narrow[4]) == 0xD0 &&
+        static_cast<unsigned char>(narrow[5]) == 0xB2));
+#endif
 }
 
 TEST_CASE("WideToNarrow mixed", "[utils][string]")
 {
+#if !defined (KMP_PLATFORM_WINDOWS)
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+#endif
     const auto wstr = std::wstring({L'a', static_cast<wchar_t>(0x430), L'b', static_cast<wchar_t>(0x431), L'c', static_cast<wchar_t>(0x432)});
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
+#if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((narrow.size() == 6 &&
         static_cast<unsigned char>(narrow[0]) == 'a' &&
         static_cast<unsigned char>(narrow[1]) == 0xE0 && 
@@ -383,11 +437,26 @@ TEST_CASE("WideToNarrow mixed", "[utils][string]")
         static_cast<unsigned char>(narrow[3]) == 0xE1 &&
         static_cast<unsigned char>(narrow[4]) == 'c' &&
         static_cast<unsigned char>(narrow[5]) == 0xE2));
+#else
+    REQUIRE((narrow.size() == 9 &&
+        static_cast<unsigned char>(narrow[0]) == 'a' &&
+        static_cast<unsigned char>(narrow[1]) == 0xD0 && 
+        static_cast<unsigned char>(narrow[2]) == 0xB0 &&
+        static_cast<unsigned char>(narrow[3]) == 'b' &&
+        static_cast<unsigned char>(narrow[4]) == 0xD0 &&
+        static_cast<unsigned char>(narrow[5]) == 0xB1 &&        
+        static_cast<unsigned char>(narrow[6]) == 'c' &&
+        static_cast<unsigned char>(narrow[7]) == 0xD0 &&
+        static_cast<unsigned char>(narrow[8]) == 0xB2));
+#endif
 }
 //--------------------------------------------------------------------------
 
 TEST_CASE("Conversion ping-pong wide-narrow", "[utils][string]")
 {
+#if !defined (KMP_PLATFORM_WINDOWS)
+    setlocale(LC_ALL, "ru_RU.UTF-8");
+#endif
     const auto str = std::string("12 test абв АБ_В!\"№;%:?*");
     if (str.size() != 24)
     {

@@ -41,9 +41,13 @@ namespace Kmplete
             MultiByteToWideChar(CP_ACP, 0, str.c_str(), static_cast<int>(str.size()), &wide[0], length);
             return wide;
 #else
-            std::wstring wide(str.length() * 4, L'\0');
-            std::mbstowcs(&wide[0], str.c_str(), str.length());
-            return std::wstring(wide.c_str());
+            mbstate_t st = {};
+            const unsigned int len = str.length();
+            const char* ptr = str.c_str();
+            const ssize_t bufSize = len * sizeof(std::string::value_type) + 1;
+            std::vector<wchar_t> buf(bufSize, 0);
+            const ssize_t res = std::mbsrtowcs(&buf[0], &ptr, bufSize, &st);
+            return (res >= 0) ? std::wstring(buf.begin(), buf.begin() + res) : L"?";
 #endif
         }
         //--------------------------------------------------------------------------
@@ -56,9 +60,13 @@ namespace Kmplete
             WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.size()), &narrow[0], length, nullptr, nullptr);
             return narrow;
 #else
-            std::string narrow(wstr.length() * 4, '\0');
-            std::wcstombs(&narrow[0], wstr.c_str(), wstr.length());
-            return std::string(narrow.c_str());
+            mbstate_t st = {};
+            const unsigned int wlen = wstr.length();
+            const wchar_t* wptr = wstr.c_str();
+            const ssize_t bufSize = wlen * sizeof(std::wstring::value_type) + 1;
+            std::vector<char> buf(bufSize, 0);
+            const ssize_t res = std::wcsrtombs(&buf[0], &wptr, bufSize, &st);
+            return (res >= 0) ? std::string(buf.begin(), buf.begin() + res) : "?";
 #endif
         }
         //--------------------------------------------------------------------------
