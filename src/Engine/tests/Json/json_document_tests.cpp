@@ -189,7 +189,7 @@ TEST_CASE("Json document add children documents positive", "[json][reader][write
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Json document add children (default constructed)", "[json][reader][writer][document]")
+TEST_CASE("Json document add children - default constructed", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
     REQUIRE_FALSE(rootDoc.HasError());
@@ -203,7 +203,7 @@ TEST_CASE("Json document add children (default constructed)", "[json][reader][wr
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Json document add children (invalid child)", "[json][reader][writer][document]")
+TEST_CASE("Json document add children - invalid child", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
     REQUIRE_FALSE(rootDoc.HasError());
@@ -231,7 +231,7 @@ TEST_CASE("Json document add children (invalid child)", "[json][reader][writer][
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Json document add children (empty name)", "[json][reader][writer][document]")
+TEST_CASE("Json document add children - empty name", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
     REQUIRE_FALSE(rootDoc.HasError());
@@ -257,7 +257,7 @@ TEST_CASE("Json document add children (empty name)", "[json][reader][writer][doc
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Json document add children (overwrite existing object)", "[json][reader][writer][document]")
+TEST_CASE("Json document add children - overwrite existing object", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.StartSetObject("Obj1"));

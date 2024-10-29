@@ -61,7 +61,7 @@ TEST_CASE("Rapidjson basic json", "[json][reader]")
     REQUIRE_FALSE(document["Ptr"] == 0);
 }
 
-TEST_CASE("Rapidjson duplicate keys (same type)", "[json][reader]")
+TEST_CASE("Rapidjson duplicate keys - same type", "[json][reader]")
 {
     const char* JsonStr = R"rjs(
     {
@@ -82,7 +82,7 @@ TEST_CASE("Rapidjson duplicate keys (same type)", "[json][reader]")
     REQUIRE(document["Node1"] == true);
 }
 
-TEST_CASE("Rapidjson duplicate keys (different types)", "[json][reader]")
+TEST_CASE("Rapidjson duplicate keys - different types", "[json][reader]")
 {
     const char* JsonStr = R"rjs(
     {
@@ -189,7 +189,7 @@ TEST_CASE("Rapidjson cyrillic use", "[json][reader]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Rapidjson malformed json (not closing tag)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - not closing tag", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -206,7 +206,7 @@ TEST_CASE("Rapidjson malformed json (not closing tag)", "[json][reader]")
     REQUIRE(error == rapidjson::kParseErrorObjectMissCommaOrCurlyBracket);
 }
 
-TEST_CASE("Rapidjson malformed json (missing colon)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - missing colon", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -222,7 +222,7 @@ TEST_CASE("Rapidjson malformed json (missing colon)", "[json][reader]")
     REQUIRE_FALSE(document.IsObject());
 }
 
-TEST_CASE("Rapidjson malformed json (type error)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - type error", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -238,7 +238,7 @@ TEST_CASE("Rapidjson malformed json (type error)", "[json][reader]")
     REQUIRE_FALSE(document.IsObject());
 }
 
-TEST_CASE("Rapidjson malformed json (non singular root)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - non-singular root", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -257,7 +257,7 @@ TEST_CASE("Rapidjson malformed json (non singular root)", "[json][reader]")
     REQUIRE_FALSE(document.IsObject());
 }
 
-TEST_CASE("Rapidjson malformed json (array with different objects)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - array with different objects", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -273,7 +273,7 @@ TEST_CASE("Rapidjson malformed json (array with different objects)", "[json][rea
     REQUIRE_FALSE(document.IsObject());
 }
 
-TEST_CASE("Rapidjson malformed json (root with name)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - root with name", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     "RootNode": {
@@ -289,7 +289,7 @@ TEST_CASE("Rapidjson malformed json (root with name)", "[json][reader]")
     REQUIRE_FALSE(document.IsObject());
 }
 
-TEST_CASE("Rapidjson malformed json (unnamed subnode)", "[json][reader]")
+TEST_CASE("Rapidjson malformed json - unnamed subnode", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
