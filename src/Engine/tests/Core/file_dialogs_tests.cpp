@@ -141,6 +141,7 @@ TEST_CASE("File dialog open multiple files - OPEN manual names existent", "[core
 
 TEST_CASE("File dialog save file - SAVE new", "[core][file_dialogs][save]")
 {
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any new file", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file");
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
@@ -149,12 +150,14 @@ TEST_CASE("File dialog save file - SAVE new", "[core][file_dialogs][save]")
 
 TEST_CASE("File dialog save file - CANCEL", "[core][file_dialogs][save]")
 {
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog press Cancel", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Press Cancel");
     REQUIRE(file.empty());
 }
 
 TEST_CASE("File dialog save file - SAVE overwrite", "[core][file_dialogs][save]")
 {
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any existing file", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to any existing file", {"Any files", "*.*"}, true);
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::PathExists(file));
@@ -163,6 +166,7 @@ TEST_CASE("File dialog save file - SAVE overwrite", "[core][file_dialogs][save]"
 
 TEST_CASE("File dialog save file - SAVE new non-matching filter", "[core][file_dialogs][save]")
 {
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any new file that do not match filter", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file that do not match filter", {"JSON files", "*.json"});
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
@@ -171,6 +175,7 @@ TEST_CASE("File dialog save file - SAVE new non-matching filter", "[core][file_d
 
 TEST_CASE("File dialog save file - Cyrillic characters", "[core][file_dialogs][open]")
 {
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to new file with cyrillic characters", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to new file with cyrillic characters");
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(file));
