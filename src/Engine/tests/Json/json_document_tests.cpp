@@ -396,8 +396,9 @@ TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][do
 TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][document]")
 {
     REQUIRE(Kmplete::Filesystem::Initialize());
-    auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
-    auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append(settingsSubPath).append("json_document_test_temp_unescaped.json");
+    const auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
+    const auto settingsSubPathWide = Kmplete::Utils::NarrowToWide(settingsSubPath);
+    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append(settingsSubPathWide).append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.SetInt("AnInt", 13));
