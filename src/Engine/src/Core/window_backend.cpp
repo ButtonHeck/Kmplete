@@ -5,7 +5,7 @@ namespace Kmplete
 {
     UPtr<WindowBackend> WindowBackend::Create()
     {
-#ifdef KMP_WINDOW_BACKEND_GLFW
+#if defined (KMP_WINDOW_BACKEND_GLFW)
         return CreateUPtr<WindowBackendGlfw>();
 #else
 #error "No window backend is provided!"

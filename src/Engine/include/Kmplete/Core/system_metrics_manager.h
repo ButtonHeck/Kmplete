@@ -47,7 +47,7 @@ namespace Kmplete
         unsigned long long _lastUserCPUTimestamp;
         unsigned long _currentProcessId;
 
-#if defined KMP_PLATFORM_WINDOWS
+#if defined (KMP_PLATFORM_WINDOWS)
         void* _windowsProcessHandle;
 #endif
     };

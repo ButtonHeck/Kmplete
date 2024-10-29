@@ -3,7 +3,7 @@
 
 #include <string>
 #include <numeric>
-#if defined KMP_PLATFORM_WINDOWS
+#if defined (KMP_PLATFORM_WINDOWS)
 #include <Windows.h>
 #else
 #include <cstdlib>
@@ -35,7 +35,7 @@ namespace Kmplete
 
         std::wstring NarrowToWide(const std::string& str)
         {
-#if defined KMP_PLATFORM_WINDOWS
+#if defined (KMP_PLATFORM_WINDOWS)
             const auto length = MultiByteToWideChar(CP_ACP, 0, str.c_str(), static_cast<int>(str.size()), 0, 0);
             std::wstring wide(length, L'\0');
             MultiByteToWideChar(CP_ACP, 0, str.c_str(), static_cast<int>(str.size()), &wide[0], length);
@@ -54,7 +54,7 @@ namespace Kmplete
 
         std::string WideToNarrow(const std::wstring& wstr)
         {
-#if defined KMP_PLATFORM_WINDOWS
+#if defined (KMP_PLATFORM_WINDOWS)
             const auto length = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.size()), nullptr, 0, nullptr, nullptr);
             std::string narrow(length, '\0');
             WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.size()), &narrow[0], length, nullptr, nullptr);
@@ -73,7 +73,7 @@ namespace Kmplete
 
         std::string NarrowToUtf8(const std::string& str)
         {
-#if defined KMP_PLATFORM_WINDOWS
+#if defined (KMP_PLATFORM_WINDOWS)
             const auto size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(), static_cast<int>(str.length()), nullptr, 0);
             std::wstring u16Str(size, L'\0');
             MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(), static_cast<int>(str.length()), &u16Str[0], size);
@@ -90,7 +90,7 @@ namespace Kmplete
 
         std::string Utf8ToNarrow(const std::string& str)
         {
-#if defined KMP_PLATFORM_WINDOWS
+#if defined (KMP_PLATFORM_WINDOWS)
             const auto u16Size = MultiByteToWideChar(CP_UTF8, 0, &str[0], static_cast<int>(str.size()), nullptr, 0);
             if (u16Size > 0)
             {

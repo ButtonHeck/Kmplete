@@ -3,7 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#ifndef KMP_COMPILER_MSVC
+#if !defined (KMP_COMPILER_MSVC)
 #include <cstddef>
 #endif
 

@@ -10,7 +10,7 @@
 #include <spdlog/sinks/null_sink.h>
 
 #include <chrono>
-#if defined KMP_PLATFORM_LINUX || defined KMP_COMPILER_MINGW
+#if defined (KMP_PLATFORM_LINUX) || defined (KMP_COMPILER_MINGW)
 #include <iomanip>
 #endif
 
@@ -129,7 +129,7 @@ namespace Kmplete
 
     void Log::SaveSettings(Settings& settings)
     {
-#ifndef KMP_LOG_DISABLED
+#if !defined (KMP_LOG_DISABLED)
         settings.StartSaveObject(LogSettingsEntryName);
         settings.SaveString(LogFilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
         settings.SaveBool(LogEnabledStr, _logSettings.enabled);
@@ -148,7 +148,7 @@ namespace Kmplete
 
     void Log::LoadSettings(Settings& settings)
     {
-#ifndef KMP_LOG_DISABLED
+#if !defined (KMP_LOG_DISABLED)
         settings.StartLoadObject(LogSettingsEntryName);
         _logSettings.filename = Utils::Utf8ToNarrow(settings.GetString(LogFilenameStr, "Kmplete_log.txt"));
         _logSettings.enabled = settings.GetBool(LogEnabledStr, true);

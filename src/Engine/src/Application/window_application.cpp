@@ -4,7 +4,7 @@
 
 #include <stdexcept>
 
-#ifdef CreateWindow
+#if defined (CreateWindow)
 #pragma push_macro("CreateWindow")
 #undef CreateWindow
 #define KMP_UNDEF_CreateWindow
@@ -98,7 +98,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#ifdef KMP_UNDEF_CreateWindow
+#if defined (KMP_UNDEF_CreateWindow)
 #pragma pop_macro("CreateWindow")
 #undef KMP_UNDEF_CreateWindow
 #endif

@@ -9,8 +9,8 @@
 #include <string>
 #include <sstream>
 
-#ifndef KMP_ASSERTS_ACTIVE
-    #ifdef NDEBUG
+#if !defined (KMP_ASSERTS_ACTIVE)
+    #if defined NDEBUG
         #define KMP_ASSERTS_ACTIVE false
     #else
         #define KMP_ASSERTS_ACTIVE true

@@ -3,7 +3,7 @@
 
 #include <fstream>
 
-#ifdef CreateFile
+#if defined (CreateFile)
 #pragma push_macro("CreateFile")
 #undef CreateFile
 #define KMP_UNDEF_CreateFile
@@ -162,7 +162,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#ifdef KMP_UNDEF_CreateFile
+#if defined (KMP_UNDEF_CreateFile)
 #pragma pop_macro("CreateFile")
 #undef KMP_UNDEF_CreateFile
 #endif

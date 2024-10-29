@@ -27,7 +27,7 @@ namespace Kmplete
         KMP_API static void SaveSettings(Settings& settings);
         KMP_API static void LoadSettings(Settings& settings);
 
-#ifndef KMP_LOG_DISABLED
+#if !defined (KMP_LOG_DISABLED)
         // Core log functions
         template <typename... Args>
         static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->trace(fmt, std::forward<Args>(args)...); }

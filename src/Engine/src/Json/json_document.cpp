@@ -9,7 +9,7 @@
 
 #include <fstream>
 
-#ifdef GetObject
+#if defined (GetObject)
 #pragma push_macro("GetObject")
 #undef GetObject
 #define KMP_UNDEF_GetObject
@@ -515,7 +515,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#ifdef KMP_UNDEF_GetObject
+#if defined (KMP_UNDEF_GetObject)
 #pragma pop_macro("GetObject")
 #undef KMP_UNDEF_GetObject
 #endif
