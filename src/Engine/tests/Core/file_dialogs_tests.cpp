@@ -217,8 +217,9 @@ TEST_CASE("Message dialog close button", "[core][file_dialogs][message]")
     auto messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect Cancel)");
     REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
 
-    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect OK)", Kmplete::FileDialogs::MessageChoice::Ok);
-    REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Ok);
+    // Windows returns OK, Ubuntu's Unity returns Cancel
+    messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect OK or Cancel)", Kmplete::FileDialogs::MessageChoice::Ok);
+    REQUIRE((messageResult == Kmplete::FileDialogs::MessageButton::Ok || messageResult == Kmplete::FileDialogs::MessageButton::Cancel));
 
     messageResult = Kmplete::FileDialogs::OpenMessage("Message dialog test", "Close this dialog (Expect Cancel)", Kmplete::FileDialogs::MessageChoice::RetryCancel);
     REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Cancel);
