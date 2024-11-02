@@ -121,7 +121,8 @@ namespace Kmplete
         constexpr static auto MibDivisor = 1024.0 * 1024.0;
         
 #if defined (KMP_PLATFORM_WINDOWS)
-        MEMORYSTATUSEX memoryInfo{.dwLength = sizeof(MEMORYSTATUSEX) };
+        MEMORYSTATUSEX memoryInfo;
+        memoryInfo.dwLength = sizeof(MEMORYSTATUSEX);
         if (!static_cast<bool>(GlobalMemoryStatusEx(&memoryInfo)))
         {
             Log::CoreError("SystemMetricsManager: initialization failed on GlobalMemoryStatusEx, error {}", GetLastError());
@@ -225,7 +226,8 @@ namespace Kmplete
         }
         else
         {
-            THREADENTRY32 threadEntry{.dwSize = sizeof(THREADENTRY32) };
+            THREADENTRY32 threadEntry; 
+            threadEntry.dwSize = sizeof(THREADENTRY32);
 
             if (!Thread32First(threadSnapHandle, &threadEntry))
             {
