@@ -10,8 +10,9 @@ namespace Kmplete
     constexpr static auto ApplicationSettingsEntryName = "Application";
 
     Application::Application(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
-        : _settingsManager(nullptr)
-        , _systemMetricsManager(nullptr)
+        : _systemMetricsManager(nullptr)
+        , _localeManager(nullptr)
+        , _settingsManager(nullptr)
     {
         Initialize(settingsFilePath, defaultSettingsName);
     }
@@ -50,6 +51,7 @@ namespace Kmplete
         Log::InitializeTemporarySink();
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
+        _localeManager = CreateUPtr<LocaleManager>();
 
         if (!Filesystem::Initialize())
         {
@@ -69,7 +71,9 @@ namespace Kmplete
         SaveSettingsInternal();
 
         _settingsManager.reset();
+        _localeManager.reset();
         _systemMetricsManager.reset();
+
         Log::Finalize();
     }
     //--------------------------------------------------------------------------

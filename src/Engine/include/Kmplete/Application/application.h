@@ -4,6 +4,7 @@
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/system_metrics_manager.h"
+#include "Kmplete/Core/locale_manager.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/key_event.h"
 
@@ -41,8 +42,9 @@ namespace Kmplete
         void LoadSettingsInternal();
 
     protected:
-        UPtr<SettingsManager> _settingsManager;
         UPtr<SystemMetricsManager> _systemMetricsManager;
+        UPtr<LocaleManager> _localeManager;
+        UPtr<SettingsManager> _settingsManager;
     };
     //--------------------------------------------------------------------------
 
