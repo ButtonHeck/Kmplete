@@ -32,6 +32,7 @@ namespace Kmplete
 
         void Initialize()
         {
+            _localeManager->SetLocale("ru_RU.UTF8");
             _mainWindow->SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
         }
 
@@ -178,7 +179,8 @@ namespace Kmplete
             return std::string("MetricsTestApplication");
         }
 
-        void Run() override {
+        void Run() override
+        {
             while (!_completed)
             {
                 _mainWindow->ProcessEvents();
