@@ -1,4 +1,5 @@
 #include "Kmplete/Core/platform.h"
+#include "Kmplete/Core/locale_manager.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -211,6 +212,9 @@ TEST_CASE("ToSStream", "[utils][string]")
 
 TEST_CASE("Utf8ToNarrow english", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto englishString = std::string("bear");
     REQUIRE(englishString.size() == 4);
     const auto fromUtf8 = Kmplete::Utils::Utf8ToNarrow(englishString);
@@ -219,6 +223,9 @@ TEST_CASE("Utf8ToNarrow english", "[utils][string]")
 
 TEST_CASE("Utf8ToNarrow cyrillic", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     auto cyrillicStr = std::string("абв");
     if (cyrillicStr.size() != 3) // file is in UTF
     {
@@ -257,6 +264,9 @@ TEST_CASE("Utf8ToNarrow cyrillic", "[utils][string]")
 
 TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto mixedString = std::string("bear абв");
     if (mixedString.size() != 8) // file is in UTF
     {
@@ -284,6 +294,9 @@ TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
 
 TEST_CASE("NarrowToUtf8 english", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto englishString = std::string("bear");
     REQUIRE(englishString.size() == 4);
     const auto toUtf8 = Kmplete::Utils::NarrowToUtf8(englishString);
@@ -292,6 +305,9 @@ TEST_CASE("NarrowToUtf8 english", "[utils][string]")
 
 TEST_CASE("NarrowToUtf8 cyrillic", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto cyrillicStr = std::string({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)});
     const auto toUtf8 = Kmplete::Utils::NarrowToUtf8(cyrillicStr);
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -306,6 +322,9 @@ TEST_CASE("NarrowToUtf8 cyrillic", "[utils][string]")
 
 TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto mixedStr = std::string({
         static_cast<char>(0xE0), 
         static_cast<char>(98),
@@ -335,6 +354,9 @@ TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
 
 TEST_CASE("Conversion ping-pong Utf8", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto str = std::string("12 test абв АБ_В!\"№;%:?*");
     if (str.size() != 24)
     {
@@ -346,6 +368,9 @@ TEST_CASE("Conversion ping-pong Utf8", "[utils][string]")
 
 TEST_CASE("NarrowToWide english", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     auto wstr = Kmplete::Utils::NarrowToWide("basic");
     REQUIRE((wstr.size() == 5 && 
         wstr[0] == 98 &&
@@ -357,10 +382,12 @@ TEST_CASE("NarrowToWide english", "[utils][string]")
 
 TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
 #if defined (KMP_PLATFORM_WINDOWS)
     const auto narrow = std::string({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)});
 #else
-    setlocale(LC_ALL, "ru_RU.UTF-8");
     const auto narrow = std::string({static_cast<char>(0xD0), static_cast<char>(0xB0), 
                                      static_cast<char>(0xD0), static_cast<char>(0xB1),
                                      static_cast<char>(0xD0), static_cast<char>(0xB2)});
@@ -374,10 +401,12 @@ TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
 
 TEST_CASE("NarrowToWide mixed", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
 #if defined (KMP_PLATFORM_WINDOWS)
     const auto narrow = std::string({static_cast<char>(0xE0), 'a', 'b', 'c', static_cast<char>(0xE1), 'd', 'e'});
 #else
-    setlocale(LC_ALL, "ru_RU.UTF-8");
     const auto narrow = std::string({static_cast<char>(0xD0), static_cast<char>(0xB0), 'a', 'b', 'c', static_cast<char>(0xD0), static_cast<char>(0xB1), 'd', 'e'});
 #endif
     const auto wstr = Kmplete::Utils::NarrowToWide(narrow);
@@ -394,6 +423,9 @@ TEST_CASE("NarrowToWide mixed", "[utils][string]")
 
 TEST_CASE("WideToNarrow english", "[utils][string]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto wstr = std::wstring(L"abc-def");
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
     REQUIRE(narrow == std::string("abc-def"));
@@ -401,9 +433,9 @@ TEST_CASE("WideToNarrow english", "[utils][string]")
 
 TEST_CASE("WideToNarrow cyrillic", "[utils][string]")
 {
-#if !defined (KMP_PLATFORM_WINDOWS)
-    setlocale(LC_ALL, "ru_RU.UTF-8");
-#endif
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto wstr = std::wstring({static_cast<wchar_t>(0x430), static_cast<wchar_t>(0x431), static_cast<wchar_t>(0x432)});
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -424,9 +456,9 @@ TEST_CASE("WideToNarrow cyrillic", "[utils][string]")
 
 TEST_CASE("WideToNarrow mixed", "[utils][string]")
 {
-#if !defined (KMP_PLATFORM_WINDOWS)
-    setlocale(LC_ALL, "ru_RU.UTF-8");
-#endif
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto wstr = std::wstring({L'a', static_cast<wchar_t>(0x430), L'b', static_cast<wchar_t>(0x431), L'c', static_cast<wchar_t>(0x432)});
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -454,9 +486,9 @@ TEST_CASE("WideToNarrow mixed", "[utils][string]")
 
 TEST_CASE("Conversion ping-pong wide-narrow", "[utils][string]")
 {
-#if !defined (KMP_PLATFORM_WINDOWS)
-    setlocale(LC_ALL, "ru_RU.UTF-8");
-#endif
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     const auto str = std::string("12 test абв АБ_В!\"№;%:?*");
     if (str.size() != 24)
     {
