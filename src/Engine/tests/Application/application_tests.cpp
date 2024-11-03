@@ -43,7 +43,9 @@ namespace Kmplete
     public:
         TestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
             : Application(settingsFilePath, defaultSettingsName)
-        {}
+        {
+            _localeManager->SetLocale("ru_RU.UTF8");
+        }
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override 
         { 

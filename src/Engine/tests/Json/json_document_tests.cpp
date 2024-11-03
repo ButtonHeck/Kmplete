@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/locale_manager.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -332,6 +333,9 @@ TEST_CASE("Json document add children during filling another object", "[json][re
 
 TEST_CASE("Json document save to file and read from file", "[json][reader][writer][document]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     REQUIRE(Kmplete::Filesystem::Initialize());
     const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("json_document_test_temp.json");
     const auto settingsPathStr = Kmplete::Filesystem::ToGenericString(settingsPath);
@@ -395,6 +399,9 @@ TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][do
 
 TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][document]")
 {
+    auto localeManager = Kmplete::LocaleManager();
+    localeManager.SetLocale("ru_RU.UTF8");
+
     REQUIRE(Kmplete::Filesystem::Initialize());
     const auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
     const auto settingsSubPathWide = Kmplete::Utils::NarrowToWide(settingsSubPath);
