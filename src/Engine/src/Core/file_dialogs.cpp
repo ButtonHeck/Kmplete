@@ -21,7 +21,8 @@ namespace Kmplete
                 return std::filesystem::path();
             }
 
-            return std::filesystem::path(StringToPathConverterFn(files.front()));
+            const auto file = StringToPathConverterFn(files.front());
+            return std::filesystem::path(Utils::NarrowToWide(file));
         }
         //--------------------------------------------------------------------------
 
@@ -39,7 +40,8 @@ namespace Kmplete
             paths.reserve(files.size());
             for (const auto& file : files)
             {
-                paths.emplace_back(StringToPathConverterFn(file));
+                const auto fileToEmplace = StringToPathConverterFn(file);
+                paths.emplace_back(Utils::NarrowToWide(fileToEmplace));
             }
 
             return paths;
@@ -50,13 +52,14 @@ namespace Kmplete
         {
             pfd::select_folder opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
 
-            const auto directory = opener.result();
+            auto directory = opener.result();
             if (directory.empty())
             {
                 return std::filesystem::path();
             }
 
-            return std::filesystem::path(StringToPathConverterFn(directory));
+            directory = StringToPathConverterFn(directory);
+            return std::filesystem::path(Utils::NarrowToWide(directory));
         }
         //--------------------------------------------------------------------------
 
@@ -64,7 +67,9 @@ namespace Kmplete
         {
             pfd::save_file saver(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
-            return std::filesystem::path(StringToPathConverterFn(saver.result()));
+            auto dialogResult = saver.result();
+            dialogResult = StringToPathConverterFn(dialogResult);
+            return std::filesystem::path(Utils::NarrowToWide(dialogResult));
         }
         //--------------------------------------------------------------------------
 
