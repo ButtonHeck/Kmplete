@@ -27,7 +27,7 @@ TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 
     settings = settingsManager.GetSettings("ObjC");
     REQUIRE(settings);
-    REQUIRE(settings->GetString("PropA") == std::string("hello"));
+    REQUIRE(settings->GetString("PropA") == "hello");
     REQUIRE(settings->GetDouble("PropB") == -44.55);
     REQUIRE(settings->GetInt("PropC") == 8);
 

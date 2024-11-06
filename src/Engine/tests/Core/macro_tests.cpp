@@ -3,31 +3,33 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+using namespace std::string_literals;
+
 TEST_CASE("Stringify macro string", "[core][macro]")
 {
     const auto strMacro = KMP_M_STRINGIFY("Hello world");
-    REQUIRE(strMacro == std::string("\"Hello world\""));
+    REQUIRE(strMacro == "\"Hello world\""s);
 }
 
 TEST_CASE("Stringify macro variable", "[core][macro]")
 {
     KMP_MB_UNUSED const auto param = 4;
     const auto strMacro = KMP_M_STRINGIFY(param);
-    REQUIRE(strMacro == std::string("param"));
+    REQUIRE(strMacro == "param"s);
 }
 
 TEST_CASE("Stringify macro expression", "[core][macro]")
 {
     KMP_MB_UNUSED const auto param = 4;
     const auto strMacro = KMP_M_STRINGIFY(param == 4);
-    REQUIRE(strMacro == std::string("param == 4"));
+    REQUIRE(strMacro == "param == 4"s);
 }
 
 TEST_CASE("Stringify macro itself", "[core][macro]")
 {
     KMP_MB_UNUSED const auto param = 4;
     const auto strMacro = KMP_M_STRINGIFY(KMP_M_STRINGIFY(param));
-    REQUIRE(strMacro == std::string("\"param\""));
+    REQUIRE(strMacro == "\"param\""s);
 }
 //--------------------------------------------------------------------------
 

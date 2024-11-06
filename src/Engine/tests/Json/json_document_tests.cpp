@@ -73,11 +73,11 @@ TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer
 
     REQUIRE(jsonDocument.GetInt("Hello") == 321);
     REQUIRE(jsonDocument.GetInt("Hello", 123) == 321);
-    REQUIRE(jsonDocument.GetString("Hello") == std::string(""));
-    REQUIRE(jsonDocument.GetString("Hello", "test") == std::string("test"));
+    REQUIRE(jsonDocument.GetString("Hello") == "");
+    REQUIRE(jsonDocument.GetString("Hello", "test") == "test");
     REQUIRE(jsonDocument.GetInt(0, 100) == 100);
     REQUIRE(jsonDocument.GetBool("Var") == true);
-    REQUIRE(jsonDocument.GetString("Str") == std::string("string"));
+    REQUIRE(jsonDocument.GetString("Str") == "string");
 
     REQUIRE(jsonDocument.GetInt("Ptr", 10) == 10);
     REQUIRE(jsonDocument.SetInt("Ptr", 999));
@@ -182,9 +182,9 @@ TEST_CASE("Json document add children documents positive", "[json][reader][write
 
     REQUIRE(rootDoc.StartGetObject("Child2"));
         REQUIRE(rootDoc.StartGetArray("StringArray") == 3);
-            REQUIRE(rootDoc.GetString(0) == std::string("zero"));
-            REQUIRE(rootDoc.GetString(1) == std::string("one"));
-            REQUIRE(rootDoc.GetString(2) == std::string("two"));
+            REQUIRE(rootDoc.GetString(0) == "zero");
+            REQUIRE(rootDoc.GetString(1) == "one");
+            REQUIRE(rootDoc.GetString(2) == "two");
         REQUIRE(rootDoc.EndGetArray());
     REQUIRE(rootDoc.EndGetObject());
 }
@@ -293,10 +293,10 @@ TEST_CASE("Json document add children - overwrite existing object", "[json][read
     REQUIRE(rootDoc.StartGetObject("Obj1"));
         REQUIRE_FALSE(rootDoc.GetBool("Bool") == true);
         REQUIRE_FALSE(rootDoc.GetInt("Int") == 33);
-        REQUIRE_FALSE(rootDoc.GetString("String") == std::string("some string"));
+        REQUIRE_FALSE(rootDoc.GetString("String") == "some string");
         REQUIRE(rootDoc.GetInt("Hello") == 321);
         REQUIRE(rootDoc.GetBool("Var") == true);
-        REQUIRE(rootDoc.GetString("Str") == std::string("string"));
+        REQUIRE(rootDoc.GetString("Str") == "string");
     REQUIRE(rootDoc.EndGetObject());
 }
 //--------------------------------------------------------------------------
@@ -359,9 +359,9 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     REQUIRE(childrenDocuments.size() == 1);
 
     REQUIRE(loadedDoc.StartGetObject("Obj1"));
-        REQUIRE(loadedDoc.GetString("Строка") == std::string("Строчечка"));
-        REQUIRE(loadedDoc.GetString("StringWithEsc") == std::string("\"Quote\" \\\\"));
-        REQUIRE(loadedDoc.GetString("RawString") == std::string("\"Quote\" string"));
+        REQUIRE(loadedDoc.GetString("Строка") == "Строчечка");
+        REQUIRE(loadedDoc.GetString("StringWithEsc") == "\"Quote\" \\\\");
+        REQUIRE(loadedDoc.GetString("RawString") == "\"Quote\" string");
     REQUIRE(loadedDoc.EndGetObject());
 
     REQUIRE(loadedDoc.StartSetObject("Obj2"));

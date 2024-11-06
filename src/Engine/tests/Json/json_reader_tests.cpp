@@ -395,7 +395,7 @@ TEST_CASE("Json reader positive", "[json][reader]")
 
     REQUIRE(reader.StartObject("Group3"));
         REQUIRE_FALSE(reader.StartArray("Group4"));
-        REQUIRE(reader.GetString("Group4") == std::string(""));
+        REQUIRE(reader.GetString("Group4") == "");
         REQUIRE(reader.StartObject("Group4"));
             REQUIRE(reader.StartArray("Prop1") == 2);
                 REQUIRE(reader.StartArray(0) == 2);
@@ -455,9 +455,9 @@ TEST_CASE("Json reader negative", "[json][reader]")
         REQUIRE(reader.GetInt64(-1) == 0);
         REQUIRE(reader.GetInt64(0) == 0);
 
-        REQUIRE(reader.GetString("") == std::string(""));
-        REQUIRE(reader.GetString(-1) == std::string(""));
-        REQUIRE(reader.GetString(0) == std::string(""));
+        REQUIRE(reader.GetString("") == "");
+        REQUIRE(reader.GetString(-1) == "");
+        REQUIRE(reader.GetString(0) == "");
 
         REQUIRE(reader.GetUInt("") == 0u);
         REQUIRE(reader.GetUInt(-1) == 0u);
@@ -494,9 +494,9 @@ TEST_CASE("Json reader negative", "[json][reader]")
         REQUIRE(reader.GetInt64("ValidName") == 0);
         REQUIRE(reader.GetInt64(-1) == 0);
 
-        REQUIRE(reader.GetString("") == std::string(""));
-        REQUIRE(reader.GetString("ValidName") == std::string(""));
-        REQUIRE(reader.GetString(-1) == std::string(""));
+        REQUIRE(reader.GetString("") == "");
+        REQUIRE(reader.GetString("ValidName") == "");
+        REQUIRE(reader.GetString(-1) == "");
 
         REQUIRE(reader.GetUInt("") == 0u);
         REQUIRE(reader.GetUInt("ValidName") == 0u);

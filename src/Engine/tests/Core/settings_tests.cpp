@@ -6,7 +6,7 @@ TEST_CASE("Settings minimal saving", "[core][settings]")
 {
     Kmplete::Settings settings("TestSettings");
 
-    REQUIRE(settings.GetName() == std::string("TestSettings"));
+    REQUIRE(settings.GetName() == "TestSettings");
     REQUIRE_FALSE(settings.EndLoadObject());
     REQUIRE_FALSE(settings.EndSaveObject());
     REQUIRE_FALSE(settings.StartSaveObject(""));
@@ -111,7 +111,7 @@ TEST_CASE("Settings normal loading", "[core][settings]")
     REQUIRE(jsonDocument);
 
     Kmplete::Settings settings("TestSettings", jsonDocument);
-    REQUIRE(settings.GetName() == std::string("TestSettings"));
+    REQUIRE(settings.GetName() == "TestSettings");
 
     REQUIRE_FALSE(settings.StartLoadObject("Obj"));
     REQUIRE_FALSE(settings.StartLoadObject(0));
@@ -124,12 +124,12 @@ TEST_CASE("Settings normal loading", "[core][settings]")
         REQUIRE(settings.GetInt("Prop1") == 11);
         REQUIRE(settings.GetInt("Prop1", 33) == 11);
         REQUIRE(settings.GetInt("P1", 33) == 33);
-        REQUIRE(settings.GetString("Prop1", "def") == std::string("def"));
+        REQUIRE(settings.GetString("Prop1", "def") == "def");
         REQUIRE(settings.GetBool("Prop2") == true);
-        REQUIRE(settings.GetString("Prop3") == std::string("string"));
+        REQUIRE(settings.GetString("Prop3") == "string");
         REQUIRE(settings.GetInt("Prop4") == 0);
         REQUIRE(settings.StartLoadArray("Prop4") == 2);
-            REQUIRE(settings.GetString(0) == std::string(""));
+            REQUIRE(settings.GetString(0) == "");
             REQUIRE(settings.GetInt(0) == 22);
             REQUIRE(settings.GetInt(1) == 33);
             REQUIRE(settings.GetInt(1, 66) == 33);
@@ -192,7 +192,7 @@ TEST_CASE("Settings loading malformed json", "[core][settings]")
 
     REQUIRE_FALSE(settings.GetInt("Hello") == 321);
     REQUIRE_FALSE(settings.GetBool("Var") == true);
-    REQUIRE_FALSE(settings.GetString("Str") == std::string("string"));
+    REQUIRE_FALSE(settings.GetString("Str") == "string");
 }
 
 TEST_CASE("Settings loading document with null value", "[core][settings]")

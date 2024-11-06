@@ -73,7 +73,7 @@ TEST_CASE("Window backend single window", "[core][window_backend][window]")
     REQUIRE(mainWindow);
     REQUIRE(mainWindow.use_count() == 1);
     REQUIRE(mainWindow->GetImplPointer());
-    REQUIRE(mainWindow->GetName() == std::string("Main"));
+    REQUIRE(mainWindow->GetName() == "Main");
 
     const auto [width, height] = mainWindow->GetSize();
     REQUIRE(width > 0);
@@ -365,7 +365,7 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
 
     Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
     REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
-    REQUIRE(settings->name == std::string("SomeWindow"));
+    REQUIRE(settings->name == "SomeWindow");
     settings->width = 200;
     settings->height = 200;
     settings->windowedWidth = 200;
@@ -397,7 +397,7 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
 
     Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
     REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>(""));
-    REQUIRE(settings->name == std::string(""));
+    REQUIRE(settings->name == "");
 
     Kmplete::Ptr<Kmplete::Window> window;
     REQUIRE_NOTHROW(window = windowBackend->CreateWindow(settings)); //expect exception during creation but catching it in window backend
@@ -407,7 +407,7 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with invalid settings", "Close this window", Kmplete::FileDialogs::MessageChoice::Ok);
 
     REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("ValidName-InvalidWidth"));
-    REQUIRE(settings->name == std::string("ValidName-InvalidWidth"));
+    REQUIRE(settings->name == "ValidName-InvalidWidth");
     settings->width = 65000;
     settings->height = 200;
 
@@ -431,7 +431,7 @@ TEST_CASE("Window settings update on window destruction", "[core][window_backend
 
     Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
     REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
-    REQUIRE(settings->name == std::string("SomeWindow"));
+    REQUIRE(settings->name == "SomeWindow");
     settings->width = 200;
     settings->height = 200;
     settings->windowedWidth = 200;
@@ -452,7 +452,7 @@ TEST_CASE("Window settings update on window destruction", "[core][window_backend
     }
     window.reset();
 
-    REQUIRE(settings->name == std::string("SomeWindow"));
+    REQUIRE(settings->name == "SomeWindow");
     REQUIRE(settings->width != 200);
     REQUIRE(settings->height != 200);
     REQUIRE(settings->windowedWidth != 200);

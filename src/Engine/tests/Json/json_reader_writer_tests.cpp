@@ -56,7 +56,7 @@ TEST_CASE("Json Reader/Writer overwriting", "[json][reader][writer]")
 
     // reader read Group1 object instead of array
     REQUIRE(reader.StartObject("Group1"));
-        REQUIRE(reader.GetString("ObjStr") == std::string("str"));
+        REQUIRE(reader.GetString("ObjStr") == "str");
     REQUIRE(reader.EndObject());
 
 
