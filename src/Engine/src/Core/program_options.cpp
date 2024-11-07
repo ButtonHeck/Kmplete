@@ -7,7 +7,6 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN)
     void ProgramOptions::ProcessCommandLine(char* lpCmdLine)
     {
         auto cmdParser = CreateCmdParser(lpCmdLine);
@@ -21,18 +20,11 @@ namespace Kmplete
         return boost::program_options::command_line_parser(args);
     }
     //--------------------------------------------------------------------------
-#endif
 
     void ProgramOptions::ProcessCommandLine(int argc, char** argv)
     {
         auto cmdParser = CreateCmdParser(argc, argv);
         ProcessCommandLineArgs(cmdParser);
-    }
-    //--------------------------------------------------------------------------
-
-    const std::filesystem::path& ProgramOptions::GetSettingsFilePath() const
-    {
-        return _settingsFilePath;
     }
     //--------------------------------------------------------------------------
 
@@ -42,11 +34,17 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    const std::filesystem::path& ProgramOptions::GetSettingsFilePath() const
+    {
+        return _settingsFilePath;
+    }
+    //--------------------------------------------------------------------------
+
     void ProgramOptions::ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser)
     {
         boost::program_options::options_description optDescription("Kmplete options");
         optDescription.add_options()
-            ("settngs,S", boost::program_options::value<std::string>(), "Path to settings file")
+            ("settings,S", boost::program_options::value<std::string>(), "Path to settings file")
             ;
 
         boost::program_options::variables_map vm;

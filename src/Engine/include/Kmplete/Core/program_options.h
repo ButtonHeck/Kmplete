@@ -14,20 +14,16 @@ namespace Kmplete
     public:
         KMP_API ProgramOptions() KMP_NOEXCEPT;
 
-#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN)
         // WinMain entryPoint
         KMP_API void ProcessCommandLine(char* lpCmdLine);
-#endif
         // main entryPoint
         KMP_API void ProcessCommandLine(int argc, char** argv);
 
         KMP_NODISCARD KMP_API const std::filesystem::path& GetSettingsFilePath() const;
 
     private:
-#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN)
         // WinMain entryPoint
         KMP_NODISCARD boost::program_options::command_line_parser CreateCmdParser(char* lpCmdLine) const;
-#endif
         // main entryPoint
         KMP_NODISCARD boost::program_options::command_line_parser CreateCmdParser(int argc, char** argv) const;
 

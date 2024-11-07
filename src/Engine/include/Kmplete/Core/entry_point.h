@@ -9,7 +9,7 @@ int Main(const Kmplete::ProgramOptions& programOptions);
 
 #if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN) 
 #include <Windows.h>
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 {
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(lpCmdLine);
