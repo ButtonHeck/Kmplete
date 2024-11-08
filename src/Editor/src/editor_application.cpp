@@ -46,13 +46,13 @@ namespace Kmplete
         _mainWindow->SetTitle(GetApplicationName());
         _mainWindow->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
-        LoadSettings();
+        LoadSettingsInternal();
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::Finalize()
     {
-        SaveSettings();
+        SaveSettingsInternal();
     }
     //--------------------------------------------------------------------------
 
