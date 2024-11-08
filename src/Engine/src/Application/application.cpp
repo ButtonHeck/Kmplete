@@ -9,12 +9,12 @@ namespace Kmplete
 {
     constexpr static auto ApplicationSettingsEntryName = "Application";
 
-    Application::Application(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
+    Application::Application(const ApplicationParameters& applicationParameters)
         : _systemMetricsManager(nullptr)
         , _localeManager(nullptr)
         , _settingsManager(nullptr)
     {
-        Initialize(settingsFilePath, defaultSettingsName);
+        Initialize(applicationParameters);
     }
     //--------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::Initialize(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
+    void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
         Log::InitializeTemporarySink();
 
@@ -58,7 +58,9 @@ namespace Kmplete
             throw std::runtime_error("Application initialization failed");
         }
 
-        _settingsManager = CreateUPtr<SettingsManager>(settingsFilePath.empty() ? Filesystem::GetApplicationPath().append(defaultSettingsName) : settingsFilePath);
+        _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsPath.empty() 
+            ? Filesystem::GetApplicationPath().append(applicationParameters.defaultSettingsFileName) 
+            : applicationParameters.settingsPath);
 
         LoadSettingsInternal();
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/system_metrics_manager.h"
@@ -13,12 +14,19 @@
 
 namespace Kmplete
 {
+    struct ApplicationParameters
+    {
+        const std::filesystem::path settingsPath;
+        const std::string defaultSettingsFileName = "Kmplete_settings.json";
+    };
+    //--------------------------------------------------------------------------
+
     class Application
     {
     public:
         KMP_DISABLE_COPY_MOVE(Application)
 
-        KMP_API Application(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
+        KMP_API explicit Application(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~Application();
 
         KMP_NODISCARD KMP_API virtual std::string GetApplicationName() const KMP_NOEXCEPT = 0;
@@ -36,7 +44,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
 
     private:
-        void Initialize(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName);
+        void Initialize(const ApplicationParameters& applicationParameters);
         void Finalize();
         void SaveSettingsInternal() const;
         void LoadSettingsInternal();
@@ -48,5 +56,5 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    KMP_NODISCARD extern UPtr<Application> CreateApplication(const std::filesystem::path& settingsFilePath);
+    KMP_NODISCARD extern UPtr<Application> CreateApplication(const ProgramOptions& programOptions);
 }

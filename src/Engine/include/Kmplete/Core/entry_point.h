@@ -2,7 +2,6 @@
 
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Core/platform.h"
-#include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/pointers.h"
 
 int Main(const Kmplete::ProgramOptions& programOptions);
@@ -31,7 +30,7 @@ int main(int argc, char** argv)
 
 int Main(const Kmplete::ProgramOptions& programOptions)
 {
-    auto app = Kmplete::CreateApplication(programOptions.GetSettingsFilePath());
+    auto app = Kmplete::CreateApplication(programOptions);
     if (!app)
     {
         return 1;

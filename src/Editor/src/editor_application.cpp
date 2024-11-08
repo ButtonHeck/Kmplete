@@ -5,11 +5,15 @@
 
 namespace Kmplete
 {
-    UPtr<Application> CreateApplication(const std::filesystem::path& settingsFilePath)
+    UPtr<Application> CreateApplication(const Kmplete::ProgramOptions& programOptions)
     {
         try
         {
-            return CreateUPtr<EditorApplication>(settingsFilePath);
+            ApplicationParameters applicationParameters{
+                .settingsPath = programOptions.GetSettingsFilePath()
+            };
+
+            return CreateUPtr<EditorApplication>(applicationParameters);
         }
         catch (const std::exception&)
         {
@@ -18,8 +22,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    EditorApplication::EditorApplication(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
-        : WindowApplication(settingsFilePath, defaultSettingsName)
+    EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
+        : WindowApplication(applicationParameters)
     {
         Initialize();
     }

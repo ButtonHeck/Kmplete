@@ -14,8 +14,8 @@ namespace Kmplete
 {
     constexpr static auto WindowAppSettingsEntryName = "WindowApplication";
 
-    WindowApplication::WindowApplication(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName)
-        : Application(settingsFilePath, defaultSettingsName)
+    WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
+        : Application(applicationParameters)
         , _backend(nullptr)
         , _mainWindow(nullptr)
     {

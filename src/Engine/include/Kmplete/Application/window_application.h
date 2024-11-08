@@ -15,7 +15,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowApplication)
 
-        KMP_API WindowApplication(const std::filesystem::path& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json");
+        KMP_API explicit WindowApplication(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~WindowApplication();
 
         KMP_API void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const override;
