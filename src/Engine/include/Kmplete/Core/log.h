@@ -22,7 +22,7 @@ namespace Kmplete
     class Log
     {
     public:
-        KMP_API static void InitializeTemporarySink();
+        KMP_API static void Boot();
         KMP_API static void Initialize();
         KMP_API static void Finalize();
 

@@ -51,7 +51,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::InitializeTemporarySink()
+    void Log::Boot()
     {
         bootMessages.reserve(64);
 

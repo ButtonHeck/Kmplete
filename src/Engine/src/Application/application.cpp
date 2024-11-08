@@ -48,7 +48,7 @@ namespace Kmplete
 
     void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
-        Log::InitializeTemporarySink();
+        Log::Boot();
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
         _localeManager = CreateUPtr<LocaleManager>();
