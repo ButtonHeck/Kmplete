@@ -105,19 +105,27 @@ namespace Kmplete
                 logSinks.push_back(stringBufferSink);
             }
 
-            std::for_each(logSinks.cbegin(), logSinks.cend(), [](const spdlog::sink_ptr sink) 
+            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+
+            std::for_each(logSinks.cbegin(), logSinks.cend(), [coreLevel](const spdlog::sink_ptr sink)
             {
-                std::for_each(bootMessages.cbegin(), bootMessages.cend(), [&](const BootMessage& bootMsg) { sink->log(bootMsg.logMsg); sink->flush(); });
+                std::for_each(bootMessages.cbegin(), bootMessages.cend(), [&](const BootMessage& bootMsg)
+                {
+                    if (bootMsg.logMsg.level >= coreLevel)
+                    {
+                        sink->log(bootMsg.logMsg);
+                    }
+                });
+
+                sink->flush();
             });
 
             _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
-            _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
-
-            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
-            const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
-
             _coreLogger->set_level(coreLevel);
             _coreLogger->flush_on(coreLevel);
+
+            const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
             _clientLogger->set_level(clientLevel);
             _clientLogger->flush_on(clientLevel);
         }
