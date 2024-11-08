@@ -72,7 +72,13 @@ namespace Kmplete
         spdlog::register_logger(_clientLogger);
 
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+#if defined (KMP_COMPILER_MSVC)
+        struct tm buf{};
+        localtime_s(&buf, &now);
+        Log::CoreInfo("---------------------{}---------------------", Utils::Concatenate(std::put_time(&buf, "%F %T")));
+#else
         Log::CoreInfo("---------------------{}---------------------", Utils::Concatenate(std::put_time(localtime(&now), "%F %T")));
+#endif
     }
     //--------------------------------------------------------------------------
 
