@@ -4,6 +4,7 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/string_utils.h"
 
+#include "spdlog/async.h"
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/ostream_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
@@ -85,6 +86,7 @@ namespace Kmplete
     void Log::Initialize()
     {
         spdlog::drop_all();
+        spdlog::init_thread_pool(1024, 1);
 
         if (_logSettings.enabled)
         {
@@ -126,20 +128,20 @@ namespace Kmplete
                 sink->flush();
             });
 
-            _coreLogger = CreatePtr<spdlog::logger>("CORE", begin(logSinks), end(logSinks));
+            _coreLogger = CreatePtr<spdlog::async_logger>("CORE", begin(logSinks), end(logSinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
             _coreLogger->set_level(coreLevel);
             _coreLogger->flush_on(coreLevel);
 
             const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
-            _clientLogger = CreatePtr<spdlog::logger>("CLIENT", begin(logSinks), end(logSinks));
+            _clientLogger = CreatePtr<spdlog::async_logger>("CLIENT", begin(logSinks), end(logSinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
             _clientLogger->set_level(clientLevel);
             _clientLogger->flush_on(clientLevel);
         }
         else
         {
             const auto nullSink = CreatePtr<spdlog::sinks::null_sink_mt>();
-            _coreLogger = CreatePtr<spdlog::logger>("CORE", nullSink);
-            _clientLogger = CreatePtr<spdlog::logger>("CLIENT", nullSink);
+            _coreLogger = CreatePtr<spdlog::async_logger>("CORE", nullSink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+            _clientLogger = CreatePtr<spdlog::async_logger>("CLIENT", nullSink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
         }        
 
         spdlog::register_logger(_coreLogger);
