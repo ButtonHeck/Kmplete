@@ -10,8 +10,8 @@ namespace Kmplete
     class TestWindowApplication : public WindowApplication
     {
     public:
-        TestWindowApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
-            : WindowApplication(settingsFilePath, defaultSettingsName)
+        TestWindowApplication(const ApplicationParameters& applicationParameters)
+            : WindowApplication(applicationParameters)
         {
             Initialize();
         }
@@ -158,8 +158,8 @@ namespace Kmplete
     class CustomIconApplication : public TestWindowApplication
     {
     public:
-        CustomIconApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName)
-            : TestWindowApplication(settingsFilePath, defaultSettingsName)
+        CustomIconApplication(const ApplicationParameters& applicationParameters)
+            : TestWindowApplication(applicationParameters)
         {
             _mainWindow->SetIcon(KMP_TEST_ICON_PATH);
         }
@@ -168,8 +168,8 @@ namespace Kmplete
     class MetricsTestApplication : public WindowApplication
     {
     public:
-        MetricsTestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
-            : WindowApplication(settingsFilePath, defaultSettingsName)
+        MetricsTestApplication(const ApplicationParameters& applicationParameters)
+            : WindowApplication(applicationParameters)
         {
             _mainWindow->SetEventCallback(KMP_BIND(MetricsTestApplication::OnEvent));
         }
@@ -238,7 +238,7 @@ namespace Kmplete
 TEST_CASE("Test window application initialize", "[window_application][application][window]")
 {
     {
-        const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+        const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
 
         REQUIRE(application);
         REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
@@ -252,7 +252,7 @@ TEST_CASE("Test window application initialize", "[window_application][applicatio
 
 TEST_CASE("Test window application default icon", "[window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
     REQUIRE(application);
 
     KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon", Kmplete::FileDialogs::MessageChoice::Ok);
@@ -262,7 +262,7 @@ TEST_CASE("Test window application default icon", "[window_application][applicat
 
 TEST_CASE("Test window application custom icon", "[window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::CustomIconApplication>("", "Kmplete_window_application_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::CustomIconApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
     REQUIRE(application);
 
     KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon (red square upper-left and yellow square bottom-right)", Kmplete::FileDialogs::MessageChoice::Ok);
@@ -272,7 +272,7 @@ TEST_CASE("Test window application custom icon", "[window_application][applicati
 
 TEST_CASE("Test window application key events", "[window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
 
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
@@ -297,7 +297,7 @@ TEST_CASE("Test window application key events", "[window_application][applicatio
 
 TEST_CASE("Test window application mouse events", "[window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
 
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
@@ -326,7 +326,7 @@ TEST_CASE("Test window application mouse events", "[window_application][applicat
 
 TEST_CASE("Test window application window events", "[window_application][application][window]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
 
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
@@ -368,7 +368,7 @@ TEST_CASE("Test window application window events", "[window_application][applica
 
 TEST_CASE("Test window application save settings with cyrillic path", "[window_application][application][metrics]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>("", "Kmplete_window_application_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
 
     REQUIRE(application);
 
@@ -385,7 +385,7 @@ TEST_CASE("Test window application save settings with cyrillic path", "[window_a
 
 TEST_CASE("Application metrics", "[window_application][application][metrics]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>("", "Kmplete_unit_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
     REQUIRE(application);
 

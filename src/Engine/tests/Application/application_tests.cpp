@@ -41,8 +41,8 @@ namespace Kmplete
     class TestApplication : public Application
     {
     public:
-        TestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
-            : Application(settingsFilePath, defaultSettingsName)
+        TestApplication(const ApplicationParameters& applicationParameters)
+            : Application(applicationParameters)
         {
             _localeManager->SetLocale("ru_RU.UTF8");
         }
@@ -104,8 +104,8 @@ namespace Kmplete
     class MetricsTestApplication : public Application
     {
     public:
-        MetricsTestApplication(const std::string& settingsFilePath, const std::string& defaultSettingsName = "Kmplete_settings.json")
-            : Application(settingsFilePath, defaultSettingsName)
+        MetricsTestApplication(const ApplicationParameters& applicationParameters)
+            : Application(applicationParameters)
         {}
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override
@@ -130,7 +130,7 @@ namespace Kmplete
 TEST_CASE("Test application initialize", "[application]")
 {
     {
-        const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
+        const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
         REQUIRE(application);
         REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
@@ -144,7 +144,7 @@ TEST_CASE("Test application initialize", "[application]")
 
 TEST_CASE("Test application events", "[application]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
     REQUIRE(application);
 
@@ -174,7 +174,7 @@ TEST_CASE("Test application events", "[application]")
 
 TEST_CASE("Test application runtime settings save", "[application]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
     REQUIRE(application);
 
@@ -187,7 +187,7 @@ TEST_CASE("Test application runtime settings save", "[application]")
 
 TEST_CASE("Test application runtime settings load", "[application]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>("", "Kmplete_unit_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
     REQUIRE(application);
 
@@ -198,7 +198,7 @@ TEST_CASE("Test application runtime settings load", "[application]")
 
 TEST_CASE("Test application metrics update", "[application][metrics]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>("", "Kmplete_unit_tests_settings.json");
+    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
     REQUIRE(application);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
