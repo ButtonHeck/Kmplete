@@ -21,19 +21,19 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot start object '{}' - current object is null", objectName);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start object '{}' - current object is null", objectName);
             return false;
         }
 
         if (objectName.empty())
         {
-            Log::CoreError("JsonWriter: cannot start object - object's name is empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start object - object's name is empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot start object '{}' - current object '{}' is not of object type", objectName, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start object '{}' - current object '{}' is not of object type", objectName, _scope.scopeString);
             return false;
         }
 
@@ -41,7 +41,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(objectName.c_str()) || !(*_currentObject)[objectName.c_str()].IsObject())
         {
-            Log::CoreDebug("JsonWriter: creating new object '{}' in '{}'", objectName, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new object '{}' in '{}'", objectName, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetObject();
         }
 
@@ -55,19 +55,19 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot start object '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start object '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot start object '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start object '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot start object '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start object '{}' - negative index", index);
             return false;
         }
 
@@ -75,7 +75,7 @@ namespace Kmplete
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new object '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new object '{}' in '{}'", index, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetObject();
         }
 
@@ -101,19 +101,19 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot start array '{}' - current object is null", arrayName);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start array '{}' - current object is null", arrayName);
             return false;
         }
 
         if (arrayName.empty())
         {
-            Log::CoreError("JsonWriter: cannot start array - array's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start array - array's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot start array '{}' - current object '{}' is not of object type", arrayName, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start array '{}' - current object '{}' is not of object type", arrayName, _scope.scopeString);
             return false;
         }
 
@@ -121,7 +121,7 @@ namespace Kmplete
 
         if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray() || overwrite)
         {
-            Log::CoreDebug("JsonWriter: creating new array '{}' in '{}'", arrayName, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new array '{}' in '{}'", arrayName, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetArray();
         }
 
@@ -135,19 +135,19 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot start array '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start array '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot start array '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start array '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot start array '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot start array '{}' - negative index", index);
             return false;
         }
 
@@ -155,7 +155,7 @@ namespace Kmplete
 
         if (index >= static_cast<int>(_currentObject->Size()) || overwrite)
         {
-            Log::CoreDebug("JsonWriter: creating new array '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new array '{}' in '{}'", index, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetArray();
         }
 
@@ -169,13 +169,13 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot end array - current object is null");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot end array - current object is null");
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot end array - current object '{}' is not of array type", _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot end array - current object '{}' is not of array type", _scope.scopeString);
             return false;
         }
 
@@ -187,25 +187,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set bool '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set bool '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set bool '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool '{}' - negative index", index);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new bool '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new bool '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value), _document.GetAllocator());
         }
         else
@@ -221,26 +221,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set bool '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set bool - bool's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool - bool's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set bool '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsBool())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new bool '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new bool '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetBool(value);
         }
         else
@@ -256,25 +256,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set int '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set int '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set int '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int '{}' - negative index", index);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new int '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new int '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value), _document.GetAllocator());
         }
         else
@@ -290,26 +290,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set int '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set int - int's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int - int's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set int '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new int '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new int '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetInt(value);
         }
         else
@@ -325,25 +325,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int '{}' - negative index", index);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new unsigned int '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new unsigned int '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value), _document.GetAllocator());
         }
         else
@@ -359,26 +359,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int - unsigned int's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int - unsigned int's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new unsigned int '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new unsigned int '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetUint(value);
         }
         else
@@ -394,25 +394,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set int64 '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set int64 '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set int64 '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 '{}' - negative index", index);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new int64 '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new int64 '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value), _document.GetAllocator());
         }
         else
@@ -428,26 +428,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set int64 '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set int64 - int64's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 - int64's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set int64 '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt64())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new int64 '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new int64 '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetInt64(value);
         }
         else
@@ -463,25 +463,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int64 '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int64 '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int64 '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 '{}' - negative index", index);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new unsigned int64 '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new unsigned int64 '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value), _document.GetAllocator());
         }
         else
@@ -497,26 +497,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int64 '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int64 - unsigned int64's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 - unsigned int64's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set unsigned int64 '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint64())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new unsigned int64 '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new unsigned int64 '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetUint64(value);
         }
         else
@@ -532,25 +532,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set double '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set double '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set double '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set double '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set double '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set double '{}' - negative index", index);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new double '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new double '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value), _document.GetAllocator());
         }
         else
@@ -566,26 +566,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set double '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set double '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set double - double's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set double - double's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set double '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set double '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsDouble())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new double '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new double '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetDouble(value);
         }
         else
@@ -601,26 +601,26 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set string '{}' - current object is null", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set string '{}' - current object is null", index);
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            Log::CoreError("JsonWriter: cannot set string '{}' - current object '{}' is not of array type", index, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set string '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
         }
 
         if (index < 0)
         {
-            Log::CoreError("JsonWriter: cannot set string '{}' - negative index", index);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set string '{}' - negative index", index);
             return false;
         }
 
         const auto size = static_cast<rapidjson::SizeType>(value.length());
         if (index >= static_cast<int>(_currentObject->Size()))
         {
-            Log::CoreDebug("JsonWriter: creating new string '{}' in '{}'", index, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new string '{}' in '{}'", index, _scope.scopeString);
             _currentObject->PushBack(rapidjson::Value(value.c_str(), size, _document.GetAllocator()), _document.GetAllocator());
         }
         else
@@ -636,19 +636,19 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            Log::CoreError("JsonWriter: cannot set string '{}' - current object is null", name);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set string '{}' - current object is null", name);
             return false;
         }
 
         if (name.empty())
         {
-            Log::CoreError("JsonWriter: cannot set string - string's name should not be empty");
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set string - string's name should not be empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            Log::CoreError("JsonWriter: cannot set string '{}' - current object '{}' is not of object type", name, _scope.scopeString);
+            KMP_LOG_CORE_ERROR("JsonWriter: cannot set string '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
@@ -656,7 +656,7 @@ namespace Kmplete
         if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsString())
         {
             const auto newScope = _scope.scopeString + "/" + name;
-            Log::CoreDebug("JsonWriter: creating new string '{}' in '{}'", name, _scope.scopeString);
+            KMP_LOG_CORE_DEBUG("JsonWriter: creating new string '{}' in '{}'", name, _scope.scopeString);
             rapidjson::Pointer(newScope.c_str()).Create(_document).SetString(value.c_str(), size, _document.GetAllocator());
         }
         else

@@ -1,3 +1,5 @@
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
+
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/assertion.h"
@@ -167,7 +169,6 @@ namespace Kmplete
 
     void Log::SaveSettings(Settings& settings)
     {
-#if !defined (KMP_LOG_DISABLED)
         settings.StartSaveObject(LogSettingsEntryName);
         settings.SaveString(LogFilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
         settings.SaveBool(LogEnabledStr, _logSettings.enabled);
@@ -178,15 +179,11 @@ namespace Kmplete
         settings.SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
         settings.SaveInt(LogClientLevelStr, _logSettings.clientLevel);
         settings.EndSaveObject();
-#else
-        (void)settings;
-#endif
     }
     //--------------------------------------------------------------------------
 
     void Log::LoadSettings(Settings& settings)
     {
-#if !defined (KMP_LOG_DISABLED)
         settings.StartLoadObject(LogSettingsEntryName);
         _logSettings.filename = Utils::Utf8ToNarrow(settings.GetString(LogFilenameStr, "Kmplete_log.txt"));
         _logSettings.enabled = settings.GetBool(LogEnabledStr, true);
@@ -197,9 +194,7 @@ namespace Kmplete
         _logSettings.coreLevel = settings.GetInt(LogCoreLevelStr, spdlog::level::trace);
         _logSettings.clientLevel = settings.GetInt(LogClientLevelStr, spdlog::level::trace);
         settings.EndLoadObject();
-#else
-        (void)settings;
-#endif
     }
     //--------------------------------------------------------------------------
 }
+#endif

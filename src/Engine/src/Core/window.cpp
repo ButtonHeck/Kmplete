@@ -40,7 +40,7 @@ namespace Kmplete
 
         default:
         {
-            Log::CoreWarn("Window: ModeToString unknown mode '{}'", int(mode));
+            KMP_LOG_CORE_WARN("Window: ModeToString unknown mode '{}'", int(mode));
             return std::string("Unknown");
         }
         }
@@ -63,7 +63,7 @@ namespace Kmplete
         }
         else
         {
-            Log::CoreWarn("Window: StringToMode unknown mode '{}', return Windowed as default", modeStr);
+            KMP_LOG_CORE_WARN("Window: StringToMode unknown mode '{}', return Windowed as default", modeStr);
             return Window::Mode::WindowedMode;
         }
     }

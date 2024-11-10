@@ -53,7 +53,7 @@ namespace Kmplete
         _mainWindow = _backend->CreateWindow("Main");
         if (!_mainWindow)
         {
-            Log::CoreCritical("WindowApplication: creation of the main window failed");
+            KMP_LOG_CORE_CRITICAL("WindowApplication: creation of the main window failed");
             throw std::runtime_error("WindowApplication creation of the main window failed");
         }
 
@@ -75,7 +75,7 @@ namespace Kmplete
         auto settings = _settingsManager->PutSettings(WindowAppSettingsEntryName);
         if (!settings)
         {
-            Log::CoreWarn("WindowApplication: failed to create settings entry for saving");
+            KMP_LOG_CORE_WARN("WindowApplication: failed to create settings entry for saving");
             return;
         }
 
@@ -89,7 +89,7 @@ namespace Kmplete
         const auto settings = _settingsManager->GetSettings(WindowAppSettingsEntryName);
         if (!settings)
         {
-            Log::CoreWarn("WindowApplication: failed to get setting entry for loading");
+            KMP_LOG_CORE_WARN("WindowApplication: failed to get setting entry for loading");
             return;
         }
 

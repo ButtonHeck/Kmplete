@@ -20,9 +20,9 @@ namespace Kmplete
             _applicationPath = std::filesystem::current_path();
             return true;
         }
-        catch (const std::filesystem::filesystem_error& fe)
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            Log::CoreError("Filesystem: failed to initialize application path: '{}'", fe.what());
+            KMP_LOG_CORE_ERROR("Filesystem: failed to initialize application path: '{}'", fe.what());
             return false;
         }
     }
@@ -46,9 +46,9 @@ namespace Kmplete
         {
             return std::filesystem::current_path();
         }
-        catch (const std::filesystem::filesystem_error& fe)
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            Log::CoreError("Filesystem: failed to get current path: '{}'", fe.what());
+            KMP_LOG_CORE_ERROR("Filesystem: failed to get current path: '{}'", fe.what());
             return std::filesystem::path();
         }
     }
@@ -60,9 +60,9 @@ namespace Kmplete
         {
             return std::filesystem::exists(path);
         }
-        catch (const std::filesystem::filesystem_error& fe)
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            Log::CoreError("Filesystem: exists failed: '{}'", fe.what());
+            KMP_LOG_CORE_ERROR("Filesystem: exists failed: '{}'", fe.what());
             return false;
         }
     }
@@ -81,9 +81,9 @@ namespace Kmplete
             std::filesystem::create_directories(pathIsFile ? path.parent_path() : path);
             return PathExists(pathIsFile ? path.parent_path() : path);
         }
-        catch (const std::filesystem::filesystem_error& fe)
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            Log::CoreError("Filesystem: create directories failed: '{}'", fe.what());
+            KMP_LOG_CORE_ERROR("Filesystem: create directories failed: '{}'", fe.what());
             return false;
         }
     }
@@ -100,9 +100,9 @@ namespace Kmplete
 
             std::ofstream(path).flush();
         }
-        catch (const std::ios_base::failure& e)
+        catch (KMP_MB_UNUSED const std::ios_base::failure& e)
         {
-            Log::CoreError("Filesystem: failed to create [{}]: '{}'", ToGenericU8String(path), e.what());
+            KMP_LOG_CORE_ERROR("Filesystem: failed to create [{}]: '{}'", ToGenericU8String(path), e.what());
         }
 
         return PathExists(path);
@@ -115,9 +115,9 @@ namespace Kmplete
         {
             return std::filesystem::is_regular_file(path);
         }
-        catch (const std::filesystem::filesystem_error& fe)
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            Log::Error("Filesystem: 'isFile' failed: '{}'", fe.what());
+            KMP_LOG_CORE_ERROR("Filesystem: 'isFile' failed: '{}'", fe.what());
             return false;
         }
     }
@@ -129,9 +129,9 @@ namespace Kmplete
         {
             return std::filesystem::is_directory(path);
         }
-        catch (const std::filesystem::filesystem_error& fe)
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            Log::Error("Filesystem: 'isDirectory' failed: '{}'", fe.what());
+            KMP_LOG_CORE_ERROR("Filesystem: 'isDirectory' failed: '{}'", fe.what());
             return false;
         }
     }

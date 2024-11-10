@@ -46,7 +46,7 @@ namespace Kmplete
     {
         if (!Load(_filename))
         {
-            Log::CoreError("JsonDocument: creation from '{}' failed", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_CORE_ERROR("JsonDocument: creation from '{}' failed", Filesystem::ToGenericU8String(_filename));
         }
     }
     //--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace Kmplete
 
         if (!Filesystem::FilePathIsValid(_filename))
         {
-            Log::CoreWarn("JsonDocument: invalid filepath was set '{}'", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_CORE_WARN("JsonDocument: invalid filepath was set '{}'", Filesystem::ToGenericU8String(_filename));
         }
     }
     //--------------------------------------------------------------------------
@@ -81,12 +81,12 @@ namespace Kmplete
         const auto filenameStr = Filesystem::ToGenericU8String(_filename);
         if (!Filesystem::PathExists(_filename))
         {
-            Log::CoreWarn("JsonDocument: failed to load due to insufficient path '{}'", filenameStr);
+            KMP_LOG_CORE_WARN("JsonDocument: failed to load due to insufficient path '{}'", filenameStr);
             _error = true;
             return false;
         }
 
-        Log::CoreInfo("JsonDocument: loading from '{}'", filenameStr);
+        KMP_LOG_CORE_INFO("JsonDocument: loading from '{}'", filenameStr);
 
         std::ifstream inputStream(_filename);
         if (!inputStream.is_open() || !inputStream.good())
@@ -102,7 +102,7 @@ namespace Kmplete
 
         if (newDocument.HasParseError())
         {
-            Log::CoreError("JsonDocument: failed to load from '{}', JSON parsing error '{}'", filenameStr, rapidjson::GetParseError_En(newDocument.GetParseError()));
+            KMP_LOG_CORE_ERROR("JsonDocument: failed to load from '{}', JSON parsing error '{}'", filenameStr, rapidjson::GetParseError_En(newDocument.GetParseError()));
             _error = true;
             return false;
         }
@@ -147,7 +147,7 @@ namespace Kmplete
             }
         }
 
-        Log::CoreWarn("JsonDocument: failed to write document in '{}'", filenameStr);
+        KMP_LOG_CORE_WARN("JsonDocument: failed to write document in '{}'", filenameStr);
         _error = true;
         return false;
     }
@@ -177,7 +177,7 @@ namespace Kmplete
             }
         }
 
-        Log::CoreWarn("JsonDocument: failed to write document to string");
+        KMP_LOG_CORE_WARN("JsonDocument: failed to write document to string");
         _error = true;
         return std::string("");
     }
@@ -193,7 +193,7 @@ namespace Kmplete
     {
         if (name.empty())
         {
-            Log::CoreError("JsonDocument: cannot add child document - name is empty");
+            KMP_LOG_CORE_ERROR("JsonDocument: cannot add child document - name is empty");
             return false;
         }
 
@@ -205,7 +205,7 @@ namespace Kmplete
             }
             else
             {
-                Log::CoreWarn("JsonDocument: already contains member '{}' and overwrite set to false", name);
+                KMP_LOG_CORE_WARN("JsonDocument: already contains member '{}' and overwrite set to false", name);
                 return false;
             }
         }
@@ -213,7 +213,7 @@ namespace Kmplete
         auto& childDocument = child._document;
         if (!childDocument.IsObject() || childDocument.HasParseError())
         {
-            Log::CoreError("JsonDocument: cannot add '{}' child document - not an object or has errors", name);
+            KMP_LOG_CORE_ERROR("JsonDocument: cannot add '{}' child document - not an object or has errors", name);
             return false;
         }
 
@@ -488,11 +488,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer, const std::string& filenameStr)
+    bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer, KMP_MB_UNUSED const std::string& filenameStr)
     {
         if (!Filesystem::CreateDirectories(_filename, true))
         {
-            Log::CoreWarn("JsonDocument: failed to create directories for '{}'", filenameStr);
+            KMP_LOG_CORE_WARN("JsonDocument: failed to create directories for '{}'", filenameStr);
             _error = true;
             return false;
         }
@@ -500,7 +500,7 @@ namespace Kmplete
         std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
         if (!outputStream.is_open() || !outputStream.good())
         {
-            Log::CoreWarn("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
+            KMP_LOG_CORE_WARN("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
             _error = true;
             return false;
         }
@@ -508,7 +508,7 @@ namespace Kmplete
         outputStream << buffer.GetString();
         outputStream.close();
 
-        Log::CoreInfo("JsonDocument: document written successfully in '{}'", filenameStr);
+        KMP_LOG_CORE_INFO("JsonDocument: document written successfully in '{}'", filenameStr);
         _error = false;
         return true;
     }

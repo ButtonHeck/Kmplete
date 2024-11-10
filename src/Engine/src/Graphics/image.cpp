@@ -24,17 +24,17 @@ namespace Kmplete
 
         if (actualChannels != _channels)
         {
-            Log::CoreWarn("Image: '{}' channels mismatch (desired: {}, actual: {})", filename, static_cast<int>(_channels), actualChannels);
+            KMP_LOG_CORE_WARN("Image: '{}' channels mismatch (desired: {}, actual: {})", filename, static_cast<int>(_channels), actualChannels);
             _channels = static_cast<Channels>(actualChannels);
         }
 
         if (!_pixels)
         {
-            Log::CoreError("Image: '{}' loading error", filename);
+            KMP_LOG_CORE_ERROR("Image: '{}' loading error", filename);
         }
         else
         {
-            Log::CoreInfo("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filename);
+            KMP_LOG_CORE_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filename);
         }
     }
     //--------------------------------------------------------------------------

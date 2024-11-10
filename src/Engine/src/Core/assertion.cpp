@@ -18,12 +18,12 @@ namespace Kmplete
     {
         if (_consequence == Consequence::Terminate)
         {
-            Log::CoreCritical("Assertion: [file {}, function {}, line {}]: {}", _file, _function, _line, _stream.str());
+            KMP_LOG_CORE_CRITICAL("Assertion: [file {}, function {}, line {}]: {}", _file, _function, _line, _stream.str());
             std::terminate();
         }
         else
         {
-            Log::CoreError("Assertion: [file {}, function {}, line {}]: {}", _file, _function, _line, _stream.str());
+            KMP_LOG_CORE_ERROR("Assertion: [file {}, function {}, line {}]: {}", _file, _function, _line, _stream.str());
         }
     }
     //--------------------------------------------------------------------------

@@ -48,7 +48,9 @@ namespace Kmplete
 
     void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::Boot();
+#endif
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
         _localeManager = CreateUPtr<LocaleManager>();
@@ -64,7 +66,9 @@ namespace Kmplete
 
         LoadSettingsInternal();
 
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::Initialize();
+#endif
     }
     //--------------------------------------------------------------------------
 
@@ -76,7 +80,9 @@ namespace Kmplete
         _localeManager.reset();
         _systemMetricsManager.reset();
 
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::Finalize();
+#endif
     }
     //--------------------------------------------------------------------------
 
@@ -85,11 +91,13 @@ namespace Kmplete
         auto settings = _settingsManager->PutSettings(ApplicationSettingsEntryName);
         if (!settings)
         {
-            Log::CoreWarn("Application: failed to create settings entry for saving");
+            KMP_LOG_CORE_WARN("Application: failed to create settings entry for saving");
             return;
         }
 
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::SaveSettings(*settings);
+#endif
 
         _settingsManager->SaveSettings();
     }
@@ -102,11 +110,13 @@ namespace Kmplete
         const auto settings = _settingsManager->GetSettings(ApplicationSettingsEntryName);
         if (!settings)
         {
-            Log::CoreWarn("Application: failed to get settings entry for loading");
+            KMP_LOG_CORE_WARN("Application: failed to get settings entry for loading");
             return;
         }
 
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::LoadSettings(*settings);
+#endif
     }
     //--------------------------------------------------------------------------
 }

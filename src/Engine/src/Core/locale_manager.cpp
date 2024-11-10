@@ -23,12 +23,12 @@ namespace Kmplete
             ImbueLocale(newLocale);
             NotifyLocaleListeners();
 
-            Log::CoreInfo("LocaleManager: set locale '{}'", _currentLocale);
+            KMP_LOG_CORE_INFO("LocaleManager: set locale '{}'", _currentLocale);
             return true;
         }
-        catch (const std::exception& e)
+        catch (KMP_MB_UNUSED const std::exception& e)
         {
-            Log::CoreError("LocaleManager: cannot set locale '{}' - {}", localeString, e.what());
+            KMP_LOG_CORE_ERROR("LocaleManager: cannot set locale '{}' - {}", localeString, e.what());
             return false;
         }
     }

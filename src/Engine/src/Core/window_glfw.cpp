@@ -34,7 +34,7 @@ namespace Kmplete
 
         if (!_window)
         {
-            Log::CoreError("WindowGlfw: creation failed");
+            KMP_LOG_CORE_ERROR("WindowGlfw: creation failed");
             throw std::runtime_error("WindowGlfw creation failed");
         }
 
@@ -107,7 +107,7 @@ namespace Kmplete
         }
         else
         {
-            Log::CoreWarn("WindowGlfw: cannot set window icon");
+            KMP_LOG_CORE_WARN("WindowGlfw: cannot set window icon");
         }
     }
     //--------------------------------------------------------------------------
@@ -222,7 +222,7 @@ namespace Kmplete
 
     void WindowGlfw::SetResizable(bool resizable)
     {
-        Log::CoreWarn("WindowGlfw: resizable setting will be applied after restart");
+        KMP_LOG_CORE_WARN("WindowGlfw: resizable setting will be applied after restart");
         _settings->resizable = resizable;
     }
     //--------------------------------------------------------------------------
@@ -235,7 +235,7 @@ namespace Kmplete
 
     void WindowGlfw::SetDecorated(bool decorated)
     {
-        Log::CoreWarn("WindowGlfw: decorated settings will be applied after restart");
+        KMP_LOG_CORE_WARN("WindowGlfw: decorated settings will be applied after restart");
         _settings->decorated = decorated;
     }
     //--------------------------------------------------------------------------
@@ -292,7 +292,7 @@ namespace Kmplete
     {
         if (!_window)
         {
-            Log::CoreWarn("WindowGlfw: can't update settings due to nullptr GLFW window");
+            KMP_LOG_CORE_WARN("WindowGlfw: can't update settings due to nullptr GLFW window");
             return;
         }
 
@@ -331,8 +331,8 @@ namespace Kmplete
 
     void WindowGlfw::InitializeCallbacks() const
     {
-        glfwSetErrorCallback([](int code, const char* description) {
-            Log::CoreError("WindowGlfw: GLFW internal error '{}': {}", code, description);
+        glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
+            KMP_LOG_CORE_ERROR("WindowGlfw: GLFW internal error '{}': {}", code, description);
             }
         );
 
