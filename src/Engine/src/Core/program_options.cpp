@@ -7,6 +7,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
+#if defined (KMP_PLATFORM_WINDOWS)
     void ProgramOptions::ProcessCommandLine(char* lpCmdLine)
     {
         auto cmdParser = CreateCmdParser(lpCmdLine);
@@ -20,6 +21,7 @@ namespace Kmplete
         return boost::program_options::command_line_parser(args);
     }
     //--------------------------------------------------------------------------
+#endif
 
     void ProgramOptions::ProcessCommandLine(int argc, char** argv)
     {
