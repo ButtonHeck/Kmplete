@@ -11,6 +11,9 @@
 #include <sys/sysinfo.h>
 #include <sys/times.h>
 #include <unistd.h>
+#include <cstring>
+#include <cstdio>
+#include <cstdlib>
 #endif
 
 namespace Kmplete
