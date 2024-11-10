@@ -158,6 +158,7 @@ namespace Kmplete
         _clientLogger->flush();
         _coreLogger->flush();
         spdlog::drop_all();
+        spdlog::shutdown();
     }
     //--------------------------------------------------------------------------
 
