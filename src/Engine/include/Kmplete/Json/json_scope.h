@@ -11,7 +11,7 @@ namespace Kmplete
     {
     public:
         KMP_API void Push(const std::string& entry);
-        KMP_API KMP_NODISCARD bool Pop();
+        KMP_NODISCARD KMP_API bool Pop();
 
         StringVector scope;
         std::string scopeString;

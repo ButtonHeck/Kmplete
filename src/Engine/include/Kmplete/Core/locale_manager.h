@@ -19,7 +19,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(LocaleManager)
 
         KMP_API LocaleManager();
-        KMP_API ~LocaleManager() = default;
+        ~LocaleManager() = default;
 
         KMP_API bool SetLocale(const std::string& localeString);
         KMP_NODISCARD KMP_API const std::string& GetLocale() const KMP_NOEXCEPT;

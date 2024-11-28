@@ -29,8 +29,8 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowBackend)
 
-        KMP_API WindowBackend() = default;
-        KMP_API virtual ~WindowBackend() = default;
+        WindowBackend() = default;
+        virtual ~WindowBackend() = default;
 
         KMP_NODISCARD KMP_API virtual Ptr<Window> CreateWindow(const std::string& windowName) = 0;
         KMP_NODISCARD KMP_API virtual Ptr<Window> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) = 0;

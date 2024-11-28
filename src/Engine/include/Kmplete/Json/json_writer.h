@@ -15,7 +15,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(JsonWriter)
 
         KMP_API explicit JsonWriter(rapidjson::Document& document);
-        KMP_API ~JsonWriter() = default;
+        ~JsonWriter() = default;
 
         KMP_API bool StartObject(const std::string& objectName);
         KMP_API bool StartObject(int index);

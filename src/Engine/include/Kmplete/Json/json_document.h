@@ -21,7 +21,7 @@ namespace Kmplete
         KMP_API JsonDocument();
         KMP_API explicit JsonDocument(rapidjson::Document&& document);
         KMP_API explicit JsonDocument(const std::filesystem::path& filename);
-        KMP_API ~JsonDocument() = default;
+        ~JsonDocument() = default;
 
         KMP_API void SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API const std::filesystem::path& GetFilename() const KMP_NOEXCEPT;

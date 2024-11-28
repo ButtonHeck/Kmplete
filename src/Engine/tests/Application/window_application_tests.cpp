@@ -107,18 +107,18 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt) override { _mouseButtonPressEventInvoked = true; return WindowApplication::OnMouseButtonPressEvent(evt); }
         KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent& evt) override { _mouseButtonReleaseEventInvoked = true; return WindowApplication::OnMouseButtonReleaseEvent(evt); }
 
-        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent& evt)
+        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent& evt) override
         {
             _completed = true;
             _windowCloseEventInvoked = true;
             return WindowApplication::OnWindowCloseEvent(evt);
         }
-        KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent& evt) { _windowMoveEventInvoked = true; return WindowApplication::OnWindowMoveEvent(evt); }
-        KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent& evt) { _windowResizeEventInvoked = true; return WindowApplication::OnWindowResizeEvent(evt); }
-        KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent& evt) { _windowFocusEventInvoked = true; return WindowApplication::OnWindowFocusEvent(evt); }
-        KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent& evt) { _windowIconifyEventInvoked = true; return WindowApplication::OnWindowIconifyEvent(evt); }
-        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& evt) { _windowFramebufferRefreshEventInvoked = true; return WindowApplication::OnWindowFramebufferRefreshEvent(evt); }
-        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& evt) { _windowFramebufferResizeEventInvoked = true; return WindowApplication::OnWindowFramebufferResizeEvent(evt); }
+        KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent& evt) override { _windowMoveEventInvoked = true; return WindowApplication::OnWindowMoveEvent(evt); }
+        KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent& evt) override { _windowResizeEventInvoked = true; return WindowApplication::OnWindowResizeEvent(evt); }
+        KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent& evt) override { _windowFocusEventInvoked = true; return WindowApplication::OnWindowFocusEvent(evt); }
+        KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent& evt) override { _windowIconifyEventInvoked = true; return WindowApplication::OnWindowIconifyEvent(evt); }
+        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& evt) override { _windowFramebufferRefreshEventInvoked = true; return WindowApplication::OnWindowFramebufferRefreshEvent(evt); }
+        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent& evt) override { _windowFramebufferResizeEventInvoked = true; return WindowApplication::OnWindowFramebufferResizeEvent(evt); }
 
     private:
         bool _completed = false;

@@ -64,7 +64,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(Window)
 
         KMP_API Window(const Ptr<WindowSettings> settings);
-        KMP_API virtual ~Window() = default;
+        virtual ~Window() = default;
 
         KMP_NODISCARD KMP_API const std::string& GetName() const;
 
