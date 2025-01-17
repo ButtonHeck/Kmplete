@@ -63,7 +63,8 @@ set_target_properties(Kmplete_Engine_Unit_Tests PROPERTIES
     FOLDER Kmplete/Tests
 )
 
-file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
+set(KmpleteUnitTestsCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteUnitTestsCopySettingsScriptName}"
     CONTENT
     [=[
     if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Engine_Unit_Tests>/Kmplete_settings_unit_tests.json")
@@ -77,7 +78,7 @@ file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
 add_custom_command(
     TARGET Kmplete_Engine_Unit_Tests
     POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "CopySettings$<CONFIG>.cmake"
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "${KmpleteUnitTestsCopySettingsScriptName}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 

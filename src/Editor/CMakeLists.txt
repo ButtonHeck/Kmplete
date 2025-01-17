@@ -55,7 +55,8 @@ set_target_properties(Kmplete_Editor PROPERTIES
     FOLDER Kmplete
 )
 
-file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
+set(KmpleteCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteCopySettingsScriptName}"
     CONTENT
     [=[
     if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
@@ -69,6 +70,6 @@ file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/CopySettings$<CONFIG>.cmake"
 add_custom_command(
     TARGET Kmplete_Editor
     POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "CopySettings$<CONFIG>.cmake"
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P ${KmpleteCopySettingsScriptName}
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
