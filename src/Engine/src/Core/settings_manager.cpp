@@ -1,11 +1,10 @@
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/log.h"
-#include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Json/json_document.h"
 
 namespace Kmplete
 {
-    SettingsManager::SettingsManager(const std::filesystem::path& filename)
+    SettingsManager::SettingsManager(const Path& filename)
         : _filename(filename)
     {}
     //--------------------------------------------------------------------------
@@ -70,13 +69,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT
+    void SettingsManager::SetFilename(const Path& filename) KMP_NOEXCEPT
     {
         _filename = filename;
     }
     //--------------------------------------------------------------------------
 
-    const std::filesystem::path& SettingsManager::GetFilename() const KMP_NOEXCEPT
+    const Path& SettingsManager::GetFilename() const KMP_NOEXCEPT
     {
         return _filename;
     }

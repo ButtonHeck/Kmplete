@@ -1,6 +1,5 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Core/log.h"
-#include "Kmplete/Core/filesystem.h"
 
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/prettywriter.h>
@@ -37,7 +36,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    JsonDocument::JsonDocument(const std::filesystem::path& filename)
+    JsonDocument::JsonDocument(const Path& filename)
         : _filename(filename)
         , _document()
         , _error(false)
@@ -51,7 +50,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void JsonDocument::SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT
+    void JsonDocument::SetFilename(const Path& filename) KMP_NOEXCEPT
     {
         _filename = filename;
 
@@ -62,13 +61,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const std::filesystem::path& JsonDocument::GetFilename() const KMP_NOEXCEPT
+    const Path& JsonDocument::GetFilename() const KMP_NOEXCEPT
     {
         return _filename;
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Load(const std::filesystem::path& filename)
+    bool JsonDocument::Load(const Path& filename)
     {
         SetFilename(filename);
         return Load();
@@ -116,7 +115,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(const std::filesystem::path& filename, bool pretty)
+    bool JsonDocument::Save(const Path& filename, bool pretty)
     {
         SetFilename(filename);
         return Save(pretty);

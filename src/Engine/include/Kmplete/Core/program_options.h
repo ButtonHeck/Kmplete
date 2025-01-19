@@ -2,10 +2,9 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/platform.h"
+#include "Kmplete/Core/filesystem.h"
 
 #include <boost/program_options.hpp>
-
-#include <filesystem>
 
 namespace Kmplete
 {
@@ -22,7 +21,7 @@ namespace Kmplete
         // main entryPoint
         KMP_API void ProcessCommandLine(int argc, char** argv);
 
-        KMP_NODISCARD KMP_API const std::filesystem::path& GetSettingsFilePath() const;
+        KMP_NODISCARD KMP_API const Path& GetSettingsFilePath() const;
 
     private:
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -36,7 +35,7 @@ namespace Kmplete
         void ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser);
 
     private:
-        std::filesystem::path _settingsFilePath;
+        Path _settingsFilePath;
     };
     //--------------------------------------------------------------------------
 }

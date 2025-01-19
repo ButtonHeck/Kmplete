@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Core/locale_manager.h"
@@ -10,13 +11,12 @@
 #include "Kmplete/Event/key_event.h"
 
 #include <string>
-#include <filesystem>
 
 namespace Kmplete
 {
     struct ApplicationParameters
     {
-        const std::filesystem::path settingsPath;
+        const Path settingsPath;
         const std::string defaultSettingsFileName = "Kmplete_settings.json";
     };
     //--------------------------------------------------------------------------
@@ -33,8 +33,8 @@ namespace Kmplete
 
         KMP_API virtual void Run() = 0;
 
-        KMP_API virtual void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const;
-        KMP_API virtual void LoadSettings(const std::filesystem::path& path = std::filesystem::path());
+        KMP_API virtual void SaveSettings(const Path& path = Path()) const;
+        KMP_API virtual void LoadSettings(const Path& path = Path());
 
     protected:
         virtual void OnEvent(Event&) {}

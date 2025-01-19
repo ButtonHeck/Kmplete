@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Json/json_writer.h"
 
@@ -9,7 +10,6 @@
 #include <rapidjson/document.h>
 
 #include <vector>
-#include <filesystem>
 
 namespace Kmplete
 {
@@ -20,15 +20,15 @@ namespace Kmplete
 
         KMP_API JsonDocument();
         KMP_API explicit JsonDocument(rapidjson::Document&& document);
-        KMP_API explicit JsonDocument(const std::filesystem::path& filename);
+        KMP_API explicit JsonDocument(const Path& filename);
         ~JsonDocument() = default;
 
-        KMP_API void SetFilename(const std::filesystem::path& filename) KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API const std::filesystem::path& GetFilename() const KMP_NOEXCEPT;
+        KMP_API void SetFilename(const Path& filename) KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const Path& GetFilename() const KMP_NOEXCEPT;
 
-        KMP_NODISCARD KMP_API bool Load(const std::filesystem::path& filename);
+        KMP_NODISCARD KMP_API bool Load(const Path& filename);
         KMP_NODISCARD KMP_API bool Load();
-        KMP_NODISCARD KMP_API bool Save(const std::filesystem::path& filename, bool pretty = true);
+        KMP_NODISCARD KMP_API bool Save(const Path& filename, bool pretty = true);
         KMP_NODISCARD KMP_API bool Save(bool pretty = true);
         KMP_NODISCARD KMP_API std::string ToString(bool pretty = true);
 
@@ -89,7 +89,7 @@ namespace Kmplete
         KMP_NODISCARD bool SaveToFile(const rapidjson::StringBuffer& buffer, const std::string& filenameStr);
 
     private:
-        std::filesystem::path _filename;
+        Path _filename;
         rapidjson::Document _document;
         bool _error;
         UPtr<JsonReader> _reader;

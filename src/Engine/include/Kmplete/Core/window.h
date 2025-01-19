@@ -2,11 +2,11 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Event/event.h"
 
 #include <string>
 #include <functional>
-#include <filesystem>
 
 namespace Kmplete
 {
@@ -72,7 +72,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual std::pair<int, int> GetWindowedSize() const = 0;
 
         KMP_API virtual void SetTitle(const std::string& title) = 0;
-        KMP_API virtual void SetIcon(const std::filesystem::path& path) = 0;
+        KMP_API virtual void SetIcon(const Path& path) = 0;
 
         KMP_API virtual void SetShouldClose(bool close) = 0;
         KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;

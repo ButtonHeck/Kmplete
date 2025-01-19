@@ -29,14 +29,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettings(const std::filesystem::path& path) const
+    void WindowApplication::SaveSettings(const Path& path) const
     {
         SaveSettingsInternal();
         Application::SaveSettings(path);
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::LoadSettings(const std::filesystem::path& path)
+    void WindowApplication::LoadSettings(const Path& path)
     {
         Application::LoadSettings(path);
         LoadSettingsInternal();

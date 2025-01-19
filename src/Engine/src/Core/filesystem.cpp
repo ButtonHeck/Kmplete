@@ -11,7 +11,7 @@
 
 namespace Kmplete
 {
-    std::filesystem::path Filesystem::_applicationPath;
+    Path Filesystem::_applicationPath;
 
     bool Filesystem::Initialize()
     {
@@ -28,19 +28,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::filesystem::path Filesystem::GetApplicationPath() KMP_NOEXCEPT
+    Path Filesystem::GetApplicationPath() KMP_NOEXCEPT
     {
         return _applicationPath;
     }
     //--------------------------------------------------------------------------
 
-    const std::filesystem::path& Filesystem::GetApplicationPathCRef() KMP_NOEXCEPT
+    const Path& Filesystem::GetApplicationPathCRef() KMP_NOEXCEPT
     {
         return _applicationPath;
     }
     //--------------------------------------------------------------------------
 
-    std::filesystem::path Filesystem::GetCurrentPath() KMP_NOEXCEPT
+    Path Filesystem::GetCurrentPath() KMP_NOEXCEPT
     {
         try
         {
@@ -49,12 +49,12 @@ namespace Kmplete
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
             KMP_LOG_CORE_ERROR("Filesystem: failed to get current path: '{}'", fe.what());
-            return std::filesystem::path();
+            return Path{};
         }
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::PathExists(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::PathExists(const Path& path) KMP_NOEXCEPT
     {
         try
         {
@@ -68,13 +68,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::FilePathIsValid(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::FilePathIsValid(const Path& path) KMP_NOEXCEPT
     {
         return !path.empty() && path.has_filename();
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectories(const std::filesystem::path& path, bool pathIsFile) KMP_NOEXCEPT
+    bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile) KMP_NOEXCEPT
     {
         try
         {
@@ -89,7 +89,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateFile(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::CreateFile(const Path& path) KMP_NOEXCEPT
     {
         try
         {
@@ -109,7 +109,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------    
 
-    bool Filesystem::IsFile(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::IsFile(const Path& path) KMP_NOEXCEPT
     {
         try
         {
@@ -123,7 +123,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::IsDirectory(const std::filesystem::path& path) KMP_NOEXCEPT
+    bool Filesystem::IsDirectory(const Path& path) KMP_NOEXCEPT
     {
         try
         {
@@ -137,25 +137,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToGenericU8String(const std::filesystem::path& path)
+    std::string Filesystem::ToGenericU8String(const Path& path)
     {
         return path.generic_u8string();
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToGenericString(const std::filesystem::path& path)
+    std::string Filesystem::ToGenericString(const Path& path)
     {
         return path.generic_string();
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToNativeU8String(const std::filesystem::path& path)
+    std::string Filesystem::ToNativeU8String(const Path& path)
     {
         return path.u8string();
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToNativeString(const std::filesystem::path& path)
+    std::string Filesystem::ToNativeString(const Path& path)
     {
         return path.string();
     }

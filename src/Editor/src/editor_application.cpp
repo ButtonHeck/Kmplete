@@ -66,14 +66,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::SaveSettings(const std::filesystem::path& path) const
+    void EditorApplication::SaveSettings(const Path& path) const
     {
         SaveSettingsInternal();
         WindowApplication::SaveSettings(path);
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::LoadSettings(const std::filesystem::path& path)
+    void EditorApplication::LoadSettings(const Path& path)
     {
         WindowApplication::LoadSettings(path);
         LoadSettingsInternal();

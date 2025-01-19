@@ -17,8 +17,8 @@ namespace Kmplete
 
         void Run() override;
 
-        void SaveSettings(const std::filesystem::path& path = std::filesystem::path()) const override;
-        void LoadSettings(const std::filesystem::path& path = std::filesystem::path()) override;
+        void SaveSettings(const Path& path = Path()) const override;
+        void LoadSettings(const Path& path = Path()) override;
 
     protected:
         void OnEvent(Event& event) override;

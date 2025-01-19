@@ -1,5 +1,4 @@
 #include "Kmplete/Application/application.h"
-#include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/log.h"
 
@@ -24,7 +23,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettings(const std::filesystem::path& path) const
+    void Application::SaveSettings(const Path& path) const
     {
         if (!path.empty())
         {
@@ -35,7 +34,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::LoadSettings(const std::filesystem::path& path)
+    void Application::LoadSettings(const Path& path)
     {
         if (!path.empty())
         {

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/filesystem.h"
 
 #include <string>
-#include <filesystem>
 
 namespace Kmplete
 {
@@ -20,7 +20,7 @@ namespace Kmplete
         };
 
     public:
-        KMP_API Image(const std::filesystem::path& filename, Channels desiredChannels, bool flipVertically = false);
+        KMP_API Image(const Path& filename, Channels desiredChannels, bool flipVertically = false);
         KMP_API Image(const char* filename, Channels desiredChannels, bool flipVertically = false);
         KMP_API ~Image();
 

@@ -3,8 +3,8 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/filesystem.h"
 
-#include <filesystem>
 #include <unordered_map>
 
 namespace Kmplete
@@ -14,7 +14,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(SettingsManager)
 
-        KMP_API explicit SettingsManager(const std::filesystem::path& filename);
+        KMP_API explicit SettingsManager(const Path& filename);
         ~SettingsManager() = default;
 
         KMP_NODISCARD KMP_API Settings* PutSettings(const std::string& name);
@@ -23,11 +23,11 @@ namespace Kmplete
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;
 
-        KMP_API void SetFilename(const std::filesystem::path& path) KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API const std::filesystem::path& GetFilename() const KMP_NOEXCEPT;
+        KMP_API void SetFilename(const Path& path) KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const Path& GetFilename() const KMP_NOEXCEPT;
 
     private:
-        std::filesystem::path _filename;
+        Path _filename;
         std::unordered_map<std::string, UPtr<Settings>> _settings;
     };
     //--------------------------------------------------------------------------
