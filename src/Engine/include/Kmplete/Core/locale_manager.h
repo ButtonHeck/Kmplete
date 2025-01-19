@@ -13,7 +13,7 @@ namespace Kmplete
     class LocaleManager
     {
     public:
-        typedef std::function<void()> LocaleChangeCallback;
+        using LocaleChangeCallback = std::function<void()>;
 
     public:
         KMP_DISABLE_COPY_MOVE(LocaleManager)

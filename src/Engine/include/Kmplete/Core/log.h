@@ -22,12 +22,12 @@
 #include "Kmplete/Core/pointers.h"
 
 #if defined (KMP_COMPILER_MSVC)
-#pragma warning(push)
-#pragma warning(disable : 4996)
+    #pragma warning(push)
+    #pragma warning(disable : 4996)
 #endif
 #include <spdlog/spdlog.h>
 #if defined (KMP_COMPILER_MSVC)
-#pragma warning(pop)
+    #pragma warning(pop)
 #endif
 
 #include <sstream>

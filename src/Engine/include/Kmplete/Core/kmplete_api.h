@@ -2,12 +2,12 @@
 
 #include "Kmplete/Core/platform.h"
 
-#if defined (Kmplete_Engine_STATIC)
+#if defined (KMP_ENGINE_STATIC)
     #define KMP_API
     #define KMP_NO_EXPORT
 #else
     #if defined (KMP_PLATFORM_WINDOWS)
-        #if defined (Kmplete_Engine_EXPORTS)
+        #if defined (KMP_EXPORTS)
             #define KMP_API __declspec(dllexport)
         #else
             #define KMP_API __declspec(dllimport)
@@ -22,7 +22,7 @@
 #if defined (KMP_PLATFORM_WINDOWS)
     #define KMP_DEPRECATED __declspec(deprecated)
 #else
-    #define KMP_DEPRECATED
+    #define KMP_DEPRECATED __attribute__((deprecated))
 #endif
 
 #define KMP_DEPRECATED_EXPORT KMP_API KMP_DEPRECATED

@@ -3,17 +3,17 @@
 #include "Kmplete/Core/log.h"
 
 #if defined (KMP_PLATFORM_WINDOWS)
-#include <Windows.h>
-#include <Psapi.h>
-#include <TlHelp32.h>
+    #include <Windows.h>
+    #include <Psapi.h>
+    #include <TlHelp32.h>
 #else
-#include <sys/types.h>
-#include <sys/sysinfo.h>
-#include <sys/times.h>
-#include <unistd.h>
-#include <cstring>
-#include <cstdio>
-#include <cstdlib>
+    #include <sys/types.h>
+    #include <sys/sysinfo.h>
+    #include <sys/times.h>
+    #include <unistd.h>
+    #include <cstring>
+    #include <cstdio>
+    #include <cstdlib>
 #endif
 
 namespace Kmplete

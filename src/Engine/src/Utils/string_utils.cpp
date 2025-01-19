@@ -4,9 +4,9 @@
 #include <string>
 #include <numeric>
 #if defined (KMP_PLATFORM_WINDOWS)
-#include <Windows.h>
+    #include <Windows.h>
 #else
-#include <cstdlib>
+    #include <cstdlib>
 #endif
 
 namespace Kmplete

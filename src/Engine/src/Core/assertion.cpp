@@ -1,7 +1,8 @@
+#if !defined (KMP_PRODUCTION_BUILD)
+
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Core/log.h"
 
-#if !defined (KMP_PRODUCTION_BUILD)
 namespace Kmplete
 {
     Assertion::Assertion(const std::string& expression, const std::string& file, const std::string& function, int line, Consequence consequence)

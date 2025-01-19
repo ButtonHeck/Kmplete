@@ -7,6 +7,7 @@
 
 namespace Kmplete
 {
+    // TODO: move constructor/assign
     class Image
     {
     public:

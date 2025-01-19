@@ -8,7 +8,7 @@ namespace Kmplete
 #if defined (KMP_WINDOW_BACKEND_GLFW)
         return CreateUPtr<WindowBackendGlfw>();
 #else
-#error "No window backend is provided!"
+    #error "No window backend is provided!"
 #endif
     }
     //--------------------------------------------------------------------------

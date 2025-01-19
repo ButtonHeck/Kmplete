@@ -5,5 +5,5 @@
 
 namespace Kmplete
 {
-    typedef std::vector<std::string> StringVector;
+    using StringVector = std::vector<std::string>;
 }
