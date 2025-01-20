@@ -96,7 +96,9 @@ namespace Kmplete
             bool outputFile = true;
             bool outputStringBuffer = false;
             int coreLevel = spdlog::level::trace;
+            int coreLevelFlush = spdlog::level::trace;
             int clientLevel = spdlog::level::trace;
+            int clientLevelFlush = spdlog::level::trace;
         };
 
     private:

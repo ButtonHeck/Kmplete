@@ -30,7 +30,9 @@ namespace Kmplete
     constexpr static auto LogOutputFileStr = "OutputFile";
     constexpr static auto LogOutputStringBufferStr = "OutputStringBuffer";
     constexpr static auto LogCoreLevelStr = "CoreLevel";
+    constexpr static auto LogCoreLevelFlushStr = "CoreLevelFlush";
     constexpr static auto LogClientLevelStr = "ClientLevel";
+    constexpr static auto LogClientLevelFlushStr = "ClientLevelFlush";
 
     Log::LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_coreLogger;
@@ -116,6 +118,11 @@ namespace Kmplete
             }
 
             const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.coreLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            auto coreLevelFlush = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.coreLevelFlush, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            if (coreLevelFlush < coreLevel)
+            {
+                coreLevelFlush = coreLevel;
+            }
 
             std::for_each(logSinks.cbegin(), logSinks.cend(), [coreLevel](const spdlog::sink_ptr sink)
             {
@@ -132,12 +139,18 @@ namespace Kmplete
 
             _coreLogger = CreatePtr<spdlog::async_logger>("CORE", begin(logSinks), end(logSinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
             _coreLogger->set_level(coreLevel);
-            _coreLogger->flush_on(coreLevel);
+            _coreLogger->flush_on(coreLevelFlush);
 
             const auto clientLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.clientLevel, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            auto clientLevelFlush = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.clientLevelFlush, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            if (clientLevelFlush < clientLevel)
+            {
+                clientLevelFlush = clientLevel;
+            }
+
             _clientLogger = CreatePtr<spdlog::async_logger>("CLIENT", begin(logSinks), end(logSinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
             _clientLogger->set_level(clientLevel);
-            _clientLogger->flush_on(clientLevel);
+            _clientLogger->flush_on(clientLevelFlush);
         }
         else
         {
@@ -178,7 +191,9 @@ namespace Kmplete
         settings.SaveBool(LogOutputFileStr, _logSettings.outputFile);
         settings.SaveBool(LogOutputStringBufferStr, _logSettings.outputStringBuffer);
         settings.SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
+        settings.SaveInt(LogCoreLevelFlushStr, _logSettings.coreLevelFlush);
         settings.SaveInt(LogClientLevelStr, _logSettings.clientLevel);
+        settings.SaveInt(LogClientLevelFlushStr, _logSettings.clientLevelFlush);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
@@ -193,7 +208,9 @@ namespace Kmplete
         _logSettings.outputFile = settings.GetBool(LogOutputFileStr, true);
         _logSettings.outputStringBuffer = settings.GetBool(LogOutputStringBufferStr, false);
         _logSettings.coreLevel = settings.GetInt(LogCoreLevelStr, spdlog::level::trace);
+        _logSettings.coreLevelFlush = settings.GetInt(LogCoreLevelFlushStr, spdlog::level::trace);
         _logSettings.clientLevel = settings.GetInt(LogClientLevelStr, spdlog::level::trace);
+        _logSettings.clientLevelFlush = settings.GetInt(LogClientLevelFlushStr, spdlog::level::trace);
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------

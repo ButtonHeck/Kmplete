@@ -8,7 +8,9 @@
             "OutputFile": true,
             "OutputStringBuffer": true,
             "CoreLevel": 0,
-            "ClientLevel": 0
+            "CoreLevelFlush": 0,
+            "ClientLevel": 0,
+            "ClientLevelFlush": 0
         }
     },
     "WindowApplication": {
