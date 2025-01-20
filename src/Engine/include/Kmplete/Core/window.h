@@ -3,6 +3,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/nullability.h"
 #include "Kmplete/Event/event.h"
 
 #include <string>
@@ -98,7 +99,7 @@ namespace Kmplete
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
         KMP_API virtual void UpdateSettings() const = 0;
 
-        KMP_NODISCARD KMP_API virtual void* GetImplPointer() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const KMP_NOEXCEPT = 0;
 
     protected:
         Ptr<WindowSettings> _settings;

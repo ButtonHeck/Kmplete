@@ -33,10 +33,10 @@ namespace Kmplete
     enum EventTrait
     {
         None = 0,
-        WindowEventTrait = 1 << 0,
-        InputEventTrait = 1 << 1,
-        KeyboardEventTrait = 1 << 2,
-        MouseEventTrait = 1 << 3,
+        WindowEventTrait =      1 << 0,
+        InputEventTrait =       1 << 1,
+        KeyboardEventTrait =    1 << 2,
+        MouseEventTrait =       1 << 3,
         MouseButtonEventTrait = 1 << 4
     };
     //--------------------------------------------------------------------------

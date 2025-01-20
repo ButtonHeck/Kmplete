@@ -93,7 +93,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned char* Image::GetPixels() const KMP_NOEXCEPT
+    Nullable<unsigned char*> Image::GetPixels() const KMP_NOEXCEPT
     {
         return _pixels;
     }

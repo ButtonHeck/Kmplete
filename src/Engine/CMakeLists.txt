@@ -26,6 +26,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/system_metrics_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/locale_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/nullability.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp

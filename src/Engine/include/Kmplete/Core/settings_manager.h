@@ -4,6 +4,7 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/nullability.h"
 
 #include <unordered_map>
 
@@ -17,8 +18,8 @@ namespace Kmplete
         KMP_API explicit SettingsManager(const Path& filename);
         ~SettingsManager() = default;
 
-        KMP_NODISCARD KMP_API Settings* PutSettings(const std::string& name);
-        KMP_NODISCARD KMP_API Settings* GetSettings(const std::string& name) const;
+        KMP_NODISCARD KMP_API Nullable<Settings*> PutSettings(const std::string& name);
+        KMP_NODISCARD KMP_API Nullable<Settings*> GetSettings(const std::string& name) const;
 
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;
@@ -28,7 +29,7 @@ namespace Kmplete
 
     private:
         Path _filename;
-        std::unordered_map<std::string, UPtr<Settings>> _settings;
+        std::unordered_map<std::string, UPtr<Settings>> _namedSettings;
     };
     //--------------------------------------------------------------------------
 }

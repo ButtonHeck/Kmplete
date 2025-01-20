@@ -272,7 +272,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void* WindowGlfw::GetImplPointer() const KMP_NOEXCEPT
+    NonNull<void*> WindowGlfw::GetImplPointer() const KMP_NOEXCEPT
     {
         return _window;
     }
@@ -309,7 +309,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    WindowGlfw::UserData* WindowGlfw::GetUserPointer(GLFWwindow* window)
+    Nullable<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(GLFWwindow* window)
     {
         auto userData = glfwGetWindowUserPointer(window);
         KMP_ASSERT(userData);

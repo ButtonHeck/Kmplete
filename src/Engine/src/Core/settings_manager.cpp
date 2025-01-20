@@ -9,23 +9,23 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    Settings* SettingsManager::PutSettings(const std::string& name)
+    Nullable<Settings*> SettingsManager::PutSettings(const std::string& name)
     {
-        if (_settings.contains(name))
+        if (_namedSettings.contains(name))
         {
-            _settings.erase(name);
+            _namedSettings.erase(name);
         }
 
-        _settings.insert({ name, CreateUPtr<Settings>(name) });
+        _namedSettings.insert({ name, CreateUPtr<Settings>(name) });
         return GetSettings(name);
     }
     //--------------------------------------------------------------------------
 
-    Settings* SettingsManager::GetSettings(const std::string& name) const
+    Nullable<Settings*> SettingsManager::GetSettings(const std::string& name) const
     {
-        if (_settings.contains(name))
+        if (_namedSettings.contains(name))
         {
-            return _settings.at(name).get();
+            return _namedSettings.at(name).get();
         }
 
         return nullptr;
@@ -44,12 +44,12 @@ namespace Kmplete
         const auto documentChildren = document.GetChildren();
         for (const auto& [name, childDocument] : documentChildren)
         {
-            if (_settings.contains(name))
+            if (_namedSettings.contains(name))
             {
-                _settings.erase(name);
+                _namedSettings.erase(name);
             }
 
-            _settings.insert({ name, CreateUPtr<Settings>(name, childDocument) });
+            _namedSettings.insert({ name, CreateUPtr<Settings>(name, childDocument) });
         }
 
         return true;
@@ -60,7 +60,7 @@ namespace Kmplete
     {
         JsonDocument summaryDocument;
 
-        for (const auto& [settingsEntryName, settingsEntry] : _settings)
+        for (const auto& [settingsEntryName, settingsEntry] : _namedSettings)
         {
             summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
         }

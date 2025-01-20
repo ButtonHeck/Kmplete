@@ -46,7 +46,7 @@ namespace Kmplete
         KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
         KMP_API void UpdateSettings() const override;
 
-        KMP_NODISCARD KMP_API void* GetImplPointer() const KMP_NOEXCEPT override;
+        KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const KMP_NOEXCEPT override;
 
     private:
         struct UserData
@@ -61,7 +61,7 @@ namespace Kmplete
             EventCallbackFn eventCallback;
         };
 
-        KMP_NODISCARD static UserData* GetUserPointer(GLFWwindow* window);
+        KMP_NODISCARD static Nullable<UserData*> GetUserPointer(GLFWwindow* window);
 
     private:
         void Initialize();

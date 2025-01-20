@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/nullability.h"
 
 #include <string>
 
@@ -30,7 +31,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API int GetWidth() const KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API int GetHeight() const KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API int GetChannels() const KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API unsigned char* GetPixels() const KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API Nullable<unsigned char*> GetPixels() const KMP_NOEXCEPT;
 
     private:
         int _width;
