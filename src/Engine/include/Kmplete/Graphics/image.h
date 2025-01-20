@@ -7,7 +7,6 @@
 
 namespace Kmplete
 {
-    // TODO: move constructor/assign
     class Image
     {
     public:
@@ -20,9 +19,13 @@ namespace Kmplete
         };
 
     public:
+        KMP_DISABLE_COPY(Image)
+
         KMP_API Image(const Path& filename, Channels desiredChannels, bool flipVertically = false);
         KMP_API Image(const char* filename, Channels desiredChannels, bool flipVertically = false);
         KMP_API ~Image();
+        KMP_API Image(Image&& rhs) KMP_NOEXCEPT;
+        KMP_API Image& operator=(Image&& rhs) KMP_NOEXCEPT;
 
         KMP_NODISCARD KMP_API int GetWidth() const KMP_NOEXCEPT;
         KMP_NODISCARD KMP_API int GetHeight() const KMP_NOEXCEPT;

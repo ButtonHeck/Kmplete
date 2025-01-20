@@ -47,6 +47,34 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    Image::Image(Image&& rhs) KMP_NOEXCEPT
+        : _width(rhs._width)
+        , _height(rhs._height)
+        , _channels(rhs._channels)
+        , _pixels(rhs._pixels)
+    {
+        rhs._pixels = nullptr;
+    }
+    //--------------------------------------------------------------------------
+
+    Image& Image::operator=(Image&& rhs) KMP_NOEXCEPT
+    {
+        if (_pixels)
+        {
+            stbi_image_free(_pixels);
+        }
+
+        _width = rhs._width;
+        _height = rhs._height;
+        _channels = rhs._channels;
+        _pixels = rhs._pixels;
+
+        rhs._pixels = nullptr;
+
+        return *this;
+    }
+    //--------------------------------------------------------------------------
+
     int Image::GetWidth() const KMP_NOEXCEPT
     {
         return _width;
