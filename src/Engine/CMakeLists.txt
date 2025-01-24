@@ -102,11 +102,10 @@ SetupCompilerOptions(Kmplete_Engine)
 
 target_include_directories(Kmplete_Engine
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
-
     PUBLIC "${spdlog_SOURCE_DIR}/include"
     PUBLIC "${RapidJSON_SOURCE_DIR}/include"
-    
-    PRIVATE "${GLFW_SOURCE_DIR}/include"    
+    PUBLIC "${GLFW_SOURCE_DIR}/include"
+
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
 )
 
@@ -129,8 +128,8 @@ target_compile_definitions(Kmplete_Engine
 
 target_link_libraries(Kmplete_Engine 
     PUBLIC Kmplete_Version
+    PUBLIC glfw
     
-    PRIVATE glfw
     PRIVATE stb_image
 )
 

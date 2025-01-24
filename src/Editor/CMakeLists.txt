@@ -8,6 +8,7 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.h
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.cpp
 )
+source_group("Editor" FILES ${Kmplete_Editor_SOURCES})
 
 if(WIN32)
 	set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
@@ -20,13 +21,29 @@ if(WIN32)
 	source_group("Resources" FILES ${Kmplete_Editor_WINRC})
 endif()
 
+aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
+source_group("Imgui" FILES
+    ${IMGUI_SOURCES}
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
+)
+
 add_executable(Kmplete_Editor
     ${Kmplete_Editor_SOURCES}
     ${Kmplete_Editor_WINRC}
+    ${IMGUI_SOURCES}
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
 )
 
 
 SetupCompilerOptions(Kmplete_Editor)
+
+target_include_directories(Kmplete_Editor
+    PRIVATE ${imgui_SOURCE_DIR}
+)
 
 target_link_libraries(Kmplete_Editor
     PRIVATE Kmplete_Engine

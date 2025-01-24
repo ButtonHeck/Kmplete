@@ -51,6 +51,9 @@ FetchContent_GetProperties(imgui)
 
 if(NOT imgui_POPULATED)
     FetchContent_Populate(imgui)
+    
+    # ImGui doesn't contain CMakeLists, thus manually set the variable
+    set(imgui_SOURCE_DIR "${FETCHCONTENT_BASE_DIR}/imgui-src" PARENT_SCOPE)
 endif()
 
 
