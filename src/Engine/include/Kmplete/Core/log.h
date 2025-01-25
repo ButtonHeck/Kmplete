@@ -50,41 +50,41 @@ namespace Kmplete
 
         // Core log functions
         template <typename... Args>
-        static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->trace(fmt, std::forward<Args>(args)...); }
+        static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->trace(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void CoreDebug(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->debug(fmt, std::forward<Args>(args)...); }
+        static void CoreDebug(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->debug(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void CoreInfo(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->info(fmt, std::forward<Args>(args)...); }
+        static void CoreInfo(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->info(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void CoreWarn(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->warn(fmt, std::forward<Args>(args)...); }
+        static void CoreWarn(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->warn(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void CoreError(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->error(fmt, std::forward<Args>(args)...); }
+        static void CoreError(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->error(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void CoreCritical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->critical(fmt, std::forward<Args>(args)...); }
+        static void CoreCritical(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->critical(fmt, std::forward<Args>(args)...); }
 
         // Client log functions
         template <typename... Args>
-        static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->trace(fmt, std::forward<Args>(args)...); }
+        static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->trace(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void Debug(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->debug(fmt, std::forward<Args>(args)...); }
+        static void Debug(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->debug(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void Info(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->info(fmt, std::forward<Args>(args)...); }
+        static void Info(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->info(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void Warn(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->warn(fmt, std::forward<Args>(args)...); }
+        static void Warn(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->warn(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void Error(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->error(fmt, std::forward<Args>(args)...); }
+        static void Error(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->error(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
-        static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_clientLogger) _clientLogger->critical(fmt, std::forward<Args>(args)...); }
+        static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->critical(fmt, std::forward<Args>(args)...); }
 
     private:
         struct LogSettings
@@ -104,7 +104,7 @@ namespace Kmplete
     private:
         static LogSettings _logSettings;
         static Ptr<spdlog::logger> _coreLogger;
-        static Ptr<spdlog::logger> _clientLogger;
+        KMP_API static Ptr<spdlog::logger> _clientLogger;
         static std::stringstream _stringStream;
     };
     //--------------------------------------------------------------------------

@@ -129,6 +129,7 @@ target_compile_definitions(Kmplete_Engine
 target_link_libraries(Kmplete_Engine 
     PUBLIC Kmplete_Version
     PUBLIC glfw
+    PUBLIC spdlog
     
     PRIVATE stb_image
 )
