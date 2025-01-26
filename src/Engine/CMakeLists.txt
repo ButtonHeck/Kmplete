@@ -124,6 +124,8 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PRIVATE KMP_EXPORTS
+    PRIVATE KMP_ENGINE_PRIVATE
+    INTERFACE KMP_ENGINE_INTERFACE
 )
 
 target_link_libraries(Kmplete_Engine 

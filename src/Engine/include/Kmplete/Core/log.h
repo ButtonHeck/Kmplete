@@ -2,19 +2,21 @@
 
 #if defined (KMP_LOG_DISABLED) || defined (KMP_PRODUCTION_BUILD)
 
-#define KMP_LOG_CORE_TRACE(...)
-#define KMP_LOG_CORE_DEBUG(...)
-#define KMP_LOG_CORE_INFO(...)
-#define KMP_LOG_CORE_WARN(...)
-#define KMP_LOG_CORE_ERROR(...)
-#define KMP_LOG_CORE_CRITICAL(...)
-
-#define KMP_LOG_CLIENT_TRACE(...)
-#define KMP_LOG_CLIENT_DEBUG(...)
-#define KMP_LOG_CLIENT_INFO(...)
-#define KMP_LOG_CLIENT_WARN(...)
-#define KMP_LOG_CLIENT_ERROR(...)
-#define KMP_LOG_CLIENT_CRITICAL(...)
+#if defined (KMP_ENGINE_PRIVATE)
+    #define KMP_LOG_CORE_TRACE(...)
+    #define KMP_LOG_CORE_DEBUG(...)
+    #define KMP_LOG_CORE_INFO(...)
+    #define KMP_LOG_CORE_WARN(...)
+    #define KMP_LOG_CORE_ERROR(...)
+    #define KMP_LOG_CORE_CRITICAL(...)
+#elif defined (KMP_ENGINE_INTERFACE)
+    #define KMP_LOG_CLIENT_TRACE(...)
+    #define KMP_LOG_CLIENT_DEBUG(...)
+    #define KMP_LOG_CLIENT_INFO(...)
+    #define KMP_LOG_CLIENT_WARN(...)
+    #define KMP_LOG_CLIENT_ERROR(...)
+    #define KMP_LOG_CLIENT_CRITICAL(...)
+#endif
 
 #else
 #include "Kmplete/Core/kmplete_api.h"
@@ -48,7 +50,7 @@ namespace Kmplete
         KMP_API static void SaveSettings(Settings& settings);
         KMP_API static void LoadSettings(Settings& settings);
 
-        // Core log functions
+#if defined (KMP_ENGINE_PRIVATE)
         template <typename... Args>
         static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->trace(fmt, std::forward<Args>(args)...); }
 
@@ -67,7 +69,7 @@ namespace Kmplete
         template <typename... Args>
         static void CoreCritical(spdlog::format_string_t<Args...> fmt, Args&&... args) { _coreLogger->critical(fmt, std::forward<Args>(args)...); }
 
-        // Client log functions
+#elif defined (KMP_ENGINE_INTERFACE)
         template <typename... Args>
         static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->trace(fmt, std::forward<Args>(args)...); }
 
@@ -85,6 +87,7 @@ namespace Kmplete
 
         template <typename... Args>
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { _clientLogger->critical(fmt, std::forward<Args>(args)...); }
+#endif
 
     private:
         struct LogSettings
@@ -110,17 +113,19 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#define KMP_LOG_CORE_TRACE(...)         ::Kmplete::Log::CoreTrace(__VA_ARGS__)
-#define KMP_LOG_CORE_DEBUG(...)         ::Kmplete::Log::CoreDebug(__VA_ARGS__)
-#define KMP_LOG_CORE_INFO(...)          ::Kmplete::Log::CoreInfo(__VA_ARGS__)
-#define KMP_LOG_CORE_WARN(...)          ::Kmplete::Log::CoreWarn(__VA_ARGS__)
-#define KMP_LOG_CORE_ERROR(...)         ::Kmplete::Log::CoreError(__VA_ARGS__)
-#define KMP_LOG_CORE_CRITICAL(...)      ::Kmplete::Log::CoreCritical(__VA_ARGS__)
-
-#define KMP_LOG_CLIENT_TRACE(...)       ::Kmplete::Log::Trace(__VA_ARGS__)
-#define KMP_LOG_CLIENT_DEBUG(...)       ::Kmplete::Log::Debug(__VA_ARGS__)
-#define KMP_LOG_CLIENT_INFO(...)        ::Kmplete::Log::Info(__VA_ARGS__)
-#define KMP_LOG_CLIENT_WARN(...)        ::Kmplete::Log::Warn(__VA_ARGS__)
-#define KMP_LOG_CLIENT_ERROR(...)       ::Kmplete::Log::Error(__VA_ARGS__)
-#define KMP_LOG_CLIENT_CRITICAL(...)    ::Kmplete::Log::Critical(__VA_ARGS__)
+#if defined (KMP_ENGINE_PRIVATE)
+    #define KMP_LOG_CORE_TRACE(...)      ::Kmplete::Log::CoreTrace(__VA_ARGS__)
+    #define KMP_LOG_CORE_DEBUG(...)      ::Kmplete::Log::CoreDebug(__VA_ARGS__)
+    #define KMP_LOG_CORE_INFO(...)       ::Kmplete::Log::CoreInfo(__VA_ARGS__)
+    #define KMP_LOG_CORE_WARN(...)       ::Kmplete::Log::CoreWarn(__VA_ARGS__)
+    #define KMP_LOG_CORE_ERROR(...)      ::Kmplete::Log::CoreError(__VA_ARGS__)
+    #define KMP_LOG_CORE_CRITICAL(...)   ::Kmplete::Log::CoreCritical(__VA_ARGS__)
+#elif defined (KMP_ENGINE_INTERFACE)
+    #define KMP_LOG_CLIENT_TRACE(...)    ::Kmplete::Log::Trace(__VA_ARGS__)
+    #define KMP_LOG_CLIENT_DEBUG(...)    ::Kmplete::Log::Debug(__VA_ARGS__)
+    #define KMP_LOG_CLIENT_INFO(...)     ::Kmplete::Log::Info(__VA_ARGS__)
+    #define KMP_LOG_CLIENT_WARN(...)     ::Kmplete::Log::Warn(__VA_ARGS__)
+    #define KMP_LOG_CLIENT_ERROR(...)    ::Kmplete::Log::Error(__VA_ARGS__)
+    #define KMP_LOG_CLIENT_CRITICAL(...) ::Kmplete::Log::Critical(__VA_ARGS__)
+#endif
 #endif
