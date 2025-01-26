@@ -9,11 +9,15 @@ namespace Kmplete
     class EditorUIImpl
     {
     public:
-        KMP_DISABLE_COPY_MOVE(EditorUIImpl)
-
         static EditorUIImpl* CreateImpl(const Ptr<Window> window);
 
+    public:
+        KMP_DISABLE_COPY_MOVE(EditorUIImpl)
+
         virtual ~EditorUIImpl() = default;
+
+        virtual void NewFrame() = 0;
+        virtual void Render() = 0;
 
     protected:
         explicit EditorUIImpl(const Ptr<Window> window);

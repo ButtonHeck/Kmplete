@@ -12,6 +12,9 @@ namespace Kmplete
         explicit EditorUIImplOpenglGLFW(const Ptr<Window> window);
         virtual ~EditorUIImplOpenglGLFW();
 
+        void NewFrame() override;
+        void Render() override;
+
     private:
         void Initialize();
         void Finalize();

@@ -24,6 +24,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    constexpr static auto EditorAppSettingsEntryName = "EditorApplication";
+
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
         : WindowApplication(applicationParameters)
         , _ui(new EditorUI(_mainWindow))
@@ -65,6 +67,7 @@ namespace Kmplete
         while (!_mainWindow->ShouldClose())
         {
             _mainWindow->ProcessEvents();
+            _ui->LoopIteration();
             _mainWindow->SwapBuffers();
         }
 
@@ -97,32 +100,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent&)
+    bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent& event)
     {
-        _mainWindow->SetShouldClose(true);
-        return true;
+        return _ui->OnWindowCloseEvent(event);
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+    bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event)
     {
-        return true;
+        return _ui->OnWindowFramebufferRefreshEvent(event);
     }
     //--------------------------------------------------------------------------
 
-    bool EditorApplication::OnKeyPressEvent(KeyPressEvent&)
+    bool EditorApplication::OnKeyPressEvent(KeyPressEvent& event)
     {
-        return true;
+        return _ui->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::SaveSettingsInternal() const
     {
+        auto settings = _settingsManager->PutSettings(EditorAppSettingsEntryName);
+        if (!settings)
+        {
+            KMP_LOG_CLIENT_WARN("EditorApplication: failed to create settings entry for saving");
+            return;
+        }
+
+        _ui->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::LoadSettingsInternal()
     {
+        const auto settings = _settingsManager->GetSettings(EditorAppSettingsEntryName);
+        if (!settings)
+        {
+            KMP_LOG_CLIENT_WARN("EditorApplication: failed to get setting entry for loading");
+            return;
+        }
+
+        _ui->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

@@ -33,4 +33,26 @@ namespace Kmplete
         ImGui_ImplGlfw_Shutdown();
     }
     //--------------------------------------------------------------------------
+
+    void EditorUIImplOpenglGLFW::NewFrame()
+    {
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUIImplOpenglGLFW::Render()
+    {
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        const auto& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            const auto backupContext = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backupContext);
+        }
+    }
+    //--------------------------------------------------------------------------
 }
