@@ -1,6 +1,7 @@
 #include "editor_application.h"
 #include "Kmplete/Core/entry_point.h"
 #include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/log.h"
 #include "Kmplete/Utils/function_utils.h"
 
 namespace Kmplete
@@ -17,6 +18,7 @@ namespace Kmplete
         }
         catch (const std::exception&)
         {
+            KMP_LOG_CLIENT_CRITICAL("EditorApplication: failed to create Editor instance");
             return nullptr;
         }
     }
@@ -24,6 +26,7 @@ namespace Kmplete
 
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
         : WindowApplication(applicationParameters)
+        , _ui(new EditorUI(_mainWindow))
     {
         Initialize();
     }
@@ -58,11 +61,14 @@ namespace Kmplete
 
     void EditorApplication::Run()
     {
+        KMP_LOG_CLIENT_DEBUG("EditorApplication: main loop started...");
         while (!_mainWindow->ShouldClose())
         {
             _mainWindow->ProcessEvents();
             _mainWindow->SwapBuffers();
         }
+
+        KMP_LOG_CLIENT_DEBUG("EditorApplication: main loop finished");
     }
     //--------------------------------------------------------------------------
 

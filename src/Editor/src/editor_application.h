@@ -1,5 +1,6 @@
 #pragma once
 
+#include "editor_ui.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Application/window_application.h"
 
@@ -33,6 +34,9 @@ namespace Kmplete
         void Finalize();
         void SaveSettingsInternal() const;
         void LoadSettingsInternal();
+
+    private:
+        UPtr<EditorUI> _ui;
     };
     //--------------------------------------------------------------------------
 }
