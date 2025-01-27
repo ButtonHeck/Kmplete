@@ -9,6 +9,8 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui.h
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_compositor.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_compositor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl.h
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl_opengl_glfw.h

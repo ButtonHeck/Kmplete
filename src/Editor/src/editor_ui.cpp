@@ -9,6 +9,7 @@ namespace Kmplete
 
     EditorUI::EditorUI(const Ptr<Window> window)
         : _uiImpl(nullptr)
+        , _compositor(CreateUPtr<EditorUICompositor>(window))
     {
         Initialize(window);
     }
@@ -42,12 +43,23 @@ namespace Kmplete
     {
         NewFrame();
         Stylize();
-        BeginApplicationArea();
-        BeginMainWorkingArea();
-        Compose();
-        EndMainWorkingArea();
-        ComposeStatusBar();
-        EndApplicationArea();
+        {
+            BeginApplicationArea();
+            {
+                BeginMainWorkingArea();
+                {
+                    ComposeMainArea();
+                }
+                EndMainWorkingArea();
+
+                BeginStatusBarArea();
+                {
+                    ComposeStatusBar();
+                }
+                EndStatusBarArea();
+            }
+            EndApplicationArea();
+        }
         Render();
         EndFrame();
     }
@@ -71,11 +83,6 @@ namespace Kmplete
 
     void EditorUI::BeginApplicationArea()
     {
-        const auto applicationWindowFlags =
-            ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -86,18 +93,18 @@ namespace Kmplete
             {ImGuiStyleVar_WindowBorderSize, 0.0f},
             {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
         });
+
+        constexpr static auto applicationWindowFlags =
+            ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+            ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
         ImGui::Begin("ApplicationWindow", nullptr, applicationWindowFlags);
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::BeginMainWorkingArea()
     {
-        constexpr static auto statusBarHeight = 40;
-        const auto workingAreaFlags =
-            ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
-            ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
-            ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
-
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowViewport(viewport->ID);
@@ -108,6 +115,13 @@ namespace Kmplete
                 {ImGuiStyleVar_WindowBorderSize, 0.0f},
                 {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
             });
+
+            constexpr static auto statusBarHeight = 40;
+            constexpr static auto workingAreaFlags =
+                ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
             ImGui::BeginChild("MainWorkingArea", ImVec2(viewport->WorkSize.x, viewport->WorkSize.y - statusBarHeight), false, workingAreaFlags);
         }
 
@@ -120,8 +134,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Compose()
+    void EditorUI::ComposeMainArea()
     {
+        _compositor->ComposeMainArea();
     }
     //--------------------------------------------------------------------------
 
@@ -131,7 +146,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::ComposeStatusBar()
+    void EditorUI::BeginStatusBarArea()
     {
         UiUtils::StyleVarGuard styleVarGuard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
@@ -141,10 +156,20 @@ namespace Kmplete
 
         UiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg)} });
 
-        if (ImGui::BeginChild("StatusBar", ImGui::GetContentRegionAvail(), false, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking))
-        {
-            ImGui::EndChild();
-        }
+        constexpr static auto statusBarFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking;
+        ImGui::BeginChild("StatusBar", ImGui::GetContentRegionAvail(), false, statusBarFlags);
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::ComposeStatusBar()
+    {
+        _compositor->ComposeStatusBar();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::EndStatusBarArea()
+    {
+        ImGui::EndChild(); // "StatusBar"
     }
     //--------------------------------------------------------------------------
 
@@ -167,9 +192,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUI::OnWindowCloseEvent(WindowCloseEvent&)
+    bool EditorUI::OnWindowCloseEvent(WindowCloseEvent& event)
     {
-        return true;
+        return _compositor->OnWindowCloseEvent(event);
     }
     //--------------------------------------------------------------------------
 
@@ -180,9 +205,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUI::OnKeyPressEvent(KeyPressEvent&)
+    bool EditorUI::OnKeyPressEvent(KeyPressEvent& event)
     {
-        return true;
+        return _compositor->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 

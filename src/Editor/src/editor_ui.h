@@ -1,6 +1,7 @@
 #pragma once
 
 #include "editor_ui_impl.h"
+#include "editor_ui_compositor.h"
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/settings.h"
@@ -23,9 +24,11 @@ namespace Kmplete
         void Stylize();
         void BeginApplicationArea();
         void BeginMainWorkingArea();
-        void Compose();
+        void ComposeMainArea();
         void EndMainWorkingArea();
+        void BeginStatusBarArea();
         void ComposeStatusBar();
+        void EndStatusBarArea();
         void EndApplicationArea();
         void Render();
         void EndFrame();
@@ -43,6 +46,7 @@ namespace Kmplete
 
     private:
         UPtr<EditorUIImpl> _uiImpl;
+        UPtr<EditorUICompositor> _compositor;
     };
     //--------------------------------------------------------------------------
 }
