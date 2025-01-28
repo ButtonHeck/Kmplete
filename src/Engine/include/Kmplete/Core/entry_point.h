@@ -1,5 +1,9 @@
 #pragma once
 
+#if defined (KMP_ENGINE_PRIVATE)
+    #error "entry_point.h should be included only in client code"
+#endif
+
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/pointers.h"
