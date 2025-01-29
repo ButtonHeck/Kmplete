@@ -41,18 +41,18 @@ namespace Kmplete
     class Log
     {
     public:
-        KMP_API static void Boot();
-        KMP_API static void Initialize();
-        KMP_API static void Finalize();
+        static void Boot();
+        static void Initialize();
+        static void Finalize();
 
         KMP_NODISCARD KMP_API static std::string_view StringLogOutput();
 
-        KMP_API static void SaveSettings(Settings& settings);
-        KMP_API static void LoadSettings(Settings& settings);
+        static void SaveSettings(Settings& settings);
+        static void LoadSettings(Settings& settings);
 
 #if defined (KMP_ENGINE_PRIVATE)
         template <typename... Args>
-        static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if(_coreLogger) _coreLogger->trace(fmt, std::forward<Args>(args)...); }
+        static void CoreTrace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->trace(fmt, std::forward<Args>(args)...); }
 
         template <typename... Args>
         static void CoreDebug(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_coreLogger) _coreLogger->debug(fmt, std::forward<Args>(args)...); }
