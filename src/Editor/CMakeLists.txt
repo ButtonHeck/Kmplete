@@ -17,6 +17,7 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl_opengl_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/ui_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/src/ui_utils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/ui_identifiers.h
 )
 source_group("Editor" FILES ${Kmplete_Editor_SOURCES})
 

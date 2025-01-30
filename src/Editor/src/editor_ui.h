@@ -21,16 +21,16 @@ namespace Kmplete
         void LoopIteration();
 
         void NewFrame();
-        void BeginApplicationArea();
-        void BeginMainWorkingArea();
+        void BeginApplicationArea() const;
+        void BeginMainWorkingArea() const;
         void ComposeMainArea();
-        void EndMainWorkingArea();
-        void BeginStatusBarArea();
+        void EndMainWorkingArea() const;
+        void BeginStatusBarArea() const;
         void ComposeStatusBar();
-        void EndStatusBarArea();
-        void EndApplicationArea();
+        void EndStatusBarArea() const;
+        void EndApplicationArea() const;
         void Render();
-        void EndFrame();
+        void EndFrame() const;
 
         bool OnWindowCloseEvent(WindowCloseEvent& event);
         bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);

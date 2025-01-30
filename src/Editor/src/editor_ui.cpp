@@ -1,5 +1,6 @@
 #include "editor_ui.h"
 #include "ui_utils.h"
+#include "ui_identifiers.h"
 
 #include <imgui.h>
 
@@ -92,7 +93,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::BeginApplicationArea()
+    void EditorUI::BeginApplicationArea() const
     {
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -110,11 +111,11 @@ namespace Kmplete
             ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
             ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
-        ImGui::Begin("ApplicationWindow", nullptr, applicationWindowFlags);
+        ImGui::Begin(IdApp_ApplicationWindow, nullptr, applicationWindowFlags);
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::BeginMainWorkingArea()
+    void EditorUI::BeginMainWorkingArea() const
     {
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -133,13 +134,13 @@ namespace Kmplete
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                 ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
-            ImGui::BeginChild("MainWorkingArea", ImVec2(viewport->WorkSize.x, viewport->WorkSize.y - statusBarHeight), false, workingAreaFlags);
+            ImGui::BeginChild(IdApp_MainWorkingArea, ImVec2(viewport->WorkSize.x, viewport->WorkSize.y - statusBarHeight), false, workingAreaFlags);
         }
 
         const auto& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
-            const auto dockspaceId = ImGui::GetID("EditorDockspace");
+            const auto dockspaceId = ImGui::GetID(IdApp_EditorDockspace);
             ImGui::DockSpace(dockspaceId, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
         }
     }
@@ -151,13 +152,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndMainWorkingArea()
+    void EditorUI::EndMainWorkingArea() const
     {
-        ImGui::EndChild(); // "MainWorkingArea"
+        ImGui::EndChild(); // IdApp_MainWorkingArea
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::BeginStatusBarArea()
+    void EditorUI::BeginStatusBarArea() const
     {
         UiUtils::StyleVarGuard styleVarGuard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
@@ -167,8 +168,8 @@ namespace Kmplete
 
         UiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg)} });
 
-        constexpr static auto statusBarFlags = ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoDocking;
-        ImGui::BeginChild("StatusBar", ImGui::GetContentRegionAvail(), false, statusBarFlags);
+        constexpr static auto statusBarFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking;
+        ImGui::BeginChild(IdApp_StatusBar, ImGui::GetContentRegionAvail(), false, statusBarFlags);
     }
     //--------------------------------------------------------------------------
 
@@ -178,15 +179,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndStatusBarArea()
+    void EditorUI::EndStatusBarArea() const
     {
-        ImGui::EndChild(); // "StatusBar"
+        ImGui::EndChild(); // IdApp_StatusBar
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndApplicationArea()
+    void EditorUI::EndApplicationArea() const
     {
-        ImGui::End(); // "ApplicationWindow"
+        ImGui::End(); // IdApp_ApplicationWindow
     }
     //--------------------------------------------------------------------------
 
@@ -197,7 +198,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndFrame()
+    void EditorUI::EndFrame() const
     {
         ImGui::EndFrame();
     }
