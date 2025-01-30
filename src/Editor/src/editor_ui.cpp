@@ -30,10 +30,31 @@ namespace Kmplete
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 
         _uiImpl.reset(EditorUIImpl::CreateImpl(window));
+
+        AddDefaultFont();
+        Stylize();
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Finalize()
+    void EditorUI::AddDefaultFont() const
+    {
+        auto& io = ImGui::GetIO();
+        const auto fontSize = 18;
+        const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "/OpenSans-Regular.ttf");
+        io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::Stylize() const
+    {
+        auto& style = ImGui::GetStyle();
+        style.FrameBorderSize = 1.0f;
+        style.WindowMenuButtonPosition = ImGuiDir_None;
+        style.DisabledAlpha = 0.4f;
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::Finalize() const
     {
         ImGui::DestroyContext();
     }
@@ -42,7 +63,6 @@ namespace Kmplete
     void EditorUI::LoopIteration()
     {
         NewFrame();
-        Stylize();
         {
             BeginApplicationArea();
             {
@@ -69,15 +89,6 @@ namespace Kmplete
     {
         _uiImpl->NewFrame();
         ImGui::NewFrame();
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorUI::Stylize()
-    {
-        auto& style = ImGui::GetStyle();
-        style.FrameBorderSize = 1.0f;
-        style.WindowMenuButtonPosition = ImGuiDir_None;
-        style.DisabledAlpha = 0.4f;
     }
     //--------------------------------------------------------------------------
 

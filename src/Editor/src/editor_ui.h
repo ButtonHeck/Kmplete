@@ -21,7 +21,6 @@ namespace Kmplete
         void LoopIteration();
 
         void NewFrame();
-        void Stylize();
         void BeginApplicationArea();
         void BeginMainWorkingArea();
         void ComposeMainArea();
@@ -42,11 +41,13 @@ namespace Kmplete
 
     private:
         void Initialize(const Ptr<Window> window);
-        void Finalize();
+        void AddDefaultFont() const;
+        void Stylize() const;
+        void Finalize() const;
 
     private:
         UPtr<EditorUIImpl> _uiImpl;
-        UPtr<EditorUICompositor> _compositor;
+        const UPtr<EditorUICompositor> _compositor;
     };
     //--------------------------------------------------------------------------
 }
