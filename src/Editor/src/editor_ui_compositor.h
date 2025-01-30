@@ -21,7 +21,28 @@ namespace Kmplete
         bool OnKeyPressEvent(KeyPressEvent& event);
 
     private:
+        void ComposeDefaultLayout();
+
+        void ComposeMenu();
+        void ComposeMenuFile();
+        void ComposeMenuView();
+        void ComposeMenuFileQuit();
+        void ComposeMenuViewFullscreen();
+
+        void ComposePopups();
+        void PopupQuit();
+
+        void SwitchFullscreen();
+
+    private:
+        struct UIPopupsState
+        {
+            bool quit = false;
+        };
+
+    private:
         const Ptr<Window> _window;
+        UIPopupsState _popups;
     };
     //--------------------------------------------------------------------------
 }
