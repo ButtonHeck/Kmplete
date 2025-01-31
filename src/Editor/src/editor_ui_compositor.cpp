@@ -1,5 +1,6 @@
 #include "editor_ui_compositor.h"
 #include "ui_utils.h"
+#include "shortcuts.h"
 #include "Kmplete/Core/filesystem.h"
 
 #include <imgui.h>
@@ -68,7 +69,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuFileQuit()
     {
-        if (ImGui::MenuItem("Quit", "Ctrl+Q"))
+        if (ImGui::MenuItem("Quit", Shortcuts::Quit.text))
         {
             _popups.quit = true;
         }
@@ -79,7 +80,7 @@ namespace Kmplete
     {
         const auto screenMode = _window->GetScreenMode();
         auto isFullscreen = screenMode == Window::WindowedFullscreenMode;
-        if (ImGui::MenuItem("Fullscreen", "Alt+Enter", &isFullscreen))
+        if (ImGui::MenuItem("Fullscreen", Shortcuts::Fullscreen.text, &isFullscreen))
         {
             _window->SetScreenMode(isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
         }
@@ -138,11 +139,11 @@ namespace Kmplete
             return true;
         }
 
-        if (keyCode == Key::Q && mods & Mode::Ctrl)
+        if (Shortcuts::Quit.Accept(mods, keyCode))
         {
             _popups.quit = true;
         }
-        else if (keyCode == Key::Enter && mods & Mode::Alt)
+        else if (Shortcuts::Fullscreen.Accept(mods, keyCode))
         {
             SwitchFullscreen();
         }
