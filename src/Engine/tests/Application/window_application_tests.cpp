@@ -32,7 +32,7 @@ namespace Kmplete
 
         void Initialize()
         {
-            _localeManager->SetLocale("ru_RU.UTF8");
+            _localizationManager->SetLocale("ru_RU.UTF8");
             _mainWindow->SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
         }
 

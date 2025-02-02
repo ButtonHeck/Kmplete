@@ -44,7 +44,7 @@ namespace Kmplete
         TestApplication(const ApplicationParameters& applicationParameters)
             : Application(applicationParameters)
         {
-            _localeManager->SetLocale("ru_RU.UTF8");
+            _localizationManager->SetLocale("ru_RU.UTF8");
         }
 
         KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override 

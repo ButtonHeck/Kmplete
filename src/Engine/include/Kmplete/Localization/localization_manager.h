@@ -10,16 +10,16 @@
 
 namespace Kmplete
 {
-    class LocaleManager
+    class LocalizationManager
     {
     public:
         using LocaleChangeCallback = std::function<void()>;
 
     public:
-        KMP_DISABLE_COPY_MOVE(LocaleManager)
+        KMP_DISABLE_COPY_MOVE(LocalizationManager)
 
-        KMP_API LocaleManager();
-        ~LocaleManager() = default;
+        KMP_API LocalizationManager();
+        ~LocalizationManager() = default;
 
         KMP_API bool SetLocale(const std::string& localeString);
         KMP_NODISCARD KMP_API const std::string& GetLocale() const KMP_NOEXCEPT;

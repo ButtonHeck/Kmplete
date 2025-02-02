@@ -160,13 +160,13 @@ set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES
 
 # Locale tests
 
-set(Kmplete_Engine_Locale_Tests_CORE
-    ${CMAKE_CURRENT_LIST_DIR}/Core/locale_manager_tests.cpp
+set(Kmplete_Engine_Locale_Tests_LOCALIZATION
+    ${CMAKE_CURRENT_LIST_DIR}/Localization/localization_manager_tests.cpp
 )
-source_group("Core" FILES ${Kmplete_Engine_Locale_Tests_CORE})
+source_group("Localization" FILES ${Kmplete_Engine_Locale_Tests_LOCALIZATION})
 
 add_executable(Kmplete_Engine_Locale_Tests
-    ${Kmplete_Engine_Locale_Tests_CORE}
+    ${Kmplete_Engine_Locale_Tests_LOCALIZATION}
 )
 
 

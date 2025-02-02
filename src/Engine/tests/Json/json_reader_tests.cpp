@@ -1,5 +1,5 @@
 #include "Kmplete/Json/json_reader.h"
-#include "Kmplete/Core/locale_manager.h"
+#include "Kmplete/Localization/localization_manager.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -171,8 +171,8 @@ TEST_CASE("Rapidjson escaped quotes", "[json][reader]")
 
 TEST_CASE("Rapidjson cyrillic use", "[json][reader]")
 {
-    auto localeManager = Kmplete::LocaleManager();
-    localeManager.SetLocale("ru_RU.UTF8");
+    auto localizationManager = Kmplete::LocalizationManager();
+    localizationManager.SetLocale("ru_RU.UTF8");
 
     const char* JsonString = R"rjs(
     {

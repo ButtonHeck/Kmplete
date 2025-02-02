@@ -25,7 +25,6 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_backend_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/system_metrics_manager.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/locale_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/nullability.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
@@ -40,7 +39,6 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_backend_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/system_metrics_manager.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/locale_manager.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 
@@ -88,6 +86,12 @@ set(Kmplete_Engine_GRAPHICS
 )
 source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
 
+set(Kmplete_Engine_LOCALIZATION
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_manager.cpp
+)
+source_group("Localization" FILES ${Kmplete_Engine_LOCALIZATION})
+
 add_library(Kmplete_Engine
     ${Kmplete_Engine_CORE}
     ${Kmplete_Engine_APPLICATION}
@@ -95,6 +99,7 @@ add_library(Kmplete_Engine
     ${Kmplete_Engine_EVENT}
     ${Kmplete_Engine_JSON}
     ${Kmplete_Engine_GRAPHICS}
+    ${Kmplete_Engine_LOCALIZATION}
 )
 
 

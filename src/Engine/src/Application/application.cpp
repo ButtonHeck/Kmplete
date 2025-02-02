@@ -10,7 +10,7 @@ namespace Kmplete
 
     Application::Application(const ApplicationParameters& applicationParameters)
         : _systemMetricsManager(nullptr)
-        , _localeManager(nullptr)
+        , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
         Initialize(applicationParameters);
@@ -52,7 +52,7 @@ namespace Kmplete
 #endif
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
-        _localeManager = CreateUPtr<LocaleManager>();
+        _localizationManager = CreateUPtr<LocalizationManager>();
 
         if (!Filesystem::Initialize())
         {
@@ -76,7 +76,7 @@ namespace Kmplete
         SaveSettingsInternal();
 
         _settingsManager.reset();
-        _localeManager.reset();
+        _localizationManager.reset();
         _systemMetricsManager.reset();
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)

@@ -1,8 +1,8 @@
-#include "Kmplete/Core/locale_manager.h"
+#include "Kmplete/Localization/localization_manager.h"
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Locale tests", "[core][locale]")
+TEST_CASE("Locale tests", "[localization][locale]")
 {
     bool ok = true;
 
@@ -11,75 +11,75 @@ TEST_CASE("Locale tests", "[core][locale]")
     REQUIRE(std::string(localeC) == "C");
     REQUIRE(std::locale().name() == "C");
 
-    // Create default localeManager
-    Kmplete::LocaleManager localeManager;
+    // Create default localizationManager
+    Kmplete::LocalizationManager localizationManager;
     localeC = std::setlocale(LC_ALL, NULL);
-    auto currentLocale = localeManager.GetLocale();
+    auto currentLocale = localizationManager.GetLocale();
     REQUIRE(std::string(localeC) == "C");
     REQUIRE(std::locale().name() == "C");
-    REQUIRE(std::locale().name() == localeManager.GetLocale());
+    REQUIRE(std::locale().name() == localizationManager.GetLocale());
 
 // Only "C" and "POSIX" locales are supported under MinGW port of GCC and libstdc++.
 #if defined (KMP_COMPILER_MINGW)
     // Set empty locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale(""));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale(""));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
     // Set 'C' locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("C"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("C"));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
 #else
     // Set 'en_US.UTF-8' locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("en_US.UTF-8"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("en_US.UTF-8"));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "en_US.UTF-8");
     REQUIRE(currentLocale == "en_US.UTF-8");
 
     // Set empty locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale(""));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale(""));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
     // Set 'ru_RU.UTF-8' locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("ru_RU.UTF-8"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("ru_RU.UTF-8"));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "ru_RU.UTF-8");
     REQUIRE(currentLocale == "ru_RU.UTF-8");
 
     // Set 'C' locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("C"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("C"));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
     // Set '.UTF-8' locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale(".UTF8"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale(".UTF8"));
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     if (ok)
     {
@@ -93,9 +93,9 @@ TEST_CASE("Locale tests", "[core][locale]")
     }
 
     // Set 'de_DE' locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("de_DE"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("de_DE"));
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     bool deutschLocaleOk = ok;
     if (ok)
@@ -110,9 +110,9 @@ TEST_CASE("Locale tests", "[core][locale]")
     }
 
     // Set invalid locale
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("definitely_invalid_locale_name"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("definitely_invalid_locale_name"));
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE_FALSE(ok);
     if (deutschLocaleOk)
@@ -127,10 +127,10 @@ TEST_CASE("Locale tests", "[core][locale]")
     }
 
     // Set 'ru_RU.UTF-8' locale again
-    REQUIRE_NOTHROW(ok = localeManager.SetLocale("ru_RU.UTF-8"));
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale("ru_RU.UTF-8"));
     REQUIRE(ok);
     localeC = std::setlocale(LC_ALL, NULL);
-    currentLocale = localeManager.GetLocale();
+    currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
     REQUIRE(std::string(localeC) == "ru_RU.UTF-8");
     REQUIRE(currentLocale == "ru_RU.UTF-8");
