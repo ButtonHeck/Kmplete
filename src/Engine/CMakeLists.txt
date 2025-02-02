@@ -88,6 +88,7 @@ source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
 
 set(Kmplete_Engine_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_manager.cpp
 )
 source_group("Localization" FILES ${Kmplete_Engine_LOCALIZATION})

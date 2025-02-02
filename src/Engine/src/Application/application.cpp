@@ -98,6 +98,8 @@ namespace Kmplete
         Log::SaveSettings(*settings);
 #endif
 
+        _localizationManager->SaveSettings(*settings);
+
         _settingsManager->SaveSettings();
     }
     //--------------------------------------------------------------------------
@@ -116,6 +118,8 @@ namespace Kmplete
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::LoadSettings(*settings);
 #endif
+
+        _localizationManager->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

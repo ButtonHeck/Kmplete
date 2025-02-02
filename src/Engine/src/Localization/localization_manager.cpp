@@ -1,17 +1,21 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Core/settings.h"
 
 #include <iostream>
 
 namespace Kmplete
 {
+    constexpr static auto LocalizationManagerSettingsEntryName = "LocalizationManager";
+    constexpr static auto LocalizationManagerLocaleStr = "Locale";
+
     LocalizationManager::LocalizationManager()
         : _localeGenerator()
         , _currentLocale(std::locale().name())
     {}
     //--------------------------------------------------------------------------
 
-    bool LocalizationManager::SetLocale(const std::string& localeString)
+    bool LocalizationManager::SetLocale(const LocaleStr& localeString)
     {
         try
         {
@@ -40,7 +44,24 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const std::string& LocalizationManager::GetLocale() const KMP_NOEXCEPT
+    void LocalizationManager::SaveSettings(Settings& settings)
+    {
+        settings.StartSaveObject(LocalizationManagerSettingsEntryName);
+        settings.SaveString(LocalizationManagerLocaleStr, _currentLocale);
+        settings.EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void LocalizationManager::LoadSettings(Settings& settings)
+    {
+        settings.StartLoadObject(LocalizationManagerSettingsEntryName);
+        const auto localeStr = settings.GetString(LocalizationManagerLocaleStr, LocaleEnUTF8Keyword);
+        SetLocale(localeStr);
+        settings.EndLoadObject();
+    }
+    //--------------------------------------------------------------------------
+
+    const LocaleStr& LocalizationManager::GetLocale() const KMP_NOEXCEPT
     {
         return _currentLocale;
     }

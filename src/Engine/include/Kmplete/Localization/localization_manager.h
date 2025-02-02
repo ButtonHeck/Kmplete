@@ -1,15 +1,17 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Localization/localization_base.h"
 
 #include <boost/locale.hpp>
 
-#include <string>
 #include <vector>
 #include <functional>
 
 namespace Kmplete
 {
+    class Settings;
+
     class LocalizationManager
     {
     public:
@@ -21,10 +23,13 @@ namespace Kmplete
         KMP_API LocalizationManager();
         ~LocalizationManager() = default;
 
-        KMP_API bool SetLocale(const std::string& localeString);
-        KMP_NODISCARD KMP_API const std::string& GetLocale() const KMP_NOEXCEPT;
+        KMP_API bool SetLocale(const LocaleStr& localeString);
+        KMP_NODISCARD KMP_API const LocaleStr& GetLocale() const KMP_NOEXCEPT;
 
         KMP_API void AddLocaleChangedCallback(const LocaleChangeCallback& callback);
+
+        void SaveSettings(Settings& settings);
+        void LoadSettings(Settings& settings);
 
     private:
         void ImbueLocale(const std::locale& locale) const;
@@ -32,7 +37,7 @@ namespace Kmplete
 
     private:
         boost::locale::generator _localeGenerator;
-        std::string _currentLocale;
+        LocaleStr _currentLocale;
         std::vector<LocaleChangeCallback> _localeChangedCallbacks;
     };
     //--------------------------------------------------------------------------
