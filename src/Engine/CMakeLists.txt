@@ -87,9 +87,11 @@ set(Kmplete_Engine_GRAPHICS
 source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
 
 set(Kmplete_Engine_LOCALIZATION
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_translator.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_translator.cpp
 )
 source_group("Localization" FILES ${Kmplete_Engine_LOCALIZATION})
 
@@ -131,6 +133,7 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts\"
+    PUBLIC KMP_TR_DOMAIN_ENGINE=\"Engine\"
     PRIVATE KMP_EXPORTS
     PRIVATE KMP_ENGINE_PRIVATE
     INTERFACE KMP_ENGINE_INTERFACE

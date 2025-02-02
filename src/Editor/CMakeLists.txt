@@ -61,6 +61,10 @@ target_link_libraries(Kmplete_Editor
     PRIVATE Kmplete_Engine
 )
 
+target_compile_definitions(Kmplete_Editor
+    PRIVATE KMP_TR_DOMAIN_EDITOR=\"Editor\"
+)
+
 if(MSVC)
     target_link_options(Kmplete_Editor 
         PRIVATE $<$<CONFIG:RELWITHDEBINFO>:/PROFILE>
