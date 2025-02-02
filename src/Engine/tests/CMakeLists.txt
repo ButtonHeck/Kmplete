@@ -24,6 +24,7 @@ source_group("Application" FILES ${Kmplete_Engine_Unit_Tests_APPLICATION})
 set(Kmplete_Engine_Unit_Tests_UTILS
     ${CMAKE_CURRENT_LIST_DIR}/Utils/function_utils_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Utils/string_utils_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Utils/string_id_tests.cpp
 )
 source_group("Utils" FILES ${Kmplete_Engine_Unit_Tests_UTILS})
 

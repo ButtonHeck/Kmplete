@@ -1,0 +1,43 @@
+#pragma once
+
+#include <cstdint>
+#include <string>
+
+namespace Kmplete
+{
+    namespace Utils
+    {
+        using StringID = uint64_t;
+
+        constexpr StringID ToStringID(const char* cstr)
+        {
+            if (cstr == nullptr)
+            {
+                return 0;
+            }
+
+            StringID sid = 0;
+            size_t index = 0;
+            while (cstr[index] != 0)
+            {
+                sid = 37 * sid + static_cast<StringID>(17) * static_cast<char>(cstr[index]);
+                index++;
+            }
+
+            return sid;
+        }
+        //--------------------------------------------------------------------------
+
+        StringID ToStringID(const std::string& str)
+        {
+            return ToStringID(str.c_str());
+        }
+        //--------------------------------------------------------------------------
+    }
+
+    constexpr Utils::StringID operator ""_sid(const char* cstr, std::size_t)
+    {
+        return Utils::ToStringID(cstr);
+    }
+    //--------------------------------------------------------------------------
+}

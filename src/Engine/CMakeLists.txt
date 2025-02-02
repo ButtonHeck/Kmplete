@@ -55,6 +55,7 @@ source_group("Application" FILES ${Kmplete_Engine_APPLICATION})
 set(Kmplete_Engine_UTILS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_id.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Utils/string_utils.cpp
 )
 source_group("Utils" FILES ${Kmplete_Engine_UTILS})
