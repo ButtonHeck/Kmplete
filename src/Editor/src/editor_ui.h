@@ -32,9 +32,9 @@ namespace Kmplete
         void Render();
         void EndFrame() const;
 
-        bool OnWindowCloseEvent(WindowCloseEvent& event);
-        bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
-        bool OnKeyPressEvent(KeyPressEvent& event);
+        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
+        KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
+        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
         void SaveSettings(Settings& settings) const;
         void LoadSettings(Settings& settings);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Kmplete/Utils/string_id.h"
+
 #include <string>
 
 namespace Kmplete
@@ -13,6 +15,10 @@ namespace Kmplete
     static constexpr auto LocaleEnName = "English";
     static constexpr auto LocaleRuUTF8Keyword = "ru_RU.UTF-8";
     static constexpr auto LocaleRuName = "Russian";
+
+    static constexpr auto SidTrLocaleEnUTF8 = Utils::ToStringID(LocaleEnUTF8Keyword);
+    static constexpr auto SidTrLocaleRuUTF8 = Utils::ToStringID(LocaleRuUTF8Keyword);
+    static constexpr auto SidTrDomainEngine = Utils::ToStringID(KMP_TR_DOMAIN_ENGINE);
 
     using LocaleStr = std::string;
     using DomainStr = std::string;

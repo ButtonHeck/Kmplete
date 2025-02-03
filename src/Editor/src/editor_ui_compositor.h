@@ -17,8 +17,8 @@ namespace Kmplete
         void ComposeMainArea();
         void ComposeStatusBar();
 
-        bool OnWindowCloseEvent(WindowCloseEvent& event);
-        bool OnKeyPressEvent(KeyPressEvent& event);
+        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
+        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
     private:
         void ComposeDefaultLayout();

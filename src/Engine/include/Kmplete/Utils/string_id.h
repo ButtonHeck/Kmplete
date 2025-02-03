@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Kmplete/Core/kmplete_api.h"
+
 #include <cstdint>
 #include <string>
 
@@ -9,7 +11,7 @@ namespace Kmplete
     {
         using StringID = uint64_t;
 
-        constexpr StringID ToStringID(const char* cstr)
+        KMP_NODISCARD constexpr StringID ToStringID(const char* cstr)
         {
             if (cstr == nullptr)
             {
@@ -28,14 +30,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        StringID ToStringID(const std::string& str)
+        KMP_NODISCARD constexpr StringID ToStringID(const std::string& str)
         {
             return ToStringID(str.c_str());
         }
         //--------------------------------------------------------------------------
     }
 
-    constexpr Utils::StringID operator ""_sid(const char* cstr, std::size_t)
+    KMP_NODISCARD constexpr Utils::StringID operator ""_sid(const char* cstr, std::size_t)
     {
         return Utils::ToStringID(cstr);
     }

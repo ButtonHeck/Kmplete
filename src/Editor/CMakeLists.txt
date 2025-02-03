@@ -19,6 +19,7 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/ui_utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/ui_identifiers.h
     ${CMAKE_CURRENT_LIST_DIR}/src/shortcuts.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/localization_base.h
 )
 source_group("Editor" FILES ${Kmplete_Editor_SOURCES})
 

@@ -43,7 +43,7 @@ namespace Kmplete
         class StyleVarGuard
         {
         public:
-            explicit StyleVarGuard(std::initializer_list<std::pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables);
+            StyleVarGuard(std::initializer_list<std::pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables);
             ~StyleVarGuard();
 
         private:
