@@ -16,6 +16,7 @@ namespace Kmplete
     static constexpr auto LocaleRuUTF8Keyword = "ru_RU.UTF-8";
     static constexpr auto LocaleRuName = "Russian";
 
+    static constexpr auto SidTrInvalidLocale = static_cast<Utils::StringID>(0);
     static constexpr auto SidTrLocaleEnUTF8 = Utils::ToStringID(LocaleEnUTF8Keyword);
     static constexpr auto SidTrLocaleRuUTF8 = Utils::ToStringID(LocaleRuUTF8Keyword);
     static constexpr auto SidTrDomainEngine = Utils::ToStringID(KMP_TR_DOMAIN_ENGINE);
@@ -26,14 +27,20 @@ namespace Kmplete
     using SourceStr = std::string;
     using TranslationStr = std::string;
 
+    using LocaleStrSID = Utils::StringID;
+    using DomainStrSID = Utils::StringID;
+    using ContextStrSID = Utils::StringID;
+    using SourceStrSID = Utils::StringID;
+    using TranslationStrSID = Utils::StringID;
+
     struct ContextedSource
     {
-        SourceStr source;
-        ContextStr context;
+        SourceStrSID sourceSid;
+        ContextStrSID contextSid;
 
         bool operator==(const ContextedSource& other) const
         {
-            return source == other.source && context == other.context;
+            return sourceSid == other.sourceSid && contextSid == other.contextSid;
         }
     };
     //--------------------------------------------------------------------------
@@ -42,10 +49,7 @@ namespace Kmplete
     {
         std::size_t operator()(const ContextedSource& p) const
         {
-            const auto hs = std::hash<SourceStr>{}(p.source);
-            const auto hc = std::hash<ContextStr>{}(p.context);
-
-            return hs ^ hc;
+            return p.sourceSid ^ p.contextSid;
         }
     };
     //--------------------------------------------------------------------------
