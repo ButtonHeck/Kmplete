@@ -2,6 +2,8 @@
 #include "Kmplete/Localization/localization_translator.h"
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/assertion.h"
 
 #include <iostream>
 
@@ -14,7 +16,11 @@ namespace Kmplete
         : _localeGenerator()
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())
-    {}
+    {
+        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append("locale"));
+        KMP_ASSERT(defaultTranslationsPath != "locale");
+        AddMessagesPath(defaultTranslationsPath);
+    }
     //--------------------------------------------------------------------------
 
     bool LocalizationManager::SetLocale(const LocaleStr& localeString)

@@ -51,14 +51,13 @@ namespace Kmplete
         Log::Boot();
 #endif
 
-        _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
-        _localizationManager = CreateUPtr<LocalizationManager>();
-
         if (!Filesystem::Initialize())
         {
             throw std::runtime_error("Application initialization failed");
         }
 
+        _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
+        _localizationManager = CreatePtr<LocalizationManager>();
         _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsPath.empty() 
             ? Filesystem::GetApplicationPath().append(applicationParameters.defaultSettingsFileName) 
             : applicationParameters.settingsPath);
@@ -68,6 +67,8 @@ namespace Kmplete
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
         Log::Initialize();
 #endif
+
+        _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
     }
     //--------------------------------------------------------------------------
 

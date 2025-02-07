@@ -1,4 +1,6 @@
 #include "Kmplete/Localization/localization_dictionary.h"
+#include "Kmplete/Core/log.h"
+#include "Kmplete/Core/assertion.h"
 
 namespace Kmplete
 {
@@ -22,13 +24,28 @@ namespace Kmplete
 
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const TranslationStr& translation)
     {
+        KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
+        if (_translationMap[_currentLocaleSid].contains(sourceSid))
+        {
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" already contains \"{}\"", _domain, sourceSid);
+            return;
+        }
+
         _translationMap[_currentLocaleSid].insert(std::make_pair(sourceSid, translation));
     }
     //--------------------------------------------------------------------------
 
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
-        _translationCtxMap[_currentLocaleSid].insert(std::make_pair(ContextedSource{ sourceSid, contextSid }, translation));
+        KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
+        const ContextedSource&& contextedSource = ContextedSource{ sourceSid, contextSid };
+        if (_translationCtxMap[_currentLocaleSid].contains(contextedSource))
+        {
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" already contains \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
+            return;
+        }
+
+        _translationCtxMap[_currentLocaleSid].insert(std::make_pair(contextedSource, translation));
     }
     //--------------------------------------------------------------------------
 

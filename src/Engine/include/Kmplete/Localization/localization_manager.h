@@ -31,7 +31,7 @@ namespace Kmplete
 
         KMP_API void AddMessagesPath(const std::string& path);
 
-        KMP_NODISCARD KMP_API NonNull<Ptr<LocalizationDictionary>> AddMessagesDomain(const DomainStr& domain);
+        KMP_API NonNull<Ptr<LocalizationDictionary>> AddMessagesDomain(const DomainStr& domain);
         KMP_API void RemoveMessagesDomain(const DomainStr& domain);
 
         KMP_NODISCARD KMP_API Nullable<Ptr<LocalizationDictionary>> GetDictionary(const DomainStr& domain) const;

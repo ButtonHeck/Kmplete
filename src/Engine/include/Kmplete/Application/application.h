@@ -51,7 +51,7 @@ namespace Kmplete
 
     protected:
         UPtr<SystemMetricsManager> _systemMetricsManager;
-        UPtr<LocalizationManager> _localizationManager;
+        Ptr<LocalizationManager> _localizationManager;
         UPtr<SettingsManager> _settingsManager;
     };
     //--------------------------------------------------------------------------
