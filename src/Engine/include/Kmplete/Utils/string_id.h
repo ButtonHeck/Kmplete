@@ -37,7 +37,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
     }
 
-    KMP_NODISCARD constexpr Utils::StringID operator ""_sid(const char* cstr, std::size_t)
+    KMP_NODISCARD consteval Utils::StringID operator ""_sid(const char* cstr, std::size_t)
     {
         return Utils::ToStringID(cstr);
     }
