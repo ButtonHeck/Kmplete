@@ -16,7 +16,6 @@ CMakeFiles
 Makefile
 
 # Executables
-*.exe
 *.out
 *.app
 
