@@ -152,7 +152,7 @@ target_link_libraries(Kmplete_Engine
 )
 
 set_target_properties(Kmplete_Engine PROPERTIES 
-    FOLDER Kmplete
+    FOLDER Kmplete/Engine
 )
 
 if(${KMPLETE_BUILD_TESTS})

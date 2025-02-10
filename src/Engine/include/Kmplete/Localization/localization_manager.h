@@ -59,7 +59,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const TranslationStr& TranslationOrSource(const DomainStr& domain, const SourceStr& message, const ContextStr& context);
 
     private:
-        void ImbueLocale(const std::locale& locale) const;
+        void ImbueLocale() const;
         void NotifyLocaleListeners() const;
 
     private:

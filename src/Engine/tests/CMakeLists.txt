@@ -61,7 +61,7 @@ target_link_libraries(Kmplete_Engine_Unit_Tests
 )
 
 set_target_properties(Kmplete_Engine_Unit_Tests PROPERTIES 
-    FOLDER Kmplete/Tests
+    FOLDER Kmplete/Engine/Tests
 )
 
 set(KmpleteUnitTestsCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
@@ -112,7 +112,7 @@ target_link_libraries(Kmplete_Engine_File_Dialogs_Tests
 )
 
 set_target_properties(Kmplete_Engine_File_Dialogs_Tests PROPERTIES 
-    FOLDER Kmplete/Tests
+    FOLDER Kmplete/Engine/Tests
 )
 
 
@@ -154,7 +154,7 @@ target_compile_definitions(Kmplete_Engine_Window_Application_Tests
 )
 
 set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES 
-    FOLDER Kmplete/Tests
+    FOLDER Kmplete/Engine/Tests
 )
 
 
@@ -184,7 +184,7 @@ target_link_libraries(Kmplete_Engine_Locale_Tests
 )
 
 set_target_properties(Kmplete_Engine_Locale_Tests PROPERTIES 
-    FOLDER Kmplete/Tests
+    FOLDER Kmplete/Engine/Tests
 )
 
 

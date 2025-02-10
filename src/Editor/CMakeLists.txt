@@ -24,14 +24,14 @@ set(Kmplete_Editor_SOURCES
 source_group("Editor" FILES ${Kmplete_Editor_SOURCES})
 
 if(WIN32)
-	set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
-	configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/resource.h" "${CMAKE_CURRENT_BINARY_DIR}/resource.h" COPYONLY)
-	set(Kmplete_Editor_WINRC
-		"${CMAKE_CURRENT_BINARY_DIR}/resource.h"
-		"${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc"
-	)
-	source_group("Resources" FILES ${Kmplete_Editor_WINRC})
+    set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/resource.h" "${CMAKE_CURRENT_BINARY_DIR}/resource.h" COPYONLY)
+    set(Kmplete_Editor_WINRC
+        "${CMAKE_CURRENT_BINARY_DIR}/resource.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc"
+    )
+    source_group("Resources" FILES ${Kmplete_Editor_WINRC})
 endif()
 
 aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
@@ -86,7 +86,7 @@ if(MSVC)
 endif()
 
 set_target_properties(Kmplete_Editor PROPERTIES 
-    FOLDER Kmplete
+    FOLDER Kmplete/Editor
 )
 
 set(KmpleteCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
@@ -107,3 +107,12 @@ add_custom_command(
     COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P ${KmpleteCopySettingsScriptName}
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
+
+get_target_property(exeDir Kmplete_Editor RUNTIME_OUTPUT_DIRECTORY)
+add_custom_command(TARGET Kmplete_Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale" 
+	-P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
+)
+
+CreateTranslationHelperTargets(Kmplete_Editor Kmplete/Editor po_update.sh po_compile.sh ${CMAKE_CURRENT_LIST_DIR}/scripts)

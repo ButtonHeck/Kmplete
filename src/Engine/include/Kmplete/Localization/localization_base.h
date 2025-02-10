@@ -6,6 +6,8 @@
 
 namespace Kmplete
 {
+    static constexpr auto LocalesDirectory = "locale";
+
     static constexpr auto TranslateKeyword = "Translate";
     static constexpr auto TranslateCtxKeyword = "TranslateCtx";
     static constexpr auto TranslateDeferKeyword = "TranslateDefer";

@@ -17,8 +17,8 @@ namespace Kmplete
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())
     {
-        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append("locale"));
-        KMP_ASSERT(defaultTranslationsPath != "locale");
+        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+        KMP_ASSERT(defaultTranslationsPath != LocalesDirectory);
         AddMessagesPath(defaultTranslationsPath);
     }
     //--------------------------------------------------------------------------
@@ -29,12 +29,11 @@ namespace Kmplete
         {
             const auto testLocale = localeString.empty() ? std::locale::classic() : std::locale(localeString);
             _currentLocale = testLocale.name();
-            const auto newLocale = std::locale::global(_localeGenerator.generate(localeString));
             std::setlocale(LC_ALL, _currentLocale.c_str());
 
             _library->SetLocale(_currentLocale);
 
-            ImbueLocale(newLocale);
+            ImbueLocale();
             NotifyLocaleListeners();
 
             KMP_LOG_CORE_INFO("LocalizationManager: set locale '{}'", _currentLocale);
@@ -63,7 +62,7 @@ namespace Kmplete
     NonNull<Ptr<LocalizationDictionary>> LocalizationManager::AddMessagesDomain(const DomainStr& domain)
     {
         _localeGenerator.add_messages_domain(domain);
-        ImbueLocale(_localeGenerator(_currentLocale));
+        ImbueLocale();
 
         return _library->AddDictionary(domain);
     }
@@ -172,11 +171,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::ImbueLocale(const std::locale& locale) const
+    void LocalizationManager::ImbueLocale() const
     {
-        std::cout.imbue(locale);
-        std::cerr.imbue(locale);
-        std::clog.imbue(locale);
+        std::locale::global(_localeGenerator(_currentLocale));
+        std::cout.imbue(std::locale());
+        std::cerr.imbue(std::locale());
+        std::clog.imbue(std::locale());
     }
     //--------------------------------------------------------------------------
 
