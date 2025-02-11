@@ -3,7 +3,7 @@ if [ -z "$1" ]
     echo "No domain supplied"
 fi
 
-filelist=`find ../src -type f \( -iname \*.cpp -o -iname \*.h \)`
+filelist=`find ../src ../include -type f \( -iname \*.cpp -o -iname \*.h \)`
 echo ${filelist} | tr ' ' '\n'
 
 po_template_file=../locale/ru_RU/LC_MESSAGES/$1.pot

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 17:45+0300\n"
+"POT-Creation-Date: 2025-02-11 18:40+0300\n"
 "PO-Revision-Date: 2025-02-10 17:25+0300\n"
 "Last-Translator: U-DESKTOP-002D5DN\\sound <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -17,10 +17,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/Localization/localization_manager.cpp:185
+#: ../src/Application/application.cpp:132
 msgid "English"
 msgstr "English"
 
-#: ../src/Localization/localization_manager.cpp:186
+#: ../src/Application/application.cpp:133
 msgid "Russian"
 msgstr "Russian"
