@@ -190,6 +190,17 @@ set_target_properties(Kmplete_Engine_Locale_Tests PROPERTIES
 
 # Common stuff
 
+add_custom_target(Kmplete_Engine_build_all_tests)
+add_dependencies(Kmplete_Engine_build_all_tests
+    Kmplete_Engine_Unit_Tests
+    Kmplete_Engine_File_Dialogs_Tests
+    Kmplete_Engine_Window_Application_Tests
+    Kmplete_Engine_Locale_Tests
+)
+set_target_properties(Kmplete_Engine_build_all_tests PROPERTIES
+    FOLDER Kmplete/Engine/Tests
+)
+
 if(MSVC)
     set_target_properties(Kmplete_Engine_Unit_Tests PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
