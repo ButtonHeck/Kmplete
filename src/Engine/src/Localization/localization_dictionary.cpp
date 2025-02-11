@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    LocalizationDictionary::LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid) KMP_NOEXCEPT
+    LocalizationDictionary::LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid) noexcept
         : _domain(domain)
         , _currentLocaleSid(localeSid)
     {}

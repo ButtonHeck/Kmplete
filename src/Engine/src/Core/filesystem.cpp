@@ -28,19 +28,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Path Filesystem::GetApplicationPath() KMP_NOEXCEPT
+    Path Filesystem::GetApplicationPath() noexcept
     {
         return _applicationPath;
     }
     //--------------------------------------------------------------------------
 
-    const Path& Filesystem::GetApplicationPathCRef() KMP_NOEXCEPT
+    const Path& Filesystem::GetApplicationPathCRef() noexcept
     {
         return _applicationPath;
     }
     //--------------------------------------------------------------------------
 
-    Path Filesystem::GetCurrentPath() KMP_NOEXCEPT
+    Path Filesystem::GetCurrentPath() noexcept
     {
         try
         {
@@ -54,7 +54,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::PathExists(const Path& path) KMP_NOEXCEPT
+    bool Filesystem::PathExists(const Path& path) noexcept
     {
         try
         {
@@ -68,13 +68,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::FilePathIsValid(const Path& path) KMP_NOEXCEPT
+    bool Filesystem::FilePathIsValid(const Path& path) noexcept
     {
         return !path.empty() && path.has_filename();
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile) KMP_NOEXCEPT
+    bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile) noexcept
     {
         try
         {
@@ -89,7 +89,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateFile(const Path& path) KMP_NOEXCEPT
+    bool Filesystem::CreateFile(const Path& path) noexcept
     {
         try
         {
@@ -109,7 +109,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------    
 
-    bool Filesystem::IsFile(const Path& path) KMP_NOEXCEPT
+    bool Filesystem::IsFile(const Path& path) noexcept
     {
         try
         {
@@ -123,7 +123,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::IsDirectory(const Path& path) KMP_NOEXCEPT
+    bool Filesystem::IsDirectory(const Path& path) noexcept
     {
         try
         {

@@ -5,12 +5,12 @@ namespace Kmplete
 {
     static const auto NoTranslation = TranslationStr("");
 
-    LocalizationLibrary::LocalizationLibrary() KMP_NOEXCEPT
+    LocalizationLibrary::LocalizationLibrary() noexcept
         : _currentLocaleSid(SidTrInvalidLocale)
     {}
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::SetLocale(const LocaleStrSID& localeSid) KMP_NOEXCEPT
+    void LocalizationLibrary::SetLocale(const LocaleStrSID& localeSid) noexcept
     {
         if (_currentLocaleSid != localeSid)
         {
@@ -23,7 +23,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::SetLocale(const LocaleStr& locale) KMP_NOEXCEPT
+    void LocalizationLibrary::SetLocale(const LocaleStr& locale) noexcept
     {
         SetLocale(Utils::ToStringID(locale));
     }
@@ -60,13 +60,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::RemoveDictionary(const DomainStrSID& domainSid) KMP_NOEXCEPT
+    void LocalizationLibrary::RemoveDictionary(const DomainStrSID& domainSid) noexcept
     {
         _dictionaryMap.erase(domainSid);
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::RemoveDictionary(const DomainStr& domain) KMP_NOEXCEPT
+    void LocalizationLibrary::RemoveDictionary(const DomainStr& domain) noexcept
     {
         RemoveDictionary(Utils::ToStringID(domain));
     }

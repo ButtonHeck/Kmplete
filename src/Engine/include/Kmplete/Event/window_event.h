@@ -7,7 +7,7 @@ namespace Kmplete
 {
     struct WindowEvent : public Event
     {
-        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
+        KMP_NODISCARD int GetTraits() const noexcept override
         {
             return WindowEventTrait;
         }
@@ -22,17 +22,17 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowResizeEventType)
 
-        WindowResizeEvent(unsigned int width, unsigned int height) KMP_NOEXCEPT
+        WindowResizeEvent(unsigned int width, unsigned int height) noexcept
             : _width(width)
             , _height(height)
         {}
 
-        KMP_NODISCARD unsigned int GetWidth() const KMP_NOEXCEPT
+        KMP_NODISCARD unsigned int GetWidth() const noexcept
         {
             return _width;
         }
 
-        KMP_NODISCARD unsigned int GetHeight() const KMP_NOEXCEPT
+        KMP_NODISCARD unsigned int GetHeight() const noexcept
         {
             return _height;
         }
@@ -53,17 +53,17 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowMoveEventType)
 
-        WindowMoveEvent(unsigned int x, unsigned int y) KMP_NOEXCEPT
+        WindowMoveEvent(unsigned int x, unsigned int y) noexcept
             : _x(x)
             , _y(y)
         {}
 
-        KMP_NODISCARD unsigned int GetX() const KMP_NOEXCEPT
+        KMP_NODISCARD unsigned int GetX() const noexcept
         {
             return _x;
         }
 
-        KMP_NODISCARD unsigned int GetY() const KMP_NOEXCEPT
+        KMP_NODISCARD unsigned int GetY() const noexcept
         {
             return _y;
         }
@@ -93,11 +93,11 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowFocusEventType)
 
-        explicit WindowFocusEvent(int focused) KMP_NOEXCEPT
+        explicit WindowFocusEvent(int focused) noexcept
             : _focused(focused)
         {}
 
-        KMP_NODISCARD bool IsFocused() const KMP_NOEXCEPT
+        KMP_NODISCARD bool IsFocused() const noexcept
         {
             return bool(_focused);
         }
@@ -117,11 +117,11 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowIconifyEventType)
 
-        explicit WindowIconifyEvent(int iconified) KMP_NOEXCEPT
+        explicit WindowIconifyEvent(int iconified) noexcept
             : _iconified(iconified)
         {}
 
-        KMP_NODISCARD bool IsIconified() const KMP_NOEXCEPT
+        KMP_NODISCARD bool IsIconified() const noexcept
         {
             return bool(_iconified);
         }
@@ -141,17 +141,17 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(WindowFramebufferResizeEventType)
 
-        WindowFramebufferResizeEvent(unsigned int width, unsigned int height) KMP_NOEXCEPT
+        WindowFramebufferResizeEvent(unsigned int width, unsigned int height) noexcept
             : _width(width)
             , _height(height)
         {}
 
-        KMP_NODISCARD unsigned int GetWidth() const KMP_NOEXCEPT
+        KMP_NODISCARD unsigned int GetWidth() const noexcept
         {
             return _width;
         }
 
-        KMP_NODISCARD unsigned int GetHeight() const KMP_NOEXCEPT
+        KMP_NODISCARD unsigned int GetHeight() const noexcept
         {
             return _height;
         }

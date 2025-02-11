@@ -24,8 +24,8 @@ namespace Kmplete
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;
 
-        KMP_API void SetFilename(const Path& path) KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API const Path& GetFilename() const KMP_NOEXCEPT;
+        KMP_API void SetFilename(const Path& path) noexcept;
+        KMP_NODISCARD KMP_API const Path& GetFilename() const noexcept;
 
     private:
         Path _filename;

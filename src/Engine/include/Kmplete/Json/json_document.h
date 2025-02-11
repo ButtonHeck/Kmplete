@@ -23,8 +23,8 @@ namespace Kmplete
         KMP_API explicit JsonDocument(const Path& filename);
         ~JsonDocument() = default;
 
-        KMP_API void SetFilename(const Path& filename) KMP_NOEXCEPT;
-        KMP_NODISCARD KMP_API const Path& GetFilename() const KMP_NOEXCEPT;
+        KMP_API void SetFilename(const Path& filename) noexcept;
+        KMP_NODISCARD KMP_API const Path& GetFilename() const noexcept;
 
         KMP_NODISCARD KMP_API bool Load(const Path& filename);
         KMP_NODISCARD KMP_API bool Load();
@@ -32,7 +32,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API bool Save(bool pretty = true);
         KMP_NODISCARD KMP_API std::string ToString(bool pretty = true);
 
-        KMP_NODISCARD KMP_API bool HasError() const KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API bool HasError() const noexcept;
 
         KMP_API bool AddChildDocument(const std::string& name, const JsonDocument& child, bool overwrite = true);
         KMP_NODISCARD KMP_API std::vector<std::pair<std::string, Ptr<JsonDocument>>> GetChildren(bool onlyObjects = true) const;

@@ -17,7 +17,7 @@ namespace Kmplete
         KMP_API explicit Settings(const std::string& name);
         ~Settings() = default;
 
-        KMP_NODISCARD KMP_API const std::string& GetName() const KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const std::string& GetName() const noexcept;
 
         KMP_API bool StartSaveObject(const std::string& objectName);
         KMP_API bool StartSaveObject(int index);

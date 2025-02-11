@@ -47,7 +47,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Image::Image(Image&& rhs) KMP_NOEXCEPT
+    Image::Image(Image&& rhs) noexcept
         : _width(rhs._width)
         , _height(rhs._height)
         , _channels(rhs._channels)
@@ -57,7 +57,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Image& Image::operator=(Image&& rhs) KMP_NOEXCEPT
+    Image& Image::operator=(Image&& rhs) noexcept
     {
         if (_pixels)
         {
@@ -75,25 +75,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int Image::GetWidth() const KMP_NOEXCEPT
+    int Image::GetWidth() const noexcept
     {
         return _width;
     }
     //--------------------------------------------------------------------------
 
-    int Image::GetHeight() const KMP_NOEXCEPT
+    int Image::GetHeight() const noexcept
     {
         return _height;
     }
     //--------------------------------------------------------------------------
 
-    int Image::GetChannels() const KMP_NOEXCEPT
+    int Image::GetChannels() const noexcept
     {
         return _channels;
     }
     //--------------------------------------------------------------------------
 
-    Nullable<unsigned char*> Image::GetPixels() const KMP_NOEXCEPT
+    Nullable<unsigned char*> Image::GetPixels() const noexcept
     {
         return _pixels;
     }

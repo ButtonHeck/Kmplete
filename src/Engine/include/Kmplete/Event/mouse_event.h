@@ -10,22 +10,22 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseMoveEventType)
 
-        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
+        KMP_NODISCARD int GetTraits() const noexcept override
         {
             return MouseEventTrait | InputEventTrait;
         }
 
-        MouseMoveEvent(float x, float y) KMP_NOEXCEPT
+        MouseMoveEvent(float x, float y) noexcept
             : _x(x)
             , _y(y)
         {}
 
-        KMP_NODISCARD float GetX() const KMP_NOEXCEPT
+        KMP_NODISCARD float GetX() const noexcept
         {
             return _x;
         }
 
-        KMP_NODISCARD float GetY() const KMP_NOEXCEPT
+        KMP_NODISCARD float GetY() const noexcept
         {
             return _y;
         }
@@ -46,22 +46,22 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseScrollEventType)
 
-        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
+        KMP_NODISCARD int GetTraits() const noexcept override
         {
             return MouseEventTrait | InputEventTrait;
         }
 
-        MouseScrollEvent(float xOffset, float yOffset) KMP_NOEXCEPT
+        MouseScrollEvent(float xOffset, float yOffset) noexcept
             : _xOffset(xOffset)
             , _yOffset(yOffset)
         {}
 
-        KMP_NODISCARD float GetXOffset() const KMP_NOEXCEPT
+        KMP_NODISCARD float GetXOffset() const noexcept
         {
             return _xOffset;
         }
 
-        KMP_NODISCARD float GetYOffset() const KMP_NOEXCEPT
+        KMP_NODISCARD float GetYOffset() const noexcept
         {
             return _yOffset;
         }
@@ -80,23 +80,23 @@ namespace Kmplete
 
     struct MouseButtonEvent : public Event
     {
-        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
+        KMP_NODISCARD int GetTraits() const noexcept override
         {
             return MouseEventTrait | InputEventTrait | MouseButtonEventTrait;
         }
 
-        KMP_NODISCARD MouseCode GetMouseButton() const KMP_NOEXCEPT
+        KMP_NODISCARD MouseCode GetMouseButton() const noexcept
         {
             return _button;
         }
 
-        KMP_NODISCARD int GetMods() const KMP_NOEXCEPT
+        KMP_NODISCARD int GetMods() const noexcept
         {
             return _mods;
         }
 
     protected:
-        MouseButtonEvent(const MouseCode button, int mods) KMP_NOEXCEPT
+        MouseButtonEvent(const MouseCode button, int mods) noexcept
             : _button(button)
             , _mods(mods)
         {}
@@ -112,7 +112,7 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseButtonPressEventType)
 
-        MouseButtonPressEvent(const MouseCode button, int mods) KMP_NOEXCEPT
+        MouseButtonPressEvent(const MouseCode button, int mods) noexcept
             : MouseButtonEvent(button, mods)
         {}
 
@@ -128,7 +128,7 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(MouseButtonReleaseEventType)
 
-        MouseButtonReleaseEvent(const MouseCode button, int mods) KMP_NOEXCEPT
+        MouseButtonReleaseEvent(const MouseCode button, int mods) noexcept
             : MouseButtonEvent(button, mods)
         {}
 

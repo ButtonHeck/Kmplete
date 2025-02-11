@@ -64,7 +64,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const SystemMetricsManager::SystemMetrics& SystemMetricsManager::GetMetrics() const KMP_NOEXCEPT
+    const SystemMetricsManager::SystemMetrics& SystemMetricsManager::GetMetrics() const noexcept
     {
         return _systemMetrics;
     }

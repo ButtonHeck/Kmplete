@@ -26,7 +26,7 @@ namespace Kmplete
         ~SystemMetricsManager() = default;
 
         KMP_API bool Update();
-        KMP_NODISCARD KMP_API const SystemMetrics& GetMetrics() const KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const SystemMetrics& GetMetrics() const noexcept;
 
     private:
         void Initialize();

@@ -8,18 +8,18 @@ namespace Kmplete
 {
     struct KeyEvent : public Event
     {
-        KMP_NODISCARD int GetTraits() const KMP_NOEXCEPT override
+        KMP_NODISCARD int GetTraits() const noexcept override
         {
             return KeyboardEventTrait | InputEventTrait;
         }
 
-        KMP_NODISCARD KeyCode GetKeyCode() const KMP_NOEXCEPT
+        KMP_NODISCARD KeyCode GetKeyCode() const noexcept
         {
             return _keyCode;
         }
 
     protected:
-        explicit KeyEvent(const KeyCode keyCode) KMP_NOEXCEPT
+        explicit KeyEvent(const KeyCode keyCode) noexcept
             : _keyCode(keyCode)
         {}
 
@@ -33,18 +33,18 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(KeyPressEventType)
 
-        KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false) KMP_NOEXCEPT
+        KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false) noexcept
             : KeyEvent(keyCode)
             , _mods(mods)
             , _repeat(repeat)
         {}
 
-        KMP_NODISCARD bool IsRepeat() const KMP_NOEXCEPT
+        KMP_NODISCARD bool IsRepeat() const noexcept
         {
             return _repeat;
         }
 
-        KMP_NODISCARD int GetMods() const KMP_NOEXCEPT
+        KMP_NODISCARD int GetMods() const noexcept
         {
             return _mods;
         }
@@ -65,7 +65,7 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(KeyReleaseEventType)
 
-        explicit KeyReleaseEvent(const KeyCode keyCode) KMP_NOEXCEPT
+        explicit KeyReleaseEvent(const KeyCode keyCode) noexcept
             : KeyEvent(keyCode)
         {}
 
@@ -81,7 +81,7 @@ namespace Kmplete
     {
         EVENT_CLASS_TYPE(KeyCharEventType)
 
-        explicit KeyCharEvent(const KeyCode keyCode) KMP_NOEXCEPT
+        explicit KeyCharEvent(const KeyCode keyCode) noexcept
             : KeyEvent(keyCode)
         {}
 

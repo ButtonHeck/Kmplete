@@ -28,8 +28,6 @@
 #define KMP_DEPRECATED_EXPORT KMP_API KMP_DEPRECATED
 #define KMP_DEPRECATED_NO_EXPORT KMP_NO_EXPORT KMP_DEPRECATED
 
-#define KMP_CONSTEXPR constexpr
-#define KMP_NOEXCEPT noexcept
 #define KMP_NORETURN [[noreturn]]
 #define KMP_NODISCARD [[nodiscard]]
 #define KMP_MB_UNUSED [[maybe_unused]]

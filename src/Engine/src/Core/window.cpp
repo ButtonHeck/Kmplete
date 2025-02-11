@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    Window::WindowSettings::WindowSettings(const std::string& name) KMP_NOEXCEPT
+    Window::WindowSettings::WindowSettings(const std::string& name) noexcept
         : name(name)
     {}
     //--------------------------------------------------------------------------
@@ -25,7 +25,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string Window::ModeToString(Mode mode) KMP_NOEXCEPT
+    std::string Window::ModeToString(Mode mode) noexcept
     {
         switch (mode)
         {
@@ -47,7 +47,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Window::Mode Window::StringToMode(const std::string& modeStr) KMP_NOEXCEPT
+    Window::Mode Window::StringToMode(const std::string& modeStr) noexcept
     {
         if (modeStr == FullscreenModeStr)
         {

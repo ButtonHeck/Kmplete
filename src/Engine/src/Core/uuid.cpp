@@ -21,12 +21,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    UUID::UUID(uint64_t uuid) KMP_NOEXCEPT
+    UUID::UUID(uint64_t uuid) noexcept
         : _uuid(uuid)
     {}
     //--------------------------------------------------------------------------
 
-    UUID::operator uint64_t() const KMP_NOEXCEPT
+    UUID::operator uint64_t() const noexcept
     {
         return _uuid;
     }

@@ -46,7 +46,7 @@ namespace Kmplete
         KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
         KMP_API void UpdateSettings() const override;
 
-        KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const KMP_NOEXCEPT override;
+        KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const noexcept override;
 
     private:
         struct UserData

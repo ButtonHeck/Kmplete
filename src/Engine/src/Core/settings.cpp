@@ -14,7 +14,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    const std::string& Settings::GetName() const KMP_NOEXCEPT
+    const std::string& Settings::GetName() const noexcept
     {
         return _name;
     }

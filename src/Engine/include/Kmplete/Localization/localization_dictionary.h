@@ -13,7 +13,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(LocalizationDictionary)
 
-        KMP_API explicit LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid = SidTrInvalidLocale) KMP_NOEXCEPT;
+        KMP_API explicit LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid = SidTrInvalidLocale) noexcept;
 
         KMP_NODISCARD KMP_API const DomainStrSID& GetDomain() const;
         KMP_API void SetLocale(const LocaleStrSID& localeSid);

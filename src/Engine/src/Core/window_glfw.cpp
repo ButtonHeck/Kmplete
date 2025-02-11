@@ -272,7 +272,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    NonNull<void*> WindowGlfw::GetImplPointer() const KMP_NOEXCEPT
+    NonNull<void*> WindowGlfw::GetImplPointer() const noexcept
     {
         return _window;
     }

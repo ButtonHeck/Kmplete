@@ -50,7 +50,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void JsonDocument::SetFilename(const Path& filename) KMP_NOEXCEPT
+    void JsonDocument::SetFilename(const Path& filename) noexcept
     {
         _filename = filename;
 
@@ -61,7 +61,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const Path& JsonDocument::GetFilename() const KMP_NOEXCEPT
+    const Path& JsonDocument::GetFilename() const noexcept
     {
         return _filename;
     }
@@ -182,7 +182,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::HasError() const KMP_NOEXCEPT
+    bool JsonDocument::HasError() const noexcept
     {
         return _error;
     }

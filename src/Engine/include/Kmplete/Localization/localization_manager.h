@@ -27,7 +27,7 @@ namespace Kmplete
         ~LocalizationManager() = default;
 
         KMP_API bool SetLocale(const LocaleStr& localeString);
-        KMP_NODISCARD KMP_API const LocaleStr& GetLocale() const KMP_NOEXCEPT;
+        KMP_NODISCARD KMP_API const LocaleStr& GetLocale() const noexcept;
 
         KMP_API void AddMessagesPath(const std::string& path);
 

@@ -47,7 +47,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const LocaleStr& LocalizationManager::GetLocale() const KMP_NOEXCEPT
+    const LocaleStr& LocalizationManager::GetLocale() const noexcept
     {
         return _currentLocale;
     }

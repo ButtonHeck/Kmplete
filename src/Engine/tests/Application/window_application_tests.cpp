@@ -16,7 +16,7 @@ namespace Kmplete
             Initialize();
         }
 
-        KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override
+        KMP_NODISCARD std::string GetApplicationName() const noexcept override
         {
             return std::string("TestApplication");
         }
@@ -174,7 +174,7 @@ namespace Kmplete
             _mainWindow->SetEventCallback(KMP_BIND(MetricsTestApplication::OnEvent));
         }
 
-        KMP_NODISCARD std::string GetApplicationName() const KMP_NOEXCEPT override
+        KMP_NODISCARD std::string GetApplicationName() const noexcept override
         {
             return std::string("MetricsTestApplication");
         }

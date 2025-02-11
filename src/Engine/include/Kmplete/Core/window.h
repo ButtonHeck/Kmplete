@@ -44,7 +44,7 @@ namespace Kmplete
 
         struct WindowSettings
         {
-            KMP_API explicit WindowSettings(const std::string& name) KMP_NOEXCEPT;
+            KMP_API explicit WindowSettings(const std::string& name) noexcept;
 
             const std::string name = "";
             unsigned int width = DefaultWidth;
@@ -58,8 +58,8 @@ namespace Kmplete
             bool decorated = true;
         };
 
-        KMP_NODISCARD static std::string ModeToString(Mode mode) KMP_NOEXCEPT;
-        KMP_NODISCARD static Mode StringToMode(const std::string& modeStr) KMP_NOEXCEPT;
+        KMP_NODISCARD static std::string ModeToString(Mode mode) noexcept;
+        KMP_NODISCARD static Mode StringToMode(const std::string& modeStr) noexcept;
 
     public:
         KMP_DISABLE_COPY_MOVE(Window)
@@ -99,7 +99,7 @@ namespace Kmplete
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
         KMP_API virtual void UpdateSettings() const = 0;
 
-        KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const KMP_NOEXCEPT = 0;
+        KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const noexcept = 0;
 
     protected:
         Ptr<WindowSettings> _settings;

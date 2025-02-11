@@ -69,13 +69,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::SetFilename(const Path& filename) KMP_NOEXCEPT
+    void SettingsManager::SetFilename(const Path& filename) noexcept
     {
         _filename = filename;
     }
     //--------------------------------------------------------------------------
 
-    const Path& SettingsManager::GetFilename() const KMP_NOEXCEPT
+    const Path& SettingsManager::GetFilename() const noexcept
     {
         return _filename;
     }

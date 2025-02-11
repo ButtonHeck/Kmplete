@@ -2,7 +2,7 @@
 
 namespace Kmplete
 {
-    ProgramOptions::ProgramOptions() KMP_NOEXCEPT
+    ProgramOptions::ProgramOptions() noexcept
         : _settingsFilePath(Path())
     {}
     //--------------------------------------------------------------------------
