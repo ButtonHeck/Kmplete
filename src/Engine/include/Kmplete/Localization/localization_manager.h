@@ -41,10 +41,10 @@ namespace Kmplete
         void SaveSettings(Settings& settings) const;
         void LoadSettings(Settings& settings);
 
-        KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& message);
-        KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& messageSingular, const SourceStr& messagePlural, int count) const;
-        KMP_NODISCARD KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& message, const ContextStr& context);
-        KMP_NODISCARD KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& messageSingular, const SourceStr& messagePlural, int count, const ContextStr& context) const;
+        KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& message);
+        KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& messageSingular, const SourceStr& messagePlural, int count) const;
+        KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& message, const ContextStr& context);
+        KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& messageSingular, const SourceStr& messagePlural, int count, const ContextStr& context) const;
 
         constexpr static void TranslateDefer(const DomainStr&, const SourceStr&) {};
         constexpr static void TranslateDefer(const DomainStr&, const SourceStr&, const SourceStr&, int) {};
@@ -52,6 +52,7 @@ namespace Kmplete
         constexpr static void TranslateCtxDefer(const DomainStr&, const SourceStr&, const SourceStr&, int, const ContextStr&) {};
 
         KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStr& domain, const SourceStr& message) const;
+        KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid) const;
         KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStr& domain, const SourceStr& message, const ContextStr& context);
         KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStr& domain, const SourceStr& message, const TranslationStr& fallback) const;
         KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStr& domain, const SourceStr& message, const ContextStr& context, const TranslationStr& fallback);

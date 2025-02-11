@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 08:40+0300\n"
+"POT-Creation-Date: 2025-02-10 17:44+0300\n"
 "PO-Revision-Date: 2025-02-07 14:48+0300\n"
 "Last-Translator: U-DESKTOP-002D5DN\\sound <sound@desktop-002d5dn>\n"
 "Language-Team: English\n"
@@ -17,18 +17,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/editor_ui_compositor.cpp:166
+#: ../src/editor_ui_compositor.cpp:186
 msgid "File"
 msgstr "File"
 
-#: ../src/editor_ui_compositor.cpp:167
+#: ../src/editor_ui_compositor.cpp:187
 msgid "View"
 msgstr "View"
 
-#: ../src/editor_ui_compositor.cpp:168
+#: ../src/editor_ui_compositor.cpp:188
 msgid "Quit"
 msgstr "Quit"
 
-#: ../src/editor_ui_compositor.cpp:169
+#: ../src/editor_ui_compositor.cpp:189
 msgid "Fullscreen"
 msgstr "Fullscreen"
+
+#: ../src/editor_ui_compositor.cpp:190
+msgid "Language"
+msgstr "Language"

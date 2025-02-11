@@ -47,6 +47,7 @@ namespace Kmplete
         {
             ComposeMenuFile();
             ComposeMenuView();
+            ComposeMenuLanguage();
 
             ImGui::EndMenuBar();
         }
@@ -71,6 +72,25 @@ namespace Kmplete
         if (ImGui::BeginMenu(_localizationDict->Get("View"_sid).c_str()))
         {
             ComposeMenuViewFullscreen();
+            ImGui::EndMenu();
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUICompositor::ComposeMenuLanguage()
+    {
+        if (ImGui::BeginMenu(_localizationDict->Get("Language"_sid).c_str()))
+        {
+            if (ImGui::MenuItem(_localizationManager->Translation(SidTrDomainEngine, SidTrLocaleEnName).c_str()))
+            {
+                _localizationManager->SetLocale(LocaleEnUTF8Keyword);
+            }
+
+            if (ImGui::MenuItem(_localizationManager->Translation(SidTrDomainEngine, SidTrLocaleRuName).c_str()))
+            {
+                _localizationManager->SetLocale(LocaleRuUTF8Keyword);
+            }
+
             ImGui::EndMenu();
         }
     }
@@ -167,6 +187,7 @@ namespace Kmplete
         _localizationDict->Add("View"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "View"));
         _localizationDict->Add("Quit"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "Quit"));
         _localizationDict->Add("Fullscreen"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "Fullscreen"));
+        _localizationDict->Add("Language"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "Language"));
     }
     //--------------------------------------------------------------------------
 }

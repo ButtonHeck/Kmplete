@@ -137,7 +137,6 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts\"
-    PUBLIC KMP_TR_DOMAIN_ENGINE=\"Engine\"
     PRIVATE KMP_EXPORTS
     PRIVATE KMP_ENGINE_PRIVATE
     INTERFACE KMP_ENGINE_INTERFACE
@@ -158,3 +157,14 @@ set_target_properties(Kmplete_Engine PROPERTIES
 if(${KMPLETE_BUILD_TESTS})
     add_subdirectory(tests)
 endif()
+
+
+# Localization
+# --------------------------
+
+set(KmpleteEngineDomain "Engine")
+target_compile_definitions(Kmplete_Engine
+    PUBLIC KMP_TR_DOMAIN_ENGINE=\"${KmpleteEngineDomain}\"
+)
+
+CreateTranslationHelperTargets(Kmplete_Engine Kmplete/Engine po_update.sh po_compile.sh ${KmpleteEngineDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)

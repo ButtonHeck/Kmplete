@@ -1,6 +1,7 @@
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/log.h"
+#include "Kmplete/Utils/function_utils.h"
 
 #include <stdexcept>
 
@@ -58,6 +59,7 @@ namespace Kmplete
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
         _localizationManager = CreatePtr<LocalizationManager>();
+        _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
         _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsPath.empty() 
             ? Filesystem::GetApplicationPath().append(applicationParameters.defaultSettingsFileName) 
             : applicationParameters.settingsPath);
@@ -68,7 +70,8 @@ namespace Kmplete
         Log::Initialize();
 #endif
 
-        _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
+        FillDictionary();
+        _localizationManager->AddLocaleChangedCallback(KMP_BIND(Application::FillDictionary));
     }
     //--------------------------------------------------------------------------
 
@@ -121,6 +124,13 @@ namespace Kmplete
 #endif
 
         _localizationManager->LoadSettings(*settings);
+    }
+    //--------------------------------------------------------------------------
+
+    void Application::FillDictionary()
+    {
+        _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
+        _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");
     }
     //--------------------------------------------------------------------------
 }

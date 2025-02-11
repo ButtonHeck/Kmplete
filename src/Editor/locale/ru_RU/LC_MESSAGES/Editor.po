@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 08:40+0300\n"
+"POT-Creation-Date: 2025-02-10 17:44+0300\n"
 "PO-Revision-Date: 2025-02-07 14:48+0300\n"
 "Last-Translator: U-DESKTOP-002D5DN\\sound <sound@desktop-002d5dn>\n"
 "Language-Team: Russian\n"
@@ -18,18 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/editor_ui_compositor.cpp:166
+#: ../src/editor_ui_compositor.cpp:186
 msgid "File"
 msgstr "Файл"
 
-#: ../src/editor_ui_compositor.cpp:167
+#: ../src/editor_ui_compositor.cpp:187
 msgid "View"
 msgstr "Вид"
 
-#: ../src/editor_ui_compositor.cpp:168
+#: ../src/editor_ui_compositor.cpp:188
 msgid "Quit"
 msgstr "Выход"
 
-#: ../src/editor_ui_compositor.cpp:169
+#: ../src/editor_ui_compositor.cpp:189
 msgid "Fullscreen"
 msgstr "Полный экран"
+
+#: ../src/editor_ui_compositor.cpp:190
+msgid "Language"
+msgstr "Язык"

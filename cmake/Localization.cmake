@@ -53,7 +53,7 @@ else()
     message(WARNING "msginit not found!")
 endif()
 
-function(CreateTranslationHelperTargets TargetName Folder UpdateScript CompileScript WorkingDirectory)
+function(CreateTranslationHelperTargets TargetName Folder UpdateScript CompileScript Domain WorkingDirectory)
     set(UpdateTranslationsTargetName ${TargetName}_localization_update)
     message(STATUS "localization update for ${TargetName}")
     add_custom_target(${UpdateTranslationsTargetName}
@@ -63,7 +63,7 @@ function(CreateTranslationHelperTargets TargetName Folder UpdateScript CompileSc
     
     add_custom_command(TARGET ${UpdateTranslationsTargetName}
         PRE_BUILD
-        COMMAND ${SHELL_EXECUTABLE} ${UpdateScript}
+        COMMAND ${SHELL_EXECUTABLE} ${UpdateScript} ${Domain}
         WORKING_DIRECTORY ${WorkingDirectory}
     )
     
@@ -77,7 +77,7 @@ function(CreateTranslationHelperTargets TargetName Folder UpdateScript CompileSc
     
     add_custom_command(TARGET ${CompileTranslationsTargetName}
         PRE_BUILD
-        COMMAND ${SHELL_EXECUTABLE} ${CompileScript}
+        COMMAND ${SHELL_EXECUTABLE} ${CompileScript} ${Domain}
         WORKING_DIRECTORY ${WorkingDirectory}
     )
 endfunction()

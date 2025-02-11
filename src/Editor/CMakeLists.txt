@@ -62,10 +62,6 @@ target_link_libraries(Kmplete_Editor
     PRIVATE Kmplete_Engine
 )
 
-target_compile_definitions(Kmplete_Editor
-    PRIVATE KMP_TR_DOMAIN_EDITOR=\"Editor\"
-)
-
 if(MSVC)
     target_link_options(Kmplete_Editor 
         PRIVATE $<$<CONFIG:RELWITHDEBINFO>:/PROFILE>
@@ -108,11 +104,20 @@ add_custom_command(
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
+
+# Localization
+# --------------------------
+
+set(KmpleteEditorDomain "Editor")
+target_compile_definitions(Kmplete_Editor
+    PRIVATE KMP_TR_DOMAIN_EDITOR=\"${KmpleteEditorDomain}\"
+)
+
 get_target_property(exeDir Kmplete_Editor RUNTIME_OUTPUT_DIRECTORY)
 add_custom_command(TARGET Kmplete_Editor POST_BUILD
     COMMAND ${CMAKE_COMMAND}
-    "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale" 
+    "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale;${CMAKE_CURRENT_LIST_DIR}/../Engine/locale" 
 	-P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
 )
 
-CreateTranslationHelperTargets(Kmplete_Editor Kmplete/Editor po_update.sh po_compile.sh ${CMAKE_CURRENT_LIST_DIR}/scripts)
+CreateTranslationHelperTargets(Kmplete_Editor Kmplete/Editor po_update.sh po_compile.sh ${KmpleteEditorDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)

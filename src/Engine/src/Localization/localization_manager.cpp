@@ -137,6 +137,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid) const
+    {
+        return _library->Get(domainSid, messageSid);
+    }
+    //--------------------------------------------------------------------------
+
     const TranslationStr& LocalizationManager::Translation(const DomainStr& domain, const SourceStr& message, const ContextStr& context)
     {
         return _library->Get(Utils::ToStringID(domain), Utils::ToStringID(message), Utils::ToStringID(context));

@@ -29,6 +29,7 @@ namespace Kmplete
         void ComposeMenu();
         void ComposeMenuFile();
         void ComposeMenuView();
+        void ComposeMenuLanguage();
         void ComposeMenuFileQuit();
         void ComposeMenuViewFullscreen();
 

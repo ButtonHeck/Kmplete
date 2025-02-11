@@ -49,6 +49,8 @@ namespace Kmplete
         void SaveSettingsInternal() const;
         void LoadSettingsInternal();
 
+        void FillDictionary();
+
     protected:
         UPtr<SystemMetricsManager> _systemMetricsManager;
         Ptr<LocalizationManager> _localizationManager;
