@@ -6,7 +6,7 @@
 
 namespace Kmplete
 {
-    UPtr<Application> CreateApplication(const Kmplete::ProgramOptions& programOptions)
+    UPtr<Application> CreateApplication(const ProgramOptions& programOptions)
     {
         try
         {
