@@ -114,10 +114,18 @@ target_compile_definitions(Kmplete_Editor
 )
 
 get_target_property(exeDir Kmplete_Editor RUNTIME_OUTPUT_DIRECTORY)
-add_custom_command(TARGET Kmplete_Editor POST_BUILD
+add_custom_target(Kmplete_Editor_copy_translations
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Kmplete_Editor done"
+)
+add_custom_command(TARGET Kmplete_Editor_copy_translations PRE_BUILD
     COMMAND ${CMAKE_COMMAND}
     "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale;${CMAKE_CURRENT_LIST_DIR}/../Engine/locale" 
-	-P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
+    -P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
 )
+set_target_properties(Kmplete_Editor_copy_translations PROPERTIES
+    FOLDER Kmplete/Editor
+)
+
+add_dependencies(Kmplete_Editor Kmplete_Editor_copy_translations)
 
 CreateTranslationHelperTargets(Kmplete_Editor Kmplete/Editor po_update.sh po_compile.sh ${KmpleteEditorDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)
