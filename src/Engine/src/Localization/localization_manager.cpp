@@ -12,15 +12,11 @@ namespace Kmplete
     constexpr static auto LocalizationManagerSettingsEntryName = "LocalizationManager";
     constexpr static auto LocalizationManagerLocaleStr = "Locale";
 
-    LocalizationManager::LocalizationManager()
+    LocalizationManager::LocalizationManager() noexcept
         : _localeGenerator()
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())
-    {
-        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
-        KMP_ASSERT(defaultTranslationsPath != LocalesDirectory);
-        AddMessagesPath(defaultTranslationsPath);
-    }
+    {}
     //--------------------------------------------------------------------------
 
     bool LocalizationManager::SetLocale(const LocaleStr& localeString)

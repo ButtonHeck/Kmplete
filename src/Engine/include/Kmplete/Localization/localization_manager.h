@@ -23,7 +23,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(LocalizationManager)
 
-        KMP_API LocalizationManager();
+        KMP_API LocalizationManager() noexcept;
         ~LocalizationManager() = default;
 
         KMP_API bool SetLocale(const LocaleStr& localeString);
