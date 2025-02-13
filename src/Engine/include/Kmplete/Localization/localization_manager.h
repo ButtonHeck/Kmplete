@@ -41,13 +41,10 @@ namespace Kmplete
         void SaveSettings(Settings& settings) const;
         void LoadSettings(Settings& settings);
 
-        KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStr& domain, const SourceStr& message) const;
         KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid) const;
-        KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStr& domain, const SourceStr& message, const ContextStr& context);
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStr& domain, const SourceStr& message, const TranslationStr& fallback) const;
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStr& domain, const SourceStr& message, const ContextStr& context, const TranslationStr& fallback);
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrSource(const DomainStr& domain, const SourceStr& message) const;
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrSource(const DomainStr& domain, const SourceStr& message, const ContextStr& context);
+        KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const TranslationStr& fallback) const;
+        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const;
 
     private:
         void ImbueLocale() const;

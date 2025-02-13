@@ -109,49 +109,29 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::Translation(const DomainStr& domain, const SourceStr& message) const
-    {
-        return _library->Get(Utils::ToStringID(domain), Utils::ToStringID(message));
-    }
-    //--------------------------------------------------------------------------
-
     const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid) const
     {
         return _library->Get(domainSid, messageSid);
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::Translation(const DomainStr& domain, const SourceStr& message, const ContextStr& context)
+    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid) const
     {
-        return _library->Get(Utils::ToStringID(domain), Utils::ToStringID(message), Utils::ToStringID(context));
+        return _library->Get(domainSid, messageSid, contextSid);
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStr& domain, const SourceStr& message, const TranslationStr& fallback) const
+    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const TranslationStr& fallback) const
     {
-        const auto& translation = Translation(domain, message);
+        const auto& translation = Translation(domainSid, messageSid);
         return translation.empty() ? fallback : translation;
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStr& domain, const SourceStr& message, const ContextStr& context, const TranslationStr& fallback)
+    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const
     {
-        const auto& translation = Translation(domain, message, context);
+        const auto& translation = Translation(domainSid, messageSid, contextSid);
         return translation.empty() ? fallback : translation;
-    }
-    //--------------------------------------------------------------------------
-
-    const TranslationStr& LocalizationManager::TranslationOrSource(const DomainStr& domain, const SourceStr& message) const
-    {
-        const auto& translation = Translation(domain, message);
-        return translation.empty() ? message : translation;
-    }
-    //--------------------------------------------------------------------------
-
-    const TranslationStr& LocalizationManager::TranslationOrSource(const DomainStr& domain, const SourceStr& message, const ContextStr& context)
-    {
-        const auto& translation = Translation(domain, message, context);
-        return translation.empty() ? message : translation;
     }
     //--------------------------------------------------------------------------
 

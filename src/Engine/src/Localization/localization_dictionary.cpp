@@ -57,7 +57,7 @@ namespace Kmplete
 
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid)
     {
-        return _translationCtxMap[_currentLocaleSid][{sourceSid, contextSid}];
+        return _translationCtxMap[_currentLocaleSid][ContextedSource{sourceSid, contextSid}];
     }
     //--------------------------------------------------------------------------
 }

@@ -90,7 +90,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid)
+    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const
     {
         if (_dictionaryMap.contains(domainSid))
         {
@@ -101,7 +101,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid)
+    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const
     {
         if (_dictionaryMap.contains(domainSid))
         {
