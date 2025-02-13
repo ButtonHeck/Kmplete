@@ -64,6 +64,17 @@ TEST_CASE("Window backend no-window", "[core][window_backend]")
 }
 //--------------------------------------------------------------------------
 
+TEST_CASE("Window backend DPI scale", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    auto dpi = 0.0f;
+    REQUIRE_NOTHROW(dpi = windowBackend->GetDPIScale());
+    REQUIRE(dpi != 0.0f);
+}
+//--------------------------------------------------------------------------
+
 TEST_CASE("Window backend single window", "[core][window_backend][window]")
 {
     const auto windowBackend = Kmplete::WindowBackend::Create();
