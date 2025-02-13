@@ -18,7 +18,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict);
+        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict);
         ~EditorUI();
 
         void LoopIteration();
@@ -43,9 +43,9 @@ namespace Kmplete
         void LoadSettings(Settings& settings);
 
     private:
-        void Initialize(const Ptr<Window> window);
-        void AddDefaultFont() const;
-        void Stylize() const;
+        void Initialize(const Ptr<Window> window, float dpiScale);
+        void AddDefaultFont(float dpiScale) const;
+        void Stylize(float dpiScale) const;
         void Finalize() const;
 
     private:

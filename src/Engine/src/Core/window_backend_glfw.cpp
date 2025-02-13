@@ -210,6 +210,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    float WindowBackendGlfw::GetDPIScale() const
+    {
+        const auto monitor = glfwGetPrimaryMonitor();
+        float scale = 1.0f;
+        glfwGetMonitorContentScale(monitor, &scale, &scale);
+        return scale;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowBackendGlfw::SaveSettings(Settings& settings) const
     {
         settings.StartSaveObject(WindowBackendSettingsEntryName);

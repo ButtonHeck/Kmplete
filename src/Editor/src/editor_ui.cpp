@@ -8,11 +8,11 @@ namespace Kmplete
 {
     constexpr static auto EditorUISettingsEntryName = "EditorUI";
 
-    EditorUI::EditorUI(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict)
+    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict)
         : _uiImpl(nullptr)
         , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager, localizationDict))
     {
-        Initialize(window);
+        Initialize(window, dpiScale);
     }
     //--------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Initialize(const Ptr<Window> window)
+    void EditorUI::Initialize(const Ptr<Window> window, float dpiScale)
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -32,22 +32,24 @@ namespace Kmplete
 
         _uiImpl.reset(EditorUIImpl::CreateImpl(window));
 
-        AddDefaultFont();
-        Stylize();
+        AddDefaultFont(dpiScale);
+        Stylize(dpiScale);
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddDefaultFont() const
+    void EditorUI::AddDefaultFont(float dpiScale) const
     {
         auto& io = ImGui::GetIO();
-        const auto fontSize = 18;
+        const auto fontSize = 18 * dpiScale;
         const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "/OpenSans-Regular.ttf");
         io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Stylize() const
+    void EditorUI::Stylize(float dpiScale) const
     {
+        (void)dpiScale; //TODO
+
         auto& style = ImGui::GetStyle();
         style.FrameBorderSize = 1.0f;
         style.WindowMenuButtonPosition = ImGuiDir_None;
