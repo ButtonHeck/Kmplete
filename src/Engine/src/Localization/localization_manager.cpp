@@ -109,34 +109,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& message)
-    {
-        const auto translation = Translator::Translate(domain, message);
-        _library->Add(Utils::ToStringID(domain), Utils::ToStringID(message), translation);
-        return translation;
-    }
-    //--------------------------------------------------------------------------
-
-    TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& messageSingular, const SourceStr& messagePlural, int count) const
-    {
-        return Translator::Translate(domain, messageSingular, messagePlural, count);
-    }
-    //--------------------------------------------------------------------------
-
-    TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& message, const ContextStr& context)
-    {
-        const auto translation = Translator::TranslateCtx(domain, message, context);
-        _library->Add(Utils::ToStringID(domain), Utils::ToStringID(message), Utils::ToStringID(context), translation);
-        return translation;
-    }
-    //--------------------------------------------------------------------------
-
-    TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& messageSingular, const SourceStr& messagePlural, int count, const ContextStr& context) const
-    {
-        return Translator::TranslateCtx(domain, messageSingular, messagePlural, count, context);
-    }
-    //--------------------------------------------------------------------------
-
     const TranslationStr& LocalizationManager::Translation(const DomainStr& domain, const SourceStr& message) const
     {
         return _library->Get(Utils::ToStringID(domain), Utils::ToStringID(message));
