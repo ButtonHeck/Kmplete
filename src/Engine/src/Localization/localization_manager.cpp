@@ -25,6 +25,12 @@ namespace Kmplete
 
     bool LocalizationManager::SetLocale(const LocaleStr& localeString)
     {
+        if (_currentLocale == localeString)
+        {
+            KMP_LOG_CORE_INFO("LocalizationManager: locale '{}' already set", localeString);
+            return false;
+        }
+
         try
         {
             const auto testLocale = localeString.empty() ? std::locale::classic() : std::locale(localeString);

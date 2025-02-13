@@ -19,9 +19,7 @@ namespace Kmplete
     static constexpr auto LocaleRuName = "Russian";
 
     static constexpr auto SidTrInvalidLocale = static_cast<Utils::StringID>(0);
-    static constexpr auto SidTrLocaleEnUTF8 = Utils::ToStringID(LocaleEnUTF8Keyword);
     static constexpr auto SidTrLocaleEnName = Utils::ToStringID(LocaleEnName);
-    static constexpr auto SidTrLocaleRuUTF8 = Utils::ToStringID(LocaleRuUTF8Keyword);
     static constexpr auto SidTrLocaleRuName = Utils::ToStringID(LocaleRuName);
     static constexpr auto SidTrDomainEngine = Utils::ToStringID(KMP_TR_DOMAIN_ENGINE);
 

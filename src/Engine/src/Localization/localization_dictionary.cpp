@@ -25,9 +25,9 @@ namespace Kmplete
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const TranslationStr& translation)
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
-        if (_translationMap[_currentLocaleSid].contains(sourceSid))
+        if (_translationMap[_currentLocaleSid].contains(sourceSid) && _translationMap[_currentLocaleSid][sourceSid] != translation)
         {
-            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" already contains \"{}\"", _domain, sourceSid);
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"", _domain, sourceSid);
             return;
         }
 
@@ -39,9 +39,9 @@ namespace Kmplete
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedSource&& contextedSource = ContextedSource{ sourceSid, contextSid };
-        if (_translationCtxMap[_currentLocaleSid].contains(contextedSource))
+        if (_translationCtxMap[_currentLocaleSid].contains(contextedSource) && _translationCtxMap[_currentLocaleSid][contextedSource] != translation)
         {
-            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" already contains \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
             return;
         }
 
