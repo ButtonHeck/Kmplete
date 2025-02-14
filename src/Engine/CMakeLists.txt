@@ -16,6 +16,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/pointers.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/macro.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/memory_checker.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
@@ -30,6 +31,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/memory_checker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
