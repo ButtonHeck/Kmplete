@@ -7,6 +7,7 @@
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/memory_checker.h"
 
 int Main(const Kmplete::ProgramOptions& programOptions);
 
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
 
 int Main(const Kmplete::ProgramOptions& programOptions)
 {
+    Kmplete::MemoryChecker::Prepare();
     auto app = Kmplete::CreateApplication(programOptions);
     if (!app)
     {
