@@ -65,6 +65,13 @@ namespace Kmplete
     void WindowGlfw::Finalize()
     {
         UpdateSettings();
+
+        auto* userData = GetUserPointer(_window);
+        if (userData)
+        {
+            delete userData;
+        }
+
         glfwDestroyWindow(_window);
     }
     //--------------------------------------------------------------------------
