@@ -111,7 +111,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid) const
+    const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid) const
     {
         return _library->Get(domainSid, messageSid, contextSid);
     }
@@ -124,9 +124,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const
+    const TranslationStr& LocalizationManager::TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const
     {
-        const auto& translation = Translation(domainSid, messageSid, contextSid);
+        const auto& translation = TranslationCtx(domainSid, messageSid, contextSid);
         return translation.empty() ? fallback : translation;
     }
     //--------------------------------------------------------------------------

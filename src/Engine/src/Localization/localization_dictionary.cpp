@@ -60,4 +60,11 @@ namespace Kmplete
         return _translationCtxMap[_currentLocaleSid][ContextedSource{sourceSid, contextSid}];
     }
     //--------------------------------------------------------------------------
+
+    void LocalizationDictionary::Clear() noexcept
+    {
+        _translationMap.clear();
+        _translationCtxMap.clear();
+    }
+    //--------------------------------------------------------------------------
 }

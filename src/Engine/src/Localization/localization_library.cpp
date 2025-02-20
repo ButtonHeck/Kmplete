@@ -1,5 +1,6 @@
 #include "Kmplete/Localization/localization_library.h"
 #include "Kmplete/Localization/localization_dictionary.h"
+#include "Kmplete/Core/log.h"
 
 namespace Kmplete
 {
@@ -31,6 +32,12 @@ namespace Kmplete
 
     NonNull<Ptr<LocalizationDictionary>> LocalizationLibrary::AddDictionary(const DomainStrSID& domainSid)
     {
+        if (_dictionaryMap.contains(domainSid))
+        {
+            KMP_LOG_CORE_WARN("LocalizationLibrary: already contains domainSID '{}'", domainSid);
+            return _dictionaryMap.at(domainSid);
+        }
+
         auto dictionary = CreatePtr<LocalizationDictionary>(domainSid, _currentLocaleSid);
         _dictionaryMap.insert(std::make_pair(domainSid, dictionary));
         return dictionary;
@@ -39,7 +46,14 @@ namespace Kmplete
 
     NonNull<Ptr<LocalizationDictionary>> LocalizationLibrary::AddDictionary(const DomainStr& domain)
     {
-        return AddDictionary(Utils::ToStringID(domain));
+        const auto domainSid = Utils::ToStringID(domain);
+        if (_dictionaryMap.contains(domainSid))
+        {
+            KMP_LOG_CORE_WARN("LocalizationLibrary: already contains domain '{}'", domain);
+            return _dictionaryMap.at(domainSid);
+        }
+
+        return AddDictionary(domainSid);
     }
     //--------------------------------------------------------------------------
 
@@ -62,6 +76,12 @@ namespace Kmplete
 
     void LocalizationLibrary::RemoveDictionary(const DomainStrSID& domainSid) noexcept
     {
+        const auto dict = GetDictionary(domainSid);
+        if (dict)
+        {
+            dict->Clear();
+        }
+        
         _dictionaryMap.erase(domainSid);
     }
     //--------------------------------------------------------------------------
