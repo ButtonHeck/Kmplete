@@ -184,8 +184,31 @@ target_link_libraries(Kmplete_Engine_Locale_Tests
 )
 
 set_target_properties(Kmplete_Engine_Locale_Tests PROPERTIES 
-    FOLDER Kmplete/Engine/Tests
+    FOLDER Kmplete/Engine/Tests/Localization
 )
+
+# Locale tests - localization
+
+set(KmpleteTestsDomain "Tests")
+target_compile_definitions(Kmplete_Engine_Locale_Tests
+    PRIVATE KMP_TR_DOMAIN_TESTS=\"${KmpleteTestsDomain}\"
+)
+get_target_property(exeDir Kmplete_Engine_Locale_Tests RUNTIME_OUTPUT_DIRECTORY)
+add_custom_target(Kmplete_Engine_Locale_Tests_copy_translations
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Kmplete_Editor done"
+)
+add_custom_command(TARGET Kmplete_Engine_Locale_Tests_copy_translations PRE_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale" 
+    -P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
+)
+set_target_properties(Kmplete_Engine_Locale_Tests_copy_translations PROPERTIES
+    FOLDER Kmplete/Engine/Tests/Localization
+)
+
+add_dependencies(Kmplete_Engine_Locale_Tests Kmplete_Engine_Locale_Tests_copy_translations)
+
+CreateTranslationHelperTargets(Kmplete_Engine_Locale_Tests Kmplete/Engine/Tests/Localization po_update.sh po_compile.sh ${KmpleteTestsDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)
 
 
 # Common stuff
