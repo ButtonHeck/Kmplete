@@ -1,11 +1,10 @@
 #include "editor_ui_compositor.h"
 #include "ui_utils.h"
 #include "shortcuts.h"
+#include "localization_base.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
-#include "Kmplete/Localization/localization_dictionary.h"
-#include "Kmplete/Localization/localization_translator.h"
 
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
@@ -13,10 +12,9 @@
 
 namespace Kmplete
 {
-    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict)
+    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager)
         : _window(window)
         , _localizationManager(localizationManager)
-        , _localizationDict(localizationDict)
     {
         FillDictionary();
         _localizationManager->AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::FillDictionary));
@@ -56,7 +54,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuFile()
     {
-        if (ImGui::BeginMenu(_localizationDict->Get("File"_sid).c_str()))
+        if (ImGui::BeginMenu(_localizationManager->Translation(SidTrDomainEditor, "File"_sid).c_str()))
         {
             ImGui::Separator();
 
@@ -69,7 +67,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuView()
     {
-        if (ImGui::BeginMenu(_localizationDict->Get("View"_sid).c_str()))
+        if (ImGui::BeginMenu(_localizationManager->Translation(SidTrDomainEditor, "View"_sid).c_str()))
         {
             ComposeMenuViewFullscreen();
             ImGui::EndMenu();
@@ -79,7 +77,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuLanguage()
     {
-        if (ImGui::BeginMenu(_localizationDict->Get("Language"_sid).c_str()))
+        if (ImGui::BeginMenu(_localizationManager->Translation(SidTrDomainEditor, "Language"_sid).c_str()))
         {
             if (ImGui::MenuItem(_localizationManager->Translation(SidTrDomainEngine, SidTrLocaleEnName).c_str()))
             {
@@ -98,7 +96,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuFileQuit()
     {
-        if (ImGui::MenuItem(_localizationDict->Get("Quit"_sid).c_str(), Shortcuts::Quit.text))
+        if (ImGui::MenuItem(_localizationManager->Translation(SidTrDomainEditor, "Quit"_sid).c_str(), Shortcuts::Quit.text))
         {
             _popups.quit = true;
         }
@@ -109,7 +107,7 @@ namespace Kmplete
     {
         const auto screenMode = _window->GetScreenMode();
         auto isFullscreen = screenMode == Window::WindowedFullscreenMode;
-        if (ImGui::MenuItem(_localizationDict->Get("Fullscreen"_sid).c_str(), Shortcuts::Fullscreen.text, &isFullscreen))
+        if (ImGui::MenuItem(_localizationManager->Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), Shortcuts::Fullscreen.text, &isFullscreen))
         {
             _window->SetScreenMode(isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
         }
@@ -183,11 +181,11 @@ namespace Kmplete
 
     void EditorUICompositor::FillDictionary()
     {
-        _localizationDict->Add("File"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "File"));
-        _localizationDict->Add("View"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "View"));
-        _localizationDict->Add("Quit"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "Quit"));
-        _localizationDict->Add("Fullscreen"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "Fullscreen"));
-        _localizationDict->Add("Language"_sid, Translator::Translate(KMP_TR_DOMAIN_EDITOR, "Language"));
+        _localizationManager->Translate(KMP_TR_DOMAIN_EDITOR, "File");
+        _localizationManager->Translate(KMP_TR_DOMAIN_EDITOR, "View");
+        _localizationManager->Translate(KMP_TR_DOMAIN_EDITOR, "Quit");
+        _localizationManager->Translate(KMP_TR_DOMAIN_EDITOR, "Fullscreen");
+        _localizationManager->Translate(KMP_TR_DOMAIN_EDITOR, "Language");
     }
     //--------------------------------------------------------------------------
 }

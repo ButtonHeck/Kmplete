@@ -2,7 +2,6 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/log.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Localization/localization_translator.h"
 #include "Kmplete/Utils/function_utils.h"
 
 #include <stdexcept>
@@ -136,11 +135,8 @@ namespace Kmplete
 
     void Application::FillDictionary()
     {
-        const auto dictionary = _localizationManager->GetDictionary(KMP_TR_DOMAIN_ENGINE);
-        KMP_ASSERT(dictionary);
-
-        dictionary->Add("English"_sid, Translator::Translate(KMP_TR_DOMAIN_ENGINE, "English"));
-        dictionary->Add("Russian"_sid, Translator::Translate(KMP_TR_DOMAIN_ENGINE, "Russian"));
+        _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
+        _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");
     }
     //--------------------------------------------------------------------------
 }

@@ -11,14 +11,13 @@
 namespace Kmplete
 {
     class LocalizationManager;
-    class LocalizationDictionary;
 
     class EditorUI
     {
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict);
+        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager);
         ~EditorUI();
 
         void LoopIteration();

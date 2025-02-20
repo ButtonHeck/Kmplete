@@ -8,9 +8,9 @@ namespace Kmplete
 {
     constexpr static auto EditorUISettingsEntryName = "EditorUI";
 
-    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict)
+    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager)
         : _uiImpl(nullptr)
-        , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager, localizationDict))
+        , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager))
     {
         Initialize(window, dpiScale);
     }

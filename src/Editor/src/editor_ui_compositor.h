@@ -8,14 +8,13 @@
 namespace Kmplete
 {
     class LocalizationManager;
-    class LocalizationDictionary;
 
     class EditorUICompositor
     {
     public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
-        EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const Ptr<LocalizationDictionary> localizationDict);
+        EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager);
 
         void ComposeMainArea();
         void ComposeStatusBar();
@@ -49,7 +48,6 @@ namespace Kmplete
     private:
         const Ptr<Window> _window;
         const Ptr<LocalizationManager> _localizationManager;
-        const Ptr<LocalizationDictionary> _localizationDict;
         UIPopupsState _popups;
     };
     //--------------------------------------------------------------------------

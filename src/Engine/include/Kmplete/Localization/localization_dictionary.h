@@ -22,7 +22,6 @@ namespace Kmplete
         KMP_API void Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
         KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSid);
         KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid);
-        KMP_API void Clear() noexcept;
 
     private:
         using TranslationMap = std::unordered_map<SourceStrSID, TranslationStr>;

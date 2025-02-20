@@ -30,65 +30,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    NonNull<Ptr<LocalizationDictionary>> LocalizationLibrary::AddDictionary(const DomainStrSID& domainSid)
+    bool LocalizationLibrary::AddDictionary(const DomainStrSID& domainSid)
     {
         if (_dictionaryMap.contains(domainSid))
         {
             KMP_LOG_CORE_WARN("LocalizationLibrary: already contains domainSID '{}'", domainSid);
-            return _dictionaryMap.at(domainSid);
+            return false;
         }
 
-        auto dictionary = CreatePtr<LocalizationDictionary>(domainSid, _currentLocaleSid);
-        _dictionaryMap.insert(std::make_pair(domainSid, dictionary));
-        return dictionary;
+        _dictionaryMap.insert(std::make_pair(domainSid, CreateUPtr<LocalizationDictionary>(domainSid, _currentLocaleSid)));
+        return true;
     }
     //--------------------------------------------------------------------------
 
-    NonNull<Ptr<LocalizationDictionary>> LocalizationLibrary::AddDictionary(const DomainStr& domain)
+    bool LocalizationLibrary::AddDictionary(const DomainStr& domain)
     {
         const auto domainSid = Utils::ToStringID(domain);
         if (_dictionaryMap.contains(domainSid))
         {
             KMP_LOG_CORE_WARN("LocalizationLibrary: already contains domain '{}'", domain);
-            return _dictionaryMap.at(domainSid);
+            return false;
         }
 
         return AddDictionary(domainSid);
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Ptr<LocalizationDictionary>> LocalizationLibrary::GetDictionary(const DomainStrSID& domainSid) const
+    bool LocalizationLibrary::RemoveDictionary(const DomainStrSID& domainSid) noexcept
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            return _dictionaryMap.at(domainSid);
-        }
-
-        return nullptr;
-    }
-    //--------------------------------------------------------------------------
-
-    Nullable<Ptr<LocalizationDictionary>> LocalizationLibrary::GetDictionary(const DomainStr& domain) const
-    {
-        return GetDictionary(Utils::ToStringID(domain));
-    }
-    //--------------------------------------------------------------------------
-
-    void LocalizationLibrary::RemoveDictionary(const DomainStrSID& domainSid) noexcept
-    {
-        const auto dict = GetDictionary(domainSid);
-        if (dict)
-        {
-            dict->Clear();
+            _dictionaryMap.erase(domainSid);
+            return true;
         }
         
-        _dictionaryMap.erase(domainSid);
+        return false;
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::RemoveDictionary(const DomainStr& domain) noexcept
+    bool LocalizationLibrary::RemoveDictionary(const DomainStr& domain) noexcept
     {
-        RemoveDictionary(Utils::ToStringID(domain));
+        return RemoveDictionary(Utils::ToStringID(domain));
     }
     //--------------------------------------------------------------------------
 

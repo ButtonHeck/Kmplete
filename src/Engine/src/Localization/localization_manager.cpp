@@ -61,7 +61,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    NonNull<Ptr<LocalizationDictionary>> LocalizationManager::AddMessagesDomain(const DomainStr& domain)
+    bool LocalizationManager::AddMessagesDomain(const DomainStr& domain)
     {
         _localeGenerator.add_messages_domain(domain);
         ImbueLocale();
@@ -70,15 +70,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::RemoveMessagesDomain(const DomainStr& domain)
+    bool LocalizationManager::RemoveMessagesDomain(const DomainStr& domain)
     {
-        _library->RemoveDictionary(domain);
-    }
-    //--------------------------------------------------------------------------
-
-    Nullable<Ptr<LocalizationDictionary>> LocalizationManager::GetDictionary(const DomainStr& domain) const
-    {
-        return _library->GetDictionary(domain);
+        return _library->RemoveDictionary(domain);
     }
     //--------------------------------------------------------------------------
 
@@ -102,6 +96,54 @@ namespace Kmplete
         const auto localeStr = settings.GetString(LocalizationManagerLocaleStr, LocaleEnUTF8Keyword);
         SetLocale(localeStr);
         settings.EndLoadObject();
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& source)
+    {
+        const auto translation = Translator::Translate(domain, source);
+        const auto domainSid = Utils::ToStringID(domain);
+        const auto sourceSid = Utils::ToStringID(source);
+        _library->Add(domainSid, sourceSid, translation);
+
+        return translation;
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count)
+    {
+        const auto translation = Translator::Translate(domain, sourceSingular, sourcePlural, count);
+        const auto domainSid = Utils::ToStringID(domain);
+        const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
+        const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
+        // TODO: library add
+
+        return translation;
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context)
+    {
+        const auto translation = Translator::TranslateCtx(domain, source, context);
+        const auto domainSid = Utils::ToStringID(domain);
+        const auto sourceSid = Utils::ToStringID(source);
+        const auto contextSid = Utils::ToStringID(context);
+        _library->Add(domainSid, sourceSid, contextSid, translation);
+
+        return translation;
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context)
+    {
+        const auto translation = Translator::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
+        const auto domainSid = Utils::ToStringID(domain);
+        const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
+        const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
+        const auto contextSid = Utils::ToStringID(context);
+        // TODO: library add
+
+        return translation;
     }
     //--------------------------------------------------------------------------
 

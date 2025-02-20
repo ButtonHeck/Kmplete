@@ -1,15 +1,15 @@
 # Russian translations for PACKAGE package.
 # Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# U-DESKTOP-002D5DN\sound <sound@desktop-002d5dn>, 2025.
+# U-DESKTOP-002D5DN\sound <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-10 17:44+0300\n"
-"PO-Revision-Date: 2025-02-07 14:48+0300\n"
-"Last-Translator: U-DESKTOP-002D5DN\\sound <sound@desktop-002d5dn>\n"
+"POT-Creation-Date: 2025-02-20 17:55+0300\n"
+"PO-Revision-Date: 2025-02-20 17:55+0300\n"
+"Last-Translator: U-DESKTOP-002D5DN\\sound <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/editor_ui_compositor.cpp:186
+#: ../src/editor_ui_compositor.cpp:184
 msgid "File"
 msgstr "Файл"
 
-#: ../src/editor_ui_compositor.cpp:187
+#: ../src/editor_ui_compositor.cpp:185
 msgid "View"
 msgstr "Вид"
 
-#: ../src/editor_ui_compositor.cpp:188
+#: ../src/editor_ui_compositor.cpp:186
 msgid "Quit"
 msgstr "Выход"
 
-#: ../src/editor_ui_compositor.cpp:189
+#: ../src/editor_ui_compositor.cpp:187
 msgid "Fullscreen"
 msgstr "Полный экран"
 
-#: ../src/editor_ui_compositor.cpp:190
+#: ../src/editor_ui_compositor.cpp:188
 msgid "Language"
 msgstr "Язык"

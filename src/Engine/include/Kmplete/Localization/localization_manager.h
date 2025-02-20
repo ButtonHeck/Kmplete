@@ -1,10 +1,8 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/nullability.h"
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_library.h"
-#include "Kmplete/Localization/localization_dictionary.h"
 
 #include <boost/locale.hpp>
 
@@ -31,15 +29,18 @@ namespace Kmplete
 
         KMP_API void AddMessagesPath(const std::string& path);
 
-        KMP_API NonNull<Ptr<LocalizationDictionary>> AddMessagesDomain(const DomainStr& domain);
-        KMP_API void RemoveMessagesDomain(const DomainStr& domain);
-
-        KMP_NODISCARD KMP_API Nullable<Ptr<LocalizationDictionary>> GetDictionary(const DomainStr& domain) const;
+        KMP_API bool AddMessagesDomain(const DomainStr& domain);
+        KMP_API bool RemoveMessagesDomain(const DomainStr& domain);
 
         KMP_API void AddLocaleChangedCallback(const LocaleChangeCallback& callback);
 
         void SaveSettings(Settings& settings) const;
         void LoadSettings(Settings& settings);
+
+        KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source);
+        KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count);
+        KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context);
+        KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context);
 
         KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid) const;
         KMP_NODISCARD KMP_API const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid) const;

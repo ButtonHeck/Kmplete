@@ -51,8 +51,8 @@ namespace Kmplete
         _mainWindow->SetTitle(GetApplicationName());
         _mainWindow->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
-        const auto localizationDict = _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _ui.reset(new EditorUI(_mainWindow, _backend->GetDPIScale(), _localizationManager, localizationDict));
+        _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
+        _ui.reset(new EditorUI(_mainWindow, _backend->GetDPIScale(), _localizationManager));
 
         LoadSettingsInternal();
     }
