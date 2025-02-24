@@ -187,14 +187,14 @@ TEST_CASE("Localization manager callbacks", "[localization][locale]")
     int testValue = 0;
     LocalizationManager localizationManager;
 
-    localizationManager.AddLocaleChangedCallback([&](){ testValue++; });
+    REQUIRE_NOTHROW(localizationManager.AddLocaleChangedCallback([&](){ testValue++; }));
 
     // en_EN.UTF-8
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE(testValue == 1);
 
     int anotherTestValue = 100;
-    localizationManager.AddLocaleChangedCallback([&](){ anotherTestValue++; });
+    REQUIRE_NOTHROW(localizationManager.AddLocaleChangedCallback([&](){ anotherTestValue++; }));
 
     // en_EN.UTF-8 again
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
@@ -216,41 +216,45 @@ TEST_CASE("Localization translator without context singular", "[localization][lo
     // set ru_RU locale
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
 
+    TranslationStr yesStr;
+    TranslationStr noStr;
+    TranslationStr untranslatedStr;
+
     // Without domain "Tests" and without "locale" path
-    auto yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes");
+    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes"); // without translation
 
     // add path
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes");
+    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes"); // without translation
 
     // add domain (translations must be ready)
     REQUIRE_NOTHROW(localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes");
+    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(Utils::Utf8ToNarrow(yesStr) == "Да");
-    auto noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No");
+    REQUIRE_NOTHROW(noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No"));
     REQUIRE(Utils::Utf8ToNarrow(noStr) == "Нет");
-    auto untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated");
+    REQUIRE_NOTHROW(untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to en_EN
     REQUIRE(localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes");
+    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes");
-    noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No");
+    REQUIRE_NOTHROW(noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No"));
     REQUIRE(noStr == "No");
-    untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated");
+    REQUIRE_NOTHROW(untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to ru_RU again
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes");
+    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(Utils::Utf8ToNarrow(yesStr) == "Да");
-    noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No");
+    REQUIRE_NOTHROW(noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No"));
     REQUIRE(Utils::Utf8ToNarrow(noStr) == "Нет");
-    untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated");
+    REQUIRE_NOTHROW(untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 }
 //--------------------------------------------------------------------------
@@ -262,45 +266,45 @@ TEST_CASE("Localization translator with context singular", "[localization][local
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
 
-    std::string openVerbStr;
-    std::string openAdjStr;
-    std::string untranslatedStr;
+    TranslationStr openVerbStr;
+    TranslationStr openAdjStr;
+    TranslationStr untranslatedStr;
 
     // Without domain "Tests" and without messages path
-    openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb");
+    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
 
     // add path
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb");
+    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
 
     // add domain "Tests"
     REQUIRE_NOTHROW(localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb");
+    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(Utils::Utf8ToNarrow(openVerbStr) == "Открыть");
-    openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective");
+    REQUIRE_NOTHROW(openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
     REQUIRE(Utils::Utf8ToNarrow(openAdjStr) == "Открытый");
-    untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context");
+    REQUIRE_NOTHROW(untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to en_EN
     REQUIRE(localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb");
+    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
-    openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective");
+    REQUIRE_NOTHROW(openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
     REQUIRE(openAdjStr == "Open");
-    untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context");
+    REQUIRE_NOTHROW(untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to ru_RU again
     REQUIRE(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb");
+    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(Utils::Utf8ToNarrow(openVerbStr) == "Открыть");
-    openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective");
+    REQUIRE_NOTHROW(openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
     REQUIRE(Utils::Utf8ToNarrow(openAdjStr) == "Открытый");
-    untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context");
+    REQUIRE_NOTHROW(untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 }
 //--------------------------------------------------------------------------
@@ -313,18 +317,18 @@ TEST_CASE("Localization manager Translation functions without context singular",
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    Ptr<LocalizationDictionary> dict;
-    REQUIRE_NOTHROW(dict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict);
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
 
-    REQUIRE_NOTHROW(dict->Add("Yes"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes")));
-    REQUIRE_NOTHROW(dict->Add("No"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "No")));
-    REQUIRE_NOTHROW(dict->Add("Untranslated"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated")));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "No"));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
 
-    std::string yesStr;
-    std::string noStr;
-    std::string untranslatedStr;
-    std::string unknownStr;
+    TranslationStr yesStr;
+    TranslationStr noStr;
+    TranslationStr untranslatedStr;
+    TranslationStr unknownStr;
 
     // existing domain Translation
     REQUIRE_NOTHROW(yesStr = localizationManager.Translation(SidTrDomainTests, "Yes"_sid));
@@ -379,23 +383,23 @@ TEST_CASE("Localization manager Translation functions with context singular", "[
 {
     REQUIRE(Filesystem::Initialize());
 
-    std::string openVerbStr;
-    std::string openAdjStr;
-    std::string untranslatedStr;
-    std::string unknownStr;
+    TranslationStr openVerbStr;
+    TranslationStr openAdjStr;
+    TranslationStr untranslatedStr;
+    TranslationStr unknownStr;
 
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    Ptr<LocalizationDictionary> dict;
-    REQUIRE_NOTHROW(dict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict);
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
 
     // add existing translations with existing context
-    REQUIRE_NOTHROW(dict->Add("Open"_sid, "Verb"_sid, Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb")));
-    REQUIRE_NOTHROW(dict->Add("Open"_sid, "Adjective"_sid, Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective")));
-    REQUIRE_NOTHROW(dict->Add("Untranslated"_sid, "Some context"_sid, Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context")));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
 
     // check existing translations with existing context
     REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(SidTrDomainTests, "Open"_sid, "Verb"_sid));
@@ -485,69 +489,64 @@ TEST_CASE("Localization manager dictionaries without context", "[localization][l
 {
     REQUIRE(Filesystem::Initialize());
 
-    std::string yesStr;
-    std::string noStr;
-    std::string untranslatedStr;
-    std::string unknownStr;
+    TranslationStr yesStr;
+    TranslationStr noStr;
+    TranslationStr untranslatedStr;
+    TranslationStr unknownStr;
 
     LocalizationManager localizationManager;
-    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    auto dict = localizationManager.GetDictionary(KMP_TR_DOMAIN_TESTS);
-    REQUIRE(dict == nullptr);
-
-    REQUIRE_NOTHROW(dict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict);
-    REQUIRE(dict->GetDomain() != 0);
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.SetLocale(LocaleRuUTF8Keyword));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
 
     // try add "tests" domain again
-    Ptr<LocalizationDictionary> anotherDict = nullptr;
-    REQUIRE_NOTHROW(anotherDict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(anotherDict == dict);
-
-    REQUIRE_NOTHROW(dict = localizationManager.GetDictionary(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict);
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE_FALSE(ok);
 
     // check double remove
-    REQUIRE_NOTHROW(localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE_NOTHROW(localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
-
-    REQUIRE_NOTHROW(dict = localizationManager.GetDictionary(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict == nullptr);
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE_FALSE(ok);
 
     // add again
-    REQUIRE_NOTHROW(dict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict);
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
 
     // try add without messages path set
-    REQUIRE_NOTHROW(dict->Add("Yes"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes")));
-    REQUIRE_NOTHROW(dict->Add("No"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "No")));
-    REQUIRE_NOTHROW(yesStr = dict->Get("Yes"_sid));
-    REQUIRE_NOTHROW(noStr = dict->Get("No"_sid));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "No"));
+    REQUIRE_NOTHROW(yesStr = localizationManager.Translation(SidTrDomainTests, "Yes"_sid));
+    REQUIRE_NOTHROW(noStr = localizationManager.Translation(SidTrDomainTests, "No"_sid));
     REQUIRE(yesStr == "Yes");
     REQUIRE(noStr == "No");
 
     // try add again after messages path set
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    REQUIRE_NOTHROW(localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE_NOTHROW(dict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE_NOTHROW(dict->Add("Yes"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes")));
-    REQUIRE_NOTHROW(dict->Add("No"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "No")));
-    REQUIRE_NOTHROW(dict->Add("Untranslated"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated")));
-    REQUIRE_NOTHROW(dict->Add("Unknown"_sid, Translator::Translate(KMP_TR_DOMAIN_TESTS, "Unknown")));
-    REQUIRE_NOTHROW(yesStr = dict->Get("Yes"_sid));
-    REQUIRE_NOTHROW(noStr = dict->Get("No"_sid));
-    REQUIRE_NOTHROW(untranslatedStr = dict->Get("Untranslated"_sid));
-    REQUIRE_NOTHROW(unknownStr = dict->Get("Unknown"_sid));
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "No"));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
+    REQUIRE_NOTHROW(yesStr = localizationManager.Translation(SidTrDomainTests, "Yes"_sid));
+    REQUIRE_NOTHROW(noStr = localizationManager.Translation(SidTrDomainTests, "No"_sid));
+    REQUIRE_NOTHROW(untranslatedStr = localizationManager.Translation(SidTrDomainTests, "Untranslated"_sid));
+    REQUIRE_NOTHROW(unknownStr = localizationManager.Translation(SidTrDomainTests, "Unknown"_sid));
     REQUIRE(Utils::Utf8ToNarrow(yesStr) == "Да");
     REQUIRE(Utils::Utf8ToNarrow(noStr) == "Нет");
     REQUIRE(untranslatedStr == "Untranslated");
-    REQUIRE(unknownStr == "Unknown");
+    REQUIRE(unknownStr.empty());
 
-    // try get after remove "Tests" domain (via existing ptr to dictionary)
-    REQUIRE_NOTHROW(localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE_NOTHROW(yesStr = dict->Get("Yes"_sid));
-    REQUIRE_NOTHROW(noStr = dict->Get("No"_sid));
+    // try after remove "Tests" domain
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(yesStr = localizationManager.Translation(SidTrDomainTests, "Yes"_sid));
+    REQUIRE_NOTHROW(noStr = localizationManager.Translation(SidTrDomainTests, "No"_sid));
     REQUIRE(yesStr.empty());
     REQUIRE(noStr.empty());
 }
@@ -561,28 +560,144 @@ TEST_CASE("Localization manager dictionaries with context", "[localization][loca
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    Ptr<LocalizationDictionary> dict = nullptr;
-    REQUIRE_NOTHROW(dict = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE(dict);
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
 
-    std::string openVerbStr;
-    std::string openAdjStr;
-    std::string untranslatedStr;
-    std::string unknownStr;
+    TranslationStr openVerbStr;
+    TranslationStr openAdjStr;
+    TranslationStr untranslatedStr;
+    TranslationStr unknownStr;
 
-    // try add valid sources but invalid context
-    REQUIRE_NOTHROW(dict->Add("Open"_sid, "VERB"_sid, Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "VERB")));
-    REQUIRE_NOTHROW(openVerbStr = dict->Get("Open"_sid, "VERB"_sid));
-    REQUIRE(openVerbStr == "Open");
-    REQUIRE_NOTHROW(openVerbStr = dict->Get("Open"_sid, "Verb"_sid));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
+
+    // try TranslationCtx valid sources or invalid context
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(SidTrDomainTests, "Open"_sid, "VERB"_sid));
     REQUIRE(openVerbStr.empty());
-    REQUIRE_NOTHROW(openVerbStr = dict->Get("OPEN"_sid, "Verb"_sid));
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(SidTrDomainTests, "OPEN"_sid, "Verb"_sid));
     REQUIRE(openVerbStr.empty());
-    REQUIRE_NOTHROW(dict->Clear());
 
-    // try add invalid sources and invalid context
-    REQUIRE_NOTHROW(dict->Add("OPEN"_sid, "VERB"_sid, Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "OPEN", "VERB")));
-    REQUIRE_NOTHROW(openVerbStr = dict->Get("OPEN"_sid, "VERB"_sid));
-    REQUIRE(openVerbStr == "OPEN");
+    // try TranslationCtx invalid sources and invalid context
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(SidTrDomainTests, "OPEN"_sid, "VERB"_sid));
+    REQUIRE(openVerbStr.empty());
+
+    // try TranslationCtx valid sources and context but invalid domain
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx("123", "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(123, "Open"_sid, "Verb"_sid));
+    REQUIRE(openVerbStr.empty());
+
+    // try TranslationCtx all valid
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(SidTrDomainTests, "Open"_sid, "Verb"_sid));
+    REQUIRE_NOTHROW(openAdjStr = localizationManager.TranslationCtx(SidTrDomainTests, "Open"_sid, "Adjective"_sid));
+    REQUIRE_NOTHROW(untranslatedStr = localizationManager.TranslationCtx(SidTrDomainTests, "Untranslated"_sid, "Some context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(openVerbStr) == "Открыть");
+    REQUIRE(Utils::Utf8ToNarrow(openAdjStr) == "Открытый");
+    REQUIRE(untranslatedStr == "Untranslated");
+
+    // try TranslationCtx after remove "Tests" domain
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtx(SidTrDomainTests, "Open"_sid, "Verb"_sid));
+    REQUIRE_NOTHROW(openAdjStr = localizationManager.TranslationCtx(SidTrDomainTests, "Open"_sid, "Adjective"_sid));
+    REQUIRE_NOTHROW(untranslatedStr = localizationManager.TranslationCtx(SidTrDomainTests, "Untranslated"_sid, "Some context"_sid));
+    REQUIRE(openVerbStr.empty());
+    REQUIRE(openAdjStr.empty());
+    REQUIRE(untranslatedStr.empty());
+
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
+
+    // try TranslationCtxOrFallback invalid sources or invalid context
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtxOrFallback(SidTrDomainTests, "OPEN"_sid, "Verb"_sid, "FALLBACK"));
+    REQUIRE(openVerbStr == "FALLBACK");
+
+    // try TranslationCtxOrFallback invalid source and context
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtxOrFallback(SidTrDomainTests, "OPEN"_sid, "VERB"_sid, "FALLBACK"));
+    REQUIRE(openVerbStr == "FALLBACK");
+
+    // try TranslationCtxOrFallback invalid domain
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtxOrFallback(123, "Open"_sid, "Verb"_sid, "FALLBACK"));
+    REQUIRE(openVerbStr == "FALLBACK");
+
+    // try TranslationCtxOrFallback all valid
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtxOrFallback(SidTrDomainTests, "Open"_sid, "Verb"_sid, "FALLBACK"));
+    REQUIRE_FALSE(openVerbStr == "FALLBACK");
+
+    // try TranslationCtxOrFallback after remove "Tests" domain
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(openVerbStr = localizationManager.TranslationCtxOrFallback(SidTrDomainTests, "Open"_sid, "Verb"_sid, "FALLBACK"));
+    REQUIRE(openVerbStr == "FALLBACK");
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Localization translator without context plural", "[localization][locale]")
+{
+    REQUIRE(Filesystem::Initialize());
+
+    LocalizationManager localizationManager;
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+    REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+
+    TranslationStr appleStrUnformattedForm1;
+    TranslationStr appleStrUnformattedForm2;
+    TranslationStr appleStrUnformattedForm3;
+    TranslationStr appleStr0;
+    TranslationStr appleStr1;
+    TranslationStr appleStr2;
+    TranslationStr appleStr5;
+    TranslationStr appleStr11;
+    TranslationStr appleStr21;
+
+    REQUIRE_NOTHROW(appleStrUnformattedForm1 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
+    REQUIRE_NOTHROW(appleStrUnformattedForm2 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
+    REQUIRE_NOTHROW(appleStrUnformattedForm3 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
+    REQUIRE_FALSE(appleStrUnformattedForm1.empty());
+    REQUIRE_FALSE(appleStrUnformattedForm2.empty());
+    REQUIRE_FALSE(appleStrUnformattedForm3.empty());
+
+    // existing domain Translation Russian
+    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformattedForm1, 1));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr1) == "1 яблоко");
+    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformattedForm2, 2));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr2) == "2 яблока");
+    REQUIRE_NOTHROW(appleStr5 = Translator::Format(appleStrUnformattedForm3, 5));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr5) == "5 яблок");
+    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformattedForm3, 11));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr11) == "11 яблок");
+    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformattedForm3, 0));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr0) == "0 яблок");
+    REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformattedForm1, 21));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr21) == "21 яблоко");
+
+    // existing domain Translation English
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
+    REQUIRE_NOTHROW(appleStrUnformattedForm1 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
+    REQUIRE_NOTHROW(appleStrUnformattedForm2 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
+    REQUIRE_NOTHROW(appleStrUnformattedForm3 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
+    REQUIRE_FALSE(appleStrUnformattedForm1.empty());
+    REQUIRE_FALSE(appleStrUnformattedForm2.empty());
+    REQUIRE_FALSE(appleStrUnformattedForm3.empty());
+    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformattedForm1, 1));
+    REQUIRE(appleStr1 == "1 apple");
+    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformattedForm2, 2));
+    REQUIRE(appleStr2 == "2 apples");
+    REQUIRE_NOTHROW(appleStr5 = Translator::Format(appleStrUnformattedForm3, 5));
+    REQUIRE(appleStr5 == "5 apples");
+    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformattedForm3, 11));
+    REQUIRE(appleStr11 == "11 apples");
+    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformattedForm3, 0));
+    REQUIRE(appleStr0 == "0 apples");
+    REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformattedForm2, 21));
+    REQUIRE(appleStr21 == "21 apples");
 }
 //--------------------------------------------------------------------------

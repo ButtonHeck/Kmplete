@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-18 08:54+0300\n"
+"POT-Creation-Date: 2025-02-23 16:50+0300\n"
 "PO-Revision-Date: 2025-02-17 08:22+0300\n"
 "Last-Translator: U-DESKTOP-002D5DN\\sound <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
@@ -18,42 +18,72 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../Localization/localization_manager_tests.cpp:221
-#: ../Localization/localization_manager_tests.cpp:227
-#: ../Localization/localization_manager_tests.cpp:232
-#: ../Localization/localization_manager_tests.cpp:241
-#: ../Localization/localization_manager_tests.cpp:250
-#: ../Localization/localization_manager_tests.cpp:307
+#: ../Localization/localization_manager_tests.cpp:220
+#: ../Localization/localization_manager_tests.cpp:226
+#: ../Localization/localization_manager_tests.cpp:231
+#: ../Localization/localization_manager_tests.cpp:240
+#: ../Localization/localization_manager_tests.cpp:249
+#: ../Localization/localization_manager_tests.cpp:320
+#: ../Localization/localization_manager_tests.cpp:515
+#: ../Localization/localization_manager_tests.cpp:529
 msgid "Yes"
 msgstr "Да"
 
-#: ../Localization/localization_manager_tests.cpp:234
-#: ../Localization/localization_manager_tests.cpp:243
-#: ../Localization/localization_manager_tests.cpp:252
-#: ../Localization/localization_manager_tests.cpp:308
+#: ../Localization/localization_manager_tests.cpp:233
+#: ../Localization/localization_manager_tests.cpp:242
+#: ../Localization/localization_manager_tests.cpp:251
+#: ../Localization/localization_manager_tests.cpp:321
+#: ../Localization/localization_manager_tests.cpp:516
+#: ../Localization/localization_manager_tests.cpp:530
 msgid "No"
 msgstr "Нет"
 
-#: ../Localization/localization_manager_tests.cpp:236
-#: ../Localization/localization_manager_tests.cpp:245
-#: ../Localization/localization_manager_tests.cpp:254
-#: ../Localization/localization_manager_tests.cpp:309
+#: ../Localization/localization_manager_tests.cpp:235
+#: ../Localization/localization_manager_tests.cpp:244
+#: ../Localization/localization_manager_tests.cpp:253
+#: ../Localization/localization_manager_tests.cpp:322
+#: ../Localization/localization_manager_tests.cpp:531
 msgid "Untranslated"
 msgstr ""
 
-#: ../Localization/localization_manager_tests.cpp:273
-#: ../Localization/localization_manager_tests.cpp:279
-#: ../Localization/localization_manager_tests.cpp:284
+#: ../Localization/localization_manager_tests.cpp:270
+#: ../Localization/localization_manager_tests.cpp:276
+#: ../Localization/localization_manager_tests.cpp:281
+#: ../Localization/localization_manager_tests.cpp:290
+#: ../Localization/localization_manager_tests.cpp:299
+#: ../Localization/localization_manager_tests.cpp:396
+#: ../Localization/localization_manager_tests.cpp:568
+#: ../Localization/localization_manager_tests.cpp:583
+#: ../Localization/localization_manager_tests.cpp:607
 msgctxt "Verb"
 msgid "Open"
 msgstr "Открыть"
 
-#: ../Localization/localization_manager_tests.cpp:286
+#: ../Localization/localization_manager_tests.cpp:283
+#: ../Localization/localization_manager_tests.cpp:292
+#: ../Localization/localization_manager_tests.cpp:301
+#: ../Localization/localization_manager_tests.cpp:397
+#: ../Localization/localization_manager_tests.cpp:569
+#: ../Localization/localization_manager_tests.cpp:608
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Открытый"
 
-#: ../Localization/localization_manager_tests.cpp:288
+#: ../Localization/localization_manager_tests.cpp:285
+#: ../Localization/localization_manager_tests.cpp:294
+#: ../Localization/localization_manager_tests.cpp:303
+#: ../Localization/localization_manager_tests.cpp:398
+#: ../Localization/localization_manager_tests.cpp:570
+#: ../Localization/localization_manager_tests.cpp:609
 msgctxt "Some context"
 msgid "Untranslated"
 msgstr ""
+
+#: ../Localization/localization_manager_tests.cpp:656
+#: ../Localization/localization_manager_tests.cpp:657
+#: ../Localization/localization_manager_tests.cpp:658
+msgid "{1} apple"
+msgid_plural "{1} apples"
+msgstr[0] "{1} яблоко"
+msgstr[1] "{1} яблока"
+msgstr[2] "{1} яблок"
