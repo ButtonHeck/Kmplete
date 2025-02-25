@@ -162,6 +162,7 @@ set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES
 
 set(Kmplete_Engine_Locale_Tests_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/Localization/localization_manager_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Localization/localization_base_tests.cpp
 )
 source_group("Localization" FILES ${Kmplete_Engine_Locale_Tests_LOCALIZATION})
 

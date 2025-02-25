@@ -94,6 +94,7 @@ set(Kmplete_Engine_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_translator.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_library.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_dictionary.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_translator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_library.cpp

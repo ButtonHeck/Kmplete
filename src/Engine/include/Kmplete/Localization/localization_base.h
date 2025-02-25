@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Utils/string_id.h"
 
 #include <string>
@@ -34,6 +35,39 @@ namespace Kmplete
     using ContextStrSID = Utils::StringID;
     using SourceStrSID = Utils::StringID;
     using TranslationStrSID = Utils::StringID;
+
+    enum PluralityForm
+    {
+        PluralityFormSingular,
+        PluralityFormPlural1,
+        PluralityFormPlural2,
+        PluralityFormCount
+    };
+    //--------------------------------------------------------------------------
+
+    struct PluralityFormDispatcher
+    {
+        KMP_NODISCARD KMP_API virtual PluralityForm GetPluralityForm(int count) const noexcept = 0;
+    };
+    //--------------------------------------------------------------------------
+
+    struct PluralityFormDispatcherEn : public PluralityFormDispatcher
+    {
+        KMP_NODISCARD KMP_API PluralityForm GetPluralityForm(int count) const noexcept override;
+    };
+    //--------------------------------------------------------------------------
+
+    struct PluralityFormDispatcherRu : public PluralityFormDispatcher
+    {
+        KMP_NODISCARD KMP_API PluralityForm GetPluralityForm(int count) const noexcept override;
+    };
+    //--------------------------------------------------------------------------
+
+    KMP_NODISCARD KMP_API const PluralityFormDispatcher& GetPluralityDispatcher(const LocaleStr& localeStr) noexcept;
+    //--------------------------------------------------------------------------
+
+    static constexpr PluralityFormDispatcherEn pluralFormIndexGeneratorEn;
+    static constexpr PluralityFormDispatcherRu pluralFormIndexGeneratorRu;
 
     struct ContextedSource
     {
