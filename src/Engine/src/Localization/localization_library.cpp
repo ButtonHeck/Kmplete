@@ -83,6 +83,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation)
+    {
+        if (_dictionaryMap.contains(domainSid))
+        {
+            _dictionaryMap.at(domainSid)->Add(sourceSidSingular, sourceSidPlural, pluralityForm, translation);
+        }
+    }
+    //--------------------------------------------------------------------------
+
     void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
         if (_dictionaryMap.contains(domainSid))
@@ -97,6 +106,17 @@ namespace Kmplete
         if (_dictionaryMap.contains(domainSid))
         {
             return _dictionaryMap.at(domainSid)->Get(sourceSid);
+        }
+
+        return NoTranslation;
+    }
+    //--------------------------------------------------------------------------
+
+    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const
+    {
+        if (_dictionaryMap.contains(domainSid))
+        {
+            return _dictionaryMap.at(domainSid)->Get(sourceSidSingular, sourceSidPlural, pluralityForm);
         }
 
         return NoTranslation;

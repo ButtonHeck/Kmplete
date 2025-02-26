@@ -25,8 +25,10 @@ namespace Kmplete
         KMP_NODISCARD KMP_API bool RemoveDictionary(const DomainStr& domain) noexcept;
 
         KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& translation);
+        KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation);
         KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
         KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const;
+        KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const;
         KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const;
 
     private:

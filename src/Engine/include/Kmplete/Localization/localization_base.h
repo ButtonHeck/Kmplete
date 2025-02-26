@@ -4,6 +4,7 @@
 #include "Kmplete/Utils/string_id.h"
 
 #include <string>
+#include <type_traits>
 
 namespace Kmplete
 {
@@ -79,13 +80,40 @@ namespace Kmplete
             return sourceSid == other.sourceSid && contextSid == other.contextSid;
         }
     };
+    static_assert(std::is_trivially_copyable_v<ContextedSource> == true);
+    static_assert(std::is_trivially_move_constructible_v<ContextedSource> == true);
+    static_assert(std::is_trivially_move_assignable_v<ContextedSource> == true);
     //--------------------------------------------------------------------------
 
     struct ContextedSourceHash
     {
-        std::size_t operator()(const ContextedSource& p) const
+        std::size_t operator()(const ContextedSource& source) const
         {
-            return p.sourceSid ^ p.contextSid;
+            return source.sourceSid ^ source.contextSid;
+        }
+    };
+    //--------------------------------------------------------------------------
+
+    struct PluralSource
+    {
+        SourceStrSID sourceSidSingular;
+        SourceStrSID sourceSidPlural;
+
+        bool operator==(const PluralSource& other) const
+        {
+            return sourceSidSingular == other.sourceSidSingular && sourceSidPlural == other.sourceSidPlural;
+        }
+    };
+    static_assert(std::is_trivially_copyable_v<PluralSource> == true);
+    static_assert(std::is_trivially_move_constructible_v<PluralSource> == true);
+    static_assert(std::is_trivially_move_assignable_v<PluralSource> == true);
+    //--------------------------------------------------------------------------
+
+    struct PluralSourceHash
+    {
+        std::size_t operator()(const PluralSource& source) const
+        {
+            return source.sourceSidSingular ^ source.sourceSidPlural;
         }
     };
     //--------------------------------------------------------------------------

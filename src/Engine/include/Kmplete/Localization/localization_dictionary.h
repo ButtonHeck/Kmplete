@@ -5,6 +5,7 @@
 #include "Kmplete/Utils/string_id.h"
 
 #include <unordered_map>
+#include <array>
 
 namespace Kmplete
 {
@@ -19,8 +20,10 @@ namespace Kmplete
         KMP_API void SetLocale(const LocaleStrSID& localeSid);
 
         KMP_API void Add(const SourceStrSID& sourceSid, const TranslationStr& translation);
+        KMP_API void Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation);
         KMP_API void Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
         KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSid);
+        KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm);
         KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid);
 
     private:
@@ -28,12 +31,16 @@ namespace Kmplete
         using ContextedTranslationMap = std::unordered_map<ContextedSource, TranslationStr, ContextedSourceHash>;
         using LocalizedTranslationMap = std::unordered_map<LocaleStrSID, TranslationMap>;
         using LocalizedContextedTranslationMap = std::unordered_map<LocaleStrSID, ContextedTranslationMap>;
+        using PluralTranslations = std::array<TranslationStr, PluralityFormCount>;
+        using TranslationPluralMap = std::unordered_map<PluralSource, PluralTranslations, PluralSourceHash>;
+        using LocalizedTranslationPluralMap = std::unordered_map<LocaleStrSID, TranslationPluralMap>;
 
     private:
         const DomainStrSID _domain;
         LocaleStrSID _currentLocaleSid;
         LocalizedTranslationMap _translationMap;
         LocalizedContextedTranslationMap _translationCtxMap;
+        LocalizedTranslationPluralMap _translationPluralMap;
     };
     //--------------------------------------------------------------------------
 }

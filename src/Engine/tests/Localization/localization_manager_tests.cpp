@@ -485,7 +485,7 @@ TEST_CASE("Localization manager Translation functions with context singular", "[
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Localization manager dictionaries without context", "[localization][locale]")
+TEST_CASE("Localization manager dictionaries without context singular", "[localization][locale]")
 {
     REQUIRE(Filesystem::Initialize());
 
@@ -552,7 +552,7 @@ TEST_CASE("Localization manager dictionaries without context", "[localization][l
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Localization manager dictionaries with context", "[localization][locale]")
+TEST_CASE("Localization manager dictionaries with context singular", "[localization][locale]")
 {
     REQUIRE(Filesystem::Initialize());
 
@@ -699,5 +699,111 @@ TEST_CASE("Localization translator without context plural", "[localization][loca
     REQUIRE(appleStr0 == "0 apples");
     REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformattedForm2, 21));
     REQUIRE(appleStr21 == "21 apples");
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Localization manager dictionaries without context plural", "[localization][locale]")
+{
+    REQUIRE(Filesystem::Initialize());
+
+    LocalizationManager localizationManager;
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+    REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+
+    TranslationStr appleStrUnformatted;
+    TranslationStr appleStr0;
+    TranslationStr appleStr1;
+    TranslationStr appleStr2;
+    TranslationStr appleStr5;
+    TranslationStr appleStr11;
+    TranslationStr appleStr21;
+
+    // create only two forms for russian
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
+
+    REQUIRE_NOTHROW(appleStr0 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr0) == "0 €блок");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
+    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformatted, 0));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr0) == "0 €блок");
+
+    REQUIRE_NOTHROW(appleStr5 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 5));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr5) == "5 €блок");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 5));
+    REQUIRE_NOTHROW(appleStr5 = Translator::Format(appleStrUnformatted, 5));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr5) == "5 €блок");
+
+    REQUIRE_NOTHROW(appleStr11 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr11) == "11 €блок");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
+    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformatted, 11));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr11) == "11 €блок");
+
+    REQUIRE_NOTHROW(appleStr1 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr1) == "1 €блоко");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
+    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformatted, 1));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr1) == "1 €блоко");
+
+    REQUIRE_NOTHROW(appleStr21 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 21));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr21) == "21 €блоко");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 21));
+    REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformatted, 21));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr21) == "21 €блоко");
+
+    // try first plural form that not added
+    REQUIRE_NOTHROW(appleStr2 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
+    REQUIRE(appleStr2.empty());
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
+    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformatted, 2));
+    REQUIRE(appleStr2.empty());
+
+    // add first plural russian
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
+
+    // try first plural russian form again
+    REQUIRE_NOTHROW(appleStr2 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr2) == "2 €блока");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
+    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformatted, 2));
+    REQUIRE(Utils::Utf8ToNarrow(appleStr2) == "2 €блока");
+
+    // try with english locale
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
+    REQUIRE_NOTHROW(localizationManager.Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
+
+    REQUIRE_NOTHROW(appleStr0 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
+    REQUIRE(appleStr0 == "0 apples");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
+    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformatted, 0));
+    REQUIRE(appleStr0 == "0 apples");
+
+    REQUIRE_NOTHROW(appleStr1 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
+    REQUIRE(appleStr1 == "1 apple");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
+    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformatted, 1));
+    REQUIRE(appleStr1 == "1 apple");
+
+    REQUIRE_NOTHROW(appleStr11 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
+    REQUIRE(appleStr11 == "11 apples");
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
+    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformatted, 11));
+    REQUIRE(appleStr11 == "11 apples");
+
+    // test after remove "Tests" domain
+    REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+
+    REQUIRE_NOTHROW(appleStr0 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
+    REQUIRE(appleStr0.empty());
+    REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
+    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformatted, 0));
+    REQUIRE(appleStr0.empty());
 }
 //--------------------------------------------------------------------------

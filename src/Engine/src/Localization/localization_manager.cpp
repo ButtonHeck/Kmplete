@@ -116,7 +116,8 @@ namespace Kmplete
         const auto domainSid = Utils::ToStringID(domain);
         const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
         const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
-        // TODO: library add
+        const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
+        _library->Add(domainSid, sourceSingularSid, sourcePluralSid, pluralityDispatcher.GetPluralityForm(count), translation);
 
         return translation;
     }
@@ -141,34 +142,48 @@ namespace Kmplete
         const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
         const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
         const auto contextSid = Utils::ToStringID(context);
+        //const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         // TODO: library add
 
         return translation;
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& messageSid) const
+    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const
     {
-        return _library->Get(domainSid, messageSid);
+        return _library->Get(domainSid, sourceSid);
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid) const
+    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const
     {
-        return _library->Get(domainSid, messageSid, contextSid);
+        const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
+        return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count));
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const TranslationStr& fallback) const
+    TranslationStr LocalizationManager::TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const
     {
-        const auto& translation = Translation(domainSid, messageSid);
+        return Translator::Format(Translation(domainSid, sourceSidSingular, sourceSidPlural, count), count);
+    }
+    //--------------------------------------------------------------------------
+
+    const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const
+    {
+        return _library->Get(domainSid, sourceSid, contextSid);
+    }
+    //--------------------------------------------------------------------------
+
+    const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& fallback) const
+    {
+        const auto& translation = Translation(domainSid, sourceSid);
         return translation.empty() ? fallback : translation;
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& messageSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const
+    const TranslationStr& LocalizationManager::TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const
     {
-        const auto& translation = TranslationCtx(domainSid, messageSid, contextSid);
+        const auto& translation = TranslationCtx(domainSid, sourceSid, contextSid);
         return translation.empty() ? fallback : translation;
     }
     //--------------------------------------------------------------------------

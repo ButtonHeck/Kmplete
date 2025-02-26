@@ -35,6 +35,31 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation)
+    {
+        KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
+        const PluralSource&& pluralSource = PluralSource{ sourceSidSingular, sourceSidPlural };
+        if (_translationPluralMap[_currentLocaleSid].contains(pluralSource) && 
+            !_translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm].empty() && 
+            _translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm] != translation)
+        {
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")", _domain, sourceSidSingular, sourceSidPlural, static_cast<int>(pluralityForm));
+            return;
+        }
+
+        if (!_translationPluralMap[_currentLocaleSid].contains(pluralSource))
+        {
+            PluralTranslations pluralTranslations;
+            pluralTranslations[pluralityForm] = translation;
+            _translationPluralMap[_currentLocaleSid].insert(std::make_pair(pluralSource, pluralTranslations));
+        }
+        else
+        {
+            _translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm] = translation;
+        }
+    }
+    //--------------------------------------------------------------------------
+
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
@@ -52,6 +77,12 @@ namespace Kmplete
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid)
     {
         return _translationMap[_currentLocaleSid][sourceSid];
+    }
+    //--------------------------------------------------------------------------
+
+    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm)
+    {
+        return _translationPluralMap[_currentLocaleSid][PluralSource{sourceSidSingular, sourceSidPlural}][pluralityForm];
     }
     //--------------------------------------------------------------------------
 
