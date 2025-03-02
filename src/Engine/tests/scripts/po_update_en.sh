@@ -16,7 +16,7 @@ else
 	touch $po_template_file
 fi
 
-xgettext -j -C -n -kTranslate:2,2t -kTranslate:2,3,4t -kTranslateCtx:2,3c,3t -kTranslateCtx:2,3,5t,5t -kTranslateDefer:2,2t -kTranslateDefer:2,3,4t -kTranslateCtxDefer:2,3c,3t -kTranslateCtxDefer:2,3,5t,5t -o $po_template_file $filelist
+xgettext -j -C -n -kTranslate:2,2t -kTranslate:2,3,4t -kTranslateCtx:2,3c,3t -kTranslateCtx:2,3,5c,5t -kTranslateDefer:2,2t -kTranslateDefer:2,3,4t -kTranslateCtxDefer:2,3c,3t -kTranslateCtxDefer:2,3,5c,5t -o $po_template_file $filelist
 sed -i 's|Language:|Language: en|g' $po_template_file
 sed -i 's|charset=CHARSET|charset=UTF-8|g' $po_template_file
 sed -i 's|nplurals=INTEGER|nplurals=2|g' $po_template_file
