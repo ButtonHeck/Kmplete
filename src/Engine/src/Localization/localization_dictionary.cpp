@@ -74,6 +74,31 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation)
+    {
+        KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
+        const ContextedPluralSource&& contextedPluralSource = ContextedPluralSource{ sourceSidSingular, sourceSidPlural, contextSid };
+        if (_translationCtxPluralMap[_currentLocaleSid].contains(contextedPluralSource) &&
+            !_translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm].empty() &&
+            _translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm] != translation)
+        {
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")", _domain, sourceSidSingular, sourceSidPlural, contextSid, static_cast<int>(pluralityForm));
+            return;
+        }
+
+        if (!_translationCtxPluralMap[_currentLocaleSid].contains(contextedPluralSource))
+        {
+            PluralTranslations pluralTranslations;
+            pluralTranslations[pluralityForm] = translation;
+            _translationCtxPluralMap[_currentLocaleSid].insert(std::make_pair(contextedPluralSource, pluralTranslations));
+        }
+        else
+        {
+            _translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm] = translation;
+        }
+    }
+    //--------------------------------------------------------------------------
+
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid)
     {
         return _translationMap[_currentLocaleSid][sourceSid];
@@ -89,6 +114,12 @@ namespace Kmplete
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid)
     {
         return _translationCtxMap[_currentLocaleSid][ContextedSource{sourceSid, contextSid}];
+    }
+    //--------------------------------------------------------------------------
+
+    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid)
+    {
+        return _translationCtxPluralMap[_currentLocaleSid][ContextedPluralSource{sourceSidSingular, sourceSidPlural, contextSid}][pluralityForm];
     }
     //--------------------------------------------------------------------------
 }

@@ -45,6 +45,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const;
         KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const;
         KMP_NODISCARD KMP_API TranslationStr TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const;
+        KMP_NODISCARD KMP_API const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD KMP_API TranslationStr TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const;
         KMP_NODISCARD KMP_API const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const;
         KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& fallback) const;
         KMP_NODISCARD KMP_API const TranslationStr& TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const;

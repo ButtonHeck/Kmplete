@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-23 16:50+0300\n"
+"POT-Creation-Date: 2025-03-02 17:49+0300\n"
 "PO-Revision-Date: 2025-02-17 08:22+0300\n"
 "Last-Translator: U-DESKTOP-002D5DN\\sound <EMAIL@ADDRESS>\n"
 "Language-Team: Russian\n"
@@ -18,72 +18,89 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../Localization/localization_manager_tests.cpp:220
-#: ../Localization/localization_manager_tests.cpp:226
-#: ../Localization/localization_manager_tests.cpp:231
-#: ../Localization/localization_manager_tests.cpp:240
-#: ../Localization/localization_manager_tests.cpp:249
-#: ../Localization/localization_manager_tests.cpp:320
-#: ../Localization/localization_manager_tests.cpp:515
-#: ../Localization/localization_manager_tests.cpp:529
-msgid "Yes"
-msgstr "Да"
-
-#: ../Localization/localization_manager_tests.cpp:233
-#: ../Localization/localization_manager_tests.cpp:242
-#: ../Localization/localization_manager_tests.cpp:251
-#: ../Localization/localization_manager_tests.cpp:321
-#: ../Localization/localization_manager_tests.cpp:516
-#: ../Localization/localization_manager_tests.cpp:530
-msgid "No"
-msgstr "Нет"
-
+#: ../Localization/localization_manager_tests.cpp:224
+#: ../Localization/localization_manager_tests.cpp:230
 #: ../Localization/localization_manager_tests.cpp:235
 #: ../Localization/localization_manager_tests.cpp:244
 #: ../Localization/localization_manager_tests.cpp:253
-#: ../Localization/localization_manager_tests.cpp:322
-#: ../Localization/localization_manager_tests.cpp:531
+#: ../Localization/localization_manager_tests.cpp:324
+#: ../Localization/localization_manager_tests.cpp:519
+#: ../Localization/localization_manager_tests.cpp:533
+msgid "Yes"
+msgstr "Да"
+
+#: ../Localization/localization_manager_tests.cpp:237
+#: ../Localization/localization_manager_tests.cpp:246
+#: ../Localization/localization_manager_tests.cpp:255
+#: ../Localization/localization_manager_tests.cpp:325
+#: ../Localization/localization_manager_tests.cpp:520
+#: ../Localization/localization_manager_tests.cpp:534
+msgid "No"
+msgstr "Нет"
+
+#: ../Localization/localization_manager_tests.cpp:239
+#: ../Localization/localization_manager_tests.cpp:248
+#: ../Localization/localization_manager_tests.cpp:257
+#: ../Localization/localization_manager_tests.cpp:326
+#: ../Localization/localization_manager_tests.cpp:535
 msgid "Untranslated"
 msgstr ""
 
-#: ../Localization/localization_manager_tests.cpp:270
-#: ../Localization/localization_manager_tests.cpp:276
-#: ../Localization/localization_manager_tests.cpp:281
-#: ../Localization/localization_manager_tests.cpp:290
-#: ../Localization/localization_manager_tests.cpp:299
-#: ../Localization/localization_manager_tests.cpp:396
-#: ../Localization/localization_manager_tests.cpp:568
-#: ../Localization/localization_manager_tests.cpp:583
-#: ../Localization/localization_manager_tests.cpp:607
+#: ../Localization/localization_manager_tests.cpp:274
+#: ../Localization/localization_manager_tests.cpp:280
+#: ../Localization/localization_manager_tests.cpp:285
+#: ../Localization/localization_manager_tests.cpp:294
+#: ../Localization/localization_manager_tests.cpp:303
+#: ../Localization/localization_manager_tests.cpp:400
+#: ../Localization/localization_manager_tests.cpp:572
+#: ../Localization/localization_manager_tests.cpp:587
+#: ../Localization/localization_manager_tests.cpp:611
 msgctxt "Verb"
 msgid "Open"
 msgstr "Открыть"
 
-#: ../Localization/localization_manager_tests.cpp:283
-#: ../Localization/localization_manager_tests.cpp:292
-#: ../Localization/localization_manager_tests.cpp:301
-#: ../Localization/localization_manager_tests.cpp:397
-#: ../Localization/localization_manager_tests.cpp:569
-#: ../Localization/localization_manager_tests.cpp:608
+#: ../Localization/localization_manager_tests.cpp:287
+#: ../Localization/localization_manager_tests.cpp:296
+#: ../Localization/localization_manager_tests.cpp:305
+#: ../Localization/localization_manager_tests.cpp:401
+#: ../Localization/localization_manager_tests.cpp:573
+#: ../Localization/localization_manager_tests.cpp:612
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Открытый"
 
-#: ../Localization/localization_manager_tests.cpp:285
-#: ../Localization/localization_manager_tests.cpp:294
-#: ../Localization/localization_manager_tests.cpp:303
-#: ../Localization/localization_manager_tests.cpp:398
-#: ../Localization/localization_manager_tests.cpp:570
-#: ../Localization/localization_manager_tests.cpp:609
+#: ../Localization/localization_manager_tests.cpp:289
+#: ../Localization/localization_manager_tests.cpp:298
+#: ../Localization/localization_manager_tests.cpp:307
+#: ../Localization/localization_manager_tests.cpp:402
+#: ../Localization/localization_manager_tests.cpp:574
+#: ../Localization/localization_manager_tests.cpp:613
 msgctxt "Some context"
 msgid "Untranslated"
 msgstr ""
 
-#: ../Localization/localization_manager_tests.cpp:656
-#: ../Localization/localization_manager_tests.cpp:657
-#: ../Localization/localization_manager_tests.cpp:658
+#: ../Localization/localization_manager_tests.cpp:661
+#: ../Localization/localization_manager_tests.cpp:662
+#: ../Localization/localization_manager_tests.cpp:663
+#: ../Localization/localization_manager_tests.cpp:684
+#: ../Localization/localization_manager_tests.cpp:685
+#: ../Localization/localization_manager_tests.cpp:686
+#: ../Localization/localization_manager_tests.cpp:726
+#: ../Localization/localization_manager_tests.cpp:727
+#: ../Localization/localization_manager_tests.cpp:767
+#: ../Localization/localization_manager_tests.cpp:778
+#: ../Localization/localization_manager_tests.cpp:779
 msgid "{1} apple"
 msgid_plural "{1} apples"
 msgstr[0] "{1} яблоко"
 msgstr[1] "{1} яблока"
 msgstr[2] "{1} яблок"
+
+#: ../Localization/localization_manager_tests.cpp:832
+#: ../Localization/localization_manager_tests.cpp:833
+msgctxt "Plural context"
+msgid "{1} context"
+msgid_plural "{1} contexts"
+msgstr[0] "{1} контекст"
+msgstr[1] "{1} контекста"
+msgstr[2] "{1} контекстов"

@@ -807,3 +807,90 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
     REQUIRE(appleStr0.empty());
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Localization manager dictionaries with context plural", "[localization][locale]")
+{
+    REQUIRE(Filesystem::Initialize());
+
+    LocalizationManager localizationManager;
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+    REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+
+    TranslationStr contextStrUnformatted;
+    TranslationStr contextStr0;
+    TranslationStr contextStr1;
+    TranslationStr contextStr2;
+    TranslationStr contextStr5;
+    TranslationStr contextStr11;
+    TranslationStr contextStr21;
+
+    // create only two forms for russian
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 1, "Plural context"));
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 5, "Plural context"));
+
+    // test with invalid context
+    REQUIRE_NOTHROW(contextStr0 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "CTX"_sid));
+    REQUIRE(contextStr0.empty());
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "CTX"_sid));
+    REQUIRE_NOTHROW(contextStr0 = Translator::Format(contextStrUnformatted, 0));
+    REQUIRE(contextStr0.empty());
+
+    REQUIRE_NOTHROW(contextStr1 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "CTX"_sid));
+    REQUIRE(contextStr1.empty());
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "CTX"_sid));
+    REQUIRE_NOTHROW(contextStr1 = Translator::Format(contextStrUnformatted, 1));
+    REQUIRE(contextStr1.empty());
+
+    // test with valid context
+    REQUIRE_NOTHROW(contextStr0 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "Plural context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr0) == "0 контекстов");
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr0 = Translator::Format(contextStrUnformatted, 0));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr0) == "0 контекстов");
+
+    REQUIRE_NOTHROW(contextStr1 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "Plural context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr1) == "1 контекст");
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr1 = Translator::Format(contextStrUnformatted, 1));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr1) == "1 контекст");
+
+    REQUIRE_NOTHROW(contextStr5 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 5, "Plural context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr5) == "5 контекстов");
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 5, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr5 = Translator::Format(contextStrUnformatted, 5));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr5) == "5 контекстов");
+
+    // try valid context but non-added form
+    REQUIRE_NOTHROW(contextStr2 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
+    REQUIRE(contextStr2.empty());
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr2 = Translator::Format(contextStrUnformatted, 2));
+    REQUIRE(contextStr2.empty());
+
+    // add other russian form
+    REQUIRE_NOTHROW(localizationManager.TranslateCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 2, "Plural context"));
+
+    // try valid context with first russian plural form again
+    REQUIRE_NOTHROW(contextStr2 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr2) == "2 контекста");
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr2 = Translator::Format(contextStrUnformatted, 2));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr2) == "2 контекста");
+
+    REQUIRE_NOTHROW(contextStr11 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 11, "Plural context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr11) == "11 контекстов");
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 11, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr11 = Translator::Format(contextStrUnformatted, 11));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr11) == "11 контекстов");
+
+    REQUIRE_NOTHROW(contextStr21 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 21, "Plural context"_sid));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr21) == "21 контекст");
+    REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 21, "Plural context"_sid));
+    REQUIRE_NOTHROW(contextStr21 = Translator::Format(contextStrUnformatted, 21));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr21) == "21 контекст");
+}
+//--------------------------------------------------------------------------

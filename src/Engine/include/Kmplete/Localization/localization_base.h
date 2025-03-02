@@ -77,7 +77,8 @@ namespace Kmplete
 
         bool operator==(const ContextedSource& other) const
         {
-            return sourceSid == other.sourceSid && contextSid == other.contextSid;
+            return sourceSid == other.sourceSid &&
+                   contextSid == other.contextSid;
         }
     };
     static_assert(std::is_trivially_copyable_v<ContextedSource> == true);
@@ -101,7 +102,8 @@ namespace Kmplete
 
         bool operator==(const PluralSource& other) const
         {
-            return sourceSidSingular == other.sourceSidSingular && sourceSidPlural == other.sourceSidPlural;
+            return sourceSidSingular == other.sourceSidSingular &&
+                   sourceSidPlural == other.sourceSidPlural;
         }
     };
     static_assert(std::is_trivially_copyable_v<PluralSource> == true);
@@ -114,6 +116,33 @@ namespace Kmplete
         std::size_t operator()(const PluralSource& source) const
         {
             return source.sourceSidSingular ^ source.sourceSidPlural;
+        }
+    };
+    //--------------------------------------------------------------------------
+
+    struct ContextedPluralSource
+    {
+        SourceStrSID sourceSidSingular;
+        SourceStrSID sourceSidPlural;
+        ContextStrSID contextSid;
+
+        bool operator==(const ContextedPluralSource& other) const
+        {
+            return sourceSidSingular == other.sourceSidSingular &&
+                   sourceSidPlural == other.sourceSidPlural &&
+                   contextSid == other.contextSid;
+        }
+    };
+    static_assert(std::is_trivially_copyable_v<ContextedPluralSource> == true);
+    static_assert(std::is_trivially_move_constructible_v<ContextedPluralSource> == true);
+    static_assert(std::is_trivially_move_assignable_v<ContextedPluralSource> == true);
+    //--------------------------------------------------------------------------
+
+    struct ContextedPluralSourceHash
+    {
+        std::size_t operator()(const ContextedPluralSource& source) const
+        {
+            return source.sourceSidSingular ^ source.sourceSidPlural ^ source.contextSid;
         }
     };
     //--------------------------------------------------------------------------

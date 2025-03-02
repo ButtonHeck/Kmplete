@@ -142,8 +142,8 @@ namespace Kmplete
         const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
         const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
         const auto contextSid = Utils::ToStringID(context);
-        //const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
-        // TODO: library add
+        const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
+        _library->Add(domainSid, sourceSingularSid, sourcePluralSid, pluralityDispatcher.GetPluralityForm(count), contextSid, translation);
 
         return translation;
     }
@@ -165,6 +165,19 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const
     {
         return Translator::Format(Translation(domainSid, sourceSidSingular, sourceSidPlural, count), count);
+    }
+    //--------------------------------------------------------------------------
+
+    const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
+    {
+        const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
+        return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count), contextSid);
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
+    {
+        return Translator::Format(TranslationCtx(domainSid, sourceSidSingular, sourceSidPlural, count, contextSid), count);
     }
     //--------------------------------------------------------------------------
 
