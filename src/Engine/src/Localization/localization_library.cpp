@@ -83,7 +83,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation)
+    void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                                  PluralityForm pluralityForm, const TranslationStr& translation)
     {
         if (_dictionaryMap.contains(domainSid))
         {
@@ -101,7 +102,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation)
+    void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                                  PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
         if (_dictionaryMap.contains(domainSid))
         {
@@ -121,7 +123,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const
+    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                   const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const
     {
         if (_dictionaryMap.contains(domainSid))
         {
@@ -143,7 +146,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid) const
+    const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                                                   PluralityForm pluralityForm, const ContextStrSID& contextSid) const
     {
         if (_dictionaryMap.contains(domainSid))
         {

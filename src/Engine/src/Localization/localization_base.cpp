@@ -23,6 +23,7 @@ namespace Kmplete
             return PluralityFormPlural2;
         }
     }
+    //--------------------------------------------------------------------------
 
     const PluralityFormDispatcher& GetPluralityDispatcher(const LocaleStr& localeStr) noexcept
     {

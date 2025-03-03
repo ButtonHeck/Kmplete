@@ -51,8 +51,16 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#define KMP_ASSERT(expr) (!KMP_ASSERTS_ACTIVE || bool(expr)) ? void(0) : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), __FILE__, __FUNCTION__, __LINE__ }
-#define KMP_CHECK(expr) bool(expr) ? void(0) : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), __FILE__, __FUNCTION__, __LINE__, KMP_ASSERTS_ACTIVE ? Kmplete::Assertion::Consequence::Terminate : Kmplete::Assertion::Consequence::Log }
+#define KMP_ASSERT(expr) (!KMP_ASSERTS_ACTIVE || bool(expr)) \
+    ? (void)0 \
+    : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), __FILE__, __FUNCTION__, __LINE__ }
+
+#define KMP_CHECK(expr) bool(expr) \
+    ? (void)0 \
+    : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), __FILE__, __FUNCTION__, __LINE__, \
+        KMP_ASSERTS_ACTIVE \
+        ? Kmplete::Assertion::Consequence::Terminate \
+        : Kmplete::Assertion::Consequence::Log }
 
 #define KMP_ASSERT_WATCH(...) KMP_M_DISPATCH_VA(KMP_AW_, __VA_ARGS__)
 #define KMP_AW_(expr) Watch((expr), KMP_M_STRINGIFY(expr))

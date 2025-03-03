@@ -43,7 +43,8 @@ namespace Kmplete
             !_translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm].empty() && 
             _translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm] != translation)
         {
-            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")", _domain, sourceSidSingular, sourceSidPlural, static_cast<int>(pluralityForm));
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")",
+                              _domain, sourceSidSingular, sourceSidPlural, static_cast<int>(pluralityForm));
             return;
         }
 
@@ -74,7 +75,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation)
+    void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm,
+                                     const ContextStrSID& contextSid, const TranslationStr& translation)
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedPluralSource&& contextedPluralSource = ContextedPluralSource{ sourceSidSingular, sourceSidPlural, contextSid };
@@ -82,7 +84,8 @@ namespace Kmplete
             !_translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm].empty() &&
             _translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm] != translation)
         {
-            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")", _domain, sourceSidSingular, sourceSidPlural, contextSid, static_cast<int>(pluralityForm));
+            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")",
+                              _domain, sourceSidSingular, sourceSidPlural, contextSid, static_cast<int>(pluralityForm));
             return;
         }
 
@@ -117,7 +120,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid)
+    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural,
+                                                      PluralityForm pluralityForm, const ContextStrSID& contextSid)
     {
         return _translationCtxPluralMap[_currentLocaleSid][ContextedPluralSource{sourceSidSingular, sourceSidPlural, contextSid}][pluralityForm];
     }

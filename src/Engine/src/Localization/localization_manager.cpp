@@ -135,7 +135,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context)
+    TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, 
+                                                     int count, const ContextStr& context)
     {
         const auto translation = Translator::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
         const auto domainSid = Utils::ToStringID(domain);
@@ -155,27 +156,31 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const
+    const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                           const SourceStrSID& sourceSidPlural, int count) const
     {
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count));
     }
     //--------------------------------------------------------------------------
 
-    TranslationStr LocalizationManager::TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count) const
+    TranslationStr LocalizationManager::TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                             const SourceStrSID& sourceSidPlural, int count) const
     {
         return Translator::Format(Translation(domainSid, sourceSidSingular, sourceSidPlural, count), count);
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
+    const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                              const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
     {
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count), contextSid);
     }
     //--------------------------------------------------------------------------
 
-    TranslationStr LocalizationManager::TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
+    TranslationStr LocalizationManager::TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                                const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
     {
         return Translator::Format(TranslationCtx(domainSid, sourceSidSingular, sourceSidPlural, count, contextSid), count);
     }
@@ -194,7 +199,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationManager::TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& fallback) const
+    const TranslationStr& LocalizationManager::TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, 
+                                                                        const ContextStrSID& contextSid, const TranslationStr& fallback) const
     {
         const auto& translation = TranslationCtx(domainSid, sourceSid, contextSid);
         return translation.empty() ? fallback : translation;
