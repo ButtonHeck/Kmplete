@@ -86,7 +86,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::string GetString(const std::string& name, const std::string& defaultValue = "");
 
     private:
-        KMP_NODISCARD bool SaveToFile(const rapidjson::StringBuffer& buffer, const std::string& filenameStr);
+        KMP_NODISCARD bool SaveToFile(const rapidjson::StringBuffer& buffer);
 
     private:
         Path _filename;

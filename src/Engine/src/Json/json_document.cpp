@@ -127,14 +127,12 @@ namespace Kmplete
         _error = false;
         rapidjson::StringBuffer buffer;
 
-        const auto filenameStr = Filesystem::ToGenericU8String(_filename);
-
         if (pretty)
         {
             rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
-                return SaveToFile(buffer, filenameStr);
+                return SaveToFile(buffer);
             }
         }
         else
@@ -142,11 +140,11 @@ namespace Kmplete
             rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
-                return SaveToFile(buffer, filenameStr);
+                return SaveToFile(buffer);
             }
         }
 
-        KMP_LOG_CORE_WARN("JsonDocument: failed to write document in '{}'", filenameStr);
+        KMP_LOG_CORE_WARN("JsonDocument: failed to write document in '{}'", Filesystem::ToGenericU8String(_filename));
         _error = true;
         return false;
     }
@@ -487,11 +485,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer, KMP_MB_UNUSED const std::string& filenameStr)
+    bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer)
     {
         if (!Filesystem::CreateDirectories(_filename, true))
         {
-            KMP_LOG_CORE_WARN("JsonDocument: failed to create directories for '{}'", filenameStr);
+            KMP_LOG_CORE_WARN("JsonDocument: failed to create directories for '{}'", Filesystem::ToGenericU8String(_filename));
             _error = true;
             return false;
         }
@@ -499,7 +497,7 @@ namespace Kmplete
         std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
         if (!outputStream.is_open() || !outputStream.good())
         {
-            KMP_LOG_CORE_WARN("JsonDocument: failed to open file stream for saving in '{}'", filenameStr);
+            KMP_LOG_CORE_WARN("JsonDocument: failed to open file stream for saving in '{}'", Filesystem::ToGenericU8String(_filename));
             _error = true;
             return false;
         }
@@ -507,7 +505,7 @@ namespace Kmplete
         outputStream << buffer.GetString();
         outputStream.close();
 
-        KMP_LOG_CORE_INFO("JsonDocument: document written successfully in '{}'", filenameStr);
+        KMP_LOG_CORE_INFO("JsonDocument: document written successfully in '{}'", Filesystem::ToGenericU8String(_filename));
         _error = false;
         return true;
     }
