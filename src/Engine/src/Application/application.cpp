@@ -58,7 +58,7 @@ namespace Kmplete
             throw std::runtime_error("Application initialization failed");
         }
 
-        _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
+        _systemMetricsManager = CreatePtr<SystemMetricsManager>();
 
         _localizationManager = CreatePtr<LocalizationManager>();
         const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));

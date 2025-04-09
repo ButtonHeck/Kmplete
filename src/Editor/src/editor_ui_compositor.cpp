@@ -3,6 +3,7 @@
 #include "shortcuts.h"
 #include "localization_base.h"
 #include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
 
@@ -12,9 +13,10 @@
 
 namespace Kmplete
 {
-    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager)
+    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager)
         : _window(window)
         , _localizationManager(localizationManager)
+        , _systemMetricsManager(systemMetricsManager)
     {
         FillDictionary();
         _localizationManager->AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::FillDictionary));
@@ -145,6 +147,17 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeStatusBar()
     {
+        const auto& currentMetrics = _systemMetricsManager->GetMetrics();
+        std::ostringstream oss;
+        oss.setf(std::ios::fixed);
+        oss.precision(2);
+        const auto metricsString = Utils::ToSStream(oss, 
+            "CPU: ", currentMetrics.cpuUsagePercent, "%, ", 
+            "PMem: ", currentMetrics.physicalMemoryUsedMib, "MiB, ",
+            "VMem: ", currentMetrics.virtualMemoryUsedMib, "MiB").str();
+
+        ImGui::SetCursorPosX(8.0f);
+        ImGui::TextUnformatted(metricsString.c_str());
     }
     //--------------------------------------------------------------------------
 

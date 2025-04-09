@@ -5,19 +5,21 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 
 namespace Kmplete
 {
     class LocalizationManager;
+    class SystemMetricsManager;
 
     class EditorUI
     {
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager);
+        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager);
         ~EditorUI();
 
         void LoopIteration();
@@ -49,7 +51,9 @@ namespace Kmplete
 
     private:
         UPtr<EditorUIImpl> _uiImpl;
+        const Ptr<SystemMetricsManager> _systemMetricsManager;
         const UPtr<EditorUICompositor> _compositor;
+        Timer _metricsTimer;
     };
     //--------------------------------------------------------------------------
 }

@@ -27,6 +27,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/system_metrics_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/nullability.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/timer.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
@@ -41,6 +42,7 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_backend_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/system_metrics_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/timer.cpp
 )
 source_group("Core" FILES ${Kmplete_Engine_CORE})
 

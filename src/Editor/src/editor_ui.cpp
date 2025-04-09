@@ -1,16 +1,20 @@
 #include "editor_ui.h"
 #include "ui_utils.h"
 #include "ui_identifiers.h"
+#include "Kmplete/Core/system_metrics_manager.h"
 
 #include <imgui.h>
 
 namespace Kmplete
 {
     constexpr static auto EditorUISettingsEntryName = "EditorUI";
+    constexpr static auto EditorUIMetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager)
+    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager)
         : _uiImpl(nullptr)
-        , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager))
+        , _systemMetricsManager(systemMetricsManager)
+        , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager, systemMetricsManager))
+        , _metricsTimer(1000)
     {
         Initialize(window, dpiScale);
     }
@@ -34,6 +38,8 @@ namespace Kmplete
 
         AddDefaultFont(dpiScale);
         Stylize(dpiScale);
+
+        _metricsTimer.Mark();
     }
     //--------------------------------------------------------------------------
 
@@ -65,6 +71,12 @@ namespace Kmplete
 
     void EditorUI::LoopIteration()
     {
+        if (_metricsTimer.ReachedTimeout())
+        {
+            _metricsTimer.Mark();
+            _systemMetricsManager->Update();
+        }
+
         NewFrame();
         {
             BeginApplicationArea();
@@ -228,6 +240,7 @@ namespace Kmplete
     void EditorUI::SaveSettings(Settings& settings) const
     {
         settings.StartSaveObject(EditorUISettingsEntryName);
+        settings.SaveUInt(EditorUIMetricsTimeoutStr, _metricsTimer.GetTimeout());
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
@@ -235,6 +248,7 @@ namespace Kmplete
     void EditorUI::LoadSettings(Settings& settings)
     {
         settings.StartLoadObject(EditorUISettingsEntryName);
+        _metricsTimer.SetTimeout(settings.GetUInt(EditorUIMetricsTimeoutStr, 1000));
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
