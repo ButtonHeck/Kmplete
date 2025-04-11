@@ -59,8 +59,11 @@ namespace Kmplete
         }
 
         _systemMetricsManager = CreatePtr<SystemMetricsManager>();
+        KMP_ASSERT(_systemMetricsManager);
 
         _localizationManager = CreatePtr<LocalizationManager>();
+        KMP_ASSERT(_localizationManager);
+
         const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
         KMP_ASSERT(defaultTranslationsPath != LocalesDirectory);
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
@@ -69,6 +72,7 @@ namespace Kmplete
         _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsPath.empty() 
             ? Filesystem::GetApplicationPath().append(applicationParameters.defaultSettingsFileName) 
             : applicationParameters.settingsPath);
+        KMP_ASSERT(_settingsManager);
 
         LoadSettingsInternal();
 

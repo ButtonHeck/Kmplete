@@ -16,8 +16,10 @@ namespace Kmplete
 
     WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
         : Application(applicationParameters)
-        , _backend(nullptr)
+        , _windowBackend(nullptr)
         , _mainWindow(nullptr)
+        , _graphicsBackendManager(nullptr)
+        , _graphicsBackend(nullptr)
     {
         Initialize();
     }
@@ -45,12 +47,22 @@ namespace Kmplete
 
     void WindowApplication::Initialize()
     {
-        _backend = WindowBackend::Create();
-        KMP_ASSERT(_backend);
+        _windowBackend = WindowBackend::Create();
+        KMP_ASSERT(_windowBackend);
+
+        _graphicsBackendManager = CreateUPtr<GraphicsBackendManager>();
+        KMP_ASSERT(_graphicsBackendManager);
 
         LoadSettingsInternal();
 
-        _mainWindow = _backend->CreateWindow("Main");
+        InitializeMainWindow();
+        InitializeGraphicsBackend();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::InitializeMainWindow()
+    {
+        _mainWindow = _windowBackend->CreateWindow("Main");
         if (!_mainWindow)
         {
             KMP_LOG_CORE_CRITICAL("WindowApplication: creation of the main window failed");
@@ -61,12 +73,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowApplication::InitializeGraphicsBackend()
+    {
+        _graphicsBackend = _graphicsBackendManager->CreateBackend();
+        if (!_graphicsBackend)
+        {
+            KMP_LOG_CORE_CRITICAL("WindowApplication: graphics backend initialization failed");
+            throw std::runtime_error("WindowApplication: graphics backend initialization failed");
+        }
+    }
+    //--------------------------------------------------------------------------
+
     void WindowApplication::Finalize()
     {
         SaveSettingsInternal();
 
+        _graphicsBackend.reset();
         _mainWindow.reset();
-        _backend.reset();
+        _graphicsBackendManager.reset();
+        _windowBackend.reset();
     }
     //--------------------------------------------------------------------------
 
@@ -80,7 +105,8 @@ namespace Kmplete
         }
 
         _mainWindow->UpdateSettings();
-        _backend->SaveSettings(*settings);
+        _windowBackend->SaveSettings(*settings);
+        _graphicsBackendManager->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
 
@@ -93,7 +119,8 @@ namespace Kmplete
             return;
         }
 
-        _backend->LoadSettings(*settings);
+        _windowBackend->LoadSettings(*settings);
+        _graphicsBackendManager->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

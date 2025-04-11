@@ -86,9 +86,18 @@ source_group("Json" FILES ${Kmplete_Engine_JSON})
 
 set(Kmplete_Engine_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend_manager.cpp
 )
 source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
+
+set(Kmplete_Engine_GRAPHICS_OPENGL
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
+)
+source_group("Graphics/OpenGL" FILES ${Kmplete_Engine_GRAPHICS_OPENGL})
 
 set(Kmplete_Engine_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
@@ -111,6 +120,7 @@ add_library(Kmplete_Engine
     ${Kmplete_Engine_EVENT}
     ${Kmplete_Engine_JSON}
     ${Kmplete_Engine_GRAPHICS}
+    ${Kmplete_Engine_GRAPHICS_OPENGL}
     ${Kmplete_Engine_LOCALIZATION}
 )
 
@@ -153,6 +163,7 @@ target_link_libraries(Kmplete_Engine
     PUBLIC spdlog
     
     PRIVATE stb_image
+    PRIVATE glad
 )
 
 set_target_properties(Kmplete_Engine PROPERTIES 

@@ -5,6 +5,8 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Graphics/graphics_backend_manager.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete
 {
@@ -35,13 +37,17 @@ namespace Kmplete
 
     private:
         void Initialize();
+        void InitializeMainWindow();
+        void InitializeGraphicsBackend();
         void Finalize();
         void SaveSettingsInternal() const;
         void LoadSettingsInternal();
 
     protected:
-        UPtr<WindowBackend> _backend;
+        UPtr<WindowBackend> _windowBackend;
         Ptr<Window> _mainWindow;
+        UPtr<GraphicsBackendManager> _graphicsBackendManager;
+        Ptr<GraphicsBackend> _graphicsBackend;
     };
     //--------------------------------------------------------------------------
 }
