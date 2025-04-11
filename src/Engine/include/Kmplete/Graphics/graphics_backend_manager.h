@@ -4,8 +4,6 @@
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 
-#include <string>
-
 namespace Kmplete
 {
     class Settings;
@@ -20,12 +18,10 @@ namespace Kmplete
         KMP_API void SaveSettings(Settings& settings) const;
         KMP_API void LoadSettings(Settings& settings);
 
-        KMP_NODISCARD KMP_API const std::string& GetAPIName() const;
-
         KMP_NODISCARD KMP_API Ptr<GraphicsBackend> CreateBackend();
 
     private:
-        std::string _apiName;
+        GraphicsBackend::BackendType _type;
         Ptr<GraphicsBackend> _backend;
     };
     //--------------------------------------------------------------------------

@@ -8,6 +8,7 @@
 #include "Kmplete/Core/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete
 {
@@ -19,7 +20,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager, const std::string& graphicsApiName);
+        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType);
         ~EditorUI();
 
         void LoopIteration();
@@ -44,7 +45,7 @@ namespace Kmplete
         void LoadSettings(Settings& settings);
 
     private:
-        void Initialize(const Ptr<Window> window, float dpiScale, const std::string& graphicsApiName);
+        void Initialize(const Ptr<Window> window, float dpiScale, GraphicsBackend::BackendType graphicsBackendType);
         void AddDefaultFont(float dpiScale) const;
         void Stylize(float dpiScale) const;
         void Finalize() const;

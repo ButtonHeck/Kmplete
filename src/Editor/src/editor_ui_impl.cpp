@@ -1,13 +1,12 @@
 #include "editor_ui_impl.h"
 #include "editor_ui_impl_opengl_glfw.h"
-#include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete
 {
-    EditorUIImpl* EditorUIImpl::CreateImpl(const Ptr<Window> window, const std::string& graphicsApiName)
+    EditorUIImpl* EditorUIImpl::CreateImpl(const Ptr<Window> window, GraphicsBackend::BackendType graphicsBackendType)
     {
 #if defined (KMP_WINDOW_BACKEND_GLFW)
-        if (graphicsApiName == GraphicsBackend::OpenGLStr)
+        if (graphicsBackendType == GraphicsBackend::BackendType::OpenGL)
         {
             return new EditorUIImplOpenglGLFW(window);
         }

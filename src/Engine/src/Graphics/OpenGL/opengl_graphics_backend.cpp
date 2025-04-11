@@ -34,4 +34,10 @@ namespace Kmplete
         KMP_LOG_CORE_INFO("OpenGLGraphicsBackend: version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
     }
     //--------------------------------------------------------------------------
+
+    GraphicsBackend::BackendType OpenGLGraphicsBackend::GetType() const noexcept
+    {
+        return GraphicsBackend::BackendType::OpenGL;
+    }
+    //--------------------------------------------------------------------------
 }

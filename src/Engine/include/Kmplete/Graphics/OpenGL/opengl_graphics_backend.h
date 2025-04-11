@@ -12,6 +12,8 @@ namespace Kmplete
         KMP_API OpenGLGraphicsBackend();
 
         KMP_API void Initialize() const override;
+
+        KMP_NODISCARD KMP_API BackendType GetType() const noexcept override;
     };
     //--------------------------------------------------------------------------
 }

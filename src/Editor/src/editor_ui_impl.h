@@ -3,13 +3,14 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete
 {
     class EditorUIImpl
     {
     public:
-        static EditorUIImpl* CreateImpl(const Ptr<Window> window, const std::string& graphicsApiName);
+        KMP_NODISCARD static EditorUIImpl* CreateImpl(const Ptr<Window> window, GraphicsBackend::BackendType graphicsBackendType);
 
     public:
         KMP_DISABLE_COPY_MOVE(EditorUIImpl)
