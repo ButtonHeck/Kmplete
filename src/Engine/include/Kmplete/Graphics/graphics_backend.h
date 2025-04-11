@@ -7,6 +7,10 @@ namespace Kmplete
     class GraphicsBackend
     {
     public:
+        constexpr static auto OpenGLStr = "OpenGL";
+        constexpr static auto DefaultAPI = OpenGLStr;
+
+    public:
         KMP_DISABLE_COPY_MOVE(GraphicsBackend)
 
         GraphicsBackend() = default;

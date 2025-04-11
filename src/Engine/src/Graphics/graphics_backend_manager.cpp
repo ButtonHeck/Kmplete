@@ -9,11 +9,8 @@ namespace Kmplete
     constexpr static auto GraphicsBackendManagerSettingsEntryName = "GraphicsBackendManager";
     constexpr static auto GraphicsBackendManagerAPIStr = "API";
 
-    constexpr static auto OpenGLStr = "OpenGL";
-    constexpr static auto DefaultAPI = OpenGLStr;
-
     GraphicsBackendManager::GraphicsBackendManager() noexcept
-        : _apiName(DefaultAPI)
+        : _apiName(GraphicsBackend::DefaultAPI)
         , _backend(nullptr)
     {}
     //--------------------------------------------------------------------------
@@ -29,14 +26,20 @@ namespace Kmplete
     void GraphicsBackendManager::LoadSettings(Settings& settings)
     {
         settings.StartLoadObject(GraphicsBackendManagerSettingsEntryName);
-        _apiName = settings.GetString(GraphicsBackendManagerAPIStr, DefaultAPI);
+        _apiName = settings.GetString(GraphicsBackendManagerAPIStr, GraphicsBackend::DefaultAPI);
         settings.EndLoadObject();
+    }
+    //--------------------------------------------------------------------------
+
+    const std::string& GraphicsBackendManager::GetAPIName() const
+    {
+        return _apiName;
     }
     //--------------------------------------------------------------------------
 
     Ptr<GraphicsBackend> GraphicsBackendManager::CreateBackend()
     {
-        if (_apiName == OpenGLStr)
+        if (_apiName == GraphicsBackend::OpenGLStr)
         {
             KMP_LOG_CORE_INFO("GraphicsBackendManager: creating OpenGL backend");
             _backend = CreatePtr<OpenGLGraphicsBackend>();

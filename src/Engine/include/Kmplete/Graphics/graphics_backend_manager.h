@@ -20,6 +20,8 @@ namespace Kmplete
         KMP_API void SaveSettings(Settings& settings) const;
         KMP_API void LoadSettings(Settings& settings);
 
+        KMP_NODISCARD KMP_API const std::string& GetAPIName() const;
+
         KMP_NODISCARD KMP_API Ptr<GraphicsBackend> CreateBackend();
 
     private:

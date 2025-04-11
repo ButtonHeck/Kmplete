@@ -9,7 +9,7 @@ namespace Kmplete
     class EditorUIImpl
     {
     public:
-        static EditorUIImpl* CreateImpl(const Ptr<Window> window);
+        static EditorUIImpl* CreateImpl(const Ptr<Window> window, const std::string& graphicsApiName);
 
     public:
         KMP_DISABLE_COPY_MOVE(EditorUIImpl)
