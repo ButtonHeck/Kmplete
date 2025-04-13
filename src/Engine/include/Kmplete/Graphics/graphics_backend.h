@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/pointers.h"
 
 #include <string>
 
@@ -22,6 +23,9 @@ namespace Kmplete
 
         KMP_NODISCARD static std::string BackendTypeToString(BackendType type) noexcept;
         KMP_NODISCARD static BackendType StringToBackendType(const std::string& string) noexcept;
+
+    public:
+        KMP_NODISCARD KMP_API static Ptr<GraphicsBackend> Create(BackendType type);
 
     public:
         KMP_DISABLE_COPY_MOVE(GraphicsBackend)

@@ -1,0 +1,39 @@
+#include "Kmplete/Graphics/graphics_manager.h"
+#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/log.h"
+#include "Kmplete/Core/assertion.h"
+
+namespace Kmplete
+{
+    constexpr static auto GraphicsManagerSettingsEntryName = "GraphicsManager";
+    constexpr static auto GraphicsManagerAPIStr = "API";
+
+    GraphicsManager::GraphicsManager() noexcept
+        : _type(GraphicsBackend::BackendType::Unknown)
+        , _backend(nullptr)
+    {}
+    //--------------------------------------------------------------------------
+
+    void GraphicsManager::SaveSettings(Settings& settings) const
+    {
+        settings.StartSaveObject(GraphicsManagerSettingsEntryName);
+        settings.SaveString(GraphicsManagerAPIStr, GraphicsBackend::BackendTypeToString(_type));
+        settings.EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void GraphicsManager::LoadSettings(Settings& settings)
+    {
+        settings.StartLoadObject(GraphicsManagerSettingsEntryName);
+        _type = GraphicsBackend::StringToBackendType(settings.GetString(GraphicsManagerAPIStr, GraphicsBackend::DefaultAPIStr));
+        settings.EndLoadObject();
+    }
+    //--------------------------------------------------------------------------
+
+    Ptr<GraphicsBackend> GraphicsManager::CreateBackend()
+    {
+        _backend = GraphicsBackend::Create(_type);
+        return _backend;
+    }
+    //--------------------------------------------------------------------------
+}

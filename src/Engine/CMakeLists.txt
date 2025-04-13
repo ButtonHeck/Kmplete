@@ -87,10 +87,10 @@ source_group("Json" FILES ${Kmplete_Engine_JSON})
 set(Kmplete_Engine_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_manager.cpp
 )
 source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
 

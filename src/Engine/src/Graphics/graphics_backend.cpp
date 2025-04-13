@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 
 namespace Kmplete
 {
@@ -22,6 +23,18 @@ namespace Kmplete
         }
 
         return BackendType::Unknown;
+    }
+    //--------------------------------------------------------------------------
+
+    Ptr<GraphicsBackend> GraphicsBackend::Create(BackendType type)
+    {
+        switch (type)
+        {
+        case BackendType::OpenGL:
+            return CreatePtr<OpenGLGraphicsBackend>();
+        default:
+            return nullptr;
+        }
     }
     //--------------------------------------------------------------------------
 }

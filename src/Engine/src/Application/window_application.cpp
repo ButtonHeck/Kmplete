@@ -18,7 +18,7 @@ namespace Kmplete
         : Application(applicationParameters)
         , _windowBackend(nullptr)
         , _mainWindow(nullptr)
-        , _graphicsBackendManager(nullptr)
+        , _graphicsManager(nullptr)
         , _graphicsBackend(nullptr)
     {
         Initialize();
@@ -50,8 +50,8 @@ namespace Kmplete
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
 
-        _graphicsBackendManager = CreateUPtr<GraphicsBackendManager>();
-        KMP_ASSERT(_graphicsBackendManager);
+        _graphicsManager = CreateUPtr<GraphicsManager>();
+        KMP_ASSERT(_graphicsManager);
 
         LoadSettingsInternal();
 
@@ -75,7 +75,7 @@ namespace Kmplete
 
     void WindowApplication::InitializeGraphicsBackend()
     {
-        _graphicsBackend = _graphicsBackendManager->CreateBackend();
+        _graphicsBackend = _graphicsManager->CreateBackend();
         if (!_graphicsBackend)
         {
             KMP_LOG_CORE_CRITICAL("WindowApplication: graphics backend initialization failed");
@@ -90,7 +90,7 @@ namespace Kmplete
 
         _graphicsBackend.reset();
         _mainWindow.reset();
-        _graphicsBackendManager.reset();
+        _graphicsManager.reset();
         _windowBackend.reset();
     }
     //--------------------------------------------------------------------------
@@ -106,7 +106,7 @@ namespace Kmplete
 
         _mainWindow->UpdateSettings();
         _windowBackend->SaveSettings(*settings);
-        _graphicsBackendManager->SaveSettings(*settings);
+        _graphicsManager->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
 
@@ -120,7 +120,7 @@ namespace Kmplete
         }
 
         _windowBackend->LoadSettings(*settings);
-        _graphicsBackendManager->LoadSettings(*settings);
+        _graphicsManager->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

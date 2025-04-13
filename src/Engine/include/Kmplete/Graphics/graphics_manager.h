@@ -8,12 +8,12 @@ namespace Kmplete
 {
     class Settings;
 
-    class GraphicsBackendManager
+    class GraphicsManager
     {
     public:
-        KMP_DISABLE_COPY_MOVE(GraphicsBackendManager)
+        KMP_DISABLE_COPY_MOVE(GraphicsManager)
 
-        KMP_API GraphicsBackendManager() noexcept;
+        KMP_API GraphicsManager() noexcept;
 
         KMP_API void SaveSettings(Settings& settings) const;
         KMP_API void LoadSettings(Settings& settings);
