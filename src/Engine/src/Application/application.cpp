@@ -61,7 +61,7 @@ namespace Kmplete
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
         KMP_ASSERT(_systemMetricsManager);
 
-        _localizationManager = CreatePtr<LocalizationManager>();
+        _localizationManager = CreateUPtr<LocalizationManager>();
         KMP_ASSERT(_localizationManager);
 
         const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));

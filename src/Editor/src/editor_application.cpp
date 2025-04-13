@@ -52,7 +52,7 @@ namespace Kmplete
         _mainWindow->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _ui.reset(new EditorUI(_mainWindow, _windowBackend->GetDPIScale(), _localizationManager, *_systemMetricsManager, _graphicsBackend->GetType()));
+        _ui.reset(new EditorUI(_mainWindow, _windowBackend->GetDPIScale(), *_localizationManager, *_systemMetricsManager, _graphicsBackend->GetType()));
 
         LoadSettingsInternal();
     }
