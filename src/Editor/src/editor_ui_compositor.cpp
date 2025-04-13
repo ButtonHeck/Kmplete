@@ -13,7 +13,7 @@
 
 namespace Kmplete
 {
-    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager)
+    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, const Ptr<LocalizationManager> localizationManager, const SystemMetricsManager& systemMetricsManager)
         : _window(window)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
@@ -147,7 +147,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeStatusBar()
     {
-        const auto& currentMetrics = _systemMetricsManager->GetMetrics();
+        const auto& currentMetrics = _systemMetricsManager.GetMetrics();
         std::ostringstream oss;
         oss.setf(std::ios::fixed);
         oss.precision(2);

@@ -10,7 +10,7 @@ namespace Kmplete
     constexpr static auto EditorUISettingsEntryName = "EditorUI";
     constexpr static auto EditorUIMetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
+    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
         : _uiImpl(nullptr)
         , _systemMetricsManager(systemMetricsManager)
         , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager, systemMetricsManager))
@@ -74,7 +74,7 @@ namespace Kmplete
         if (_metricsTimer.ReachedTimeout())
         {
             _metricsTimer.Mark();
-            _systemMetricsManager->Update();
+            _systemMetricsManager.Update();
         }
 
         NewFrame();

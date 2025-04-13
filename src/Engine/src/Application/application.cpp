@@ -58,7 +58,7 @@ namespace Kmplete
             throw std::runtime_error("Application initialization failed");
         }
 
-        _systemMetricsManager = CreatePtr<SystemMetricsManager>();
+        _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
         KMP_ASSERT(_systemMetricsManager);
 
         _localizationManager = CreatePtr<LocalizationManager>();

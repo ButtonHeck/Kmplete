@@ -20,7 +20,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, const Ptr<SystemMetricsManager> systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType);
+        EditorUI(const Ptr<Window> window, float dpiScale, const Ptr<LocalizationManager> localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType);
         ~EditorUI();
 
         void LoopIteration();
@@ -52,7 +52,7 @@ namespace Kmplete
 
     private:
         UPtr<EditorUIImpl> _uiImpl;
-        const Ptr<SystemMetricsManager> _systemMetricsManager;
+        SystemMetricsManager& _systemMetricsManager;
         const UPtr<EditorUICompositor> _compositor;
         Timer _metricsTimer;
     };

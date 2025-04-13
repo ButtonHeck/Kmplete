@@ -52,7 +52,7 @@ namespace Kmplete
         void FillDictionary();
 
     protected:
-        Ptr<SystemMetricsManager> _systemMetricsManager;
+        UPtr<SystemMetricsManager> _systemMetricsManager;
         Ptr<LocalizationManager> _localizationManager;
         UPtr<SettingsManager> _settingsManager;
     };
