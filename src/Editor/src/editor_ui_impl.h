@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Kmplete/Core/window.h"
-#include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 
@@ -10,7 +9,7 @@ namespace Kmplete
     class EditorUIImpl
     {
     public:
-        KMP_NODISCARD static EditorUIImpl* CreateImpl(const Ptr<Window> window, GraphicsBackend::BackendType graphicsBackendType);
+        KMP_NODISCARD static EditorUIImpl* CreateImpl(Window* window, GraphicsBackend::BackendType graphicsBackendType);
 
     public:
         KMP_DISABLE_COPY_MOVE(EditorUIImpl)
@@ -21,10 +20,10 @@ namespace Kmplete
         virtual void Render() = 0;
 
     protected:
-        explicit EditorUIImpl(const Ptr<Window> window);
+        explicit EditorUIImpl(Window* window);
 
     protected:
-        const Ptr<Window> _window;
+        Window* _window;
     };
     //--------------------------------------------------------------------------
 }

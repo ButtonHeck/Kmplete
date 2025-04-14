@@ -13,7 +13,7 @@
 
 namespace Kmplete
 {
-    EditorUICompositor::EditorUICompositor(const Ptr<Window> window, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+    EditorUICompositor::EditorUICompositor(Window* window, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
         : _window(window)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)

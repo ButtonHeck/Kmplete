@@ -71,6 +71,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::Finalize()
     {
+        _windows.clear();
+
         if (glfwGetCurrentContext())
         {
             KMP_LOG_CORE_WARN("WindowBackendGlfw: some window's context is still current");
@@ -81,7 +83,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Window> WindowBackendGlfw::CreateWindow(const std::string& windowName)
+    Nullable<Window*> WindowBackendGlfw::CreateWindow(const std::string& windowName)
     {
         if (windowName.empty())
         {
@@ -94,8 +96,8 @@ namespace Kmplete
             KMP_LOG_CORE_INFO("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
             try
             {
-                const auto newWindow = CreatePtr<WindowGlfw>(_windowsSettings[windowName]);
-                return newWindow;
+                _windows[windowName] = CreateUPtr<WindowGlfw>(_windowsSettings[windowName]);
+                return GetWindow(windowName);
             }
             catch (KMP_MB_UNUSED const std::exception& e)
             {
@@ -111,8 +113,8 @@ namespace Kmplete
 
             try
             {
-                const auto newWindow = CreatePtr<WindowGlfw>(windowSettings);
-                return newWindow;
+                _windows[windowName] = CreateUPtr<WindowGlfw>(windowSettings);
+                return GetWindow(windowName);
             }
             catch (KMP_MB_UNUSED const std::exception& e)
             {
@@ -123,7 +125,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<Window> WindowBackendGlfw::CreateWindow(const Ptr<Window::WindowSettings> windowSettings)
+    Nullable<Window*> WindowBackendGlfw::CreateWindow(const Ptr<Window::WindowSettings> windowSettings)
     {
         try
         {
@@ -143,13 +145,25 @@ namespace Kmplete
                 _windowsSettings.insert({ windowName, windowSettings });
             }
 
-            return CreatePtr<WindowGlfw>(windowSettings);
+            _windows[windowName] = CreateUPtr<WindowGlfw>(windowSettings);
+            return GetWindow(windowName);
         }
         catch (KMP_MB_UNUSED const std::exception& e)
         {
             KMP_LOG_CORE_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowSettings->name, e.what());
             return nullptr;
         }
+    }
+    //--------------------------------------------------------------------------
+
+    Nullable<Window*> WindowBackendGlfw::GetWindow(const std::string& windowName) const
+    {
+        if (_windows.contains(windowName))
+        {
+            return _windows.at(windowName).get();
+        }
+
+        return nullptr;
     }
     //--------------------------------------------------------------------------
 
@@ -221,6 +235,11 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(Settings& settings) const
     {
+        for (const auto& [unused, window] : _windows)
+        {
+            window->UpdateSettings();
+        }
+
         settings.StartSaveObject(WindowBackendSettingsEntryName);
         settings.StartSaveArray(WindowsStr);
         int index = 0;

@@ -32,8 +32,9 @@ namespace Kmplete
         WindowBackend() = default;
         virtual ~WindowBackend() = default;
 
-        KMP_NODISCARD KMP_API virtual Ptr<Window> CreateWindow(const std::string& windowName) = 0;
-        KMP_NODISCARD KMP_API virtual Ptr<Window> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) = 0;
+        KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateWindow(const std::string& windowName) = 0;
+        KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) = 0;
+        KMP_NODISCARD KMP_API virtual Nullable<Window*> GetWindow(const std::string& windowName) const = 0;
 
         KMP_NODISCARD KMP_API virtual int GetMonitorCount() const = 0;
         KMP_NODISCARD KMP_API virtual StringVector GetMonitorNames() const = 0;

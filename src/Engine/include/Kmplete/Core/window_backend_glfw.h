@@ -15,8 +15,9 @@ namespace Kmplete
         KMP_API WindowBackendGlfw();
         KMP_API ~WindowBackendGlfw();
 
-        KMP_NODISCARD KMP_API Ptr<Window> CreateWindow(const std::string& windowName) override;
-        KMP_NODISCARD KMP_API Ptr<Window> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) override;
+        KMP_NODISCARD KMP_API Nullable<Window*> CreateWindow(const std::string& windowName) override;
+        KMP_NODISCARD KMP_API Nullable<Window*> CreateWindow(const Ptr<Window::WindowSettings> windowSettings) override;
+        KMP_NODISCARD KMP_API Nullable<Window*> GetWindow(const std::string& windowName) const override;
 
         KMP_NODISCARD KMP_API int GetMonitorCount() const override;
         KMP_NODISCARD KMP_API StringVector GetMonitorNames() const override;
@@ -33,6 +34,7 @@ namespace Kmplete
 
     private:
         std::unordered_map<std::string, Ptr<Window::WindowSettings>> _windowsSettings;
+        std::unordered_map<std::string, UPtr<Window>> _windows;
     };
     //--------------------------------------------------------------------------
 }

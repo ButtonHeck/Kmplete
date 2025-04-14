@@ -20,7 +20,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(const Ptr<Window> window, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType);
+        EditorUI(Window* window, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType);
         ~EditorUI();
 
         void LoopIteration();
@@ -45,7 +45,7 @@ namespace Kmplete
         void LoadSettings(Settings& settings);
 
     private:
-        void Initialize(const Ptr<Window> window, float dpiScale, GraphicsBackend::BackendType graphicsBackendType);
+        void Initialize(Window* window, float dpiScale, GraphicsBackend::BackendType graphicsBackendType);
         void AddDefaultFont(float dpiScale) const;
         void Stylize(float dpiScale) const;
         void Finalize() const;

@@ -10,7 +10,7 @@ namespace Kmplete
     constexpr static auto EditorUISettingsEntryName = "EditorUI";
     constexpr static auto EditorUIMetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(const Ptr<Window> window, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
+    EditorUI::EditorUI(Window* window, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
         : _uiImpl(nullptr)
         , _systemMetricsManager(systemMetricsManager)
         , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager, systemMetricsManager))
@@ -27,7 +27,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Initialize(const Ptr<Window> window, float dpiScale, GraphicsBackend::BackendType graphicsBackendType)
+    void EditorUI::Initialize(Window* window, float dpiScale, GraphicsBackend::BackendType graphicsBackendType)
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();

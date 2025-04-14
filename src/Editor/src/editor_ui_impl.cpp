@@ -3,7 +3,7 @@
 
 namespace Kmplete
 {
-    EditorUIImpl* EditorUIImpl::CreateImpl(const Ptr<Window> window, GraphicsBackend::BackendType graphicsBackendType)
+    EditorUIImpl* EditorUIImpl::CreateImpl(Window* window, GraphicsBackend::BackendType graphicsBackendType)
     {
 #if defined (KMP_WINDOW_BACKEND_GLFW)
         if (graphicsBackendType == GraphicsBackend::BackendType::OpenGL)
@@ -17,7 +17,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    EditorUIImpl::EditorUIImpl(const Ptr<Window> window)
+    EditorUIImpl::EditorUIImpl(Window* window)
         : _window(window)
     {}
     //--------------------------------------------------------------------------

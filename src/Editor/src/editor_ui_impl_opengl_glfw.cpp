@@ -7,7 +7,7 @@
 
 namespace Kmplete
 {
-    EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(const Ptr<Window> window)
+    EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(Window* window)
         : EditorUIImpl(window)
     {
         Initialize();

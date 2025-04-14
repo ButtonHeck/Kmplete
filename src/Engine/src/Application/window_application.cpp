@@ -1,4 +1,5 @@
 #include "Kmplete/Application/window_application.h"
+#include "Kmplete/Core/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Core/log.h"
 
@@ -17,7 +18,6 @@ namespace Kmplete
     WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
         : Application(applicationParameters)
         , _windowBackend(nullptr)
-        , _mainWindow(nullptr)
         , _graphicsManager(nullptr)
         , _graphicsBackend(nullptr)
     {
@@ -62,14 +62,14 @@ namespace Kmplete
 
     void WindowApplication::InitializeMainWindow()
     {
-        _mainWindow = _windowBackend->CreateWindow("Main");
-        if (!_mainWindow)
+        auto mainWindow = _windowBackend->CreateWindow("Main");
+        if (!mainWindow)
         {
             KMP_LOG_CORE_CRITICAL("WindowApplication: creation of the main window failed");
             throw std::runtime_error("WindowApplication creation of the main window failed");
         }
 
-        _mainWindow->SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
+        mainWindow->SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
     }
     //--------------------------------------------------------------------------
 
@@ -89,7 +89,6 @@ namespace Kmplete
         SaveSettingsInternal();
 
         _graphicsBackend.reset();
-        _mainWindow.reset();
         _graphicsManager.reset();
         _windowBackend.reset();
     }
@@ -103,8 +102,7 @@ namespace Kmplete
             KMP_LOG_CORE_WARN("WindowApplication: failed to create settings entry for saving");
             return;
         }
-
-        _mainWindow->UpdateSettings();
+        
         _windowBackend->SaveSettings(*settings);
         _graphicsManager->SaveSettings(*settings);
     }
