@@ -9,7 +9,7 @@ namespace Kmplete
     class EditorUIImpl
     {
     public:
-        KMP_NODISCARD static EditorUIImpl* CreateImpl(Window* window, GraphicsBackend::BackendType graphicsBackendType);
+        KMP_NODISCARD static EditorUIImpl* CreateImpl(Window& mainWindow, GraphicsBackend::BackendType graphicsBackendType);
 
     public:
         KMP_DISABLE_COPY_MOVE(EditorUIImpl)
@@ -20,10 +20,10 @@ namespace Kmplete
         virtual void Render() = 0;
 
     protected:
-        explicit EditorUIImpl(Window* window);
+        explicit EditorUIImpl(Window& mainWindow);
 
     protected:
-        Window* _window;
+        Window& _mainWindow;
     };
     //--------------------------------------------------------------------------
 }

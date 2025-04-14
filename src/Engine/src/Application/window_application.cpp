@@ -62,14 +62,8 @@ namespace Kmplete
 
     void WindowApplication::InitializeMainWindow()
     {
-        auto mainWindow = _windowBackend->CreateWindow("Main");
-        if (!mainWindow)
-        {
-            KMP_LOG_CORE_CRITICAL("WindowApplication: creation of the main window failed");
-            throw std::runtime_error("WindowApplication creation of the main window failed");
-        }
-
-        mainWindow->SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
+        auto& mainWindow = _windowBackend->CreateMainWindow();
+        mainWindow.SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
     }
     //--------------------------------------------------------------------------
 

@@ -15,7 +15,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
-        EditorUICompositor(Window* window, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
+        EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
 
         void ComposeMainArea();
         void ComposeStatusBar();
@@ -47,7 +47,7 @@ namespace Kmplete
         };
 
     private:
-        Window* _window;
+        Window& _mainWindow;
         LocalizationManager& _localizationManager;
         const SystemMetricsManager& _systemMetricsManager;
         UIPopupsState _popups;

@@ -10,13 +10,13 @@ namespace Kmplete
     constexpr static auto EditorUISettingsEntryName = "EditorUI";
     constexpr static auto EditorUIMetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(Window* window, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
+    EditorUI::EditorUI(Window& mainWindow, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
         : _uiImpl(nullptr)
         , _systemMetricsManager(systemMetricsManager)
-        , _compositor(CreateUPtr<EditorUICompositor>(window, localizationManager, systemMetricsManager))
+        , _compositor(CreateUPtr<EditorUICompositor>(mainWindow, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
-        Initialize(window, dpiScale, graphicsBackendType);
+        Initialize(mainWindow, dpiScale, graphicsBackendType);
     }
     //--------------------------------------------------------------------------
 
@@ -27,14 +27,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Initialize(Window* window, float dpiScale, GraphicsBackend::BackendType graphicsBackendType)
+    void EditorUI::Initialize(Window& mainWindow, float dpiScale, GraphicsBackend::BackendType graphicsBackendType)
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 
-        _uiImpl.reset(EditorUIImpl::CreateImpl(window, graphicsBackendType));
+        _uiImpl.reset(EditorUIImpl::CreateImpl(mainWindow, graphicsBackendType));
 
         AddDefaultFont(dpiScale);
         Stylize(dpiScale);

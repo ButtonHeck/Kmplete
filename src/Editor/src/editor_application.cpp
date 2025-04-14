@@ -48,15 +48,9 @@ namespace Kmplete
 
     void EditorApplication::Initialize()
     {
-        auto mainWindow = _windowBackend->GetWindow("Main");
-        if (!mainWindow)
-        {
-            KMP_LOG_CLIENT_CRITICAL("EditorApplication: failed to get main window");
-            throw std::runtime_error("EditorApplication failed to get main window");
-        }
-
-        mainWindow->SetTitle(GetApplicationName());
-        mainWindow->SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
+        auto& mainWindow = _windowBackend->GetMainWindow();
+        mainWindow.SetTitle(GetApplicationName());
+        mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
         _ui.reset(new EditorUI(mainWindow, _windowBackend->GetDPIScale(), *_localizationManager, *_systemMetricsManager, _graphicsBackend->GetType()));
@@ -73,19 +67,14 @@ namespace Kmplete
 
     void EditorApplication::Run()
     {
-        auto mainWindow = _windowBackend->GetWindow("Main");
-        if (!mainWindow)
-        {
-            KMP_LOG_CLIENT_ERROR("EditorApplication: failed to get main window");
-            return;
-        }
+        auto& mainWindow = _windowBackend->GetMainWindow();
 
         KMP_LOG_CLIENT_DEBUG("EditorApplication: main loop started...");
-        while (!mainWindow->ShouldClose())
+        while (!mainWindow.ShouldClose())
         {
-            mainWindow->ProcessEvents();
+            mainWindow.ProcessEvents();
             _ui->LoopIteration();
-            mainWindow->SwapBuffers();
+            mainWindow.SwapBuffers();
         }
 
         KMP_LOG_CLIENT_DEBUG("EditorApplication: main loop finished");

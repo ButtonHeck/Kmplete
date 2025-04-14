@@ -7,8 +7,8 @@
 
 namespace Kmplete
 {
-    EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(Window* window)
-        : EditorUIImpl(window)
+    EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(Window& mainWindow)
+        : EditorUIImpl(mainWindow)
     {
         Initialize();
     }
@@ -22,7 +22,7 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::Initialize()
     {
-        ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<GLFWwindow*>(_window->GetImplPointer()), true);
+        ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<GLFWwindow*>(_mainWindow.GetImplPointer()), true);
         ImGui_ImplOpenGL3_Init("#version 330");
     }
     //--------------------------------------------------------------------------

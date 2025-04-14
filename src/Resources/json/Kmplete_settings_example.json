@@ -18,20 +18,22 @@
     },
     "WindowApplication": {
         "WindowBackend": {
-            "Windows": [
-                {
-                    "Name": "Main",
-                    "Width": 1920,
-                    "Height": 1080,
-                    "WindowedWidth": 1920,
-                    "WindowedHeight": 1080,
-                    "ScreenMode": "Windowed",
-                    "VSync": true,
-                    "UpdateContinuously": true,
-                    "Resizable": true,
-                    "Decorated": true
-                }
-            ]
+            "MainWindow": {
+                "Name": "Main",
+                "Width": 1920,
+                "Height": 1080,
+                "WindowedWidth": 1920,
+                "WindowedHeight": 1080,
+                "ScreenMode": "Windowed",
+                "VSync": true,
+                "UpdateContinuously": true,
+                "Resizable": true,
+                "Decorated": true
+            },
+            "AuxWindows": []
+        },
+        "GraphicsManager": {
+            "API": "OpenGL"
         }
     }
 }

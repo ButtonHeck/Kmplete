@@ -9,7 +9,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUIImplOpenglGLFW)
 
-        explicit EditorUIImplOpenglGLFW(Window* window);
+        explicit EditorUIImplOpenglGLFW(Window& mainWindow);
         virtual ~EditorUIImplOpenglGLFW();
 
         void NewFrame() override;

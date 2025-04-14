@@ -13,8 +13,8 @@
 
 namespace Kmplete
 {
-    EditorUICompositor::EditorUICompositor(Window* window, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
-        : _window(window)
+    EditorUICompositor::EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+        : _mainWindow(mainWindow)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
     {
@@ -107,11 +107,11 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuViewFullscreen()
     {
-        const auto screenMode = _window->GetScreenMode();
+        const auto screenMode = _mainWindow.GetScreenMode();
         auto isFullscreen = screenMode == Window::WindowedFullscreenMode;
         if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), Shortcuts::Fullscreen.text, &isFullscreen))
         {
-            _window->SetScreenMode(isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
+            _mainWindow.SetScreenMode(isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
         }
     }
     //--------------------------------------------------------------------------
@@ -132,7 +132,7 @@ namespace Kmplete
         }
         else
         {
-            _window->SetShouldClose(true);
+            _mainWindow.SetShouldClose(true);
             _popups.quit = false;
         }
     }
@@ -140,8 +140,8 @@ namespace Kmplete
 
     void EditorUICompositor::SwitchFullscreen()
     {
-        const auto isFullscreen = _window->GetScreenMode() == Window::WindowedFullscreenMode;
-        _window->SetScreenMode(!isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
+        const auto isFullscreen = _mainWindow.GetScreenMode() == Window::WindowedFullscreenMode;
+        _mainWindow.SetScreenMode(!isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
     }
     //--------------------------------------------------------------------------
 
@@ -164,7 +164,7 @@ namespace Kmplete
     bool EditorUICompositor::OnWindowCloseEvent(WindowCloseEvent&)
     {
         _popups.quit = true;
-        _window->SetShouldClose(false);
+        _mainWindow.SetShouldClose(false);
         return true;
     }
     //--------------------------------------------------------------------------
