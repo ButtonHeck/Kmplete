@@ -52,8 +52,6 @@ namespace Kmplete
         {
             explicit UserData(WindowSettings& settings);
 
-            bool& updateContinuously;
-            bool& vSync;
             Mode& screenMode;
             int& width;
             int& height;

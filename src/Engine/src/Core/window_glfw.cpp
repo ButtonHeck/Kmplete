@@ -13,9 +13,7 @@
 namespace Kmplete
 {
     WindowGlfw::UserData::UserData(WindowSettings& settings)
-        : updateContinuously(settings.updateContinuously)
-        , vSync(settings.vSync)
-        , screenMode(settings.screenMode)
+        : screenMode(settings.screenMode)
         , width(settings.width)
         , height(settings.height)
         , windowedWidth(settings.windowedWidth)
@@ -183,47 +181,26 @@ namespace Kmplete
 
     void WindowGlfw::SetVSync(bool vSync)
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            userData->vSync = vSync;
-        }
-
+        _settings.vSync = vSync;
         glfwSwapInterval(vSync ? 1 : 0);
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsVSync() const
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            return userData->vSync;
-        }
-
-        return true;
+        return _settings.vSync;
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::SetUpdatedContinuously(bool updatedContinuously)
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            userData->updateContinuously = updatedContinuously;
-        }
+        _settings.updateContinuously = updatedContinuously;
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsUpdatedContinuously() const
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            return userData->updateContinuously;
-        }
-
-        return true;
+        return _settings.updateContinuously;
     }
     //--------------------------------------------------------------------------
 
@@ -255,8 +232,7 @@ namespace Kmplete
 
     void WindowGlfw::ProcessEvents()
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData->updateContinuously)
+        if (_settings.updateContinuously)
         {
             glfwPollEvents();
         }
