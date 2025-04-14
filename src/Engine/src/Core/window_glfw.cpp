@@ -12,7 +12,18 @@
 
 namespace Kmplete
 {
-    WindowGlfw::WindowGlfw(const Ptr<WindowSettings> settings)
+    WindowGlfw::UserData::UserData(WindowSettings& settings)
+        : updateContinuously(settings.updateContinuously)
+        , vSync(settings.vSync)
+        , screenMode(settings.screenMode)
+        , width(settings.width)
+        , height(settings.height)
+        , windowedWidth(settings.windowedWidth)
+        , windowedHeight(settings.windowedHeight)
+    {}
+    //--------------------------------------------------------------------------
+
+    WindowGlfw::WindowGlfw(WindowSettings& settings)
         : Window(settings)
         , _window(nullptr)
     {
@@ -30,7 +41,7 @@ namespace Kmplete
     {
         InitializeHints();
 
-        _window = glfwCreateWindow(_settings->width, _settings->height, "", nullptr, nullptr);
+        _window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
 
         if (!_window)
         {
@@ -38,34 +49,23 @@ namespace Kmplete
             throw std::runtime_error("WindowGlfw creation failed");
         }
 
-        glfwSetWindowUserPointer(_window, new UserData());
+        glfwSetWindowUserPointer(_window, new UserData(_settings));
+        KMP_ASSERT(GetUserPointer(_window));
+
         MakeContextCurrent();
-
         InitializeCallbacks();
+        SetVSync(_settings.vSync);
+        SetScreenMode(_settings.screenMode);
 
-        const auto userData = GetUserPointer(_window);
-        if (userData)
+        if (_settings.screenMode == WindowedMode)
         {
-            userData->windowedWidth = _settings->windowedWidth;
-            userData->windowedHeight = _settings->windowedHeight;
-            userData->updateContinuously = _settings->updateContinuously;
-        }
-
-        SetUpdatedContinuously(_settings->updateContinuously);
-        SetVSync(_settings->vSync);
-        SetScreenMode(Window::StringToMode(_settings->screenMode));
-
-        if (Window::StringToMode(_settings->screenMode) == WindowedMode)
-        {
-            glfwSetWindowSize(_window, _settings->windowedWidth, _settings->windowedHeight);
+            glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
         }
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::Finalize()
     {
-        UpdateSettings();
-
         auto* userData = GetUserPointer(_window);
         if (userData)
         {
@@ -230,26 +230,26 @@ namespace Kmplete
     void WindowGlfw::SetResizable(bool resizable)
     {
         KMP_LOG_CORE_WARN("WindowGlfw: resizable setting will be applied after restart");
-        _settings->resizable = resizable;
+        _settings.resizable = resizable;
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsResizable() const
     {
-        return _settings->resizable;
+        return _settings.resizable;
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::SetDecorated(bool decorated)
     {
         KMP_LOG_CORE_WARN("WindowGlfw: decorated settings will be applied after restart");
-        _settings->decorated = decorated;
+        _settings.decorated = decorated;
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsDecorated() const
     {
-        return _settings->decorated;
+        return _settings.decorated;
     }
     //--------------------------------------------------------------------------
 
@@ -295,27 +295,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::UpdateSettings() const
-    {
-        if (!_window)
-        {
-            KMP_LOG_CORE_WARN("WindowGlfw: can't update settings due to nullptr GLFW window");
-            return;
-        }
-
-        const auto [width, height] = GetSize();
-        const auto [windowedWidth, windowedHeight] = GetWindowedSize();
-
-        _settings->width = width;
-        _settings->height = height;
-        _settings->windowedWidth = windowedWidth;
-        _settings->windowedHeight = windowedHeight;
-        _settings->screenMode = ModeToString(GetScreenMode());
-        _settings->vSync = IsVSync();
-        _settings->updateContinuously = IsUpdatedContinuously();
-    }
-    //--------------------------------------------------------------------------
-
     Nullable<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(GLFWwindow* window)
     {
         auto userData = glfwGetWindowUserPointer(window);
@@ -327,9 +306,9 @@ namespace Kmplete
 
     void WindowGlfw::InitializeHints() const
     {
-        glfwWindowHint(GLFW_RESIZABLE, _settings->resizable ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, _settings.resizable ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-        glfwWindowHint(GLFW_DECORATED, _settings->decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_DECORATED, _settings.decorated ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);

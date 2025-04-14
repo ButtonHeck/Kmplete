@@ -9,10 +9,10 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    Window::Window(const Ptr<WindowSettings> settings)
+    Window::Window(WindowSettings& settings)
         : _settings(settings)
     {
-        if (!settings || settings->name.empty())
+        if (settings.name.empty())
         {
             throw std::exception();
         }
@@ -21,7 +21,7 @@ namespace Kmplete
 
     const std::string& Window::GetName() const
     {
-        return _settings->name;
+        return _settings.name;
     }
     //--------------------------------------------------------------------------
 

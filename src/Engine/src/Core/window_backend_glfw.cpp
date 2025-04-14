@@ -96,7 +96,7 @@ namespace Kmplete
             KMP_LOG_CORE_INFO("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
             try
             {
-                _windows[windowName] = CreateUPtr<WindowGlfw>(_windowsSettings[windowName]);
+                _windows[windowName] = CreateUPtr<WindowGlfw>(*_windowsSettings[windowName]);
                 return GetWindow(windowName);
             }
             catch (KMP_MB_UNUSED const std::exception& e)
@@ -108,12 +108,11 @@ namespace Kmplete
         else
         {
             KMP_LOG_CORE_INFO("WindowBackendGlfw: creating window '{}' with default settings", windowName);
-            auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
-            _windowsSettings[windowName] = windowSettings;
+            _windowsSettings[windowName] = CreateUPtr<Window::WindowSettings>(windowName);
 
             try
             {
-                _windows[windowName] = CreateUPtr<WindowGlfw>(windowSettings);
+                _windows[windowName] = CreateUPtr<WindowGlfw>(*_windowsSettings[windowName]);
                 return GetWindow(windowName);
             }
             catch (KMP_MB_UNUSED const std::exception& e)
@@ -125,16 +124,16 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::CreateWindow(const Ptr<Window::WindowSettings> windowSettings)
+    Nullable<Window*> WindowBackendGlfw::CreateWindow(Window::WindowSettings& windowSettings)
     {
         try
         {
-            if (!windowSettings || windowSettings->name.empty())
+            if (windowSettings.name.empty())
             {
                 throw std::exception();
             }
 
-            const auto& windowName = windowSettings->name;
+            const auto& windowName = windowSettings.name;
             if (_windowsSettings.contains(windowName))
             {
                 KMP_LOG_CORE_WARN("WindowBackendGlfw: window '{}' will be created, but settings already contains this name and will be overriden", windowName);
@@ -142,15 +141,15 @@ namespace Kmplete
             else
             {
                 KMP_LOG_CORE_INFO("WindowBackendGlfw: window '{}' will be created with provided settings", windowName);
-                _windowsSettings.insert({ windowName, windowSettings });
+                _windowsSettings.insert({ windowName, CreateUPtr<Window::WindowSettings>(windowSettings) });
             }
 
-            _windows[windowName] = CreateUPtr<WindowGlfw>(windowSettings);
+            _windows[windowName] = CreateUPtr<WindowGlfw>(*_windowsSettings[windowName]);
             return GetWindow(windowName);
         }
         catch (KMP_MB_UNUSED const std::exception& e)
         {
-            KMP_LOG_CORE_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowSettings->name, e.what());
+            KMP_LOG_CORE_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowSettings.name, e.what());
             return nullptr;
         }
     }
@@ -235,31 +234,26 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(Settings& settings) const
     {
-        for (const auto& [unused, window] : _windows)
-        {
-            window->UpdateSettings();
-        }
-
         settings.StartSaveObject(WindowBackendSettingsEntryName);
         settings.StartSaveArray(WindowsStr);
         int index = 0;
         for (const auto& windowEntry : _windowsSettings)
         {
-            const auto windowSettings = windowEntry.second;
-            KMP_ASSERT(windowSettings);
+            KMP_ASSERT(windowEntry.second);
+            const auto& windowSettings = *windowEntry.second;
 
             settings.StartSaveObject(index);
 
-            settings.SaveString(Window::NameStr, windowSettings->name);
-            settings.SaveUInt(Window::WidthStr, windowSettings->width);
-            settings.SaveUInt(Window::HeightStr, windowSettings->height);
-            settings.SaveUInt(Window::WindowedWidthStr, windowSettings->windowedWidth);
-            settings.SaveUInt(Window::WindowedHeightStr, windowSettings->windowedHeight);
-            settings.SaveString(Window::ScreenModeStr, windowSettings->screenMode);
-            settings.SaveBool(Window::VSyncStr, windowSettings->vSync);
-            settings.SaveBool(Window::UpdateContinuouslyStr, windowSettings->updateContinuously);
-            settings.SaveBool(Window::ResizableStr, windowSettings->resizable);
-            settings.SaveBool(Window::DecoratedStr, windowSettings->decorated);
+            settings.SaveString(Window::NameStr, windowSettings.name);
+            settings.SaveInt(Window::WidthStr, windowSettings.width);
+            settings.SaveInt(Window::HeightStr, windowSettings.height);
+            settings.SaveInt(Window::WindowedWidthStr, windowSettings.windowedWidth);
+            settings.SaveInt(Window::WindowedHeightStr, windowSettings.windowedHeight);
+            settings.SaveString(Window::ScreenModeStr, Window::ModeToString(windowSettings.screenMode));
+            settings.SaveBool(Window::VSyncStr, windowSettings.vSync);
+            settings.SaveBool(Window::UpdateContinuouslyStr, windowSettings.updateContinuously);
+            settings.SaveBool(Window::ResizableStr, windowSettings.resizable);
+            settings.SaveBool(Window::DecoratedStr, windowSettings.decorated);
 
             settings.EndSaveObject();
             ++index;
@@ -285,17 +279,17 @@ namespace Kmplete
             }
             else
             {
-                auto windowSettings = CreatePtr<Window::WindowSettings>(windowName);
-                windowSettings->width = settings.GetUInt(Window::WidthStr, Window::DefaultWidth);
-                windowSettings->height = settings.GetUInt(Window::HeightStr, Window::DefaultHeight);
-                windowSettings->windowedWidth = settings.GetUInt(Window::WindowedWidthStr, Window::DefaultWidth);
-                windowSettings->windowedHeight = settings.GetUInt(Window::WindowedHeightStr, Window::DefaultHeight);
-                windowSettings->screenMode = settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr);
+                auto windowSettings = CreateUPtr<Window::WindowSettings>(windowName);
+                windowSettings->width = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
+                windowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
+                windowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
+                windowSettings->windowedHeight = settings.GetInt(Window::WindowedHeightStr, Window::DefaultHeight);
+                windowSettings->screenMode = Window::StringToMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
                 windowSettings->vSync = settings.GetBool(Window::VSyncStr, true);
                 windowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
                 windowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
                 windowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
-                _windowsSettings.insert({ windowName, windowSettings });
+                _windowsSettings.insert({ windowName, std::move(windowSettings) });
             }
 
             settings.EndLoadObject();

@@ -13,7 +13,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
-        KMP_API WindowGlfw(const Ptr<WindowSettings> settings);
+        KMP_API explicit WindowGlfw(WindowSettings& settings);
         KMP_API ~WindowGlfw();
 
         KMP_NODISCARD KMP_API std::pair<int, int> GetSize() const override;
@@ -44,20 +44,21 @@ namespace Kmplete
         KMP_API void SwapBuffers() const override;
         KMP_API void MakeContextCurrent() override;
         KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
-        KMP_API void UpdateSettings() const override;
 
         KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const noexcept override;
 
     private:
         struct UserData
         {
-            bool updateContinuously = true;
-            bool vSync = true;
-            Mode screenMode = WindowedMode;
-            int width = DefaultWidth;
-            int height = DefaultHeight;
-            int windowedWidth = width;
-            int windowedHeight = height;
+            explicit UserData(WindowSettings& settings);
+
+            bool& updateContinuously;
+            bool& vSync;
+            Mode& screenMode;
+            int& width;
+            int& height;
+            int& windowedWidth;
+            int& windowedHeight;
             EventCallbackFn eventCallback;
         };
 

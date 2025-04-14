@@ -47,11 +47,11 @@ namespace Kmplete
             KMP_API explicit WindowSettings(const std::string& name) noexcept;
 
             const std::string name = "";
-            unsigned int width = DefaultWidth;
-            unsigned int height = DefaultHeight;
-            unsigned int windowedWidth = DefaultWidth;
-            unsigned int windowedHeight = DefaultHeight;
-            std::string screenMode = WindowedModeStr;
+            int width = DefaultWidth;
+            int height = DefaultHeight;
+            int windowedWidth = DefaultWidth;
+            int windowedHeight = DefaultHeight;
+            Mode screenMode = WindowedMode;
             bool vSync = true;
             bool updateContinuously = true;
             bool resizable = true;
@@ -64,7 +64,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(Window)
 
-        KMP_API Window(const Ptr<WindowSettings> settings);
+        KMP_API explicit Window(WindowSettings& settings);
         virtual ~Window() = default;
 
         KMP_NODISCARD KMP_API const std::string& GetName() const;
@@ -97,12 +97,11 @@ namespace Kmplete
         KMP_API virtual void SwapBuffers() const = 0;
         KMP_API virtual void MakeContextCurrent() = 0;
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
-        KMP_API virtual void UpdateSettings() const = 0;
 
         KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const noexcept = 0;
 
     protected:
-        Ptr<WindowSettings> _settings;
+        WindowSettings& _settings;
     };
     //--------------------------------------------------------------------------
 }
