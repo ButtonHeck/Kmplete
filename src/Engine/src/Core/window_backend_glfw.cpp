@@ -203,7 +203,21 @@ namespace Kmplete
             return _auxWindows.at(windowName).get();
         }
 
+        KMP_LOG_CORE_WARN("WindowBackendGlfw: cannot find aux window '{}'", windowName);
         return nullptr;
+    }
+    //--------------------------------------------------------------------------
+
+    bool WindowBackendGlfw::DestroyAuxWindow(const std::string& windowName)
+    {
+        if (_auxWindows.contains(windowName))
+        {
+            _auxWindows.erase(windowName);
+            return true;
+        }
+        
+        KMP_LOG_CORE_WARN("WindowBackendGlfw: cannot find aux window '{}'", windowName);
+        return false;
     }
     //--------------------------------------------------------------------------
 
