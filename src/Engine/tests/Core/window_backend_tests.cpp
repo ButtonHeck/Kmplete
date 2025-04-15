@@ -253,18 +253,20 @@ TEST_CASE("Window backend multiple windows", "[core][window_backend][window]")
     REQUIRE(auxWindow);
     auxWindow->SetTitle("Aux window");
 
-    while ((!mainWindow.ShouldClose()) || (!auxWindow->ShouldClose()))
+    while (!mainWindow.ShouldClose())
     {
-        if (!mainWindow.ShouldClose())
-        {
-            mainWindow.ProcessEvents();
-            mainWindow.SwapBuffers();
-        }
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
 
         if (auxWindow && !auxWindow->ShouldClose())
         {
             auxWindow->ProcessEvents();
             auxWindow->SwapBuffers();
+        }
+        else
+        {
+            windowBackend->DestroyAuxWindow("Aux");
+            auxWindow = nullptr;
         }
     }
 
