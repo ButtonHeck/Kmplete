@@ -149,8 +149,10 @@ target_link_libraries(Kmplete_Engine_Window_Application_Tests
     PRIVATE Catch2::Catch2WithMain
 )
 
+set(KmpleteWindowApplicationTestsSettingsFile "Kmplete_window_application_tests_settings.json")
 target_compile_definitions(Kmplete_Engine_Window_Application_Tests
     PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
+    PRIVATE KMP_TEST_SETTINGS_JSON=\"${KmpleteWindowApplicationTestsSettingsFile}\"
 )
 
 set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES 
@@ -161,10 +163,10 @@ set(KmpleteWindowAppTestsCopySettingsScriptName "CopyWindowTestsSettings$<CONFIG
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteWindowAppTestsCopySettingsScriptName}"
     CONTENT
     [=[
-    if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Engine_Window_Application_Tests>/Kmplete_window_application_tests_settings.json")
+    if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Engine_Window_Application_Tests>/${KmpleteWindowApplicationTestsSettingsFile}")
     execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
         "${resources_folder}/json/Kmplete_settings_example.json"
-        "$<TARGET_FILE_DIR:Kmplete_Engine_Window_Application_Tests>/Kmplete_window_application_tests_settings.json")
+        "$<TARGET_FILE_DIR:Kmplete_Engine_Window_Application_Tests>/${KmpleteWindowApplicationTestsSettingsFile}")
     endif() 
     ]=]
 )
