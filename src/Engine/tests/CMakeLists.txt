@@ -157,6 +157,25 @@ set_target_properties(Kmplete_Engine_Window_Application_Tests PROPERTIES
     FOLDER Kmplete/Engine/Tests
 )
 
+set(KmpleteWindowAppTestsCopySettingsScriptName "CopyWindowTestsSettings$<CONFIG>.cmake")
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteWindowAppTestsCopySettingsScriptName}"
+    CONTENT
+    [=[
+    if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Engine_Window_Application_Tests>/Kmplete_window_application_tests_settings.json")
+    execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
+        "${resources_folder}/json/Kmplete_settings_example.json"
+        "$<TARGET_FILE_DIR:Kmplete_Engine_Window_Application_Tests>/Kmplete_window_application_tests_settings.json")
+    endif() 
+    ]=]
+)
+
+add_custom_command(
+    TARGET Kmplete_Engine_Window_Application_Tests
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "${KmpleteWindowAppTestsCopySettingsScriptName}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
 
 # Locale tests
 
