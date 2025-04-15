@@ -23,17 +23,19 @@ namespace Kmplete
 
         void Run() override
         {
+            auto& mainWindow = _windowBackend->GetMainWindow();
             while (!_completed)
             {
-                _mainWindow->ProcessEvents();
-                _mainWindow->SwapBuffers();
+                mainWindow.ProcessEvents();
+                mainWindow.SwapBuffers();
             }
         }
 
         void Initialize()
         {
+            auto& mainWindow = _windowBackend->GetMainWindow();
             _localizationManager->SetLocale("ru_RU.UTF8");
-            _mainWindow->SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
+            mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
         }
 
         bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
@@ -161,7 +163,8 @@ namespace Kmplete
         CustomIconApplication(const ApplicationParameters& applicationParameters)
             : TestWindowApplication(applicationParameters)
         {
-            _mainWindow->SetIcon(KMP_TEST_ICON_PATH);
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            mainWindow.SetIcon(KMP_TEST_ICON_PATH);
         }
     };
 
@@ -171,7 +174,8 @@ namespace Kmplete
         MetricsTestApplication(const ApplicationParameters& applicationParameters)
             : WindowApplication(applicationParameters)
         {
-            _mainWindow->SetEventCallback(KMP_BIND(MetricsTestApplication::OnEvent));
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            mainWindow.SetEventCallback(KMP_BIND(MetricsTestApplication::OnEvent));
         }
 
         KMP_NODISCARD std::string GetApplicationName() const noexcept override
@@ -181,10 +185,11 @@ namespace Kmplete
 
         void Run() override
         {
+            auto& mainWindow = _windowBackend->GetMainWindow();
             while (!_completed)
             {
-                _mainWindow->ProcessEvents();
-                _mainWindow->SwapBuffers();
+                mainWindow.ProcessEvents();
+                mainWindow.SwapBuffers();
             }
         }
 
@@ -385,7 +390,7 @@ TEST_CASE("Test window application save settings with cyrillic path", "[window_a
 
 TEST_CASE("Application metrics", "[window_application][application][metrics]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
+    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("", "Kmplete_window_application_tests_settings.json"));
 
     REQUIRE(application);
 
