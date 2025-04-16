@@ -26,12 +26,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<GraphicsBackend> GraphicsBackend::Create(BackendType type)
+    UPtr<GraphicsBackend> GraphicsBackend::Create(BackendType type)
     {
         switch (type)
         {
         case BackendType::OpenGL:
-            return CreatePtr<OpenGLGraphicsBackend>();
+            return CreateUPtr<OpenGLGraphicsBackend>();
         default:
             return nullptr;
         }

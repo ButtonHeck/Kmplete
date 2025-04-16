@@ -25,7 +25,7 @@ namespace Kmplete
         KMP_NODISCARD static BackendType StringToBackendType(const std::string& string) noexcept;
 
     public:
-        KMP_NODISCARD KMP_API static Ptr<GraphicsBackend> Create(BackendType type);
+        KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(BackendType type);
 
     public:
         KMP_DISABLE_COPY_MOVE(GraphicsBackend)

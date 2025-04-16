@@ -19,7 +19,6 @@ namespace Kmplete
         : Application(applicationParameters)
         , _windowBackend(nullptr)
         , _graphicsManager(nullptr)
-        , _graphicsBackend(nullptr)
     {
         Initialize();
     }
@@ -55,22 +54,10 @@ namespace Kmplete
 
         LoadSettingsInternal();
 
-        InitializeMainWindow();
-        InitializeGraphicsBackend();
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::InitializeMainWindow()
-    {
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
-    }
-    //--------------------------------------------------------------------------
 
-    void WindowApplication::InitializeGraphicsBackend()
-    {
-        _graphicsBackend = _graphicsManager->CreateBackend();
-        if (!_graphicsBackend)
+        if (!_graphicsManager->CreateBackend())
         {
             KMP_LOG_CORE_CRITICAL("WindowApplication: graphics backend initialization failed");
             throw std::runtime_error("WindowApplication: graphics backend initialization failed");
@@ -82,7 +69,6 @@ namespace Kmplete
     {
         SaveSettingsInternal();
 
-        _graphicsBackend.reset();
         _graphicsManager.reset();
         _windowBackend.reset();
     }

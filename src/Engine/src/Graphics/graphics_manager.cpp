@@ -30,10 +30,17 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Ptr<GraphicsBackend> GraphicsManager::CreateBackend()
+    bool GraphicsManager::CreateBackend()
     {
         _backend = GraphicsBackend::Create(_type);
-        return _backend;
+        return _backend != nullptr;
+    }
+    //--------------------------------------------------------------------------
+
+    GraphicsBackend& GraphicsManager::GetBackend()
+    {
+        KMP_ASSERT(_backend);
+        return *_backend;
     }
     //--------------------------------------------------------------------------
 }

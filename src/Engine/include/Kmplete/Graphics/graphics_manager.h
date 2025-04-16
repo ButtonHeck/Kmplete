@@ -18,11 +18,12 @@ namespace Kmplete
         KMP_API void SaveSettings(Settings& settings) const;
         KMP_API void LoadSettings(Settings& settings);
 
-        KMP_NODISCARD KMP_API Ptr<GraphicsBackend> CreateBackend();
+        KMP_NODISCARD KMP_API bool CreateBackend();
+        KMP_NODISCARD KMP_API GraphicsBackend& GetBackend();
 
     private:
         GraphicsBackend::BackendType _type;
-        Ptr<GraphicsBackend> _backend;
+        UPtr<GraphicsBackend> _backend;
     };
     //--------------------------------------------------------------------------
 }
