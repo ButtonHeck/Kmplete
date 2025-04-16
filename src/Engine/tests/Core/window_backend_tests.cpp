@@ -359,18 +359,17 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
-    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
-    REQUIRE(settings->name == "SomeWindow");
-    settings->width = 200;
-    settings->height = 200;
-    settings->windowedWidth = 200;
-    settings->windowedHeight = 200;
-    settings->vSync = true;
-    settings->updateContinuously = true;
+    Kmplete::Window::WindowSettings settings("SomeWindow");
+    REQUIRE(settings.name == "SomeWindow");
+    settings.width = 200;
+    settings.height = 200;
+    settings.windowedWidth = 200;
+    settings.windowedHeight = 200;
+    settings.vSync = true;
+    settings.updateContinuously = true;
     
     Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(*settings));
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
     REQUIRE(window);
 
     WindowCallbackUserSingleCondition windowCb(*window);
@@ -391,23 +390,22 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
-    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>(""));
-    REQUIRE(settings->name == "");
+    Kmplete::Window::WindowSettings settings("");
+    REQUIRE(settings.name == "");
 
     Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(*settings)); //expect exception during creation but catching it in window backend
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings)); //expect exception during creation but catching it in window backend
     REQUIRE_FALSE(window);
 
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with invalid settings", "Close this window", Kmplete::FileDialogs::MessageChoice::Ok);
 
-    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("ValidName-InvalidWidth"));
-    REQUIRE(settings->name == "ValidName-InvalidWidth");
-    settings->width = 65000;
-    settings->height = 200;
+    Kmplete::Window::WindowSettings settings2 = Kmplete::Window::WindowSettings("ValidName-InvalidWidth");
+    REQUIRE(settings2.name == "ValidName-InvalidWidth");
+    settings2.width = 65000;
+    settings2.height = 200;
 
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(*settings));
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings2));
     REQUIRE(window);
 
     while (!window->ShouldClose())
@@ -425,18 +423,17 @@ TEST_CASE("Window backend resizable OFF", "[core][window_backend][window]")
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
-    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
-    settings->width = 400;
-    settings->height = 400;
-    settings->windowedWidth = 400;
-    settings->windowedHeight = 400;
-    settings->vSync = true;
-    settings->updateContinuously = true;
-    settings->resizable = false;
+    Kmplete::Window::WindowSettings settings("SomeWindow");
+    settings.width = 400;
+    settings.height = 400;
+    settings.windowedWidth = 400;
+    settings.windowedHeight = 400;
+    settings.vSync = true;
+    settings.updateContinuously = true;
+    settings.resizable = false;
 
     Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(*settings));
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
     REQUIRE(window);
 
     WindowCallbackUserSingleCondition windowCb(*window);
@@ -458,18 +455,17 @@ TEST_CASE("Window backend decorated OFF", "[core][window_backend][window]")
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    Kmplete::Ptr<Kmplete::Window::WindowSettings> settings;
-    REQUIRE_NOTHROW(settings = Kmplete::CreatePtr<Kmplete::Window::WindowSettings>("SomeWindow"));
-    settings->width = 400;
-    settings->height = 400;
-    settings->windowedWidth = 400;
-    settings->windowedHeight = 400;
-    settings->vSync = true;
-    settings->updateContinuously = true;
-    settings->decorated = false;
+    Kmplete::Window::WindowSettings settings("SomeWindow");
+    settings.width = 400;
+    settings.height = 400;
+    settings.windowedWidth = 400;
+    settings.windowedHeight = 400;
+    settings.vSync = true;
+    settings.updateContinuously = true;
+    settings.decorated = false;
 
     Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(*settings));
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
     REQUIRE(window);
 
     WindowCallbackUserSingleCondition windowCb(*window);
