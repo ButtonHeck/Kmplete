@@ -23,9 +23,8 @@ TEST_CASE("Locale tests", "[localization][locale]")
     LocalizationManager localizationManager;
     localeC = std::setlocale(LC_ALL, NULL);
     auto currentLocale = localizationManager.GetLocale();
-    REQUIRE(std::string(localeC) == "C");
-    REQUIRE(std::locale().name() == "C");
-    REQUIRE(std::locale().name() == localizationManager.GetLocale());
+    REQUIRE(std::locale().name() == "*");
+    REQUIRE(std::string(localeC) == LocaleEnUTF8Keyword);
 
 // Only "C" and "POSIX" locales are supported under MinGW port of GCC and libstdc++.
 #if defined (KMP_COMPILER_MINGW)
@@ -50,7 +49,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
 #else
     // Set 'en_EN.UTF-8' locale
     REQUIRE_NOTHROW(ok = localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    REQUIRE(ok);
+    REQUIRE_FALSE(ok); // already set locale
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
@@ -149,11 +148,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
 TEST_CASE("Localization manager set/get locale", "[localization][locale]")
 {
     LocalizationManager localizationManager;
-
-    // set en_EN.UTF-8 first time
     bool ok = false;
-    REQUIRE_NOTHROW(ok = localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    REQUIRE(ok);
 
     LocaleStr localeStr = "";
     REQUIRE_NOTHROW(localeStr = localizationManager.GetLocale());
@@ -189,20 +184,20 @@ TEST_CASE("Localization manager callbacks", "[localization][locale]")
 
     REQUIRE_NOTHROW(localizationManager.AddLocaleChangedCallback([&](){ testValue++; }));
 
-    // en_EN.UTF-8
-    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
+    // ru_RU.UTF-8
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
     REQUIRE(testValue == 1);
 
     int anotherTestValue = 100;
     REQUIRE_NOTHROW(localizationManager.AddLocaleChangedCallback([&](){ anotherTestValue++; }));
 
-    // en_EN.UTF-8 again
-    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
+    // ru_RU.UTF-8 again
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
     REQUIRE(testValue == 1);
     REQUIRE(anotherTestValue == 100);
 
-    // ru_RU.UTF-8
-    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
+    // en_EN.UTF-8
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE(testValue == 2);
     REQUIRE(anotherTestValue == 101);
 }
