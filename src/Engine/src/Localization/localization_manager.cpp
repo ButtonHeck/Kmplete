@@ -16,7 +16,9 @@ namespace Kmplete
         : _localeGenerator()
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())
-    {}
+    {
+        SetLocale(LocaleEnUTF8Keyword);
+    }
     //--------------------------------------------------------------------------
 
     bool LocalizationManager::SetLocale(const LocaleStr& localeString)

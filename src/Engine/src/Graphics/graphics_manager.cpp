@@ -1,6 +1,5 @@
 #include "Kmplete/Graphics/graphics_manager.h"
 #include "Kmplete/Core/settings.h"
-#include "Kmplete/Core/log.h"
 #include "Kmplete/Core/assertion.h"
 
 namespace Kmplete
@@ -9,7 +8,7 @@ namespace Kmplete
     constexpr static auto GraphicsManagerAPIStr = "API";
 
     GraphicsManager::GraphicsManager() noexcept
-        : _type(GraphicsBackend::BackendType::Unknown)
+        : _type(GraphicsBackend::BackendType::OpenGL)
         , _backend(nullptr)
     {}
     //--------------------------------------------------------------------------
