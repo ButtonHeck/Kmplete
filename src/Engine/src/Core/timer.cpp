@@ -31,7 +31,11 @@ namespace Kmplete
 
     void Timer::SetTimeout(unsigned int timeoutMs) noexcept
     {
+        if (_timeoutMs == timeoutMs)
+            return;
+
         _timeoutMs = timeoutMs;
+        Mark();
     }
     //--------------------------------------------------------------------------
 
