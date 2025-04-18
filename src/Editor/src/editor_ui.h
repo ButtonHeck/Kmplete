@@ -54,7 +54,7 @@ namespace Kmplete
     private:
         UPtr<EditorUIImpl> _uiImpl;
         SystemMetricsManager& _systemMetricsManager;
-        const UPtr<EditorUICompositor> _compositor;
+        UPtr<EditorUICompositor> _compositor;
         Timer _metricsTimer;
     };
     //--------------------------------------------------------------------------

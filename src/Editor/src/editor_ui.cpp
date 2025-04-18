@@ -205,7 +205,7 @@ namespace Kmplete
 
     void EditorUI::ComposeStatusBar()
     {
-        _compositor->ComposeStatusBar();
+        _compositor->ComposeStatusBar(_metricsTimer);
     }
     //--------------------------------------------------------------------------
 
@@ -257,6 +257,7 @@ namespace Kmplete
     {
         settings.StartSaveObject(EditorUISettingsEntryName);
         settings.SaveUInt(EditorUIMetricsTimeoutStr, _metricsTimer.GetTimeout());
+        _compositor->SaveSettings(settings);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
@@ -265,6 +266,7 @@ namespace Kmplete
     {
         settings.StartLoadObject(EditorUISettingsEntryName);
         _metricsTimer.SetTimeout(settings.GetUInt(EditorUIMetricsTimeoutStr, 1000));
+        _compositor->LoadSettings(settings);
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------

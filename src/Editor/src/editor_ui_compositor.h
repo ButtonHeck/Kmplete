@@ -9,6 +9,8 @@ namespace Kmplete
 {
     class LocalizationManager;
     class SystemMetricsManager;
+    class Timer;
+    class Settings;
 
     class EditorUICompositor
     {
@@ -18,10 +20,13 @@ namespace Kmplete
         EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
 
         void ComposeMainArea();
-        void ComposeStatusBar();
+        void ComposeStatusBar(Timer& metricsTimer);
 
         KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
+
+        void SaveSettings(Settings& settings) const;
+        void LoadSettings(Settings& settings);
 
     private:
         void ComposeDefaultLayout();
@@ -41,6 +46,11 @@ namespace Kmplete
         void FillDictionary();
 
     private:
+        struct UIComponentsState
+        {
+            bool metricsFractional = true;
+        };
+
         struct UIPopupsState
         {
             bool quit = false;
@@ -50,6 +60,7 @@ namespace Kmplete
         Window& _mainWindow;
         LocalizationManager& _localizationManager;
         const SystemMetricsManager& _systemMetricsManager;
+        UIComponentsState _state;
         UIPopupsState _popups;
     };
     //--------------------------------------------------------------------------

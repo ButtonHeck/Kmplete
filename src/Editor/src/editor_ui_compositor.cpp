@@ -4,15 +4,21 @@
 #include "localization_base.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
+#include "Kmplete/Core/timer.h"
+#include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
 
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
 #include <misc/cpp/imgui_stdlib.h> // for ImGui::InputText wrappers for std::string
+#include <forkawesome-webfont.h>
 
 namespace Kmplete
 {
+    constexpr static auto EditorUICompositorSettingsEntryName = "EditorUICompositor";
+    constexpr static auto EditorUICompositorMetricsFractionalStr = "MetricsFractional";
+
     EditorUICompositor::EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
         : _mainWindow(mainWindow)
         , _localizationManager(localizationManager)
@@ -145,18 +151,52 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::ComposeStatusBar()
+    void EditorUICompositor::ComposeStatusBar(Timer& metricsTimer)
     {
+        ImGui::SetCursorPosX(8.0f);
+
+        if (ImGui::Button(ICON_FK_CLOCK_O))
+        {
+            ImGui::OpenPopup("StatusBarSettingsPopup");
+        }
+        UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Metrics update period (ms)"_sid).c_str());
+
+        if (ImGui::BeginPopup("StatusBarSettingsPopup"))
+        {
+            const char* intervals[] = {"500", "1000", "2000"};
+            for (auto intervalIndex = 0; intervalIndex < 3; intervalIndex++)
+            {
+                if (ImGui::Selectable(intervals[intervalIndex]))
+                {
+                    metricsTimer.SetTimeout(std::stoi(intervals[intervalIndex]));
+                }
+            }
+
+            ImGui::EndPopup();
+        }
+
+        ImGui::SameLine();
+
+        {
+            UiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border)} });
+            if (ImGui::Button(ICON_FK_PERCENT))
+            {
+                _state.metricsFractional = !_state.metricsFractional;
+            }
+        }
+        UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Show fractional"_sid).c_str());
+
+        ImGui::SameLine();
+
         const auto& currentMetrics = _systemMetricsManager.GetMetrics();
         std::ostringstream oss;
         oss.setf(std::ios::fixed);
-        oss.precision(2);
-        const auto metricsString = Utils::ToSStream(oss, 
-            "CPU: ", currentMetrics.cpuUsagePercent, "%, ", 
+        oss.precision(_state.metricsFractional ? 2 : 0);
+        const auto metricsString = Utils::ToSStream(oss,
+            "CPU: ", currentMetrics.cpuUsagePercent, "%, ",
             "PMem: ", currentMetrics.physicalMemoryUsedMib, "MiB, ",
             "VMem: ", currentMetrics.virtualMemoryUsedMib, "MiB").str();
 
-        ImGui::SetCursorPosX(8.0f);
         ImGui::TextUnformatted(metricsString.c_str());
     }
     //--------------------------------------------------------------------------
@@ -192,6 +232,22 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void EditorUICompositor::SaveSettings(Settings& settings) const
+    {
+        settings.StartSaveObject(EditorUICompositorSettingsEntryName);
+        settings.SaveBool(EditorUICompositorMetricsFractionalStr, _state.metricsFractional);
+        settings.EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUICompositor::LoadSettings(Settings& settings)
+    {
+        settings.StartLoadObject(EditorUICompositorSettingsEntryName);
+        _state.metricsFractional = settings.GetBool(EditorUICompositorMetricsFractionalStr, true);
+        settings.EndLoadObject();
+    }
+    //--------------------------------------------------------------------------
+
     void EditorUICompositor::FillDictionary()
     {
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "File");
@@ -199,6 +255,8 @@ namespace Kmplete
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Quit");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Fullscreen");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Language");
+        _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Metrics update period (ms)");
+        _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Show fractional");
     }
     //--------------------------------------------------------------------------
 }
