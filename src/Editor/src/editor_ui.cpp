@@ -1,4 +1,5 @@
 #include "editor_ui.h"
+#include "icons_font.h"
 #include "ui_utils.h"
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
@@ -37,6 +38,7 @@ namespace Kmplete
         _uiImpl.reset(EditorUIImpl::CreateImpl(mainWindow, graphicsBackendType));
 
         AddDefaultFont(dpiScale);
+        AddIconsFont(dpiScale);
         Stylize(dpiScale);
 
         _metricsTimer.Mark();
@@ -49,6 +51,20 @@ namespace Kmplete
         const auto fontSize = 18 * dpiScale;
         const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "/OpenSans-Regular.ttf");
         io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::AddIconsFont(float dpiScale) const
+    {
+        auto& io = ImGui::GetIO();
+        const auto fontSize = 18;
+        ImFontConfig iconsConfig;
+        iconsConfig.MergeMode = true;
+        iconsConfig.GlyphMinAdvanceX = fontSize;
+        iconsConfig.PixelSnapH = true;
+        iconsConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
+        static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+        io.Fonts->AddFontFromFileTTF(Utils::Concatenate(KMP_FONTS_FOLDER, "/forkawesome-webfont.ttf").c_str(), fontSize, &iconsConfig, iconsRanges);
     }
     //--------------------------------------------------------------------------
 

@@ -47,6 +47,7 @@ namespace Kmplete
     private:
         void Initialize(Window& mainWindow, float dpiScale, GraphicsBackend::BackendType graphicsBackendType);
         void AddDefaultFont(float dpiScale) const;
+        void AddIconsFont(float dpiScale) const;
         void Stylize(float dpiScale) const;
         void Finalize() const;
 
