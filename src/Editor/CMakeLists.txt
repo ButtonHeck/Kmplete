@@ -20,7 +20,6 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/ui_identifiers.h
     ${CMAKE_CURRENT_LIST_DIR}/src/shortcuts.h
     ${CMAKE_CURRENT_LIST_DIR}/src/localization_base.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/icons_font.h
 )
 source_group("Editor" FILES ${Kmplete_Editor_SOURCES})
 
@@ -61,6 +60,7 @@ target_include_directories(Kmplete_Editor
 
 target_link_libraries(Kmplete_Editor
     PRIVATE Kmplete_Engine
+    PRIVATE icons_fonts
 )
 
 if(MSVC)

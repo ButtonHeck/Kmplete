@@ -1,10 +1,10 @@
 #include "editor_ui.h"
-#include "icons_font.h"
 #include "ui_utils.h"
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 
 #include <imgui.h>
+#include <forkawesome-webfont.h>
 
 namespace Kmplete
 {
@@ -57,7 +57,7 @@ namespace Kmplete
     void EditorUI::AddIconsFont(float dpiScale) const
     {
         auto& io = ImGui::GetIO();
-        const auto fontSize = 18;
+        const auto fontSize = 18 * dpiScale;
         ImFontConfig iconsConfig;
         iconsConfig.MergeMode = true;
         iconsConfig.GlyphMinAdvanceX = fontSize;

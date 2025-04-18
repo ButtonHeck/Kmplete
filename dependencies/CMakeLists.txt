@@ -13,6 +13,10 @@ message("---- Kmplete dependencies: stb_image")
 add_subdirectory(stb_image)
 set_target_properties(stb_image PROPERTIES FOLDER Dependencies/stb_image)
 
+# icons_fonts
+message("---- Kmplete dependencies: icons_fonts")
+add_subdirectory(icons_fonts)
+
 
 ## Dependencies fetched via FetchContent
 ## --------------------------------------------------------
