@@ -1,24 +1,25 @@
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
+#include "Kmplete/Graphics/image.h"
 
 #include <glad/glad.h>
 
 namespace Kmplete
 {
-    OpenGLTexture::OpenGLTexture(const Path& filename, Image::Channels desiredChannels, bool flipVertically)
+    OpenGLTexture::OpenGLTexture(const Path& filename, ImageChannels desiredChannels, bool flipVertically)
         : Texture(filename, desiredChannels, flipVertically)
     {
         Load(Filesystem::ToGenericString(filename).c_str(), desiredChannels, flipVertically);
     }
     //--------------------------------------------------------------------------
 
-    OpenGLTexture::OpenGLTexture(const char* filename, Image::Channels desiredChannels, bool flipVertically)
+    OpenGLTexture::OpenGLTexture(const char* filename, ImageChannels desiredChannels, bool flipVertically)
         : Texture(filename, desiredChannels, flipVertically)
     {
         Load(filename, desiredChannels, flipVertically);
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLTexture::Load(const char* filename, Image::Channels desiredChannels, bool flipVertically)
+    void OpenGLTexture::Load(const char* filename, ImageChannels desiredChannels, bool flipVertically)
     {
         Image image(filename, desiredChannels, flipVertically);
         GLuint handle;

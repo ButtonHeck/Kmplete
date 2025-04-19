@@ -103,7 +103,7 @@ namespace Kmplete
 
     void WindowGlfw::SetIcon(const Path& path)
     {
-        Image img(path, Image::RGBAlpha);
+        Image img(path, ImageChannels::RGBAlpha);
         GLFWimage icon{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
 
         if (icon.pixels)

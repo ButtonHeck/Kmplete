@@ -7,11 +7,11 @@ namespace Kmplete
     class OpenGLTexture : public Texture
     {
     public:
-        KMP_API OpenGLTexture(const Path& filename, Image::Channels desiredChannels, bool flipVertically = false);
-        KMP_API OpenGLTexture(const char* filename, Image::Channels desiredChannels, bool flipVertically = false);
+        KMP_API OpenGLTexture(const Path& filename, ImageChannels desiredChannels, bool flipVertically = false);
+        KMP_API OpenGLTexture(const char* filename, ImageChannels desiredChannels, bool flipVertically = false);
 
     private:
-        void Load(const char* filename, Image::Channels desiredChannels, bool flipVertically);
+        void Load(const char* filename, ImageChannels desiredChannels, bool flipVertically);
     };
     //--------------------------------------------------------------------------
 }

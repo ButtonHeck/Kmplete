@@ -85,6 +85,7 @@ set(Kmplete_Engine_JSON
 source_group("Json" FILES ${Kmplete_Engine_JSON})
 
 set(Kmplete_Engine_GRAPHICS
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_manager.h
