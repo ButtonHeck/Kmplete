@@ -157,8 +157,8 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
-    PUBLIC KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons\"
-    PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts\"
+    PUBLIC KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
+    PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
     PRIVATE KMP_EXPORTS
     PRIVATE KMP_ENGINE_PRIVATE
     INTERFACE KMP_ENGINE_INTERFACE
