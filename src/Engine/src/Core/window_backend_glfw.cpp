@@ -289,7 +289,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(Settings& settings) const
     {
-        settings.StartSaveObject(WindowBackendSettingsEntryName);
+        settings.StartSaveObject(SettingsEntryName);
 
         SaveMainWindowSettings(settings);
         SaveAuxWindowsSettings(settings);
@@ -349,7 +349,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadSettings(Settings& settings)
     {
-        settings.StartLoadObject(WindowBackendSettingsEntryName);
+        settings.StartLoadObject(SettingsEntryName);
 
         LoadMainWindowSettings(settings);
         LoadAuxWindowsSettings(settings);

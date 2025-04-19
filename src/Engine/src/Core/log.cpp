@@ -22,17 +22,17 @@
 
 namespace Kmplete
 {
-    constexpr static auto LogSettingsEntryName = "Log";
-    constexpr static auto LogFilenameStr = "Filename";
-    constexpr static auto LogEnabledStr = "Enabled";
-    constexpr static auto LogTruncateStr = "Truncate";
-    constexpr static auto LogOutputConsoleStr = "OutputConsole";
-    constexpr static auto LogOutputFileStr = "OutputFile";
-    constexpr static auto LogOutputStringBufferStr = "OutputStringBuffer";
-    constexpr static auto LogCoreLevelStr = "CoreLevel";
-    constexpr static auto LogCoreLevelFlushStr = "CoreLevelFlush";
-    constexpr static auto LogClientLevelStr = "ClientLevel";
-    constexpr static auto LogClientLevelFlushStr = "ClientLevelFlush";
+    constexpr static auto SettingsEntryName = "Log";
+    constexpr static auto FilenameStr = "Filename";
+    constexpr static auto EnabledStr = "Enabled";
+    constexpr static auto TruncateStr = "Truncate";
+    constexpr static auto OutputConsoleStr = "OutputConsole";
+    constexpr static auto OutputFileStr = "OutputFile";
+    constexpr static auto OutputStringBufferStr = "OutputStringBuffer";
+    constexpr static auto CoreLevelStr = "CoreLevel";
+    constexpr static auto CoreLevelFlushStr = "CoreLevelFlush";
+    constexpr static auto ClientLevelStr = "ClientLevel";
+    constexpr static auto ClientLevelFlushStr = "ClientLevelFlush";
 
     Log::LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_coreLogger;
@@ -183,34 +183,34 @@ namespace Kmplete
 
     void Log::SaveSettings(Settings& settings)
     {
-        settings.StartSaveObject(LogSettingsEntryName);
-        settings.SaveString(LogFilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
-        settings.SaveBool(LogEnabledStr, _logSettings.enabled);
-        settings.SaveBool(LogTruncateStr, _logSettings.truncate);
-        settings.SaveBool(LogOutputConsoleStr, _logSettings.outputConsole);
-        settings.SaveBool(LogOutputFileStr, _logSettings.outputFile);
-        settings.SaveBool(LogOutputStringBufferStr, _logSettings.outputStringBuffer);
-        settings.SaveInt(LogCoreLevelStr, _logSettings.coreLevel);
-        settings.SaveInt(LogCoreLevelFlushStr, _logSettings.coreLevelFlush);
-        settings.SaveInt(LogClientLevelStr, _logSettings.clientLevel);
-        settings.SaveInt(LogClientLevelFlushStr, _logSettings.clientLevelFlush);
+        settings.StartSaveObject(SettingsEntryName);
+        settings.SaveString(FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
+        settings.SaveBool(EnabledStr, _logSettings.enabled);
+        settings.SaveBool(TruncateStr, _logSettings.truncate);
+        settings.SaveBool(OutputConsoleStr, _logSettings.outputConsole);
+        settings.SaveBool(OutputFileStr, _logSettings.outputFile);
+        settings.SaveBool(OutputStringBufferStr, _logSettings.outputStringBuffer);
+        settings.SaveInt(CoreLevelStr, _logSettings.coreLevel);
+        settings.SaveInt(CoreLevelFlushStr, _logSettings.coreLevelFlush);
+        settings.SaveInt(ClientLevelStr, _logSettings.clientLevel);
+        settings.SaveInt(ClientLevelFlushStr, _logSettings.clientLevelFlush);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void Log::LoadSettings(Settings& settings)
     {
-        settings.StartLoadObject(LogSettingsEntryName);
-        _logSettings.filename = Utils::Utf8ToNarrow(settings.GetString(LogFilenameStr, "Kmplete_log.txt"));
-        _logSettings.enabled = settings.GetBool(LogEnabledStr, true);
-        _logSettings.truncate = settings.GetBool(LogTruncateStr, false);
-        _logSettings.outputConsole = settings.GetBool(LogOutputConsoleStr, true);
-        _logSettings.outputFile = settings.GetBool(LogOutputFileStr, true);
-        _logSettings.outputStringBuffer = settings.GetBool(LogOutputStringBufferStr, false);
-        _logSettings.coreLevel = settings.GetInt(LogCoreLevelStr, spdlog::level::trace);
-        _logSettings.coreLevelFlush = settings.GetInt(LogCoreLevelFlushStr, spdlog::level::trace);
-        _logSettings.clientLevel = settings.GetInt(LogClientLevelStr, spdlog::level::trace);
-        _logSettings.clientLevelFlush = settings.GetInt(LogClientLevelFlushStr, spdlog::level::trace);
+        settings.StartLoadObject(SettingsEntryName);
+        _logSettings.filename = Utils::Utf8ToNarrow(settings.GetString(FilenameStr, "Kmplete_log.txt"));
+        _logSettings.enabled = settings.GetBool(EnabledStr, true);
+        _logSettings.truncate = settings.GetBool(TruncateStr, false);
+        _logSettings.outputConsole = settings.GetBool(OutputConsoleStr, true);
+        _logSettings.outputFile = settings.GetBool(OutputFileStr, true);
+        _logSettings.outputStringBuffer = settings.GetBool(OutputStringBufferStr, false);
+        _logSettings.coreLevel = settings.GetInt(CoreLevelStr, spdlog::level::trace);
+        _logSettings.coreLevelFlush = settings.GetInt(CoreLevelFlushStr, spdlog::level::trace);
+        _logSettings.clientLevel = settings.GetInt(ClientLevelStr, spdlog::level::trace);
+        _logSettings.clientLevelFlush = settings.GetInt(ClientLevelFlushStr, spdlog::level::trace);
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------

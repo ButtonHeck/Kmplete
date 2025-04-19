@@ -13,7 +13,7 @@
 
 namespace Kmplete
 {
-    constexpr static auto WindowAppSettingsEntryName = "WindowApplication";
+    constexpr static auto SettingsEntryName = "WindowApplication";
 
     WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
         : Application(applicationParameters)
@@ -76,7 +76,7 @@ namespace Kmplete
 
     void WindowApplication::SaveSettingsInternal() const
     {
-        auto settings = _settingsManager->PutSettings(WindowAppSettingsEntryName);
+        auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
             KMP_LOG_CORE_WARN("WindowApplication: failed to create settings entry for saving");
@@ -90,7 +90,7 @@ namespace Kmplete
 
     void WindowApplication::LoadSettingsInternal()
     {
-        const auto settings = _settingsManager->GetSettings(WindowAppSettingsEntryName);
+        const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {
             KMP_LOG_CORE_WARN("WindowApplication: failed to get setting entry for loading");

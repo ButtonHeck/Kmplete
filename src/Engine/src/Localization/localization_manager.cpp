@@ -9,8 +9,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto LocalizationManagerSettingsEntryName = "LocalizationManager";
-    constexpr static auto LocalizationManagerLocaleStr = "Locale";
+    constexpr static auto SettingsEntryName = "LocalizationManager";
+    constexpr static auto SettingsLocaleStr = "Locale";
 
     LocalizationManager::LocalizationManager() noexcept
         : _localeGenerator()
@@ -86,16 +86,16 @@ namespace Kmplete
 
     void LocalizationManager::SaveSettings(Settings& settings) const
     {
-        settings.StartSaveObject(LocalizationManagerSettingsEntryName);
-        settings.SaveString(LocalizationManagerLocaleStr, _currentLocale);
+        settings.StartSaveObject(SettingsEntryName);
+        settings.SaveString(SettingsLocaleStr, _currentLocale);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void LocalizationManager::LoadSettings(Settings& settings)
     {
-        settings.StartLoadObject(LocalizationManagerSettingsEntryName);
-        const auto localeStr = settings.GetString(LocalizationManagerLocaleStr, LocaleEnUTF8Keyword);
+        settings.StartLoadObject(SettingsEntryName);
+        const auto localeStr = settings.GetString(SettingsLocaleStr, LocaleEnUTF8Keyword);
         SetLocale(localeStr);
         settings.EndLoadObject();
     }

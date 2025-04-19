@@ -8,8 +8,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto EditorUISettingsEntryName = "EditorUI";
-    constexpr static auto EditorUIMetricsTimeoutStr = "MetricsTimeout";
+    constexpr static auto SettingsEntryName = "EditorUI";
+    constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
     EditorUI::EditorUI(Window& mainWindow, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackend::BackendType graphicsBackendType)
         : _uiImpl(nullptr)
@@ -255,8 +255,8 @@ namespace Kmplete
 
     void EditorUI::SaveSettings(Settings& settings) const
     {
-        settings.StartSaveObject(EditorUISettingsEntryName);
-        settings.SaveUInt(EditorUIMetricsTimeoutStr, _metricsTimer.GetTimeout());
+        settings.StartSaveObject(SettingsEntryName);
+        settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
         _compositor->SaveSettings(settings);
         settings.EndSaveObject();
     }
@@ -264,8 +264,8 @@ namespace Kmplete
 
     void EditorUI::LoadSettings(Settings& settings)
     {
-        settings.StartLoadObject(EditorUISettingsEntryName);
-        _metricsTimer.SetTimeout(settings.GetUInt(EditorUIMetricsTimeoutStr, 1000));
+        settings.StartLoadObject(SettingsEntryName);
+        _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
         _compositor->LoadSettings(settings);
         settings.EndLoadObject();
     }

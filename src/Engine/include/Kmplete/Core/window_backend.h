@@ -12,7 +12,7 @@ namespace Kmplete
     class WindowBackend
     {
     protected:
-        constexpr static auto WindowBackendSettingsEntryName = "WindowBackend";
+        constexpr static auto SettingsEntryName = "WindowBackend";
         constexpr static auto MainWindowStr = "MainWindow";
         constexpr static auto AuxWindowsStr = "AuxWindows";
 

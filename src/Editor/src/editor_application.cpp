@@ -24,7 +24,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    constexpr static auto EditorAppSettingsEntryName = "EditorApplication";
+    constexpr static auto SettingsEntryName = "EditorApplication";
 
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
         : WindowApplication(applicationParameters)
@@ -126,7 +126,7 @@ namespace Kmplete
 
     void EditorApplication::SaveSettingsInternal() const
     {
-        auto settings = _settingsManager->PutSettings(EditorAppSettingsEntryName);
+        auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
             KMP_LOG_CLIENT_WARN("EditorApplication: failed to create settings entry for saving");
@@ -139,7 +139,7 @@ namespace Kmplete
 
     void EditorApplication::LoadSettingsInternal()
     {
-        const auto settings = _settingsManager->GetSettings(EditorAppSettingsEntryName);
+        const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {
             KMP_LOG_CLIENT_WARN("EditorApplication: failed to get setting entry for loading");

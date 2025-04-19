@@ -18,8 +18,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto EditorUICompositorSettingsEntryName = "EditorUICompositor";
-    constexpr static auto EditorUICompositorMetricsFractionalStr = "MetricsFractional";
+    constexpr static auto SettingsEntryName = "EditorUICompositor";
+    constexpr static auto MetricsFractionalStr = "MetricsFractional";
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
         : _mainWindow(mainWindow)
@@ -238,16 +238,16 @@ namespace Kmplete
 
     void EditorUICompositor::SaveSettings(Settings& settings) const
     {
-        settings.StartSaveObject(EditorUICompositorSettingsEntryName);
-        settings.SaveBool(EditorUICompositorMetricsFractionalStr, _state.metricsFractional);
+        settings.StartSaveObject(SettingsEntryName);
+        settings.SaveBool(MetricsFractionalStr, _state.metricsFractional);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void EditorUICompositor::LoadSettings(Settings& settings)
     {
-        settings.StartLoadObject(EditorUICompositorSettingsEntryName);
-        _state.metricsFractional = settings.GetBool(EditorUICompositorMetricsFractionalStr, true);
+        settings.StartLoadObject(SettingsEntryName);
+        _state.metricsFractional = settings.GetBool(MetricsFractionalStr, true);
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------

@@ -4,8 +4,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto GraphicsManagerSettingsEntryName = "GraphicsManager";
-    constexpr static auto GraphicsManagerAPIStr = "API";
+    constexpr static auto SettingsEntryName = "GraphicsManager";
+    constexpr static auto APIStr = "API";
 
     GraphicsManager::GraphicsManager() noexcept
         : _type(GraphicsBackend::BackendType::OpenGL)
@@ -15,16 +15,16 @@ namespace Kmplete
 
     void GraphicsManager::SaveSettings(Settings& settings) const
     {
-        settings.StartSaveObject(GraphicsManagerSettingsEntryName);
-        settings.SaveString(GraphicsManagerAPIStr, GraphicsBackend::BackendTypeToString(_type));
+        settings.StartSaveObject(SettingsEntryName);
+        settings.SaveString(APIStr, GraphicsBackend::BackendTypeToString(_type));
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
     void GraphicsManager::LoadSettings(Settings& settings)
     {
-        settings.StartLoadObject(GraphicsManagerSettingsEntryName);
-        _type = GraphicsBackend::StringToBackendType(settings.GetString(GraphicsManagerAPIStr, GraphicsBackend::DefaultAPIStr));
+        settings.StartLoadObject(SettingsEntryName);
+        _type = GraphicsBackend::StringToBackendType(settings.GetString(APIStr, GraphicsBackend::DefaultAPIStr));
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
