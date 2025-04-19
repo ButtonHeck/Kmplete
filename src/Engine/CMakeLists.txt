@@ -88,15 +88,19 @@ set(Kmplete_Engine_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
 )
 source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
 
 set(Kmplete_Engine_GRAPHICS_OPENGL
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_texture.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
 )
 source_group("Graphics/OpenGL" FILES ${Kmplete_Engine_GRAPHICS_OPENGL})
 
@@ -152,6 +156,7 @@ target_compile_definitions(Kmplete_Engine
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
+    PUBLIC KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons\"
     PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts\"
     PRIVATE KMP_EXPORTS
     PRIVATE KMP_ENGINE_PRIVATE

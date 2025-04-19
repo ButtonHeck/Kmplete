@@ -9,6 +9,8 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
 
+#include "Kmplete/Graphics/OpenGL/opengl_texture.h" // TODO remove after refactoring
+
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
 #include <misc/cpp/imgui_stdlib.h> // for ImGui::InputText wrappers for std::string
@@ -49,8 +51,10 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenu()
     {
+        static const OpenGLTexture testTexture = OpenGLTexture(Utils::Concatenate(KMP_ICONS_FOLDER, "/flag_russia_128.png"), Image::RGB, false); //TODO remove test
         if (ImGui::BeginMenuBar())
         {
+            ImGui::ImageButton(static_cast<ImTextureID>(testTexture.GetHandle()), ImVec2{24, 24});
             ComposeMenuFile();
             ComposeMenuView();
             ComposeMenuLanguage();
