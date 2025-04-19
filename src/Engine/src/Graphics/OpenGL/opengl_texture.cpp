@@ -33,17 +33,17 @@ namespace Kmplete
         const auto width = image.GetWidth();
         const auto height = image.GetHeight();
         const auto data = image.GetPixels();
-        if (imageChannels == 4)
+        if (imageChannels == ImageChannels::RGBAlpha)
         {
             internalFormat = GL_RGBA8;
             dataFormat = GL_RGBA;
         }
-        else if (imageChannels == 3)
+        else if (imageChannels == ImageChannels::RGB)
         {
             internalFormat = GL_RGB8;
             dataFormat = GL_RGB;
         }
-        else if (imageChannels == 1)
+        else if (imageChannels == ImageChannels::Grey)
         {
             internalFormat = GL_R8;
             dataFormat = GL_RED;
