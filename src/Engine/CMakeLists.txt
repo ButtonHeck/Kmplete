@@ -2,10 +2,10 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-project(Kmplete_Engine LANGUAGES CXX)
+project(Kmplete LANGUAGES CXX)
 
 
-set(Kmplete_Engine_CORE
+set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/kmplete_api.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/platform.h
@@ -44,25 +44,25 @@ set(Kmplete_Engine_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/system_metrics_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/timer.cpp
 )
-source_group("Core" FILES ${Kmplete_Engine_CORE})
+source_group("Core" FILES ${Kmplete_CORE})
 
-set(Kmplete_Engine_APPLICATION
+set(Kmplete_APPLICATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/window_application.cpp
 )
-source_group("Application" FILES ${Kmplete_Engine_APPLICATION})
+source_group("Application" FILES ${Kmplete_APPLICATION})
 
-set(Kmplete_Engine_UTILS
+set(Kmplete_UTILS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_id.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Utils/string_utils.cpp
 )
-source_group("Utils" FILES ${Kmplete_Engine_UTILS})
+source_group("Utils" FILES ${Kmplete_UTILS})
 
-set(Kmplete_Engine_EVENT
+set(Kmplete_EVENT
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_codes.h
@@ -70,9 +70,9 @@ set(Kmplete_Engine_EVENT
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_codes.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/window_event.h
 )
-source_group("Event" FILES ${Kmplete_Engine_EVENT})
+source_group("Event" FILES ${Kmplete_EVENT})
 
-set(Kmplete_Engine_JSON
+set(Kmplete_JSON
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_document.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_reader.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_writer.h
@@ -82,9 +82,9 @@ set(Kmplete_Engine_JSON
     ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_scope.cpp    
 )
-source_group("Json" FILES ${Kmplete_Engine_JSON})
+source_group("Json" FILES ${Kmplete_JSON})
 
-set(Kmplete_Engine_GRAPHICS
+set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
@@ -95,17 +95,17 @@ set(Kmplete_Engine_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
 )
-source_group("Graphics" FILES ${Kmplete_Engine_GRAPHICS})
+source_group("Graphics" FILES ${Kmplete_GRAPHICS})
 
-set(Kmplete_Engine_GRAPHICS_OPENGL
+set(Kmplete_GRAPHICS_OPENGL
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_texture.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
 )
-source_group("Graphics/OpenGL" FILES ${Kmplete_Engine_GRAPHICS_OPENGL})
+source_group("Graphics/OpenGL" FILES ${Kmplete_GRAPHICS_OPENGL})
 
-set(Kmplete_Engine_LOCALIZATION
+set(Kmplete_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_translator.h
@@ -117,24 +117,24 @@ set(Kmplete_Engine_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_library.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_dictionary.cpp
 )
-source_group("Localization" FILES ${Kmplete_Engine_LOCALIZATION})
+source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
-add_library(Kmplete_Engine
-    ${Kmplete_Engine_CORE}
-    ${Kmplete_Engine_APPLICATION}
-    ${Kmplete_Engine_UTILS}
-    ${Kmplete_Engine_EVENT}
-    ${Kmplete_Engine_JSON}
-    ${Kmplete_Engine_GRAPHICS}
-    ${Kmplete_Engine_GRAPHICS_OPENGL}
-    ${Kmplete_Engine_LOCALIZATION}
+add_library(Kmplete
+    ${Kmplete_CORE}
+    ${Kmplete_APPLICATION}
+    ${Kmplete_UTILS}
+    ${Kmplete_EVENT}
+    ${Kmplete_JSON}
+    ${Kmplete_GRAPHICS}
+    ${Kmplete_GRAPHICS_OPENGL}
+    ${Kmplete_LOCALIZATION}
 )
 
 
-SetupBoost(Kmplete_Engine)
-SetupCompilerOptions(Kmplete_Engine)
+SetupBoost(Kmplete)
+SetupCompilerOptions(Kmplete)
 
-target_include_directories(Kmplete_Engine
+target_include_directories(Kmplete
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
     PUBLIC "${RapidJSON_SOURCE_DIR}/include"
@@ -145,14 +145,14 @@ target_include_directories(Kmplete_Engine
 
 option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)
 if(${KMPLETE_USE_WINDOW_BACKEND_GLFW})
-    target_compile_definitions(Kmplete_Engine PUBLIC 
+    target_compile_definitions(Kmplete PUBLIC 
         KMP_WINDOW_BACKEND_GLFW
     )
 else()
     message(SEND_ERROR "No window backend is chosen")
 endif()
 
-target_compile_definitions(Kmplete_Engine
+target_compile_definitions(Kmplete
     PUBLIC $<$<CONFIG:Production>:KMP_LOG_DISABLED>
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
@@ -164,8 +164,8 @@ target_compile_definitions(Kmplete_Engine
     INTERFACE KMP_ENGINE_INTERFACE
 )
 
-target_link_libraries(Kmplete_Engine 
-    PUBLIC Kmplete_Version
+target_link_libraries(Kmplete 
+    PUBLIC VersionLib
     PUBLIC glfw
     PUBLIC spdlog
     
@@ -173,7 +173,7 @@ target_link_libraries(Kmplete_Engine
     PRIVATE glad
 )
 
-set_target_properties(Kmplete_Engine PROPERTIES 
+set_target_properties(Kmplete PROPERTIES 
     FOLDER Kmplete/Engine
 )
 
@@ -185,9 +185,9 @@ endif()
 # Localization
 # --------------------------
 
-set(KmpleteEngineDomain "Engine")
-target_compile_definitions(Kmplete_Engine
-    PUBLIC KMP_TR_DOMAIN_ENGINE=\"${KmpleteEngineDomain}\"
+set(KmpleteDomain "Engine")
+target_compile_definitions(Kmplete
+    PUBLIC KMP_TR_DOMAIN_ENGINE=\"${KmpleteDomain}\"
 )
 
-CreateTranslationHelperTargets(Kmplete_Engine Kmplete/Engine po_update.sh po_compile.sh ${KmpleteEngineDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)
+CreateTranslationHelperTargets(Kmplete Kmplete/Engine po_update.sh po_compile.sh ${KmpleteDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)

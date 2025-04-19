@@ -2,9 +2,9 @@
 
 cmake_minimum_required(VERSION 3.20)
 
-project(Kmplete_Editor LANGUAGES CXX)
+project(Editor LANGUAGES CXX)
 
-set(Kmplete_Editor_SOURCES
+set(Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.h
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui.h
@@ -21,17 +21,17 @@ set(Kmplete_Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/shortcuts.h
     ${CMAKE_CURRENT_LIST_DIR}/src/localization_base.h
 )
-source_group("Editor" FILES ${Kmplete_Editor_SOURCES})
+source_group("Editor" FILES ${Editor_SOURCES})
 
 if(WIN32)
     set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/resource.h" "${CMAKE_CURRENT_BINARY_DIR}/resource.h" COPYONLY)
-    set(Kmplete_Editor_WINRC
+    set(Editor_WINRC
         "${CMAKE_CURRENT_BINARY_DIR}/resource.h"
         "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc"
     )
-    source_group("Resources" FILES ${Kmplete_Editor_WINRC})
+    source_group("Resources" FILES ${Editor_WINRC})
 endif()
 
 aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
@@ -42,9 +42,9 @@ source_group("Imgui" FILES
     ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
 )
 
-add_executable(Kmplete_Editor
-    ${Kmplete_Editor_SOURCES}
-    ${Kmplete_Editor_WINRC}
+add_executable(Editor
+    ${Editor_SOURCES}
+    ${Editor_WINRC}
     ${IMGUI_SOURCES}
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
@@ -52,56 +52,56 @@ add_executable(Kmplete_Editor
 )
 
 
-SetupCompilerOptions(Kmplete_Editor)
+SetupCompilerOptions(Editor)
 
-target_include_directories(Kmplete_Editor
+target_include_directories(Editor
     PRIVATE ${imgui_SOURCE_DIR}
 )
 
-target_link_libraries(Kmplete_Editor
-    PRIVATE Kmplete_Engine
+target_link_libraries(Editor
+    PRIVATE Kmplete
     PRIVATE icons_fonts
 )
 
 if(MSVC)
-    target_link_options(Kmplete_Editor 
+    target_link_options(Editor 
         PRIVATE $<$<CONFIG:RELWITHDEBINFO>:/PROFILE>
     )
     
     set_property(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} PROPERTY 
-        VS_STARTUP_PROJECT Kmplete_Editor
+        VS_STARTUP_PROJECT Editor
     )
     
     set_property(DIRECTORY ${CMAKE_BINARY_DIR} PROPERTY 
-        VS_STARTUP_PROJECT Kmplete_Editor
+        VS_STARTUP_PROJECT Editor
     )
     
-    set_target_properties(Kmplete_Editor PROPERTIES
+    set_target_properties(Editor PROPERTIES
         VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
     )
     
 endif()
 
-set_target_properties(Kmplete_Editor PROPERTIES 
+set_target_properties(Editor PROPERTIES 
     FOLDER Kmplete/Editor
 )
 
-set(KmpleteCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
-file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteCopySettingsScriptName}"
+set(EditorCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${EditorCopySettingsScriptName}"
     CONTENT
     [=[
-    if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
+    if (NOT EXISTS "$<TARGET_FILE_DIR:Editor>/Kmplete_settings.json")
     execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
         "${resources_folder}/json/Kmplete_settings_example.json"
-        "$<TARGET_FILE_DIR:Kmplete_Editor>/Kmplete_settings.json")
+        "$<TARGET_FILE_DIR:Editor>/Kmplete_settings.json")
     endif() 
     ]=]
 )
 
 add_custom_command(
-    TARGET Kmplete_Editor
+    TARGET Editor
     POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P ${KmpleteCopySettingsScriptName}
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P ${EditorCopySettingsScriptName}
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
@@ -109,24 +109,24 @@ add_custom_command(
 # Localization
 # --------------------------
 
-set(KmpleteEditorDomain "Editor")
-target_compile_definitions(Kmplete_Editor
-    PRIVATE KMP_TR_DOMAIN_EDITOR=\"${KmpleteEditorDomain}\"
+set(EditorDomain "Editor")
+target_compile_definitions(Editor
+    PRIVATE KMP_TR_DOMAIN_EDITOR=\"${EditorDomain}\"
 )
 
-get_target_property(exeDir Kmplete_Editor RUNTIME_OUTPUT_DIRECTORY)
-add_custom_target(Kmplete_Editor_copy_translations
-    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Kmplete_Editor done"
+get_target_property(exeDir Editor RUNTIME_OUTPUT_DIRECTORY)
+add_custom_target(Editor_copy_translations
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Editor done"
 )
-add_custom_command(TARGET Kmplete_Editor_copy_translations PRE_BUILD
+add_custom_command(TARGET Editor_copy_translations PRE_BUILD
     COMMAND ${CMAKE_COMMAND}
     "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale;${CMAKE_CURRENT_LIST_DIR}/../Engine/locale" 
     -P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
 )
-set_target_properties(Kmplete_Editor_copy_translations PROPERTIES
+set_target_properties(Editor_copy_translations PROPERTIES
     FOLDER Kmplete/Editor
 )
 
-add_dependencies(Kmplete_Editor Kmplete_Editor_copy_translations)
+add_dependencies(Editor Editor_copy_translations)
 
-CreateTranslationHelperTargets(Kmplete_Editor Kmplete/Editor po_update.sh po_compile.sh ${KmpleteEditorDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)
+CreateTranslationHelperTargets(Editor Kmplete/Editor po_update.sh po_compile.sh ${EditorDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)

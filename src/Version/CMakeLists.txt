@@ -16,16 +16,16 @@ endif()
 
 configure_file(kmplete_version.cpp.in kmplete_version.cpp @ONLY)
 
-add_library(Kmplete_Version STATIC 
+add_library(VersionLib STATIC 
     ${CMAKE_CURRENT_LIST_DIR}/kmplete_version.h
     ${CMAKE_CURRENT_BINARY_DIR}/kmplete_version.cpp
 )
 
-set_target_properties(Kmplete_Version PROPERTIES 
+set_target_properties(VersionLib PROPERTIES 
     FOLDER Kmplete
     POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
 )
 
-target_include_directories(Kmplete_Version 
+target_include_directories(VersionLib 
     PUBLIC ${CMAKE_CURRENT_LIST_DIR}
 )
