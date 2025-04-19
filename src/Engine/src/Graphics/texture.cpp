@@ -2,12 +2,12 @@
 
 namespace Kmplete
 {
-    Texture::Texture(const Path &, ImageChannels, bool)
+    Texture::Texture(const Path&, bool)
         : _handle(0)
     {}
     //--------------------------------------------------------------------------
 
-    Texture::Texture(const char*, ImageChannels, bool)
+    Texture::Texture(const char*, bool)
         : _handle(0)
     {}
     //--------------------------------------------------------------------------

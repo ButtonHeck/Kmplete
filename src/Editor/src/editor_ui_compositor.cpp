@@ -51,7 +51,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenu()
     {
-        static const OpenGLTexture testTexture = OpenGLTexture(Utils::Concatenate(KMP_ICONS_FOLDER, "/flag_russia_128.png"), ImageChannels::RGB, false); //TODO remove test
+        static const OpenGLTexture testTexture = OpenGLTexture(Utils::Concatenate(KMP_ICONS_FOLDER, "/flag_russia_128.png")); //TODO remove test
         if (ImGui::BeginMenuBar())
         {
             ImGui::ImageButton(static_cast<ImTextureID>(testTexture.GetHandle()), ImVec2{24, 24});

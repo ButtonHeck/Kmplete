@@ -5,23 +5,23 @@
 
 namespace Kmplete
 {
-    OpenGLTexture::OpenGLTexture(const Path& filename, ImageChannels desiredChannels, bool flipVertically)
-        : Texture(filename, desiredChannels, flipVertically)
+    OpenGLTexture::OpenGLTexture(const Path& filename, bool flipVertically)
+        : Texture(filename, flipVertically)
     {
-        Load(Filesystem::ToGenericString(filename).c_str(), desiredChannels, flipVertically);
+        Load(Filesystem::ToGenericString(filename).c_str(), flipVertically);
     }
     //--------------------------------------------------------------------------
 
-    OpenGLTexture::OpenGLTexture(const char* filename, ImageChannels desiredChannels, bool flipVertically)
-        : Texture(filename, desiredChannels, flipVertically)
+    OpenGLTexture::OpenGLTexture(const char* filename, bool flipVertically)
+        : Texture(filename, flipVertically)
     {
-        Load(filename, desiredChannels, flipVertically);
+        Load(filename, flipVertically);
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLTexture::Load(const char* filename, ImageChannels desiredChannels, bool flipVertically)
+    void OpenGLTexture::Load(const char* filename, bool flipVertically)
     {
-        Image image(filename, desiredChannels, flipVertically);
+        Image image(filename, flipVertically);
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
         glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // TODO abstraction
