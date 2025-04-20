@@ -3,10 +3,10 @@
 
 namespace Kmplete
 {
-    EditorUIImpl* EditorUIImpl::CreateImpl(Window& mainWindow, GraphicsBackend::BackendType graphicsBackendType)
+    EditorUIImpl* EditorUIImpl::CreateImpl(Window& mainWindow, GraphicsBackendType graphicsBackendType)
     {
 #if defined (KMP_WINDOW_BACKEND_GLFW)
-        if (graphicsBackendType == GraphicsBackend::BackendType::OpenGL)
+        if (graphicsBackendType == GraphicsBackendType::OpenGL)
         {
             return new EditorUIImplOpenglGLFW(mainWindow);
         }

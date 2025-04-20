@@ -3,38 +3,27 @@
 
 namespace Kmplete
 {
-    std::string GraphicsBackend::BackendTypeToString(BackendType type) noexcept
+    UPtr<GraphicsBackend> GraphicsBackend::Create(GraphicsBackendType type)
     {
         switch (type)
         {
-        case BackendType::OpenGL:
-            return OpenGLStr;
-        default:
-            return UnknownStr;
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    GraphicsBackend::BackendType GraphicsBackend::StringToBackendType(const std::string& string) noexcept
-    {
-        if (string == OpenGLStr)
-        {
-            return BackendType::OpenGL;
-        }
-
-        return BackendType::Unknown;
-    }
-    //--------------------------------------------------------------------------
-
-    UPtr<GraphicsBackend> GraphicsBackend::Create(BackendType type)
-    {
-        switch (type)
-        {
-        case BackendType::OpenGL:
+        case GraphicsBackendType::OpenGL:
             return CreateUPtr<OpenGLGraphicsBackend>();
         default:
             return nullptr;
         }
+    }
+    //--------------------------------------------------------------------------
+
+    GraphicsBackend::GraphicsBackend(GraphicsBackendType type)
+        : _type(type)
+        , _textureManager(CreateUPtr<TextureManager>(type))
+    {}
+    //--------------------------------------------------------------------------
+
+    GraphicsBackendType GraphicsBackend::GetType() const noexcept
+    {
+        return _type;
     }
     //--------------------------------------------------------------------------
 }

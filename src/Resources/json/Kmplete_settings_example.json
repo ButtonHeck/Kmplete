@@ -17,6 +17,7 @@
         }
     },
     "WindowApplication": {
+        "GraphicsBackendType": "OpenGL",
         "WindowBackend": {
             "MainWindow": {
                 "Name": "Main",
@@ -31,9 +32,6 @@
                 "Decorated": true
             },
             "AuxWindows": []
-        },
-        "GraphicsManager": {
-            "API": "OpenGL"
         }
     }
 }

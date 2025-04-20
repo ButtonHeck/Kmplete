@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    TextureManager::TextureManager(GraphicsBackend::BackendType backendType)
+    TextureManager::TextureManager(GraphicsBackendType backendType)
         : _backendType(backendType)
     {}
     //--------------------------------------------------------------------------
@@ -20,7 +20,7 @@ namespace Kmplete
         UPtr<Texture> texture = nullptr;
         switch (_backendType)
         {
-        case GraphicsBackend::BackendType::OpenGL:
+        case GraphicsBackendType::OpenGL:
             texture.reset(new OpenGLTexture(filename, flipVertically));
             break;
 

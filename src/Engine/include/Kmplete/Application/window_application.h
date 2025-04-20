@@ -4,7 +4,7 @@
 #include "Kmplete/Core/window_backend.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/mouse_event.h"
-#include "Kmplete/Graphics/graphics_manager.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete
 {
@@ -41,7 +41,8 @@ namespace Kmplete
 
     protected:
         UPtr<WindowBackend> _windowBackend;
-        UPtr<GraphicsManager> _graphicsManager;
+        GraphicsBackendType _graphicsBackendType;
+        UPtr<GraphicsBackend> _graphicsBackend;
     };
     //--------------------------------------------------------------------------
 }

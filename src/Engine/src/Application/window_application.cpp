@@ -14,11 +14,13 @@
 namespace Kmplete
 {
     constexpr static auto SettingsEntryName = "WindowApplication";
+    constexpr static auto GraphicsBackendTypeStr = "GraphicsBackendType";
 
     WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
         : Application(applicationParameters)
         , _windowBackend(nullptr)
-        , _graphicsManager(nullptr)
+        , _graphicsBackendType(GraphicsBackendType::OpenGL)
+        , _graphicsBackend(nullptr)
     {
         Initialize();
     }
@@ -49,25 +51,13 @@ namespace Kmplete
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
 
-        _graphicsManager = CreateUPtr<GraphicsManager>();
-        KMP_ASSERT(_graphicsManager);
-
         LoadSettingsInternal();
 
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
 
-        if (!_graphicsManager->CreateBackend())
-        {
-            KMP_LOG_CORE_CRITICAL("WindowApplication: graphics backend initialization failed");
-            throw std::runtime_error("WindowApplication: graphics backend initialization failed");
-        }
-
-        if (!_graphicsManager->CreateTextureManager())
-        {
-            KMP_LOG_CORE_CRITICAL("WindowApplication: texture manager initialization failed");
-            throw std::runtime_error("WindowApplication: texture manager initialization failed");
-        }
+        _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
+        KMP_ASSERT(_graphicsBackend);
     }
     //--------------------------------------------------------------------------
 
@@ -75,7 +65,7 @@ namespace Kmplete
     {
         SaveSettingsInternal();
 
-        _graphicsManager.reset();
+        _graphicsBackend.reset();
         _windowBackend.reset();
     }
     //--------------------------------------------------------------------------
@@ -89,8 +79,8 @@ namespace Kmplete
             return;
         }
         
+        settings->SaveString(GraphicsBackendTypeStr, GraphicsBackendTypeToString(_graphicsBackendType));
         _windowBackend->SaveSettings(*settings);
-        _graphicsManager->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
 
@@ -103,8 +93,8 @@ namespace Kmplete
             return;
         }
 
+        _graphicsBackendType = StringToGraphicsBackendType(settings->GetString(GraphicsBackendTypeStr, DefaultAPIStr));
         _windowBackend->LoadSettings(*settings);
-        _graphicsManager->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

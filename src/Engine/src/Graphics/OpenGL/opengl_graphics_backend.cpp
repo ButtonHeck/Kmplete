@@ -9,7 +9,7 @@
 namespace Kmplete
 {
     OpenGLGraphicsBackend::OpenGLGraphicsBackend()
-        : GraphicsBackend()
+        : GraphicsBackend(GraphicsBackendType::OpenGL)
     {
         Initialize();
     }
@@ -32,12 +32,6 @@ namespace Kmplete
         KMP_LOG_CORE_INFO("OpenGLGraphicsBackend: vendor - {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
         KMP_LOG_CORE_INFO("OpenGLGraphicsBackend: renderer - {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
         KMP_LOG_CORE_INFO("OpenGLGraphicsBackend: version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-    }
-    //--------------------------------------------------------------------------
-
-    GraphicsBackend::BackendType OpenGLGraphicsBackend::GetType() const noexcept
-    {
-        return GraphicsBackend::BackendType::OpenGL;
     }
     //--------------------------------------------------------------------------
 }

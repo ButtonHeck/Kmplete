@@ -88,12 +88,11 @@ set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_manager.cpp
 )
