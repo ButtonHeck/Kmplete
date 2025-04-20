@@ -62,6 +62,12 @@ namespace Kmplete
             KMP_LOG_CORE_CRITICAL("WindowApplication: graphics backend initialization failed");
             throw std::runtime_error("WindowApplication: graphics backend initialization failed");
         }
+
+        if (!_graphicsManager->CreateTextureManager())
+        {
+            KMP_LOG_CORE_CRITICAL("WindowApplication: texture manager initialization failed");
+            throw std::runtime_error("WindowApplication: texture manager initialization failed");
+        }
     }
     //--------------------------------------------------------------------------
 
