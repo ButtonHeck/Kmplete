@@ -12,8 +12,8 @@ namespace Kmplete
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
     EditorUI::EditorUI(Window& mainWindow, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackendType graphicsBackendType)
-        : _uiImpl(nullptr)
-        , _systemMetricsManager(systemMetricsManager)
+        : _systemMetricsManager(systemMetricsManager)
+        , _uiImpl(nullptr)
         , _compositor(CreateUPtr<EditorUICompositor>(mainWindow, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {

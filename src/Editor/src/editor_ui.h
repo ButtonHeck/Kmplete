@@ -52,8 +52,8 @@ namespace Kmplete
         void Finalize() const;
 
     private:
-        UPtr<EditorUIImpl> _uiImpl;
         SystemMetricsManager& _systemMetricsManager;
+        UPtr<EditorUIImpl> _uiImpl;
         UPtr<EditorUICompositor> _compositor;
         Timer _metricsTimer;
     };
