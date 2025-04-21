@@ -179,9 +179,10 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeStatusBar(Timer& metricsTimer)
     {
+        static const auto buttonSize = ImVec2{ 24 * _dpiScale, 24 * _dpiScale };
         ImGui::SetCursorPosX(8.0f);
 
-        if (ImGui::Button(ICON_FK_CLOCK_O))
+        if (ImGui::Button(ICON_FK_CLOCK_O, buttonSize))
         {
             ImGui::OpenPopup("StatusBarSettingsPopup");
         }
@@ -205,7 +206,7 @@ namespace Kmplete
 
         {
             UiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border)} });
-            if (ImGui::Button(ICON_FK_PERCENT))
+            if (ImGui::Button(ICON_FK_PERCENT, buttonSize))
             {
                 _state.metricsFractional = !_state.metricsFractional;
             }
