@@ -101,8 +101,12 @@ namespace Kmplete
                 BeginMainWorkingArea();
                 {
                     ComposeMainArea();
+
+                    UiUtils::StyleVarGuard styleVarGuard({
+                        {ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f)}
+                    });
+                    EndMainWorkingArea();
                 }
-                EndMainWorkingArea();
 
                 BeginStatusBarArea();
                 {
