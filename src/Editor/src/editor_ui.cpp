@@ -76,6 +76,7 @@ namespace Kmplete
         style.FrameBorderSize = 1.0f;
         style.WindowMenuButtonPosition = ImGuiDir_None;
         style.DisabledAlpha = 0.4f;
+        style.ScaleAllSizes(_dpiScale);
     }
     //--------------------------------------------------------------------------
 
