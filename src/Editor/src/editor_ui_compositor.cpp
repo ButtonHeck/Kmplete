@@ -1,6 +1,7 @@
 #include "editor_ui_compositor.h"
 #include "ui_utils.h"
 #include "shortcuts.h"
+#include "ui_identifiers.h"
 #include "localization_base.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
@@ -85,11 +86,11 @@ namespace Kmplete
         UiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Button, ImColor(0, 0, 0, 0)}, {ImGuiCol_Border, ImColor(0, 0, 0, 0)} });
         if (ImGui::ImageButton(languageIcons[languageIndex], iconSize))
         {
-            ImGui::OpenPopup("ChangeLanguagePopup");
+            ImGui::OpenPopup(IdPopup_ChangeLanguage);
         }
         UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Change language"_sid).c_str());
 
-        if (ImGui::BeginPopup("ChangeLanguagePopup"))
+        if (ImGui::BeginPopup(IdPopup_ChangeLanguage))
         {
             if (ImGui::ImageButton(languageIcons[0], iconSize))
             {
@@ -184,11 +185,11 @@ namespace Kmplete
 
         if (ImGui::Button(ICON_FK_CLOCK_O, buttonSize))
         {
-            ImGui::OpenPopup("StatusBarSettingsPopup");
+            ImGui::OpenPopup(IdPopup_StatusBarSettings);
         }
         UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Metrics update period (ms)"_sid).c_str());
 
-        if (ImGui::BeginPopup("StatusBarSettingsPopup"))
+        if (ImGui::BeginPopup(IdPopup_StatusBarSettings))
         {
             const char* intervals[] = {"500", "1000", "2000"};
             for (auto intervalIndex = 0; intervalIndex < 3; intervalIndex++)
