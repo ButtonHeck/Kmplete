@@ -18,6 +18,7 @@ namespace Kmplete
         WindowIconifyEventType,
         WindowFramebufferResizeEventType,
         WindowFramebufferRefreshEventType,
+        WindowContentScaleEventType,
 
         KeyPressEventType,
         KeyReleaseEventType,

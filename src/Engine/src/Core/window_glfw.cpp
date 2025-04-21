@@ -308,6 +308,16 @@ namespace Kmplete
             }
         );
 
+        glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
+            const auto userData = GetUserPointer(window);
+            if (userData && userData->eventCallback)
+            {
+                WindowContentScaleEvent event(xScale);
+                userData->eventCallback(event);
+            }
+            }
+        );
+
         glfwSetWindowFocusCallback(_window, [](GLFWwindow* window, int focused) {
             const auto userData = GetUserPointer(window);
             if (userData && userData->eventCallback)

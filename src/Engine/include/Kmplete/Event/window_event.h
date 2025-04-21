@@ -175,4 +175,28 @@ namespace Kmplete
         WindowFramebufferRefreshEvent() = default;
     };
     //--------------------------------------------------------------------------
+
+
+    struct WindowContentScaleEvent : public WindowEvent
+    {
+        EVENT_CLASS_TYPE(WindowContentScaleEventType)
+
+        WindowContentScaleEvent(float scale) noexcept
+            : _scale(scale)
+        {}
+
+        KMP_NODISCARD float GetScale() const noexcept
+        {
+            return _scale;
+        }
+
+        KMP_NODISCARD std::string ToString() const override
+        {
+            return Utils::Concatenate("WindowContentScaleEvent: ", _scale);
+        }
+
+    private:
+        const float _scale;
+    };
+    //--------------------------------------------------------------------------
 }

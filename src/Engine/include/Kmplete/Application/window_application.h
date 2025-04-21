@@ -27,6 +27,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent&) { return true; }
         KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&) { return true; }
         KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent&) { return true; }
+        KMP_NODISCARD virtual bool OnWindowContentScaleEvent(WindowContentScaleEvent&) { return true; }
 
         KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent&) { return true; }
         KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { return true; }
