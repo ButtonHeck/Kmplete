@@ -8,8 +8,8 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
-
-#include "Kmplete/Graphics/OpenGL/opengl_texture.h" // TODO remove after refactoring
+#include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/texture_manager.h"
 
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
@@ -21,8 +21,10 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "EditorUICompositor";
     constexpr static auto MetricsFractionalStr = "MetricsFractional";
 
-    EditorUICompositor::EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+    EditorUICompositor::EditorUICompositor(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
         : _mainWindow(mainWindow)
+        , _dpiScale(dpiScale)
+        , _graphicsBackend(graphicsBackend)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
     {
@@ -51,15 +53,54 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenu()
     {
-        static const OpenGLTexture testTexture = OpenGLTexture(Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png")); //TODO remove test
         if (ImGui::BeginMenuBar())
         {
-            ImGui::ImageButton(static_cast<ImTextureID>(testTexture.GetHandle()), ImVec2{24, 24});
+            ComposeMenuLanguage();
             ComposeMenuFile();
             ComposeMenuView();
-            ComposeMenuLanguage();
 
             ImGui::EndMenuBar();
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUICompositor::ComposeMenuLanguage()
+    {
+        static const ImVec2 iconSize = ImVec2{18 * _dpiScale, 18 * _dpiScale};
+        static const ImTextureID languageIcons[] = {
+            static_cast<ImTextureID>(_graphicsBackend.GetTextureManager().GetTexture("_flag_usa"_sid).GetHandle()),
+            static_cast<ImTextureID>(_graphicsBackend.GetTextureManager().GetTexture("_flag_russian"_sid).GetHandle())
+        };
+
+        int languageIndex = 0;
+        if (_localizationManager.GetLocale() == LocaleEnUTF8Keyword)
+        {
+            languageIndex = 0;
+        }
+        else if (_localizationManager.GetLocale() == LocaleRuUTF8Keyword)
+        {
+            languageIndex = 1;
+        }
+
+        UiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Button, ImColor(0, 0, 0, 0)}, {ImGuiCol_Border, ImColor(0, 0, 0, 0)} });
+        if (ImGui::ImageButton(languageIcons[languageIndex], iconSize))
+        {
+            ImGui::OpenPopup("ChangeLanguagePopup");
+        }
+        UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Change language"_sid).c_str());
+
+        if (ImGui::BeginPopup("ChangeLanguagePopup"))
+        {
+            if (ImGui::ImageButton(languageIcons[0], iconSize))
+            {
+                _localizationManager.SetLocale(LocaleEnUTF8Keyword);
+            }
+            else if (ImGui::ImageButton(languageIcons[1], iconSize))
+            {
+                _localizationManager.SetLocale(LocaleRuUTF8Keyword);
+            }
+
+            ImGui::EndPopup();
         }
     }
     //--------------------------------------------------------------------------
@@ -82,25 +123,6 @@ namespace Kmplete
         if (ImGui::BeginMenu(_localizationManager.Translation(SidTrDomainEditor, "View"_sid).c_str()))
         {
             ComposeMenuViewFullscreen();
-            ImGui::EndMenu();
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorUICompositor::ComposeMenuLanguage()
-    {
-        if (ImGui::BeginMenu(_localizationManager.Translation(SidTrDomainEditor, "Language"_sid).c_str()))
-        {
-            if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEngine, SidTrLocaleEnName).c_str()))
-            {
-                _localizationManager.SetLocale(LocaleEnUTF8Keyword);
-            }
-
-            if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEngine, SidTrLocaleRuName).c_str()))
-            {
-                _localizationManager.SetLocale(LocaleRuUTF8Keyword);
-            }
-
             ImGui::EndMenu();
         }
     }
@@ -258,9 +280,9 @@ namespace Kmplete
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "View");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Quit");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Fullscreen");
-        _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Language");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Metrics update period (ms)");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Show fractional");
+        _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Change language");
     }
     //--------------------------------------------------------------------------
 }

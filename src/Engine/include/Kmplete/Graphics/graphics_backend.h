@@ -23,6 +23,7 @@ namespace Kmplete
         KMP_API virtual void Initialize() const = 0;
 
         KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
+        KMP_NODISCARD KMP_API TextureManager& GetTextureManager();
 
     protected:
         GraphicsBackendType _type;

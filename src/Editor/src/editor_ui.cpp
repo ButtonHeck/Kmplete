@@ -2,6 +2,7 @@
 #include "ui_utils.h"
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 
 #include <imgui.h>
 #include <forkawesome-webfont.h>
@@ -11,13 +12,14 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "EditorUI";
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(Window& mainWindow, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackendType graphicsBackendType)
+    EditorUI::EditorUI(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
         : _systemMetricsManager(systemMetricsManager)
+        , _dpiScale(dpiScale)
         , _uiImpl(nullptr)
-        , _compositor(CreateUPtr<EditorUICompositor>(mainWindow, localizationManager, systemMetricsManager))
+        , _compositor(CreateUPtr<EditorUICompositor>(mainWindow, _dpiScale, graphicsBackend, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
-        Initialize(mainWindow, dpiScale, graphicsBackendType);
+        Initialize(mainWindow, graphicsBackend.GetType());
     }
     //--------------------------------------------------------------------------
 
@@ -28,7 +30,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Initialize(Window& mainWindow, float dpiScale, GraphicsBackendType graphicsBackendType)
+    void EditorUI::Initialize(Window& mainWindow, GraphicsBackendType graphicsBackendType)
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -37,27 +39,27 @@ namespace Kmplete
 
         _uiImpl.reset(EditorUIImpl::CreateImpl(mainWindow, graphicsBackendType));
 
-        AddDefaultFont(dpiScale);
-        AddIconsFont(dpiScale);
-        Stylize(dpiScale);
+        AddDefaultFont();
+        AddIconsFont();
+        Stylize();
 
         _metricsTimer.Mark();
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddDefaultFont(float dpiScale) const
+    void EditorUI::AddDefaultFont() const
     {
         auto& io = ImGui::GetIO();
-        const auto fontSize = 18 * dpiScale;
+        const auto fontSize = 18 * _dpiScale;
         const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
         io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddIconsFont(float dpiScale) const
+    void EditorUI::AddIconsFont() const
     {
         auto& io = ImGui::GetIO();
-        const auto fontSize = 18 * dpiScale;
+        const auto fontSize = 18 * _dpiScale;
         ImFontConfig iconsConfig;
         iconsConfig.MergeMode = true;
         iconsConfig.GlyphMinAdvanceX = fontSize;
@@ -68,10 +70,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Stylize(float dpiScale) const
+    void EditorUI::Stylize() const
     {
-        (void)dpiScale; //TODO
-
         auto& style = ImGui::GetStyle();
         style.FrameBorderSize = 1.0f;
         style.WindowMenuButtonPosition = ImGuiDir_None;
@@ -158,7 +158,7 @@ namespace Kmplete
                 {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
             });
 
-            constexpr static auto statusBarHeight = 40;
+            const static auto statusBarHeight = 28 * _dpiScale;
             constexpr static auto workingAreaFlags =
                 ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |

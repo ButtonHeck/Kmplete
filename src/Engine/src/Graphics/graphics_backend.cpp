@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
+#include "Kmplete/Core/assertion.h"
 
 namespace Kmplete
 {
@@ -24,6 +25,13 @@ namespace Kmplete
     GraphicsBackendType GraphicsBackend::GetType() const noexcept
     {
         return _type;
+    }
+    //--------------------------------------------------------------------------
+
+    TextureManager& GraphicsBackend::GetTextureManager()
+    {
+        KMP_ASSERT(_textureManager);
+        return *_textureManager;
     }
     //--------------------------------------------------------------------------
 }

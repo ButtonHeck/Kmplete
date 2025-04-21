@@ -8,19 +8,19 @@
 #include "Kmplete/Core/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
-#include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete
 {
     class LocalizationManager;
     class SystemMetricsManager;
+    class GraphicsBackend;
 
     class EditorUI
     {
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(Window& mainWindow, float dpiScale, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, GraphicsBackendType graphicsBackendType);
+        EditorUI(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
         ~EditorUI();
 
         void LoopIteration();
@@ -45,14 +45,15 @@ namespace Kmplete
         void LoadSettings(Settings& settings);
 
     private:
-        void Initialize(Window& mainWindow, float dpiScale, GraphicsBackendType graphicsBackendType);
-        void AddDefaultFont(float dpiScale) const;
-        void AddIconsFont(float dpiScale) const;
-        void Stylize(float dpiScale) const;
+        void Initialize(Window& mainWindow, GraphicsBackendType graphicsBackendType);
+        void AddDefaultFont() const;
+        void AddIconsFont() const;
+        void Stylize() const;
         void Finalize() const;
 
     private:
         SystemMetricsManager& _systemMetricsManager;
+        float _dpiScale;
         UPtr<EditorUIImpl> _uiImpl;
         UPtr<EditorUICompositor> _compositor;
         Timer _metricsTimer;

@@ -52,8 +52,11 @@ namespace Kmplete
         mainWindow.SetTitle(GetApplicationName());
         mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
+        _graphicsBackend->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));
+        _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
+
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _ui.reset(new EditorUI(mainWindow, _windowBackend->GetDPIScale(), *_localizationManager, *_systemMetricsManager, _graphicsBackend->GetType()));
+        _ui.reset(new EditorUI(mainWindow, _windowBackend->GetDPIScale(), *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
 
         LoadSettingsInternal();
     }

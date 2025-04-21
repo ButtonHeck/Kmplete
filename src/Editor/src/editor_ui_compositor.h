@@ -11,13 +11,14 @@ namespace Kmplete
     class SystemMetricsManager;
     class Timer;
     class Settings;
+    class GraphicsBackend;
 
     class EditorUICompositor
     {
     public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
-        EditorUICompositor(Window& mainWindow, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
+        EditorUICompositor(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
 
         void ComposeMainArea();
         void ComposeStatusBar(Timer& metricsTimer);
@@ -32,9 +33,9 @@ namespace Kmplete
         void ComposeDefaultLayout();
 
         void ComposeMenu();
+        void ComposeMenuLanguage();
         void ComposeMenuFile();
         void ComposeMenuView();
-        void ComposeMenuLanguage();
         void ComposeMenuFileQuit();
         void ComposeMenuViewFullscreen();
 
@@ -58,6 +59,8 @@ namespace Kmplete
 
     private:
         Window& _mainWindow;
+        float _dpiScale;
+        GraphicsBackend& _graphicsBackend;
         LocalizationManager& _localizationManager;
         const SystemMetricsManager& _systemMetricsManager;
         UIComponentsState _state;
