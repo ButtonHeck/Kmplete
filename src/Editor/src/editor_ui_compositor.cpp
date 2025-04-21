@@ -182,6 +182,7 @@ namespace Kmplete
     {
         static const auto buttonSize = ImVec2{ 24 * _dpiScale, 24 * _dpiScale };
         ImGui::SetCursorPosX(8.0f);
+        ImGui::SetCursorPosY(2.0f * _dpiScale);
 
         if (ImGui::Button(ICON_FK_CLOCK_O, buttonSize))
         {
