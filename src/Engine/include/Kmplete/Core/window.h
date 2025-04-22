@@ -56,6 +56,7 @@ namespace Kmplete
             bool updateContinuously = true;
             bool resizable = true;
             bool decorated = true;
+            float dpiScale = 1.0f;
         };
 
         KMP_NODISCARD static std::string ModeToString(Mode mode) noexcept;

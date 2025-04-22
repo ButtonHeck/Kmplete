@@ -59,6 +59,7 @@ namespace Kmplete
             int& height;
             int& windowedWidth;
             int& windowedHeight;
+            float& dpiScale;
             EventCallbackFn eventCallback;
         };
 

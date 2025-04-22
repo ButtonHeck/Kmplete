@@ -18,6 +18,7 @@ namespace Kmplete
         , height(settings.height)
         , windowedWidth(settings.windowedWidth)
         , windowedHeight(settings.windowedHeight)
+        , dpiScale(settings.dpiScale)
     {}
     //--------------------------------------------------------------------------
 
@@ -59,6 +60,10 @@ namespace Kmplete
         {
             glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
         }
+
+        float scale = 1.0f;
+        glfwGetWindowContentScale(_window, &scale, &scale);
+        _settings.dpiScale = scale;
     }
     //--------------------------------------------------------------------------
 
@@ -97,9 +102,7 @@ namespace Kmplete
 
     float WindowGlfw::GetDPIScale() const
     {
-        float scale = 1.0;
-        glfwGetWindowContentScale(_window, &scale, &scale);
-        return scale;
+        return _settings.dpiScale;
     }
     //--------------------------------------------------------------------------
 
@@ -318,10 +321,15 @@ namespace Kmplete
 
         glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
             const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            if (userData)
             {
-                WindowContentScaleEvent event(xScale);
-                userData->eventCallback(event);
+                userData->dpiScale = xScale;
+
+                if (userData->eventCallback)
+                {
+                    WindowContentScaleEvent event(xScale);
+                    userData->eventCallback(event);
+                }
             }
             }
         );
