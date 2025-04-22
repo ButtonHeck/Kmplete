@@ -95,6 +95,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    float WindowGlfw::GetDPIScale() const
+    {
+        float scale = 1.0;
+        glfwGetWindowContentScale(_window, &scale, &scale);
+        return scale;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::SetTitle(const std::string& title)
     {
         glfwSetWindowTitle(_window, title.c_str());

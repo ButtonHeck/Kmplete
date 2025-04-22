@@ -19,6 +19,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::pair<int, int> GetSize() const override;
         KMP_NODISCARD KMP_API std::pair<int, int> GetWindowedSize() const override;
 
+        KMP_NODISCARD KMP_API float GetDPIScale() const override;
+
         KMP_API void SetTitle(const std::string& title) override;
         KMP_API void SetIcon(const Path& path) override;
 

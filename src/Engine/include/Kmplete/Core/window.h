@@ -72,6 +72,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual std::pair<int, int> GetSize() const = 0; //TODO: make geometric struct instead of std pair
         KMP_NODISCARD KMP_API virtual std::pair<int, int> GetWindowedSize() const = 0;
 
+        KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
+
         KMP_API virtual void SetTitle(const std::string& title) = 0;
         KMP_API virtual void SetIcon(const Path& path) = 0;
 
