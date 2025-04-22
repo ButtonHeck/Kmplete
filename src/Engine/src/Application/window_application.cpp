@@ -58,6 +58,12 @@ namespace Kmplete
 
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_graphicsBackend);
+
+        if (!_graphicsBackend->GetTextureManager().CreateTexture(0, Utils::Concatenate(KMP_ICONS_FOLDER, "error.jpg")))
+        {
+            KMP_LOG_CORE_CRITICAL("WindowApplication: error texture loading failed");
+            throw std::runtime_error("WindowApplication: error texture loading failed");
+        }
     }
     //--------------------------------------------------------------------------
 

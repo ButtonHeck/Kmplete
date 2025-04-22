@@ -22,7 +22,11 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Texture& GetTexture(Utils::StringID textureSid);
 
     private:
+        bool CreateErrorTexture(const Path& filename, bool flipVertically);
+
+    private:
         const GraphicsBackendType _backendType;
+        UPtr<Texture> _errorTexture;
         std::unordered_map<Utils::StringID, UPtr<Texture>> _textures;
     };
     //--------------------------------------------------------------------------
