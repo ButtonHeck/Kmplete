@@ -12,14 +12,15 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "EditorUI";
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
+    EditorUI::EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
         : _systemMetricsManager(systemMetricsManager)
-        , _dpiScale(dpiScale)
+        , _mainWindow(mainWindow)
+        , _graphicsBackend(graphicsBackend)
         , _uiImpl(nullptr)
-        , _compositor(CreateUPtr<EditorUICompositor>(mainWindow, _dpiScale, graphicsBackend, localizationManager, systemMetricsManager))
+        , _compositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
-        Initialize(mainWindow, graphicsBackend.GetType());
+        Initialize();
     }
     //--------------------------------------------------------------------------
 
@@ -30,36 +31,37 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Initialize(Window& mainWindow, GraphicsBackendType graphicsBackendType)
+    void EditorUI::Initialize()
     {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
 
-        _uiImpl.reset(EditorUIImpl::CreateImpl(mainWindow, graphicsBackendType));
+        _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
 
-        AddDefaultFont();
-        AddIconsFont();
-        Stylize();
+        const auto dpiScale = _mainWindow.GetDPIScale();
+        AddDefaultFont(dpiScale);
+        AddIconsFont(dpiScale);
+        Stylize(dpiScale);
 
         _metricsTimer.Mark();
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddDefaultFont() const
+    void EditorUI::AddDefaultFont(float dpiScale) const
     {
         auto& io = ImGui::GetIO();
-        const auto fontSize = 18 * _dpiScale;
+        const auto fontSize = 18 * dpiScale;
         const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
         io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddIconsFont() const
+    void EditorUI::AddIconsFont(float dpiScale) const
     {
         auto& io = ImGui::GetIO();
-        const auto fontSize = 18 * _dpiScale;
+        const auto fontSize = 18 * dpiScale;
         ImFontConfig iconsConfig;
         iconsConfig.MergeMode = true;
         iconsConfig.GlyphMinAdvanceX = fontSize;
@@ -70,13 +72,16 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Stylize() const
+    void EditorUI::Stylize(float dpiScale) const
     {
+        ImGui::GetStyle() = ImGuiStyle();
+
         auto& style = ImGui::GetStyle();
         style.FrameBorderSize = 1.0f;
         style.WindowMenuButtonPosition = ImGuiDir_None;
         style.DisabledAlpha = 0.4f;
-        style.ScaleAllSizes(_dpiScale);
+
+        style.ScaleAllSizes(dpiScale);
     }
     //--------------------------------------------------------------------------
 
@@ -163,7 +168,7 @@ namespace Kmplete
                 {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
             });
 
-            const static auto statusBarHeight = 28 * _dpiScale;
+            const auto statusBarHeight = 28 * _mainWindow.GetDPIScale();
             constexpr static auto workingAreaFlags =
                 ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
@@ -248,6 +253,23 @@ namespace Kmplete
     bool EditorUI::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
     {
         LoopIteration();
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorUI::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
+    {
+        _uiImpl.reset();
+        _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
+
+        auto& io = ImGui::GetIO();
+        io.Fonts->Clear();
+        const auto scale = event.GetScale();
+        AddDefaultFont(scale);
+        AddIconsFont(scale);
+        io.Fonts->Build();
+        Stylize(scale);
+
         return true;
     }
     //--------------------------------------------------------------------------

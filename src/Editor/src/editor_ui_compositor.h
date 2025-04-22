@@ -18,7 +18,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
-        EditorUICompositor(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
+        EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
 
         void ComposeMainArea();
         void ComposeStatusBar(Timer& metricsTimer);
@@ -59,7 +59,6 @@ namespace Kmplete
 
     private:
         Window& _mainWindow;
-        float _dpiScale;
         GraphicsBackend& _graphicsBackend;
         LocalizationManager& _localizationManager;
         const SystemMetricsManager& _systemMetricsManager;

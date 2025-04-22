@@ -20,7 +20,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 
-        EditorUI(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
+        EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
         ~EditorUI();
 
         void LoopIteration();
@@ -39,21 +39,23 @@ namespace Kmplete
 
         KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
         KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
+        KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event);
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
         void SaveSettings(Settings& settings) const;
         void LoadSettings(Settings& settings);
 
     private:
-        void Initialize(Window& mainWindow, GraphicsBackendType graphicsBackendType);
-        void AddDefaultFont() const;
-        void AddIconsFont() const;
-        void Stylize() const;
+        void Initialize();
+        void AddDefaultFont(float dpiScale) const;
+        void AddIconsFont(float dpiScale) const;
+        void Stylize(float dpiScale) const;
         void Finalize() const;
 
     private:
         SystemMetricsManager& _systemMetricsManager;
-        float _dpiScale;
+        Window& _mainWindow;
+        GraphicsBackend& _graphicsBackend;
         UPtr<EditorUIImpl> _uiImpl;
         UPtr<EditorUICompositor> _compositor;
         Timer _metricsTimer;

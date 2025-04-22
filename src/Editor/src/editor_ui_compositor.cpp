@@ -22,9 +22,8 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "EditorUICompositor";
     constexpr static auto MetricsFractionalStr = "MetricsFractional";
 
-    EditorUICompositor::EditorUICompositor(Window& mainWindow, float dpiScale, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+    EditorUICompositor::EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
         : _mainWindow(mainWindow)
-        , _dpiScale(dpiScale)
         , _graphicsBackend(graphicsBackend)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
@@ -67,7 +66,9 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMenuLanguage()
     {
-        static const ImVec2 iconSize = ImVec2{18 * _dpiScale, 18 * _dpiScale};
+        const auto dpiScale = _mainWindow.GetDPIScale();
+        const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
+
         static const ImTextureID languageIcons[] = {
             static_cast<ImTextureID>(_graphicsBackend.GetTextureManager().GetTexture("_flag_usa"_sid).GetHandle()),
             static_cast<ImTextureID>(_graphicsBackend.GetTextureManager().GetTexture("_flag_russian"_sid).GetHandle())
@@ -180,9 +181,10 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeStatusBar(Timer& metricsTimer)
     {
-        static const auto buttonSize = ImVec2{ 24 * _dpiScale, 24 * _dpiScale };
+        const auto dpiScale = _mainWindow.GetDPIScale();
+        const auto buttonSize = ImVec2(24 * dpiScale, 24 * dpiScale);
         ImGui::SetCursorPosX(8.0f);
-        ImGui::SetCursorPosY(2.0f * _dpiScale);
+        ImGui::SetCursorPosY(2.0f * dpiScale);
 
         if (ImGui::Button(ICON_FK_CLOCK_O, buttonSize))
         {

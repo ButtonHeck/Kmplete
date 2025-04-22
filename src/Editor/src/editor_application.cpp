@@ -56,7 +56,7 @@ namespace Kmplete
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _ui.reset(new EditorUI(mainWindow, _windowBackend->GetDPIScale(), *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
+        _ui.reset(new EditorUI(mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
 
         LoadSettingsInternal();
     }
@@ -104,6 +104,7 @@ namespace Kmplete
 
         dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorApplication::OnWindowCloseEvent));
         dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorApplication::OnWindowFramebufferRefreshEvent));
+        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorApplication::OnWindowContentScaleEvent));
 
         dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorApplication::OnKeyPressEvent));
     }
@@ -118,6 +119,12 @@ namespace Kmplete
     bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event)
     {
         return _ui->OnWindowFramebufferRefreshEvent(event);
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorApplication::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
+    {
+        return _ui->OnWindowContentScaleEvent(event);
     }
     //--------------------------------------------------------------------------
 

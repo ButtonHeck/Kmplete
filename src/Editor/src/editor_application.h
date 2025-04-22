@@ -26,6 +26,7 @@ namespace Kmplete
 
         KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event) override;
         KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) override;
+        KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event) override;
 
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event) override;
 
