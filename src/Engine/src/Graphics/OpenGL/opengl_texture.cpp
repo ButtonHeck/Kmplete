@@ -22,7 +22,7 @@ namespace Kmplete
         Image image(filename, flipVertically);
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
-        glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR); // TODO abstraction
+        glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO abstraction
         glTextureParameteri(handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // TODO abstraction
 
         GLenum internalFormat = GL_RGBA8;
@@ -47,8 +47,10 @@ namespace Kmplete
             dataFormat = GL_RED;
         }
 
-        glTextureStorage2D(handle, 1, internalFormat, width, height);
+        const auto mipLevels = static_cast<GLsizei>(GetMipLevelsCount(width, height));
+        glTextureStorage2D(handle, mipLevels, internalFormat, width, height);
         glTextureSubImage2D(handle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
+        glGenerateTextureMipmap(handle);
 
         _handle = static_cast<uint64_t>(handle);
     }
