@@ -2,7 +2,7 @@
 
 namespace Kmplete
 {
-    std::string GetKmpleteVersion()
+    const char* GetKmpleteVersion()
     {
         return "@Kmplete_VERSION@";
     }
@@ -27,7 +27,7 @@ namespace Kmplete
         return @Kmplete_VERSION_TWEAK@ + 0;
     }
     
-    std::string GetKmpleteGitHash()
+    const char* GetKmpleteGitHash()
     {
         return "@Kmplete_GIT_HASH@";
     }

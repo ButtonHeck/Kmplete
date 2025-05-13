@@ -1,12 +1,12 @@
-#include <string>
+#pragma once
 
 namespace Kmplete
 {
-    std::string GetKmpleteVersion();
+    const char* GetKmpleteVersion();
     unsigned int GetKmpleteVersionMajor();
     unsigned int GetKmpleteVersionMinor();
     unsigned int GetKmpleteVersionPatch();
     unsigned int GetKmpleteVersionTweak();
     
-    std::string GetKmpleteGitHash();
+    const char* GetKmpleteGitHash();
 }
