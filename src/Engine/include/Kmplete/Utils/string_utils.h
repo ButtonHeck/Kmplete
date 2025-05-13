@@ -28,8 +28,8 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, char delimiter);
         KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, const String& delimiter);
-        KMP_NODISCARD KMP_API std::wstring NarrowToWide(const String& str);
-        KMP_NODISCARD KMP_API String WideToNarrow(const std::wstring& wstr);
+        KMP_NODISCARD KMP_API WString NarrowToWide(const String& str);
+        KMP_NODISCARD KMP_API String WideToNarrow(const WString& wstr);
         KMP_NODISCARD KMP_API String NarrowToUtf8(const String& str);
         KMP_NODISCARD KMP_API String Utf8ToNarrow(const String& str);
     }
