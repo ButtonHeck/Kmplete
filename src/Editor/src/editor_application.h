@@ -14,7 +14,7 @@ namespace Kmplete
         explicit EditorApplication(const ApplicationParameters& applicationParameters);
         virtual ~EditorApplication();
 
-        KMP_NODISCARD String GetApplicationName() const noexcept override;
+        KMP_NODISCARD const char* GetApplicationName() const noexcept override;
 
         void Run() override;
 

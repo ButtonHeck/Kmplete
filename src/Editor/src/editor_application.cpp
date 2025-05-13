@@ -40,9 +40,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String EditorApplication::GetApplicationName() const noexcept
+    const char* EditorApplication::GetApplicationName() const noexcept
     {
-        return String("Kmplete Editor");
+        return "Kmplete Editor";
     }
     //--------------------------------------------------------------------------
 

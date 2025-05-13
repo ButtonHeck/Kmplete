@@ -28,7 +28,7 @@ namespace Kmplete
         KMP_API explicit Application(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~Application();
 
-        KMP_NODISCARD KMP_API virtual String GetApplicationName() const noexcept = 0;
+        KMP_NODISCARD KMP_API virtual const char* GetApplicationName() const noexcept = 0;
 
         KMP_API virtual void Run() = 0;
 
