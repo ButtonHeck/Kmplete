@@ -12,7 +12,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::StartObject(const std::string& objectName)
+    bool JsonReader::StartObject(const String& objectName)
     {
         if (!_currentObject)
         {
@@ -77,7 +77,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonReader::StartArray(const std::string& arrayName)
+    int JsonReader::StartArray(const String& arrayName)
     {
         if (!_currentObject)
         {
@@ -165,7 +165,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::GetBool(const std::string& name, bool defaultValue)
+    bool JsonReader::GetBool(const String& name, bool defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -200,7 +200,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonReader::GetInt(const std::string& name, int defaultValue)
+    int JsonReader::GetInt(const String& name, int defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -235,7 +235,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonReader::GetUInt(const std::string& name, unsigned int defaultValue)
+    unsigned int JsonReader::GetUInt(const String& name, unsigned int defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -270,7 +270,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonReader::GetInt64(const std::string& name, int64_t defaultValue)
+    int64_t JsonReader::GetInt64(const String& name, int64_t defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -305,7 +305,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonReader::GetUInt64(const std::string& name, uint64_t defaultValue)
+    uint64_t JsonReader::GetUInt64(const String& name, uint64_t defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -340,7 +340,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double JsonReader::GetDouble(const std::string& name, double defaultValue)
+    double JsonReader::GetDouble(const String& name, double defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -358,7 +358,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string JsonReader::GetString(int index, const std::string& defaultValue)
+    String JsonReader::GetString(int index, const String& defaultValue)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -375,7 +375,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string JsonReader::GetString(const std::string& name, const std::string& defaultValue)
+    String JsonReader::GetString(const String& name, const String& defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {

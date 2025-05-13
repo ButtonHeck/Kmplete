@@ -5,7 +5,7 @@
 
 namespace Kmplete
 {
-    Assertion::Assertion(const std::string& expression, const std::string& file, const std::string& function, int line, Consequence consequence)
+    Assertion::Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence)
         : _file(file)
         , _function(function)
         , _line(line)
@@ -29,7 +29,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Assertion& Assertion::Message(const std::string& message)
+    Assertion& Assertion::Message(const String& message)
     {
         Utils::ToSStream(_stream, "\n\tMessage: ", message);
         return *this;

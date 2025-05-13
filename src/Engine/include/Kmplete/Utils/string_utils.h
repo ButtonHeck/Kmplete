@@ -10,7 +10,7 @@ namespace Kmplete
     namespace Utils
     {
         template<typename... Ts>
-        KMP_NODISCARD std::string Concatenate(Ts&&... args)
+        KMP_NODISCARD String Concatenate(Ts&&... args)
         {
             std::ostringstream oss;
             (oss << ... << std::forward<Ts>(args));
@@ -26,11 +26,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        KMP_NODISCARD KMP_API std::string StringVectorToString(const StringVector& stringVector, char delimiter);
-        KMP_NODISCARD KMP_API std::string StringVectorToString(const StringVector& stringVector, const std::string& delimiter);
-        KMP_NODISCARD KMP_API std::wstring NarrowToWide(const std::string& str);
-        KMP_NODISCARD KMP_API std::string WideToNarrow(const std::wstring& wstr);
-        KMP_NODISCARD KMP_API std::string NarrowToUtf8(const std::string& str);
-        KMP_NODISCARD KMP_API std::string Utf8ToNarrow(const std::string& str);
+        KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, char delimiter);
+        KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, const String& delimiter);
+        KMP_NODISCARD KMP_API std::wstring NarrowToWide(const String& str);
+        KMP_NODISCARD KMP_API String WideToNarrow(const std::wstring& wstr);
+        KMP_NODISCARD KMP_API String NarrowToUtf8(const String& str);
+        KMP_NODISCARD KMP_API String Utf8ToNarrow(const String& str);
     }
 }

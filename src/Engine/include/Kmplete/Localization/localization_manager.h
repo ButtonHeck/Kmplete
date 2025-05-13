@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_library.h"
 
@@ -27,7 +28,7 @@ namespace Kmplete
         KMP_API bool SetLocale(const LocaleStr& localeString);
         KMP_NODISCARD KMP_API const LocaleStr& GetLocale() const noexcept;
 
-        KMP_API void AddMessagesPath(const std::string& path);
+        KMP_API void AddMessagesPath(const String& path);
 
         KMP_API bool AddMessagesDomain(const DomainStr& domain);
         KMP_API bool RemoveMessagesDomain(const DomainStr& domain);

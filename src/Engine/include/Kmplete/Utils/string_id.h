@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 
 #include <cstdint>
-#include <string>
 
 namespace Kmplete
 {
@@ -30,7 +30,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        KMP_NODISCARD constexpr StringID ToStringID(const std::string& str)
+        KMP_NODISCARD constexpr StringID ToStringID(const String& str)
         {
             return ToStringID(str.c_str());
         }

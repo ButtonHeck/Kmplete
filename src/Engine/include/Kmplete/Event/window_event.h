@@ -37,7 +37,7 @@ namespace Kmplete
             return _height;
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("WindowResizeEvent: ", _width, ", ", _height);
         }
@@ -68,7 +68,7 @@ namespace Kmplete
             return _y;
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("WindowMoveEvent: ", _x, ", ", _y);
         }
@@ -102,7 +102,7 @@ namespace Kmplete
             return bool(_focused);
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("WindowFocusEvent: ", IsFocused());
         }
@@ -126,7 +126,7 @@ namespace Kmplete
             return bool(_iconified);
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("WindowIconifyEvent: ", IsIconified());
         }
@@ -156,7 +156,7 @@ namespace Kmplete
             return _height;
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("WindowFramebufferResizeEvent: ", _width, ", ", _height);
         }
@@ -190,7 +190,7 @@ namespace Kmplete
             return _scale;
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("WindowContentScaleEvent: ", _scale);
         }

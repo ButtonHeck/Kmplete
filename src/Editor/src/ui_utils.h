@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Kmplete/Core/types.h"
+
 #include <imgui.h>
 
 #include <variant>
 #include <initializer_list>
-#include <string>
 
 namespace Kmplete
 {
@@ -70,7 +71,7 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
-        void SetItemTooltip(const std::string& text, ImGuiHoveredFlags_ flags = ImGuiHoveredFlags_AllowWhenDisabled);
+        void SetItemTooltip(const String& text, ImGuiHoveredFlags_ flags = ImGuiHoveredFlags_AllowWhenDisabled);
         //--------------------------------------------------------------------------
     }
 }

@@ -10,7 +10,7 @@ namespace Kmplete
 
     namespace FileDialogs
     {
-        Path OpenFile(const std::string& title, const StringVector& filters)
+        Path OpenFile(const String& title, const StringVector& filters)
         {
             pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::none);
 
@@ -25,7 +25,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::vector<Path> OpenFiles(const std::string& title, const StringVector& filters)
+        std::vector<Path> OpenFiles(const String& title, const StringVector& filters)
         {
             pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::multiselect);
 
@@ -47,7 +47,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Path OpenDirectory(const std::string& title)
+        Path OpenDirectory(const String& title)
         {
             pfd::select_folder opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
 
@@ -62,7 +62,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Path SaveFile(const std::string& title, const StringVector& filters, bool forceOverwrite)
+        Path SaveFile(const String& title, const StringVector& filters, bool forceOverwrite)
         {
             pfd::save_file saver(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
@@ -72,7 +72,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        MessageButton OpenMessage(const std::string& title, const std::string& message, MessageChoice choice, MessageIcon icon)
+        MessageButton OpenMessage(const String& title, const String& message, MessageChoice choice, MessageIcon icon)
         {
             pfd::choice pfdChoice = pfd::choice::ok_cancel;
             switch (choice)

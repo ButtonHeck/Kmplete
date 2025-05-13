@@ -4,9 +4,9 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/macro.h"
+#include "Kmplete/Core/types.h"
 #include "Kmplete/Utils/string_utils.h"
 
-#include <string>
 #include <sstream>
 
 #if !defined (KMP_ASSERTS_ACTIVE)
@@ -29,10 +29,10 @@ namespace Kmplete
         };
 
     public:
-        KMP_API Assertion(const std::string& expression, const std::string& file, const std::string& function, int line, Consequence consequence = Consequence::Terminate);
+        KMP_API Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence = Consequence::Terminate);
         KMP_API ~Assertion();
 
-        KMP_API Assertion& Message(const std::string& message);
+        KMP_API Assertion& Message(const String& message);
 
         template<typename T>
         Assertion& Watch(T&& val, const char* name)
@@ -42,8 +42,8 @@ namespace Kmplete
         }
 
     private:
-        const std::string _file;
-        const std::string _function;
+        const String _file;
+        const String _function;
         const int _line;
         Consequence _consequence;
         std::ostringstream _stream;

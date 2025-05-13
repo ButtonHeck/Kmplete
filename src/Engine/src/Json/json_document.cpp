@@ -150,7 +150,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string JsonDocument::ToString(bool pretty)
+    String JsonDocument::ToString(bool pretty)
     {
         _error = false;
         rapidjson::StringBuffer buffer;
@@ -161,7 +161,7 @@ namespace Kmplete
 
             if (_document.Accept(writer))
             {
-                return std::string(buffer.GetString());
+                return String(buffer.GetString());
             }
         }
         else
@@ -170,13 +170,13 @@ namespace Kmplete
 
             if (_document.Accept(writer))
             {
-                return std::string(buffer.GetString());
+                return String(buffer.GetString());
             }
         }
 
         KMP_LOG_CORE_WARN("JsonDocument: failed to write document to string");
         _error = true;
-        return std::string("");
+        return String("");
     }
     //--------------------------------------------------------------------------
 
@@ -186,7 +186,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::AddChildDocument(const std::string& name, const JsonDocument& child, bool overwrite)
+    bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite)
     {
         if (name.empty())
         {
@@ -222,9 +222,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<std::pair<std::string, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects) const
+    std::vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects) const
     {
-        std::vector<std::pair<std::string, Ptr<JsonDocument>>> children;
+        std::vector<std::pair<String, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
         {
@@ -244,7 +244,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::StartSetObject(const std::string& objectName)
+    bool JsonDocument::StartSetObject(const String& objectName)
     {
         return _writer->StartObject(objectName);
     }
@@ -262,7 +262,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::StartSetArray(const std::string& arrayName, bool overwrite)
+    bool JsonDocument::StartSetArray(const String& arrayName, bool overwrite)
     {
         return _writer->StartArray(arrayName, overwrite);
     }
@@ -286,7 +286,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetBool(const std::string& name, bool value)
+    bool JsonDocument::SetBool(const String& name, bool value)
     {
         return _writer->SetBool(name, value);
     }
@@ -298,7 +298,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetInt(const std::string& name, int value)
+    bool JsonDocument::SetInt(const String& name, int value)
     {
         return _writer->SetInt(name, value);
     }
@@ -310,7 +310,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetUInt(const std::string& name, unsigned int value)
+    bool JsonDocument::SetUInt(const String& name, unsigned int value)
     {
         return _writer->SetUInt(name, value);
     }
@@ -322,7 +322,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetInt64(const std::string& name, int64_t value)
+    bool JsonDocument::SetInt64(const String& name, int64_t value)
     {
         return _writer->SetInt64(name, value);
     }
@@ -334,7 +334,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetUInt64(const std::string& name, uint64_t value)
+    bool JsonDocument::SetUInt64(const String& name, uint64_t value)
     {
         return _writer->SetUInt64(name, value);
     }
@@ -346,26 +346,26 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetDouble(const std::string& name, double value)
+    bool JsonDocument::SetDouble(const String& name, double value)
     {
         return _writer->SetDouble(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetString(int index, const std::string& value)
+    bool JsonDocument::SetString(int index, const String& value)
     {
         return _writer->SetString(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetString(const std::string& name, const std::string& value)
+    bool JsonDocument::SetString(const String& name, const String& value)
     {
         return _writer->SetString(name, value);
     }
     //--------------------------------------------------------------------------
 
 
-    bool JsonDocument::StartGetObject(const std::string& objectName)
+    bool JsonDocument::StartGetObject(const String& objectName)
     {
         return _reader->StartObject(objectName);
     }
@@ -383,7 +383,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonDocument::StartGetArray(const std::string& arrayName)
+    int JsonDocument::StartGetArray(const String& arrayName)
     {
         return _reader->StartArray(arrayName);
     }
@@ -407,7 +407,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::GetBool(const std::string& name, bool defaultValue)
+    bool JsonDocument::GetBool(const String& name, bool defaultValue)
     {
         return _reader->GetBool(name, defaultValue);
     }
@@ -419,7 +419,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonDocument::GetInt(const std::string& name, int defaultValue)
+    int JsonDocument::GetInt(const String& name, int defaultValue)
     {
         return _reader->GetInt(name, defaultValue);
     }
@@ -431,7 +431,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonDocument::GetUInt(const std::string& name, unsigned int defaultValue)
+    unsigned int JsonDocument::GetUInt(const String& name, unsigned int defaultValue)
     {
         return _reader->GetUInt(name, defaultValue);
     }
@@ -443,7 +443,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonDocument::GetInt64(const std::string& name, int64_t defaultValue)
+    int64_t JsonDocument::GetInt64(const String& name, int64_t defaultValue)
     {
         return _reader->GetInt64(name, defaultValue);
     }
@@ -455,7 +455,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonDocument::GetUInt64(const std::string& name, uint64_t defaultValue)
+    uint64_t JsonDocument::GetUInt64(const String& name, uint64_t defaultValue)
     {
         return _reader->GetUInt64(name, defaultValue);
     }
@@ -467,19 +467,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double JsonDocument::GetDouble(const std::string& name, double defaultValue)
+    double JsonDocument::GetDouble(const String& name, double defaultValue)
     {
         return _reader->GetDouble(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    std::string JsonDocument::GetString(int index, const std::string& defaultValue)
+    String JsonDocument::GetString(int index, const String& defaultValue)
     {
         return _reader->GetString(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    std::string JsonDocument::GetString(const std::string& name, const std::string& defaultValue)
+    String JsonDocument::GetString(const String& name, const String& defaultValue)
     {
         return _reader->GetString(name, defaultValue);
     }

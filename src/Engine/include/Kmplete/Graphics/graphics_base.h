@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
-
-#include <string>
+#include "Kmplete/Core/types.h"
 
 namespace Kmplete
 {
@@ -21,8 +20,8 @@ namespace Kmplete
         Unknown
     };
 
-    KMP_NODISCARD std::string GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
-    KMP_NODISCARD GraphicsBackendType StringToGraphicsBackendType(const std::string& string) noexcept;
+    KMP_NODISCARD String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
+    KMP_NODISCARD GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
 
     constexpr static auto OpenGLStr = "OpenGL";
     constexpr static auto UnknownStr = "Unknown";

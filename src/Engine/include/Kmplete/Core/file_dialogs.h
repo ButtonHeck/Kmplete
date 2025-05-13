@@ -4,17 +4,16 @@
 #include "Kmplete/Core/types.h"
 #include "Kmplete/Core/filesystem.h"
 
-#include <string>
 #include <vector>
 
 namespace Kmplete
 {
     namespace FileDialogs
     {
-        KMP_NODISCARD KMP_API Path OpenFile(const std::string& title, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API std::vector<Path> OpenFiles(const std::string& title, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API Path OpenDirectory(const std::string& title);
-        KMP_NODISCARD KMP_API Path SaveFile(const std::string& title, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
+        KMP_NODISCARD KMP_API Path OpenFile(const String& title, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API std::vector<Path> OpenFiles(const String& title, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API Path OpenDirectory(const String& title);
+        KMP_NODISCARD KMP_API Path SaveFile(const String& title, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
 
         enum class MessageButton
         {
@@ -45,7 +44,7 @@ namespace Kmplete
             Question
         };
 
-        KMP_NODISCARD KMP_API MessageButton OpenMessage(const std::string& title, const std::string& message, 
+        KMP_NODISCARD KMP_API MessageButton OpenMessage(const String& title, const String& message, 
                                                         MessageChoice choice = MessageChoice::OkCancel, MessageIcon = MessageIcon::Info);
     };
 }

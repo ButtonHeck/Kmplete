@@ -2,25 +2,25 @@
 
 namespace Kmplete
 {
-    Settings::Settings(const std::string& name, Ptr<JsonDocument> document)
+    Settings::Settings(const String& name, Ptr<JsonDocument> document)
         : _name(name)
         , _document(document)
     {}
     //--------------------------------------------------------------------------
 
-    Settings::Settings(const std::string& name)
+    Settings::Settings(const String& name)
         : _name(name)
         , _document(new JsonDocument())
     {}
     //--------------------------------------------------------------------------
 
-    const std::string& Settings::GetName() const noexcept
+    const String& Settings::GetName() const noexcept
     {
         return _name;
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveObject(const std::string& objectName)
+    bool Settings::StartSaveObject(const String& objectName)
     {
         return _document->StartSetObject(objectName);
     }
@@ -38,7 +38,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(const std::string& arrayName, bool overwrite)
+    bool Settings::StartSaveArray(const String& arrayName, bool overwrite)
     {
         return _document->StartSetArray(arrayName, overwrite);
     }
@@ -62,7 +62,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveBool(const std::string& name, bool value)
+    bool Settings::SaveBool(const String& name, bool value)
     {
         return _document->SetBool(name, value);
     }
@@ -74,7 +74,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt(const std::string& name, int value)
+    bool Settings::SaveInt(const String& name, int value)
     {
         return _document->SetInt(name, value);
     }
@@ -86,7 +86,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt(const std::string& name, unsigned int value)
+    bool Settings::SaveUInt(const String& name, unsigned int value)
     {
         return _document->SetUInt(name, value);
     }
@@ -98,7 +98,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt64(const std::string& name, int64_t value)
+    bool Settings::SaveInt64(const String& name, int64_t value)
     {
         return _document->SetInt64(name, value);
     }
@@ -110,7 +110,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt64(const std::string& name, uint64_t value)
+    bool Settings::SaveUInt64(const String& name, uint64_t value)
     {
         return _document->SetUInt64(name, value);
     }
@@ -122,19 +122,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveDouble(const std::string& name, double value)
+    bool Settings::SaveDouble(const String& name, double value)
     {
         return _document->SetDouble(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveString(int index, const std::string& value)
+    bool Settings::SaveString(int index, const String& value)
     {
         return _document->SetString(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveString(const std::string& name, const std::string& value)
+    bool Settings::SaveString(const String& name, const String& value)
     {
         return _document->SetString(name, value);
     }
@@ -146,7 +146,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartLoadObject(const std::string& objectName)
+    bool Settings::StartLoadObject(const String& objectName)
     {
         return _document->StartGetObject(objectName);
     }
@@ -164,7 +164,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int Settings::StartLoadArray(const std::string& arrayName)
+    int Settings::StartLoadArray(const String& arrayName)
     {
         return _document->StartGetArray(arrayName);
     }
@@ -188,7 +188,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::GetBool(const std::string& name, bool defaultValue)
+    bool Settings::GetBool(const String& name, bool defaultValue)
     {
         return _document->GetBool(name, defaultValue);
     }
@@ -200,7 +200,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int Settings::GetInt(const std::string& name, int defaultValue)
+    int Settings::GetInt(const String& name, int defaultValue)
     {
         return _document->GetInt(name, defaultValue);
     }
@@ -212,7 +212,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int Settings::GetUInt(const std::string& name, unsigned int defaultValue)
+    unsigned int Settings::GetUInt(const String& name, unsigned int defaultValue)
     {
         return _document->GetUInt(name, defaultValue);
     }
@@ -224,7 +224,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t Settings::GetInt64(const std::string& name, int64_t defaultValue)
+    int64_t Settings::GetInt64(const String& name, int64_t defaultValue)
     {
         return _document->GetInt64(name, defaultValue);
     }
@@ -236,7 +236,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t Settings::GetUInt64(const std::string& name, uint64_t defaultValue)
+    uint64_t Settings::GetUInt64(const String& name, uint64_t defaultValue)
     {
         return _document->GetUInt64(name, defaultValue);
     }
@@ -248,19 +248,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double Settings::GetDouble(const std::string& name, double defaultValue)
+    double Settings::GetDouble(const String& name, double defaultValue)
     {
         return _document->GetDouble(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    std::string Settings::GetString(int index, const std::string& defaultValue)
+    String Settings::GetString(int index, const String& defaultValue)
     {
         return _document->GetString(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    std::string Settings::GetString(const std::string& name, const std::string& defaultValue)
+    String Settings::GetString(const String& name, const String& defaultValue)
     {
         return _document->GetString(name, defaultValue);
     }

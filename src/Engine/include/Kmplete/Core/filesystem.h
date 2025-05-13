@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 
 #include <filesystem>
 
@@ -25,10 +26,10 @@ namespace Kmplete
         KMP_NODISCARD KMP_API static bool IsFile(const Path& path) noexcept;
         KMP_NODISCARD KMP_API static bool IsDirectory(const Path& path) noexcept;
         
-        KMP_NODISCARD KMP_API static std::string ToGenericU8String(const Path& path);
-        KMP_NODISCARD KMP_API static std::string ToGenericString(const Path& path);
-        KMP_NODISCARD KMP_API static std::string ToNativeU8String(const Path& path);
-        KMP_NODISCARD KMP_API static std::string ToNativeString(const Path& path);
+        KMP_NODISCARD KMP_API static String ToGenericU8String(const Path& path);
+        KMP_NODISCARD KMP_API static String ToGenericString(const Path& path);
+        KMP_NODISCARD KMP_API static String ToNativeU8String(const Path& path);
+        KMP_NODISCARD KMP_API static String ToNativeString(const Path& path);
 
     private:
         static Path _applicationPath;

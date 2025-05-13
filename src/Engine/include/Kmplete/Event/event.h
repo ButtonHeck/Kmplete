@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 
-#include <string>
 #include <ostream>
 
 namespace Kmplete
@@ -54,7 +54,7 @@ namespace Kmplete
         KMP_NODISCARD virtual EventType GetType() const noexcept = 0;
         KMP_NODISCARD virtual const char* GetName() const noexcept = 0;
         KMP_NODISCARD virtual int GetTraits() const noexcept = 0;
-        KMP_NODISCARD virtual std::string ToString() const
+        KMP_NODISCARD virtual String ToString() const
         {
             return GetName();
         }

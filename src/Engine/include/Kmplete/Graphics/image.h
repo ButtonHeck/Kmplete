@@ -5,8 +5,6 @@
 #include "Kmplete/Core/nullability.h"
 #include "Kmplete/Graphics/graphics_base.h"
 
-#include <string>
-
 namespace Kmplete
 {
     class Image

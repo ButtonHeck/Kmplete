@@ -17,7 +17,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartObject(const std::string& objectName)
+    bool JsonWriter::StartObject(const String& objectName)
     {
         if (!_currentObject)
         {
@@ -97,7 +97,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartArray(const std::string& arrayName, bool overwrite)
+    bool JsonWriter::StartArray(const String& arrayName, bool overwrite)
     {
         if (!_currentObject)
         {
@@ -217,7 +217,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetBool(const std::string& name, bool value)
+    bool JsonWriter::SetBool(const String& name, bool value)
     {
         if (!_currentObject)
         {
@@ -286,7 +286,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetInt(const std::string& name, int value)
+    bool JsonWriter::SetInt(const String& name, int value)
     {
         if (!_currentObject)
         {
@@ -355,7 +355,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetUInt(const std::string& name, unsigned int value)
+    bool JsonWriter::SetUInt(const String& name, unsigned int value)
     {
         if (!_currentObject)
         {
@@ -424,7 +424,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetInt64(const std::string& name, int64_t value)
+    bool JsonWriter::SetInt64(const String& name, int64_t value)
     {
         if (!_currentObject)
         {
@@ -493,7 +493,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetUInt64(const std::string& name, uint64_t value)
+    bool JsonWriter::SetUInt64(const String& name, uint64_t value)
     {
         if (!_currentObject)
         {
@@ -562,7 +562,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetDouble(const std::string& name, double value)
+    bool JsonWriter::SetDouble(const String& name, double value)
     {
         if (!_currentObject)
         {
@@ -597,7 +597,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetString(int index, const std::string& value)
+    bool JsonWriter::SetString(int index, const String& value)
     {
         if (!_currentObject)
         {
@@ -632,7 +632,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetString(const std::string& name, const std::string& value)
+    bool JsonWriter::SetString(const String& name, const String& value)
     {
         if (!_currentObject)
         {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 #include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/pointers.h"
 #include "Kmplete/Core/filesystem.h"
@@ -10,14 +11,12 @@
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/key_event.h"
 
-#include <string>
-
 namespace Kmplete
 {
     struct ApplicationParameters
     {
         const Path settingsPath;
-        const std::string defaultSettingsFileName = "Kmplete_settings.json";
+        const String defaultSettingsFileName = "Kmplete_settings.json";
     };
     //--------------------------------------------------------------------------
 
@@ -29,7 +28,7 @@ namespace Kmplete
         KMP_API explicit Application(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~Application();
 
-        KMP_NODISCARD KMP_API virtual std::string GetApplicationName() const noexcept = 0;
+        KMP_NODISCARD KMP_API virtual String GetApplicationName() const noexcept = 0;
 
         KMP_API virtual void Run() = 0;
 

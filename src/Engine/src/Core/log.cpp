@@ -43,10 +43,10 @@ namespace Kmplete
     {
         struct BootMessage
         {
-            std::string textPersistent;
+            String textPersistent;
             spdlog::details::log_msg logMsg;
 
-            BootMessage(const std::string& text, const spdlog::details::log_msg& msg)
+            BootMessage(const String& text, const spdlog::details::log_msg& msg)
                 : textPersistent(text)
                 , logMsg(msg.logger_name, msg.level, textPersistent)
             {}
@@ -62,7 +62,7 @@ namespace Kmplete
 
         const auto callbackSink = CreatePtr<spdlog::sinks::callback_sink_mt>([](const spdlog::details::log_msg& msg) 
         { 
-            bootMessages.emplace_back(std::string(msg.payload.data(), msg.payload.size()), msg);
+            bootMessages.emplace_back(String(msg.payload.data(), msg.payload.size()), msg);
         });
 
         _coreLogger = CreatePtr<spdlog::logger>("CORE", callbackSink);

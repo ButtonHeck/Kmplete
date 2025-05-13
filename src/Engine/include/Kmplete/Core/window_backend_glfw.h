@@ -18,10 +18,10 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Window& CreateMainWindow() override;
         KMP_NODISCARD KMP_API Window& GetMainWindow() override;
 
-        KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(const std::string& windowName) override;
+        KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(const String& windowName) override;
         KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(Window::WindowSettings& windowSettings) override;
-        KMP_NODISCARD KMP_API Nullable<Window*> GetAuxWindow(const std::string& windowName) const override;
-        KMP_API bool DestroyAuxWindow(const std::string& windowName) override;
+        KMP_NODISCARD KMP_API Nullable<Window*> GetAuxWindow(const String& windowName) const override;
+        KMP_API bool DestroyAuxWindow(const String& windowName) override;
 
         KMP_NODISCARD KMP_API int GetMonitorCount() const override;
         KMP_NODISCARD KMP_API StringVector GetMonitorNames() const override;
@@ -46,8 +46,8 @@ namespace Kmplete
         UPtr<Window::WindowSettings> _mainWindowSettings;
         UPtr<Window> _mainWindow;
 
-        std::unordered_map<std::string, UPtr<Window::WindowSettings>> _auxWindowsSettings;
-        std::unordered_map<std::string, UPtr<Window>> _auxWindows;
+        std::unordered_map<String, UPtr<Window::WindowSettings>> _auxWindowsSettings;
+        std::unordered_map<String, UPtr<Window>> _auxWindows;
     };
     //--------------------------------------------------------------------------
 }

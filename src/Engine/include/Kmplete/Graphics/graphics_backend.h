@@ -5,8 +5,6 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/texture_manager.h"
 
-#include <string>
-
 namespace Kmplete
 {
     class GraphicsBackend

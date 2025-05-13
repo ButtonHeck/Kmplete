@@ -22,6 +22,7 @@
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/pointers.h"
+#include "Kmplete/Core/types.h"
 
 #if defined (KMP_COMPILER_MSVC)
     #pragma warning(push)
@@ -92,7 +93,7 @@ namespace Kmplete
     private:
         struct LogSettings
         {
-            std::string filename = "Kmplete_log.txt";
+            String filename = "Kmplete_log.txt";
             bool enabled = true;
             bool truncate = false;
             bool outputConsole = true;

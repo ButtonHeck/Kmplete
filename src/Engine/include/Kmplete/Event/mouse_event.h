@@ -30,7 +30,7 @@ namespace Kmplete
             return _y;
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("MouseMoveEvent: ", _x, ", ", _y);
         }
@@ -66,7 +66,7 @@ namespace Kmplete
             return _yOffset;
         }
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("MouseScrollEvent: ", _xOffset, ", ", _yOffset);
         }
@@ -116,7 +116,7 @@ namespace Kmplete
             : MouseButtonEvent(button, mods)
         {}
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("MouseButtonPressEvent: ", _button);
         }
@@ -132,7 +132,7 @@ namespace Kmplete
             : MouseButtonEvent(button, mods)
         {}
 
-        KMP_NODISCARD std::string ToString() const override
+        KMP_NODISCARD String ToString() const override
         {
             return Utils::Concatenate("MouseButtonReleaseEvent: ", _button);
         }

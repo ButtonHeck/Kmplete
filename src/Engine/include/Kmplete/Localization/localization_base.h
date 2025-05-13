@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Core/types.h"
 #include "Kmplete/Utils/string_id.h"
 
-#include <string>
 #include <type_traits>
 
 namespace Kmplete
@@ -25,11 +25,11 @@ namespace Kmplete
     static constexpr auto SidTrLocaleRuName = Utils::ToStringID(LocaleRuName);
     static constexpr auto SidTrDomainEngine = Utils::ToStringID(KMP_TR_DOMAIN_ENGINE);
 
-    using LocaleStr = std::string;
-    using DomainStr = std::string;
-    using ContextStr = std::string;
-    using SourceStr = std::string;
-    using TranslationStr = std::string;
+    using LocaleStr = String;
+    using DomainStr = String;
+    using ContextStr = String;
+    using SourceStr = String;
+    using TranslationStr = String;
 
     using LocaleStrSID = Utils::StringID;
     using DomainStrSID = Utils::StringID;

@@ -9,7 +9,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    Nullable<Settings*> SettingsManager::PutSettings(const std::string& name)
+    Nullable<Settings*> SettingsManager::PutSettings(const String& name)
     {
         if (_namedSettings.contains(name))
         {
@@ -21,7 +21,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Settings*> SettingsManager::GetSettings(const std::string& name) const
+    Nullable<Settings*> SettingsManager::GetSettings(const String& name) const
     {
         if (_namedSettings.contains(name))
         {

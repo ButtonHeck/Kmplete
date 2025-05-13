@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    void JsonScope::Push(const std::string& entry)
+    void JsonScope::Push(const String& entry)
     {
         scope.push_back(entry);
         scopeString = Utils::StringVectorToString(scope, '/');

@@ -5,8 +5,6 @@
 
 #include <boost/locale.hpp>
 
-#include <string>
-
 namespace Kmplete
 {
     namespace Translator

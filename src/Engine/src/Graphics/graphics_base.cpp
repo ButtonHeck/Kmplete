@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    std::string GraphicsBackendTypeToString(GraphicsBackendType type) noexcept
+    String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept
     {
         switch (type)
         {
@@ -16,7 +16,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    GraphicsBackendType StringToGraphicsBackendType(const std::string& string) noexcept
+    GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept
     {
         if (string == OpenGLStr)
         {

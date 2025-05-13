@@ -137,25 +137,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToGenericU8String(const Path& path)
+    String Filesystem::ToGenericU8String(const Path& path)
     {
         return path.generic_u8string();
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToGenericString(const Path& path)
+    String Filesystem::ToGenericString(const Path& path)
     {
         return path.generic_string();
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToNativeU8String(const Path& path)
+    String Filesystem::ToNativeU8String(const Path& path)
     {
         return path.u8string();
     }
     //--------------------------------------------------------------------------
 
-    std::string Filesystem::ToNativeString(const Path& path)
+    String Filesystem::ToNativeString(const Path& path)
     {
         return path.string();
     }

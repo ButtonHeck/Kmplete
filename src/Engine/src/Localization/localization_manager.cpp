@@ -57,7 +57,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::AddMessagesPath(const std::string& path)
+    void LocalizationManager::AddMessagesPath(const String& path)
     {
         _localeGenerator.add_messages_path(path);
     }

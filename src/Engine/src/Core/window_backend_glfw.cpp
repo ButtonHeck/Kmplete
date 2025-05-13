@@ -118,7 +118,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const std::string& windowName)
+    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName)
     {
         if (windowName.empty())
         {
@@ -196,7 +196,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::GetAuxWindow(const std::string& windowName) const
+    Nullable<Window*> WindowBackendGlfw::GetAuxWindow(const String& windowName) const
     {
         if (_auxWindows.contains(windowName))
         {
@@ -208,7 +208,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool WindowBackendGlfw::DestroyAuxWindow(const std::string& windowName)
+    bool WindowBackendGlfw::DestroyAuxWindow(const String& windowName)
     {
         if (_auxWindows.contains(windowName))
         {

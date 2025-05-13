@@ -1,4 +1,5 @@
 #include "Kmplete/Core/program_options.h"
+#include "Kmplete/Core/types.h"
 
 namespace Kmplete
 {
@@ -46,14 +47,14 @@ namespace Kmplete
     {
         boost::program_options::options_description optDescription("Kmplete options");
         optDescription.add_options()
-            ("settings,S", boost::program_options::value<std::string>(), "Path to settings file")
+            ("settings,S", boost::program_options::value<String>(), "Path to settings file")
             ;
 
         boost::program_options::variables_map vm;
         boost::program_options::store(cmdParser.options(optDescription).run(), vm);
         boost::program_options::notify(vm);
 
-        _settingsFilePath = Path(vm.count("settings") ? vm["settings"].as<std::string>() : "");
+        _settingsFilePath = Path(vm.count("settings") ? vm["settings"].as<String>() : "");
     }
     //--------------------------------------------------------------------------
 }

@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/kmplete_api.h"
 #include "Kmplete/Core/window.h"
+#include "Kmplete/Core/types.h"
 #include "Kmplete/Core/pointers.h"
 
 struct GLFWwindow;
@@ -21,7 +22,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
 
-        KMP_API void SetTitle(const std::string& title) override;
+        KMP_API void SetTitle(const String& title) override;
         KMP_API void SetIcon(const Path& path) override;
 
         KMP_API void SetShouldClose(bool close) override;
