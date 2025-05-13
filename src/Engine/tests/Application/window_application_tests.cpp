@@ -16,9 +16,9 @@ namespace Kmplete
             Initialize();
         }
 
-        KMP_NODISCARD std::string GetApplicationName() const noexcept override
+        KMP_NODISCARD String GetApplicationName() const noexcept override
         {
-            return std::string("TestApplication");
+            return String("TestApplication");
         }
 
         void Run() override

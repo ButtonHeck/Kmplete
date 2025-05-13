@@ -145,7 +145,7 @@ TEST_CASE("Json document add children documents positive", "[json][reader][write
     REQUIRE(childrenDocuments.empty());
 
     // assure lifetime of child1 and child2 doesn't affect rootDoc (rapidjson allocators didn't mess up)
-    std::string rootDocStringBeforeScopeExit = "";
+    Kmplete::String rootDocStringBeforeScopeExit = "";
     {
         Kmplete::JsonDocument child1;
         REQUIRE(child1.SetInt("Int1", 10));
@@ -161,7 +161,7 @@ TEST_CASE("Json document add children documents positive", "[json][reader][write
 
         // assure lifetime of ChildStr doesn't affect rootDoc
         {
-            const std::string ChildStr = std::string("Child1");
+            const auto ChildStr = Kmplete::String("Child1");
             REQUIRE(rootDoc.AddChildDocument(ChildStr, child1));
             REQUIRE(rootDoc.AddChildDocument("Child2", child2));
             childrenDocuments = rootDoc.GetChildren();
@@ -385,8 +385,8 @@ TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][do
     const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
-    const std::string unescaped = R"rjs("Quote" unescaped)rjs";
-    const std::string unsecaped2 = R"rjs("Quote\" unescaped)rjs";
+    const Kmplete::String unescaped = R"rjs("Quote" unescaped)rjs";
+    const Kmplete::String unsecaped2 = R"rjs("Quote\" unescaped)rjs";
 
     REQUIRE(rootDoc.SetString("Unescaped", unescaped));
     REQUIRE(rootDoc.SetString("Unescaped2", unsecaped2));

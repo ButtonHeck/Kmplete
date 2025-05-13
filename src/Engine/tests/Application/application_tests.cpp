@@ -47,9 +47,9 @@ namespace Kmplete
             _localizationManager->SetLocale("ru_RU.UTF8");
         }
 
-        KMP_NODISCARD std::string GetApplicationName() const noexcept override 
+        KMP_NODISCARD String GetApplicationName() const noexcept override 
         { 
-            return std::string("TestApplication"); 
+            return String("TestApplication"); 
         }
 
         void SetSender(Ptr<EventSender> sender)
@@ -108,9 +108,9 @@ namespace Kmplete
             : Application(applicationParameters)
         {}
 
-        KMP_NODISCARD std::string GetApplicationName() const noexcept override
+        KMP_NODISCARD String GetApplicationName() const noexcept override
         {
-            return std::string("MetricsTestApplication");
+            return String("MetricsTestApplication");
         }
 
         void Run() override {}

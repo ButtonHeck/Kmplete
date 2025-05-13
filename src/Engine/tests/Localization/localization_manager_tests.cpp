@@ -16,7 +16,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
 
     // Before any locale handling
     auto localeC = std::setlocale(LC_ALL, NULL);
-    REQUIRE(std::string(localeC) == "C");
+    REQUIRE(String(localeC) == "C");
     REQUIRE(std::locale().name() == "C");
 
     // Create default localizationManager
@@ -24,7 +24,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     auto currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == LocaleEnUTF8Keyword);
+    REQUIRE(String(localeC) == LocaleEnUTF8Keyword);
 
 // Only "C" and "POSIX" locales are supported under MinGW port of GCC and libstdc++.
 #if defined (KMP_COMPILER_MINGW)
@@ -34,7 +34,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == "C");
+    REQUIRE(String(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
     // Set 'C' locale
@@ -43,7 +43,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == "C");
+    REQUIRE(String(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
 #else
@@ -53,7 +53,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == LocaleEnUTF8Keyword);
+    REQUIRE(String(localeC) == LocaleEnUTF8Keyword);
     REQUIRE(currentLocale == LocaleEnUTF8Keyword);
 
     // Set empty locale
@@ -62,7 +62,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == "C");
+    REQUIRE(String(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
     // Set 'ru_RU.UTF-8' locale
@@ -71,7 +71,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == LocaleRuUTF8Keyword);
+    REQUIRE(String(localeC) == LocaleRuUTF8Keyword);
     REQUIRE(currentLocale == LocaleRuUTF8Keyword);
 
     // Set 'C' locale
@@ -80,7 +80,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == "C");
+    REQUIRE(String(localeC) == "C");
     REQUIRE(currentLocale == "C");
 
     // Set '.UTF-8' locale
@@ -90,12 +90,12 @@ TEST_CASE("Locale tests", "[localization][locale]")
     REQUIRE(std::locale().name() == "*");
     if (ok)
     {
-        REQUIRE_FALSE(std::string(localeC) == "C"); // may be like 'Russian_Russia.utf8' and should not be C from previous call
+        REQUIRE_FALSE(String(localeC) == "C"); // may be like 'Russian_Russia.utf8' and should not be C from previous call
         REQUIRE(currentLocale == ".UTF8");
     }
     else // Linux might not accept ".UTF8"
     {
-        REQUIRE(std::string(localeC) == "C");
+        REQUIRE(String(localeC) == "C");
         REQUIRE(currentLocale == "C");
     }
 
@@ -107,12 +107,12 @@ TEST_CASE("Locale tests", "[localization][locale]")
     bool deutschLocaleOk = ok;
     if (ok)
     {
-        REQUIRE(std::string(localeC) == "de_DE");
+        REQUIRE(String(localeC) == "de_DE");
         REQUIRE(currentLocale == "de_DE");
     }
     else // Linux might not accept ".de_DE" (or other lang_LANG like)
     {
-        REQUIRE(std::string(localeC) == "C");
+        REQUIRE(String(localeC) == "C");
         REQUIRE(currentLocale == "C");
     }
 
@@ -124,12 +124,12 @@ TEST_CASE("Locale tests", "[localization][locale]")
     REQUIRE_FALSE(ok);
     if (deutschLocaleOk)
     {
-        REQUIRE(std::string(localeC) == "de_DE"); // should be same from previous successful call
+        REQUIRE(String(localeC) == "de_DE"); // should be same from previous successful call
         REQUIRE(currentLocale == "de_DE"); // should be same from previous successful call
     }
     else
     {
-        REQUIRE(std::string(localeC) == "C"); // should be same from previous unsuccessful call
+        REQUIRE(String(localeC) == "C"); // should be same from previous unsuccessful call
         REQUIRE(currentLocale == "C"); // should be same from previous unsuccessful call
     }
 
@@ -139,7 +139,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     localeC = std::setlocale(LC_ALL, NULL);
     currentLocale = localizationManager.GetLocale();
     REQUIRE(std::locale().name() == "*");
-    REQUIRE(std::string(localeC) == LocaleRuUTF8Keyword);
+    REQUIRE(String(localeC) == LocaleRuUTF8Keyword);
     REQUIRE(currentLocale == LocaleRuUTF8Keyword);
 #endif
 }
