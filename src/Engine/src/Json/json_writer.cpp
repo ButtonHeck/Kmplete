@@ -217,7 +217,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetBool(const String& name, bool value)
+    bool JsonWriter::SetBool(const char* name, bool value)
     {
         if (!_currentObject)
         {
@@ -225,7 +225,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set bool - bool's name should not be empty");
             return false;
@@ -237,7 +237,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsBool())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsBool())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new bool '{}' in '{}'", name, _scope.scopeString);
@@ -245,7 +245,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetBool(value);
+            (*_currentObject)[name].SetBool(value);
         }
 
         return true;
@@ -286,7 +286,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetInt(const String& name, int value)
+    bool JsonWriter::SetInt(const char* name, int value)
     {
         if (!_currentObject)
         {
@@ -294,7 +294,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set int - int's name should not be empty");
             return false;
@@ -306,7 +306,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new int '{}' in '{}'", name, _scope.scopeString);
@@ -314,7 +314,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetInt(value);
+            (*_currentObject)[name].SetInt(value);
         }
 
         return true;
@@ -355,7 +355,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetUInt(const String& name, unsigned int value)
+    bool JsonWriter::SetUInt(const char* name, unsigned int value)
     {
         if (!_currentObject)
         {
@@ -363,7 +363,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int - unsigned int's name should not be empty");
             return false;
@@ -375,7 +375,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new unsigned int '{}' in '{}'", name, _scope.scopeString);
@@ -383,7 +383,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetUint(value);
+            (*_currentObject)[name].SetUint(value);
         }
 
         return true;
@@ -424,7 +424,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetInt64(const String& name, int64_t value)
+    bool JsonWriter::SetInt64(const char* name, int64_t value)
     {
         if (!_currentObject)
         {
@@ -432,7 +432,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set int64 - int64's name should not be empty");
             return false;
@@ -444,7 +444,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt64())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt64())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new int64 '{}' in '{}'", name, _scope.scopeString);
@@ -452,7 +452,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetInt64(value);
+            (*_currentObject)[name].SetInt64(value);
         }
 
         return true;
@@ -493,7 +493,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetUInt64(const String& name, uint64_t value)
+    bool JsonWriter::SetUInt64(const char* name, uint64_t value)
     {
         if (!_currentObject)
         {
@@ -501,7 +501,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set unsigned int64 - unsigned int64's name should not be empty");
             return false;
@@ -513,7 +513,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint64())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint64())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new unsigned int64 '{}' in '{}'", name, _scope.scopeString);
@@ -521,7 +521,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetUint64(value);
+            (*_currentObject)[name].SetUint64(value);
         }
 
         return true;
@@ -562,7 +562,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetDouble(const String& name, double value)
+    bool JsonWriter::SetDouble(const char* name, double value)
     {
         if (!_currentObject)
         {
@@ -570,7 +570,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set double - double's name should not be empty");
             return false;
@@ -582,7 +582,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsDouble())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsDouble())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new double '{}' in '{}'", name, _scope.scopeString);
@@ -590,7 +590,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetDouble(value);
+            (*_currentObject)[name].SetDouble(value);
         }
 
         return true;
@@ -632,7 +632,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetString(const String& name, const String& value)
+    bool JsonWriter::SetString(const char* name, const String& value)
     {
         if (!_currentObject)
         {
@@ -640,7 +640,7 @@ namespace Kmplete
             return false;
         }
 
-        if (name.empty())
+        if (!name || *name == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot set string - string's name should not be empty");
             return false;
@@ -653,7 +653,7 @@ namespace Kmplete
         }
 
         const auto size = static_cast<rapidjson::SizeType>(value.length());
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsString())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsString())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new string '{}' in '{}'", name, _scope.scopeString);
@@ -661,7 +661,7 @@ namespace Kmplete
         }
         else
         {
-            (*_currentObject)[name.c_str()].SetString(value.c_str(), size, _document.GetAllocator());
+            (*_currentObject)[name].SetString(value.c_str(), size, _document.GetAllocator());
         }
 
         return true;

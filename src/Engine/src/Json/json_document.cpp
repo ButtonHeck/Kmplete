@@ -286,7 +286,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetBool(const String& name, bool value)
+    bool JsonDocument::SetBool(const char* name, bool value)
     {
         return _writer->SetBool(name, value);
     }
@@ -298,7 +298,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetInt(const String& name, int value)
+    bool JsonDocument::SetInt(const char* name, int value)
     {
         return _writer->SetInt(name, value);
     }
@@ -310,7 +310,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetUInt(const String& name, unsigned int value)
+    bool JsonDocument::SetUInt(const char* name, unsigned int value)
     {
         return _writer->SetUInt(name, value);
     }
@@ -322,7 +322,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetInt64(const String& name, int64_t value)
+    bool JsonDocument::SetInt64(const char* name, int64_t value)
     {
         return _writer->SetInt64(name, value);
     }
@@ -334,7 +334,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetUInt64(const String& name, uint64_t value)
+    bool JsonDocument::SetUInt64(const char* name, uint64_t value)
     {
         return _writer->SetUInt64(name, value);
     }
@@ -346,7 +346,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetDouble(const String& name, double value)
+    bool JsonDocument::SetDouble(const char* name, double value)
     {
         return _writer->SetDouble(name, value);
     }
@@ -358,7 +358,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetString(const String& name, const String& value)
+    bool JsonDocument::SetString(const char* name, const String& value)
     {
         return _writer->SetString(name, value);
     }
@@ -407,7 +407,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::GetBool(const String& name, bool defaultValue)
+    bool JsonDocument::GetBool(const char* name, bool defaultValue)
     {
         return _reader->GetBool(name, defaultValue);
     }
@@ -419,7 +419,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonDocument::GetInt(const String& name, int defaultValue)
+    int JsonDocument::GetInt(const char* name, int defaultValue)
     {
         return _reader->GetInt(name, defaultValue);
     }
@@ -431,7 +431,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonDocument::GetUInt(const String& name, unsigned int defaultValue)
+    unsigned int JsonDocument::GetUInt(const char* name, unsigned int defaultValue)
     {
         return _reader->GetUInt(name, defaultValue);
     }
@@ -443,7 +443,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonDocument::GetInt64(const String& name, int64_t defaultValue)
+    int64_t JsonDocument::GetInt64(const char* name, int64_t defaultValue)
     {
         return _reader->GetInt64(name, defaultValue);
     }
@@ -455,7 +455,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonDocument::GetUInt64(const String& name, uint64_t defaultValue)
+    uint64_t JsonDocument::GetUInt64(const char* name, uint64_t defaultValue)
     {
         return _reader->GetUInt64(name, defaultValue);
     }
@@ -467,7 +467,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double JsonDocument::GetDouble(const String& name, double defaultValue)
+    double JsonDocument::GetDouble(const char* name, double defaultValue)
     {
         return _reader->GetDouble(name, defaultValue);
     }
@@ -479,7 +479,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String JsonDocument::GetString(const String& name, const String& defaultValue)
+    String JsonDocument::GetString(const char* name, const String& defaultValue)
     {
         return _reader->GetString(name, defaultValue);
     }

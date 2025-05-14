@@ -25,19 +25,19 @@ namespace Kmplete
         KMP_API bool EndArray();
 
         KMP_NODISCARD KMP_API bool GetBool(int index, bool defaultValue = false);
-        KMP_NODISCARD KMP_API bool GetBool(const String& name, bool defaultValue = false);
+        KMP_NODISCARD KMP_API bool GetBool(const char* name, bool defaultValue = false);
         KMP_NODISCARD KMP_API int GetInt(int index, int defaultValue = 0);
-        KMP_NODISCARD KMP_API int GetInt(const String& name, int defaultValue = 0);
+        KMP_NODISCARD KMP_API int GetInt(const char* name, int defaultValue = 0);
         KMP_NODISCARD KMP_API unsigned int GetUInt(int index, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API unsigned int GetUInt(const String& name, unsigned int defaultValue = 0);
+        KMP_NODISCARD KMP_API unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
         KMP_NODISCARD KMP_API int64_t GetInt64(int index, int64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API int64_t GetInt64(const String& name, int64_t defaultValue = 0);
+        KMP_NODISCARD KMP_API int64_t GetInt64(const char* name, int64_t defaultValue = 0);
         KMP_NODISCARD KMP_API uint64_t GetUInt64(int index, uint64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API uint64_t GetUInt64(const String& name, uint64_t defaultValue = 0);
+        KMP_NODISCARD KMP_API uint64_t GetUInt64(const char* name, uint64_t defaultValue = 0);
         KMP_NODISCARD KMP_API double GetDouble(int index, double defaultValue = 0.0);
-        KMP_NODISCARD KMP_API double GetDouble(const String& name, double defaultValue = 0.0);
+        KMP_NODISCARD KMP_API double GetDouble(const char* name, double defaultValue = 0.0);
         KMP_NODISCARD KMP_API String GetString(int index, const String& defaultValue = "");
-        KMP_NODISCARD KMP_API String GetString(const String& name, const String& defaultValue = "");
+        KMP_NODISCARD KMP_API String GetString(const char* name, const String& defaultValue = "");
 
     private:
         KMP_NODISCARD bool ValidToGetFromArray(int index) const;

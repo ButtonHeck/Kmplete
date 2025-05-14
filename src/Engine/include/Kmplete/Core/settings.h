@@ -27,19 +27,19 @@ namespace Kmplete
         KMP_API bool EndSaveArray();
 
         KMP_API bool SaveBool(int index, bool value);
-        KMP_API bool SaveBool(const String& name, bool value);
+        KMP_API bool SaveBool(const char* name, bool value);
         KMP_API bool SaveInt(int index, int value);
-        KMP_API bool SaveInt(const String& name, int value);
+        KMP_API bool SaveInt(const char* name, int value);
         KMP_API bool SaveUInt(int index, unsigned int value);
-        KMP_API bool SaveUInt(const String& name, unsigned int value);
+        KMP_API bool SaveUInt(const char* name, unsigned int value);
         KMP_API bool SaveInt64(int index, int64_t value);
-        KMP_API bool SaveInt64(const String& name, int64_t value);
+        KMP_API bool SaveInt64(const char* name, int64_t value);
         KMP_API bool SaveUInt64(int index, uint64_t value);
-        KMP_API bool SaveUInt64(const String& name, uint64_t value);
+        KMP_API bool SaveUInt64(const char* name, uint64_t value);
         KMP_API bool SaveDouble(int index, double value);
-        KMP_API bool SaveDouble(const String& name, double value);
+        KMP_API bool SaveDouble(const char* name, double value);
         KMP_API bool SaveString(int index, const String& value);
-        KMP_API bool SaveString(const String& name, const String& value);
+        KMP_API bool SaveString(const char* name, const String& value);
 
         KMP_NODISCARD KMP_API const JsonDocument& GetDocument() const;
 
@@ -53,19 +53,19 @@ namespace Kmplete
         KMP_API bool EndLoadArray();
 
         KMP_NODISCARD KMP_API bool GetBool(int index, bool defaultValue = false);
-        KMP_NODISCARD KMP_API bool GetBool(const String& name, bool defaultValue = false);
+        KMP_NODISCARD KMP_API bool GetBool(const char* name, bool defaultValue = false);
         KMP_NODISCARD KMP_API int GetInt(int index, int defaultValue = 0);
-        KMP_NODISCARD KMP_API int GetInt(const String& name, int defaultValue = 0);
+        KMP_NODISCARD KMP_API int GetInt(const char* name, int defaultValue = 0);
         KMP_NODISCARD KMP_API unsigned int GetUInt(int index, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API unsigned int GetUInt(const String& name, unsigned int defaultValue = 0);
+        KMP_NODISCARD KMP_API unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
         KMP_NODISCARD KMP_API int64_t GetInt64(int index, int64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API int64_t GetInt64(const String& name, int64_t defaultValue = 0);
+        KMP_NODISCARD KMP_API int64_t GetInt64(const char* name, int64_t defaultValue = 0);
         KMP_NODISCARD KMP_API uint64_t GetUInt64(int index, uint64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API uint64_t GetUInt64(const String& name, uint64_t defaultValue = 0);
+        KMP_NODISCARD KMP_API uint64_t GetUInt64(const char* name, uint64_t defaultValue = 0);
         KMP_NODISCARD KMP_API double GetDouble(int index, double defaultValue = 0.0);
-        KMP_NODISCARD KMP_API double GetDouble(const String& name, double defaultValue = 0.0);
+        KMP_NODISCARD KMP_API double GetDouble(const char* name, double defaultValue = 0.0);
         KMP_NODISCARD KMP_API String GetString(int index, const String& defaultValue = "");
-        KMP_NODISCARD KMP_API String GetString(const String& name, const String& defaultValue = "");
+        KMP_NODISCARD KMP_API String GetString(const char* name, const String& defaultValue = "");
 
     private:
         const String _name;

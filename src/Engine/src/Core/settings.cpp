@@ -62,7 +62,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveBool(const String& name, bool value)
+    bool Settings::SaveBool(const char* name, bool value)
     {
         return _document->SetBool(name, value);
     }
@@ -74,7 +74,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt(const String& name, int value)
+    bool Settings::SaveInt(const char* name, int value)
     {
         return _document->SetInt(name, value);
     }
@@ -86,7 +86,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt(const String& name, unsigned int value)
+    bool Settings::SaveUInt(const char* name, unsigned int value)
     {
         return _document->SetUInt(name, value);
     }
@@ -98,7 +98,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt64(const String& name, int64_t value)
+    bool Settings::SaveInt64(const char* name, int64_t value)
     {
         return _document->SetInt64(name, value);
     }
@@ -110,7 +110,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt64(const String& name, uint64_t value)
+    bool Settings::SaveUInt64(const char* name, uint64_t value)
     {
         return _document->SetUInt64(name, value);
     }
@@ -122,7 +122,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveDouble(const String& name, double value)
+    bool Settings::SaveDouble(const char* name, double value)
     {
         return _document->SetDouble(name, value);
     }
@@ -134,7 +134,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveString(const String& name, const String& value)
+    bool Settings::SaveString(const char* name, const String& value)
     {
         return _document->SetString(name, value);
     }
@@ -188,7 +188,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::GetBool(const String& name, bool defaultValue)
+    bool Settings::GetBool(const char* name, bool defaultValue)
     {
         return _document->GetBool(name, defaultValue);
     }
@@ -200,7 +200,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int Settings::GetInt(const String& name, int defaultValue)
+    int Settings::GetInt(const char* name, int defaultValue)
     {
         return _document->GetInt(name, defaultValue);
     }
@@ -212,7 +212,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int Settings::GetUInt(const String& name, unsigned int defaultValue)
+    unsigned int Settings::GetUInt(const char* name, unsigned int defaultValue)
     {
         return _document->GetUInt(name, defaultValue);
     }
@@ -224,7 +224,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t Settings::GetInt64(const String& name, int64_t defaultValue)
+    int64_t Settings::GetInt64(const char* name, int64_t defaultValue)
     {
         return _document->GetInt64(name, defaultValue);
     }
@@ -236,7 +236,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t Settings::GetUInt64(const String& name, uint64_t defaultValue)
+    uint64_t Settings::GetUInt64(const char* name, uint64_t defaultValue)
     {
         return _document->GetUInt64(name, defaultValue);
     }
@@ -248,7 +248,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double Settings::GetDouble(const String& name, double defaultValue)
+    double Settings::GetDouble(const char* name, double defaultValue)
     {
         return _document->GetDouble(name, defaultValue);
     }
@@ -260,7 +260,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Settings::GetString(const String& name, const String& defaultValue)
+    String Settings::GetString(const char* name, const String& defaultValue)
     {
         return _document->GetString(name, defaultValue);
     }

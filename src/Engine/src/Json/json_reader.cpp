@@ -165,7 +165,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::GetBool(const String& name, bool defaultValue)
+    bool JsonReader::GetBool(const char* name, bool defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -173,13 +173,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsBool())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsBool())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find bool for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetBool();
+        return (*_currentObject)[name].GetBool();
     }
     //--------------------------------------------------------------------------
 
@@ -200,7 +200,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonReader::GetInt(const String& name, int defaultValue)
+    int JsonReader::GetInt(const char* name, int defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -208,13 +208,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find int for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetInt();
+        return (*_currentObject)[name].GetInt();
     }
     //--------------------------------------------------------------------------
 
@@ -235,7 +235,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonReader::GetUInt(const String& name, unsigned int defaultValue)
+    unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -243,13 +243,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find unsigned int for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetUint();
+        return (*_currentObject)[name].GetUint();
     }
     //--------------------------------------------------------------------------
 
@@ -270,7 +270,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonReader::GetInt64(const String& name, int64_t defaultValue)
+    int64_t JsonReader::GetInt64(const char* name, int64_t defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -278,13 +278,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsInt64())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt64())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find int64 for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetInt64();
+        return (*_currentObject)[name].GetInt64();
     }
     //--------------------------------------------------------------------------
 
@@ -305,7 +305,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonReader::GetUInt64(const String& name, uint64_t defaultValue)
+    uint64_t JsonReader::GetUInt64(const char* name, uint64_t defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -313,13 +313,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsUint64())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint64())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find unsigned int64 for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetUint64();
+        return (*_currentObject)[name].GetUint64();
     }
     //--------------------------------------------------------------------------
 
@@ -340,7 +340,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double JsonReader::GetDouble(const String& name, double defaultValue)
+    double JsonReader::GetDouble(const char* name, double defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -348,13 +348,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsDouble())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsDouble())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find double for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetDouble();
+        return (*_currentObject)[name].GetDouble();
     }
     //--------------------------------------------------------------------------
 
@@ -375,7 +375,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String JsonReader::GetString(const String& name, const String& defaultValue)
+    String JsonReader::GetString(const char* name, const String& defaultValue)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -383,13 +383,13 @@ namespace Kmplete
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name.c_str()) || !(*_currentObject)[name.c_str()].IsString())
+        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsString())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find string for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
-        return (*_currentObject)[name.c_str()].GetString();
+        return (*_currentObject)[name].GetString();
     }
     //--------------------------------------------------------------------------
 
