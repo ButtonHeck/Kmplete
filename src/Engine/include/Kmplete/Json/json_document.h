@@ -39,11 +39,11 @@ namespace Kmplete
         KMP_NODISCARD KMP_API std::vector<std::pair<String, Ptr<JsonDocument>>> GetChildren(bool onlyObjects = true) const;
 
 
-        KMP_API bool StartSetObject(const String& objectName);
+        KMP_API bool StartSetObject(const char* objectName);
         KMP_API bool StartSetObject(int index);
         KMP_API bool EndSetObject();
 
-        KMP_API bool StartSetArray(const String& arrayName, bool overwrite = true);
+        KMP_API bool StartSetArray(const char* arrayName, bool overwrite = true);
         KMP_API bool StartSetArray(int index, bool overwrite = true);
         KMP_API bool EndSetArray();
 
@@ -63,11 +63,11 @@ namespace Kmplete
         KMP_API bool SetString(const char* name, const String& value);
 
 
-        KMP_API bool StartGetObject(const String& objectName);
+        KMP_API bool StartGetObject(const char* objectName);
         KMP_API bool StartGetObject(int index);
         KMP_API bool EndGetObject();
 
-        KMP_API int StartGetArray(const String& arrayName);
+        KMP_API int StartGetArray(const char* arrayName);
         KMP_API int StartGetArray(int index);
         KMP_API bool EndGetArray();
 

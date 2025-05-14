@@ -244,7 +244,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::StartSetObject(const String& objectName)
+    bool JsonDocument::StartSetObject(const char* objectName)
     {
         return _writer->StartObject(objectName);
     }
@@ -262,7 +262,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::StartSetArray(const String& arrayName, bool overwrite)
+    bool JsonDocument::StartSetArray(const char* arrayName, bool overwrite)
     {
         return _writer->StartArray(arrayName, overwrite);
     }
@@ -365,7 +365,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    bool JsonDocument::StartGetObject(const String& objectName)
+    bool JsonDocument::StartGetObject(const char* objectName)
     {
         return _reader->StartObject(objectName);
     }
@@ -383,7 +383,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonDocument::StartGetArray(const String& arrayName)
+    int JsonDocument::StartGetArray(const char* arrayName)
     {
         return _reader->StartArray(arrayName);
     }

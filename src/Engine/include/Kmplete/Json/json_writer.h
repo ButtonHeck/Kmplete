@@ -16,11 +16,11 @@ namespace Kmplete
         KMP_API explicit JsonWriter(rapidjson::Document& document);
         ~JsonWriter() = default;
 
-        KMP_API bool StartObject(const String& objectName);
+        KMP_API bool StartObject(const char* objectName);
         KMP_API bool StartObject(int index);
         KMP_API bool EndObject();
 
-        KMP_API bool StartArray(const String& arrayName, bool overwrite = true);
+        KMP_API bool StartArray(const char* arrayName, bool overwrite = true);
         KMP_API bool StartArray(int index, bool overwrite = true);
         KMP_API bool EndArray();
 

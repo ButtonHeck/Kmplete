@@ -17,7 +17,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartObject(const String& objectName)
+    bool JsonWriter::StartObject(const char* objectName)
     {
         if (!_currentObject)
         {
@@ -25,7 +25,7 @@ namespace Kmplete
             return false;
         }
 
-        if (objectName.empty())
+        if (!objectName || *objectName == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot start object - object's name is empty");
             return false;
@@ -39,7 +39,7 @@ namespace Kmplete
 
         _scope.Push(objectName);
 
-        if (!_currentObject->HasMember(objectName.c_str()) || !(*_currentObject)[objectName.c_str()].IsObject())
+        if (!_currentObject->HasMember(objectName) || !(*_currentObject)[objectName].IsObject())
         {
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new object '{}' in '{}'", objectName, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetObject();
@@ -97,7 +97,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartArray(const String& arrayName, bool overwrite)
+    bool JsonWriter::StartArray(const char* arrayName, bool overwrite)
     {
         if (!_currentObject)
         {
@@ -105,7 +105,7 @@ namespace Kmplete
             return false;
         }
 
-        if (arrayName.empty())
+        if (!arrayName || *arrayName == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonWriter: cannot start array - array's name should not be empty");
             return false;
@@ -119,7 +119,7 @@ namespace Kmplete
 
         _scope.Push(arrayName);
 
-        if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray() || overwrite)
+        if (!_currentObject->HasMember(arrayName) || !(*_currentObject)[arrayName].IsArray() || overwrite)
         {
             KMP_LOG_CORE_DEBUG("JsonWriter: creating new array '{}' in '{}'", arrayName, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetArray();

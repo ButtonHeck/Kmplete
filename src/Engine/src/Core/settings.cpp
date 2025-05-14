@@ -20,7 +20,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveObject(const String& objectName)
+    bool Settings::StartSaveObject(const char* objectName)
     {
         return _document->StartSetObject(objectName);
     }
@@ -38,7 +38,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(const String& arrayName, bool overwrite)
+    bool Settings::StartSaveArray(const char* arrayName, bool overwrite)
     {
         return _document->StartSetArray(arrayName, overwrite);
     }
@@ -146,7 +146,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartLoadObject(const String& objectName)
+    bool Settings::StartLoadObject(const char* objectName)
     {
         return _document->StartGetObject(objectName);
     }
@@ -164,7 +164,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int Settings::StartLoadArray(const String& arrayName)
+    int Settings::StartLoadArray(const char* arrayName)
     {
         return _document->StartGetArray(arrayName);
     }

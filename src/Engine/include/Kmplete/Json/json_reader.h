@@ -16,11 +16,11 @@ namespace Kmplete
         KMP_API explicit JsonReader(rapidjson::Document& document);
         ~JsonReader() = default;
 
-        KMP_API bool StartObject(const String& objectName);
+        KMP_API bool StartObject(const char* objectName);
         KMP_API bool StartObject(int index);
         KMP_API bool EndObject();
 
-        KMP_API int StartArray(const String& arrayName);
+        KMP_API int StartArray(const char* arrayName);
         KMP_API int StartArray(int index);
         KMP_API bool EndArray();
 

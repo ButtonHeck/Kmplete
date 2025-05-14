@@ -18,11 +18,11 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API const String& GetName() const noexcept;
 
-        KMP_API bool StartSaveObject(const String& objectName);
+        KMP_API bool StartSaveObject(const char* objectName);
         KMP_API bool StartSaveObject(int index);
         KMP_API bool EndSaveObject();
 
-        KMP_API bool StartSaveArray(const String& arrayName, bool overwrite = true);
+        KMP_API bool StartSaveArray(const char* arrayName, bool overwrite = true);
         KMP_API bool StartSaveArray(int index, bool overwrite = true);
         KMP_API bool EndSaveArray();
 
@@ -44,11 +44,11 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const JsonDocument& GetDocument() const;
 
 
-        KMP_API bool StartLoadObject(const String& objectName);
+        KMP_API bool StartLoadObject(const char* objectName);
         KMP_API bool StartLoadObject(int index);
         KMP_API bool EndLoadObject();
 
-        KMP_API int StartLoadArray(const String& arrayName);
+        KMP_API int StartLoadArray(const char* arrayName);
         KMP_API int StartLoadArray(int index);
         KMP_API bool EndLoadArray();
 

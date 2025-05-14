@@ -12,7 +12,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::StartObject(const String& objectName)
+    bool JsonReader::StartObject(const char* objectName)
     {
         if (!_currentObject)
         {
@@ -20,7 +20,7 @@ namespace Kmplete
             return false;
         }
 
-        if (objectName.empty())
+        if (!objectName || *objectName == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot start object - object's name is empty");
             return false;
@@ -32,7 +32,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!_currentObject->HasMember(objectName.c_str()) || !(*_currentObject)[objectName.c_str()].IsObject())
+        if (!_currentObject->HasMember(objectName) || !(*_currentObject)[objectName].IsObject())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find member '{}', or the member is not an object type", objectName);
             return false;
@@ -77,7 +77,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonReader::StartArray(const String& arrayName)
+    int JsonReader::StartArray(const char* arrayName)
     {
         if (!_currentObject)
         {
@@ -85,7 +85,7 @@ namespace Kmplete
             return 0;
         }
 
-        if (arrayName.empty())
+        if (!arrayName || *arrayName == '\0')
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot start array - array's name should not be empty");
             return 0;
@@ -97,7 +97,7 @@ namespace Kmplete
             return 0;
         }
 
-        if (!_currentObject->HasMember(arrayName.c_str()) || !(*_currentObject)[arrayName.c_str()].IsArray())
+        if (!_currentObject->HasMember(arrayName) || !(*_currentObject)[arrayName].IsArray())
         {
             KMP_LOG_CORE_ERROR("JsonReader: cannot find member '{}', or the member is not an array type", arrayName);
             return 0;
