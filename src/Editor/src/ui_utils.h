@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Kmplete/Core/types.h"
-
 #include <imgui.h>
 
 #include <variant>
@@ -71,7 +69,7 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
-        void SetItemTooltip(const String& text, ImGuiHoveredFlags_ flags = ImGuiHoveredFlags_AllowWhenDisabled);
+        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags = ImGuiHoveredFlags_AllowWhenDisabled);
         //--------------------------------------------------------------------------
     }
 }
