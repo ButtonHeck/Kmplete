@@ -106,9 +106,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetTitle(const String& title)
+    void WindowGlfw::SetTitle(const char* title)
     {
-        glfwSetWindowTitle(_window, title.c_str());
+        glfwSetWindowTitle(_window, title);
     }
     //--------------------------------------------------------------------------
 

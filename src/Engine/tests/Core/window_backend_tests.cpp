@@ -155,7 +155,7 @@ TEST_CASE("Window backend UpdateContinuously ON", "[core][window_backend][window
 
         // every SetTitle generates new event that can't be captured via callback, thus it should be sparsed
         if (titleCount++ % 10 == 0)
-            mainWindow.SetTitle(std::to_string(titleCount / 10));
+            mainWindow.SetTitle(std::to_string(titleCount / 10).c_str());
     }
 
     REQUIRE(mainWindowCb.conditionOk);
@@ -181,7 +181,7 @@ TEST_CASE("Window backend UpdateContinuously OFF", "[core][window_backend][windo
 
         // every SetTitle generates new event that can't be captured via callback, thus it should be sparsed
         if (titleCount++ % 10 == 0)
-            mainWindow.SetTitle(std::to_string(titleCount / 10));
+            mainWindow.SetTitle(std::to_string(titleCount / 10).c_str());
     }
 
     REQUIRE(mainWindowCb.conditionOk);
@@ -207,7 +207,7 @@ TEST_CASE("Window backend VSync ON", "[core][window_backend][window]")
         mainWindow.SwapBuffers();
 
         if (titleCount++ % 60 == 0)
-            mainWindow.SetTitle(std::to_string(titleCount / 60));
+            mainWindow.SetTitle(std::to_string(titleCount / 60).c_str());
     }
 
     REQUIRE(mainWindowCb.conditionOk);
@@ -232,7 +232,7 @@ TEST_CASE("Window backend VSync OFF", "[core][window_backend][window]")
         mainWindow.SwapBuffers();
 
         if (titleCount++ % 60 == 0)
-            mainWindow.SetTitle(std::to_string(titleCount / 60));
+            mainWindow.SetTitle(std::to_string(titleCount / 60).c_str());
     }
 
     REQUIRE(mainWindowCb.conditionOk);
