@@ -5,12 +5,12 @@
 
 namespace Kmplete
 {
-    Image::Image(const Path& filename, bool flipVertically)
+    Image::Image(const Path& filename, bool flipVertically /*= false*/)
         : Image(Filesystem::ToGenericString(filename).c_str(), flipVertically)
     {}
     //--------------------------------------------------------------------------
 
-    Image::Image(const char* filename, bool flipVertically)
+    Image::Image(const char* filename, bool flipVertically /*= false*/)
         : _width(0)
         , _height(0)
         , _channels(ImageChannels::RGB)
@@ -33,12 +33,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Image::Image(const Path& filename, ImageChannels desiredChannels, bool flipVertically)
+    Image::Image(const Path& filename, ImageChannels desiredChannels, bool flipVertically /*= false*/)
         : Image(Filesystem::ToGenericString(filename).c_str(), desiredChannels, flipVertically)
     {}
     //--------------------------------------------------------------------------
 
-    Image::Image(const char* filename, ImageChannels desiredChannels, bool flipVertically)
+    Image::Image(const char* filename, ImageChannels desiredChannels, bool flipVertically /*= false*/)
         : _width(0)
         , _height(0)
         , _channels(desiredChannels)

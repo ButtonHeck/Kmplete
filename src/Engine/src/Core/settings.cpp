@@ -38,13 +38,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(const char* arrayName, bool overwrite)
+    bool Settings::StartSaveArray(const char* arrayName, bool overwrite /*= true*/)
     {
         return _document->StartSetArray(arrayName, overwrite);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(int index, bool overwrite)
+    bool Settings::StartSaveArray(int index, bool overwrite /*= true*/)
     {
         return _document->StartSetArray(index, overwrite);
     }
@@ -182,85 +182,85 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::GetBool(int index, bool defaultValue)
+    bool Settings::GetBool(int index, bool defaultValue /*= false*/)
     {
         return _document->GetBool(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::GetBool(const char* name, bool defaultValue)
+    bool Settings::GetBool(const char* name, bool defaultValue /*= false*/)
     {
         return _document->GetBool(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int Settings::GetInt(int index, int defaultValue)
+    int Settings::GetInt(int index, int defaultValue /*= 0*/)
     {
         return _document->GetInt(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int Settings::GetInt(const char* name, int defaultValue)
+    int Settings::GetInt(const char* name, int defaultValue /*= 0*/)
     {
         return _document->GetInt(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    unsigned int Settings::GetUInt(int index, unsigned int defaultValue)
+    unsigned int Settings::GetUInt(int index, unsigned int defaultValue /*= 0*/)
     {
         return _document->GetUInt(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    unsigned int Settings::GetUInt(const char* name, unsigned int defaultValue)
+    unsigned int Settings::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
     {
         return _document->GetUInt(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t Settings::GetInt64(int index, int64_t defaultValue)
+    int64_t Settings::GetInt64(int index, int64_t defaultValue /*= 0*/)
     {
         return _document->GetInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t Settings::GetInt64(const char* name, int64_t defaultValue)
+    int64_t Settings::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
     {
         return _document->GetInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t Settings::GetUInt64(int index, uint64_t defaultValue)
+    uint64_t Settings::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
     {
         return _document->GetUInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t Settings::GetUInt64(const char* name, uint64_t defaultValue)
+    uint64_t Settings::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
     {
         return _document->GetUInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    double Settings::GetDouble(int index, double defaultValue)
+    double Settings::GetDouble(int index, double defaultValue /*= 0.0*/)
     {
         return _document->GetDouble(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    double Settings::GetDouble(const char* name, double defaultValue)
+    double Settings::GetDouble(const char* name, double defaultValue /*= 0.0*/)
     {
         return _document->GetDouble(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    String Settings::GetString(int index, const String& defaultValue)
+    String Settings::GetString(int index, const String& defaultValue /*= ""*/)
     {
         return _document->GetString(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    String Settings::GetString(const char* name, const String& defaultValue)
+    String Settings::GetString(const char* name, const String& defaultValue /*= ""*/)
     {
         return _document->GetString(name, defaultValue);
     }

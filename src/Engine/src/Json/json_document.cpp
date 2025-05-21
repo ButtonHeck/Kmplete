@@ -115,14 +115,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(const Path& filename, bool pretty)
+    bool JsonDocument::Save(const Path& filename, bool pretty /*= true*/)
     {
         SetFilename(filename);
         return Save(pretty);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(bool pretty)
+    bool JsonDocument::Save(bool pretty /*= true*/)
     {
         _error = false;
         rapidjson::StringBuffer buffer;
@@ -150,7 +150,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String JsonDocument::ToString(bool pretty)
+    String JsonDocument::ToString(bool pretty /*= true*/)
     {
         _error = false;
         rapidjson::StringBuffer buffer;
@@ -186,7 +186,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite)
+    bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite /*= true*/)
     {
         if (name.empty())
         {
@@ -222,7 +222,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects) const
+    std::vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const
     {
         std::vector<std::pair<String, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
@@ -262,13 +262,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::StartSetArray(const char* arrayName, bool overwrite)
+    bool JsonDocument::StartSetArray(const char* arrayName, bool overwrite /*= true*/)
     {
         return _writer->StartArray(arrayName, overwrite);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::StartSetArray(int index, bool overwrite)
+    bool JsonDocument::StartSetArray(int index, bool overwrite /*= true*/)
     {
         return _writer->StartArray(index, overwrite);
     }
@@ -401,85 +401,85 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::GetBool(int index, bool defaultValue)
+    bool JsonDocument::GetBool(int index, bool defaultValue /*= false*/)
     {
         return _reader->GetBool(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::GetBool(const char* name, bool defaultValue)
+    bool JsonDocument::GetBool(const char* name, bool defaultValue /*= false*/)
     {
         return _reader->GetBool(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int JsonDocument::GetInt(int index, int defaultValue)
+    int JsonDocument::GetInt(int index, int defaultValue /*= 0*/)
     {
         return _reader->GetInt(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int JsonDocument::GetInt(const char* name, int defaultValue)
+    int JsonDocument::GetInt(const char* name, int defaultValue /*= 0*/)
     {
         return _reader->GetInt(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonDocument::GetUInt(int index, unsigned int defaultValue)
+    unsigned int JsonDocument::GetUInt(int index, unsigned int defaultValue /*= 0*/)
     {
         return _reader->GetUInt(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonDocument::GetUInt(const char* name, unsigned int defaultValue)
+    unsigned int JsonDocument::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
     {
         return _reader->GetUInt(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonDocument::GetInt64(int index, int64_t defaultValue)
+    int64_t JsonDocument::GetInt64(int index, int64_t defaultValue /*= 0*/)
     {
         return _reader->GetInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonDocument::GetInt64(const char* name, int64_t defaultValue)
+    int64_t JsonDocument::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
     {
         return _reader->GetInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonDocument::GetUInt64(int index, uint64_t defaultValue)
+    uint64_t JsonDocument::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
     {
         return _reader->GetUInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonDocument::GetUInt64(const char* name, uint64_t defaultValue)
+    uint64_t JsonDocument::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
     {
         return _reader->GetUInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    double JsonDocument::GetDouble(int index, double defaultValue)
+    double JsonDocument::GetDouble(int index, double defaultValue /*= 0.0*/)
     {
         return _reader->GetDouble(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    double JsonDocument::GetDouble(const char* name, double defaultValue)
+    double JsonDocument::GetDouble(const char* name, double defaultValue /*= 0.0*/)
     {
         return _reader->GetDouble(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    String JsonDocument::GetString(int index, const String& defaultValue)
+    String JsonDocument::GetString(int index, const String& defaultValue /*= ""*/)
     {
         return _reader->GetString(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    String JsonDocument::GetString(const char* name, const String& defaultValue)
+    String JsonDocument::GetString(const char* name, const String& defaultValue /*= ""*/)
     {
         return _reader->GetString(name, defaultValue);
     }

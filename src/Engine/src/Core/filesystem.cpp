@@ -74,7 +74,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile) noexcept
+    bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile /*= false*/) noexcept
     {
         try
         {

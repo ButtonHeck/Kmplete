@@ -97,7 +97,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartArray(const char* arrayName, bool overwrite)
+    bool JsonWriter::StartArray(const char* arrayName, bool overwrite /*= true*/)
     {
         if (!_currentObject)
         {
@@ -131,7 +131,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::StartArray(int index, bool overwrite)
+    bool JsonWriter::StartArray(int index, bool overwrite /*= true*/)
     {
         if (!_currentObject)
         {

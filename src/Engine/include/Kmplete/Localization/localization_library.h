@@ -15,6 +15,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(LocalizationLibrary)
 
         KMP_API LocalizationLibrary() noexcept;
+        ~LocalizationLibrary() = default;
 
         KMP_API void SetLocale(const LocaleStrSID& localeSid) noexcept;
         KMP_API void SetLocale(const LocaleStr& locale) noexcept;

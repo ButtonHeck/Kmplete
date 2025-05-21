@@ -5,7 +5,7 @@
 
 namespace Kmplete
 {
-    Assertion::Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence)
+    Assertion::Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence /*= Consequence::Terminate*/)
         : _file(file)
         , _function(function)
         , _line(line)

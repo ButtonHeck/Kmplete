@@ -25,7 +25,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettings(const Path& path) const
+    void Application::SaveSettings(const Path& path /*= Path()*/) const
     {
         if (!path.empty())
         {
@@ -36,7 +36,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::LoadSettings(const Path& path)
+    void Application::LoadSettings(const Path& path /*= Path()*/)
     {
         if (!path.empty())
         {

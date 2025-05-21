@@ -148,7 +148,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::GetBool(int index, bool defaultValue)
+    bool JsonReader::GetBool(int index, bool defaultValue /*= false*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -165,7 +165,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::GetBool(const char* name, bool defaultValue)
+    bool JsonReader::GetBool(const char* name, bool defaultValue /*= false*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -183,7 +183,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonReader::GetInt(int index, int defaultValue)
+    int JsonReader::GetInt(int index, int defaultValue /*= 0*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -200,7 +200,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int JsonReader::GetInt(const char* name, int defaultValue)
+    int JsonReader::GetInt(const char* name, int defaultValue /*= 0*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -218,7 +218,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue)
+    unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue /*= 0*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -235,7 +235,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue)
+    unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -253,7 +253,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonReader::GetInt64(int index, int64_t defaultValue)
+    int64_t JsonReader::GetInt64(int index, int64_t defaultValue /*= 0*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -270,7 +270,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonReader::GetInt64(const char* name, int64_t defaultValue)
+    int64_t JsonReader::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -288,7 +288,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonReader::GetUInt64(int index, uint64_t defaultValue)
+    uint64_t JsonReader::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -305,7 +305,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonReader::GetUInt64(const char* name, uint64_t defaultValue)
+    uint64_t JsonReader::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -323,7 +323,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double JsonReader::GetDouble(int index, double defaultValue)
+    double JsonReader::GetDouble(int index, double defaultValue /*= 0.0*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -340,7 +340,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    double JsonReader::GetDouble(const char* name, double defaultValue)
+    double JsonReader::GetDouble(const char* name, double defaultValue /*= 0.0*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -358,7 +358,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String JsonReader::GetString(int index, const String& defaultValue)
+    String JsonReader::GetString(int index, const String& defaultValue /*= ""*/)
     {
         if (!ValidToGetFromArray(index))
         {
@@ -375,7 +375,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String JsonReader::GetString(const char* name, const String& defaultValue)
+    String JsonReader::GetString(const char* name, const String& defaultValue /*= ""*/)
     {
         if (!_currentObject || !_currentObject->IsObject())
         {

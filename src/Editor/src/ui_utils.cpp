@@ -109,7 +109,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags)
+        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags /*= ImGuiHoveredFlags_AllowWhenDisabled*/)
         {
             if (ImGui::IsItemHovered(flags))
             {

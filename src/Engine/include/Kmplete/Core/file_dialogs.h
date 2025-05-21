@@ -45,6 +45,6 @@ namespace Kmplete
         };
 
         KMP_NODISCARD KMP_API MessageButton OpenMessage(const String& title, const String& message, 
-                                                        MessageChoice choice = MessageChoice::OkCancel, MessageIcon = MessageIcon::Info);
+                                                        MessageChoice choice = MessageChoice::OkCancel, MessageIcon icon = MessageIcon::Info);
     };
 }
