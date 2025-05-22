@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/platform.h"
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/platform.h"
 #include "Kmplete/Core/filesystem.h"
 
 #include <boost/program_options.hpp>

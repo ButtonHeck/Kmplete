@@ -1,5 +1,5 @@
 #include "Kmplete/Utils/string_utils.h"
-#include "Kmplete/Core/platform.h"
+#include "Kmplete/Base/platform.h"
 
 #include <numeric>
 #if defined (KMP_PLATFORM_WINDOWS)

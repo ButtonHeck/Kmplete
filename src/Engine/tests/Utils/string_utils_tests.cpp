@@ -1,4 +1,4 @@
-#include "Kmplete/Core/platform.h"
+#include "Kmplete/Base/platform.h"
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Utils/string_utils.h"
 

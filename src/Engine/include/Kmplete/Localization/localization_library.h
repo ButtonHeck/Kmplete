@@ -2,8 +2,8 @@
 
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_dictionary.h"
-#include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/pointers.h"
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/pointers.h"
 
 #include <unordered_map>
 

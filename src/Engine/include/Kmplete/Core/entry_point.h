@@ -5,8 +5,8 @@
 #endif
 
 #include "Kmplete/Application/application.h"
-#include "Kmplete/Core/platform.h"
-#include "Kmplete/Core/pointers.h"
+#include "Kmplete/Base/platform.h"
+#include "Kmplete/Base/pointers.h"
 #include "Kmplete/Core/memory_checker.h"
 
 int Main(const Kmplete::ProgramOptions& programOptions);

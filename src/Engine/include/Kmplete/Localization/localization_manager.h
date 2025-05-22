@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Core/types.h"
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_library.h"

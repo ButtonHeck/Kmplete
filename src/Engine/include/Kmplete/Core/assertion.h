@@ -2,8 +2,8 @@
 
 #if !defined (KMP_PRODUCTION_BUILD)
 
-#include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/macro.h"
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/macro.h"
 #include "Kmplete/Core/types.h"
 #include "Kmplete/Utils/string_utils.h"
 

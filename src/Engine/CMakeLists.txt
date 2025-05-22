@@ -5,17 +5,22 @@ cmake_minimum_required(VERSION 3.20)
 project(Kmplete LANGUAGES CXX)
 
 
+set(Kmplete_BASE
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/kmplete_api.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/platform.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/macro.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/nullability.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/pointers.h
+)
+source_group("Base" FILES ${Kmplete_BASE})
+
 set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/kmplete_api.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/platform.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/types.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/filesystem.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/pointers.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/macro.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/memory_checker.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
@@ -26,7 +31,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_backend_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/system_metrics_manager.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/nullability.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/timer.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
@@ -121,6 +125,7 @@ set(Kmplete_LOCALIZATION
 source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
 add_library(Kmplete
+    ${Kmplete_BASE}
     ${Kmplete_CORE}
     ${Kmplete_APPLICATION}
     ${Kmplete_UTILS}

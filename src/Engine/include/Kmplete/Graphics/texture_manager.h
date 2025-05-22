@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Kmplete/Core/kmplete_api.h"
-#include "Kmplete/Core/pointers.h"
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/pointers.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Graphics/texture.h"

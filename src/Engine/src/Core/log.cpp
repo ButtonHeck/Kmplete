@@ -1,7 +1,6 @@
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
 
 #include "Kmplete/Core/log.h"
-#include "Kmplete/Core/platform.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/string_utils.h"

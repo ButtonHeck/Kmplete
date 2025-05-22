@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kmplete/Core/platform.h"
+#include "Kmplete/Base/platform.h"
 
 #if defined (KMP_ENGINE_STATIC)
     #define KMP_API

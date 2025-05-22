@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Core/window.h"
-#include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 
 namespace Kmplete

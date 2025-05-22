@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Kmplete/Core/platform.h"
-#include "Kmplete/Core/kmplete_api.h"
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/platform.h"
 
 #if !defined (KMP_COMPILER_MSVC)
     #include <cstddef>

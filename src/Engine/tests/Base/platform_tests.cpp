@@ -1,4 +1,4 @@
-#include "Kmplete/Core/platform.h"
+#include "Kmplete/Base/platform.h"
 
 #include <catch2/catch_test_macros.hpp>
 
