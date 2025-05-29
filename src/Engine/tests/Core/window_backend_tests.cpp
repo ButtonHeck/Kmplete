@@ -70,7 +70,7 @@ TEST_CASE("Window backend DPI scale", "[core][window_backend][window]")
     REQUIRE(windowBackend);
 
     auto dpi = 0.0f;
-    REQUIRE_NOTHROW(dpi = windowBackend->GetDPIScale());
+    REQUIRE_NOTHROW(dpi = windowBackend->GetPrimaryMonitorDPIScale());
     REQUIRE(dpi != 0.0f);
 }
 //--------------------------------------------------------------------------

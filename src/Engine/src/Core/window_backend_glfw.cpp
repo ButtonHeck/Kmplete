@@ -278,7 +278,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    float WindowBackendGlfw::GetDPIScale() const
+    float WindowBackendGlfw::GetPrimaryMonitorDPIScale() const
     {
         const auto monitor = glfwGetPrimaryMonitor();
         float scale = 1.0f;
