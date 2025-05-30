@@ -62,7 +62,9 @@ namespace Kmplete
         ? Kmplete::Assertion::Consequence::Terminate \
         : Kmplete::Assertion::Consequence::Log }
 
-#define KMP_ASSERT_WATCH(...) KMP_M_DISPATCH_VA(KMP_AW_, __VA_ARGS__)
+#define KMP_ASSERT_WATCH(expr, ...) KMP_ASSERT(expr).KMP_M_DISPATCH_VA(KMP_AW_, __VA_ARGS__)
+#define KMP_CHECK_WATCH(expr, ...) KMP_CHECK(expr).KMP_M_DISPATCH_VA(KMP_AW_, __VA_ARGS__)
+
 #define KMP_AW_(expr) Watch((expr), KMP_M_STRINGIFY(expr))
 #define KMP_AW_1_(a) KMP_AW_(a)
 #define KMP_AW_2_(a, b) KMP_AW_(a).KMP_AW_(b)
@@ -74,4 +76,5 @@ namespace Kmplete
 #define KMP_ASSERT(expr)
 #define KMP_CHECK(expr)
 #define KMP_ASSERT_WATCH(...)
+#define KMP_CHECK_WATCH(...)
 #endif

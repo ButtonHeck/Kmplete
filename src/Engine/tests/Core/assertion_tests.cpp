@@ -31,8 +31,8 @@ TEST_CASE("Assertion chain watch", "[core][assertion]")
 #if !defined (KMP_PRODUCTION_BUILD)
     const auto var = 10;
     const auto var2 = 88;
-    REQUIRE_NOTHROW((KMP_ASSERT(var == 10 && var2 == 88).KMP_ASSERT_WATCH(var).KMP_ASSERT_WATCH(var2)));
-    REQUIRE_NOTHROW((KMP_ASSERT(var == 10 && var2 == 88).KMP_ASSERT_WATCH(var, var2)));
+    REQUIRE_NOTHROW(KMP_ASSERT_WATCH(var == 10 && var2 == 88, var, var2));
+    REQUIRE_NOTHROW(KMP_CHECK_WATCH(var == 10 && var2 == 88, var, var2));
 #else
     SUCCEED();
 #endif
