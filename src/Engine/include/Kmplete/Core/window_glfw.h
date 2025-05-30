@@ -64,7 +64,7 @@ namespace Kmplete
             EventCallbackFn eventCallback;
         };
 
-        KMP_NODISCARD static Nullable<UserData*> GetUserPointer(GLFWwindow* window);
+        KMP_NODISCARD static NonNull<UserData*> GetUserPointer(GLFWwindow* window);
 
     private:
         void Initialize();

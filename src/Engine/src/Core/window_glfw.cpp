@@ -69,11 +69,8 @@ namespace Kmplete
 
     void WindowGlfw::Finalize()
     {
-        auto* userData = GetUserPointer(_window);
-        if (userData)
-        {
-            delete userData;
-        }
+        NonNull<UserData*> userData = GetUserPointer(_window);
+        delete userData;
 
         glfwDestroyWindow(_window);
     }
@@ -90,13 +87,8 @@ namespace Kmplete
 
     std::pair<int, int> WindowGlfw::GetWindowedSize() const
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            return std::pair<int, int>(userData->windowedWidth, userData->windowedHeight);
-        }
-
-        return std::pair<int, int>(DefaultWidth, DefaultHeight);
+        const NonNull<UserData*> userData = GetUserPointer(_window);
+        return std::pair<int, int>(userData->windowedWidth, userData->windowedHeight);
     }
     //--------------------------------------------------------------------------
 
@@ -142,8 +134,8 @@ namespace Kmplete
 
     void WindowGlfw::SetScreenMode(Mode mode)
     {
-        const auto userData = GetUserPointer(_window);
-        if (!userData || userData->screenMode == mode)
+        const NonNull<UserData*> userData = GetUserPointer(_window);
+        if (userData->screenMode == mode)
         {
             return;
         }
@@ -180,13 +172,8 @@ namespace Kmplete
 
     Window::Mode WindowGlfw::GetScreenMode() const
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            return userData->screenMode;
-        }
-
-        return WindowedMode;
+        const NonNull<UserData*> userData = GetUserPointer(_window);
+        return userData->screenMode;
     }
     //--------------------------------------------------------------------------
 
@@ -274,15 +261,12 @@ namespace Kmplete
 
     void WindowGlfw::SetEventCallback(const EventCallbackFn& callback)
     {
-        const auto userData = GetUserPointer(_window);
-        if (userData)
-        {
-            userData->eventCallback = callback;
-        }
+        const NonNull<UserData*> userData = GetUserPointer(_window);
+        userData->eventCallback = callback;
     }
     //--------------------------------------------------------------------------
 
-    Nullable<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(GLFWwindow* window)
+    NonNull<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(GLFWwindow* window)
     {
         auto userData = glfwGetWindowUserPointer(window);
         KMP_ASSERT(userData);
@@ -310,8 +294,8 @@ namespace Kmplete
         );
 
         glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 WindowMoveEvent event(x, y);
                 userData->eventCallback(event);
@@ -320,23 +304,20 @@ namespace Kmplete
         );
 
         glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
-            const auto userData = GetUserPointer(window);
-            if (userData)
-            {
-                userData->dpiScale = xScale;
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            userData->dpiScale = xScale;
 
-                if (userData->eventCallback)
-                {
-                    WindowContentScaleEvent event(xScale);
-                    userData->eventCallback(event);
-                }
+            if (userData->eventCallback)
+            {
+                WindowContentScaleEvent event(xScale);
+                userData->eventCallback(event);
             }
             }
         );
 
         glfwSetWindowFocusCallback(_window, [](GLFWwindow* window, int focused) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 WindowFocusEvent event(focused);
                 userData->eventCallback(event);
@@ -345,8 +326,8 @@ namespace Kmplete
         );
 
         glfwSetWindowIconifyCallback(_window, [](GLFWwindow* window, int iconified) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 WindowIconifyEvent event(iconified);
                 userData->eventCallback(event);
@@ -355,30 +336,27 @@ namespace Kmplete
         );
 
         glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
-            const auto userData = GetUserPointer(window);
-            if (userData)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            userData->width = width;
+            userData->height = height;
+
+            if (userData->screenMode == WindowedMode)
             {
-                userData->width = width;
-                userData->height = height;
+                userData->windowedWidth = width;
+                userData->windowedHeight = height;
+            }
 
-                if (userData->screenMode == WindowedMode)
-                {
-                    userData->windowedWidth = width;
-                    userData->windowedHeight = height;
-                }
-
-                if (userData->eventCallback)
-                {
-                    WindowFramebufferResizeEvent event(width, height);
-                    userData->eventCallback(event);
-                }
+            if (userData->eventCallback)
+            {
+                WindowFramebufferResizeEvent event(width, height);
+                userData->eventCallback(event);
             }
             }
         );
 
         glfwSetWindowRefreshCallback(_window, [](GLFWwindow* window) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 WindowFramebufferRefreshEvent event;
                 userData->eventCallback(event);
@@ -389,8 +367,8 @@ namespace Kmplete
         );
 
         glfwSetWindowCloseCallback(_window, [](GLFWwindow* window) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 WindowCloseEvent event;
                 userData->eventCallback(event);
@@ -399,8 +377,8 @@ namespace Kmplete
         );
 
         glfwSetKeyCallback(_window, [](GLFWwindow* window, int key, KMP_MB_UNUSED int scancode, int action, int mods) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 switch (action)
                 {
@@ -430,8 +408,8 @@ namespace Kmplete
         );
 
         glfwSetCharCallback(_window, [](GLFWwindow* window, unsigned int codepoint) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 KeyCharEvent event(codepoint);
                 userData->eventCallback(event);
@@ -440,8 +418,8 @@ namespace Kmplete
         );
 
         glfwSetMouseButtonCallback(_window, [](GLFWwindow* window, int button, int action, int mods) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 switch (action)
                 {
@@ -465,8 +443,8 @@ namespace Kmplete
         );
 
         glfwSetScrollCallback(_window, [](GLFWwindow* window, double xOffset, double yOffset) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 MouseScrollEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
                 userData->eventCallback(event);
@@ -475,8 +453,8 @@ namespace Kmplete
         );
 
         glfwSetCursorPosCallback(_window, [](GLFWwindow* window, double xPos, double yPos) {
-            const auto userData = GetUserPointer(window);
-            if (userData && userData->eventCallback)
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
             {
                 MouseMoveEvent event(static_cast<float>(xPos), static_cast<float>(yPos));
                 userData->eventCallback(event);
