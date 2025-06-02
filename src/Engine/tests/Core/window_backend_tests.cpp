@@ -64,13 +64,27 @@ TEST_CASE("Window backend no-window", "[core][window_backend]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Window backend DPI scale", "[core][window_backend][window]")
+TEST_CASE("Window backend primary monitor DPI scale", "[core][window_backend][window]")
 {
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
     auto dpi = 0.0f;
     REQUIRE_NOTHROW(dpi = windowBackend->GetPrimaryMonitorDPIScale());
+    REQUIRE(dpi != 0.0f);
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Window backend window DPI scale", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    auto& mainWindow = windowBackend->CreateMainWindow();
+    REQUIRE(mainWindow.GetName() == "Main");
+
+    auto dpi = 0.0f;
+    REQUIRE_NOTHROW(dpi = mainWindow.GetDPIScale());
     REQUIRE(dpi != 0.0f);
 }
 //--------------------------------------------------------------------------
