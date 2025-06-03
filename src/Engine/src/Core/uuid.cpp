@@ -1,22 +1,18 @@
 #include "Kmplete/Core/uuid.h"
-
-#include <random>
-#include <cstdint>
+#include "Kmplete/Core/rng.h"
 
 namespace Kmplete
 {
-    static std::random_device randomDevice;
-    static std::mt19937_64 engine(randomDevice());
-    static std::uniform_int_distribution<uint64_t> uniformDistribution;
+    static RNGUint64 rng;
 
     UUID UUID::InvalidUuid(0);
 
     UUID::UUID()
-        : _uuid(uniformDistribution(engine))
+        : _uuid(rng.Generate())
     {
         while (_uuid == 0)
         {
-            _uuid = uniformDistribution(engine);
+            _uuid = rng.Generate();
         }
     }
     //--------------------------------------------------------------------------
