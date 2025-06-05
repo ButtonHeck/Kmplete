@@ -203,6 +203,36 @@ TEST_CASE("Localization manager callbacks", "[localization][locale]")
 }
 //--------------------------------------------------------------------------
 
+TEST_CASE("Localization manager add/remove domain", "[localization][locale]")
+{
+    REQUIRE(Filesystem::Initialize());
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+
+    LocalizationManager localizationManager;
+    REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
+
+    bool domainOperationTrue = true;
+    REQUIRE_NOTHROW(domainOperationTrue = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(domainOperationTrue);
+
+    // add already registered domain
+    REQUIRE_NOTHROW(domainOperationTrue = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE_FALSE(domainOperationTrue);
+
+    // remove existing domain
+    REQUIRE_NOTHROW(domainOperationTrue = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(domainOperationTrue);
+
+    // add again
+    REQUIRE_NOTHROW(domainOperationTrue = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(domainOperationTrue);
+
+    // remove non-existing domain
+    REQUIRE_NOTHROW(domainOperationTrue = localizationManager.RemoveMessagesDomain("UnknownDomain"));
+    REQUIRE_FALSE(domainOperationTrue);
+}
+//--------------------------------------------------------------------------
+
 TEST_CASE("Localization translator without context singular", "[localization][locale]")
 {
     REQUIRE(Filesystem::Initialize());
