@@ -889,3 +889,66 @@ TEST_CASE("Localization manager dictionaries with context plural", "[localizatio
     REQUIRE(Utils::Utf8ToNarrow(contextStr21) == "21 контекст");
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Localization manager translate from other locale", "[localization][locale]")
+{
+    REQUIRE(Filesystem::Initialize());
+
+    LocalizationManager localizationManager;
+    REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+    REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
+    REQUIRE(ok);
+
+    const auto yesStrTranslatedToRussian = localizationManager.Translation(KMP_TR_DOMAIN_TESTS, "Yes", LocaleRuUTF8Keyword);
+    REQUIRE(Utils::Utf8ToNarrow(yesStrTranslatedToRussian) == "Да");
+
+    auto yesStrCurrentLocale = std::string();
+    REQUIRE_NOTHROW(yesStrCurrentLocale = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE(yesStrCurrentLocale == "Yes");
+
+    std::string appleStrForm1;
+    std::string appleStrForm2;
+    std::string appleStrForm3;
+    REQUIRE_NOTHROW(appleStrForm1 = Translator::Format(Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1), 1));
+    REQUIRE_NOTHROW(appleStrForm2 = Translator::Format(Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2), 2));
+    REQUIRE_NOTHROW(appleStrForm3 = Translator::Format(Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5), 5));
+    REQUIRE(appleStrForm1 == "1 apple");
+    REQUIRE(appleStrForm2 == "2 apples");
+    REQUIRE(appleStrForm3 == "5 apples");
+
+    std::string appleStrForm1Russian;
+    std::string appleStrForm2Russian;
+    std::string appleStrForm3Russian;
+    REQUIRE_NOTHROW(appleStrForm1Russian = localizationManager.Translation(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1, LocaleRuUTF8Keyword));
+    REQUIRE_NOTHROW(appleStrForm2Russian = localizationManager.Translation(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2, LocaleRuUTF8Keyword));
+    REQUIRE_NOTHROW(appleStrForm3Russian = localizationManager.Translation(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5, LocaleRuUTF8Keyword));
+    REQUIRE(Utils::Utf8ToNarrow(appleStrForm1Russian) == "1 яблоко");
+    REQUIRE(Utils::Utf8ToNarrow(appleStrForm2Russian) == "2 яблока");
+    REQUIRE(Utils::Utf8ToNarrow(appleStrForm3Russian) == "5 яблок");
+
+    std::string openVerbStr;
+    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE(openVerbStr == "Open");
+
+    std::string openVerbStrRussian;
+    REQUIRE_NOTHROW(openVerbStrRussian = localizationManager.TranslationCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb", LocaleRuUTF8Keyword));
+    REQUIRE(Utils::Utf8ToNarrow(openVerbStrRussian) == "Открыть");
+
+    std::string contextStr;
+    REQUIRE_NOTHROW(contextStr = Translator::Format(Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 1, "Plural context"), 1));
+    REQUIRE(contextStr == "1 context");
+
+    std::string contextStr1Russian;
+    std::string contextStr2Russian;
+    std::string contextStr5Russian;
+    REQUIRE_NOTHROW(contextStr1Russian = localizationManager.TranslationCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 1, "Plural context", LocaleRuUTF8Keyword));
+    REQUIRE_NOTHROW(contextStr2Russian = localizationManager.TranslationCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 2, "Plural context", LocaleRuUTF8Keyword));
+    REQUIRE_NOTHROW(contextStr5Russian = localizationManager.TranslationCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 5, "Plural context", LocaleRuUTF8Keyword));
+    REQUIRE(Utils::Utf8ToNarrow(contextStr1Russian) == "1 контекст");
+    REQUIRE(Utils::Utf8ToNarrow(contextStr2Russian) == "2 контекста");
+    REQUIRE(Utils::Utf8ToNarrow(contextStr5Russian) == "5 контекстов");
+}
+//--------------------------------------------------------------------------

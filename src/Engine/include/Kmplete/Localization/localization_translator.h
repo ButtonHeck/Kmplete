@@ -9,10 +9,10 @@ namespace Kmplete
 {
     namespace Translator
     {
-        KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source);
-        KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count);
-        KMP_NODISCARD KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context);
-        KMP_NODISCARD KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context);
+        KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale = std::locale());
+        KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const std::locale& locale = std::locale());
+        KMP_NODISCARD KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const std::locale& locale = std::locale());
+        KMP_NODISCARD KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const std::locale& locale = std::locale());
 
         inline void TranslateDefer(const DomainStr&, const SourceStr&) {};
         inline void TranslateDefer(const DomainStr&, const SourceStr&, const SourceStr&, int) {};

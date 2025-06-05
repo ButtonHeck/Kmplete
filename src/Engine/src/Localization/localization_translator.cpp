@@ -4,27 +4,27 @@ namespace Kmplete
 {
     namespace Translator
     {
-        TranslationStr Translate(const DomainStr& domain, const SourceStr& source)
+        TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale /*= std::locale()*/)
         {
-            return boost::locale::translate(source).str(domain);
+            return boost::locale::translate(source).str(locale, domain);
         }
         //--------------------------------------------------------------------------
 
-        TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count)
+        TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const std::locale& locale /*= std::locale()*/)
         {
-            return boost::locale::translate(sourceSingular, sourcePlural, count).str(domain);
+            return boost::locale::translate(sourceSingular, sourcePlural, count).str(locale, domain);
         }
         //--------------------------------------------------------------------------
 
-        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context)
+        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const std::locale& locale /*= std::locale()*/)
         {
-            return boost::locale::translate(context, source).str(domain);
+            return boost::locale::translate(context, source).str(locale, domain);
         }
         //--------------------------------------------------------------------------
 
-        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context)
+        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const std::locale& locale /*= std::locale()*/)
         {
-            return boost::locale::translate(context, sourceSingular, sourcePlural, count).str(domain);
+            return boost::locale::translate(context, sourceSingular, sourcePlural, count).str(locale, domain);
         }
         //--------------------------------------------------------------------------
     }

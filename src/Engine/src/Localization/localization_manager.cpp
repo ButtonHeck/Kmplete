@@ -209,6 +209,34 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    TranslationStr LocalizationManager::Translation(const DomainStr& domain, const SourceStr& source, const LocaleStr& localeString)
+    {
+        const auto translation = Translator::Translate(domain, source, _localeGenerator(localeString));
+        return translation;
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::Translation(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const LocaleStr& localeString)
+    {
+        const auto translation = Translator::Translate(domain, sourceSingular, sourcePlural, count, _localeGenerator(localeString));
+        return Translator::Format(translation, count);
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::TranslationCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const LocaleStr& localeString)
+    {
+        const auto translation = Translator::TranslateCtx(domain, source, context, _localeGenerator(localeString));
+        return translation;
+    }
+    //--------------------------------------------------------------------------
+
+    TranslationStr LocalizationManager::TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString)
+    {
+        const auto translation = Translator::TranslateCtx(domain, sourceSingular, sourcePlural, count, context, _localeGenerator(localeString));
+        return Translator::Format(translation, count);
+    }
+    //--------------------------------------------------------------------------
+
     void LocalizationManager::ImbueLocale() const
     {
         std::locale::global(_localeGenerator(_currentLocale));

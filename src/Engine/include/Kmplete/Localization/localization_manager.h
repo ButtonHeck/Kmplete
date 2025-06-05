@@ -57,6 +57,11 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const TranslationStr& TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, 
                                                                              const ContextStrSID& contextSid, const TranslationStr& fallback) const;
 
+        KMP_NODISCARD KMP_API TranslationStr Translation(const DomainStr& domain, const SourceStr& source, const LocaleStr& localeString);
+        KMP_NODISCARD KMP_API TranslationStr Translation(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const LocaleStr& localeString);
+        KMP_NODISCARD KMP_API TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const LocaleStr& localeString);
+        KMP_NODISCARD KMP_API TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString);
+
     private:
         void ImbueLocale() const;
         void NotifyLocaleListeners() const;
