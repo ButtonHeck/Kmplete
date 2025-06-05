@@ -25,13 +25,17 @@ namespace Kmplete
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const TranslationStr& translation)
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
-        if (_translationMap[_currentLocaleSid].contains(sourceSid) && _translationMap[_currentLocaleSid][sourceSid] != translation)
+        if (_translationMap[_currentLocaleSid].contains(sourceSid))
         {
-            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"", _domain, sourceSid);
-            return;
+            if (_translationMap[_currentLocaleSid][sourceSid] != translation)
+            {
+                KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"", _domain, sourceSid);
+            }
         }
-
-        _translationMap[_currentLocaleSid].insert(std::make_pair(sourceSid, translation));
+        else
+        {
+            _translationMap[_currentLocaleSid].insert(std::make_pair(sourceSid, translation));
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -65,13 +69,17 @@ namespace Kmplete
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedSource&& contextedSource = ContextedSource{ sourceSid, contextSid };
-        if (_translationCtxMap[_currentLocaleSid].contains(contextedSource) && _translationCtxMap[_currentLocaleSid][contextedSource] != translation)
+        if (_translationCtxMap[_currentLocaleSid].contains(contextedSource))
         {
-            KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
-            return;
+            if (_translationCtxMap[_currentLocaleSid][contextedSource] != translation)
+            {
+                KMP_LOG_CORE_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
+            }
         }
-
-        _translationCtxMap[_currentLocaleSid].insert(std::make_pair(contextedSource, translation));
+        else
+        {
+            _translationCtxMap[_currentLocaleSid].insert(std::make_pair(contextedSource, translation));
+        }
     }
     //--------------------------------------------------------------------------
 
