@@ -197,4 +197,8 @@ target_compile_definitions(Kmplete
     PUBLIC KMP_TR_DOMAIN_ENGINE=\"${KmpleteDomain}\"
 )
 
-CreateTranslationHelperTargets(Kmplete Kmplete/Engine po_update.sh po_compile.sh ${KmpleteDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)
+CreateTranslationHelperTargets(
+    Kmplete Kmplete/Engine
+    "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" \"${CMAKE_CURRENT_LIST_DIR}/include\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
+    "--mode=Compile --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" \"${CMAKE_CURRENT_LIST_DIR}/include\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
+)

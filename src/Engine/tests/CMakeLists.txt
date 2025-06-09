@@ -223,7 +223,7 @@ target_compile_definitions(Kmplete_LocaleTests
 )
 get_target_property(exeDir Kmplete_LocaleTests RUNTIME_OUTPUT_DIRECTORY)
 add_custom_target(Kmplete_LocaleTests_copy_translations
-    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Kmplete_Editor done"
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Kmplete_LocaleTests done"
 )
 add_custom_command(TARGET Kmplete_LocaleTests_copy_translations PRE_BUILD
     COMMAND ${CMAKE_COMMAND}
@@ -236,7 +236,11 @@ set_target_properties(Kmplete_LocaleTests_copy_translations PROPERTIES
 
 add_dependencies(Kmplete_LocaleTests Kmplete_LocaleTests_copy_translations)
 
-CreateTranslationHelperTargets(Kmplete_LocaleTests Kmplete/Engine/Tests/Localization po_update.sh po_compile.sh ${KmpleteTestsDomain} ${CMAKE_CURRENT_LIST_DIR}/scripts)
+CreateTranslationHelperTargets(
+    Kmplete_LocaleTests Kmplete/Engine/Tests/Localization
+    "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/Localization\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
+    "--mode=Compile --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/Localization\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
+)
 
 
 # Common stuff

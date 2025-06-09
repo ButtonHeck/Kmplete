@@ -1,46 +1,45 @@
 # English translations for PACKAGE package.
 # Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# U-DESKTOP-002D5DN\sound <EMAIL@ADDRESS>, 2025.
+# <EMAIL@ADDRESS>, 2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 08:27+0300\n"
-"PO-Revision-Date: 2025-02-20 17:55+0300\n"
-"Last-Translator: U-DESKTOP-002D5DN\\sound <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2025-06-09 09:28+0300\n"
+"PO-Revision-Date: 2025-06-09 09:28+0300\n"
+"Last-Translator: <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: en_EN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:284
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:284
 msgid "File"
 msgstr "File"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:285
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:285
 msgid "View"
 msgstr "View"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:286
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:286
 msgid "Quit"
 msgstr "Quit"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:287
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:287
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:288
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:288
 msgid "Metrics update period (ms)"
 msgstr "Metrics update period (ms)"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:289
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:289
 msgid "Show fractional"
 msgstr "Show fractional"
 
-#: D:\workspace\My\Kmplete\Kmplete\src\Editor\src\editor_ui_compositor.cpp:290
+#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:290
 msgid "Change language"
 msgstr "Change language"

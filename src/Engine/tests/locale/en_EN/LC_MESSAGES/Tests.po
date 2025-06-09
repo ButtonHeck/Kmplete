@@ -7,95 +7,102 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-02 17:49+0300\n"
+"POT-Creation-Date: 2025-06-09 17:34+0300\n"
 "PO-Revision-Date: 2025-02-17 08:22+0300\n"
 "Last-Translator: U-DESKTOP-002D5DN\\sound <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
-"Language: en_EN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: en_EN\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../Localization/localization_manager_tests.cpp:224
-#: ../Localization/localization_manager_tests.cpp:230
-#: ../Localization/localization_manager_tests.cpp:235
-#: ../Localization/localization_manager_tests.cpp:244
-#: ../Localization/localization_manager_tests.cpp:253
-#: ../Localization/localization_manager_tests.cpp:324
-#: ../Localization/localization_manager_tests.cpp:519
-#: ../Localization/localization_manager_tests.cpp:533
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:249
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:255
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:260
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:269
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:278
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:349
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:544
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:558
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:939
 msgid "Yes"
 msgstr "Yes"
 
-#: ../Localization/localization_manager_tests.cpp:237
-#: ../Localization/localization_manager_tests.cpp:246
-#: ../Localization/localization_manager_tests.cpp:255
-#: ../Localization/localization_manager_tests.cpp:325
-#: ../Localization/localization_manager_tests.cpp:520
-#: ../Localization/localization_manager_tests.cpp:534
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:262
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:271
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:280
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:350
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:545
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:559
 msgid "No"
 msgstr "No"
 
-#: ../Localization/localization_manager_tests.cpp:239
-#: ../Localization/localization_manager_tests.cpp:248
-#: ../Localization/localization_manager_tests.cpp:257
-#: ../Localization/localization_manager_tests.cpp:326
-#: ../Localization/localization_manager_tests.cpp:535
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:264
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:273
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:282
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:351
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:560
 msgid "Untranslated"
 msgstr ""
 
-#: ../Localization/localization_manager_tests.cpp:274
-#: ../Localization/localization_manager_tests.cpp:280
-#: ../Localization/localization_manager_tests.cpp:285
-#: ../Localization/localization_manager_tests.cpp:294
-#: ../Localization/localization_manager_tests.cpp:303
-#: ../Localization/localization_manager_tests.cpp:400
-#: ../Localization/localization_manager_tests.cpp:572
-#: ../Localization/localization_manager_tests.cpp:587
-#: ../Localization/localization_manager_tests.cpp:611
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:299
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:305
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:310
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:319
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:328
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:425
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:597
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:612
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:636
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:963
 msgctxt "Verb"
 msgid "Open"
 msgstr "Open"
 
-#: ../Localization/localization_manager_tests.cpp:287
-#: ../Localization/localization_manager_tests.cpp:296
-#: ../Localization/localization_manager_tests.cpp:305
-#: ../Localization/localization_manager_tests.cpp:401
-#: ../Localization/localization_manager_tests.cpp:573
-#: ../Localization/localization_manager_tests.cpp:612
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:312
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:321
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:330
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:426
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:598
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:637
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Open"
 
-#: ../Localization/localization_manager_tests.cpp:289
-#: ../Localization/localization_manager_tests.cpp:298
-#: ../Localization/localization_manager_tests.cpp:307
-#: ../Localization/localization_manager_tests.cpp:402
-#: ../Localization/localization_manager_tests.cpp:574
-#: ../Localization/localization_manager_tests.cpp:613
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:314
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:323
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:332
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:427
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:599
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:638
 msgctxt "Some context"
 msgid "Untranslated"
 msgstr ""
 
-#: ../Localization/localization_manager_tests.cpp:661
-#: ../Localization/localization_manager_tests.cpp:662
-#: ../Localization/localization_manager_tests.cpp:663
-#: ../Localization/localization_manager_tests.cpp:684
-#: ../Localization/localization_manager_tests.cpp:685
-#: ../Localization/localization_manager_tests.cpp:686
-#: ../Localization/localization_manager_tests.cpp:726
-#: ../Localization/localization_manager_tests.cpp:727
-#: ../Localization/localization_manager_tests.cpp:767
-#: ../Localization/localization_manager_tests.cpp:778
-#: ../Localization/localization_manager_tests.cpp:779
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:686
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:687
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:688
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:709
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:710
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:711
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:751
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:752
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:792
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:803
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:804
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:945
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:946
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:947
 msgid "{1} apple"
 msgid_plural "{1} apples"
 msgstr[0] "{1} apple"
 msgstr[1] "{1} apples"
 
-#: ../Localization/localization_manager_tests.cpp:832
-#: ../Localization/localization_manager_tests.cpp:833
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:857
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:858
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:900
+#: D:/workspace/My/Kmplete/Kmplete/src/Engine/tests/Localization\localization_manager_tests.cpp:971
 msgctxt "Plural context"
 msgid "{1} context"
 msgid_plural "{1} contexts"
