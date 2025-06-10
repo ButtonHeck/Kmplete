@@ -93,11 +93,17 @@ namespace Kmplete
 
         if (ImGui::BeginPopup(IdPopup_ChangeLanguage))
         {
-            if (ImGui::ImageButton(languageIcons[0], iconSize))
+            const auto EngButtonClicked = ImGui::ImageButton(languageIcons[0], iconSize);
+            UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEngine, "English"_sid).c_str());
+
+            const auto RusButtonClicked = ImGui::ImageButton(languageIcons[1], iconSize);
+            UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEngine, "Russian"_sid).c_str());
+
+            if (EngButtonClicked)
             {
                 _localizationManager.SetLocale(LocaleEnUTF8Keyword);
             }
-            else if (ImGui::ImageButton(languageIcons[1], iconSize))
+            else if (RusButtonClicked)
             {
                 _localizationManager.SetLocale(LocaleRuUTF8Keyword);
             }
