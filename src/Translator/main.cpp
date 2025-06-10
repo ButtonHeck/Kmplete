@@ -81,6 +81,8 @@ int main(int argc, char** argv)
     boost::program_options::store(cmdParser.options(optDescription).run(), vm);
     boost::program_options::notify(vm);
 
+    Context context;
+
     // Work mode parsing
     const auto workMode = vm.count("mode") ? vm["mode"].as<std::string>() : "";
     if (workMode.empty())
@@ -96,40 +98,50 @@ int main(int argc, char** argv)
         return -21;
     }
 
-    // Source directory parsing
-    const auto sourceDirectoryStrings = vm.count("input_directories") ? vm["input_directories"].as<std::vector<std::string>>() : std::vector<std::string>();
-    if (sourceDirectoryStrings.empty())
+    context.workMode = workMode;
+
+    if (workMode == WorkingModeUpdate)
     {
-        std::cerr << "Translator directories are not set\n";
-        PrintUsage(optDescription);
-        return -3;
-    }
-    std::vector<std::filesystem::path> sourceDirectories;
-    sourceDirectories.reserve(sourceDirectoryStrings.size());
-    for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
-    {
-        const auto sourceDirectory = std::filesystem::path(sourceDirectoryStr);
-        if (!std::filesystem::exists(sourceDirectory) || !std::filesystem::is_directory(sourceDirectory))
+        // Source directory parsing
+        const auto sourceDirectoryStrings = vm.count("input_directories") ? vm["input_directories"].as<std::vector<std::string>>() : std::vector<std::string>();
+        if (sourceDirectoryStrings.empty())
         {
-            std::cerr << "One of translator directories is not exists or is not of a directory type\n";
+            std::cerr << "Translator directories are not set\n";
             PrintUsage(optDescription);
-            return -31;
+            return -3;
+        }
+        std::vector<std::filesystem::path> sourceDirectories;
+        sourceDirectories.reserve(sourceDirectoryStrings.size());
+        for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
+        {
+            const auto sourceDirectory = std::filesystem::path(sourceDirectoryStr);
+            if (!std::filesystem::exists(sourceDirectory) || !std::filesystem::is_directory(sourceDirectory))
+            {
+                std::cerr << "One of translator directories is not exists or is not of a directory type\n";
+                PrintUsage(optDescription);
+                return -31;
+            }
+
+            sourceDirectories.push_back(sourceDirectory);
         }
 
-        sourceDirectories.push_back(sourceDirectory);
-    }
+        context.sourceDirectories = sourceDirectories;
 
-    // files extensions parsing
-    const auto filesExtensions = vm.count("extensions") ? vm["extensions"].as<std::vector<std::string>>() : std::vector<std::string>();
-    if (filesExtensions.empty())
-    {
-        std::cerr << "Files extensions are not set\n";
-        PrintUsage(optDescription);
-        return -4;
-    }
+        // files extensions parsing
+        const auto filesExtensions = vm.count("extensions") ? vm["extensions"].as<std::vector<std::string>>() : std::vector<std::string>();
+        if (filesExtensions.empty())
+        {
+            std::cerr << "Files extensions are not set\n";
+            PrintUsage(optDescription);
+            return -4;
+        }
 
-    // Is recursive parsing
-    const bool isRecursive = vm.count("recursive");
+        context.filesExtensions = filesExtensions;
+
+        // Is recursive parsing
+        const bool isRecursive = vm.count("recursive");
+        context.isRecursive = isRecursive;
+    }
 
     // output directory parsing
     const auto outputDirectoryStr = vm.count("output_directory") ? vm["output_directory"].as<std::string>() : "";
@@ -160,11 +172,6 @@ int main(int argc, char** argv)
         return -6;
     }
 
-    Context context;
-    context.workMode = workMode;
-    context.sourceDirectories = sourceDirectories;
-    context.filesExtensions = filesExtensions;
-    context.isRecursive = isRecursive;
     context.outputDirectory = outputDirectory;
     context.outputFileName = outputFileNameStr;
 

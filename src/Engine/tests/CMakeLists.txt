@@ -239,7 +239,7 @@ add_dependencies(Kmplete_LocaleTests Kmplete_LocaleTests_copy_translations)
 CreateTranslationHelperTargets(
     Kmplete_LocaleTests Kmplete/Engine/Tests/Localization
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/Localization\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
-    "--mode=Compile --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/Localization\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
+    "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
 )
 
 

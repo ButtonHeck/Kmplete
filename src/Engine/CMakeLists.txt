@@ -200,5 +200,5 @@ target_compile_definitions(Kmplete
 CreateTranslationHelperTargets(
     Kmplete Kmplete/Engine
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" \"${CMAKE_CURRENT_LIST_DIR}/include\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
-    "--mode=Compile --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" \"${CMAKE_CURRENT_LIST_DIR}/include\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
+    "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
 )
