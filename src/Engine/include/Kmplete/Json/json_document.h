@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Base/types.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Json/json_writer.h"

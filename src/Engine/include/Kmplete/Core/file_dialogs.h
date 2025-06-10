@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Base/types.h"
 #include "Kmplete/Core/filesystem.h"
 
 #include <vector>

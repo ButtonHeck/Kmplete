@@ -22,7 +22,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Base/types.h"
 
 #if defined (KMP_COMPILER_MSVC)
     #pragma warning(push)

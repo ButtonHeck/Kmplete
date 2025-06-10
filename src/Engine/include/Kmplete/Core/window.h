@@ -3,7 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Base/types.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Event/event.h"
 

@@ -4,7 +4,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/macro.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Base/types.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <sstream>

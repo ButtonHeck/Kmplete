@@ -2,8 +2,8 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/types.h"
 #include "Kmplete/Core/window.h"
-#include "Kmplete/Core/types.h"
 
 struct GLFWwindow;
 

@@ -11,12 +11,12 @@ set(Kmplete_BASE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/macro.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/nullability.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/pointers.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/types.h
 )
 source_group("Base" FILES ${Kmplete_BASE})
 
 set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/types.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/filesystem.h

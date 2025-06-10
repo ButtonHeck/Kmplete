@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Core/types.h"
+#include "Kmplete/Base/types.h"
 #include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/settings_manager.h"
