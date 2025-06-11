@@ -5,12 +5,6 @@ cmake_minimum_required(VERSION 3.20)
 
 # Unit Tests
 
-set(Kmplete_UnitTests_BASE
-    ${CMAKE_CURRENT_LIST_DIR}/Base/platform_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Base/macro_tests.cpp
-)
-source_group("Base" FILES ${Kmplete_UnitTests_BASE})
-
 set(Kmplete_UnitTests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/filesystem_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/uuid_tests.cpp
@@ -42,7 +36,6 @@ set(Kmplete_UnitTests_JSON
 source_group("Json" FILES ${Kmplete_UnitTests_JSON})
 
 add_executable(Kmplete_UnitTests
-    ${Kmplete_UnitTests_BASE}
     ${Kmplete_UnitTests_CORE}
     ${Kmplete_UnitTests_APPLICATION}
     ${Kmplete_UnitTests_UTILS}

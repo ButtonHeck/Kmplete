@@ -4,17 +4,6 @@ cmake_minimum_required(VERSION 3.20)
 
 project(Kmplete LANGUAGES CXX)
 
-
-set(Kmplete_BASE
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/kmplete_api.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/platform.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/macro.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/nullability.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/pointers.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/types.h
-)
-source_group("Base" FILES ${Kmplete_BASE})
-
 set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
@@ -126,7 +115,6 @@ set(Kmplete_LOCALIZATION
 source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
 add_library(Kmplete
-    ${Kmplete_BASE}
     ${Kmplete_CORE}
     ${Kmplete_APPLICATION}
     ${Kmplete_UTILS}
@@ -172,6 +160,7 @@ target_compile_definitions(Kmplete
 )
 
 target_link_libraries(Kmplete 
+    PUBLIC BaseLib
     PUBLIC VersionLib
     PUBLIC glfw
     PUBLIC spdlog
