@@ -48,14 +48,6 @@ set(Kmplete_APPLICATION
 )
 source_group("Application" FILES ${Kmplete_APPLICATION})
 
-set(Kmplete_UTILS
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_utils.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_id.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Utils/string_utils.cpp
-)
-source_group("Utils" FILES ${Kmplete_UTILS})
-
 set(Kmplete_EVENT
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_event.h
@@ -117,7 +109,6 @@ source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 add_library(Kmplete
     ${Kmplete_CORE}
     ${Kmplete_APPLICATION}
-    ${Kmplete_UTILS}
     ${Kmplete_EVENT}
     ${Kmplete_JSON}
     ${Kmplete_GRAPHICS}
@@ -161,6 +152,7 @@ target_compile_definitions(Kmplete
 
 target_link_libraries(Kmplete 
     PUBLIC BaseLib
+    PUBLIC UtilsLib
     PUBLIC VersionLib
     PUBLIC glfw
     PUBLIC spdlog

@@ -20,13 +20,6 @@ set(Kmplete_UnitTests_APPLICATION
 )
 source_group("Application" FILES ${Kmplete_UnitTests_APPLICATION})
 
-set(Kmplete_UnitTests_UTILS
-    ${CMAKE_CURRENT_LIST_DIR}/Utils/function_utils_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Utils/string_utils_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Utils/string_id_tests.cpp
-)
-source_group("Utils" FILES ${Kmplete_UnitTests_UTILS})
-
 set(Kmplete_UnitTests_JSON
     ${CMAKE_CURRENT_LIST_DIR}/Json/json_reader_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Json/json_reader_writer_tests.cpp
@@ -38,7 +31,6 @@ source_group("Json" FILES ${Kmplete_UnitTests_JSON})
 add_executable(Kmplete_UnitTests
     ${Kmplete_UnitTests_CORE}
     ${Kmplete_UnitTests_APPLICATION}
-    ${Kmplete_UnitTests_UTILS}
     ${Kmplete_UnitTests_JSON}
 )
 
