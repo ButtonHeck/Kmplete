@@ -9,12 +9,12 @@ namespace bpo = boost::program_options;
 void PrintUsage(const bpo::options_description& description);
 bool WorkModeIsValid(const Kmplete::String& workMode);
 bpo::options_description CreateDescription();
-int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::TranslatorParameters& translatorParameters);
+int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::Translator::TranslatorParameters& translatorParameters);
 //--------------------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
-    using namespace Kmplete;
+    using namespace Kmplete::Translator;
 
     auto optionsDescription = CreateDescription();
 
@@ -38,8 +38,8 @@ int main(int argc, char** argv)
         return parseParametersResult;
     }
 
-    Translator translator(std::move(translatorParameters));
-    const auto translatorResultCode = translator.Run();
+    TranslatorProcessor processor(std::move(translatorParameters));
+    const auto translatorResultCode = processor.Run();
     return translatorResultCode;
 }
 //--------------------------------------------------------------------------
@@ -47,15 +47,23 @@ int main(int argc, char** argv)
 bpo::options_description CreateDescription()
 {
     using namespace Kmplete;
+    using namespace Kmplete::Translator;
+
+    const auto modeArgument =               Utils::Concatenate(ProcessorArgumentWorkMode, ",", ProcessorArgumentWorkModeShort);
+    const auto inputDirectoriesArgument =   Utils::Concatenate(ProcessorArgumentInputDirectories, ",", ProcessorArgumentInputDirectoriesShort);
+    const auto extensionsArgument =         Utils::Concatenate(ProcessorArgumentExtensions, ",", ProcessorArgumentExtensionsShort);
+    const auto recursiveArgument =          Utils::Concatenate(ProcessorArgumentRecursive, ",", ProcessorArgumentRecursiveShort);
+    const auto outputDirectoryArgument =    Utils::Concatenate(ProcessorArgumentOutputDirectory, ",", ProcessorArgumentOutputDirectoryShort);
+    const auto outputFileNameArgument =     Utils::Concatenate(ProcessorArgumentOutputFileName, ",", ProcessorArgumentOutputFileNameShort);
 
     bpo::options_description optionsDescription("Translator options");
     optionsDescription.add_options()
-        ("mode,M", bpo::value<String>(), "Working mode (Update, Compile)")
-        ("input_directories,D", bpo::value<StringVector>()->multitoken(), "Directories to search files")
-        ("extensions,E", bpo::value<StringVector>()->multitoken(), "Files extensions to parse")
-        ("recursive,R", "Is recursive search in directory")
-        ("output_directory,O", bpo::value<String>(), "Output files directory")
-        ("output_file_name,F", bpo::value<String>(), "Output file name");
+        (modeArgument.c_str(),              bpo::value<String>(),                       "Working mode (Update, Compile)")
+        (inputDirectoriesArgument.c_str(),  bpo::value<StringVector>()->multitoken(),   "Directories to search files")
+        (extensionsArgument.c_str(),        bpo::value<StringVector>()->multitoken(),   "Files extensions to parse")
+        (recursiveArgument.c_str(),                                                     "Is recursive search in directory")
+        (outputDirectoryArgument.c_str(),   bpo::value<String>(),                       "Output files directory")
+        (outputFileNameArgument.c_str(),    bpo::value<String>(),                       "Output file name");
 
     return optionsDescription;
 }
@@ -69,17 +77,20 @@ void PrintUsage(const bpo::options_description& description)
 
 bool WorkModeIsValid(const Kmplete::String& workMode)
 {
-    return workMode == Kmplete::WorkingModeUpdate ||
-           workMode == Kmplete::WorkingModeCompile;
+    using namespace Kmplete::Translator;
+
+    return workMode == ProcessorWorkModeUpdate ||
+           workMode == ProcessorWorkModeCompile;
 }
 //--------------------------------------------------------------------------
 
-int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::TranslatorParameters& translatorParameters)
+int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::Translator::TranslatorParameters& translatorParameters)
 {
     using namespace Kmplete;
+    using namespace Kmplete::Translator;
 
     // Work mode parsing
-    const auto workMode = vm.count("mode") ? vm["mode"].as<String>() : String();
+    const auto workMode = vm.count(ProcessorArgumentWorkMode) ? vm[ProcessorArgumentWorkMode].as<String>() : String();
     if (workMode.empty())
     {
         std::cerr << "Translator: work mode is not set\n";
@@ -95,10 +106,10 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
 
     translatorParameters.workMode = workMode;
 
-    if (workMode == WorkingModeUpdate)
+    if (workMode == ProcessorWorkModeUpdate)
     {
-        // Source directory parsing
-        const auto sourceDirectoryStrings = vm.count("input_directories") ? vm["input_directories"].as<StringVector>() : StringVector();
+        // Source directories parsing
+        const auto sourceDirectoryStrings = vm.count(ProcessorArgumentInputDirectories) ? vm[ProcessorArgumentInputDirectories].as<StringVector>() : StringVector();
         if (sourceDirectoryStrings.empty())
         {
             std::cerr << "Translator: source directories are not set\n";
@@ -123,7 +134,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         translatorParameters.sourceDirectories = sourceDirectories;
 
         // files extensions parsing
-        const auto filesExtensions = vm.count("extensions") ? vm["extensions"].as<StringVector>() : StringVector();
+        const auto filesExtensions = vm.count(ProcessorArgumentExtensions) ? vm[ProcessorArgumentExtensions].as<StringVector>() : StringVector();
         if (filesExtensions.empty())
         {
             std::cerr << "Translator: files extensions are not set\n";
@@ -134,12 +145,12 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         translatorParameters.filesExtensions = filesExtensions;
 
         // Is recursive parsing
-        const bool isRecursive = vm.count("recursive");
+        const bool isRecursive = vm.count(ProcessorArgumentRecursive);
         translatorParameters.isRecursive = isRecursive;
     }
 
     // output directory parsing
-    const auto outputDirectoryStr = vm.count("output_directory") ? vm["output_directory"].as<String>() : String();
+    const auto outputDirectoryStr = vm.count(ProcessorArgumentOutputDirectory) ? vm[ProcessorArgumentOutputDirectory].as<String>() : String();
     if (outputDirectoryStr.empty())
     {
         std::cerr << "Translator: output directory is not set\n";
@@ -159,7 +170,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     }
 
     // output filename parsing
-    const auto outputFileNameStr = vm.count("output_file_name") ? vm["output_file_name"].as<String>() : String();
+    const auto outputFileNameStr = vm.count(ProcessorArgumentOutputFileName) ? vm[ProcessorArgumentOutputFileName].as<String>() : String();
     if (outputFileNameStr.empty())
     {
         std::cerr << "Translator: output file name is not set\n";
