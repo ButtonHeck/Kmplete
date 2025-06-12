@@ -20,3 +20,8 @@ target_compile_definitions(Translator
     PRIVATE MSGINIT_EXECUTABLE_PATH=\"${GETTEXT_MSGINIT_EXECUTABLE}\"
     PRIVATE MSGATTRIB_EXECUTABLE_PATH=\"${GETTEXT_MSGATTRIB_EXECUTABLE}\"
 )
+
+target_link_libraries(Translator
+    PRIVATE BaseLib
+    PRIVATE UtilsLib
+)

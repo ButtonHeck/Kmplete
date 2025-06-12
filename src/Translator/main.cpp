@@ -1,15 +1,17 @@
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/types.h"
+#include "Kmplete/Utils/string_utils.h"
+
 #include <boost/process.hpp>
 #include <boost/program_options.hpp>
 
 #include <iostream>
 #include <filesystem>
-#include <string>
 #include <algorithm>
 #include <array>
 #include <fstream>
 #include <streambuf>
 #include <numeric>
-#include <sstream>
 
 constexpr const auto WorkingModeUpdate = "Update";
 constexpr const auto WorkingModeCompile = "Compile";
@@ -20,27 +22,26 @@ constexpr const auto PoExtension = ".po";
 constexpr const auto MoExtension = ".mo";
 //--------------------------------------------------------------------------
 
+using namespace Kmplete;
+
 struct LocaleInfo
 {
-    const std::string localeName;
-    const std::string languageShortName;
-    const std::string encoding = "UTF-8";
+    const String localeName;
+    const String languageShortName;
+    const String encoding = "UTF-8";
     const int numPlurals;
-    const std::string pluralExpression;
 };
 
 const LocaleInfo EnglishLocaleInfo = LocaleInfo{
     .localeName = "en_EN",
     .languageShortName = "en",
-    .numPlurals = 2,
-    .pluralExpression = "n != 1"
+    .numPlurals = 2
 };
 
 const LocaleInfo RussianLocaleInfo = LocaleInfo{
     .localeName = "ru_RU",
     .languageShortName = "ru",
-    .numPlurals = 3,
-    .pluralExpression = "n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2"
+    .numPlurals = 3
 };
 
 const std::array<LocaleInfo, 2> LocaleInfos = { EnglishLocaleInfo, RussianLocaleInfo };
@@ -48,21 +49,21 @@ const std::array<LocaleInfo, 2> LocaleInfos = { EnglishLocaleInfo, RussianLocale
 
 struct Context
 {
-    std::string workMode;
+    String workMode;
     std::vector<std::filesystem::path> sourceDirectories;
-    std::vector<std::string> filesExtensions;
+    StringVector filesExtensions;
     bool isRecursive = false;
     std::filesystem::path outputDirectory;
-    std::string outputFileName;
+    String outputFileName;
 };
 //--------------------------------------------------------------------------
 
 void PrintUsage(const boost::program_options::options_description& description);
-bool WorkModeIsValid(const std::string& workMode);
+bool WorkModeIsValid(const String& workMode);
 bool DoUpdate(const Context& context);
 bool DoCompile(const Context& context);
 boost::program_options::options_description CreateDescription();
-void ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntry, const std::vector<std::string>& filesExtensions, std::vector<std::filesystem::path>& filesToProcess);
+void ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions, std::vector<std::filesystem::path>& filesToProcess);
 //--------------------------------------------------------------------------
 
 int main(int argc, char** argv)
@@ -84,7 +85,7 @@ int main(int argc, char** argv)
     Context context;
 
     // Work mode parsing
-    const auto workMode = vm.count("mode") ? vm["mode"].as<std::string>() : "";
+    const auto workMode = vm.count("mode") ? vm["mode"].as<String>() : String();
     if (workMode.empty())
     {
         std::cerr << "Translator's work mode is not set\n";
@@ -103,7 +104,7 @@ int main(int argc, char** argv)
     if (workMode == WorkingModeUpdate)
     {
         // Source directory parsing
-        const auto sourceDirectoryStrings = vm.count("input_directories") ? vm["input_directories"].as<std::vector<std::string>>() : std::vector<std::string>();
+        const auto sourceDirectoryStrings = vm.count("input_directories") ? vm["input_directories"].as<StringVector>() : StringVector();
         if (sourceDirectoryStrings.empty())
         {
             std::cerr << "Translator directories are not set\n";
@@ -128,7 +129,7 @@ int main(int argc, char** argv)
         context.sourceDirectories = sourceDirectories;
 
         // files extensions parsing
-        const auto filesExtensions = vm.count("extensions") ? vm["extensions"].as<std::vector<std::string>>() : std::vector<std::string>();
+        const auto filesExtensions = vm.count("extensions") ? vm["extensions"].as<StringVector>() : StringVector();
         if (filesExtensions.empty())
         {
             std::cerr << "Files extensions are not set\n";
@@ -144,7 +145,7 @@ int main(int argc, char** argv)
     }
 
     // output directory parsing
-    const auto outputDirectoryStr = vm.count("output_directory") ? vm["output_directory"].as<std::string>() : "";
+    const auto outputDirectoryStr = vm.count("output_directory") ? vm["output_directory"].as<String>() : String();
     if (outputDirectoryStr.empty())
     {
         std::cerr << "Output directory is not set\n";
@@ -164,7 +165,7 @@ int main(int argc, char** argv)
     }
 
     // output filename parsing
-    const auto outputFileNameStr = vm.count("output_file_name") ? vm["output_file_name"].as<std::string>() : "";
+    const auto outputFileNameStr = vm.count("output_file_name") ? vm["output_file_name"].as<String>() : String();
     if (outputFileNameStr.empty())
     {
         std::cerr << "Output file name is not set\n";
@@ -203,12 +204,12 @@ boost::program_options::options_description CreateDescription()
 {
     boost::program_options::options_description optDescription("Translator options");
     optDescription.add_options()
-        ("mode,M", boost::program_options::value<std::string>(), "Working mode (Update, Compile)")
-        ("input_directories,D", boost::program_options::value<std::vector<std::string>>()->multitoken(), "Directories to search files")
-        ("extensions,E", boost::program_options::value<std::vector<std::string>>()->multitoken(), "Files extensions to parse")
+        ("mode,M", boost::program_options::value<String>(), "Working mode (Update, Compile)")
+        ("input_directories,D", boost::program_options::value<StringVector>()->multitoken(), "Directories to search files")
+        ("extensions,E", boost::program_options::value<StringVector>()->multitoken(), "Files extensions to parse")
         ("recursive,R", "Is recursive search in directory")
-        ("output_directory,O", boost::program_options::value<std::string>(), "Output files directory")
-        ("output_file_name,F", boost::program_options::value<std::string>(), "Output file name");
+        ("output_directory,O", boost::program_options::value<String>(), "Output files directory")
+        ("output_file_name,F", boost::program_options::value<String>(), "Output file name");
 
     return optDescription;
 }
@@ -220,14 +221,14 @@ void PrintUsage(const boost::program_options::options_description& description)
 }
 //--------------------------------------------------------------------------
 
-bool WorkModeIsValid(const std::string& workMode)
+bool WorkModeIsValid(const String& workMode)
 {
     return workMode == WorkingModeUpdate ||
            workMode == WorkingModeCompile;
 }
 //--------------------------------------------------------------------------
 
-void ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntry, const std::vector<std::string>& filesExtensions, std::vector<std::filesystem::path>& filesToProcess)
+void ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions, std::vector<std::filesystem::path>& filesToProcess)
 {
     if (directoryEntry.is_directory() || !directoryEntry.is_regular_file() || !directoryEntry.path().has_extension())
     {
@@ -235,9 +236,9 @@ void ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntr
     }
 
     const auto& entryPath = directoryEntry.path();
-    const std::string extension = entryPath.extension().string();
+    const auto entryExtension = entryPath.extension().string();
     if (std::find_if(filesExtensions.cbegin(), filesExtensions.cend(),
-        [extension](const std::string& supportedExtension) { return supportedExtension == extension; })
+        [entryExtension](const String& enabledExtension) { return enabledExtension == entryExtension; })
         != filesExtensions.cend())
     {
         filesToProcess.push_back(entryPath);
@@ -267,7 +268,7 @@ void GatherFilesToUpdate(std::vector<std::filesystem::path>& filesToProcess, con
 }
 //--------------------------------------------------------------------------
 
-std::string CreatePoTemplateFile(const Context& context, const LocaleInfo& localeInfo)
+String CreatePoTemplateFile(const Context& context, const LocaleInfo& localeInfo)
 {
     auto poTemplateFilePath = context.outputDirectory;
     poTemplateFilePath /= localeInfo.localeName;
@@ -279,12 +280,12 @@ std::string CreatePoTemplateFile(const Context& context, const LocaleInfo& local
         if (!success)
         {
             std::cerr << "Cannot create .pot file directory hierarchy (" << poTemplateFilePath.string() << ")\n";
-            return std::string();
+            return String();
         }
     }
 
     poTemplateFilePath /= context.outputFileName;
-    const std::string poTemplateFileName = poTemplateFilePath.string().append(PotExtension);
+    const String poTemplateFileName = poTemplateFilePath.string().append(PotExtension);
 
     if (!std::filesystem::exists(poTemplateFileName))
     {
@@ -294,7 +295,7 @@ std::string CreatePoTemplateFile(const Context& context, const LocaleInfo& local
     if (!std::filesystem::exists(poTemplateFileName))
     {
         std::cerr << "Failed to create .pot file (" << poTemplateFileName << ")\n";
-        return std::string();
+        return String();
     }
 
     return poTemplateFileName;
@@ -312,7 +313,7 @@ bool DoUpdate(const Context& context)
         return false;
     }
 
-    const std::string filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), std::string(), 
+    const String filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), String(), 
         [](const std::filesystem::path& a, const std::filesystem::path& b) {
             return a.string() + (a.empty() ? "" : " ") + b.string();
         }
@@ -321,7 +322,7 @@ bool DoUpdate(const Context& context)
     for (const auto& localeInfo : LocaleInfos)
     {
         // 1. Create .po template file
-        const std::string poTemplateFile = CreatePoTemplateFile(context, localeInfo);
+        const String poTemplateFile = CreatePoTemplateFile(context, localeInfo);
         if (poTemplateFile.empty())
         {
             std::cerr << "Cannot create .pot file\n";
@@ -329,13 +330,18 @@ bool DoUpdate(const Context& context)
         }
 
         // 2. invoke xgettext for .pot
-        std::string xgettextCommand = std::string(XGETTEXT_EXECUTABLE_PATH);
-        xgettextCommand.append(" -j -C -n -kTranslate:2,2t -kTranslate:2,3,4t -kTranslateCtx:2,3c,3t -kTranslateCtx:2,3,5c,5t -kTranslateDefer:2,2t -kTranslateDefer:2,3,4t -kTranslateCtxDefer:2,3c,3t -kTranslateCtxDefer:2,3,5c,5t -o ");
-        xgettextCommand.append(poTemplateFile);
-        xgettextCommand.append(" ");
-        xgettextCommand.append(filesList);
-        auto xgettextProgram = boost::process::child(xgettextCommand);
-        xgettextProgram.wait();
+        const auto xgettextCommand = Utils::Concatenate(
+            XGETTEXT_EXECUTABLE_PATH, 
+            " -j -C -n ", 
+            "-kTranslate:2,2t -kTranslate:2,3,4t ",
+            "-kTranslateCtx:2,3c,3t -kTranslateCtx:2,3,5c,5t ",
+            "-kTranslateDefer:2,2t -kTranslateDefer:2,3,4t ",
+            "-kTranslateCtxDefer:2,3c,3t -kTranslateCtxDefer:2,3,5c,5t -o ", 
+            poTemplateFile, 
+            " ", 
+            filesList);
+        auto xgettextProcess = boost::process::child(xgettextCommand);
+        xgettextProcess.wait();
 
         // 3. fix charset for generated .pot file
         std::ifstream potFileStream(poTemplateFile);
@@ -345,11 +351,11 @@ bool DoUpdate(const Context& context)
             return false;
         }
 
-        std::string potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
+        String potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
         potFileStream.close();
-        const auto charsetStringToReplace = std::string("CHARSET");
+        const auto charsetStringToReplace = String("CHARSET");
         const auto charsetStringIndex = potFileContent.find(charsetStringToReplace);
-        if (charsetStringIndex != std::string::npos)
+        if (charsetStringIndex != String::npos)
         {
             potFileContent.replace(charsetStringIndex, charsetStringToReplace.size(), "UTF-8");
         }
@@ -359,52 +365,62 @@ bool DoUpdate(const Context& context)
         potFileOutStream.close();
         
         // 4. invoke msginit if necessary for creation of .po file
-        std::string poFile = poTemplateFile;
+        String poFile = poTemplateFile;
         poFile.pop_back();
 
         if (!std::filesystem::exists(poFile))
         {
-            std::string msginitCommand = std::string(MSGINIT_EXECUTABLE_PATH);
-            msginitCommand.append(" -i ");
-            msginitCommand.append(poTemplateFile);
-            msginitCommand.append(" -o ");
-            msginitCommand.append(poFile);
-            msginitCommand.append(" -l ");
-            msginitCommand.append(localeInfo.localeName).append(".").append(localeInfo.encoding);
-            auto msginitProgram = boost::process::child(msginitCommand);
-            msginitProgram.wait();
+            const auto msginitCommand = Utils::Concatenate(
+                MSGINIT_EXECUTABLE_PATH,
+                " -i ",
+                poTemplateFile,
+                " -o ",
+                poFile,
+                " -l ",
+                localeInfo.localeName,
+                ".",
+                localeInfo.encoding
+            );
+            auto msginitProcess = boost::process::child(msginitCommand);
+            msginitProcess.wait();
         }
 
         // 5. invoke msgattrib with --set-obsolete flag
-        std::string msgattribCommand = std::string(MSGATTRIB_EXECUTABLE_PATH);
-        msgattribCommand.append(" --set-obsolete --ignore-file=");
-        msgattribCommand.append(poTemplateFile);
-        msgattribCommand.append(" -o ");
-        msgattribCommand.append(poFile);
-        msgattribCommand.append(" ");
-        msgattribCommand.append(poFile);
-        auto msgattribProgramStep1 = boost::process::child(msgattribCommand);
-        msgattribProgramStep1.wait();
+        auto msgattribCommand = Utils::Concatenate(
+            MSGATTRIB_EXECUTABLE_PATH,
+            " --set-obsolete --ignore-file=",
+            poTemplateFile,
+            " -o ",
+            poFile,
+            " ",
+            poFile
+        );
+        auto msgattribProcessStep1 = boost::process::child(msgattribCommand);
+        msgattribProcessStep1.wait();
 
         // 6. invoke msgattrib with --no-obsolete flag
-        msgattribCommand = std::string(MSGATTRIB_EXECUTABLE_PATH);
-        msgattribCommand.append(" --no-obsolete -o ");
-        msgattribCommand.append(poFile);
-        msgattribCommand.append(" ");
-        msgattribCommand.append(poFile);
-        auto msgattribProgramStep2 = boost::process::child(msgattribCommand);
-        msgattribProgramStep2.wait();
+        msgattribCommand = Utils::Concatenate(
+            MSGATTRIB_EXECUTABLE_PATH,
+            " --no-obsolete -o ",
+            poFile,
+            " ",
+            poFile
+        );
+        auto msgattribProcessStep2 = boost::process::child(msgattribCommand);
+        msgattribProcessStep2.wait();
 
         // 7. invoke msgmerge
-        std::string msgmergeCommand = std::string(MSGMERGE_EXECUTABLE_PATH);
-        msgmergeCommand.append(" -q -o ");
-        msgmergeCommand.append(poFile);
-        msgmergeCommand.append(" ");
-        msgmergeCommand.append(poFile);
-        msgmergeCommand.append(" ");
-        msgmergeCommand.append(poTemplateFile);
-        auto msgmergeProgram = boost::process::child(msgmergeCommand);
-        msgmergeProgram.wait();
+        const auto msgmergeCommand = Utils::Concatenate(
+            MSGMERGE_EXECUTABLE_PATH,
+            " -q -o ",
+            poFile,
+            " ",
+            poFile,
+            " ",
+            poTemplateFile
+        );
+        auto msgmergeProcess = boost::process::child(msgmergeCommand);
+        msgmergeProcess.wait();
 
         // 8. remove .pot file
         std::filesystem::remove(poTemplateFile);
@@ -440,13 +456,15 @@ bool DoCompile(const Context& context)
         auto moFile = outputDirectory;
         moFile /= (context.outputFileName + MoExtension);
 
-        std::string msgfmtCommand = std::string(MSGFMT_EXECUTABLE_PATH);
-        msgfmtCommand.append(" -o ");
-        msgfmtCommand.append(moFile.string());
-        msgfmtCommand.append(" ");
-        msgfmtCommand.append(poTemplateFile.string());
-        auto msgfmtProgram = boost::process::child(msgfmtCommand);
-        msgfmtProgram.wait();
+        const auto msgfmtCommand = Utils::Concatenate(
+            MSGFMT_EXECUTABLE_PATH,
+            " -o ",
+            moFile.string(),
+            " ",
+            poTemplateFile.string()
+        );
+        auto msgfmtProcess = boost::process::child(msgfmtCommand);
+        msgfmtProcess.wait();
     }
 
     return true;
