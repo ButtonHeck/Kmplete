@@ -43,8 +43,8 @@ namespace Kmplete
 
         if (filesToProcess.empty())
         {
-            std::cerr << "DoUpdate: Appropriate files not found\n";
-            return false;
+            std::cerr << "Translator::Update: Appropriate files not found\n";
+            return -1;
         }
 
         const String filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), String(),
@@ -59,8 +59,8 @@ namespace Kmplete
             const String poTemplateFile = CreatePoTemplateFile(_parameters, locale);
             if (poTemplateFile.empty())
             {
-                std::cerr << "Cannot create .pot file\n";
-                return false;
+                std::cerr << "Translator::Update: cannot create .pot file (" << poTemplateFile << ")\n";
+                return -1;
             }
 
             // 2. invoke xgettext for .pot
@@ -81,8 +81,8 @@ namespace Kmplete
             std::ifstream potFileStream(poTemplateFile);
             if (!potFileStream.is_open() || !potFileStream.good())
             {
-                std::cerr << "Cannot open newly created .pot file (" << poTemplateFile << ")\n";
-                return false;
+                std::cerr << "Update: cannot open newly created .pot file (" << poTemplateFile << ")\n";
+                return -1;
             }
 
             String potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
@@ -173,7 +173,7 @@ namespace Kmplete
 
             if (!std::filesystem::exists(outputDirectory))
             {
-                std::cerr << "Output directory for locale " << locale << " not found\n";
+                std::cerr << "Translator::Compile: output directory for locale " << locale << " not found\n";
                 continue;
             }
 
@@ -182,7 +182,7 @@ namespace Kmplete
 
             if (!std::filesystem::exists(poTemplateFile))
             {
-                std::cerr << "Source .pot file not found " << poTemplateFile << "\n";
+                std::cerr << "Translator::Compile: source .pot file not found (" << poTemplateFile << ")\n";
                 continue;
             }
 
@@ -215,7 +215,7 @@ namespace Kmplete
             const auto success = std::filesystem::create_directories(poTemplateFilePath);
             if (!success)
             {
-                std::cerr << "Cannot create .pot file directory hierarchy (" << poTemplateFilePath.string() << ")\n";
+                std::cerr << "Translator::Update: cannot create .pot file directory hierarchy (" << poTemplateFilePath << ")\n";
                 return String();
             }
         }
@@ -230,7 +230,7 @@ namespace Kmplete
 
         if (!std::filesystem::exists(poTemplateFileName))
         {
-            std::cerr << "Failed to create .pot file (" << poTemplateFileName << ")\n";
+            std::cerr << "Translator::Update: failed to create .pot file (" << poTemplateFileName << ")\n";
             return String();
         }
 

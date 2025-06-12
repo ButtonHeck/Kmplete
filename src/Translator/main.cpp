@@ -34,7 +34,7 @@ int main(int argc, char** argv)
     const auto parseParametersResult = ParseParameters(optionsDescription, vm, translatorParameters);
     if (parseParametersResult != 0)
     {
-        std::cerr << "Failed to parse parameters\n";
+        std::cerr << "Translator: failed to parse parameters\n";
         return parseParametersResult;
     }
 
@@ -82,13 +82,13 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto workMode = vm.count("mode") ? vm["mode"].as<String>() : String();
     if (workMode.empty())
     {
-        std::cerr << "Translator's work mode is not set\n";
+        std::cerr << "Translator: work mode is not set\n";
         PrintUsage(optionsDescription);
         return -2;
     }
     if (!WorkModeIsValid(workMode))
     {
-        std::cerr << "Translator's work mode is not valid\n";
+        std::cerr << "Translator: work mode is not valid (" << workMode << ")\n";
         PrintUsage(optionsDescription);
         return -21;
     }
@@ -101,7 +101,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto sourceDirectoryStrings = vm.count("input_directories") ? vm["input_directories"].as<StringVector>() : StringVector();
         if (sourceDirectoryStrings.empty())
         {
-            std::cerr << "Translator directories are not set\n";
+            std::cerr << "Translator: source directories are not set\n";
             PrintUsage(optionsDescription);
             return -3;
         }
@@ -112,7 +112,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
             const auto sourceDirectory = std::filesystem::path(sourceDirectoryStr);
             if (!std::filesystem::exists(sourceDirectory) || !std::filesystem::is_directory(sourceDirectory))
             {
-                std::cerr << "One of translator directories is not exists or is not of a directory type\n";
+                std::cerr << "Translator: one of source directories does not exist or is not of a directory type (" << sourceDirectory << ")\n";
                 PrintUsage(optionsDescription);
                 return -31;
             }
@@ -126,7 +126,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto filesExtensions = vm.count("extensions") ? vm["extensions"].as<StringVector>() : StringVector();
         if (filesExtensions.empty())
         {
-            std::cerr << "Files extensions are not set\n";
+            std::cerr << "Translator: files extensions are not set\n";
             PrintUsage(optionsDescription);
             return -4;
         }
@@ -142,7 +142,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto outputDirectoryStr = vm.count("output_directory") ? vm["output_directory"].as<String>() : String();
     if (outputDirectoryStr.empty())
     {
-        std::cerr << "Output directory is not set\n";
+        std::cerr << "Translator: output directory is not set\n";
         PrintUsage(optionsDescription);
         return -5;
     }
@@ -152,7 +152,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto success = std::filesystem::create_directories(outputDirectory);
         if (!success)
         {
-            std::cerr << "Translator cannot create output directory\n";
+            std::cerr << "Translator: cannot create output directory (" << outputDirectory << ")\n";
             PrintUsage(optionsDescription);
             return -51;
         }
@@ -162,7 +162,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto outputFileNameStr = vm.count("output_file_name") ? vm["output_file_name"].as<String>() : String();
     if (outputFileNameStr.empty())
     {
-        std::cerr << "Output file name is not set\n";
+        std::cerr << "Translator: output file name is not set\n";
         PrintUsage(optionsDescription);
         return -6;
     }
