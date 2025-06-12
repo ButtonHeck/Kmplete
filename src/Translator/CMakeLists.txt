@@ -4,7 +4,18 @@ cmake_minimum_required(VERSION 3.20)
 
 project(Translator LANGUAGES CXX)
 
-add_executable(Translator main.cpp)
+set(Translator_HEADERS
+    ${CMAKE_CURRENT_LIST_DIR}/translator.h
+)
+set(Translator_SOURCES
+    ${CMAKE_CURRENT_LIST_DIR}/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/translator.cpp
+)
+
+add_executable(Translator
+    ${Translator_HEADERS}
+    ${Translator_SOURCES}
+)
 
 SetupBoost(Translator)
 SetupCompilerOptions(Translator)
