@@ -3,10 +3,6 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types.h"
 
-#include <filesystem>
-
-using Path = std::filesystem::path;
-
 namespace Kmplete
 {
     class Filesystem

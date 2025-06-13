@@ -25,11 +25,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::vector<Path> OpenFiles(const String& title, const StringVector& filters /*= { "Any Files", "*.*" }*/)
+        PathVector OpenFiles(const String& title, const StringVector& filters /*= { "Any Files", "*.*" }*/)
         {
             pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::multiselect);
 
-            auto paths = std::vector<Path>();
+            auto paths = PathVector();
             const auto files = opener.result();
             if (files.empty())
             {

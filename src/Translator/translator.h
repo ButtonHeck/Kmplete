@@ -5,8 +5,6 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Translator/translator_interface.h"
 
-#include <filesystem>
-
 namespace Kmplete
 {
     namespace Translator
@@ -14,10 +12,10 @@ namespace Kmplete
         struct TranslatorParameters
         {
             String workMode;
-            std::vector<std::filesystem::path> sourceDirectories;
+            PathVector sourceDirectories;
             StringVector filesExtensions;
             bool isRecursive = false;
-            std::filesystem::path outputDirectory;
+            Path outputDirectory;
             String outputFileName;
         };
         //--------------------------------------------------------------------------
@@ -33,7 +31,7 @@ namespace Kmplete
             KMP_NODISCARD int Update() const;
             KMP_NODISCARD int Compile() const;
 
-            KMP_NODISCARD std::vector<std::filesystem::path> GatherFilesToUpdate(const TranslatorParameters& parameters) const;
+            KMP_NODISCARD PathVector GatherFilesToUpdate(const TranslatorParameters& parameters) const;
             KMP_NODISCARD bool IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const;
             KMP_NODISCARD String CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const;
 

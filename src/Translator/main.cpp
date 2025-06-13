@@ -116,11 +116,11 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
             PrintUsage(optionsDescription);
             return ReturnCode::SourceDirectoriesAreNotSet;
         }
-        std::vector<std::filesystem::path> sourceDirectories;
+        PathVector sourceDirectories;
         sourceDirectories.reserve(sourceDirectoryStrings.size());
         for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
         {
-            const auto sourceDirectory = std::filesystem::path(sourceDirectoryStr);
+            const auto sourceDirectory = Path(sourceDirectoryStr);
             if (!std::filesystem::exists(sourceDirectory) || !std::filesystem::is_directory(sourceDirectory))
             {
                 std::cerr << "Translator: one of source directories does not exist or is not of a directory type (" << sourceDirectory << ")\n";
@@ -157,7 +157,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         PrintUsage(optionsDescription);
         return ReturnCode::OutputDirectoryIsNotSet;
     }
-    const auto outputDirectory = std::filesystem::path(outputDirectoryStr);
+    const auto outputDirectory = Path(outputDirectoryStr);
     if (!std::filesystem::exists(outputDirectory))
     {
         const auto success = std::filesystem::create_directories(outputDirectory);

@@ -4,14 +4,12 @@
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Core/filesystem.h"
 
-#include <vector>
-
 namespace Kmplete
 {
     namespace FileDialogs
     {
         KMP_NODISCARD KMP_API Path OpenFile(const String& title, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API std::vector<Path> OpenFiles(const String& title, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API PathVector OpenFiles(const String& title, const StringVector& filters = { "Any Files", "*.*" });
         KMP_NODISCARD KMP_API Path OpenDirectory(const String& title);
         KMP_NODISCARD KMP_API Path SaveFile(const String& title, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
 
