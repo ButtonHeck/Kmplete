@@ -78,6 +78,12 @@ namespace Kmplete
                     filesList);
                 auto xgettextProcess = boost::process::child(xgettextCommand);
                 xgettextProcess.wait();
+                const auto xgettextExitCode = xgettextProcess.exit_code();
+                if (xgettextExitCode != 0)
+                {
+                    std::cerr << "TranslatorProcessor::Update: xgettext error occured\n";
+                    return ReturnCode::ProcessorXgettextError;
+                }
 
                 // 3. fix charset for generated .pot file
                 std::ifstream potFileStream(poTemplateFile);
@@ -118,6 +124,12 @@ namespace Kmplete
                     );
                     auto msginitProcess = boost::process::child(msginitCommand);
                     msginitProcess.wait();
+                    const auto msginitExitCode = msginitProcess.exit_code();
+                    if (msginitExitCode != 0)
+                    {
+                        std::cerr << "TranslatorProcessor::Update: msginit error occured\n";
+                        return ReturnCode::ProcessorMsginitError;
+                    }
                 }
 
                 // 5. invoke msgattrib with --set-obsolete flag
@@ -132,6 +144,12 @@ namespace Kmplete
                 );
                 auto msgattribProcessStep1 = boost::process::child(msgattribCommand);
                 msgattribProcessStep1.wait();
+                const auto msgattribStep1ExitCode = msgattribProcessStep1.exit_code();
+                if (msgattribStep1ExitCode != 0)
+                {
+                    std::cerr << "TranslatorProcessor::Update: msgattrib error occured\n";
+                    return ReturnCode::ProcessorMsgattribError;
+                }
 
                 // 6. invoke msgattrib with --no-obsolete flag
                 msgattribCommand = Utils::Concatenate(
@@ -143,6 +161,12 @@ namespace Kmplete
                 );
                 auto msgattribProcessStep2 = boost::process::child(msgattribCommand);
                 msgattribProcessStep2.wait();
+                const auto msgattribStep2ExitCode = msgattribProcessStep2.exit_code();
+                if (msgattribStep2ExitCode != 0)
+                {
+                    std::cerr << "TranslatorProcessor::Update: msgattrib error occured\n";
+                    return ReturnCode::ProcessorMsgattribError;
+                }
 
                 // 7. invoke msgmerge
                 const auto msgmergeCommand = Utils::Concatenate(
@@ -156,6 +180,12 @@ namespace Kmplete
                 );
                 auto msgmergeProcess = boost::process::child(msgmergeCommand);
                 msgmergeProcess.wait();
+                const auto msgmergeExitCode = msgmergeProcess.exit_code();
+                if (msgmergeExitCode != 0)
+                {
+                    std::cerr << "TranslatorProcessor::Update: msgmerge error occured\n";
+                    return ReturnCode::ProcessorMsgmergeError;
+                }
 
                 // 8. remove .pot file
                 std::filesystem::remove(poTemplateFile);
@@ -200,6 +230,12 @@ namespace Kmplete
                 );
                 auto msgfmtProcess = boost::process::child(msgfmtCommand);
                 msgfmtProcess.wait();
+                const auto msgfmtExitCode = msgfmtProcess.exit_code();
+                if (msgfmtExitCode != 0)
+                {
+                    std::cerr << "TranslatorProcessor::Update: msgfmt error occured\n";
+                    return ReturnCode::ProcessorMsgmergeError;
+                }
             }
 
             return ReturnCode::Ok;

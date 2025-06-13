@@ -36,6 +36,12 @@ namespace Kmplete
             ProcessorFilesNotFound = -10,
             ProcessorCreatePotFailed = -11,
             ProcessorOpenPotFailed = -12,
+
+            ProcessorXgettextError = -100,
+            ProcessorMsginitError = -101,
+            ProcessorMsgattribError = -102,
+            ProcessorMsgmergeError = -103,
+            ProcessorMsgfmtError = -104,
         };
     }
 }
