@@ -19,5 +19,23 @@ namespace Kmplete
         static constexpr auto ProcessorArgumentOutputDirectoryShort = "O";
         static constexpr auto ProcessorArgumentOutputFileName = "output_file_name";
         static constexpr auto ProcessorArgumentOutputFileNameShort = "F";
+
+        enum ReturnCode
+        {
+            Ok = 0,
+            InvalidArgumentCount = -1,
+            WorkModeIsNotSet = -2,
+            WorkModeIsNotValid = -21,
+            SourceDirectoriesAreNotSet = -3,
+            SourceDirectoriesAreNotValid = -31,
+            FilesExtensionsAreNotSet = -4,
+            OutputDirectoryIsNotSet = -5,
+            OutputDirectoryIsNotValid = -51,
+            OutputFileNameIsNotSet = -6,
+
+            ProcessorFilesNotFound = -10,
+            ProcessorCreatePotFailed = -11,
+            ProcessorOpenPotFailed = -12,
+        };
     }
 }

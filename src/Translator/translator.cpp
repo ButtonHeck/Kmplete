@@ -26,16 +26,17 @@ namespace Kmplete
 
         int TranslatorProcessor::Run() const
         {
+            auto returnCode = 0;
             if (_parameters.workMode == ProcessorWorkModeUpdate)
             {
-                return Update();
+                returnCode = Update();
             }
             else if (_parameters.workMode == ProcessorWorkModeCompile)
             {
-                return Compile();
+                returnCode = Compile();
             }
 
-            return -1;
+            return returnCode;
         }
         //--------------------------------------------------------------------------
 
@@ -46,8 +47,8 @@ namespace Kmplete
 
             if (filesToProcess.empty())
             {
-                std::cerr << "Translator::Update: Appropriate files not found\n";
-                return -1;
+                std::cerr << "TranslatorProcessor::Update: Appropriate files not found\n";
+                return ReturnCode::ProcessorFilesNotFound;
             }
 
             const String filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), String(),
@@ -62,8 +63,8 @@ namespace Kmplete
                 const String poTemplateFile = CreatePoTemplateFile(_parameters, locale);
                 if (poTemplateFile.empty())
                 {
-                    std::cerr << "Translator::Update: cannot create .pot file (" << poTemplateFile << ")\n";
-                    return -1;
+                    std::cerr << "TranslatorProcessor::Update: cannot create .pot file (" << poTemplateFile << ")\n";
+                    return ReturnCode::ProcessorCreatePotFailed;
                 }
 
                 // 2. invoke xgettext for .pot
@@ -84,8 +85,8 @@ namespace Kmplete
                 std::ifstream potFileStream(poTemplateFile);
                 if (!potFileStream.is_open() || !potFileStream.good())
                 {
-                    std::cerr << "Update: cannot open newly created .pot file (" << poTemplateFile << ")\n";
-                    return -1;
+                    std::cerr << "TranslatorProcessor::Update: cannot open newly created .pot file (" << poTemplateFile << ")\n";
+                    return ReturnCode::ProcessorOpenPotFailed;
                 }
 
                 String potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
@@ -162,7 +163,7 @@ namespace Kmplete
                 std::filesystem::remove(poTemplateFile);
             }
 
-            return 0;
+            return ReturnCode::Ok;
         }
         //--------------------------------------------------------------------------
 
@@ -176,7 +177,7 @@ namespace Kmplete
 
                 if (!std::filesystem::exists(outputDirectory))
                 {
-                    std::cerr << "Translator::Compile: output directory for locale " << locale << " not found\n";
+                    std::cerr << "TranslatorProcessor::Compile: output directory for locale " << locale << " not found\n";
                     continue;
                 }
 
@@ -185,7 +186,7 @@ namespace Kmplete
 
                 if (!std::filesystem::exists(poTemplateFile))
                 {
-                    std::cerr << "Translator::Compile: source .pot file not found (" << poTemplateFile << ")\n";
+                    std::cerr << "TranslatorProcessor::Compile: source .pot file not found (" << poTemplateFile << ")\n";
                     continue;
                 }
 
@@ -203,7 +204,7 @@ namespace Kmplete
                 msgfmtProcess.wait();
             }
 
-            return 0;
+            return ReturnCode::Ok;
         }
         //--------------------------------------------------------------------------
 
@@ -218,7 +219,7 @@ namespace Kmplete
                 const auto success = std::filesystem::create_directories(poTemplateFilePath);
                 if (!success)
                 {
-                    std::cerr << "Translator::Update: cannot create .pot file directory hierarchy (" << poTemplateFilePath << ")\n";
+                    std::cerr << "TranslatorProcessor::Update: cannot create .pot file directory hierarchy (" << poTemplateFilePath << ")\n";
                     return String();
                 }
             }
@@ -233,7 +234,7 @@ namespace Kmplete
 
             if (!std::filesystem::exists(poTemplateFileName))
             {
-                std::cerr << "Translator::Update: failed to create .pot file (" << poTemplateFileName << ")\n";
+                std::cerr << "TranslatorProcessor::Update: failed to create .pot file (" << poTemplateFileName << ")\n";
                 return String();
             }
 
