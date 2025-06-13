@@ -246,40 +246,40 @@ TEST_CASE("Localization translator without context singular", "[localization][lo
     TranslationStr untranslatedStr;
 
     // Without domain "Tests" and without "locale" path
-    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes"); // without translation
 
     // add path
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes"); // without translation
 
     // add domain (translations must be ready)
     REQUIRE_NOTHROW(localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(Utils::Utf8ToNarrow(yesStr) == "Да");
-    REQUIRE_NOTHROW(noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No"));
+    REQUIRE_NOTHROW(noStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "No"));
     REQUIRE(Utils::Utf8ToNarrow(noStr) == "Нет");
-    REQUIRE_NOTHROW(untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
+    REQUIRE_NOTHROW(untranslatedStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to en_EN
     REQUIRE(localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes");
-    REQUIRE_NOTHROW(noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No"));
+    REQUIRE_NOTHROW(noStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "No"));
     REQUIRE(noStr == "No");
-    REQUIRE_NOTHROW(untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
+    REQUIRE_NOTHROW(untranslatedStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to ru_RU again
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    REQUIRE_NOTHROW(yesStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(Utils::Utf8ToNarrow(yesStr) == "Да");
-    REQUIRE_NOTHROW(noStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "No"));
+    REQUIRE_NOTHROW(noStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "No"));
     REQUIRE(Utils::Utf8ToNarrow(noStr) == "Нет");
-    REQUIRE_NOTHROW(untranslatedStr = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
+    REQUIRE_NOTHROW(untranslatedStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 }
 //--------------------------------------------------------------------------
@@ -296,40 +296,40 @@ TEST_CASE("Localization translator with context singular", "[localization][local
     TranslationStr untranslatedStr;
 
     // Without domain "Tests" and without messages path
-    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
 
     // add path
     const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
-    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
 
     // add domain "Tests"
     REQUIRE_NOTHROW(localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
-    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(Utils::Utf8ToNarrow(openVerbStr) == "Открыть");
-    REQUIRE_NOTHROW(openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
+    REQUIRE_NOTHROW(openAdjStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
     REQUIRE(Utils::Utf8ToNarrow(openAdjStr) == "Открытый");
-    REQUIRE_NOTHROW(untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
+    REQUIRE_NOTHROW(untranslatedStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to en_EN
     REQUIRE(localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
-    REQUIRE_NOTHROW(openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
+    REQUIRE_NOTHROW(openAdjStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
     REQUIRE(openAdjStr == "Open");
-    REQUIRE_NOTHROW(untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
+    REQUIRE_NOTHROW(untranslatedStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 
     // switch to ru_RU again
     REQUIRE(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(Utils::Utf8ToNarrow(openVerbStr) == "Открыть");
-    REQUIRE_NOTHROW(openAdjStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
+    REQUIRE_NOTHROW(openAdjStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Adjective"));
     REQUIRE(Utils::Utf8ToNarrow(openAdjStr) == "Открытый");
-    REQUIRE_NOTHROW(untranslatedStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
+    REQUIRE_NOTHROW(untranslatedStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 }
 //--------------------------------------------------------------------------
@@ -683,46 +683,46 @@ TEST_CASE("Localization translator without context plural", "[localization][loca
     TranslationStr appleStr11;
     TranslationStr appleStr21;
 
-    REQUIRE_NOTHROW(appleStrUnformattedForm1 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
-    REQUIRE_NOTHROW(appleStrUnformattedForm2 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
-    REQUIRE_NOTHROW(appleStrUnformattedForm3 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
+    REQUIRE_NOTHROW(appleStrUnformattedForm1 = Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
+    REQUIRE_NOTHROW(appleStrUnformattedForm2 = Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
+    REQUIRE_NOTHROW(appleStrUnformattedForm3 = Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
     REQUIRE_FALSE(appleStrUnformattedForm1.empty());
     REQUIRE_FALSE(appleStrUnformattedForm2.empty());
     REQUIRE_FALSE(appleStrUnformattedForm3.empty());
 
     // existing domain Translation Russian
-    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformattedForm1, 1));
+    REQUIRE_NOTHROW(appleStr1 = Localization::Format(appleStrUnformattedForm1, 1));
     REQUIRE(Utils::Utf8ToNarrow(appleStr1) == "1 яблоко");
-    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformattedForm2, 2));
+    REQUIRE_NOTHROW(appleStr2 = Localization::Format(appleStrUnformattedForm2, 2));
     REQUIRE(Utils::Utf8ToNarrow(appleStr2) == "2 яблока");
-    REQUIRE_NOTHROW(appleStr5 = Translator::Format(appleStrUnformattedForm3, 5));
+    REQUIRE_NOTHROW(appleStr5 = Localization::Format(appleStrUnformattedForm3, 5));
     REQUIRE(Utils::Utf8ToNarrow(appleStr5) == "5 яблок");
-    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformattedForm3, 11));
+    REQUIRE_NOTHROW(appleStr11 = Localization::Format(appleStrUnformattedForm3, 11));
     REQUIRE(Utils::Utf8ToNarrow(appleStr11) == "11 яблок");
-    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformattedForm3, 0));
+    REQUIRE_NOTHROW(appleStr0 = Localization::Format(appleStrUnformattedForm3, 0));
     REQUIRE(Utils::Utf8ToNarrow(appleStr0) == "0 яблок");
-    REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformattedForm1, 21));
+    REQUIRE_NOTHROW(appleStr21 = Localization::Format(appleStrUnformattedForm1, 21));
     REQUIRE(Utils::Utf8ToNarrow(appleStr21) == "21 яблоко");
 
     // existing domain Translation English
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    REQUIRE_NOTHROW(appleStrUnformattedForm1 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
-    REQUIRE_NOTHROW(appleStrUnformattedForm2 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
-    REQUIRE_NOTHROW(appleStrUnformattedForm3 = Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
+    REQUIRE_NOTHROW(appleStrUnformattedForm1 = Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1));
+    REQUIRE_NOTHROW(appleStrUnformattedForm2 = Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2));
+    REQUIRE_NOTHROW(appleStrUnformattedForm3 = Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5));
     REQUIRE_FALSE(appleStrUnformattedForm1.empty());
     REQUIRE_FALSE(appleStrUnformattedForm2.empty());
     REQUIRE_FALSE(appleStrUnformattedForm3.empty());
-    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformattedForm1, 1));
+    REQUIRE_NOTHROW(appleStr1 = Localization::Format(appleStrUnformattedForm1, 1));
     REQUIRE(appleStr1 == "1 apple");
-    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformattedForm2, 2));
+    REQUIRE_NOTHROW(appleStr2 = Localization::Format(appleStrUnformattedForm2, 2));
     REQUIRE(appleStr2 == "2 apples");
-    REQUIRE_NOTHROW(appleStr5 = Translator::Format(appleStrUnformattedForm3, 5));
+    REQUIRE_NOTHROW(appleStr5 = Localization::Format(appleStrUnformattedForm3, 5));
     REQUIRE(appleStr5 == "5 apples");
-    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformattedForm3, 11));
+    REQUIRE_NOTHROW(appleStr11 = Localization::Format(appleStrUnformattedForm3, 11));
     REQUIRE(appleStr11 == "11 apples");
-    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformattedForm3, 0));
+    REQUIRE_NOTHROW(appleStr0 = Localization::Format(appleStrUnformattedForm3, 0));
     REQUIRE(appleStr0 == "0 apples");
-    REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformattedForm2, 21));
+    REQUIRE_NOTHROW(appleStr21 = Localization::Format(appleStrUnformattedForm2, 21));
     REQUIRE(appleStr21 == "21 apples");
 }
 //--------------------------------------------------------------------------
@@ -754,38 +754,38 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
     REQUIRE_NOTHROW(appleStr0 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
     REQUIRE(Utils::Utf8ToNarrow(appleStr0) == "0 яблок");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
-    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformatted, 0));
+    REQUIRE_NOTHROW(appleStr0 = Localization::Format(appleStrUnformatted, 0));
     REQUIRE(Utils::Utf8ToNarrow(appleStr0) == "0 яблок");
 
     REQUIRE_NOTHROW(appleStr5 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 5));
     REQUIRE(Utils::Utf8ToNarrow(appleStr5) == "5 яблок");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 5));
-    REQUIRE_NOTHROW(appleStr5 = Translator::Format(appleStrUnformatted, 5));
+    REQUIRE_NOTHROW(appleStr5 = Localization::Format(appleStrUnformatted, 5));
     REQUIRE(Utils::Utf8ToNarrow(appleStr5) == "5 яблок");
 
     REQUIRE_NOTHROW(appleStr11 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
     REQUIRE(Utils::Utf8ToNarrow(appleStr11) == "11 яблок");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
-    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformatted, 11));
+    REQUIRE_NOTHROW(appleStr11 = Localization::Format(appleStrUnformatted, 11));
     REQUIRE(Utils::Utf8ToNarrow(appleStr11) == "11 яблок");
 
     REQUIRE_NOTHROW(appleStr1 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
     REQUIRE(Utils::Utf8ToNarrow(appleStr1) == "1 яблоко");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
-    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformatted, 1));
+    REQUIRE_NOTHROW(appleStr1 = Localization::Format(appleStrUnformatted, 1));
     REQUIRE(Utils::Utf8ToNarrow(appleStr1) == "1 яблоко");
 
     REQUIRE_NOTHROW(appleStr21 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 21));
     REQUIRE(Utils::Utf8ToNarrow(appleStr21) == "21 яблоко");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 21));
-    REQUIRE_NOTHROW(appleStr21 = Translator::Format(appleStrUnformatted, 21));
+    REQUIRE_NOTHROW(appleStr21 = Localization::Format(appleStrUnformatted, 21));
     REQUIRE(Utils::Utf8ToNarrow(appleStr21) == "21 яблоко");
 
     // try first plural form that not added
     REQUIRE_NOTHROW(appleStr2 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
     REQUIRE(appleStr2.empty());
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
-    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformatted, 2));
+    REQUIRE_NOTHROW(appleStr2 = Localization::Format(appleStrUnformatted, 2));
     REQUIRE(appleStr2.empty());
 
     // add first plural russian
@@ -795,7 +795,7 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
     REQUIRE_NOTHROW(appleStr2 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
     REQUIRE(Utils::Utf8ToNarrow(appleStr2) == "2 яблока");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 2));
-    REQUIRE_NOTHROW(appleStr2 = Translator::Format(appleStrUnformatted, 2));
+    REQUIRE_NOTHROW(appleStr2 = Localization::Format(appleStrUnformatted, 2));
     REQUIRE(Utils::Utf8ToNarrow(appleStr2) == "2 яблока");
 
     // try with english locale
@@ -806,19 +806,19 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
     REQUIRE_NOTHROW(appleStr0 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
     REQUIRE(appleStr0 == "0 apples");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
-    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformatted, 0));
+    REQUIRE_NOTHROW(appleStr0 = Localization::Format(appleStrUnformatted, 0));
     REQUIRE(appleStr0 == "0 apples");
 
     REQUIRE_NOTHROW(appleStr1 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
     REQUIRE(appleStr1 == "1 apple");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 1));
-    REQUIRE_NOTHROW(appleStr1 = Translator::Format(appleStrUnformatted, 1));
+    REQUIRE_NOTHROW(appleStr1 = Localization::Format(appleStrUnformatted, 1));
     REQUIRE(appleStr1 == "1 apple");
 
     REQUIRE_NOTHROW(appleStr11 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
     REQUIRE(appleStr11 == "11 apples");
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 11));
-    REQUIRE_NOTHROW(appleStr11 = Translator::Format(appleStrUnformatted, 11));
+    REQUIRE_NOTHROW(appleStr11 = Localization::Format(appleStrUnformatted, 11));
     REQUIRE(appleStr11 == "11 apples");
 
     // test after remove "Tests" domain
@@ -828,7 +828,7 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
     REQUIRE_NOTHROW(appleStr0 = localizationManager.TranslationFormatted(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
     REQUIRE(appleStr0.empty());
     REQUIRE_NOTHROW(appleStrUnformatted = localizationManager.Translation(SidTrDomainTests, "{1} apple"_sid, "{1} apples"_sid, 0));
-    REQUIRE_NOTHROW(appleStr0 = Translator::Format(appleStrUnformatted, 0));
+    REQUIRE_NOTHROW(appleStr0 = Localization::Format(appleStrUnformatted, 0));
     REQUIRE(appleStr0.empty());
 }
 //--------------------------------------------------------------------------
@@ -861,39 +861,39 @@ TEST_CASE("Localization manager dictionaries with context plural", "[localizatio
     REQUIRE_NOTHROW(contextStr0 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "CTX"_sid));
     REQUIRE(contextStr0.empty());
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "CTX"_sid));
-    REQUIRE_NOTHROW(contextStr0 = Translator::Format(contextStrUnformatted, 0));
+    REQUIRE_NOTHROW(contextStr0 = Localization::Format(contextStrUnformatted, 0));
     REQUIRE(contextStr0.empty());
 
     REQUIRE_NOTHROW(contextStr1 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "CTX"_sid));
     REQUIRE(contextStr1.empty());
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "CTX"_sid));
-    REQUIRE_NOTHROW(contextStr1 = Translator::Format(contextStrUnformatted, 1));
+    REQUIRE_NOTHROW(contextStr1 = Localization::Format(contextStrUnformatted, 1));
     REQUIRE(contextStr1.empty());
 
     // test with valid context
     REQUIRE_NOTHROW(contextStr0 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "Plural context"_sid));
     REQUIRE(Utils::Utf8ToNarrow(contextStr0) == "0 контекстов");
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 0, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr0 = Translator::Format(contextStrUnformatted, 0));
+    REQUIRE_NOTHROW(contextStr0 = Localization::Format(contextStrUnformatted, 0));
     REQUIRE(Utils::Utf8ToNarrow(contextStr0) == "0 контекстов");
 
     REQUIRE_NOTHROW(contextStr1 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "Plural context"_sid));
     REQUIRE(Utils::Utf8ToNarrow(contextStr1) == "1 контекст");
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 1, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr1 = Translator::Format(contextStrUnformatted, 1));
+    REQUIRE_NOTHROW(contextStr1 = Localization::Format(contextStrUnformatted, 1));
     REQUIRE(Utils::Utf8ToNarrow(contextStr1) == "1 контекст");
 
     REQUIRE_NOTHROW(contextStr5 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 5, "Plural context"_sid));
     REQUIRE(Utils::Utf8ToNarrow(contextStr5) == "5 контекстов");
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 5, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr5 = Translator::Format(contextStrUnformatted, 5));
+    REQUIRE_NOTHROW(contextStr5 = Localization::Format(contextStrUnformatted, 5));
     REQUIRE(Utils::Utf8ToNarrow(contextStr5) == "5 контекстов");
 
     // try valid context but non-added form
     REQUIRE_NOTHROW(contextStr2 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
     REQUIRE(contextStr2.empty());
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr2 = Translator::Format(contextStrUnformatted, 2));
+    REQUIRE_NOTHROW(contextStr2 = Localization::Format(contextStrUnformatted, 2));
     REQUIRE(contextStr2.empty());
 
     // add other russian form
@@ -903,19 +903,19 @@ TEST_CASE("Localization manager dictionaries with context plural", "[localizatio
     REQUIRE_NOTHROW(contextStr2 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
     REQUIRE(Utils::Utf8ToNarrow(contextStr2) == "2 контекста");
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 2, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr2 = Translator::Format(contextStrUnformatted, 2));
+    REQUIRE_NOTHROW(contextStr2 = Localization::Format(contextStrUnformatted, 2));
     REQUIRE(Utils::Utf8ToNarrow(contextStr2) == "2 контекста");
 
     REQUIRE_NOTHROW(contextStr11 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 11, "Plural context"_sid));
     REQUIRE(Utils::Utf8ToNarrow(contextStr11) == "11 контекстов");
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 11, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr11 = Translator::Format(contextStrUnformatted, 11));
+    REQUIRE_NOTHROW(contextStr11 = Localization::Format(contextStrUnformatted, 11));
     REQUIRE(Utils::Utf8ToNarrow(contextStr11) == "11 контекстов");
 
     REQUIRE_NOTHROW(contextStr21 = localizationManager.TranslationCtxFormatted(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 21, "Plural context"_sid));
     REQUIRE(Utils::Utf8ToNarrow(contextStr21) == "21 контекст");
     REQUIRE_NOTHROW(contextStrUnformatted = localizationManager.TranslationCtx(SidTrDomainTests, "{1} context"_sid, "{1} contexts"_sid, 21, "Plural context"_sid));
-    REQUIRE_NOTHROW(contextStr21 = Translator::Format(contextStrUnformatted, 21));
+    REQUIRE_NOTHROW(contextStr21 = Localization::Format(contextStrUnformatted, 21));
     REQUIRE(Utils::Utf8ToNarrow(contextStr21) == "21 контекст");
 }
 //--------------------------------------------------------------------------
@@ -936,15 +936,15 @@ TEST_CASE("Localization manager translate from other locale", "[localization][lo
     REQUIRE(Utils::Utf8ToNarrow(yesStrTranslatedToRussian) == "Да");
 
     auto yesStrCurrentLocale = std::string();
-    REQUIRE_NOTHROW(yesStrCurrentLocale = Translator::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
+    REQUIRE_NOTHROW(yesStrCurrentLocale = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStrCurrentLocale == "Yes");
 
     std::string appleStrForm1;
     std::string appleStrForm2;
     std::string appleStrForm3;
-    REQUIRE_NOTHROW(appleStrForm1 = Translator::Format(Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1), 1));
-    REQUIRE_NOTHROW(appleStrForm2 = Translator::Format(Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2), 2));
-    REQUIRE_NOTHROW(appleStrForm3 = Translator::Format(Translator::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5), 5));
+    REQUIRE_NOTHROW(appleStrForm1 = Localization::Format(Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 1), 1));
+    REQUIRE_NOTHROW(appleStrForm2 = Localization::Format(Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 2), 2));
+    REQUIRE_NOTHROW(appleStrForm3 = Localization::Format(Localization::Translate(KMP_TR_DOMAIN_TESTS, "{1} apple", "{1} apples", 5), 5));
     REQUIRE(appleStrForm1 == "1 apple");
     REQUIRE(appleStrForm2 == "2 apples");
     REQUIRE(appleStrForm3 == "5 apples");
@@ -960,7 +960,7 @@ TEST_CASE("Localization manager translate from other locale", "[localization][lo
     REQUIRE(Utils::Utf8ToNarrow(appleStrForm3Russian) == "5 яблок");
 
     std::string openVerbStr;
-    REQUIRE_NOTHROW(openVerbStr = Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
+    REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
 
     std::string openVerbStrRussian;
@@ -968,7 +968,7 @@ TEST_CASE("Localization manager translate from other locale", "[localization][lo
     REQUIRE(Utils::Utf8ToNarrow(openVerbStrRussian) == "Открыть");
 
     std::string contextStr;
-    REQUIRE_NOTHROW(contextStr = Translator::Format(Translator::TranslateCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 1, "Plural context"), 1));
+    REQUIRE_NOTHROW(contextStr = Localization::Format(Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "{1} context", "{1} contexts", 1, "Plural context"), 1));
     REQUIRE(contextStr == "1 context");
 
     std::string contextStr1Russian;

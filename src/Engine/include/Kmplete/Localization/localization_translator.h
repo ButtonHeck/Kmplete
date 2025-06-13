@@ -7,7 +7,7 @@
 
 namespace Kmplete
 {
-    namespace Translator
+    namespace Localization
     {
         KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale = std::locale());
         KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const std::locale& locale = std::locale());

@@ -2,7 +2,7 @@
 
 namespace Kmplete
 {
-    namespace Translator
+    namespace Localization
     {
         TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale /*= std::locale()*/)
         {

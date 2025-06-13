@@ -103,7 +103,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& source)
     {
-        const auto translation = Translator::Translate(domain, source);
+        const auto translation = Localization::Translate(domain, source);
         const auto domainSid = Utils::ToStringID(domain);
         const auto sourceSid = Utils::ToStringID(source);
         _library->Add(domainSid, sourceSid, translation);
@@ -114,7 +114,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count)
     {
-        const auto translation = Translator::Translate(domain, sourceSingular, sourcePlural, count);
+        const auto translation = Localization::Translate(domain, sourceSingular, sourcePlural, count);
         const auto domainSid = Utils::ToStringID(domain);
         const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
         const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
@@ -127,7 +127,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context)
     {
-        const auto translation = Translator::TranslateCtx(domain, source, context);
+        const auto translation = Localization::TranslateCtx(domain, source, context);
         const auto domainSid = Utils::ToStringID(domain);
         const auto sourceSid = Utils::ToStringID(source);
         const auto contextSid = Utils::ToStringID(context);
@@ -140,7 +140,7 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, 
                                                      int count, const ContextStr& context)
     {
-        const auto translation = Translator::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
+        const auto translation = Localization::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
         const auto domainSid = Utils::ToStringID(domain);
         const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
         const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
@@ -169,7 +169,7 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                              const SourceStrSID& sourceSidPlural, int count) const
     {
-        return Translator::Format(Translation(domainSid, sourceSidSingular, sourceSidPlural, count), count);
+        return Localization::Format(Translation(domainSid, sourceSidSingular, sourceSidPlural, count), count);
     }
     //--------------------------------------------------------------------------
 
@@ -184,7 +184,7 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                                 const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
     {
-        return Translator::Format(TranslationCtx(domainSid, sourceSidSingular, sourceSidPlural, count, contextSid), count);
+        return Localization::Format(TranslationCtx(domainSid, sourceSidSingular, sourceSidPlural, count, contextSid), count);
     }
     //--------------------------------------------------------------------------
 
@@ -211,29 +211,29 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translation(const DomainStr& domain, const SourceStr& source, const LocaleStr& localeString)
     {
-        const auto translation = Translator::Translate(domain, source, _localeGenerator(localeString));
+        const auto translation = Localization::Translate(domain, source, _localeGenerator(localeString));
         return translation;
     }
     //--------------------------------------------------------------------------
 
     TranslationStr LocalizationManager::Translation(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const LocaleStr& localeString)
     {
-        const auto translation = Translator::Translate(domain, sourceSingular, sourcePlural, count, _localeGenerator(localeString));
-        return Translator::Format(translation, count);
+        const auto translation = Localization::Translate(domain, sourceSingular, sourcePlural, count, _localeGenerator(localeString));
+        return Localization::Format(translation, count);
     }
     //--------------------------------------------------------------------------
 
     TranslationStr LocalizationManager::TranslationCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const LocaleStr& localeString)
     {
-        const auto translation = Translator::TranslateCtx(domain, source, context, _localeGenerator(localeString));
+        const auto translation = Localization::TranslateCtx(domain, source, context, _localeGenerator(localeString));
         return translation;
     }
     //--------------------------------------------------------------------------
 
     TranslationStr LocalizationManager::TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString)
     {
-        const auto translation = Translator::TranslateCtx(domain, sourceSingular, sourcePlural, count, context, _localeGenerator(localeString));
-        return Translator::Format(translation, count);
+        const auto translation = Localization::TranslateCtx(domain, sourceSingular, sourcePlural, count, context, _localeGenerator(localeString));
+        return Localization::Format(translation, count);
     }
     //--------------------------------------------------------------------------
 
