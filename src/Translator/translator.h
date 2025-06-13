@@ -33,9 +33,9 @@ namespace Kmplete
             KMP_NODISCARD int Update() const;
             KMP_NODISCARD int Compile() const;
 
+            KMP_NODISCARD std::vector<std::filesystem::path> GatherFilesToUpdate(const TranslatorParameters& parameters) const;
+            KMP_NODISCARD bool IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const;
             KMP_NODISCARD String CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const;
-            void ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions, std::vector<std::filesystem::path>& filesToProcess) const;
-            void GatherFilesToUpdate(std::vector<std::filesystem::path>& filesToProcess, const TranslatorParameters& parameters) const;
 
         private:
             const TranslatorParameters _parameters;

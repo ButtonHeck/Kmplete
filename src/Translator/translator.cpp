@@ -42,16 +42,14 @@ namespace Kmplete
 
         int TranslatorProcessor::Update() const
         {
-            std::vector<std::filesystem::path> filesToProcess;
-            GatherFilesToUpdate(filesToProcess, _parameters);
-
+            const auto filesToProcess = GatherFilesToUpdate(_parameters);
             if (filesToProcess.empty())
             {
                 std::cerr << "TranslatorProcessor::Update: Appropriate files not found\n";
                 return ReturnCode::ProcessorFilesNotFound;
             }
 
-            const String filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), String(),
+            const auto filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), String(),
                 [](const std::filesystem::path& a, const std::filesystem::path& b) {
                     return a.string() + (a.empty() ? "" : " ") + b.string();
                 }
@@ -60,7 +58,7 @@ namespace Kmplete
             for (const auto& locale : Locales)
             {
                 // 1. Create .po template file
-                const String poTemplateFile = CreatePoTemplateFile(_parameters, locale);
+                const auto poTemplateFile = CreatePoTemplateFile(_parameters, locale);
                 if (poTemplateFile.empty())
                 {
                     std::cerr << "TranslatorProcessor::Update: cannot create .pot file (" << poTemplateFile << ")\n";
@@ -208,6 +206,52 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        std::vector<std::filesystem::path> TranslatorProcessor::GatherFilesToUpdate(const TranslatorParameters& parameters) const
+        {
+            std::vector<std::filesystem::path> filesToProcess;
+            for (const auto& sourceDirectory : parameters.sourceDirectories)
+            {
+                if (parameters.isRecursive)
+                {
+                    for (const auto& directoryEntry : std::filesystem::recursive_directory_iterator(sourceDirectory))
+                    {
+                        if (IsDirectoryEntryAcceptable(directoryEntry, parameters.filesExtensions))
+                        {
+                            filesToProcess.push_back(directoryEntry.path());
+                        }
+                    }
+                }
+                else
+                {
+                    for (const auto& directoryEntry : std::filesystem::directory_iterator(sourceDirectory))
+                    {
+                        if (IsDirectoryEntryAcceptable(directoryEntry, parameters.filesExtensions))
+                        {
+                            filesToProcess.push_back(directoryEntry.path());
+                        }
+                    }
+                }
+            }
+
+            return filesToProcess;
+        }
+        //--------------------------------------------------------------------------
+
+        bool TranslatorProcessor::IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const
+        {
+            if (directoryEntry.is_directory() || !directoryEntry.is_regular_file() || !directoryEntry.path().has_extension())
+            {
+                return false;
+            }
+
+            const auto& entryPath = directoryEntry.path();
+            const auto entryExtension = entryPath.extension().string();
+            return std::find_if(filesExtensions.cbegin(), filesExtensions.cend(),
+                [entryExtension](const String& enabledExtension) { return enabledExtension == entryExtension; })
+                != filesExtensions.cend();
+        }
+        //--------------------------------------------------------------------------
+
         String TranslatorProcessor::CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const
         {
             auto poTemplateFilePath = parameters.outputDirectory;
@@ -239,46 +283,6 @@ namespace Kmplete
             }
 
             return poTemplateFileName;
-        }
-        //--------------------------------------------------------------------------
-
-        void TranslatorProcessor::ProcessDirectoryEntry(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions, std::vector<std::filesystem::path>& filesToProcess) const
-        {
-            if (directoryEntry.is_directory() || !directoryEntry.is_regular_file() || !directoryEntry.path().has_extension())
-            {
-                return;
-            }
-
-            const auto& entryPath = directoryEntry.path();
-            const auto entryExtension = entryPath.extension().string();
-            if (std::find_if(filesExtensions.cbegin(), filesExtensions.cend(),
-                [entryExtension](const String& enabledExtension) { return enabledExtension == entryExtension; })
-                != filesExtensions.cend())
-            {
-                filesToProcess.push_back(entryPath);
-            }
-        }
-        //--------------------------------------------------------------------------
-
-        void TranslatorProcessor::GatherFilesToUpdate(std::vector<std::filesystem::path>& filesToProcess, const TranslatorParameters& parameters) const
-        {
-            for (const auto& sourceDirectory : parameters.sourceDirectories)
-            {
-                if (parameters.isRecursive)
-                {
-                    for (const auto& directoryEntry : std::filesystem::recursive_directory_iterator(sourceDirectory))
-                    {
-                        ProcessDirectoryEntry(directoryEntry, parameters.filesExtensions, filesToProcess);
-                    }
-                }
-                else
-                {
-                    for (const auto& directoryEntry : std::filesystem::directory_iterator(sourceDirectory))
-                    {
-                        ProcessDirectoryEntry(directoryEntry, parameters.filesExtensions, filesToProcess);
-                    }
-                }
-            }
         }
         //--------------------------------------------------------------------------
     }
