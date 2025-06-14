@@ -15,8 +15,20 @@ namespace Kmplete
     {
         String RegexReplace(const String& source, const char* regexp, const char* replacement)
         {
-            const std::regex regexObject(regexp);
-            return std::regex_replace(source, regexObject, replacement);
+            if (regexp == nullptr || replacement == nullptr)
+            {
+                return source;
+            }
+
+            try
+            {
+                const std::regex regexObject(regexp);
+                return std::regex_replace(source, regexObject, replacement);
+            }
+            catch (const std::regex_error&)
+            {
+                return source;
+            }
         }
         //--------------------------------------------------------------------------
 

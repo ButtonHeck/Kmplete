@@ -497,3 +497,66 @@ TEST_CASE("Conversion ping-pong wide-narrow", "[utils][string]")
     }
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("RegexReplace positive", "[utils][string]")
+{
+    auto str1 = Kmplete::String("Test Test");
+    REQUIRE_NOTHROW(str1 = Kmplete::Utils::RegexReplace(str1, "Test", "TEST"));
+    REQUIRE(str1 == "TEST TEST");
+
+    auto str2 = Kmplete::String("TestTest");
+    REQUIRE_NOTHROW(str2 = Kmplete::Utils::RegexReplace(str2, "Test", "TEST"));
+    REQUIRE(str2 == "TESTTEST");
+
+    auto str3 = Kmplete::String("test test");
+    REQUIRE_NOTHROW(str3 = Kmplete::Utils::RegexReplace(str3, "Test", "TEST"));
+    REQUIRE(str3 == "test test");
+
+    auto str4 = Kmplete::String("Test test");
+    REQUIRE_NOTHROW(str4 = Kmplete::Utils::RegexReplace(str4, "Test", "TEST"));
+    REQUIRE(str4 == "TEST test");
+
+    auto str5 = Kmplete::String("Test Test");
+    REQUIRE_NOTHROW(str5 = Kmplete::Utils::RegexReplace(str5, "11", "22"));
+    REQUIRE(str5 == "Test Test");
+
+    auto str6 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str6 = Kmplete::Utils::RegexReplace(str6, "[A-Z]", "_"));
+    REQUIRE(str6 == "____ test");
+
+    auto str7 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str7 = Kmplete::Utils::RegexReplace(str7, "", "_"));
+    REQUIRE(str7 == "_T_E_S_T_ _t_e_s_t_");
+
+    auto str8 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str8 = Kmplete::Utils::RegexReplace(str8, " ", "_"));
+    REQUIRE(str8 == "TEST_test");
+
+    auto str9 = Kmplete::String("   test   test  ");
+    REQUIRE_NOTHROW(str9 = Kmplete::Utils::RegexReplace(str9, " +", " "));
+    REQUIRE(str9 == " test test ");
+}
+
+TEST_CASE("RegexReplace negative", "[utils][string]")
+{
+    auto str1 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str1 = Kmplete::Utils::RegexReplace(str1, "[A-\\]", "_"));
+    REQUIRE(str1 == "TEST test");
+
+    auto str2 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str2 = Kmplete::Utils::RegexReplace(str2, "A-Z]", "_"));
+    REQUIRE(str1 == "TEST test");
+
+    auto str3 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str3 = Kmplete::Utils::RegexReplace(str3, nullptr, "_"));
+    REQUIRE(str3 == "TEST test");
+
+    auto str4 = Kmplete::String("TEST test");
+    REQUIRE_NOTHROW(str4 = Kmplete::Utils::RegexReplace(str4, "TEST", nullptr));
+    REQUIRE(str4 == "TEST test");
+
+    auto str5 = Kmplete::String("TEST   test");
+    REQUIRE_NOTHROW(str5 = Kmplete::Utils::RegexReplace(str5, " ++", "_"));
+    REQUIRE(str5 == "TEST   test");
+}
+//--------------------------------------------------------------------------
