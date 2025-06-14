@@ -8,6 +8,7 @@
 #include <fstream>
 #include <streambuf>
 #include <numeric>
+#include <regex>
 
 namespace Kmplete
 {
@@ -95,12 +96,8 @@ namespace Kmplete
 
                 String potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
                 potFileStream.close();
-                const auto charsetStringToReplace = String("CHARSET");
-                const auto charsetStringIndex = potFileContent.find(charsetStringToReplace);
-                if (charsetStringIndex != String::npos)
-                {
-                    potFileContent.replace(charsetStringIndex, charsetStringToReplace.size(), "UTF-8");
-                }
+                const std::regex replacement("CHARSET");
+                potFileContent = std::regex_replace(potFileContent, replacement, "UTF-8");
 
                 std::ofstream potFileOutStream(poTemplateFile, std::ios::trunc);
                 potFileOutStream << potFileContent;
