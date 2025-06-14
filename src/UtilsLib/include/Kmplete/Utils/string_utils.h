@@ -26,6 +26,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        KMP_NODISCARD KMP_API String RegexReplace(const String& source, const char* regexp, const char* replacement);
         KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, char delimiter);
         KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, const String& delimiter);
         KMP_NODISCARD KMP_API WString NarrowToWide(const String& str);

@@ -2,6 +2,7 @@
 #include "Kmplete/Base/platform.h"
 
 #include <numeric>
+#include <regex>
 #if defined (KMP_PLATFORM_WINDOWS)
     #include <Windows.h>
 #else
@@ -12,6 +13,13 @@ namespace Kmplete
 {
     namespace Utils
     {
+        String RegexReplace(const String& source, const char* regexp, const char* replacement)
+        {
+            const std::regex regexObject(regexp);
+            return std::regex_replace(source, regexObject, replacement);
+        }
+        //--------------------------------------------------------------------------
+
         String StringVectorToString(const StringVector& stringVector, char delimiter)
         {
             return StringVectorToString(stringVector, String({delimiter}));

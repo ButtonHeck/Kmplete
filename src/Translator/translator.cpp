@@ -8,7 +8,6 @@
 #include <fstream>
 #include <streambuf>
 #include <numeric>
-#include <regex>
 
 namespace Kmplete
 {
@@ -96,16 +95,14 @@ namespace Kmplete
 
                 String potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
                 potFileStream.close();
-                const std::regex replacement("CHARSET");
-                potFileContent = std::regex_replace(potFileContent, replacement, "UTF-8");
+                potFileContent = Utils::RegexReplace(potFileContent, "CHARSET", "UTF-8");
 
                 std::ofstream potFileOutStream(poTemplateFile, std::ios::trunc);
                 potFileOutStream << potFileContent;
                 potFileOutStream.close();
 
                 // 4. invoke msginit if necessary for creation of .po file
-                String poFile = poTemplateFile;
-                poFile.pop_back();
+                const auto poFile = Utils::RegexReplace(poTemplateFile, ".pot", ".po");
 
                 if (!std::filesystem::exists(poFile))
                 {
