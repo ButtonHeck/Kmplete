@@ -53,9 +53,10 @@ namespace Kmplete
         Log::Boot();
 #endif
 
-        if (!Filesystem::Initialize())
+        const auto applicationPath = Filesystem::GetCurrentPath();
+        if (!Filesystem::PathExists(applicationPath))
         {
-            throw std::runtime_error("Application initialization failed");
+            throw std::runtime_error("Application path initialization failed");
         }
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
@@ -64,13 +65,13 @@ namespace Kmplete
         _localizationManager = CreateUPtr<LocalizationManager>();
         KMP_ASSERT(_localizationManager);
 
-        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetApplicationPath().append(LocalesDirectory));
+        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(applicationPath / LocalesDirectory);
         KMP_ASSERT(defaultTranslationsPath != LocalesDirectory);
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
 
         _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsPath.empty() 
-            ? Filesystem::GetApplicationPath().append(applicationParameters.defaultSettingsFileName) 
+            ? applicationPath / applicationParameters.defaultSettingsFileName
             : applicationParameters.settingsPath);
         KMP_ASSERT(_settingsManager);
 

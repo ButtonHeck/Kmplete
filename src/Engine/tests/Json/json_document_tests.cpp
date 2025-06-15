@@ -336,10 +336,9 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     auto localizationManager = Kmplete::LocalizationManager();
     localizationManager.SetLocale("ru_RU.UTF8");
 
-    REQUIRE(Kmplete::Filesystem::Initialize());
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("json_document_test_temp.json");
+    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("json_document_test_temp.json");
     const auto settingsPathStr = Kmplete::Filesystem::ToGenericString(settingsPath);
-    const auto nonExistSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("non-exist.json");
+    const auto nonExistSettingsPath = Kmplete::Filesystem::GetCurrentPath().append("non-exist.json");
 
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.StartSetObject("Obj1"));
@@ -381,8 +380,7 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
 
 TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][document]")
 {
-    REQUIRE(Kmplete::Filesystem::Initialize());
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("json_document_test_temp_unescaped.json");
+    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
     const Kmplete::String unescaped = R"rjs("Quote" unescaped)rjs";
@@ -402,10 +400,9 @@ TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][
     auto localizationManager = Kmplete::LocalizationManager();
     localizationManager.SetLocale("ru_RU.UTF8");
 
-    REQUIRE(Kmplete::Filesystem::Initialize());
     const auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
     const auto settingsSubPathWide = Kmplete::Utils::NarrowToWide(settingsSubPath);
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append(settingsSubPathWide).append("json_document_test_temp_unescaped.json");
+    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append(settingsSubPathWide).append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.SetInt("AnInt", 13));

@@ -5,9 +5,7 @@
 
 TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 {
-    REQUIRE(Kmplete::Filesystem::Initialize());
-
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests.json");
+    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsPath);
 
     REQUIRE(!settingsManager.GetFilename().empty());
@@ -37,9 +35,7 @@ TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 
 TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
 {
-    REQUIRE(Kmplete::Filesystem::Initialize());
-
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests.json");
+    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsPath);
 
     REQUIRE(!settingsManager.GetFilename().empty());
@@ -48,7 +44,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
     auto settings = settingsManager.GetSettings("ObjA");
     REQUIRE(settings->SaveInt("PropA", 999));
 
-    const auto swapSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_settings_unit_tests_swap.json");
+    const auto swapSettingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_settings_unit_tests_swap.json");
     settingsManager.SetFilename(swapSettingsPath);
     REQUIRE(settingsManager.SaveSettings());
 

@@ -8,10 +8,10 @@ namespace Kmplete
 {
     namespace FileDialogs
     {
-        KMP_NODISCARD KMP_API Path OpenFile(const String& title, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API PathVector OpenFiles(const String& title, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API Path OpenDirectory(const String& title);
-        KMP_NODISCARD KMP_API Path SaveFile(const String& title, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
+        KMP_NODISCARD KMP_API Path OpenFile(const String& title, const Path& startPath, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API PathVector OpenFiles(const String& title, const Path& startPath, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API Path OpenDirectory(const String& title, const Path& startPath);
+        KMP_NODISCARD KMP_API Path SaveFile(const String& title, const Path& startPath, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
 
         enum class MessageButton
         {

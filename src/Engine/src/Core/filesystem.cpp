@@ -11,35 +11,6 @@
 
 namespace Kmplete
 {
-    Path Filesystem::_applicationPath;
-
-    bool Filesystem::Initialize()
-    {
-        try
-        {
-            _applicationPath = std::filesystem::current_path();
-            return true;
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_CORE_ERROR("Filesystem: failed to initialize application path: '{}'", fe.what());
-            return false;
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    Path Filesystem::GetApplicationPath() noexcept
-    {
-        return _applicationPath;
-    }
-    //--------------------------------------------------------------------------
-
-    const Path& Filesystem::GetApplicationPathCRef() noexcept
-    {
-        return _applicationPath;
-    }
-    //--------------------------------------------------------------------------
-
     Path Filesystem::GetCurrentPath() noexcept
     {
         try

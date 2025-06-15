@@ -10,9 +10,9 @@ namespace Kmplete
 
     namespace FileDialogs
     {
-        Path OpenFile(const String& title, const StringVector& filters /*= { "Any Files", "*.*" }*/)
+        Path OpenFile(const String& title, const Path& startPath, const StringVector& filters /*= { "Any Files", "*.*" }*/)
         {
-            pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::none);
+            pfd::open_file opener(title, PathToStringConverterFn(startPath), filters, pfd::opt::none);
 
             const auto files = opener.result();
             if (files.empty())
@@ -25,9 +25,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        PathVector OpenFiles(const String& title, const StringVector& filters /*= { "Any Files", "*.*" }*/)
+        PathVector OpenFiles(const String& title, const Path& startPath, const StringVector& filters /*= { "Any Files", "*.*" }*/)
         {
-            pfd::open_file opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, pfd::opt::multiselect);
+            pfd::open_file opener(title, PathToStringConverterFn(startPath), filters, pfd::opt::multiselect);
 
             auto paths = PathVector();
             const auto files = opener.result();
@@ -47,9 +47,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Path OpenDirectory(const String& title)
+        Path OpenDirectory(const String& title, const Path& startPath)
         {
-            pfd::select_folder opener(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), pfd::opt::force_path);
+            pfd::select_folder opener(title, PathToStringConverterFn(startPath), pfd::opt::force_path);
 
             auto directory = opener.result();
             if (directory.empty())
@@ -62,9 +62,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Path SaveFile(const String& title, const StringVector& filters /*= { "Any Files", "*.*" }*/, bool forceOverwrite /*= false*/)
+        Path SaveFile(const String& title, const Path& startPath, const StringVector& filters /*= { "Any Files", "*.*" }*/, bool forceOverwrite /*= false*/)
         {
-            pfd::save_file saver(title, PathToStringConverterFn(Filesystem::GetApplicationPathCRef()), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
+            pfd::save_file saver(title, PathToStringConverterFn(startPath), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
             auto dialogResult = saver.result();
             dialogResult = StringToPathConverterFn(dialogResult);

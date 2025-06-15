@@ -133,10 +133,10 @@ TEST_CASE("Test application initialize", "[application]")
         const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("", "Kmplete_unit_tests_settings.json"));
 
         REQUIRE(application);
-        REQUIRE(!Kmplete::Filesystem::GetApplicationPathCRef().empty());
+        REQUIRE(!Kmplete::Filesystem::GetCurrentPath().empty());
     }
 
-    const auto settingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_unit_tests_settings.json");
+    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_unit_tests_settings.json");
     REQUIRE(Kmplete::Filesystem::FilePathIsValid(settingsPath));
     REQUIRE(Kmplete::Filesystem::PathExists(settingsPath));
 }
@@ -178,7 +178,7 @@ TEST_CASE("Test application runtime settings save", "[application]")
 
     REQUIRE(application);
 
-    const auto newSettingsPath = Kmplete::Filesystem::GetApplicationPath().append("Kmplete_unit_test_settings_runtime.json");
+    const auto newSettingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_unit_test_settings_runtime.json");
     application->SaveSettings(newSettingsPath);
 
     REQUIRE(Kmplete::Filesystem::PathExists(newSettingsPath));
