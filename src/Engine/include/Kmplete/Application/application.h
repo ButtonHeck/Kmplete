@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types.h"
+#include "Kmplete/Core/log.h"
 #include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/settings_manager.h"
@@ -54,6 +55,10 @@ namespace Kmplete
         UPtr<SystemMetricsManager> _systemMetricsManager;
         UPtr<LocalizationManager> _localizationManager;
         UPtr<SettingsManager> _settingsManager;
+
+#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
+        Log::LogSettings _logSettings;
+#endif
     };
     //--------------------------------------------------------------------------
 

@@ -1,6 +1,5 @@
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Core/settings.h"
-#include "Kmplete/Core/log.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/function_utils.h"
 
@@ -78,7 +77,7 @@ namespace Kmplete
         LoadSettingsInternal();
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Initialize();
+        Log::Initialize(_logSettings);
 #endif
 
         FillDictionary();
@@ -110,7 +109,16 @@ namespace Kmplete
         }
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::SaveSettings(*settings);
+        settings->StartSaveObject(SettingsEntryName);
+        settings->SaveString(Log::FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
+        settings->SaveBool(Log::EnabledStr, _logSettings.enabled);
+        settings->SaveBool(Log::TruncateStr, _logSettings.truncate);
+        settings->SaveBool(Log::OutputConsoleStr, _logSettings.outputConsole);
+        settings->SaveBool(Log::OutputFileStr, _logSettings.outputFile);
+        settings->SaveBool(Log::OutputStringBufferStr, _logSettings.outputStringBuffer);
+        settings->SaveInt(Log::LevelStr, _logSettings.level);
+        settings->SaveInt(Log::LevelFlushStr, _logSettings.levelFlush);
+        settings->EndSaveObject();
 #endif
 
         _localizationManager->SaveSettings(*settings);
@@ -131,7 +139,16 @@ namespace Kmplete
         }
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::LoadSettings(*settings);
+        settings->StartLoadObject(SettingsEntryName);
+        _logSettings.filename = Utils::Utf8ToNarrow(settings->GetString(Log::FilenameStr, "Kmplete_log.txt"));
+        _logSettings.enabled = settings->GetBool(Log::EnabledStr, true);
+        _logSettings.truncate = settings->GetBool(Log::TruncateStr, false);
+        _logSettings.outputConsole = settings->GetBool(Log::OutputConsoleStr, true);
+        _logSettings.outputFile = settings->GetBool(Log::OutputFileStr, true);
+        _logSettings.outputStringBuffer = settings->GetBool(Log::OutputStringBufferStr, false);
+        _logSettings.level = settings->GetInt(Log::LevelStr, spdlog::level::trace);
+        _logSettings.levelFlush = settings->GetInt(Log::LevelFlushStr, spdlog::level::trace);
+        settings->EndLoadObject();
 #endif
 
         _localizationManager->LoadSettings(*settings);

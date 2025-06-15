@@ -1,8 +1,6 @@
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
 
 #include "Kmplete/Core/log.h"
-#include "Kmplete/Core/assertion.h"
-#include "Kmplete/Core/settings.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include "spdlog/async.h"
@@ -14,23 +12,12 @@
 #include <spdlog/details/log_msg.h>
 
 #include <chrono>
-#include <algorithm>
 #if defined (KMP_PLATFORM_LINUX) || defined (KMP_COMPILER_MINGW)
     #include <iomanip>
 #endif
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "Log";
-    constexpr static auto FilenameStr = "Filename";
-    constexpr static auto EnabledStr = "Enabled";
-    constexpr static auto TruncateStr = "Truncate";
-    constexpr static auto OutputConsoleStr = "OutputConsole";
-    constexpr static auto OutputFileStr = "OutputFile";
-    constexpr static auto OutputStringBufferStr = "OutputStringBuffer";
-    constexpr static auto LevelStr = "Level";
-    constexpr static auto LevelFlushStr = "LevelFlush";
-
     Log::LogSettings Log::_logSettings;
     Ptr<spdlog::logger> Log::_logger;
     std::stringstream Log::_stringStream;
@@ -79,10 +66,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize()
+    void Log::Initialize(const LogSettings& settings)
     {
         spdlog::drop_all();
         spdlog::init_thread_pool(1024, 1);
+
+        _logSettings = settings;
 
         if (_logSettings.enabled)
         {
@@ -156,36 +145,6 @@ namespace Kmplete
     std::string_view Log::StringLogOutput()
     {
         return _stringStream.view();
-    }
-    //--------------------------------------------------------------------------
-
-    void Log::SaveSettings(Settings& settings)
-    {
-        settings.StartSaveObject(SettingsEntryName);
-        settings.SaveString(FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
-        settings.SaveBool(EnabledStr, _logSettings.enabled);
-        settings.SaveBool(TruncateStr, _logSettings.truncate);
-        settings.SaveBool(OutputConsoleStr, _logSettings.outputConsole);
-        settings.SaveBool(OutputFileStr, _logSettings.outputFile);
-        settings.SaveBool(OutputStringBufferStr, _logSettings.outputStringBuffer);
-        settings.SaveInt(LevelStr, _logSettings.level);
-        settings.SaveInt(LevelFlushStr, _logSettings.levelFlush);
-        settings.EndSaveObject();
-    }
-    //--------------------------------------------------------------------------
-
-    void Log::LoadSettings(Settings& settings)
-    {
-        settings.StartLoadObject(SettingsEntryName);
-        _logSettings.filename = Utils::Utf8ToNarrow(settings.GetString(FilenameStr, "Kmplete_log.txt"));
-        _logSettings.enabled = settings.GetBool(EnabledStr, true);
-        _logSettings.truncate = settings.GetBool(TruncateStr, false);
-        _logSettings.outputConsole = settings.GetBool(OutputConsoleStr, true);
-        _logSettings.outputFile = settings.GetBool(OutputFileStr, true);
-        _logSettings.outputStringBuffer = settings.GetBool(OutputStringBufferStr, false);
-        _logSettings.level = settings.GetInt(LevelStr, spdlog::level::trace);
-        _logSettings.levelFlush = settings.GetInt(LevelFlushStr, spdlog::level::trace);
-        settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
 }

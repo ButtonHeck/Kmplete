@@ -28,19 +28,37 @@
 
 namespace Kmplete
 {
-    class Settings;
-
     class Log
     {
     public:
+        constexpr static auto SettingsEntryName = "Log";
+        constexpr static auto FilenameStr = "Filename";
+        constexpr static auto EnabledStr = "Enabled";
+        constexpr static auto TruncateStr = "Truncate";
+        constexpr static auto OutputConsoleStr = "OutputConsole";
+        constexpr static auto OutputFileStr = "OutputFile";
+        constexpr static auto OutputStringBufferStr = "OutputStringBuffer";
+        constexpr static auto LevelStr = "Level";
+        constexpr static auto LevelFlushStr = "LevelFlush";
+
+        struct LogSettings
+        {
+            String filename = "Kmplete_log.txt";
+            bool enabled = true;
+            bool truncate = false;
+            bool outputConsole = true;
+            bool outputFile = true;
+            bool outputStringBuffer = false;
+            int level = spdlog::level::trace;
+            int levelFlush = spdlog::level::trace;
+        };
+
+    public:
         static void Boot();
-        static void Initialize();
+        static void Initialize(const LogSettings& settings);
         static void Finalize();
 
         KMP_NODISCARD KMP_API static std::string_view StringLogOutput();
-
-        static void SaveSettings(Settings& settings);
-        static void LoadSettings(Settings& settings);
 
         template <typename... Args>
         static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->trace(fmt, std::forward<Args>(args)...); }
@@ -59,19 +77,6 @@ namespace Kmplete
 
         template <typename... Args>
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->critical(fmt, std::forward<Args>(args)...); }
-
-    private:
-        struct LogSettings
-        {
-            String filename = "Kmplete_log.txt";
-            bool enabled = true;
-            bool truncate = false;
-            bool outputConsole = true;
-            bool outputFile = true;
-            bool outputStringBuffer = false;
-            int level = spdlog::level::trace;
-            int levelFlush = spdlog::level::trace;
-        };
 
     private:
         static LogSettings _logSettings;
