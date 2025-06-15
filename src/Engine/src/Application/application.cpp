@@ -49,7 +49,8 @@ namespace Kmplete
     void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Boot();
+        const auto bootLogger = Log::Boot();
+        spdlog::register_logger(bootLogger);
 #endif
 
         const auto applicationPath = Filesystem::GetCurrentPath();
@@ -77,7 +78,8 @@ namespace Kmplete
         LoadSettingsInternal();
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Initialize(_logSettings);
+        const auto logger = Log::Initialize(_logSettings);
+        spdlog::register_logger(logger);
 #endif
 
         FillDictionary();

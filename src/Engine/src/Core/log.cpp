@@ -39,8 +39,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Boot()
+    Ptr<spdlog::logger> Log::Boot()
     {
+        if (_logger)
+        {
+            Log::Warn("Log: logger instance has already been booted");
+            return _logger;
+        }
+
         bootMessages.reserve(64);
 
         const auto callbackSink = CreatePtr<spdlog::sinks::callback_sink_mt>([](const spdlog::details::log_msg& msg) 
@@ -53,8 +59,6 @@ namespace Kmplete
         _logger->set_level(spdlog::level::trace);
         _logger->flush_on(spdlog::level::trace);
 
-        spdlog::register_logger(_logger);
-
         const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 #if defined (KMP_COMPILER_MSVC)
         struct tm buf{};
@@ -63,10 +67,12 @@ namespace Kmplete
 #else
         Log::Info("---------------------{}---------------------", Utils::Concatenate(std::put_time(localtime(&now), "%F %T")));
 #endif
+
+        return _logger;
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const LogSettings& settings)
+    Ptr<spdlog::logger> Log::Initialize(const LogSettings& settings)
     {
         spdlog::drop_all();
         spdlog::init_thread_pool(1024, 1);
@@ -126,11 +132,11 @@ namespace Kmplete
         {
             const auto nullSink = CreatePtr<spdlog::sinks::null_sink_mt>();
             _logger = CreatePtr<spdlog::async_logger>("CORE", nullSink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
-        }        
-
-        spdlog::register_logger(_logger);
+        }
 
         bootMessages.clear();
+
+        return _logger;
     }
     //--------------------------------------------------------------------------
 
