@@ -7,10 +7,8 @@
             "OutputConsole": true,
             "OutputFile": true,
             "OutputStringBuffer": true,
-            "CoreLevel": 0,
-            "CoreLevelFlush": 0,
-            "ClientLevel": 0,
-            "ClientLevelFlush": 0
+            "Level": 0,
+            "LevelFlush": 0
         },
         "LocalizationManager": {
             "Locale": "en_EN.UTF-8"

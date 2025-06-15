@@ -27,6 +27,7 @@ namespace Kmplete
             }
             catch (const std::regex_error&)
             {
+                // TODO: logging exception
                 return source;
             }
         }

@@ -18,7 +18,7 @@ namespace Kmplete
         }
         catch (const std::exception&)
         {
-            KMP_LOG_CLIENT_CRITICAL("EditorApplication: failed to create Editor instance");
+            KMP_LOG_CRITICAL("EditorApplication: failed to create Editor instance");
             return nullptr;
         }
     }
@@ -72,7 +72,7 @@ namespace Kmplete
     {
         auto& mainWindow = _windowBackend->GetMainWindow();
 
-        KMP_LOG_CLIENT_DEBUG("EditorApplication: main loop started...");
+        KMP_LOG_DEBUG("EditorApplication: main loop started...");
         while (!mainWindow.ShouldClose())
         {
             mainWindow.ProcessEvents();
@@ -80,7 +80,7 @@ namespace Kmplete
             mainWindow.SwapBuffers();
         }
 
-        KMP_LOG_CLIENT_DEBUG("EditorApplication: main loop finished");
+        KMP_LOG_DEBUG("EditorApplication: main loop finished");
     }
     //--------------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ namespace Kmplete
         auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_CLIENT_WARN("EditorApplication: failed to create settings entry for saving");
+            KMP_LOG_WARN("EditorApplication: failed to create settings entry for saving");
             return;
         }
 
@@ -152,7 +152,7 @@ namespace Kmplete
         const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_CLIENT_WARN("EditorApplication: failed to get setting entry for loading");
+            KMP_LOG_WARN("EditorApplication: failed to get setting entry for loading");
             return;
         }
 

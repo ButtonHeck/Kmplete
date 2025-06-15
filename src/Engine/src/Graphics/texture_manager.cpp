@@ -19,7 +19,7 @@ namespace Kmplete
 
         if (_textures.contains(textureSid))
         {
-            KMP_LOG_CORE_WARN("TextureManager: already contains a texture with SID '{}'", textureSid);
+            KMP_LOG_WARN("TextureManager: already contains a texture with SID '{}'", textureSid);
             return false;
         }
 
@@ -36,7 +36,7 @@ namespace Kmplete
 
         if (!texture)
         {
-            KMP_LOG_CORE_ERROR("TextureManager: failed to create texture '{}'", Filesystem::ToGenericU8String(filename));
+            KMP_LOG_ERROR("TextureManager: failed to create texture '{}'", Filesystem::ToGenericU8String(filename));
             return false;
         }
 
@@ -49,7 +49,7 @@ namespace Kmplete
     {
         if (_errorTexture)
         {
-            KMP_LOG_CORE_WARN("TextureManager: error texture already created");
+            KMP_LOG_WARN("TextureManager: error texture already created");
             return false;
         }
 
@@ -65,7 +65,7 @@ namespace Kmplete
 
         if (!_errorTexture)
         {
-            KMP_LOG_CORE_ERROR("TextureManager: error texture failed to load");
+            KMP_LOG_ERROR("TextureManager: error texture failed to load");
             return false;
         }
 
@@ -77,7 +77,7 @@ namespace Kmplete
     {
         if (!_textures.contains(textureSid))
         {
-            KMP_LOG_CORE_WARN("TextureManager: texture '{}' not found", textureSid);
+            KMP_LOG_WARN("TextureManager: texture '{}' not found", textureSid);
             return *_errorTexture;
         }
 

@@ -63,13 +63,13 @@ namespace Kmplete
     {
         if (_mainWindow)
         {
-            KMP_LOG_CORE_WARN("WindowBackendGlfw: main window already created!");
+            KMP_LOG_WARN("WindowBackendGlfw: main window already created!");
         }
         else
         {
             if (!_mainWindowSettings)
             {
-                KMP_LOG_CORE_WARN("WindowBackendGlfw: main window settings were not found, provide default");
+                KMP_LOG_WARN("WindowBackendGlfw: main window settings were not found, provide default");
                 _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
             }
 
@@ -93,7 +93,7 @@ namespace Kmplete
         {
             KMP_MB_UNUSED const char* description;
             KMP_MB_UNUSED const auto errorCode = glfwGetError(&description);
-            KMP_LOG_CORE_CRITICAL("WindowBackendGlfw: initialization error: code '{}', description '{}'", errorCode, description ? description : "");
+            KMP_LOG_CRITICAL("WindowBackendGlfw: initialization error: code '{}', description '{}'", errorCode, description ? description : "");
             throw std::runtime_error("WindowBackendGlfw initialization failed");
         }
 
@@ -110,7 +110,7 @@ namespace Kmplete
 
         if (glfwGetCurrentContext())
         {
-            KMP_LOG_CORE_WARN("WindowBackendGlfw: some window's context is still current");
+            KMP_LOG_WARN("WindowBackendGlfw: some window's context is still current");
         }
 
         _auxWindowsSettings.clear();
@@ -122,19 +122,19 @@ namespace Kmplete
     {
         if (windowName.empty())
         {
-            KMP_LOG_CORE_ERROR("WindowBackendGlfw: creation of unnamed windows is prohibited");
+            KMP_LOG_ERROR("WindowBackendGlfw: creation of unnamed windows is prohibited");
             return nullptr;
         }
 
         if (windowName == MainWindowName)
         {
-            KMP_LOG_CORE_ERROR("WindowBackendGlfw: cannot create two \"Main\" windows");
+            KMP_LOG_ERROR("WindowBackendGlfw: cannot create two \"Main\" windows");
             return nullptr;
         }
 
         if (_auxWindowsSettings.contains(windowName))
         {
-            KMP_LOG_CORE_INFO("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
+            KMP_LOG_INFO("WindowBackendGlfw: creating window '{}' with previously loaded settings", windowName);
             try
             {
                 _auxWindows[windowName] = CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]);
@@ -142,13 +142,13 @@ namespace Kmplete
             }
             catch (KMP_MB_UNUSED const std::exception& e)
             {
-                KMP_LOG_CORE_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
+                KMP_LOG_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
                 return nullptr;
             }
         }
         else
         {
-            KMP_LOG_CORE_INFO("WindowBackendGlfw: creating window '{}' with default settings", windowName);
+            KMP_LOG_INFO("WindowBackendGlfw: creating window '{}' with default settings", windowName);
             _auxWindowsSettings[windowName] = CreateUPtr<Window::WindowSettings>(windowName);
 
             try
@@ -158,7 +158,7 @@ namespace Kmplete
             }
             catch (KMP_MB_UNUSED const std::exception& e)
             {
-                KMP_LOG_CORE_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
+                KMP_LOG_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowName, e.what());
                 return nullptr;
             }
         }
@@ -177,11 +177,11 @@ namespace Kmplete
             const auto& windowName = windowSettings.name;
             if (_auxWindowsSettings.contains(windowName))
             {
-                KMP_LOG_CORE_WARN("WindowBackendGlfw: window '{}' will be created, but settings already contains this name and will be overriden", windowName);
+                KMP_LOG_WARN("WindowBackendGlfw: window '{}' will be created, but settings already contains this name and will be overriden", windowName);
             }
             else
             {
-                KMP_LOG_CORE_INFO("WindowBackendGlfw: window '{}' will be created with provided settings", windowName);
+                KMP_LOG_INFO("WindowBackendGlfw: window '{}' will be created with provided settings", windowName);
                 _auxWindowsSettings.insert({ windowName, CreateUPtr<Window::WindowSettings>(windowSettings) });
             }
 
@@ -190,7 +190,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::exception& e)
         {
-            KMP_LOG_CORE_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowSettings.name, e.what());
+            KMP_LOG_ERROR("WindowBackendGlfw: error creating window '{}', message: '{}'", windowSettings.name, e.what());
             return nullptr;
         }
     }
@@ -203,7 +203,7 @@ namespace Kmplete
             return _auxWindows.at(windowName).get();
         }
 
-        KMP_LOG_CORE_WARN("WindowBackendGlfw: cannot find aux window '{}'", windowName);
+        KMP_LOG_WARN("WindowBackendGlfw: cannot find aux window '{}'", windowName);
         return nullptr;
     }
     //--------------------------------------------------------------------------
@@ -216,7 +216,7 @@ namespace Kmplete
             return true;
         }
         
-        KMP_LOG_CORE_WARN("WindowBackendGlfw: cannot find aux window '{}'", windowName);
+        KMP_LOG_WARN("WindowBackendGlfw: cannot find aux window '{}'", windowName);
         return false;
     }
     //--------------------------------------------------------------------------
@@ -364,7 +364,7 @@ namespace Kmplete
 
         if (!settings.StartLoadObject(MainWindowStr))
         {
-            KMP_LOG_CORE_WARN("WindowBackendGlfw: main window settings were not found");
+            KMP_LOG_WARN("WindowBackendGlfw: main window settings were not found");
         }
         else
         {
@@ -393,7 +393,7 @@ namespace Kmplete
             const auto windowName = settings.GetString(Window::NameStr, "");
             if (windowName.empty())
             {
-                KMP_LOG_CORE_ERROR("WindowBackendGlfw: loading settings for unnamed window is prohibited, current object would be skipped, remove it from settings");
+                KMP_LOG_ERROR("WindowBackendGlfw: loading settings for unnamed window is prohibited, current object would be skipped, remove it from settings");
             }
             else
             {

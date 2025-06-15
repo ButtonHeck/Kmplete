@@ -20,7 +20,7 @@ namespace Kmplete
             return true;
         }
 
-        KMP_LOG_CORE_ERROR("JsonScope: cannot pop from empty scope");
+        KMP_LOG_ERROR("JsonScope: cannot pop from empty scope");
         return false;
     }
     //--------------------------------------------------------------------------

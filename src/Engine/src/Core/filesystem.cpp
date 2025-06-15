@@ -19,7 +19,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_CORE_ERROR("Filesystem: failed to get current path: '{}'", fe.what());
+            KMP_LOG_ERROR("Filesystem: failed to get current path: '{}'", fe.what());
             return Path{};
         }
     }
@@ -33,7 +33,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_CORE_ERROR("Filesystem: exists failed: '{}'", fe.what());
+            KMP_LOG_ERROR("Filesystem: exists failed: '{}'", fe.what());
             return false;
         }
     }
@@ -54,7 +54,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_CORE_ERROR("Filesystem: create directories failed: '{}'", fe.what());
+            KMP_LOG_ERROR("Filesystem: create directories failed: '{}'", fe.what());
             return false;
         }
     }
@@ -73,7 +73,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::ios_base::failure& e)
         {
-            KMP_LOG_CORE_ERROR("Filesystem: failed to create [{}]: '{}'", ToGenericU8String(path), e.what());
+            KMP_LOG_ERROR("Filesystem: failed to create [{}]: '{}'", ToGenericU8String(path), e.what());
         }
 
         return PathExists(path);
@@ -88,7 +88,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_CORE_ERROR("Filesystem: 'isFile' failed: '{}'", fe.what());
+            KMP_LOG_ERROR("Filesystem: 'isFile' failed: '{}'", fe.what());
             return false;
         }
     }
@@ -102,7 +102,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_CORE_ERROR("Filesystem: 'isDirectory' failed: '{}'", fe.what());
+            KMP_LOG_ERROR("Filesystem: 'isDirectory' failed: '{}'", fe.what());
             return false;
         }
     }

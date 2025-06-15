@@ -25,7 +25,7 @@ namespace Kmplete
     {
         if (_currentLocale == localeString)
         {
-            KMP_LOG_CORE_INFO("LocalizationManager: locale '{}' already set", localeString);
+            KMP_LOG_INFO("LocalizationManager: locale '{}' already set", localeString);
             return false;
         }
 
@@ -40,12 +40,12 @@ namespace Kmplete
             ImbueLocale();
             NotifyLocaleListeners();
 
-            KMP_LOG_CORE_INFO("LocalizationManager: set locale '{}'", _currentLocale);
+            KMP_LOG_INFO("LocalizationManager: set locale '{}'", _currentLocale);
             return true;
         }
         catch (KMP_MB_UNUSED const std::exception& e)
         {
-            KMP_LOG_CORE_ERROR("LocalizationManager: cannot set locale '{}' - {}", localeString, e.what());
+            KMP_LOG_ERROR("LocalizationManager: cannot set locale '{}' - {}", localeString, e.what());
             return false;
         }
     }

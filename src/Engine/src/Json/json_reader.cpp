@@ -16,25 +16,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot start object '{}' - current object is null", objectName);
+            KMP_LOG_ERROR("JsonReader: cannot start object '{}' - current object is null", objectName);
             return false;
         }
 
         if (!objectName || *objectName == '\0')
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot start object - object's name is empty");
+            KMP_LOG_ERROR("JsonReader: cannot start object - object's name is empty");
             return false;
         }
 
         if (!_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot start object '{}' - current object '{}' is not of object type", objectName, _scope.scopeString);
+            KMP_LOG_ERROR("JsonReader: cannot start object '{}' - current object '{}' is not of object type", objectName, _scope.scopeString);
             return false;
         }
 
         if (!_currentObject->HasMember(objectName) || !(*_currentObject)[objectName].IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find member '{}', or the member is not an object type", objectName);
+            KMP_LOG_ERROR("JsonReader: cannot find member '{}', or the member is not an object type", objectName);
             return false;
         }
 
@@ -54,7 +54,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not of object type", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not of object type", _scope.scopeString, index);
             return false;
         }
 
@@ -81,25 +81,25 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot start array '{}' - current object is null", arrayName);
+            KMP_LOG_ERROR("JsonReader: cannot start array '{}' - current object is null", arrayName);
             return 0;
         }
 
         if (!arrayName || *arrayName == '\0')
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot start array - array's name should not be empty");
+            KMP_LOG_ERROR("JsonReader: cannot start array - array's name should not be empty");
             return 0;
         }
 
         if (!_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot start array '{}' - current object '{}' is not of object type", arrayName, _scope.scopeString);
+            KMP_LOG_ERROR("JsonReader: cannot start array '{}' - current object '{}' is not of object type", arrayName, _scope.scopeString);
             return 0;
         }
 
         if (!_currentObject->HasMember(arrayName) || !(*_currentObject)[arrayName].IsArray())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find member '{}', or the member is not an array type", arrayName);
+            KMP_LOG_ERROR("JsonReader: cannot find member '{}', or the member is not an array type", arrayName);
             return 0;
         }
 
@@ -119,7 +119,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsArray())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not of array type", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not of array type", _scope.scopeString, index);
             return 0;
         }
 
@@ -134,13 +134,13 @@ namespace Kmplete
     {
         if (!_currentObject)
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot end array - current object is null");
+            KMP_LOG_ERROR("JsonReader: cannot end array - current object is null");
             return false;
         }
 
         if (!_currentObject->IsArray())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot end array - current object '{}' is not of array type", _scope.scopeString);
+            KMP_LOG_ERROR("JsonReader: cannot end array - current object '{}' is not of array type", _scope.scopeString);
             return false;
         }
 
@@ -157,7 +157,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsBool())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not a bool", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not a bool", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -169,13 +169,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get bool '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get bool '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsBool())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find bool for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find bool for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -192,7 +192,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsInt())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not an int", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not an int", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -204,13 +204,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get int '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get int '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find int for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find int for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -227,7 +227,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsUint())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not an unsigned int", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not an unsigned int", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -239,13 +239,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get unsigned int '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get unsigned int '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find unsigned int for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find unsigned int for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -262,7 +262,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsInt64())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not an int64", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not an int64", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -274,13 +274,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get int64 '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get int64 '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt64())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find int64 for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find int64 for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -297,7 +297,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsUint64())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not an unsigned int64", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not an unsigned int64", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -309,13 +309,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get unsigned int64 '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get unsigned int64 '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint64())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find unsigned int64 for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find unsigned int64 for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -332,7 +332,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsDouble())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not a double", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not a double", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -344,13 +344,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get double '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get double '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsDouble())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find double for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find double for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -367,7 +367,7 @@ namespace Kmplete
 
         if (!(*_currentObject)[index].IsString())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: '{}[{}]' is not a string", _scope.scopeString, index);
+            KMP_LOG_ERROR("JsonReader: '{}[{}]' is not a string", _scope.scopeString, index);
             return defaultValue;
         }
 
@@ -379,13 +379,13 @@ namespace Kmplete
     {
         if (!_currentObject || !_currentObject->IsObject())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot get string '{}' - current object is null or is not of object type", name);
+            KMP_LOG_ERROR("JsonReader: cannot get string '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
         if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsString())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: cannot find string for '{}/{}'", _scope.scopeString, name);
+            KMP_LOG_ERROR("JsonReader: cannot find string for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
         }
 
@@ -402,13 +402,13 @@ namespace Kmplete
 
         if (!_currentObject->IsArray())
         {
-            KMP_LOG_CORE_ERROR("JsonReader: current object '{}' is not an array", _scope.scopeString);
+            KMP_LOG_ERROR("JsonReader: current object '{}' is not an array", _scope.scopeString);
             return false;
         }
 
         if (index >= static_cast<int>(_currentObject->Size()) || index < 0)
         {
-            KMP_LOG_CORE_ERROR("JsonReader: invalid index [{}] for '{}'", index, _scope.scopeString);
+            KMP_LOG_ERROR("JsonReader: invalid index [{}] for '{}'", index, _scope.scopeString);
             return false;
         }
 

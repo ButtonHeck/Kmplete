@@ -34,7 +34,7 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            KMP_LOG_CORE_WARN("LocalizationLibrary: already contains domainSID '{}'", domainSid);
+            KMP_LOG_WARN("LocalizationLibrary: already contains domainSID '{}'", domainSid);
             return false;
         }
 
@@ -48,7 +48,7 @@ namespace Kmplete
         const auto domainSid = Utils::ToStringID(domain);
         if (_dictionaryMap.contains(domainSid))
         {
-            KMP_LOG_CORE_WARN("LocalizationLibrary: already contains domain '{}'", domain);
+            KMP_LOG_WARN("LocalizationLibrary: already contains domain '{}'", domain);
             return false;
         }
 

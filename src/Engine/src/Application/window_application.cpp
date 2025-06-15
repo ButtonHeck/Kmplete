@@ -61,7 +61,7 @@ namespace Kmplete
 
         if (!_graphicsBackend->GetTextureManager().CreateTexture(0, Utils::Concatenate(KMP_ICONS_FOLDER, "error.jpg")))
         {
-            KMP_LOG_CORE_CRITICAL("WindowApplication: error texture loading failed");
+            KMP_LOG_CRITICAL("WindowApplication: error texture loading failed");
             throw std::runtime_error("WindowApplication: error texture loading failed");
         }
     }
@@ -81,7 +81,7 @@ namespace Kmplete
         auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_CORE_WARN("WindowApplication: failed to create settings entry for saving");
+            KMP_LOG_WARN("WindowApplication: failed to create settings entry for saving");
             return;
         }
         
@@ -95,7 +95,7 @@ namespace Kmplete
         const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_CORE_WARN("WindowApplication: failed to get setting entry for loading");
+            KMP_LOG_WARN("WindowApplication: failed to get setting entry for loading");
             return;
         }
 
