@@ -1,5 +1,5 @@
 #include "Kmplete/Localization/localization_dictionary.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Core/assertion.h"
 
 namespace Kmplete

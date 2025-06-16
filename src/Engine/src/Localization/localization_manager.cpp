@@ -1,6 +1,6 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Localization/localization_translator.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Core/assertion.h"

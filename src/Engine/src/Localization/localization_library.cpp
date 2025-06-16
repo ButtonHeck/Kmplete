@@ -1,6 +1,6 @@
 #include "Kmplete/Localization/localization_library.h"
 #include "Kmplete/Localization/localization_dictionary.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 
 namespace Kmplete
 {

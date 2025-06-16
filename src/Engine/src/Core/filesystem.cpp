@@ -1,5 +1,5 @@
 #include "Kmplete/Core/filesystem.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 
 #include <fstream>
 

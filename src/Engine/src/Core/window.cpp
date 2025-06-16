@@ -1,6 +1,6 @@
 #include "Kmplete/Core/window.h"
-#include "Kmplete/Core/log.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Log/log.h"
 
 namespace Kmplete
 {

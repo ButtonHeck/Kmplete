@@ -1,6 +1,6 @@
 #include "Kmplete/Graphics/texture_manager.h"
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 
 namespace Kmplete
 {

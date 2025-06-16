@@ -1,5 +1,5 @@
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 
 #include <glad/glad.h>
 #if defined (KMP_WINDOW_BACKEND_GLFW)

@@ -12,7 +12,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/memory_checker.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/log.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/window.h
@@ -28,7 +27,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/memory_checker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/log.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/window.cpp
@@ -141,7 +139,7 @@ endif()
 target_compile_definitions(Kmplete
     PUBLIC $<$<CONFIG:Production>:KMP_LOG_DISABLED>
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
-    PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_ENGINE_STATIC>
+    PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_BUILD_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PUBLIC KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
     PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
@@ -151,10 +149,10 @@ target_compile_definitions(Kmplete
 
 target_link_libraries(Kmplete 
     PUBLIC BaseLib
+    PUBLIC LoggerLib
     PUBLIC UtilsLib
     PUBLIC VersionLib
     PUBLIC glfw
-    PUBLIC spdlog
     
     PRIVATE stb_image
     PRIVATE glad

@@ -1,7 +1,7 @@
 #include "editor_application.h"
 #include "Kmplete/Core/entry_point.h"
 #include "Kmplete/Core/settings.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/function_utils.h"
 
 namespace Kmplete

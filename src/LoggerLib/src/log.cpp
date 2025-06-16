@@ -1,6 +1,6 @@
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
 
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include "spdlog/async.h"

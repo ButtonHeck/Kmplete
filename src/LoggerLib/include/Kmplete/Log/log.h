@@ -10,6 +10,7 @@
 #define KMP_LOG_CRITICAL(...)
 
 #else
+#include "Kmplete/Log/log_api.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/pointers.h"
@@ -54,11 +55,11 @@ namespace Kmplete
         };
 
     public:
-        KMP_NODISCARD static Ptr<spdlog::logger> Boot();
-        KMP_NODISCARD static Ptr<spdlog::logger> Initialize(const LogSettings& settings);
-        static void Finalize();
+        KMP_NODISCARD KMP_LOG_API static Ptr<spdlog::logger> Boot();
+        KMP_NODISCARD KMP_LOG_API static Ptr<spdlog::logger> Initialize(const LogSettings& settings);
+        KMP_LOG_API static void Finalize();
 
-        KMP_NODISCARD KMP_API static std::string_view StringLogOutput();
+        KMP_NODISCARD KMP_LOG_API static std::string_view StringLogOutput();
 
         template <typename... Args>
         static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->trace(fmt, std::forward<Args>(args)...); }
@@ -80,7 +81,7 @@ namespace Kmplete
 
     private:
         static LogSettings _logSettings;
-        KMP_API static Ptr<spdlog::logger> _logger;
+        KMP_LOG_API static Ptr<spdlog::logger> _logger;
         static std::stringstream _stringStream;
     };
     //--------------------------------------------------------------------------

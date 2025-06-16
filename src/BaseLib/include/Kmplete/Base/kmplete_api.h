@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/platform.h"
 
-#if defined (KMP_ENGINE_STATIC)
+#if defined (KMP_BUILD_STATIC)
     #define KMP_API
     #define KMP_NO_EXPORT
 #else

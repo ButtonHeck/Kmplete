@@ -1,6 +1,6 @@
 #include "Kmplete/Core/window_glfw.h"
-#include "Kmplete/Core/log.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"

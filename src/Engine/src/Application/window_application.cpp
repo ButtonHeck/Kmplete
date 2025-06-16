@@ -1,7 +1,7 @@
 #include "Kmplete/Application/window_application.h"
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 
 #include <stdexcept>
 

@@ -19,12 +19,6 @@ if(NOT Gettext_FOUND)
     endif()
 endif()
 
-if(SHELL_EXECUTABLE)
-    message(STATUS "Found sh: ${SHELL_EXECUTABLE}")
-else()
-    message(WARNING "sh not found!")
-endif()
-
 if(GETTEXT_XGETTEXT_EXECUTABLE)
     message(STATUS "Found xgettext: ${GETTEXT_XGETTEXT_EXECUTABLE}")
 else()

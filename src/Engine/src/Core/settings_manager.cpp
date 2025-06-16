@@ -1,5 +1,5 @@
 #include "Kmplete/Core/settings_manager.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Json/json_document.h"
 
 namespace Kmplete

@@ -1,8 +1,8 @@
 #include "Kmplete/Core/window_backend_glfw.h"
 #include "Kmplete/Core/window_glfw.h"
-#include "Kmplete/Core/log.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Log/log.h"
 
 #include <GLFW/glfw3.h>
 

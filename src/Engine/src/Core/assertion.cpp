@@ -1,7 +1,7 @@
 #if !defined (KMP_PRODUCTION_BUILD)
 
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Core/log.h"
+#include "Kmplete/Log/log.h"
 
 namespace Kmplete
 {
