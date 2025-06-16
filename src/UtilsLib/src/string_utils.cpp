@@ -1,5 +1,6 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Base/platform.h"
+#include "Kmplete/Log/log.h"
 
 #include <numeric>
 #include <regex>
@@ -25,9 +26,9 @@ namespace Kmplete
                 const std::regex regexObject(regexp);
                 return std::regex_replace(source, regexObject, replacement);
             }
-            catch (const std::regex_error&)
+            catch (const std::regex_error& re)
             {
-                // TODO: logging exception
+                KMP_LOG_ERROR("Utils: regex '{}' error for string '{}': '{}'", regexp, source, re.what());
                 return source;
             }
         }

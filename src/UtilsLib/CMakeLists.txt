@@ -24,6 +24,7 @@ target_include_directories(UtilsLib
 
 target_link_libraries(UtilsLib 
     PUBLIC BaseLib
+    PUBLIC LoggerLib
 )
 
 target_compile_definitions(UtilsLib

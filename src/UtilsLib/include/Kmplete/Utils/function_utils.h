@@ -15,7 +15,7 @@ namespace Kmplete
     namespace Utils
     {
         template<typename ...TArgs>
-        constexpr size_t GetArgsCount(TArgs&&...)
+        KMP_NODISCARD constexpr size_t GetArgsCount(TArgs&&...)
         {
             return sizeof...(TArgs);
         }
