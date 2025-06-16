@@ -23,8 +23,6 @@ target_include_directories(LoggerLib
 
 target_link_libraries(LoggerLib 
     PUBLIC BaseLib
-    PUBLIC UtilsLib
-
     PUBLIC spdlog
 )
 
