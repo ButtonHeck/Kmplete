@@ -55,8 +55,8 @@ namespace Kmplete
         };
 
     public:
-        KMP_NODISCARD KMP_LOG_API static Ptr<spdlog::logger> Boot();
-        KMP_NODISCARD KMP_LOG_API static Ptr<spdlog::logger> Initialize(const LogSettings& settings);
+        KMP_LOG_API static void Boot();
+        KMP_LOG_API static void Initialize(const LogSettings& settings);
         KMP_LOG_API static void Finalize();
 
         KMP_NODISCARD KMP_LOG_API static std::string_view StringLogOutput();
