@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <stb_image.h>
 

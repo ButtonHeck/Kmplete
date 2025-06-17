@@ -2,6 +2,7 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <stdexcept>
 

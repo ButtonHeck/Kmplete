@@ -1,5 +1,5 @@
 #include "Kmplete/Core/file_dialogs.h"
-#include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Localization/localization_manager.h"
 
 #include <catch2/catch_test_macros.hpp>

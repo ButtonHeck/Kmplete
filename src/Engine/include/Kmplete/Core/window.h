@@ -4,7 +4,6 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types.h"
-#include "Kmplete/Core/filesystem.h"
 #include "Kmplete/Event/event.h"
 
 #include <functional>

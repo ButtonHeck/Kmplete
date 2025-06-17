@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/prettywriter.h>

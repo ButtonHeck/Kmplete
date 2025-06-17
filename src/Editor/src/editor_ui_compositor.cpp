@@ -3,7 +3,7 @@
 #include "shortcuts.h"
 #include "ui_identifiers.h"
 #include "localization_base.h"
-#include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Core/timer.h"
 #include "Kmplete/Core/settings.h"

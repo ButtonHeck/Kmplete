@@ -8,7 +8,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/filesystem.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/memory_checker.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
@@ -23,7 +22,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/rng.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/filesystem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/memory_checker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
@@ -152,6 +150,7 @@ target_link_libraries(Kmplete
     PUBLIC LoggerLib
     PUBLIC UtilsLib
     PUBLIC VersionLib
+    PUBLIC FilesystemLib
     PUBLIC glfw
     
     PRIVATE stb_image

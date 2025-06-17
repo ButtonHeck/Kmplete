@@ -1,5 +1,5 @@
 #include "Kmplete/Core/settings_manager.h"
-#include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <catch2/catch_test_macros.hpp>
 

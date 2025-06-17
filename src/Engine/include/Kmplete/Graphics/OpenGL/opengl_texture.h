@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Graphics/texture.h"
-#include "Kmplete/Core/filesystem.h"
+#include "Kmplete/Base/types.h"
 
 namespace Kmplete
 {

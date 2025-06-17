@@ -1,6 +1,7 @@
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Json/json_document.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 namespace Kmplete
 {

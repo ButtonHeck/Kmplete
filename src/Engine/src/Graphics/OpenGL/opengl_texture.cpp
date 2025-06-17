@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <glad/glad.h>
 
