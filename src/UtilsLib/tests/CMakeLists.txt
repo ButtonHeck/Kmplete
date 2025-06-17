@@ -15,10 +15,6 @@ add_executable(UtilsLib_UnitTests
 
 SetupCompilerOptions(UtilsLib_UnitTests)
 
-target_include_directories(UtilsLib_UnitTests
-    PRIVATE "${CMAKE_CURRENT_LIST_DIR}/../include"
-)
-
 target_link_libraries(UtilsLib_UnitTests
     PRIVATE Catch2::Catch2WithMain
     PRIVATE UtilsLib
