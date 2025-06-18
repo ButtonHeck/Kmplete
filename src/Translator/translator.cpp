@@ -189,7 +189,10 @@ namespace Kmplete
                 }
 
                 // 8. remove .pot file
-                std::filesystem::remove(poTemplateFile);
+                if (!Filesystem::RemoveFile(poTemplateFile))
+                {
+                    KMP_LOG_WARN("TranslatorProcessor::Update: failed to remove '{}'", poTemplateFile);
+                }
             }
 
             return ReturnCode::Ok;

@@ -60,6 +60,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Filesystem::RemoveDirectories(const Path& path) noexcept
+    {
+        try
+        {
+            return std::filesystem::remove_all(path) != 0;
+        }
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+        {
+            KMP_LOG_ERROR("Filesystem: remove directories failed: '{}'", fe.what());
+            return false;
+        }
+    }
+    //--------------------------------------------------------------------------
+
     bool Filesystem::CreateFile(const Path& path) noexcept
     {
         try
@@ -83,7 +97,21 @@ namespace Kmplete
 
         return PathExists(path);
     }
-    //--------------------------------------------------------------------------    
+    //--------------------------------------------------------------------------
+
+    bool Filesystem::RemoveFile(const Path& path) noexcept
+    {
+        try
+        {
+            return std::filesystem::remove(path);
+        }
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+        {
+            KMP_LOG_ERROR("Filesystem: remove file failed: '{}'", fe.what());
+            return false;
+        }
+    }
+    //--------------------------------------------------------------------------
 
     bool Filesystem::IsFile(const Path& path) noexcept
     {

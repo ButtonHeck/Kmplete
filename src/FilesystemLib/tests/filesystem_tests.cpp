@@ -51,11 +51,12 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
         REQUIRE(!pathStr.empty());
     }
 
-    SECTION("CreateDirectories test directory")
+    SECTION("CreateDirectories/RemoveDirectories test directory")
     {
         auto path = Kmplete::Filesystem::GetCurrentPath();
         path /= "test";
         REQUIRE(Kmplete::Filesystem::CreateDirectories(path));
+        REQUIRE(Kmplete::Filesystem::RemoveDirectories(path));
     }
 
     SECTION("CreateDirectories test nested directories")
@@ -72,11 +73,12 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
         REQUIRE_FALSE(Kmplete::Filesystem::CreateDirectories(""));
     }
 
-    SECTION("CreateFile in existing directory")
+    SECTION("CreateFile/RemoveFile in existing directory")
     {
         auto path = Kmplete::Filesystem::GetCurrentPath();
         path /= "test_file.txt";
         REQUIRE(Kmplete::Filesystem::CreateFile(path));
+        REQUIRE(Kmplete::Filesystem::RemoveFile(path));
     }
 
     SECTION("CreateFile in non-existent directory")
