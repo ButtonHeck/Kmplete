@@ -1,4 +1,6 @@
 #include "translator.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <boost/program_options.hpp>
 
@@ -49,6 +51,7 @@ bpo::options_description CreateDescription()
     using namespace Kmplete;
     using namespace Kmplete::Translator;
 
+    const auto loggingArgument =            Utils::Concatenate(ProcessorArgumentLogging, ",", ProcessorArgumentLoggingShort);
     const auto modeArgument =               Utils::Concatenate(ProcessorArgumentWorkMode, ",", ProcessorArgumentWorkModeShort);
     const auto inputDirectoriesArgument =   Utils::Concatenate(ProcessorArgumentInputDirectories, ",", ProcessorArgumentInputDirectoriesShort);
     const auto extensionsArgument =         Utils::Concatenate(ProcessorArgumentExtensions, ",", ProcessorArgumentExtensionsShort);
@@ -58,6 +61,7 @@ bpo::options_description CreateDescription()
 
     bpo::options_description optionsDescription("Translator options");
     optionsDescription.add_options()
+        (loggingArgument.c_str(),                                                       "Is logging enabled")
         (modeArgument.c_str(),              bpo::value<String>(),                       "Working mode (Update, Compile)")
         (inputDirectoriesArgument.c_str(),  bpo::value<StringVector>()->multitoken(),   "Directories to search files")
         (extensionsArgument.c_str(),        bpo::value<StringVector>()->multitoken(),   "Files extensions to parse")
@@ -89,17 +93,31 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     using namespace Kmplete;
     using namespace Kmplete::Translator;
 
+    // logging parsing
+    const bool loggingEnabled = vm.count(ProcessorArgumentLogging);
+    translatorParameters.logging = loggingEnabled;
+    if (loggingEnabled)
+    {
+        Log::LogSettings logSettings;
+        logSettings.outputFile = false;
+        logSettings.outputConsole = true;
+        logSettings.outputStringBuffer = false;
+        logSettings.level = 0;
+        logSettings.levelFlush = 0;
+        Log::Initialize(logSettings);
+    }
+
     // Work mode parsing
     const auto workMode = vm.count(ProcessorArgumentWorkMode) ? vm[ProcessorArgumentWorkMode].as<String>() : String();
     if (workMode.empty())
     {
-        std::cerr << "Translator: work mode is not set\n";
+        KMP_LOG_ERROR("Translator: work mode is not set");
         PrintUsage(optionsDescription);
         return ReturnCode::WorkModeIsNotSet;
     }
     if (!WorkModeIsValid(workMode))
     {
-        std::cerr << "Translator: work mode is not valid (" << workMode << ")\n";
+        KMP_LOG_ERROR("Translator: work mode is not valid ({})", workMode);
         PrintUsage(optionsDescription);
         return ReturnCode::WorkModeIsNotValid;
     }
@@ -112,7 +130,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto sourceDirectoryStrings = vm.count(ProcessorArgumentInputDirectories) ? vm[ProcessorArgumentInputDirectories].as<StringVector>() : StringVector();
         if (sourceDirectoryStrings.empty())
         {
-            std::cerr << "Translator: source directories are not set\n";
+            KMP_LOG_ERROR("Translator: source directories are not set");
             PrintUsage(optionsDescription);
             return ReturnCode::SourceDirectoriesAreNotSet;
         }
@@ -121,9 +139,9 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
         {
             const auto sourceDirectory = Path(sourceDirectoryStr);
-            if (!std::filesystem::exists(sourceDirectory) || !std::filesystem::is_directory(sourceDirectory))
+            if (!Filesystem::PathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
             {
-                std::cerr << "Translator: one of source directories does not exist or is not of a directory type (" << sourceDirectory << ")\n";
+                KMP_LOG_ERROR("Translator: one of source directories does not exist or is not of a directory type ({})", Filesystem::ToGenericU8String(sourceDirectory));
                 PrintUsage(optionsDescription);
                 return ReturnCode::SourceDirectoriesAreNotValid;
             }
@@ -137,7 +155,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto filesExtensions = vm.count(ProcessorArgumentExtensions) ? vm[ProcessorArgumentExtensions].as<StringVector>() : StringVector();
         if (filesExtensions.empty())
         {
-            std::cerr << "Translator: files extensions are not set\n";
+            KMP_LOG_ERROR("Translator: files extensions are not set");
             PrintUsage(optionsDescription);
             return ReturnCode::FilesExtensionsAreNotSet;
         }
@@ -153,27 +171,24 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto outputDirectoryStr = vm.count(ProcessorArgumentOutputDirectory) ? vm[ProcessorArgumentOutputDirectory].as<String>() : String();
     if (outputDirectoryStr.empty())
     {
-        std::cerr << "Translator: output directory is not set\n";
+        KMP_LOG_ERROR("Translator: output directory is not set");
         PrintUsage(optionsDescription);
         return ReturnCode::OutputDirectoryIsNotSet;
     }
     const auto outputDirectory = Path(outputDirectoryStr);
-    if (!std::filesystem::exists(outputDirectory))
+
+    if (!Filesystem::CreateDirectories(outputDirectory))
     {
-        const auto success = std::filesystem::create_directories(outputDirectory);
-        if (!success)
-        {
-            std::cerr << "Translator: cannot create output directory (" << outputDirectory << ")\n";
-            PrintUsage(optionsDescription);
-            return ReturnCode::OutputDirectoryIsNotValid;
-        }
+        KMP_LOG_ERROR("Translator: cannot create output directory ({})", Filesystem::ToGenericU8String(outputDirectory));
+        PrintUsage(optionsDescription);
+        return ReturnCode::OutputDirectoryIsNotValid;
     }
 
     // output filename parsing
     const auto outputFileNameStr = vm.count(ProcessorArgumentOutputFileName) ? vm[ProcessorArgumentOutputFileName].as<String>() : String();
     if (outputFileNameStr.empty())
     {
-        std::cerr << "Translator: output file name is not set\n";
+        KMP_LOG_ERROR("Translator: output file name is not set");
         PrintUsage(optionsDescription);
         return ReturnCode::OutputFileNameIsNotSet;
     }

@@ -7,6 +7,8 @@ namespace Kmplete
         static constexpr auto ProcessorWorkModeUpdate = "Update";
         static constexpr auto ProcessorWorkModeCompile = "Compile";
 
+        static constexpr auto ProcessorArgumentLogging = "logging";
+        static constexpr auto ProcessorArgumentLoggingShort = "L";
         static constexpr auto ProcessorArgumentWorkMode = "mode";
         static constexpr auto ProcessorArgumentWorkModeShort = "M";
         static constexpr auto ProcessorArgumentInputDirectories = "input_directories";

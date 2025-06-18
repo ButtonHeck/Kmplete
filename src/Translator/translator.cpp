@@ -1,13 +1,20 @@
 #include "translator.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 #include <boost/process.hpp>
 
-#include <iostream>
 #include <algorithm>
 #include <array>
 #include <fstream>
 #include <streambuf>
 #include <numeric>
+
+#if defined (CreateFile)
+    #pragma push_macro("CreateFile")
+    #undef CreateFile
+    #define KMP_UNDEF_CreateFile
+#endif
 
 namespace Kmplete
 {
@@ -45,7 +52,7 @@ namespace Kmplete
             const auto filesToProcess = GatherFilesToUpdate(_parameters);
             if (filesToProcess.empty())
             {
-                std::cerr << "TranslatorProcessor::Update: Appropriate files not found\n";
+                KMP_LOG_ERROR("TranslatorProcessor::Update: Appropriate files not found");
                 return ReturnCode::ProcessorFilesNotFound;
             }
 
@@ -61,7 +68,7 @@ namespace Kmplete
                 const auto poTemplateFile = CreatePoTemplateFile(_parameters, locale);
                 if (poTemplateFile.empty())
                 {
-                    std::cerr << "TranslatorProcessor::Update: cannot create .pot file (" << poTemplateFile << ")\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: cannot create .pot file ({})", poTemplateFile);
                     return ReturnCode::ProcessorCreatePotFailed;
                 }
 
@@ -81,7 +88,7 @@ namespace Kmplete
                 const auto xgettextExitCode = xgettextProcess.exit_code();
                 if (xgettextExitCode != 0)
                 {
-                    std::cerr << "TranslatorProcessor::Update: xgettext error occured\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: xgettext error occured");
                     return ReturnCode::ProcessorXgettextError;
                 }
 
@@ -89,7 +96,7 @@ namespace Kmplete
                 std::ifstream potFileStream(poTemplateFile);
                 if (!potFileStream.is_open() || !potFileStream.good())
                 {
-                    std::cerr << "TranslatorProcessor::Update: cannot open newly created .pot file (" << poTemplateFile << ")\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: cannot open newly created .pot file ({})", poTemplateFile);
                     return ReturnCode::ProcessorOpenPotFailed;
                 }
 
@@ -104,7 +111,7 @@ namespace Kmplete
                 // 4. invoke msginit if necessary for creation of .po file
                 const auto poFile = Utils::RegexReplace(poTemplateFile, ".pot", ".po");
 
-                if (!std::filesystem::exists(poFile))
+                if (!Filesystem::PathExists(poFile))
                 {
                     const auto msginitCommand = Utils::Concatenate(
                         MSGINIT_EXECUTABLE_PATH,
@@ -121,7 +128,7 @@ namespace Kmplete
                     const auto msginitExitCode = msginitProcess.exit_code();
                     if (msginitExitCode != 0)
                     {
-                        std::cerr << "TranslatorProcessor::Update: msginit error occured\n";
+                        KMP_LOG_ERROR("TranslatorProcessor::Update: msginit error occured");
                         return ReturnCode::ProcessorMsginitError;
                     }
                 }
@@ -141,7 +148,7 @@ namespace Kmplete
                 const auto msgattribStep1ExitCode = msgattribProcessStep1.exit_code();
                 if (msgattribStep1ExitCode != 0)
                 {
-                    std::cerr << "TranslatorProcessor::Update: msgattrib error occured\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: msgattrib error occured");
                     return ReturnCode::ProcessorMsgattribError;
                 }
 
@@ -158,7 +165,7 @@ namespace Kmplete
                 const auto msgattribStep2ExitCode = msgattribProcessStep2.exit_code();
                 if (msgattribStep2ExitCode != 0)
                 {
-                    std::cerr << "TranslatorProcessor::Update: msgattrib error occured\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: msgattrib error occured");
                     return ReturnCode::ProcessorMsgattribError;
                 }
 
@@ -177,7 +184,7 @@ namespace Kmplete
                 const auto msgmergeExitCode = msgmergeProcess.exit_code();
                 if (msgmergeExitCode != 0)
                 {
-                    std::cerr << "TranslatorProcessor::Update: msgmerge error occured\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: msgmerge error occured");
                     return ReturnCode::ProcessorMsgmergeError;
                 }
 
@@ -197,18 +204,18 @@ namespace Kmplete
                 outputDirectory /= locale;
                 outputDirectory /= "LC_MESSAGES";
 
-                if (!std::filesystem::exists(outputDirectory))
+                if (!Filesystem::PathExists(outputDirectory))
                 {
-                    std::cerr << "TranslatorProcessor::Compile: output directory for locale " << locale << " not found\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Compile: output directory for locale '{}' not found", locale);
                     continue;
                 }
 
                 auto poTemplateFile = outputDirectory;
                 poTemplateFile /= (_parameters.outputFileName + ".po");
 
-                if (!std::filesystem::exists(poTemplateFile))
+                if (!Filesystem::PathExists(poTemplateFile))
                 {
-                    std::cerr << "TranslatorProcessor::Compile: source .pot file not found (" << poTemplateFile << ")\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Compile: source .pot file not found ({})", Filesystem::ToGenericU8String(poTemplateFile));
                     continue;
                 }
 
@@ -227,7 +234,7 @@ namespace Kmplete
                 const auto msgfmtExitCode = msgfmtProcess.exit_code();
                 if (msgfmtExitCode != 0)
                 {
-                    std::cerr << "TranslatorProcessor::Update: msgfmt error occured\n";
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: msgfmt error occured");
                     return ReturnCode::ProcessorMsgmergeError;
                 }
             }
@@ -288,28 +295,23 @@ namespace Kmplete
             poTemplateFilePath /= locale;
             poTemplateFilePath /= "LC_MESSAGES";
 
-            if (!std::filesystem::exists(poTemplateFilePath))
+            const auto success = Filesystem::CreateDirectories(poTemplateFilePath);
+            if (!success)
             {
-                const auto success = std::filesystem::create_directories(poTemplateFilePath);
-                if (!success)
-                {
-                    std::cerr << "TranslatorProcessor::Update: cannot create .pot file directory hierarchy (" << poTemplateFilePath << ")\n";
-                    return String();
-                }
+                KMP_LOG_ERROR("TranslatorProcessor::Update: cannot create .pot file directory hierarchy ({})", Filesystem::ToGenericU8String(poTemplateFilePath));
+                return String();
             }
 
             poTemplateFilePath /= parameters.outputFileName;
-            const String poTemplateFileName = poTemplateFilePath.string().append(".pot");
+            const auto poTemplateFileName = poTemplateFilePath.string().append(".pot");
 
-            if (!std::filesystem::exists(poTemplateFileName))
+            if (!Filesystem::PathExists(poTemplateFileName))
             {
-                std::ofstream(poTemplateFileName).flush();
-            }
-
-            if (!std::filesystem::exists(poTemplateFileName))
-            {
-                std::cerr << "TranslatorProcessor::Update: failed to create .pot file (" << poTemplateFileName << ")\n";
-                return String();
+                if (!Filesystem::CreateFile(poTemplateFileName))
+                {
+                    KMP_LOG_ERROR("TranslatorProcessor::Update: failed to create .pot file ({})", poTemplateFileName);
+                    return String();
+                }
             }
 
             return poTemplateFileName;
@@ -317,3 +319,8 @@ namespace Kmplete
         //--------------------------------------------------------------------------
     }
 }
+
+#if defined (KMP_UNDEF_CreateFile)
+    #pragma pop_macro("CreateFile")
+    #undef KMP_UNDEF_CreateFile
+#endif

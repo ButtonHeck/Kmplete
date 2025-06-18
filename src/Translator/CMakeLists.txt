@@ -35,5 +35,7 @@ target_compile_definitions(Translator
 target_link_libraries(Translator
     PRIVATE BaseLib
     PRIVATE UtilsLib
+    PRIVATE LoggerLib
+    PRIVATE FilesystemLib
     PRIVATE TranslatorInterfaceLib
 )

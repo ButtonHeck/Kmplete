@@ -17,6 +17,7 @@ namespace Kmplete
             bool isRecursive = false;
             Path outputDirectory;
             String outputFileName;
+            bool logging = false;
         };
         //--------------------------------------------------------------------------
 
