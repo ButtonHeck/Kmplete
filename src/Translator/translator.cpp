@@ -295,8 +295,7 @@ namespace Kmplete
             poTemplateFilePath /= locale;
             poTemplateFilePath /= "LC_MESSAGES";
 
-            const auto success = Filesystem::CreateDirectories(poTemplateFilePath);
-            if (!success)
+            if (!Filesystem::CreateDirectories(poTemplateFilePath))
             {
                 KMP_LOG_ERROR("TranslatorProcessor::Update: cannot create .pot file directory hierarchy ({})", Filesystem::ToGenericU8String(poTemplateFilePath));
                 return String();
@@ -305,13 +304,10 @@ namespace Kmplete
             poTemplateFilePath /= parameters.outputFileName;
             const auto poTemplateFileName = poTemplateFilePath.string().append(".pot");
 
-            if (!Filesystem::PathExists(poTemplateFileName))
+            if (!Filesystem::CreateFile(poTemplateFileName))
             {
-                if (!Filesystem::CreateFile(poTemplateFileName))
-                {
-                    KMP_LOG_ERROR("TranslatorProcessor::Update: failed to create .pot file ({})", poTemplateFileName);
-                    return String();
-                }
+                KMP_LOG_ERROR("TranslatorProcessor::Update: failed to create .pot file ({})", poTemplateFileName);
+                return String();
             }
 
             return poTemplateFileName;
