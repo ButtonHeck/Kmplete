@@ -3,55 +3,48 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Filesystem initialization", "[core][filesystem]")
+TEST_CASE("Filesystem functions", "[core][filesystem]")
 {
-    const auto path = Kmplete::Filesystem::GetCurrentPath();
-    REQUIRE(!path.empty());
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Filesystem", "[core][filesystem]")
-{
-    SECTION("Application path is not empty")
+    SECTION("Current path is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         REQUIRE(!path.empty());
     }
 
-    SECTION("Application path exists")
+    SECTION("Current path exists")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         REQUIRE(Kmplete::Filesystem::PathExists(path));
     }
 
-    SECTION("Application path is directory")
+    SECTION("Current path is directory")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         REQUIRE(Kmplete::Filesystem::IsDirectory(path));
     }
 
-    SECTION("Application path ToGenericU8String is not empty")
+    SECTION("Current path ToGenericU8String is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         const auto pathStr = Kmplete::Filesystem::ToGenericU8String(path);
         REQUIRE(!pathStr.empty());
     }
 
-    SECTION("Application path ToGenericString is not empty")
+    SECTION("Current path ToGenericString is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         const auto pathStr = Kmplete::Filesystem::ToGenericString(path);
         REQUIRE(!pathStr.empty());
     }
 
-    SECTION("Application path ToNativeU8String is not empty")
+    SECTION("Current path ToNativeU8String is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         const auto pathStr = Kmplete::Filesystem::ToNativeU8String(path);
         REQUIRE(!pathStr.empty());
     }
 
-    SECTION("Application path ToNativeString is not empty")
+    SECTION("Current path ToNativeString is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentPath();
         const auto pathStr = Kmplete::Filesystem::ToNativeString(path);
