@@ -64,6 +64,11 @@ namespace Kmplete
     {
         try
         {
+            if (PathExists(path))
+            {
+                return true;
+            }
+
             if (!CreateDirectories(path, true))
             {
                 return false;
