@@ -25,3 +25,13 @@ target_link_libraries(BaseLib_UnitTests
 set_target_properties(BaseLib_UnitTests PROPERTIES 
     FOLDER Kmplete/BaseLib/Tests
 )
+
+if(MSVC)
+    set_target_properties(BaseLib_UnitTests PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
+    )
+    
+endif()
+
+include(Catch)
+catch_discover_tests(BaseLib_UnitTests)

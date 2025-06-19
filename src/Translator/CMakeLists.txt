@@ -39,3 +39,10 @@ target_link_libraries(Translator
     PRIVATE FilesystemLib
     PRIVATE TranslatorInterfaceLib
 )
+
+if(MSVC)
+    set_target_properties(Translator PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
+    )
+    
+endif()
