@@ -14,12 +14,9 @@ add_executable(BaseLib_UnitTests
 
 SetupCompilerOptions(BaseLib_UnitTests)
 
-target_include_directories(BaseLib_UnitTests
-    PRIVATE "${CMAKE_CURRENT_LIST_DIR}/../include"
-)
-
 target_link_libraries(BaseLib_UnitTests
     PRIVATE Catch2::Catch2WithMain
+    PRIVATE BaseLib
 )
 
 set_target_properties(BaseLib_UnitTests PROPERTIES 
