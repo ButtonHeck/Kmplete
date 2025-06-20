@@ -54,18 +54,6 @@ set(Kmplete_EVENT
 )
 source_group("Event" FILES ${Kmplete_EVENT})
 
-set(Kmplete_JSON
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_document.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_reader.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_writer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_scope.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_document.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_reader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_writer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Json/json_scope.cpp    
-)
-source_group("Json" FILES ${Kmplete_JSON})
-
 set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
@@ -106,7 +94,6 @@ add_library(Kmplete
     ${Kmplete_CORE}
     ${Kmplete_APPLICATION}
     ${Kmplete_EVENT}
-    ${Kmplete_JSON}
     ${Kmplete_GRAPHICS}
     ${Kmplete_GRAPHICS_OPENGL}
     ${Kmplete_LOCALIZATION}
@@ -119,7 +106,6 @@ SetupCompilerOptions(Kmplete)
 target_include_directories(Kmplete
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
-    PUBLIC "${RapidJSON_SOURCE_DIR}/include"
     PUBLIC "${GLFW_SOURCE_DIR}/include"
 
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
@@ -151,6 +137,7 @@ target_link_libraries(Kmplete
     PUBLIC UtilsLib
     PUBLIC VersionLib
     PUBLIC FilesystemLib
+    PUBLIC JsonLib
     PUBLIC glfw
     
     PRIVATE stb_image
