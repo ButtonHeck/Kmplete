@@ -19,6 +19,7 @@ SetupCompilerOptions(LoggerLib)
 
 target_include_directories(LoggerLib
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
+    PUBLIC "${spdlog_SOURCE_DIR}/include"
 )
 
 target_link_libraries(LoggerLib 
