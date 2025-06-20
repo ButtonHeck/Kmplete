@@ -14,8 +14,6 @@ namespace Kmplete
         explicit EditorApplication(const ApplicationParameters& applicationParameters);
         virtual ~EditorApplication();
 
-        KMP_NODISCARD const char* GetApplicationName() const noexcept override;
-
         void Run() override;
 
         void SaveSettings(const Path& path = Path()) const override;

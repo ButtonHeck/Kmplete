@@ -55,8 +55,8 @@ namespace Kmplete
         };
 
     public:
-        KMP_LOG_API static void Boot();
-        KMP_LOG_API static void Initialize(const LogSettings& settings);
+        KMP_LOG_API static void Boot(const String& programName);
+        KMP_LOG_API static void Initialize(const LogSettings& settings, const String& programName);
         KMP_LOG_API static void Finalize();
 
         KMP_NODISCARD KMP_LOG_API static std::string_view StringLogOutput();

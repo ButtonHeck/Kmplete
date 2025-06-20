@@ -11,6 +11,7 @@ namespace Kmplete
         try
         {
             ApplicationParameters applicationParameters{
+                .applicationName = "Kmplete Editor",
                 .settingsPath = programOptions.GetSettingsFilePath()
             };
 
@@ -40,16 +41,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const char* EditorApplication::GetApplicationName() const noexcept
-    {
-        return "Kmplete Editor";
-    }
-    //--------------------------------------------------------------------------
-
     void EditorApplication::Initialize()
     {
         auto& mainWindow = _windowBackend->GetMainWindow();
-        mainWindow.SetTitle(GetApplicationName());
+        mainWindow.SetTitle(_applicationName.c_str());
         mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));

@@ -38,7 +38,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Boot()
+    void Log::Boot(const String& programName)
     {
         if (_logger)
         {
@@ -53,7 +53,7 @@ namespace Kmplete
             bootMessages.emplace_back(String(msg.payload.data(), msg.payload.size()), msg);
         });
 
-        _logger = CreatePtr<spdlog::logger>("CORE", callbackSink);
+        _logger = CreatePtr<spdlog::logger>(programName, callbackSink);
 
         _logger->set_level(spdlog::level::trace);
         _logger->flush_on(spdlog::level::trace);
@@ -75,7 +75,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const LogSettings& settings)
+    void Log::Initialize(const LogSettings& settings, const String& programName)
     {
         spdlog::drop_all();
         spdlog::init_thread_pool(1024, 1);
@@ -127,14 +127,14 @@ namespace Kmplete
                 sink->flush();
             });
 
-            _logger = CreatePtr<spdlog::async_logger>("CORE", begin(logSinks), end(logSinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+            _logger = CreatePtr<spdlog::async_logger>(programName, begin(logSinks), end(logSinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
             _logger->set_level(coreLevel);
             _logger->flush_on(coreLevelFlush);
         }
         else
         {
             const auto nullSink = CreatePtr<spdlog::sinks::null_sink_mt>();
-            _logger = CreatePtr<spdlog::async_logger>("CORE", nullSink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+            _logger = CreatePtr<spdlog::async_logger>(programName, nullSink, spdlog::thread_pool(), spdlog::async_overflow_policy::block);
         }
 
         spdlog::register_logger(_logger);

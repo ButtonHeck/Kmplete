@@ -15,6 +15,7 @@ namespace Kmplete
 {
     struct ApplicationParameters
     {
+        const String applicationName;
         const Path settingsPath;
         const String defaultSettingsFileName = "Kmplete_settings.json";
     };
@@ -28,7 +29,7 @@ namespace Kmplete
         KMP_API explicit Application(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~Application();
 
-        KMP_NODISCARD KMP_API virtual const char* GetApplicationName() const noexcept = 0;
+        KMP_NODISCARD KMP_API const String& GetApplicationName() const noexcept;
 
         KMP_API virtual void Run() = 0;
 
@@ -51,6 +52,8 @@ namespace Kmplete
         void FillDictionary();
 
     protected:
+        const String _applicationName;
+
         UPtr<SystemMetricsManager> _systemMetricsManager;
         UPtr<LocalizationManager> _localizationManager;
         UPtr<SettingsManager> _settingsManager;

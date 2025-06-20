@@ -11,7 +11,8 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "Application";
 
     Application::Application(const ApplicationParameters& applicationParameters)
-        : _systemMetricsManager(nullptr)
+        : _applicationName(applicationParameters.applicationName)
+        , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
@@ -22,6 +23,12 @@ namespace Kmplete
     Application::~Application()
     {
         Finalize();
+    }
+    //--------------------------------------------------------------------------
+
+    const String& Application::GetApplicationName() const noexcept
+    {
+        return _applicationName;
     }
     //--------------------------------------------------------------------------
 
@@ -50,7 +57,7 @@ namespace Kmplete
     void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Boot();
+        Log::Boot(_applicationName);
 #endif
 
         const auto applicationPath = Filesystem::GetCurrentPath();
@@ -78,7 +85,7 @@ namespace Kmplete
         LoadSettingsInternal();
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Initialize(_logSettings);
+        Log::Initialize(_logSettings, _applicationName);
 #endif
 
         FillDictionary();
