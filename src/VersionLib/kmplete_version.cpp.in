@@ -1,4 +1,4 @@
-#include "kmplete_version.h"
+#include "Kmplete/Version/kmplete_version.h"
 
 namespace Kmplete
 {
