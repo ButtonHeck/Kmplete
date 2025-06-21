@@ -7,6 +7,7 @@ project(TranslatorInterfaceLib LANGUAGES CXX)
 set(TranslatorApiLib_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Translator/translator_interface.h
 )
+source_group("Translator" FILES ${TranslatorApiLib_HEADERS})
 
 add_library(TranslatorInterfaceLib INTERFACE
     ${TranslatorApiLib_HEADERS}
