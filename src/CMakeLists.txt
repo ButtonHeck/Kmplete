@@ -18,3 +18,20 @@ add_subdirectory(Engine)
 add_subdirectory(Editor)
 add_subdirectory(Translator)
 add_subdirectory(TranslatorInterfaceLib)
+
+if(${KMPLETE_BUILD_TESTS})
+    add_custom_target(_BuildAllTests)
+    add_dependencies(_BuildAllTests
+        BaseLib_UnitTests
+        FilesystemLib_UnitTests
+        JsonLib_UnitTests
+        UtilsLib_UnitTests
+        Kmplete_UnitTests
+        Kmplete_FileDialogsTests
+        Kmplete_WindowApplicationTests
+        Kmplete_LocaleTests
+    )
+    set_target_properties(_BuildAllTests PROPERTIES
+        FOLDER Kmplete/Tests
+    )
+endif()

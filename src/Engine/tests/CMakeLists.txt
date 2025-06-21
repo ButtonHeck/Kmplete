@@ -56,7 +56,7 @@ add_custom_command(
 
 SetupUnitTestsTargetProperties(
     Kmplete_UnitTests 
-    Kmplete/Engine/Tests
+    Kmplete/Tests
     Catch2::Catch2WithMain Kmplete
 )
 
@@ -83,7 +83,7 @@ target_include_directories(Kmplete_FileDialogsTests
 
 SetupUnitTestsTargetProperties(
     Kmplete_FileDialogsTests 
-    Kmplete/Engine/Tests
+    Kmplete/Tests
     Catch2::Catch2WithMain Kmplete
 )
 
@@ -141,7 +141,7 @@ add_custom_command(
 
 SetupUnitTestsTargetProperties(
     Kmplete_WindowApplicationTests 
-    Kmplete/Engine/Tests
+    Kmplete/Tests
     Catch2::Catch2WithMain Kmplete
 )
 
@@ -181,33 +181,20 @@ add_custom_command(TARGET Kmplete_LocaleTests_copy_translations PRE_BUILD
     -P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
 )
 set_target_properties(Kmplete_LocaleTests_copy_translations PROPERTIES
-    FOLDER Kmplete/Engine/Tests/Localization
+    FOLDER Kmplete/Tests
 )
 
 add_dependencies(Kmplete_LocaleTests Kmplete_LocaleTests_copy_translations)
 
 CreateTranslationHelperTargets(
-    Kmplete_LocaleTests Kmplete/Engine/Tests/Localization
+    Kmplete_LocaleTests 
+    Kmplete/Tests
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/Localization\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
     "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
 )
 
 SetupUnitTestsTargetProperties(
     Kmplete_LocaleTests 
-    Kmplete/Engine/Tests/Localization
+    Kmplete/Tests
     Catch2::Catch2WithMain Kmplete
-)
-
-
-# Common stuff
-
-add_custom_target(BuildAllTests)
-add_dependencies(BuildAllTests
-    Kmplete_UnitTests
-    Kmplete_FileDialogsTests
-    Kmplete_WindowApplicationTests
-    Kmplete_LocaleTests
-)
-set_target_properties(BuildAllTests PROPERTIES
-    FOLDER Kmplete/Engine/Tests
 )

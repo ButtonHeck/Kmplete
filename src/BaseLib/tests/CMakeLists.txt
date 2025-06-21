@@ -14,6 +14,6 @@ add_executable(BaseLib_UnitTests
 
 SetupUnitTestsTargetProperties(
     BaseLib_UnitTests 
-    Kmplete/BaseLib/Tests
+    Kmplete/Tests
     Catch2::Catch2WithMain BaseLib
 )

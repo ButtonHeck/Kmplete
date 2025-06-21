@@ -13,6 +13,6 @@ add_executable(FilesystemLib_UnitTests
 
 SetupUnitTestsTargetProperties(
     FilesystemLib_UnitTests 
-    Kmplete/FilesystemLib/Tests
+    Kmplete/Tests
     Catch2::Catch2WithMain FilesystemLib Kmplete
 )
