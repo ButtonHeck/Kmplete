@@ -12,23 +12,9 @@ add_executable(BaseLib_UnitTests
     ${BaseLib_UnitTests_SOURCES}
 )
 
-SetupCompilerOptions(BaseLib_UnitTests)
-
 target_link_libraries(BaseLib_UnitTests
     PRIVATE Catch2::Catch2WithMain
     PRIVATE BaseLib
 )
 
-set_target_properties(BaseLib_UnitTests PROPERTIES 
-    FOLDER Kmplete/BaseLib/Tests
-)
-
-if(MSVC)
-    set_target_properties(BaseLib_UnitTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-    
-endif()
-
-include(Catch)
-catch_discover_tests(BaseLib_UnitTests)
+SetupUnitTestsTargetProperties(BaseLib_UnitTests)

@@ -14,24 +14,10 @@ add_executable(JsonLib_UnitTests
     ${JsonLib_UnitTests_JSON}
 )
 
-SetupCompilerOptions(JsonLib_UnitTests)
-
 target_link_libraries(JsonLib_UnitTests
     PRIVATE Catch2::Catch2WithMain
     PRIVATE FilesystemLib
     PRIVATE Kmplete
 )
 
-set_target_properties(JsonLib_UnitTests PROPERTIES 
-    FOLDER Kmplete/JsonLib/Tests
-)
-
-if(MSVC)
-    set_target_properties(JsonLib_UnitTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-    
-endif()
-
-include(Catch)
-catch_discover_tests(JsonLib_UnitTests)
+SetupUnitTestsTargetProperties(JsonLib_UnitTests)

@@ -13,24 +13,10 @@ add_executable(UtilsLib_UnitTests
     ${UtilsLib_UnitTests_UTILS}
 )
 
-SetupCompilerOptions(UtilsLib_UnitTests)
-
 target_link_libraries(UtilsLib_UnitTests
     PRIVATE Catch2::Catch2WithMain
     PRIVATE UtilsLib
     PRIVATE Kmplete
 )
 
-set_target_properties(UtilsLib_UnitTests PROPERTIES 
-    FOLDER Kmplete/UtilsLib/Tests
-)
-
-if(MSVC)
-    set_target_properties(UtilsLib_UnitTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-    
-endif()
-
-include(Catch)
-catch_discover_tests(UtilsLib_UnitTests)
+SetupUnitTestsTargetProperties(UtilsLib_UnitTests)

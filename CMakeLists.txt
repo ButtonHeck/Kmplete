@@ -27,6 +27,7 @@ include(CompilerChecks)
 include(CompilerOptions)
 include(Boost)
 include(Localization)
+include(UnitTestsTargetsSetup)
 
 # Dependencies
 add_subdirectory(dependencies)
