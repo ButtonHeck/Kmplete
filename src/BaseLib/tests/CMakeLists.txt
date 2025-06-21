@@ -17,4 +17,4 @@ target_link_libraries(BaseLib_UnitTests
     PRIVATE BaseLib
 )
 
-SetupUnitTestsTargetProperties(BaseLib_UnitTests)
+SetupUnitTestsTargetProperties(BaseLib_UnitTests Kmplete/BaseLib/Tests)

@@ -19,4 +19,4 @@ target_link_libraries(UtilsLib_UnitTests
     PRIVATE Kmplete
 )
 
-SetupUnitTestsTargetProperties(UtilsLib_UnitTests)
+SetupUnitTestsTargetProperties(UtilsLib_UnitTests Kmplete/UtilsLib/Tests)

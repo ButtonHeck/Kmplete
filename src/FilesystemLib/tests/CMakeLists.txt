@@ -17,4 +17,4 @@ target_link_libraries(FilesystemLib_UnitTests
     PRIVATE Kmplete
 )
 
-SetupUnitTestsTargetProperties(FilesystemLib_UnitTests)
+SetupUnitTestsTargetProperties(FilesystemLib_UnitTests Kmplete/FilesystemLib/Tests)

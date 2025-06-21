@@ -20,4 +20,4 @@ target_link_libraries(JsonLib_UnitTests
     PRIVATE Kmplete
 )
 
-SetupUnitTestsTargetProperties(JsonLib_UnitTests)
+SetupUnitTestsTargetProperties(JsonLib_UnitTests Kmplete/JsonLib/Tests)

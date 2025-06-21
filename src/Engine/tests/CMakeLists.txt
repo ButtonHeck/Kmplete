@@ -26,7 +26,6 @@ add_executable(Kmplete_UnitTests
 
 
 SetupBoost(Kmplete_UnitTests)
-SetupCompilerOptions(Kmplete_UnitTests)
 
 target_include_directories(Kmplete_UnitTests
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
@@ -39,10 +38,6 @@ target_include_directories(Kmplete_UnitTests
 target_link_libraries(Kmplete_UnitTests
     PRIVATE Kmplete
     PRIVATE Catch2::Catch2WithMain
-)
-
-set_target_properties(Kmplete_UnitTests PROPERTIES 
-    FOLDER Kmplete/Engine/Tests
 )
 
 set(KmpleteUnitTestsCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
@@ -77,8 +72,6 @@ add_executable(Kmplete_FileDialogsTests
 )
 
 
-SetupCompilerOptions(Kmplete_FileDialogsTests)
-
 target_include_directories(Kmplete_FileDialogsTests
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
     
@@ -90,10 +83,6 @@ target_include_directories(Kmplete_FileDialogsTests
 target_link_libraries(Kmplete_FileDialogsTests
     PRIVATE Kmplete
     PRIVATE Catch2::Catch2WithMain
-)
-
-set_target_properties(Kmplete_FileDialogsTests PROPERTIES 
-    FOLDER Kmplete/Engine/Tests
 )
 
 
@@ -115,8 +104,6 @@ add_executable(Kmplete_WindowApplicationTests
 )
 
 
-SetupCompilerOptions(Kmplete_WindowApplicationTests)
-
 target_include_directories(Kmplete_WindowApplicationTests
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
     
@@ -134,10 +121,6 @@ set(KmpleteWindowApplicationTestsSettingsFile "Kmplete_window_application_tests_
 target_compile_definitions(Kmplete_WindowApplicationTests
     PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
     PRIVATE KMP_TEST_SETTINGS_JSON=\"${KmpleteWindowApplicationTestsSettingsFile}\"
-)
-
-set_target_properties(Kmplete_WindowApplicationTests PROPERTIES 
-    FOLDER Kmplete/Engine/Tests
 )
 
 set(KmpleteWindowAppTestsCopySettingsScriptName "CopyWindowTestsSettings$<CONFIG>.cmake")
@@ -173,11 +156,8 @@ add_executable(Kmplete_LocaleTests
 )
 
 
-SetupCompilerOptions(Kmplete_LocaleTests)
-
 target_include_directories(Kmplete_LocaleTests
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
-    
     PUBLIC "${spdlog_SOURCE_DIR}/include"
 )
 
@@ -186,9 +166,6 @@ target_link_libraries(Kmplete_LocaleTests
     PRIVATE Catch2::Catch2WithMain
 )
 
-set_target_properties(Kmplete_LocaleTests PROPERTIES 
-    FOLDER Kmplete/Engine/Tests/Localization
-)
 
 # Locale tests - localization
 
@@ -220,6 +197,12 @@ CreateTranslationHelperTargets(
 
 # Common stuff
 
+SetupUnitTestsTargetProperties(Kmplete_UnitTests Kmplete/Engine/Tests)
+SetupUnitTestsTargetProperties(Kmplete_FileDialogsTests Kmplete/Engine/Tests)
+SetupUnitTestsTargetProperties(Kmplete_WindowApplicationTests Kmplete/Engine/Tests)
+SetupUnitTestsTargetProperties(Kmplete_WindowApplicationTests Kmplete/Engine/Tests)
+SetupUnitTestsTargetProperties(Kmplete_LocaleTests Kmplete/Engine/Tests/Localization)
+
 add_custom_target(BuildAllTests)
 add_dependencies(BuildAllTests
     Kmplete_UnitTests
@@ -230,24 +213,3 @@ add_dependencies(BuildAllTests
 set_target_properties(BuildAllTests PROPERTIES
     FOLDER Kmplete/Engine/Tests
 )
-
-if(MSVC)
-    set_target_properties(Kmplete_UnitTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-    set_target_properties(Kmplete_FileDialogsTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-    set_target_properties(Kmplete_WindowApplicationTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-    set_target_properties(Kmplete_LocaleTests PROPERTIES
-        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
-    )
-endif()
-
-include(Catch)
-catch_discover_tests(Kmplete_UnitTests)
-catch_discover_tests(Kmplete_FileDialogsTests)
-catch_discover_tests(Kmplete_WindowApplicationTests)
-catch_discover_tests(Kmplete_LocaleTests)
