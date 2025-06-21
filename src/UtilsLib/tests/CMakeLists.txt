@@ -13,10 +13,8 @@ add_executable(UtilsLib_UnitTests
     ${UtilsLib_UnitTests_UTILS}
 )
 
-target_link_libraries(UtilsLib_UnitTests
-    PRIVATE Catch2::Catch2WithMain
-    PRIVATE UtilsLib
-    PRIVATE Kmplete
+SetupUnitTestsTargetProperties(
+    UtilsLib_UnitTests 
+    Kmplete/UtilsLib/Tests
+    Catch2::Catch2WithMain UtilsLib Kmplete
 )
-
-SetupUnitTestsTargetProperties(UtilsLib_UnitTests Kmplete/UtilsLib/Tests)

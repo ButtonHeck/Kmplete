@@ -14,10 +14,8 @@ add_executable(JsonLib_UnitTests
     ${JsonLib_UnitTests_JSON}
 )
 
-target_link_libraries(JsonLib_UnitTests
-    PRIVATE Catch2::Catch2WithMain
-    PRIVATE FilesystemLib
-    PRIVATE Kmplete
+SetupUnitTestsTargetProperties(
+    JsonLib_UnitTests 
+    Kmplete/JsonLib/Tests
+    Catch2::Catch2WithMain FilesystemLib Kmplete
 )
-
-SetupUnitTestsTargetProperties(JsonLib_UnitTests Kmplete/JsonLib/Tests)

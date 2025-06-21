@@ -35,11 +35,6 @@ target_include_directories(Kmplete_UnitTests
     PRIVATE "${GLFW_SOURCE_DIR}/include"    
 )
 
-target_link_libraries(Kmplete_UnitTests
-    PRIVATE Kmplete
-    PRIVATE Catch2::Catch2WithMain
-)
-
 set(KmpleteUnitTestsCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
 file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteUnitTestsCopySettingsScriptName}"
     CONTENT
@@ -57,6 +52,12 @@ add_custom_command(
     POST_BUILD
     COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "${KmpleteUnitTestsCopySettingsScriptName}"
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+SetupUnitTestsTargetProperties(
+    Kmplete_UnitTests 
+    Kmplete/Engine/Tests
+    Catch2::Catch2WithMain Kmplete
 )
 
 
@@ -80,9 +81,10 @@ target_include_directories(Kmplete_FileDialogsTests
     PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
 )
 
-target_link_libraries(Kmplete_FileDialogsTests
-    PRIVATE Kmplete
-    PRIVATE Catch2::Catch2WithMain
+SetupUnitTestsTargetProperties(
+    Kmplete_FileDialogsTests 
+    Kmplete/Engine/Tests
+    Catch2::Catch2WithMain Kmplete
 )
 
 
@@ -112,11 +114,6 @@ target_include_directories(Kmplete_WindowApplicationTests
     PRIVATE "${GLFW_SOURCE_DIR}/include"
 )
 
-target_link_libraries(Kmplete_WindowApplicationTests
-    PRIVATE Kmplete
-    PRIVATE Catch2::Catch2WithMain
-)
-
 set(KmpleteWindowApplicationTestsSettingsFile "Kmplete_window_application_tests_settings.json")
 target_compile_definitions(Kmplete_WindowApplicationTests
     PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
@@ -142,6 +139,12 @@ add_custom_command(
     WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
+SetupUnitTestsTargetProperties(
+    Kmplete_WindowApplicationTests 
+    Kmplete/Engine/Tests
+    Catch2::Catch2WithMain Kmplete
+)
+
 
 # Locale tests
 
@@ -159,11 +162,6 @@ add_executable(Kmplete_LocaleTests
 target_include_directories(Kmplete_LocaleTests
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
     PUBLIC "${spdlog_SOURCE_DIR}/include"
-)
-
-target_link_libraries(Kmplete_LocaleTests
-    PRIVATE Kmplete
-    PRIVATE Catch2::Catch2WithMain
 )
 
 
@@ -194,14 +192,14 @@ CreateTranslationHelperTargets(
     "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteTestsDomain}"
 )
 
+SetupUnitTestsTargetProperties(
+    Kmplete_LocaleTests 
+    Kmplete/Engine/Tests/Localization
+    Catch2::Catch2WithMain Kmplete
+)
+
 
 # Common stuff
-
-SetupUnitTestsTargetProperties(Kmplete_UnitTests Kmplete/Engine/Tests)
-SetupUnitTestsTargetProperties(Kmplete_FileDialogsTests Kmplete/Engine/Tests)
-SetupUnitTestsTargetProperties(Kmplete_WindowApplicationTests Kmplete/Engine/Tests)
-SetupUnitTestsTargetProperties(Kmplete_WindowApplicationTests Kmplete/Engine/Tests)
-SetupUnitTestsTargetProperties(Kmplete_LocaleTests Kmplete/Engine/Tests/Localization)
 
 add_custom_target(BuildAllTests)
 add_dependencies(BuildAllTests

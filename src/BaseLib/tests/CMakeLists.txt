@@ -12,9 +12,8 @@ add_executable(BaseLib_UnitTests
     ${BaseLib_UnitTests_SOURCES}
 )
 
-target_link_libraries(BaseLib_UnitTests
-    PRIVATE Catch2::Catch2WithMain
-    PRIVATE BaseLib
+SetupUnitTestsTargetProperties(
+    BaseLib_UnitTests 
+    Kmplete/BaseLib/Tests
+    Catch2::Catch2WithMain BaseLib
 )
-
-SetupUnitTestsTargetProperties(BaseLib_UnitTests Kmplete/BaseLib/Tests)
