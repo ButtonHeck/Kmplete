@@ -1,5 +1,6 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/uuid.h"
+#include "Kmplete/Base/platform.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -71,6 +72,17 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
     SECTION("CreateDirectories test empty directory")
     {
         REQUIRE_FALSE(Kmplete::Filesystem::CreateDirectories(""));
+    }
+
+    SECTION("CreateDirectories test invalid character in a name")
+    {
+        auto path = Kmplete::Filesystem::GetCurrentPath();
+#if defined (KMP_PLATFORM_WINDOWS)
+        path /= "*";
+        REQUIRE_FALSE(Kmplete::Filesystem::CreateDirectories(path));
+#else
+        SUCCEED();
+#endif
     }
 
     SECTION("CreateFile/RemoveFile in existing directory")

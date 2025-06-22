@@ -5,7 +5,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 #if !defined (KMP_COMPILER_MSVC)
-#include <cstddef>
+    #include <cstddef>
 #endif
 
 TEST_CASE("Concatenate empty", "[utils][string]")
@@ -13,12 +13,14 @@ TEST_CASE("Concatenate empty", "[utils][string]")
     const auto result = Kmplete::Utils::Concatenate("");
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Concatenate empty multiple", "[utils][string]")
 {
     const auto result = Kmplete::Utils::Concatenate("", "", "");
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Concatenate", "[utils][string]")
 {
@@ -61,6 +63,7 @@ TEST_CASE("StringVectorToString empty vector - char delimiter", "[utils][string]
     const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString empty vector - string delimiter", "[utils][string]")
 {
@@ -68,6 +71,7 @@ TEST_CASE("StringVectorToString empty vector - string delimiter", "[utils][strin
     const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString - char delimiter", "[utils][string]")
 {
@@ -75,6 +79,7 @@ TEST_CASE("StringVectorToString - char delimiter", "[utils][string]")
     const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
     REQUIRE(result == "/Hello/World/!");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString - string delimiter", "[utils][string]")
 {
@@ -82,6 +87,7 @@ TEST_CASE("StringVectorToString - string delimiter", "[utils][string]")
     const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
     REQUIRE(result == "-YAY-Hello-YAY-World-YAY-!");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString with some empty strings - char delimiter", "[utils][string]")
 {
@@ -89,6 +95,7 @@ TEST_CASE("StringVectorToString with some empty strings - char delimiter", "[uti
     const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
     REQUIRE(result == "/This/Is/Sparta");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString with some empty strings - string delimiter", "[utils][string]")
 {
@@ -96,6 +103,7 @@ TEST_CASE("StringVectorToString with some empty strings - string delimiter", "[u
     const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
     REQUIRE(result == "-YAY-This-YAY-Is-YAY-Sparta");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString with all empty strings - char delimiter", "[utils][string]")
 {
@@ -103,6 +111,7 @@ TEST_CASE("StringVectorToString with all empty strings - char delimiter", "[util
     const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString with all empty strings - string delimiter", "[utils][string]")
 {
@@ -110,6 +119,7 @@ TEST_CASE("StringVectorToString with all empty strings - string delimiter", "[ut
     const auto result = Kmplete::Utils::StringVectorToString(vec, "-YAY-");
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString single element - char delimiter", "[utils][string]")
 {
@@ -117,6 +127,7 @@ TEST_CASE("StringVectorToString single element - char delimiter", "[utils][strin
     const auto result = Kmplete::Utils::StringVectorToString(vec, ".");
     REQUIRE(result == ".Alone");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString single element - string delimiter", "[utils][string]")
 {
@@ -124,6 +135,7 @@ TEST_CASE("StringVectorToString single element - string delimiter", "[utils][str
     const auto result = Kmplete::Utils::StringVectorToString(vec, "Home ");
     REQUIRE(result == "Home Alone");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString - empty delimiter", "[utils][string]")
 {
@@ -131,6 +143,7 @@ TEST_CASE("StringVectorToString - empty delimiter", "[utils][string]")
     const auto result = Kmplete::Utils::StringVectorToString(vec, "");
     REQUIRE(result == "HarryPotter");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("StringVectorToString with some empty elements - empty delimiter", "[utils][string]")
 {
@@ -140,6 +153,7 @@ TEST_CASE("StringVectorToString with some empty elements - empty delimiter", "[u
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("ToSStream empty", "[utils][string]")
 {
     std::ostringstream oss;
@@ -147,6 +161,7 @@ TEST_CASE("ToSStream empty", "[utils][string]")
     const auto result = oss.str();
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("ToSStream empty multiple", "[utils][string]")
 {
@@ -155,6 +170,7 @@ TEST_CASE("ToSStream empty multiple", "[utils][string]")
     const auto result = oss.str();
     REQUIRE(result.empty());
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("ToSStream", "[utils][string]")
 {
@@ -210,6 +226,7 @@ TEST_CASE("ToSStream", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Utf8ToNarrow english", "[utils][string]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -220,6 +237,7 @@ TEST_CASE("Utf8ToNarrow english", "[utils][string]")
     const auto fromUtf8 = Kmplete::Utils::Utf8ToNarrow(englishString);
     REQUIRE(englishString == fromUtf8);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Utf8ToNarrow cyrillic", "[utils][string]")
 {
@@ -261,6 +279,7 @@ TEST_CASE("Utf8ToNarrow cyrillic", "[utils][string]")
     REQUIRE((fromUtf8.size() == 6 && fromUtf8 == cyrillicStr));
 #endif
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
 {
@@ -292,6 +311,7 @@ TEST_CASE("Utf8ToNarrow mixed", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("NarrowToUtf8 english", "[utils][string]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -302,6 +322,7 @@ TEST_CASE("NarrowToUtf8 english", "[utils][string]")
     const auto toUtf8 = Kmplete::Utils::NarrowToUtf8(englishString);
     REQUIRE(englishString == toUtf8);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("NarrowToUtf8 cyrillic", "[utils][string]")
 {
@@ -319,6 +340,7 @@ TEST_CASE("NarrowToUtf8 cyrillic", "[utils][string]")
     REQUIRE((toUtf8.size() == 3 && toUtf8 == cyrillicStr));
 #endif
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
 {
@@ -352,6 +374,7 @@ TEST_CASE("NarrowToUtf8 mixed", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Conversion ping-pong Utf8", "[utils][string]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -366,6 +389,7 @@ TEST_CASE("Conversion ping-pong Utf8", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("NarrowToWide english", "[utils][string]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -379,6 +403,7 @@ TEST_CASE("NarrowToWide english", "[utils][string]")
         wstr[3] == 105 &&
         wstr[4] == 99));
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
 {
@@ -398,6 +423,7 @@ TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
         wstr[1] == 0x431 &&
         wstr[2] == 0x432));
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("NarrowToWide mixed", "[utils][string]")
 {
@@ -421,6 +447,7 @@ TEST_CASE("NarrowToWide mixed", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("WideToNarrow english", "[utils][string]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -430,6 +457,7 @@ TEST_CASE("WideToNarrow english", "[utils][string]")
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
     REQUIRE(narrow == "abc-def");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("WideToNarrow cyrillic", "[utils][string]")
 {
@@ -453,6 +481,7 @@ TEST_CASE("WideToNarrow cyrillic", "[utils][string]")
         static_cast<unsigned char>(narrow[5]) == 0xB2));
 #endif
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("WideToNarrow mixed", "[utils][string]")
 {
@@ -484,6 +513,7 @@ TEST_CASE("WideToNarrow mixed", "[utils][string]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Conversion ping-pong wide-narrow", "[utils][string]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -497,6 +527,7 @@ TEST_CASE("Conversion ping-pong wide-narrow", "[utils][string]")
     }
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("RegexReplace positive", "[utils][string]")
 {
@@ -536,6 +567,7 @@ TEST_CASE("RegexReplace positive", "[utils][string]")
     REQUIRE_NOTHROW(str9 = Kmplete::Utils::RegexReplace(str9, " +", " "));
     REQUIRE(str9 == " test test ");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("RegexReplace negative", "[utils][string]")
 {

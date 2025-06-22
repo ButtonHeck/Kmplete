@@ -1,6 +1,7 @@
 #include "Kmplete/Core/rng.h"
 
 #include <catch2/catch_test_macros.hpp>
+
 #include <unordered_set>
 
 TEST_CASE("RNG uint32_t unbounded", "[core][rng]")

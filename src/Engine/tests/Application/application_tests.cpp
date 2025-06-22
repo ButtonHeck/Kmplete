@@ -53,9 +53,9 @@ namespace Kmplete
             _sender->SetCallbackFn(KMP_BIND(TestApplication::OnEvent));
         }
 
-        bool IsKeyPressEventInvoked() const  { return _keyPressEventInvoked; }
-        bool IsKeyReleaseEventInvoked() const  { return _keyReleaseEventInvoked; }
-        bool IsKeyCharEventInvoked() const  { return _keyCharEventInvoked; }
+        bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
+        bool IsKeyReleaseEventInvoked() const { return _keyReleaseEventInvoked; }
+        bool IsKeyCharEventInvoked() const { return _keyCharEventInvoked; }
         bool IsApplicationKeyPressEventInvoked() const { return _applicationKeyPressEventInvoked; }
         bool IsApplicationKeyReleaseEventInvoked() const { return _applicationKeyReleaseEventInvoked; }
         bool IsApplicationKeyCharEventInvoked() const { return _applicationKeyCharEventInvoked; }

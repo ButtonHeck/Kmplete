@@ -8,6 +8,7 @@ TEST_CASE("GetArgsCount 0", "[utils][function]")
 {
     REQUIRE(Kmplete::Utils::GetArgsCount() == 0);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 1", "[utils][function]")
 {
@@ -16,6 +17,7 @@ TEST_CASE("GetArgsCount 1", "[utils][function]")
     REQUIRE(Kmplete::Utils::GetArgsCount(nullptr) == 1);
     REQUIRE(Kmplete::Utils::GetArgsCount((arg1 ? arg1 : 42)) == 1);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 2", "[utils][function]")
 {
@@ -24,6 +26,7 @@ TEST_CASE("GetArgsCount 2", "[utils][function]")
     REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2) == 2);
     REQUIRE(Kmplete::Utils::GetArgsCount(nullptr, nullptr) == 2);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 3", "[utils][function]")
 {
@@ -32,6 +35,7 @@ TEST_CASE("GetArgsCount 3", "[utils][function]")
     const auto arg3 = 'c';
     REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3) == 3);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 4", "[utils][function]")
 {

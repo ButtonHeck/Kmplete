@@ -15,6 +15,7 @@ TEST_CASE("Assertion exception", "[core][assertion]")
     SUCCEED();
 #endif
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Assertion nothrows", "[core][assertion]")
 {
@@ -25,6 +26,7 @@ TEST_CASE("Assertion nothrows", "[core][assertion]")
     SUCCEED();
 #endif
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Assertion chain watch", "[core][assertion]")
 {

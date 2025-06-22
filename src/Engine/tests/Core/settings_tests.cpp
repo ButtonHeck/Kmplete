@@ -12,6 +12,7 @@ TEST_CASE("Settings minimal saving", "[core][settings]")
     REQUIRE_FALSE(settings.StartSaveObject(""));
     REQUIRE_FALSE(settings.StartSaveArray(""));
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Settings normal saving", "[core][settings]")
 {
@@ -170,6 +171,7 @@ TEST_CASE("Settings normal loading", "[core][settings]")
         REQUIRE(settings.EndLoadObject()); // Group4
     REQUIRE(settings.EndLoadObject()); // Group3
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Settings loading malformed json", "[core][settings]")
 {
@@ -194,6 +196,7 @@ TEST_CASE("Settings loading malformed json", "[core][settings]")
     REQUIRE_FALSE(settings.GetBool("Var") == true);
     REQUIRE_FALSE(settings.GetString("Str") == "string");
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Settings loading document with null value", "[core][settings]")
 {
@@ -218,6 +221,7 @@ TEST_CASE("Settings loading document with null value", "[core][settings]")
     REQUIRE(settings.GetInt("Hello", 99) == 321);
     REQUIRE(settings.GetInt("Ptr", 99) == 99);
 }
+//--------------------------------------------------------------------------
 
 TEST_CASE("Settings loading duplicate values", "[core][settings]")
 {
