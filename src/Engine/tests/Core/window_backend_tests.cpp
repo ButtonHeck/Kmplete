@@ -154,7 +154,9 @@ TEST_CASE("Window backend UpdateContinuously ON", "[core][window_backend][window
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window UpdateContinuously ON test", "Press Y if window title changes repeatedly without any conditions, otherwise press any other key", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window UpdateContinuously ON test", 
+                                                                     "Press Y if window title changes repeatedly without any conditions, otherwise press any other key", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     auto& mainWindow = windowBackend->CreateMainWindow();
     mainWindow.SetTitle("Main Window");
@@ -180,7 +182,9 @@ TEST_CASE("Window backend UpdateContinuously OFF", "[core][window_backend][windo
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window UpdateContinuously OFF test", "Press Y if window title changes only on some events, otherwise press any other key", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window UpdateContinuously OFF test", 
+                                                                     "Press Y if window title changes only on some events, otherwise press any other key", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     auto& mainWindow = windowBackend->CreateMainWindow();
     mainWindow.SetTitle("Main Window");
@@ -207,7 +211,9 @@ TEST_CASE("Window backend VSync ON", "[core][window_backend][window]")
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window VSync ON test", "Press Y if window title changes once a second (for 60Hz)", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window VSync ON test", 
+                                                                     "Press Y if window title changes once a second (for 60Hz)", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     auto& mainWindow = windowBackend->CreateMainWindow();
     mainWindow.SetTitle("Main Window");
@@ -232,7 +238,9 @@ TEST_CASE("Window backend VSync OFF", "[core][window_backend][window]")
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window VSync OFF test", "Press Y if window title changes fast", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window VSync OFF test", 
+                                                                     "Press Y if window title changes fast", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     auto& mainWindow = windowBackend->CreateMainWindow();
     mainWindow.SetTitle("Main Window");
@@ -258,7 +266,9 @@ TEST_CASE("Window backend multiple windows", "[core][window_backend][window]")
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Multiple windows test", "Make sure both windows can be resized, moved, hid. Then close both windows", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Multiple windows test", 
+                                                                     "Make sure both windows can be resized, moved, hid. Then close both windows", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     auto& mainWindow = windowBackend->CreateMainWindow();
     mainWindow.SetTitle("Main Window");
@@ -349,7 +359,9 @@ TEST_CASE("Window screen mode change", "[core][window_backend][window]")
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window screen mode test", "Press F to fullscreen, W for windowed, E for windowed fullscreen. Try change screen mode and if everything is ok - press Y, otherwise - any other key", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window screen mode test", 
+                                                                     "Press F (fullscreen), W (Windowed) and E (Windowed fullscreen). Change screen mode and if everything is ok - press Y, otherwise - any other key", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     auto& mainWindow = windowBackend->CreateMainWindow();
     mainWindow.SetTitle("Main Window");
@@ -388,7 +400,9 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
 
     WindowCallbackUserSingleCondition windowCb(*window);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with premade settings", "Press Y if window is 200x200, otherwise - any other key", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with premade settings", 
+                                                                     "Press Y if window is 200x200, otherwise - any other key", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     while (!window->ShouldClose())
     {
@@ -412,7 +426,9 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
     REQUIRE_FALSE(window);
 
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with invalid settings", "Close this window", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with invalid settings", 
+                                                                     "Close this window", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     Kmplete::Window::WindowSettings settings2 = Kmplete::Window::WindowSettings("ValidName-InvalidWidth");
     REQUIRE(settings2.name == "ValidName-InvalidWidth");
@@ -452,7 +468,9 @@ TEST_CASE("Window backend resizable OFF", "[core][window_backend][window]")
 
     WindowCallbackUserSingleCondition windowCb(*window);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window resizable OFF test", "Press Y if window cannot be resized", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window resizable OFF test", 
+                                                                     "Press Y if window cannot be resized", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     while (!window->ShouldClose())
     {
@@ -484,7 +502,9 @@ TEST_CASE("Window backend decorated OFF", "[core][window_backend][window]")
 
     WindowCallbackUserSingleCondition windowCb(*window);
 
-    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window decorated OFF test", "Press Y if window is not decorated", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window decorated OFF test", 
+                                                                     "Press Y if window is not decorated", 
+                                                                     Kmplete::FileDialogs::MessageChoice::Ok);
 
     while (!window->ShouldClose())
     {

@@ -89,7 +89,7 @@ namespace Kmplete
 
         KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent& evt) override
         {
-            if (evt.GetKeyCode() == Key::Enter)
+            if (evt.GetKeyCode() == Key::Y)
             {
                 _completed = true;
             }
@@ -185,7 +185,9 @@ TEST_CASE("Test window application default icon", "[window_application][applicat
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
     REQUIRE(application);
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", 
+                                                                   "Press Y if this window has an icon", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 }
 //--------------------------------------------------------------------------
@@ -195,7 +197,9 @@ TEST_CASE("Test window application custom icon", "[window_application][applicati
     const auto application = Kmplete::CreateUPtr<Kmplete::CustomIconApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
     REQUIRE(application);
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", "Press ENTER if this window has an icon (red square upper-left and yellow square bottom-right)", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", 
+                                                                   "Press Y if this window has an icon (red square upper-left and yellow square bottom-right)", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 }
 //--------------------------------------------------------------------------
@@ -214,7 +218,9 @@ TEST_CASE("Test window application key events", "[window_application][applicatio
     REQUIRE_FALSE(application->IsWindowApplicationKeyReleaseEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationKeyCharEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: KEY", "Press some keys and then press ENTER", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: KEY", 
+                                                                   "Press some keys and then press Y", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 
     REQUIRE(application->IsKeyPressEventInvoked());
@@ -241,7 +247,9 @@ TEST_CASE("Test window application mouse events", "[window_application][applicat
     REQUIRE_FALSE(application->IsWindowApplicationMouseButtonPressEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: MOUSE", "Move mouse cursor, scroll, press/release some mouse button and then press ENTER", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: MOUSE", 
+                                                                   "Move mouse cursor, scroll, press/release some mouse button and then press Y", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 
     REQUIRE(application->IsMouseMoveEventInvoked());
@@ -276,7 +284,9 @@ TEST_CASE("Test window application window events", "[window_application][applica
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: WINDOW", "Move, resize, iconify/deiconify, focus/unfocus window and then close it", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: WINDOW", 
+                                                                   "Move, resize, iconify/deiconify, focus/unfocus window and then close it", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 
     REQUIRE(application->IsWindowCloseEventInvoked());
@@ -302,7 +312,10 @@ TEST_CASE("Test window application save settings with cyrillic path", "[window_a
 
     REQUIRE(application);
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application save", "Save settings to some cyrillic path then close window", Kmplete::FileDialogs::MessageChoice::Ok);
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application save", 
+                                                                   "Save settings to some cyrillic path then close window", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
+
     const auto filenameSave = Kmplete::FileDialogs::SaveFile("Test window application save", Kmplete::Filesystem::GetCurrentPath(), { "JSON Files", "*.json" }, true);
     application->SaveSettings(filenameSave);
     application->Run();
