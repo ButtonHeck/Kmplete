@@ -9,7 +9,7 @@ namespace Kmplete
     class Timer
     {
     public:
-        KMP_API explicit Timer(unsigned int timeoutMs) noexcept;
+        KMP_API explicit Timer(unsigned int timeoutMs = 0) noexcept;
 
         KMP_API float Mark() noexcept;
         KMP_NODISCARD KMP_API float Peek() const noexcept;
@@ -21,7 +21,7 @@ namespace Kmplete
 
     private:
         unsigned int _timeoutMs;
-        std::chrono::steady_clock::time_point _last;
+        std::chrono::high_resolution_clock::time_point _last;
     };
     //--------------------------------------------------------------------------
 }

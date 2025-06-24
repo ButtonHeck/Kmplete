@@ -2,16 +2,16 @@
 
 namespace Kmplete
 {
-    Timer::Timer(unsigned int timeoutMs) noexcept
+    Timer::Timer(unsigned int timeoutMs /*= 0*/) noexcept
         : _timeoutMs(timeoutMs)
-        , _last(std::chrono::steady_clock::now())
+        , _last(std::chrono::high_resolution_clock::now())
     {}
     //--------------------------------------------------------------------------
 
     float Timer::Mark() noexcept
     {
         const auto old = _last;
-        _last = std::chrono::steady_clock::now();
+        _last = std::chrono::high_resolution_clock::now();
         const std::chrono::duration<float, std::milli> frameTime = _last - old;
         return frameTime.count();
     }
@@ -19,7 +19,7 @@ namespace Kmplete
 
     float Timer::Peek() const noexcept
     {
-        return std::chrono::duration<float, std::milli>(std::chrono::steady_clock::now() - _last).count();
+        return std::chrono::duration<float, std::milli>(std::chrono::high_resolution_clock::now() - _last).count();
     }
     //--------------------------------------------------------------------------
 
