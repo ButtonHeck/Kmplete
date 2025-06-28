@@ -21,7 +21,7 @@ void TerminationHandler()
             std::rethrow_exception(exception);
         }
     }
-    catch (const std::exception& e)
+    catch (KMP_MB_UNUSED const std::exception& e)
     {
         KMP_LOG_CRITICAL("Uncaught exception: '{}'", e.what());
     }
