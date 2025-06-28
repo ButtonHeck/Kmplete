@@ -9,12 +9,39 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Core/memory_checker.h"
 
+#include <exception>
+
+void TerminationHandler()
+{
+    try
+    {
+        const auto exception = std::current_exception();
+        if (exception)
+        {
+            std::rethrow_exception(exception);
+        }
+    }
+    catch (const std::exception& e)
+    {
+        KMP_LOG_CRITICAL("Uncaught exception: '{}'", e.what());
+    }
+    catch (...)
+    {
+        KMP_LOG_CRITICAL("Uncaught exception");
+    }
+
+    abort();
+}
+//--------------------------------------------------------------------------
+
 int Main(const Kmplete::ProgramOptions& programOptions);
 
 #if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN) 
 #include <Windows.h>
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 {
+    set_terminate(TerminationHandler);
+
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(lpCmdLine);
 
@@ -25,6 +52,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 #else
 int main(int argc, char** argv)
 {
+    set_terminate(TerminationHandler);
+
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(argc, argv);
 
