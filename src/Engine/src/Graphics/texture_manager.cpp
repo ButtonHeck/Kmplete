@@ -37,7 +37,7 @@ namespace Kmplete
 
         if (!texture)
         {
-            KMP_LOG_ERROR("TextureManager: failed to create texture '{}'", Filesystem::ToGenericU8String(filename));
+            KMP_LOG_ERROR("TextureManager: failed to create texture '{}'", filename);
             return false;
         }
 

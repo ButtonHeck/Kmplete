@@ -38,7 +38,7 @@ namespace Kmplete
         JsonDocument document(_filename);
         if (document.HasError())
         {
-            KMP_LOG_WARN("SettingsManager: failed to load settings from '{}'", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_WARN("SettingsManager: failed to load settings from '{}'", _filename);
             return false;
         }
 

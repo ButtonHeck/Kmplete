@@ -141,7 +141,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
             const auto sourceDirectory = Path(sourceDirectoryStr);
             if (!Filesystem::PathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
             {
-                KMP_LOG_ERROR("Translator: one of source directories does not exist or is not of a directory type ({})", Filesystem::ToGenericU8String(sourceDirectory));
+                KMP_LOG_ERROR("Translator: one of source directories does not exist or is not of a directory type ({})", sourceDirectory);
                 PrintUsage(optionsDescription);
                 return ReturnCode::SourceDirectoriesAreNotValid;
             }
@@ -179,7 +179,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
 
     if (!Filesystem::CreateDirectories(outputDirectory))
     {
-        KMP_LOG_ERROR("Translator: cannot create output directory ({})", Filesystem::ToGenericU8String(outputDirectory));
+        KMP_LOG_ERROR("Translator: cannot create output directory ({})", outputDirectory);
         PrintUsage(optionsDescription);
         return ReturnCode::OutputDirectoryIsNotValid;
     }

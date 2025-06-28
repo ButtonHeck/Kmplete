@@ -218,7 +218,7 @@ namespace Kmplete
 
                 if (!Filesystem::PathExists(poTemplateFile))
                 {
-                    KMP_LOG_ERROR("TranslatorProcessor::Compile: source .pot file not found ({})", Filesystem::ToGenericU8String(poTemplateFile));
+                    KMP_LOG_ERROR("TranslatorProcessor::Compile: source .pot file not found ({})", poTemplateFile);
                     continue;
                 }
 
@@ -300,7 +300,7 @@ namespace Kmplete
 
             if (!Filesystem::CreateDirectories(poTemplateFilePath))
             {
-                KMP_LOG_ERROR("TranslatorProcessor::Update: cannot create .pot file directory hierarchy ({})", Filesystem::ToGenericU8String(poTemplateFilePath));
+                KMP_LOG_ERROR("TranslatorProcessor::Update: cannot create .pot file directory hierarchy ({})", poTemplateFilePath);
                 return String();
             }
 

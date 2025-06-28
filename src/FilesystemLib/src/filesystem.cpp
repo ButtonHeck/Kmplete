@@ -92,7 +92,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::ios_base::failure& e)
         {
-            KMP_LOG_ERROR("Filesystem: failed to create [{}]: '{}'", ToGenericU8String(path), e.what());
+            KMP_LOG_ERROR("Filesystem: failed to create [{}]: '{}'", path, e.what());
         }
 
         return PathExists(path);

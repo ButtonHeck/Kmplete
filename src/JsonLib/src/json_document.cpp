@@ -46,7 +46,7 @@ namespace Kmplete
     {
         if (!Load(_filename))
         {
-            KMP_LOG_ERROR("JsonDocument: creation from '{}' failed", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_ERROR("JsonDocument: creation from '{}' failed", _filename);
         }
     }
     //--------------------------------------------------------------------------
@@ -57,7 +57,7 @@ namespace Kmplete
 
         if (!Filesystem::FilePathIsValid(_filename))
         {
-            KMP_LOG_WARN("JsonDocument: invalid filepath was set '{}'", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_WARN("JsonDocument: invalid filepath was set '{}'", _filename);
         }
     }
     //--------------------------------------------------------------------------
@@ -145,7 +145,7 @@ namespace Kmplete
             }
         }
 
-        KMP_LOG_WARN("JsonDocument: failed to write document in '{}'", Filesystem::ToGenericU8String(_filename));
+        KMP_LOG_WARN("JsonDocument: failed to write document in '{}'", _filename);
         _error = true;
         return false;
     }
@@ -490,7 +490,7 @@ namespace Kmplete
     {
         if (!Filesystem::CreateDirectories(_filename, true))
         {
-            KMP_LOG_WARN("JsonDocument: failed to create directories for '{}'", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_WARN("JsonDocument: failed to create directories for '{}'", _filename);
             _error = true;
             return false;
         }
@@ -498,7 +498,7 @@ namespace Kmplete
         std::ofstream outputStream(_filename, std::ios::out | std::ios::trunc);
         if (!outputStream.is_open() || !outputStream.good())
         {
-            KMP_LOG_WARN("JsonDocument: failed to open file stream for saving in '{}'", Filesystem::ToGenericU8String(_filename));
+            KMP_LOG_WARN("JsonDocument: failed to open file stream for saving in '{}'", _filename);
             _error = true;
             return false;
         }
@@ -506,7 +506,7 @@ namespace Kmplete
         outputStream << buffer.GetString();
         outputStream.close();
 
-        KMP_LOG_INFO("JsonDocument: document written successfully in '{}'", Filesystem::ToGenericU8String(_filename));
+        KMP_LOG_INFO("JsonDocument: document written successfully in '{}'", _filename);
         _error = false;
         return true;
     }

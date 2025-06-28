@@ -52,7 +52,7 @@ namespace Kmplete
         }
         else
         {
-            KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", name, Filesystem::ToGenericU8String(filepath));
+            KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", name, filepath);
         }
     }
     //--------------------------------------------------------------------------
