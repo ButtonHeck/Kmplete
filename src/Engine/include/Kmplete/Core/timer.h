@@ -10,6 +10,7 @@ namespace Kmplete
     {
     public:
         KMP_API explicit Timer(unsigned int timeoutMs = 0) noexcept;
+        virtual ~Timer() = default;
 
         KMP_API float Mark() noexcept;
         KMP_NODISCARD KMP_API float Peek() const noexcept;
@@ -19,7 +20,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API bool ReachedTimeout() const noexcept;
 
-    private:
+    protected:
         unsigned int _timeoutMs;
         std::chrono::high_resolution_clock::time_point _last;
     };
