@@ -43,7 +43,7 @@ namespace Kmplete
         Utils::ToSStream(json, 
             std::setprecision(3), std::fixed,
             ",{\"cat\":\"function\",\"dur\":", 
-            result.elapsedTime.count(),
+            result.elapsedTimeMicrosec,
             ",\"name\":\"",
             result.name,
             "\",\"ph\":\"X\",\"pid\":0,\"tid\":",
@@ -115,11 +115,10 @@ namespace Kmplete
 
     ProfilerTimer::~ProfilerTimer()
     {
-        const auto end = std::chrono::high_resolution_clock::now();
+        const auto elapsedTimeMicroseconds = Peek() * 1000.0f;
         const auto start = std::chrono::duration<double, std::micro>(_last.time_since_epoch());
-        const auto elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(end).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(_last).time_since_epoch();
 
-        Profiler::Get().WriteProfile(ProfileResult{_name, start, elapsedTime, std::this_thread::get_id()});
+        Profiler::Get().WriteProfile(ProfileResult{_name, start, elapsedTimeMicroseconds, std::this_thread::get_id()});
     }
     //--------------------------------------------------------------------------
 }

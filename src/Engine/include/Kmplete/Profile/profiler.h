@@ -16,7 +16,7 @@ namespace Kmplete
     {
         String name;
         std::chrono::duration<double, std::micro> startTime;
-        std::chrono::microseconds elapsedTime;
+        float elapsedTimeMicrosec;
         std::thread::id threadId;
     };
     //--------------------------------------------------------------------------
