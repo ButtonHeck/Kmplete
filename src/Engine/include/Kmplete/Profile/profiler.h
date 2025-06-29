@@ -67,13 +67,52 @@ namespace Kmplete
         const char* _name;
     };
     //--------------------------------------------------------------------------
+
+    namespace ProfilerUtils
+    {
+        template<size_t length>
+        struct CleanupResult
+        {
+            char data[length];
+        };
+
+        template<size_t lengthSrc, size_t lengthRemove>
+        consteval auto CleanupOutputString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove])
+        {
+            CleanupResult<lengthSrc> result = {};
+
+            size_t srcIndex = 0;
+            size_t dstIndex = 0;
+            while (srcIndex < lengthSrc)
+            {
+                size_t matchIndex = 0;
+                while ((matchIndex < lengthRemove - 1) && (srcIndex + matchIndex < lengthSrc - 1) && (src[srcIndex + matchIndex] == remove[matchIndex]))
+                {
+                    matchIndex++;
+                }
+
+                if (matchIndex == lengthRemove - 1)
+                {
+                    srcIndex += matchIndex;
+                }
+
+                result.data[dstIndex++] = (src[srcIndex] == '"' ? '\'' : src[srcIndex]);
+                srcIndex++;
+            }
+
+            return result;
+        }
+    }
+    //--------------------------------------------------------------------------
 }
 
 #define KMP_PROFILE true
 #if KMP_PROFILE && !defined (KMP_PRODUCTION_BUILD)
     #define KMP_PROFILE_BEGIN_SESSION(name, filepath) ::Kmplete::Profiler::Get().BeginSession(name, filepath)
     #define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
-    #define KMP_PROFILE_SCOPE_LINE2(name, line) ::Kmplete::ProfilerTimer timer##line(name)
+    #define KMP_PROFILE_SCOPE_LINE2(name, line) \
+        constexpr auto fixedName##line = ::Kmplete::ProfilerUtils::CleanupOutputString(name, "__cdecl ");\
+        ::Kmplete::ProfilerTimer timer##line(fixedName##line.data)
     #define KMP_PROFILE_SCOPE_LINE(name, line) KMP_PROFILE_SCOPE_LINE2(name, line)
     #define KMP_PROFILE_SCOPE(name) KMP_PROFILE_SCOPE_LINE(name, __LINE__)
     #define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)
