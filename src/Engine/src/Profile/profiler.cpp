@@ -1,6 +1,7 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Utils/string_utils.h"
 
 namespace Kmplete
 {
@@ -33,6 +34,30 @@ namespace Kmplete
     {
         KMP_MB_UNUSED std::lock_guard lock(_mutex);
         InternalEndSession();
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::WriteProfile(const ProfileResult& result)
+    {
+        std::ostringstream json;
+        Utils::ToSStream(json, 
+            std::setprecision(3), std::fixed,
+            ",{\"cat\":\"function\",\"dur\":", 
+            result.elapsedTime.count(),
+            ",\"name\":\"",
+            result.name,
+            "\",\"ph\":\"X\",\"pid\":0,\"tid\":",
+            result.threadId,
+            ",\"ts\":",
+            result.startTime.count(), "}"
+        );
+
+        KMP_MB_UNUSED std::lock_guard lock(_mutex);
+        if (_currentSession)
+        {
+            _outputFileStream << json.str();
+            _outputFileStream.flush();
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -79,6 +104,22 @@ namespace Kmplete
     {
         _outputFileStream << "]}";
         _outputFileStream.flush();
+    }
+    //--------------------------------------------------------------------------
+
+
+    ProfilerTimer::ProfilerTimer(const char* name)
+        : _name(name)
+    {}
+    //--------------------------------------------------------------------------
+
+    ProfilerTimer::~ProfilerTimer()
+    {
+        const auto end = std::chrono::high_resolution_clock::now();
+        const auto start = std::chrono::duration<double, std::micro>(_last.time_since_epoch());
+        const auto elapsedTime = std::chrono::time_point_cast<std::chrono::microseconds>(end).time_since_epoch() - std::chrono::time_point_cast<std::chrono::microseconds>(_last).time_since_epoch();
+
+        Profiler::Get().WriteProfile(ProfileResult{_name, start, elapsedTime, std::this_thread::get_id()});
     }
     //--------------------------------------------------------------------------
 }
