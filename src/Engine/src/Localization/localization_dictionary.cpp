@@ -1,6 +1,7 @@
 #include "Kmplete/Localization/localization_dictionary.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
@@ -24,6 +25,8 @@ namespace Kmplete
 
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const TranslationStr& translation)
     {
+        KMP_PROFILE_FUNCTION();
+
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         if (_translationMap[_currentLocaleSid].contains(sourceSid))
         {
@@ -41,6 +44,8 @@ namespace Kmplete
 
     void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation)
     {
+        KMP_PROFILE_FUNCTION();
+
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const PluralSource&& pluralSource = PluralSource{ sourceSidSingular, sourceSidPlural };
         if (_translationPluralMap[_currentLocaleSid].contains(pluralSource) && 
@@ -67,6 +72,8 @@ namespace Kmplete
 
     void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
+        KMP_PROFILE_FUNCTION();
+
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedSource&& contextedSource = ContextedSource{ sourceSid, contextSid };
         if (_translationCtxMap[_currentLocaleSid].contains(contextedSource))
@@ -86,6 +93,8 @@ namespace Kmplete
     void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm,
                                      const ContextStrSID& contextSid, const TranslationStr& translation)
     {
+        KMP_PROFILE_FUNCTION();
+
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedPluralSource&& contextedPluralSource = ContextedPluralSource{ sourceSidSingular, sourceSidPlural, contextSid };
         if (_translationCtxPluralMap[_currentLocaleSid].contains(contextedPluralSource) &&
@@ -112,18 +121,24 @@ namespace Kmplete
 
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _translationMap[_currentLocaleSid][sourceSid];
     }
     //--------------------------------------------------------------------------
 
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _translationPluralMap[_currentLocaleSid][PluralSource{sourceSidSingular, sourceSidPlural}][pluralityForm];
     }
     //--------------------------------------------------------------------------
 
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _translationCtxMap[_currentLocaleSid][ContextedSource{sourceSid, contextSid}];
     }
     //--------------------------------------------------------------------------
@@ -131,6 +146,8 @@ namespace Kmplete
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural,
                                                       PluralityForm pluralityForm, const ContextStrSID& contextSid)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _translationCtxPluralMap[_currentLocaleSid][ContextedPluralSource{sourceSidSingular, sourceSidPlural, contextSid}][pluralityForm];
     }
     //--------------------------------------------------------------------------
