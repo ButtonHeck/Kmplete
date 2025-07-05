@@ -1,6 +1,7 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
@@ -27,6 +28,8 @@ namespace Kmplete
 
     String Window::ModeToString(Mode mode) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         switch (mode)
         {
         case FullscreenMode:
@@ -49,6 +52,8 @@ namespace Kmplete
 
     Window::Mode Window::StringToMode(const String& modeStr) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         if (modeStr == FullscreenModeStr)
         {
             return Window::Mode::FullscreenMode;

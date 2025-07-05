@@ -3,6 +3,7 @@
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -16,12 +17,16 @@ namespace Kmplete
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize(applicationParameters);
     }
     //--------------------------------------------------------------------------
 
     Application::~Application()
     {
+        KMP_PROFILE_FUNCTION();
+
         Finalize();
     }
     //--------------------------------------------------------------------------
@@ -34,6 +39,8 @@ namespace Kmplete
 
     void Application::SaveSettings(const Path& path /*= Path()*/) const
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!path.empty())
         {
             _settingsManager->SetFilename(path);
@@ -45,6 +52,8 @@ namespace Kmplete
 
     void Application::LoadSettings(const Path& path /*= Path()*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!path.empty())
         {
             _settingsManager->SetFilename(path);
@@ -56,8 +65,13 @@ namespace Kmplete
 
     void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
+        KMP_PROFILE_FUNCTION();
+
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Boot(_applicationName);
+        {
+            KMP_PROFILE_SCOPE("Application logger boot");
+            Log::Boot(_applicationName);
+        }
 #endif
 
         const auto applicationPath = Filesystem::GetCurrentPath();
@@ -85,7 +99,10 @@ namespace Kmplete
         LoadSettingsInternal();
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Initialize(_logSettings, _applicationName);
+        {
+            KMP_PROFILE_SCOPE("Application logger initialization");
+            Log::Initialize(_logSettings, _applicationName);
+        }
 #endif
 
         FillDictionary();
@@ -95,6 +112,8 @@ namespace Kmplete
 
     void Application::Finalize()
     {
+        KMP_PROFILE_FUNCTION();
+
         SaveSettingsInternal();
 
         _settingsManager.reset();
@@ -102,13 +121,18 @@ namespace Kmplete
         _systemMetricsManager.reset();
 
 #if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
-        Log::Finalize();
+        {
+            KMP_PROFILE_SCOPE("Application logger finalization");
+            Log::Finalize();
+        }
 #endif
     }
     //--------------------------------------------------------------------------
 
     void Application::SaveSettingsInternal() const
     {
+        KMP_PROFILE_FUNCTION();
+
         auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
@@ -137,6 +161,8 @@ namespace Kmplete
 
     void Application::LoadSettingsInternal()
     {
+        KMP_PROFILE_FUNCTION();
+
         _settingsManager->LoadSettings();
 
         const auto settings = _settingsManager->GetSettings(SettingsEntryName);
@@ -165,6 +191,8 @@ namespace Kmplete
 
     void Application::FillDictionary()
     {
+        KMP_PROFILE_FUNCTION();
+
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");
     }

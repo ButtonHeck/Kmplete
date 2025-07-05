@@ -5,6 +5,7 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 
@@ -26,21 +27,30 @@ namespace Kmplete
         : Window(settings)
         , _window(nullptr)
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     WindowGlfw::~WindowGlfw()
     {
+        KMP_PROFILE_FUNCTION();
+
         Finalize();
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::Initialize()
     {
+        KMP_PROFILE_FUNCTION();
+
         InitializeHints();
 
-        _window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+        {
+            KMP_PROFILE_SCOPE("GLFW window creation");
+            _window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+        }
 
         if (!_window)
         {
@@ -69,6 +79,8 @@ namespace Kmplete
 
     void WindowGlfw::Finalize()
     {
+        KMP_PROFILE_FUNCTION();
+
         NonNull<UserData*> userData = GetUserPointer(_window);
         delete userData;
 
@@ -78,6 +90,8 @@ namespace Kmplete
 
     std::pair<int, int> WindowGlfw::GetSize() const
     {
+        KMP_PROFILE_FUNCTION();
+
         int width;
         int height;
         glfwGetWindowSize(_window, &width, &height);
@@ -87,6 +101,8 @@ namespace Kmplete
 
     std::pair<int, int> WindowGlfw::GetWindowedSize() const
     {
+        KMP_PROFILE_FUNCTION();
+
         const NonNull<UserData*> userData = GetUserPointer(_window);
         return std::pair<int, int>(userData->windowedWidth, userData->windowedHeight);
     }
@@ -100,12 +116,16 @@ namespace Kmplete
 
     void WindowGlfw::SetTitle(const char* title)
     {
+        KMP_PROFILE_FUNCTION();
+
         glfwSetWindowTitle(_window, title);
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::SetIcon(const Path& path)
     {
+        KMP_PROFILE_FUNCTION();
+
         Image img(path, ImageChannels::RGBAlpha);
         GLFWimage icon{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
 
@@ -122,18 +142,24 @@ namespace Kmplete
 
     void WindowGlfw::SetShouldClose(bool close)
     {
+        KMP_PROFILE_FUNCTION();
+
         glfwSetWindowShouldClose(_window, close);
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::ShouldClose() const
     {
+        KMP_PROFILE_FUNCTION();
+
         return glfwWindowShouldClose(_window);
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::SetScreenMode(Mode mode)
     {
+        KMP_PROFILE_FUNCTION();
+
         const NonNull<UserData*> userData = GetUserPointer(_window);
         if (userData->screenMode == mode)
         {
@@ -179,6 +205,8 @@ namespace Kmplete
 
     void WindowGlfw::SetVSync(bool vSync)
     {
+        KMP_PROFILE_FUNCTION();
+
         _settings.vSync = vSync;
         glfwSwapInterval(vSync ? 1 : 0);
     }
@@ -232,10 +260,12 @@ namespace Kmplete
     {
         if (_settings.updateContinuously)
         {
+            KMP_PROFILE_SCOPE("glfwPollEvents");
             glfwPollEvents();
         }
         else
         {
+            KMP_PROFILE_SCOPE("glfwWaitEvents");
             glfwWaitEvents();
         }
     }
@@ -243,12 +273,16 @@ namespace Kmplete
 
     void WindowGlfw::SwapBuffers() const
     {
+        KMP_PROFILE_FUNCTION();
+
         glfwSwapBuffers(_window);
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::MakeContextCurrent()
     {
+        KMP_PROFILE_FUNCTION();
+
         glfwMakeContextCurrent(_window);
     }
     //--------------------------------------------------------------------------
@@ -277,6 +311,8 @@ namespace Kmplete
 
     void WindowGlfw::InitializeHints() const
     {
+        KMP_PROFILE_FUNCTION();
+
         glfwWindowHint(GLFW_RESIZABLE, _settings.resizable ? GLFW_TRUE : GLFW_FALSE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
         glfwWindowHint(GLFW_DECORATED, _settings.decorated ? GLFW_TRUE : GLFW_FALSE);
@@ -288,6 +324,8 @@ namespace Kmplete
 
     void WindowGlfw::InitializeCallbacks() const
     {
+        KMP_PROFILE_FUNCTION();
+
         glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
             KMP_LOG_ERROR("WindowGlfw: GLFW internal error '{}': {}", code, description);
             }

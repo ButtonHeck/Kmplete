@@ -2,6 +2,7 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -22,18 +23,24 @@ namespace Kmplete
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _graphicsBackend(nullptr)
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     WindowApplication::~WindowApplication()
     {
+        KMP_PROFILE_FUNCTION();
+
         Finalize();
     }
     //--------------------------------------------------------------------------
 
     void WindowApplication::SaveSettings(const Path& path /*= Path()*/) const
     {
+        KMP_PROFILE_FUNCTION();
+
         SaveSettingsInternal();
         Application::SaveSettings(path);
     }
@@ -41,6 +48,8 @@ namespace Kmplete
 
     void WindowApplication::LoadSettings(const Path& path /*= Path()*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         Application::LoadSettings(path);
         LoadSettingsInternal();
     }
@@ -48,6 +57,8 @@ namespace Kmplete
 
     void WindowApplication::Initialize()
     {
+        KMP_PROFILE_FUNCTION();
+
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
 
@@ -69,6 +80,8 @@ namespace Kmplete
 
     void WindowApplication::Finalize()
     {
+        KMP_PROFILE_FUNCTION();
+
         SaveSettingsInternal();
 
         _graphicsBackend.reset();
@@ -78,6 +91,8 @@ namespace Kmplete
 
     void WindowApplication::SaveSettingsInternal() const
     {
+        KMP_PROFILE_FUNCTION();
+
         auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
@@ -92,6 +107,8 @@ namespace Kmplete
 
     void WindowApplication::LoadSettingsInternal()
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {

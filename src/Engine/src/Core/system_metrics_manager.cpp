@@ -1,6 +1,7 @@
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #if defined (KMP_PLATFORM_WINDOWS)
     #include <Windows.h>
@@ -27,12 +28,16 @@ namespace Kmplete
         , _windowsProcessHandle(nullptr)
 #endif
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     bool SystemMetricsManager::Update()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         if (!_windowsProcessHandle)
         {
@@ -72,6 +77,8 @@ namespace Kmplete
 
     void SystemMetricsManager::Initialize()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         static_assert(sizeof(ULARGE_INTEGER) == sizeof(decltype(_lastCPUTimestamp)));
 #endif
@@ -109,6 +116,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeProcessId()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         _currentProcessId = GetCurrentProcessId();
 #else
@@ -121,6 +130,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeTotalMemory()
     {
+        KMP_PROFILE_FUNCTION();
+
         constexpr static auto MibDivisor = 1024.0 * 1024.0;
         
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -160,6 +171,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeNumProcessors()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         SYSTEM_INFO systemInfo;
         GetSystemInfo(&systemInfo);
@@ -175,6 +188,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeWindowsProcessHandle()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         _windowsProcessHandle = GetCurrentProcess();
         if (!_windowsProcessHandle)
@@ -191,6 +206,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::InitializeCPUTimestamps()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         FILETIME fTime, fSystem, fUser;
         const auto filetimeSize = sizeof(FILETIME);
@@ -219,6 +236,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::UpdateNumThreads()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         HANDLE threadSnapHandle = INVALID_HANDLE_VALUE;
         unsigned int numThreads = 0;
@@ -286,6 +305,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::UpdateMemoryUsed()
     {
+        KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
         constexpr static auto MibDivisor = 1024.0 * 1024.0;
         PROCESS_MEMORY_COUNTERS_EX pmc;
@@ -340,6 +361,8 @@ namespace Kmplete
 
     bool SystemMetricsManager::UpdateCPUUsed()
     {
+        KMP_PROFILE_FUNCTION();
+
         double cpuPercent = 0.0;
         
 #if defined (KMP_PLATFORM_WINDOWS)

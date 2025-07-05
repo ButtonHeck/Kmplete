@@ -3,6 +3,7 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 
@@ -18,8 +19,10 @@ namespace Kmplete
 {
     namespace
     {
-        std::vector<WindowBackend::MonitorVideoMode> GetVideoModes(GLFWmonitor* monitor)
+        std::vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor)
         {
+            KMP_PROFILE_FUNCTION();
+
             std::vector<WindowBackend::MonitorVideoMode> outputModes;
 
             if (!monitor)
@@ -49,18 +52,24 @@ namespace Kmplete
 
     WindowBackendGlfw::WindowBackendGlfw()
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     WindowBackendGlfw::~WindowBackendGlfw()
     {
+        KMP_PROFILE_FUNCTION();
+
         Finalize();
     }
     //--------------------------------------------------------------------------
 
     Window& WindowBackendGlfw::CreateMainWindow()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_mainWindow)
         {
             KMP_LOG_WARN("WindowBackendGlfw: main window already created!");
@@ -89,7 +98,15 @@ namespace Kmplete
 
     void WindowBackendGlfw::Initialize()
     {
-        if (!glfwInit())
+        KMP_PROFILE_FUNCTION();
+
+        int glfwInitExitCode = GLFW_FALSE;
+        {
+            KMP_PROFILE_SCOPE("GLFW initialization");
+            glfwInitExitCode = glfwInit();
+        }
+
+        if (glfwInitExitCode != GLFW_TRUE)
         {
             KMP_MB_UNUSED const char* description;
             KMP_MB_UNUSED const auto errorCode = glfwGetError(&description);
@@ -103,6 +120,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::Finalize()
     {
+        KMP_PROFILE_FUNCTION();
+
         _mainWindow.reset();
         _mainWindowSettings.reset();
 
@@ -114,12 +133,18 @@ namespace Kmplete
         }
 
         _auxWindowsSettings.clear();
-        glfwTerminate();
+
+        {
+            KMP_PROFILE_SCOPE("GLFW termination");
+            glfwTerminate();
+        }
     }
     //--------------------------------------------------------------------------
 
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (windowName.empty())
         {
             KMP_LOG_ERROR("WindowBackendGlfw: creation of unnamed windows is prohibited");
@@ -167,6 +192,8 @@ namespace Kmplete
 
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(Window::WindowSettings& windowSettings)
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             if (windowSettings.name.empty() || windowSettings.name == MainWindowName)
@@ -198,6 +225,8 @@ namespace Kmplete
 
     Nullable<Window*> WindowBackendGlfw::GetAuxWindow(const String& windowName) const
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_auxWindows.contains(windowName))
         {
             return _auxWindows.at(windowName).get();
@@ -210,6 +239,8 @@ namespace Kmplete
 
     bool WindowBackendGlfw::DestroyAuxWindow(const String& windowName)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_auxWindows.contains(windowName))
         {
             _auxWindows.erase(windowName);
@@ -223,6 +254,8 @@ namespace Kmplete
 
     int WindowBackendGlfw::GetMonitorCount() const
     {
+        KMP_PROFILE_FUNCTION();
+
         int count = 0;
         glfwGetMonitors(&count);
         return count;
@@ -231,6 +264,8 @@ namespace Kmplete
 
     StringVector WindowBackendGlfw::GetMonitorNames() const
     {
+        KMP_PROFILE_FUNCTION();
+
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
 
@@ -254,6 +289,8 @@ namespace Kmplete
 
     std::vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto monitor = glfwGetPrimaryMonitor();
         return GetVideoModes(monitor);
     }
@@ -261,6 +298,8 @@ namespace Kmplete
 
     std::vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(int index) const
     {
+        KMP_PROFILE_FUNCTION();
+
         if (index == 0)
         {
             return GetPrimaryMonitorVideoModes();
@@ -280,6 +319,8 @@ namespace Kmplete
 
     float WindowBackendGlfw::GetPrimaryMonitorDPIScale() const
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto monitor = glfwGetPrimaryMonitor();
         float scale = 1.0f;
         glfwGetMonitorContentScale(monitor, &scale, &scale);
@@ -289,6 +330,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(Settings& settings) const
     {
+        KMP_PROFILE_FUNCTION();
+
         settings.StartSaveObject(SettingsEntryName);
 
         SaveMainWindowSettings(settings);
@@ -300,6 +343,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveMainWindowSettings(Settings& settings) const
     {
+        KMP_PROFILE_FUNCTION();
+
         settings.StartSaveObject(MainWindowStr);
 
         settings.SaveString(Window::NameStr, _mainWindowSettings->name);
@@ -319,6 +364,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveAuxWindowsSettings(Settings& settings) const
     {
+        KMP_PROFILE_FUNCTION();
+
         settings.StartSaveArray(AuxWindowsStr);
         int index = 0;
         for (const auto& windowEntry : _auxWindowsSettings)
@@ -349,6 +396,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadSettings(Settings& settings)
     {
+        KMP_PROFILE_FUNCTION();
+
         settings.StartLoadObject(SettingsEntryName);
 
         LoadMainWindowSettings(settings);
@@ -360,6 +409,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadMainWindowSettings(Settings& settings)
     {
+        KMP_PROFILE_FUNCTION();
+
         KMP_ASSERT(_mainWindowSettings);
 
         if (!settings.StartLoadObject(MainWindowStr))
@@ -385,6 +436,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadAuxWindowsSettings(Settings& settings)
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto windowsCount = settings.StartLoadArray(AuxWindowsStr);
         for (auto i = 0; i < windowsCount; i++)
         {

@@ -2,6 +2,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
@@ -12,6 +13,8 @@ namespace Kmplete
 
     Nullable<Settings*> SettingsManager::PutSettings(const String& name)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_namedSettings.contains(name))
         {
             _namedSettings.erase(name);
@@ -24,6 +27,8 @@ namespace Kmplete
 
     Nullable<Settings*> SettingsManager::GetSettings(const String& name) const
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_namedSettings.contains(name))
         {
             return _namedSettings.at(name).get();
@@ -35,6 +40,8 @@ namespace Kmplete
 
     bool SettingsManager::LoadSettings()
     {
+        KMP_PROFILE_FUNCTION();
+
         JsonDocument document(_filename);
         if (document.HasError())
         {
@@ -59,6 +66,8 @@ namespace Kmplete
 
     bool SettingsManager::SaveSettings() const
     {
+        KMP_PROFILE_FUNCTION();
+
         JsonDocument summaryDocument;
 
         for (const auto& [settingsEntryName, settingsEntry] : _namedSettings)

@@ -8,6 +8,7 @@
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Core/memory_checker.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <exception>
 
@@ -65,14 +66,23 @@ int main(int argc, char** argv)
 int Main(const Kmplete::ProgramOptions& programOptions)
 {
     Kmplete::MemoryChecker::Prepare();
+
+    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json");
     auto app = Kmplete::CreateApplication(programOptions);
+    KMP_PROFILE_END_SESSION();
+
     if (!app)
     {
         return 1;
     }
 
+    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json");
     app->Run();
+    KMP_PROFILE_END_SESSION();
+
+    KMP_PROFILE_BEGIN_SESSION("Shutdown", "KmpleteProfile-Shutdown.json");
     app.reset();
+    KMP_PROFILE_END_SESSION();
 
     return 0;
 }
