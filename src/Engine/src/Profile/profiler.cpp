@@ -26,14 +26,14 @@ namespace Kmplete
     void Profiler::BeginSession(const String& name, const Path& filepath)
     {
         KMP_MB_UNUSED std::lock_guard lock(_mutex);
-        InternalBeginSession(name, filepath);
+        BeginSessionInternal(name, filepath);
     }
     //--------------------------------------------------------------------------
 
     void Profiler::EndSession()
     {
         KMP_MB_UNUSED std::lock_guard lock(_mutex);
-        InternalEndSession();
+        EndSessionInternal();
     }
     //--------------------------------------------------------------------------
 
@@ -61,12 +61,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::InternalBeginSession(const String& name, const Path& filepath)
+    void Profiler::BeginSessionInternal(const String& name, const Path& filepath)
     {
         if (_currentSession)
         {
             KMP_LOG_ERROR("Profiler: cannot start session '{}' when session '{}' already started", name, _currentSession->name);
-            InternalEndSession();
+            EndSessionInternal();
         }
 
         _outputFileStream.open(filepath);
@@ -82,7 +82,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::InternalEndSession()
+    void Profiler::EndSessionInternal()
     {
         if (_currentSession)
         {

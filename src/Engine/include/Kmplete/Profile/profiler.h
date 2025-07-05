@@ -43,8 +43,8 @@ namespace Kmplete
         Profiler() noexcept;
         ~Profiler();
 
-        void InternalBeginSession(const String& name, const Path& filepath);
-        void InternalEndSession();
+        void BeginSessionInternal(const String& name, const Path& filepath);
+        void EndSessionInternal();
         void WriteHeader();
         void WriteFooter();
 
@@ -107,14 +107,15 @@ namespace Kmplete
 }
 
 #define KMP_PROFILE true
-#if KMP_PROFILE && !defined (KMP_PRODUCTION_BUILD)
-    #define KMP_PROFILE_BEGIN_SESSION(name, filepath) ::Kmplete::Profiler::Get().BeginSession(name, filepath)
-    #define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
-    #define KMP_PROFILE_SCOPE_LINE2(name, line) \
+#if (KMP_PROFILE && !defined (KMP_PRODUCTION_BUILD)) || defined (KMP_RELWITHDEBINFO_BUILD)
+    #define _KMP_PROFILE_SCOPE_LINE2(name, line) \
         constexpr auto fixedName##line = ::Kmplete::ProfilerUtils::CleanupOutputString(name, "__cdecl ");\
         ::Kmplete::ProfilerTimer timer##line(fixedName##line.data)
-    #define KMP_PROFILE_SCOPE_LINE(name, line) KMP_PROFILE_SCOPE_LINE2(name, line)
-    #define KMP_PROFILE_SCOPE(name) KMP_PROFILE_SCOPE_LINE(name, __LINE__)
+    #define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
+
+    #define KMP_PROFILE_BEGIN_SESSION(name, filepath) ::Kmplete::Profiler::Get().BeginSession(name, filepath)
+    #define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
+    #define KMP_PROFILE_SCOPE(name) _KMP_PROFILE_SCOPE_LINE(name, __LINE__)
     #define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)
 #else
     #define KMP_PROFILE_BEGIN_SESSION(name, filepath)

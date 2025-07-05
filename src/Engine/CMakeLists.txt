@@ -129,6 +129,7 @@ endif()
 target_compile_definitions(Kmplete
     PUBLIC $<$<CONFIG:Production>:KMP_LOG_DISABLED>
     PUBLIC $<$<CONFIG:Production>:KMP_PRODUCTION_BUILD>
+    PUBLIC $<$<CONFIG:RelWithDebInfo>:KMP_RELWITHDEBINFO_BUILD>
     PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_BUILD_STATIC>
     PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PUBLIC KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
