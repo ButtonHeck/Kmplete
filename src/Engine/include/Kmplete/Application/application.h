@@ -58,7 +58,7 @@ namespace Kmplete
         UPtr<LocalizationManager> _localizationManager;
         UPtr<SettingsManager> _settingsManager;
 
-#if !defined (KMP_LOG_DISABLED) && !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_PRODUCTION_BUILD)
         Log::LogSettings _logSettings;
 #endif
     };
