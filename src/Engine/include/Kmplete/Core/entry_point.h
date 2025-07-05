@@ -16,6 +16,7 @@ void TerminationHandler()
 {
     try
     {
+        Kmplete::Profiler::Get().EndSession();
         const auto exception = std::current_exception();
         if (exception)
         {

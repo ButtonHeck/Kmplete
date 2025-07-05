@@ -39,24 +39,23 @@ namespace Kmplete
 
     void Profiler::WriteProfile(const ProfileResult& result)
     {
-        std::ostringstream json;
-        Utils::ToSStream(json, 
-            std::setprecision(3), std::fixed,
-            ",{\"cat\":\"function\",\"dur\":", 
-            result.elapsedTimeMicrosec,
-            ",\"name\":\"",
-            result.name,
-            "\",\"ph\":\"X\",\"pid\":0,\"tid\":",
-            result.threadId,
-            ",\"ts\":",
-            result.startTime.count(), "}"
-        );
-
-        KMP_MB_UNUSED std::lock_guard lock(_mutex);
         if (_currentSession)
         {
+            std::ostringstream json;
+            Utils::ToSStream(json, 
+                std::setprecision(3), std::fixed,
+                ",{\"cat\":\"function\",\"dur\":", 
+                result.elapsedTimeMicrosec,
+                ",\"name\":\"",
+                result.name,
+                "\",\"ph\":\"X\",\"pid\":0,\"tid\":",
+                result.threadId,
+                ",\"ts\":",
+                result.startTime.count(), "}"
+            );
+
+            KMP_MB_UNUSED std::lock_guard lock(_mutex);
             _outputFileStream << json.str();
-            _outputFileStream.flush();
         }
     }
     //--------------------------------------------------------------------------
