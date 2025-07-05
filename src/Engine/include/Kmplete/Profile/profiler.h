@@ -109,8 +109,9 @@ namespace Kmplete
 #define KMP_PROFILE true
 #if (KMP_PROFILE && !defined (KMP_PRODUCTION_BUILD)) || defined (KMP_RELWITHDEBINFO_BUILD)
     #define _KMP_PROFILE_SCOPE_LINE2(name, line) \
-        constexpr auto fixedName##line = ::Kmplete::ProfilerUtils::CleanupOutputString(name, "__cdecl ");\
-        ::Kmplete::ProfilerTimer timer##line(fixedName##line.data)
+        constexpr auto fixedNameCdecl##line = ::Kmplete::ProfilerUtils::CleanupOutputString(name, "__cdecl ");\
+        constexpr auto fixedNameKmplete##line = ::Kmplete::ProfilerUtils::CleanupOutputString(fixedNameCdecl##line.data, "Kmplete::");\
+        ::Kmplete::ProfilerTimer timer##line(fixedNameKmplete##line.data)
     #define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
 
     #define KMP_PROFILE_BEGIN_SESSION(name, filepath) ::Kmplete::Profiler::Get().BeginSession(name, filepath)
