@@ -44,13 +44,13 @@ namespace Kmplete
             std::ostringstream json;
             Utils::ToSStream(json, 
                 std::setprecision(3), std::fixed,
-                ",{\"cat\":\"function\",\"dur\":", 
+                R"rjs(,{"cat":"function","dur":)rjs", 
                 result.elapsedTimeMicrosec,
-                ",\"name\":\"",
+                R"rjs(,"name":")rjs",
                 result.name,
-                "\",\"ph\":\"X\",\"pid\":0,\"tid\":",
+                R"rjs(","ph":"X","pid":0,"tid":)rjs",
                 result.threadId,
-                ",\"ts\":",
+                R"rjs(,"ts":)rjs",
                 result.startTime.count(), "}"
             );
 
@@ -94,7 +94,7 @@ namespace Kmplete
 
     void Profiler::WriteHeader()
     {
-        _outputFileStream << "{\"otherData\": {},\"traceEvents\":[{}";
+        _outputFileStream << R"rjs({"otherData":{},"traceEvents":[{})rjs";
         _outputFileStream.flush();
     }
     //--------------------------------------------------------------------------
