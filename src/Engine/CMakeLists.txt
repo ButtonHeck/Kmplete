@@ -137,7 +137,7 @@ target_compile_definitions(Kmplete
 
 target_link_libraries(Kmplete 
     PUBLIC BaseLib
-    PUBLIC LoggerLib
+    PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
     PUBLIC UtilsLib
     PUBLIC VersionLib
     PUBLIC FilesystemLib

@@ -35,7 +35,7 @@ target_compile_definitions(Translator
 target_link_libraries(Translator
     PRIVATE BaseLib
     PRIVATE UtilsLib
-    PRIVATE LoggerLib
+    PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
     PRIVATE FilesystemLib
     PRIVATE TranslatorInterfaceLib
 )

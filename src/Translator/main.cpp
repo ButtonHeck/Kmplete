@@ -93,6 +93,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     using namespace Kmplete;
     using namespace Kmplete::Translator;
 
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
     // logging parsing
     const bool loggingEnabled = vm.count(ProcessorArgumentLogging);
     translatorParameters.logging = loggingEnabled;
@@ -106,6 +107,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         logSettings.levelFlush = 0;
         Log::Initialize(logSettings, "Kmplete Translator");
     }
+#endif
 
     // Work mode parsing
     const auto workMode = vm.count(ProcessorArgumentWorkMode) ? vm[ProcessorArgumentWorkMode].as<String>() : String();

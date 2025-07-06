@@ -29,7 +29,7 @@ target_include_directories(JsonLib
 
 target_link_libraries(JsonLib 
     PUBLIC BaseLib
-    PUBLIC LoggerLib
+    PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
     PUBLIC UtilsLib
     PUBLIC FilesystemLib
 )
