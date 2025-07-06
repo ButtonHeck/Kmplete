@@ -64,6 +64,7 @@ namespace Kmplete
         const SystemMetricsManager& _systemMetricsManager;
         UIComponentsState _state;
         UIPopupsState _popups;
+        bool _needCheckImguiIniFile;
     };
     //--------------------------------------------------------------------------
 }

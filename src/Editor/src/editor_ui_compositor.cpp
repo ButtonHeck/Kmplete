@@ -27,6 +27,7 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
+        , _needCheckImguiIniFile(true)
     {
         FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::FillDictionary));
@@ -35,9 +36,13 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMainArea()
     {
-        if (!Filesystem::PathExists(Filesystem::GetCurrentPath().append(ImGui::GetIO().IniFilename)))
+        if (_needCheckImguiIniFile)
         {
-            ComposeDefaultLayout();
+            _needCheckImguiIniFile = false;
+            if (!Filesystem::PathExists(Filesystem::GetCurrentPath().append(ImGui::GetIO().IniFilename)))
+            {
+                ComposeDefaultLayout();
+            }
         }
 
         ComposeMenu();
