@@ -26,7 +26,7 @@ namespace Kmplete
                 const std::regex regexObject(regexp);
                 return std::regex_replace(source, regexObject, replacement);
             }
-            catch (const std::regex_error& re)
+            catch (KMP_MB_UNUSED const std::regex_error& re)
             {
                 KMP_LOG_ERROR("Utils: regex '{}' error for string '{}': '{}'", regexp, source, re.what());
                 return source;

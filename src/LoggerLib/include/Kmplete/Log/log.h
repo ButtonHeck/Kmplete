@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined (KMP_PRODUCTION_BUILD)
+#if defined (KMP_CONFIG_TYPE_PRODUCTION)
 
 #define KMP_LOG_TRACE(...)
 #define KMP_LOG_DEBUG(...)

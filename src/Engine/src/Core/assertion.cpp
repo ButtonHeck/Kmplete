@@ -1,4 +1,4 @@
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
 
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"

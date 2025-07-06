@@ -67,7 +67,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger boot");
             Log::Boot(_applicationName);
@@ -98,7 +98,7 @@ namespace Kmplete
 
         LoadSettingsInternal();
 
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger initialization");
             Log::Initialize(_logSettings, _applicationName);
@@ -120,7 +120,7 @@ namespace Kmplete
         _localizationManager.reset();
         _systemMetricsManager.reset();
 
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger finalization");
             Log::Finalize();
@@ -140,7 +140,7 @@ namespace Kmplete
             return;
         }
 
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         settings->StartSaveObject(SettingsEntryName);
         settings->SaveString(Log::FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
         settings->SaveBool(Log::EnabledStr, _logSettings.enabled);
@@ -172,7 +172,7 @@ namespace Kmplete
             return;
         }
 
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         settings->StartLoadObject(SettingsEntryName);
         _logSettings.filename = Utils::Utf8ToNarrow(settings->GetString(Log::FilenameStr, "Kmplete_log.txt"));
         _logSettings.enabled = settings->GetBool(Log::EnabledStr, true);

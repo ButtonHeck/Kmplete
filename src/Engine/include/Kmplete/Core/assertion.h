@@ -1,6 +1,6 @@
 #pragma once
 
-#if !defined (KMP_PRODUCTION_BUILD)
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/macro.h"

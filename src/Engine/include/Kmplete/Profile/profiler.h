@@ -107,7 +107,7 @@ namespace Kmplete
 }
 
 #define KMP_PROFILE true
-#if (KMP_PROFILE && !defined (KMP_PRODUCTION_BUILD)) || defined (KMP_RELWITHDEBINFO_BUILD)
+#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
     #define _KMP_PROFILE_SCOPE_LINE2(name, line) \
         constexpr auto fixedNameCdecl##line = ::Kmplete::ProfilerUtils::CleanupOutputString(name, "__cdecl ");\
         constexpr auto fixedNameKmplete##line = ::Kmplete::ProfilerUtils::CleanupOutputString(fixedNameCdecl##line.data, "Kmplete::");\
