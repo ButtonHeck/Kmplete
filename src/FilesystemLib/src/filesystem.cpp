@@ -80,11 +80,13 @@ namespace Kmplete
         {
             if (PathExists(path))
             {
+                KMP_LOG_INFO("Filesystem::CreateFile - file '{}' already exists", path);
                 return true;
             }
 
             if (!CreateDirectories(path, true))
             {
+                KMP_LOG_ERROR("Filesystem::CreateFile - cannot create directories for file '{}'", path);
                 return false;
             }
 

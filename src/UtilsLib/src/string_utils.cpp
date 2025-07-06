@@ -18,6 +18,7 @@ namespace Kmplete
         {
             if (regexp == nullptr || replacement == nullptr)
             {
+                KMP_LOG_WARN("Utils: RegexReplace - either regexp or replacement string is nullptr");
                 return source;
             }
 
@@ -44,6 +45,7 @@ namespace Kmplete
         {
             if (stringVector.empty())
             {
+                KMP_LOG_WARN("Utils: StringVectorToString - stringVector is empty");
                 return "";
             }
 
