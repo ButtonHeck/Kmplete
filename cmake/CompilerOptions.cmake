@@ -12,6 +12,8 @@ function(SetupCompilerOptions target)
         PUBLIC $<$<CONFIG:Release>:KMP_CONFIG_TYPE_RELEASE>
         PUBLIC $<$<CONFIG:RelWithDebInfo>:KMP_CONFIG_TYPE_RELWITHDEBINFO>
         PUBLIC $<$<CONFIG:Production>:KMP_CONFIG_TYPE_PRODUCTION>
+        
+        PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_BUILD_STATIC>
     )
     
     get_target_property(target_type ${target} TYPE)

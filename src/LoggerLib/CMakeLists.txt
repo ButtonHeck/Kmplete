@@ -31,7 +31,6 @@ target_link_libraries(LoggerLib
 )
 
 target_compile_definitions(LoggerLib
-    PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_BUILD_STATIC>
     PRIVATE KMP_LOG_EXPORTS
 )
 
