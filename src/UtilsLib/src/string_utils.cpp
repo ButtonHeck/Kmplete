@@ -16,6 +16,8 @@ namespace Kmplete
     {
         String RegexReplace(const String& source, const char* regexp, const char* replacement)
         {
+            KMP_PROFILE_FUNCTION();
+
             if (regexp == nullptr || replacement == nullptr)
             {
                 KMP_LOG_WARN("Utils: RegexReplace - either regexp or replacement string is nullptr");
@@ -43,6 +45,8 @@ namespace Kmplete
 
         String StringVectorToString(const StringVector& stringVector, const String& delimiter)
         {
+            KMP_PROFILE_FUNCTION();
+
             if (stringVector.empty())
             {
                 KMP_LOG_WARN("Utils: StringVectorToString - stringVector is empty");
@@ -58,6 +62,8 @@ namespace Kmplete
 
         WString NarrowToWide(const String& str)
         {
+            KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto length = MultiByteToWideChar(CP_ACP, 0, str.c_str(), static_cast<int>(str.size()), 0, 0);
             WString wide(length, L'\0');
@@ -77,6 +83,8 @@ namespace Kmplete
 
         String WideToNarrow(const WString& wstr)
         {
+            KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto length = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.size()), nullptr, 0, nullptr, nullptr);
             String narrow(length, '\0');
@@ -96,6 +104,8 @@ namespace Kmplete
 
         String NarrowToUtf8(const String& str)
         {
+            KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(), static_cast<int>(str.length()), nullptr, 0);
             WString u16Str(size, L'\0');
@@ -113,6 +123,8 @@ namespace Kmplete
 
         String Utf8ToNarrow(const String& str)
         {
+            KMP_PROFILE_FUNCTION();
+
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto u16Size = MultiByteToWideChar(CP_UTF8, 0, &str[0], static_cast<int>(str.size()), nullptr, 0);
             if (u16Size > 0)

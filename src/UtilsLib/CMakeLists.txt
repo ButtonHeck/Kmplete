@@ -25,6 +25,7 @@ target_include_directories(UtilsLib
 target_link_libraries(UtilsLib 
     PUBLIC BaseLib
     PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
+    PUBLIC ProfilerLib
 )
 
 target_compile_definitions(UtilsLib

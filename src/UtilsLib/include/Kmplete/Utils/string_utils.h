@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <sstream>
 
@@ -12,6 +13,8 @@ namespace Kmplete
         template<typename... Ts>
         KMP_NODISCARD String Concatenate(Ts&&... args)
         {
+            KMP_PROFILE_FUNCTION();
+
             std::ostringstream oss;
             (oss << ... << std::forward<Ts>(args));
             return oss.str();
@@ -21,6 +24,8 @@ namespace Kmplete
         template<typename... Ts>
         std::ostringstream& ToSStream(std::ostringstream& oss, Ts&&... args)
         {
+            KMP_PROFILE_FUNCTION();
+
             (oss << ... << std::forward<Ts>(args));
             return oss;
         }
