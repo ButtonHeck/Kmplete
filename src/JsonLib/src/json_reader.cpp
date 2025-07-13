@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/pointer.h>
 
@@ -14,6 +15,8 @@ namespace Kmplete
 
     bool JsonReader::StartObject(const char* objectName)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonReader: cannot start object '{}' - current object is null", objectName);
@@ -47,6 +50,8 @@ namespace Kmplete
 
     bool JsonReader::StartObject(int index)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return false;
@@ -67,6 +72,8 @@ namespace Kmplete
 
     bool JsonReader::EndObject()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_scope.Pop())
         {
             _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
@@ -79,6 +86,8 @@ namespace Kmplete
 
     int JsonReader::StartArray(const char* arrayName)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonReader: cannot start array '{}' - current object is null", arrayName);
@@ -112,6 +121,8 @@ namespace Kmplete
 
     int JsonReader::StartArray(int index)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return 0;
@@ -132,6 +143,8 @@ namespace Kmplete
 
     bool JsonReader::EndArray()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonReader: cannot end array - current object is null");
@@ -150,6 +163,8 @@ namespace Kmplete
 
     bool JsonReader::GetBool(int index, bool defaultValue /*= false*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -167,6 +182,8 @@ namespace Kmplete
 
     bool JsonReader::GetBool(const char* name, bool defaultValue /*= false*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get bool '{}' - current object is null or is not of object type", name);
@@ -185,6 +202,8 @@ namespace Kmplete
 
     int JsonReader::GetInt(int index, int defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -202,6 +221,8 @@ namespace Kmplete
 
     int JsonReader::GetInt(const char* name, int defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get int '{}' - current object is null or is not of object type", name);
@@ -220,6 +241,8 @@ namespace Kmplete
 
     unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -237,6 +260,8 @@ namespace Kmplete
 
     unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get unsigned int '{}' - current object is null or is not of object type", name);
@@ -255,6 +280,8 @@ namespace Kmplete
 
     int64_t JsonReader::GetInt64(int index, int64_t defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -272,6 +299,8 @@ namespace Kmplete
 
     int64_t JsonReader::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get int64 '{}' - current object is null or is not of object type", name);
@@ -290,6 +319,8 @@ namespace Kmplete
 
     uint64_t JsonReader::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -307,6 +338,8 @@ namespace Kmplete
 
     uint64_t JsonReader::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get unsigned int64 '{}' - current object is null or is not of object type", name);
@@ -325,6 +358,8 @@ namespace Kmplete
 
     double JsonReader::GetDouble(int index, double defaultValue /*= 0.0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -342,6 +377,8 @@ namespace Kmplete
 
     double JsonReader::GetDouble(const char* name, double defaultValue /*= 0.0*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get double '{}' - current object is null or is not of object type", name);
@@ -360,6 +397,8 @@ namespace Kmplete
 
     String JsonReader::GetString(int index, const String& defaultValue /*= ""*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -377,6 +416,8 @@ namespace Kmplete
 
     String JsonReader::GetString(const char* name, const String& defaultValue /*= ""*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("JsonReader: cannot get string '{}' - current object is null or is not of object type", name);
@@ -395,6 +436,8 @@ namespace Kmplete
 
     bool JsonReader::ValidToGetFromArray(int index) const
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             return false;

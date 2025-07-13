@@ -32,6 +32,7 @@ target_link_libraries(JsonLib
     PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
     PUBLIC UtilsLib
     PUBLIC FilesystemLib
+    PUBLIC ProfilerLib
 )
 
 target_compile_definitions(JsonLib

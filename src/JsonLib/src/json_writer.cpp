@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_writer.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/pointer.h>
 
@@ -10,6 +11,8 @@ namespace Kmplete
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject->IsObject())
         {
             _currentObject->SetObject();
@@ -19,6 +22,8 @@ namespace Kmplete
 
     bool JsonWriter::StartObject(const char* objectName)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot start object '{}' - current object is null", objectName);
@@ -53,6 +58,8 @@ namespace Kmplete
 
     bool JsonWriter::StartObject(int index)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot start object '{}' - current object is null", index);
@@ -87,6 +94,8 @@ namespace Kmplete
 
     bool JsonWriter::EndObject()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_scope.Pop())
         {
             _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
@@ -99,6 +108,8 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(const char* arrayName, bool overwrite /*= true*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot start array '{}' - current object is null", arrayName);
@@ -133,6 +144,8 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(int index, bool overwrite /*= true*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot start array '{}' - current object is null", index);
@@ -167,6 +180,8 @@ namespace Kmplete
 
     bool JsonWriter::EndArray()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot end array - current object is null");
@@ -185,6 +200,8 @@ namespace Kmplete
 
     bool JsonWriter::SetBool(int index, bool value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set bool '{}' - current object is null", index);
@@ -219,6 +236,8 @@ namespace Kmplete
 
     bool JsonWriter::SetBool(const char* name, bool value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set bool '{}' - current object is null", name);
@@ -254,6 +273,8 @@ namespace Kmplete
 
     bool JsonWriter::SetInt(int index, int value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set int '{}' - current object is null", index);
@@ -288,6 +309,8 @@ namespace Kmplete
 
     bool JsonWriter::SetInt(const char* name, int value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set int '{}' - current object is null", name);
@@ -323,6 +346,8 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt(int index, unsigned int value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set unsigned int '{}' - current object is null", index);
@@ -357,6 +382,8 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt(const char* name, unsigned int value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set unsigned int '{}' - current object is null", name);
@@ -392,6 +419,8 @@ namespace Kmplete
 
     bool JsonWriter::SetInt64(int index, int64_t value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set int64 '{}' - current object is null", index);
@@ -426,6 +455,8 @@ namespace Kmplete
 
     bool JsonWriter::SetInt64(const char* name, int64_t value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set int64 '{}' - current object is null", name);
@@ -461,6 +492,8 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt64(int index, uint64_t value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set unsigned int64 '{}' - current object is null", index);
@@ -495,6 +528,8 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt64(const char* name, uint64_t value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set unsigned int64 '{}' - current object is null", name);
@@ -530,6 +565,8 @@ namespace Kmplete
 
     bool JsonWriter::SetDouble(int index, double value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set double '{}' - current object is null", index);
@@ -564,6 +601,8 @@ namespace Kmplete
 
     bool JsonWriter::SetDouble(const char* name, double value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set double '{}' - current object is null", name);
@@ -599,6 +638,8 @@ namespace Kmplete
 
     bool JsonWriter::SetString(int index, const String& value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set string '{}' - current object is null", index);
@@ -634,6 +675,8 @@ namespace Kmplete
 
     bool JsonWriter::SetString(const char* name, const String& value)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_currentObject)
         {
             KMP_LOG_ERROR("JsonWriter: cannot set string '{}' - current object is null", name);
