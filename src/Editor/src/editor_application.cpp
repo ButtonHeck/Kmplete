@@ -3,11 +3,14 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     UPtr<Application> CreateApplication(const ProgramOptions& programOptions)
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             ApplicationParameters applicationParameters{
@@ -31,18 +34,24 @@ namespace Kmplete
         : WindowApplication(applicationParameters)
         , _ui(nullptr)
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     EditorApplication::~EditorApplication()
     {
+        KMP_PROFILE_FUNCTION();
+
         Finalize();
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::Initialize()
     {
+        KMP_PROFILE_FUNCTION();
+
         auto& mainWindow = _windowBackend->GetMainWindow();
         mainWindow.SetTitle(_applicationName.c_str());
         mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
@@ -59,6 +68,8 @@ namespace Kmplete
 
     void EditorApplication::Finalize()
     {
+        KMP_PROFILE_FUNCTION();
+
         SaveSettingsInternal();
     }
     //--------------------------------------------------------------------------
@@ -81,6 +92,8 @@ namespace Kmplete
 
     void EditorApplication::SaveSettings(const Path& path /*= Path()*/) const
     {
+        KMP_PROFILE_FUNCTION();
+
         SaveSettingsInternal();
         WindowApplication::SaveSettings(path);
     }
@@ -88,6 +101,8 @@ namespace Kmplete
 
     void EditorApplication::LoadSettings(const Path& path /*= Path()*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         WindowApplication::LoadSettings(path);
         LoadSettingsInternal();
     }
@@ -95,6 +110,8 @@ namespace Kmplete
 
     void EditorApplication::OnEvent(Event& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         EventDispatcher dispatcher(event);
 
         dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorApplication::OnWindowCloseEvent));
@@ -107,30 +124,40 @@ namespace Kmplete
 
     bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _ui->OnWindowCloseEvent(event);
     }
     //--------------------------------------------------------------------------
 
     bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _ui->OnWindowFramebufferRefreshEvent(event);
     }
     //--------------------------------------------------------------------------
 
     bool EditorApplication::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _ui->OnWindowContentScaleEvent(event);
     }
     //--------------------------------------------------------------------------
 
     bool EditorApplication::OnKeyPressEvent(KeyPressEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _ui->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 
     void EditorApplication::SaveSettingsInternal() const
     {
+        KMP_PROFILE_FUNCTION();
+
         auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
@@ -144,6 +171,8 @@ namespace Kmplete
 
     void EditorApplication::LoadSettingsInternal()
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {

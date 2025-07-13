@@ -3,6 +3,7 @@
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <imgui.h>
 #include <forkawesome-webfont.h>
@@ -20,12 +21,16 @@ namespace Kmplete
         , _compositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     EditorUI::~EditorUI()
     {
+        KMP_PROFILE_FUNCTION();
+
         _uiImpl.reset();
         Finalize();
     }
@@ -33,6 +38,8 @@ namespace Kmplete
 
     void EditorUI::Initialize()
     {
+        KMP_PROFILE_FUNCTION();
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         auto& io = ImGui::GetIO();
@@ -51,6 +58,8 @@ namespace Kmplete
 
     void EditorUI::AddDefaultFont(float dpiScale) const
     {
+        KMP_PROFILE_FUNCTION();
+
         auto& io = ImGui::GetIO();
         const auto fontSize = 18 * dpiScale;
         const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
@@ -60,6 +69,8 @@ namespace Kmplete
 
     void EditorUI::AddIconsFont(float dpiScale) const
     {
+        KMP_PROFILE_FUNCTION();
+
         auto& io = ImGui::GetIO();
         const auto fontSize = 18 * dpiScale;
         ImFontConfig iconsConfig;
@@ -74,6 +85,8 @@ namespace Kmplete
 
     void EditorUI::Stylize(float dpiScale) const
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::GetStyle() = ImGuiStyle();
 
         auto& style = ImGui::GetStyle();
@@ -87,12 +100,16 @@ namespace Kmplete
 
     void EditorUI::Finalize() const
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::DestroyContext();
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::LoopIteration()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_metricsTimer.ReachedTimeout())
         {
             _metricsTimer.Mark();
@@ -128,6 +145,8 @@ namespace Kmplete
 
     void EditorUI::NewFrame()
     {
+        KMP_PROFILE_FUNCTION();
+
         _uiImpl->NewFrame();
         ImGui::NewFrame();
     }
@@ -135,6 +154,8 @@ namespace Kmplete
 
     void EditorUI::BeginApplicationArea() const
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -157,6 +178,8 @@ namespace Kmplete
 
     void EditorUI::BeginMainWorkingArea() const
     {
+        KMP_PROFILE_FUNCTION();
+
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowViewport(viewport->ID);
@@ -188,18 +211,24 @@ namespace Kmplete
 
     void EditorUI::ComposeMainArea()
     {
+        KMP_PROFILE_FUNCTION();
+
         _compositor->ComposeMainArea();
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::EndMainWorkingArea() const
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::EndChild(); // IdApp_MainWorkingArea
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::BeginStatusBarArea() const
     {
+        KMP_PROFILE_FUNCTION();
+
         UiUtils::StyleVarGuard styleVarGuard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
             {ImGuiStyleVar_WindowBorderSize, 0.0f},
@@ -215,24 +244,32 @@ namespace Kmplete
 
     void EditorUI::ComposeStatusBar()
     {
+        KMP_PROFILE_FUNCTION();
+
         _compositor->ComposeStatusBar(_metricsTimer);
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::EndStatusBarArea() const
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::EndChild(); // IdApp_StatusBar
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::EndApplicationArea() const
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::End(); // IdApp_ApplicationWindow
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::Render()
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::Render();
         _uiImpl->Render();
     }
@@ -240,18 +277,24 @@ namespace Kmplete
 
     void EditorUI::EndFrame() const
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui::EndFrame();
     }
     //--------------------------------------------------------------------------
 
     bool EditorUI::OnWindowCloseEvent(WindowCloseEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _compositor->OnWindowCloseEvent(event);
     }
     //--------------------------------------------------------------------------
 
     bool EditorUI::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
     {
+        KMP_PROFILE_FUNCTION();
+
         LoopIteration();
         return true;
     }
@@ -259,6 +302,8 @@ namespace Kmplete
 
     bool EditorUI::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         _uiImpl.reset();
         _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
 
@@ -276,12 +321,16 @@ namespace Kmplete
 
     bool EditorUI::OnKeyPressEvent(KeyPressEvent& event)
     {
+        KMP_PROFILE_FUNCTION();
+
         return _compositor->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 
     void EditorUI::SaveSettings(Settings& settings) const
     {
+        KMP_PROFILE_FUNCTION();
+
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
         _compositor->SaveSettings(settings);
@@ -291,6 +340,8 @@ namespace Kmplete
 
     void EditorUI::LoadSettings(Settings& settings)
     {
+        KMP_PROFILE_FUNCTION();
+
         settings.StartLoadObject(SettingsEntryName);
         _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
         _compositor->LoadSettings(settings);

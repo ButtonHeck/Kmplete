@@ -1,4 +1,5 @@
 #include "editor_ui_impl_opengl_glfw.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -10,18 +11,24 @@ namespace Kmplete
     EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(Window& mainWindow)
         : EditorUIImpl(mainWindow)
     {
+        KMP_PROFILE_FUNCTION();
+
         Initialize();
     }
     //--------------------------------------------------------------------------
 
     EditorUIImplOpenglGLFW::~EditorUIImplOpenglGLFW()
     {
+        KMP_PROFILE_FUNCTION();
+
         Finalize();
     }
     //--------------------------------------------------------------------------
 
     void EditorUIImplOpenglGLFW::Initialize()
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<GLFWwindow*>(_mainWindow.GetImplPointer()), true);
         ImGui_ImplOpenGL3_Init("#version 330");
     }
@@ -29,6 +36,8 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::Finalize()
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
     }
@@ -36,6 +45,8 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::NewFrame()
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
     }
@@ -43,6 +54,8 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::Render()
     {
+        KMP_PROFILE_FUNCTION();
+
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         const auto& io = ImGui::GetIO();

@@ -1,4 +1,5 @@
 #include "ui_utils.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <imgui_internal.h>
 
@@ -9,6 +10,8 @@ namespace Kmplete
         DisableGuard::DisableGuard(bool condition)
             : _condition(condition)
         {
+            KMP_PROFILE_FUNCTION();
+
             if (_condition)
             {
                 ImGui::BeginDisabled();
@@ -18,6 +21,8 @@ namespace Kmplete
 
         DisableGuard::~DisableGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             if (_condition)
             {
                 ImGui::EndDisabled();
@@ -28,12 +33,16 @@ namespace Kmplete
 
         ItemWidthGuard::ItemWidthGuard(float width)
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::PushItemWidth(width);
         }
         //--------------------------------------------------------------------------
 
         ItemWidthGuard::~ItemWidthGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::PopItemWidth();
         }
         //--------------------------------------------------------------------------
@@ -42,6 +51,8 @@ namespace Kmplete
         StyleColorGuard::StyleColorGuard(std::initializer_list<std::pair<ImGuiCol_, ImVec4>>&& colors)
             : _count(static_cast<int>(colors.size()))
         {
+            KMP_PROFILE_FUNCTION();
+
             for (const auto& value : colors)
             {
                 ImGui::PushStyleColor(value.first, value.second);
@@ -51,6 +62,8 @@ namespace Kmplete
 
         StyleColorGuard::~StyleColorGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::PopStyleColor(_count);
         }
         //--------------------------------------------------------------------------
@@ -59,6 +72,8 @@ namespace Kmplete
         StyleVarGuard::StyleVarGuard(std::initializer_list<std::pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables)
             : _count(static_cast<int>(variables.size()))
         {
+            KMP_PROFILE_FUNCTION();
+
             for (const auto& value : variables)
             {
                 const auto variableInfo = ImGui::GetStyleVarInfo(value.first);
@@ -77,6 +92,8 @@ namespace Kmplete
 
         StyleVarGuard::~StyleVarGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::PopStyleVar(_count);
         }
         //--------------------------------------------------------------------------
@@ -85,12 +102,16 @@ namespace Kmplete
         IDGuard::IDGuard(int id)
             : _id(id)
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::PushID(_id);
         }
         //--------------------------------------------------------------------------
 
         IDGuard::~IDGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::PopID();
         }
         //--------------------------------------------------------------------------
@@ -98,12 +119,16 @@ namespace Kmplete
 
         GroupGuard::GroupGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::BeginGroup();
         }
         //--------------------------------------------------------------------------
 
         GroupGuard::~GroupGuard()
         {
+            KMP_PROFILE_FUNCTION();
+
             ImGui::EndGroup();
         }
         //--------------------------------------------------------------------------
@@ -111,6 +136,8 @@ namespace Kmplete
 
         void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags /*= ImGuiHoveredFlags_AllowWhenDisabled*/)
         {
+            KMP_PROFILE_FUNCTION();
+
             if (ImGui::IsItemHovered(flags))
             {
                 ImGui::SetTooltip(text);
