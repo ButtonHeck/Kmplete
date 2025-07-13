@@ -68,7 +68,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
 {
     Kmplete::MemoryChecker::Prepare();
 
-    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json");
+    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", 210);
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();
 
@@ -77,11 +77,11 @@ int Main(const Kmplete::ProgramOptions& programOptions)
         return 1;
     }
 
-    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json");
+    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json", 100'000);
     app->Run();
     KMP_PROFILE_END_SESSION();
 
-    KMP_PROFILE_BEGIN_SESSION("Shutdown", "KmpleteProfile-Shutdown.json");
+    KMP_PROFILE_BEGIN_SESSION("Shutdown", "KmpleteProfile-Shutdown.json", 120);
     app.reset();
     KMP_PROFILE_END_SESSION();
 

@@ -8,7 +8,6 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
-#include <fstream>
 
 namespace Kmplete
 {
@@ -24,6 +23,7 @@ namespace Kmplete
     struct ProfilingSession
     {
         String name;
+        int profilesCount;
     };
     //--------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API static Profiler& Get();
 
-        KMP_API void BeginSession(const String& name, const Path& filepath);
+        KMP_API void BeginSession(const String& name, const Path& filepath, int storageSize);
         KMP_API void EndSession();
         KMP_API void WriteProfile(const ProfileResult& result);
 
@@ -42,15 +42,15 @@ namespace Kmplete
         Profiler() noexcept;
         ~Profiler();
 
-        void BeginSessionInternal(const String& name, const Path& filepath);
+        void BeginSessionInternal(const String& name, const Path& filepath, int storageSize);
         void EndSessionInternal();
-        void WriteHeader();
-        void WriteFooter();
 
     private:
         std::mutex _mutex;
         UPtr<ProfilingSession> _currentSession;
-        std::ofstream _outputFileStream;
+        Path _outputFilePath;
+        std::vector<ProfileResult> _profileResults;
+        int _storageSize;
     };
     //--------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ namespace Kmplete
         ::Kmplete::ProfilerTimer timer##line(fixedNameKmplete##line.data)
     #define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
 
-    #define KMP_PROFILE_BEGIN_SESSION(name, filepath) ::Kmplete::Profiler::Get().BeginSession(name, filepath)
+    #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
     #define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
     #define KMP_PROFILE_SCOPE(name) _KMP_PROFILE_SCOPE_LINE(name, __LINE__)
     #define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)

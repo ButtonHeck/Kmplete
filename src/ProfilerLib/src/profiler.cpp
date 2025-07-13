@@ -1,10 +1,13 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
+#include <fstream>
+
 namespace Kmplete
 {
     Profiler::Profiler() noexcept
         : _currentSession(nullptr)
+        , _storageSize(0)
     {}
     //--------------------------------------------------------------------------
 
@@ -21,10 +24,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::BeginSession(const String& name, const Path& filepath)
+    void Profiler::BeginSession(const String& name, const Path& filepath, int storageSize)
     {
         KMP_MB_UNUSED std::lock_guard lock(_mutex);
-        BeginSessionInternal(name, filepath);
+        BeginSessionInternal(name, filepath, storageSize);
     }
     //--------------------------------------------------------------------------
 
@@ -39,25 +42,14 @@ namespace Kmplete
     {
         if (_currentSession)
         {
-            std::ostringstream json;
-            json << std::setprecision(3) << std::fixed
-                 << R"rjs(,{"cat":"function","dur":)rjs"
-                 << result.elapsedTimeMicrosec
-                 << R"rjs(,"name":")rjs"
-                 << result.name
-                 << R"rjs(","ph":"X","pid":0,"tid":)rjs"
-                 << result.threadId
-                 << R"rjs(,"ts":)rjs"
-                 << result.startTime.count() 
-                 << "}";
-
             KMP_MB_UNUSED std::lock_guard lock(_mutex);
-            _outputFileStream << json.str();
+            ++_currentSession->profilesCount;
+            _profileResults.push_back(result);
         }
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::BeginSessionInternal(const String& name, const Path& filepath)
+    void Profiler::BeginSessionInternal(const String& name, const Path& filepath, int storageSize)
     {
         if (_currentSession)
         {
@@ -65,16 +57,10 @@ namespace Kmplete
             EndSessionInternal();
         }
 
-        _outputFileStream.open(filepath);
-        if (_outputFileStream.is_open())
-        {
-            _currentSession.reset(new ProfilingSession({name}));
-            WriteHeader();
-        }
-        else
-        {
-            KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", name, filepath);
-        }
+        _storageSize = storageSize;
+        _profileResults.reserve(storageSize);
+        _outputFilePath = filepath;
+        _currentSession.reset(new ProfilingSession({ name, 0 }));
     }
     //--------------------------------------------------------------------------
 
@@ -82,24 +68,42 @@ namespace Kmplete
     {
         if (_currentSession)
         {
-            WriteFooter();
-            _outputFileStream.close();
-            _currentSession.reset(nullptr);
+            std::ofstream _outputFileStream(_outputFilePath);
+            if (_outputFileStream.is_open())
+            {
+                _outputFileStream 
+                    << R"rjs({"otherData":{"profileCount":")rjs" 
+                    << _currentSession->profilesCount 
+                    << R"rjs("},"traceEvents":[{})rjs";
+
+                for (const auto& profileResult : _profileResults)
+                {
+                    _outputFileStream 
+                        << std::setprecision(3) << std::fixed
+                        << R"rjs(,{"cat":"function","dur":)rjs"
+                        << profileResult.elapsedTimeMicrosec
+                        << R"rjs(,"name":")rjs"
+                        << profileResult.name
+                        << R"rjs(","ph":"X","pid":0,"tid":)rjs"
+                        << profileResult.threadId
+                        << R"rjs(,"ts":)rjs"
+                        << profileResult.startTime.count()
+                        << "}";
+                }
+
+                _outputFileStream << "]}";
+
+                _outputFileStream.flush();
+                _outputFileStream.close();
+            }
+            else
+            {
+                KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", _currentSession->name, _outputFilePath);
+            }            
         }
-    }
-    //--------------------------------------------------------------------------
 
-    void Profiler::WriteHeader()
-    {
-        _outputFileStream << R"rjs({"otherData":{},"traceEvents":[{})rjs";
-        _outputFileStream.flush();
-    }
-    //--------------------------------------------------------------------------
-
-    void Profiler::WriteFooter()
-    {
-        _outputFileStream << "]}";
-        _outputFileStream.flush();
+        _currentSession.reset(nullptr);
+        _profileResults.clear();
     }
     //--------------------------------------------------------------------------
 
