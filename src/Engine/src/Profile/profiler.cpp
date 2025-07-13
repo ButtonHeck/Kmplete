@@ -1,7 +1,5 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Utils/string_utils.h"
 
 namespace Kmplete
 {
@@ -42,17 +40,16 @@ namespace Kmplete
         if (_currentSession)
         {
             std::ostringstream json;
-            Utils::ToSStream(json, 
-                std::setprecision(3), std::fixed,
-                R"rjs(,{"cat":"function","dur":)rjs", 
-                result.elapsedTimeMicrosec,
-                R"rjs(,"name":")rjs",
-                result.name,
-                R"rjs(","ph":"X","pid":0,"tid":)rjs",
-                result.threadId,
-                R"rjs(,"ts":)rjs",
-                result.startTime.count(), "}"
-            );
+            json << std::setprecision(3) << std::fixed
+                 << R"rjs(,{"cat":"function","dur":)rjs"
+                 << result.elapsedTimeMicrosec
+                 << R"rjs(,"name":")rjs"
+                 << result.name
+                 << R"rjs(","ph":"X","pid":0,"tid":)rjs"
+                 << result.threadId
+                 << R"rjs(,"ts":)rjs"
+                 << result.startTime.count() 
+                 << "}";
 
             KMP_MB_UNUSED std::lock_guard lock(_mutex);
             _outputFileStream << json.str();
@@ -109,12 +106,13 @@ namespace Kmplete
 
     ProfilerTimer::ProfilerTimer(const char* name)
         : _name(name)
+        , _last(std::chrono::high_resolution_clock::now())
     {}
     //--------------------------------------------------------------------------
 
     ProfilerTimer::~ProfilerTimer()
     {
-        const auto elapsedTimeMicroseconds = Peek() * 1000.0f;
+        const auto elapsedTimeMicroseconds = std::chrono::duration<float, std::micro>(std::chrono::high_resolution_clock::now() - _last).count();
         const auto start = std::chrono::duration<double, std::micro>(_last.time_since_epoch());
 
         Profiler::Get().WriteProfile(ProfileResult{_name, start, elapsedTimeMicroseconds, std::this_thread::get_id()});

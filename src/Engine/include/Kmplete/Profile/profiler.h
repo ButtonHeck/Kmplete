@@ -3,8 +3,7 @@
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Core/timer.h"
-#include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Base/macro.h"
 
 #include <chrono>
 #include <thread>
@@ -55,7 +54,7 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    class ProfilerTimer : public Timer
+    class ProfilerTimer
     {
     public:
         KMP_DISABLE_COPY_MOVE(ProfilerTimer)
@@ -65,6 +64,7 @@ namespace Kmplete
 
     private:
         const char* _name;
+        std::chrono::high_resolution_clock::time_point _last;
     };
     //--------------------------------------------------------------------------
 
