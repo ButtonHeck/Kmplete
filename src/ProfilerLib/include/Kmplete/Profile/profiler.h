@@ -8,6 +8,7 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
+#include <type_traits>
 
 namespace Kmplete
 {
@@ -18,6 +19,7 @@ namespace Kmplete
         float elapsedTimeMicrosec;
         std::thread::id threadId;
     };
+    static_assert(std::is_move_constructible_v<ProfileResult> == true);
     //--------------------------------------------------------------------------
 
     struct ProfilingSession
@@ -36,7 +38,6 @@ namespace Kmplete
 
         KMP_API void BeginSession(const String& name, const Path& filepath, int storageSize);
         KMP_API void EndSession();
-        KMP_API void WriteProfile(const ProfileResult& result);
 
     private:
         Profiler() noexcept;
@@ -44,6 +45,9 @@ namespace Kmplete
 
         void BeginSessionInternal(const String& name, const Path& filepath, int storageSize);
         void EndSessionInternal();
+
+    private:
+        friend class ProfilerTimer;
 
     private:
         std::mutex _mutex;

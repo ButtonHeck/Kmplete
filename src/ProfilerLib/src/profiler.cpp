@@ -38,17 +38,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::WriteProfile(const ProfileResult& result)
-    {
-        if (_currentSession)
-        {
-            KMP_MB_UNUSED std::lock_guard lock(_mutex);
-            ++_currentSession->profilesCount;
-            _profileResults.push_back(result);
-        }
-    }
-    //--------------------------------------------------------------------------
-
     void Profiler::BeginSessionInternal(const String& name, const Path& filepath, int storageSize)
     {
         if (_currentSession)
@@ -119,7 +108,13 @@ namespace Kmplete
         const auto elapsedTimeMicroseconds = std::chrono::duration<float, std::micro>(std::chrono::high_resolution_clock::now() - _last).count();
         const auto start = std::chrono::duration<double, std::micro>(_last.time_since_epoch());
 
-        Profiler::Get().WriteProfile(ProfileResult{_name, start, elapsedTimeMicroseconds, std::this_thread::get_id()});
+        auto& profiler = Profiler::Get();
+        if (profiler._currentSession)
+        {
+            KMP_MB_UNUSED std::lock_guard lock(profiler._mutex);
+            ++profiler._currentSession->profilesCount;
+            profiler._profileResults.emplace_back(_name, start, elapsedTimeMicroseconds, std::this_thread::get_id());
+        }
     }
     //--------------------------------------------------------------------------
 }
