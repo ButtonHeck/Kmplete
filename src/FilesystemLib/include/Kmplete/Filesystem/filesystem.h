@@ -3,8 +3,6 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types.h"
 
-#include <spdlog/fmt/fmt.h>
-
 namespace Kmplete
 {
     namespace Filesystem
@@ -28,14 +26,3 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 }
-
-template<>
-struct fmt::formatter<Kmplete::Path> : fmt::formatter<Kmplete::String>
-{
-    template <typename FormatContext>
-    auto format(const Kmplete::Path& path, FormatContext& ctx)
-    {
-        return fmt::formatter<Kmplete::String>::format(Kmplete::Filesystem::ToGenericU8String(path), ctx);
-    }
-};
-//--------------------------------------------------------------------------

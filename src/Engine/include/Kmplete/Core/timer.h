@@ -10,7 +10,7 @@ namespace Kmplete
     {
     public:
         KMP_API explicit Timer(unsigned int timeoutMs = 0) noexcept;
-        virtual ~Timer() = default;
+        ~Timer() = default;
 
         KMP_API float Mark() noexcept;
         KMP_NODISCARD KMP_API float Peek() const noexcept;

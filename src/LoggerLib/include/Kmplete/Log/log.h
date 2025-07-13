@@ -87,6 +87,17 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
+template<>
+struct fmt::formatter<Kmplete::Path> : fmt::formatter<Kmplete::String>
+{
+    template <typename FormatContext>
+    auto format(const Kmplete::Path& path, FormatContext& ctx)
+    {
+        return fmt::formatter<Kmplete::String>::format(path.generic_u8string(), ctx);
+    }
+};
+//--------------------------------------------------------------------------
+
 #define KMP_LOG_TRACE(...)      ::Kmplete::Log::Trace(__VA_ARGS__)
 #define KMP_LOG_DEBUG(...)      ::Kmplete::Log::Debug(__VA_ARGS__)
 #define KMP_LOG_INFO(...)       ::Kmplete::Log::Info(__VA_ARGS__)
