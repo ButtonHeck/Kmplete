@@ -90,12 +90,6 @@ set(Kmplete_LOCALIZATION
 )
 source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
-set(Kmplete_PROFILE
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Profile/profiler.cpp
-)
-source_group("Profile" FILES ${Kmplete_PROFILE})
-
 add_library(Kmplete
     ${Kmplete_CORE}
     ${Kmplete_APPLICATION}
@@ -103,7 +97,6 @@ add_library(Kmplete
     ${Kmplete_GRAPHICS}
     ${Kmplete_GRAPHICS_OPENGL}
     ${Kmplete_LOCALIZATION}
-    ${Kmplete_PROFILE}
 )
 
 
@@ -141,6 +134,7 @@ target_link_libraries(Kmplete
     PUBLIC VersionLib
     PUBLIC FilesystemLib
     PUBLIC JsonLib
+    PUBLIC ProfilerLib
     PUBLIC glfw
     
     PRIVATE stb_image
