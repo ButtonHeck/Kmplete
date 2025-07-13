@@ -23,6 +23,7 @@ target_include_directories(FilesystemLib
 target_link_libraries(FilesystemLib 
     PUBLIC BaseLib
     PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
+    PUBLIC ProfilerLib
 )
 
 target_compile_definitions(FilesystemLib

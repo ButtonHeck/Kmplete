@@ -1,5 +1,6 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <fstream>
 
@@ -13,6 +14,8 @@ namespace Kmplete
 {
     Path Filesystem::GetCurrentPath() noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             return std::filesystem::current_path();
@@ -27,6 +30,8 @@ namespace Kmplete
 
     bool Filesystem::PathExists(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             return std::filesystem::exists(path);
@@ -41,12 +46,16 @@ namespace Kmplete
 
     bool Filesystem::FilePathIsValid(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         return !path.empty() && path.has_filename();
     }
     //--------------------------------------------------------------------------
 
     bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile /*= false*/) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             std::filesystem::create_directories(pathIsFile ? path.parent_path() : path);
@@ -62,6 +71,8 @@ namespace Kmplete
 
     bool Filesystem::RemoveDirectories(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             return std::filesystem::remove_all(path) != 0;
@@ -76,6 +87,8 @@ namespace Kmplete
 
     bool Filesystem::CreateFile(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             if (PathExists(path))
@@ -103,6 +116,8 @@ namespace Kmplete
 
     bool Filesystem::RemoveFile(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             return std::filesystem::remove(path);
@@ -117,6 +132,8 @@ namespace Kmplete
 
     bool Filesystem::IsFile(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             return std::filesystem::is_regular_file(path);
@@ -131,6 +148,8 @@ namespace Kmplete
 
     bool Filesystem::IsDirectory(const Path& path) noexcept
     {
+        KMP_PROFILE_FUNCTION();
+
         try
         {
             return std::filesystem::is_directory(path);
@@ -145,24 +164,32 @@ namespace Kmplete
 
     String Filesystem::ToGenericU8String(const Path& path)
     {
+        KMP_PROFILE_FUNCTION();
+
         return path.generic_u8string();
     }
     //--------------------------------------------------------------------------
 
     String Filesystem::ToGenericString(const Path& path)
     {
+        KMP_PROFILE_FUNCTION();
+
         return path.generic_string();
     }
     //--------------------------------------------------------------------------
 
     String Filesystem::ToNativeU8String(const Path& path)
     {
+        KMP_PROFILE_FUNCTION();
+
         return path.u8string();
     }
     //--------------------------------------------------------------------------
 
     String Filesystem::ToNativeString(const Path& path)
     {
+        KMP_PROFILE_FUNCTION();
+
         return path.string();
     }
     //--------------------------------------------------------------------------
