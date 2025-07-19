@@ -49,7 +49,14 @@ namespace Kmplete
 
         void BeginSessionInternal(const String& name, const Path& filepath, int storageSize);
         void EndSessionInternal();
-        void WriteProfileResults(std::ofstream& outputFileStream);
+
+        void WriteProfileHeader(std::ofstream& outputFileStream) const;
+        void WriteProfileResults(std::ofstream& outputFileStream) const;
+        void WriteProfileResultsToIntermediate() const;
+        void WriteProfileResultsFromIntermediate(std::ofstream& outputFileStream) const;
+        void WriteProfileFooter(std::ofstream& outputFileStream) const;
+        Path CreateIntermediateFilePath(int intermediateCount) const;
+        void BeginNewCycle();
 
     private:
         friend class ProfilerTimer;
@@ -125,15 +132,19 @@ namespace Kmplete
 }
 
 #define _KMP_PROFILE_SCOPE_LINE2(name, line) \
-    constexpr auto fixedNameCdecl##line     = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
-    constexpr auto fixedNameKmplete##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
-    constexpr auto fixedNameUPtr##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
-    constexpr auto fixedNamePtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
-    constexpr auto fixedNameString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
-    constexpr auto fixedNameWString##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
-    constexpr auto fixedNameInt64##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
-    constexpr auto fixedNamePath##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Path");\
-    ::Kmplete::ProfilerTimer timer##line(fixedNamePath##line.data)
+    constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
+    constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
+    constexpr auto fixedNameUPtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
+    constexpr auto fixedNamePtr##line        = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
+    constexpr auto fixedNameString##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
+    constexpr auto fixedNameWString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
+    constexpr auto fixedNameInt64##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
+    constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Path");\
+    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "class ", "");\
+    constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
+    constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\
+    constexpr auto fixedNameVoidParams##line = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVector##line.data, "(void)", "()");\
+    ::Kmplete::ProfilerTimer timer##line(fixedNameVoidParams##line.data)
 #define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
 
 #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)

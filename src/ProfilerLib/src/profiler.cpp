@@ -63,43 +63,14 @@ namespace Kmplete
             std::ofstream outputFileStream(_outputFilePath);
             if (outputFileStream.is_open())
             {
-                outputFileStream
-                    << R"rjs({"otherData":{"profileCount":")rjs" 
-                    << _currentSession->profilesCount 
-                    << R"rjs("},"traceEvents":[{})rjs";
-
-                if (_storeCycles == 0)
+                WriteProfileHeader(outputFileStream);
+                if (_storeCycles > 0)
                 {
-                    WriteProfileResults(outputFileStream);
+                    WriteProfileResultsFromIntermediate(outputFileStream);
                 }
-                else
-                {
-                    int storeCycle = 0;
-                    while (storeCycle <= _storeCycles)
-                    {
-                        const auto intermediateStorageFilename = _outputFilePath.stem().generic_u8string().append("_").append(std::to_string(storeCycle));
-                        const auto intermediateStoragePath = _outputFilePath.parent_path() / intermediateStorageFilename;
-                        std::ifstream intermediateFileInputStream(intermediateStoragePath);
-                        if (intermediateFileInputStream.is_open())
-                        {
-                            std::stringstream ss;
-                            ss << intermediateFileInputStream.rdbuf();
-                            intermediateFileInputStream.close();
+                WriteProfileResults(outputFileStream);
+                WriteProfileFooter(outputFileStream);
 
-                            const String intermediateProfiles = ss.str();
-                            outputFileStream << intermediateProfiles;
-                            outputFileStream.flush();
-                            
-                            std::filesystem::remove(intermediateStoragePath);
-                        }
-
-                        ++storeCycle;
-                    }
-
-                    WriteProfileResults(outputFileStream);
-                }
-
-                outputFileStream << "]}";
                 outputFileStream.flush();
                 outputFileStream.close();
             }
@@ -114,7 +85,16 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::WriteProfileResults(std::ofstream& outputFileStream)
+    void Profiler::WriteProfileHeader(std::ofstream& outputFileStream) const
+    {
+        outputFileStream
+            << R"rjs({"otherData":{"profileCount":")rjs"
+            << _currentSession->profilesCount
+            << R"rjs("},"traceEvents":[{})rjs";
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::WriteProfileResults(std::ofstream& outputFileStream) const
     {
         for (const auto& profileResult : _profileResults)
         {
@@ -130,6 +110,83 @@ namespace Kmplete
                 << profileResult.startTime.count()
                 << "}";
         }
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::WriteProfileResultsToIntermediate() const
+    {
+        const auto intermediateStoragePath = CreateIntermediateFilePath(_storeCycles);
+
+        std::ofstream intermediateFileStream(intermediateStoragePath);
+        if (intermediateFileStream.is_open())
+        {
+            WriteProfileResults(intermediateFileStream);
+
+            intermediateFileStream.flush();
+            intermediateFileStream.close();
+
+            KMP_LOG_INFO("Profiler: write to intermediate file '{}'", intermediateStoragePath);
+        }
+        else
+        {
+            KMP_LOG_ERROR("Profiler: failed to write to intermediate file '{}'", intermediateStoragePath);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::WriteProfileResultsFromIntermediate(std::ofstream& outputFileStream) const
+    {
+        int storeCycle = 0;
+        while (storeCycle < _storeCycles)
+        {
+            const auto intermediateStoragePath = CreateIntermediateFilePath(storeCycle);
+
+            std::ifstream intermediateFileInputStream(intermediateStoragePath);
+            if (intermediateFileInputStream.is_open())
+            {
+                std::stringstream intermediateBuffer;
+                intermediateBuffer << intermediateFileInputStream.rdbuf();
+                intermediateFileInputStream.close();
+
+                outputFileStream << intermediateBuffer.str();
+
+                if (!std::filesystem::remove(intermediateStoragePath))
+                {
+                    KMP_LOG_WARN("Profiler: failed to remove temporary intermediate file '{}'", intermediateStoragePath);
+                }
+            }
+            else
+            {
+                KMP_LOG_ERROR("Profiler: failed to write from intermediate file '{}'", intermediateStoragePath);
+            }
+
+            outputFileStream.flush();
+
+            KMP_LOG_INFO("Profiler: write from intermediate file '{}'", intermediateStoragePath);
+
+            ++storeCycle;
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::WriteProfileFooter(std::ofstream& outputFileStream) const
+    {
+        outputFileStream << "]}";
+    }
+    //--------------------------------------------------------------------------
+
+    Path Profiler::CreateIntermediateFilePath(int intermediateCount) const
+    {
+        const auto intermediateStorageFilename = _outputFilePath.stem().generic_u8string().append(std::to_string(intermediateCount));
+        return _outputFilePath.parent_path() / intermediateStorageFilename;
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::BeginNewCycle()
+    {
+        ++_storeCycles;
+        _profileResults.clear();
+        _profileResults.reserve(_storageSize);
     }
     //--------------------------------------------------------------------------
 
@@ -161,20 +218,8 @@ namespace Kmplete
             return;
         }
 
-        const auto intermediateStorageFilename = profiler._outputFilePath.stem().generic_u8string().append("_").append(std::to_string(profiler._storeCycles));
-        const auto intermediateStoragePath = profiler._outputFilePath.parent_path() / intermediateStorageFilename;
-
-        std::ofstream intermediateFileStream(intermediateStoragePath);
-        if (intermediateFileStream.is_open())
-        {
-            profiler.WriteProfileResults(intermediateFileStream);
-            intermediateFileStream.flush();
-            intermediateFileStream.close();
-        }
-
-        ++profiler._storeCycles;
-        profiler._profileResults.clear();
-        profiler._profileResults.reserve(profiler._storageSize);
+        profiler.WriteProfileResultsToIntermediate();
+        profiler.BeginNewCycle();
     }
     //--------------------------------------------------------------------------
 }
