@@ -75,15 +75,15 @@ namespace Kmplete
     namespace ProfilerUtils
     {
         template<size_t length>
-        struct CleanupResult
+        struct ReplaceResult
         {
             char data[length];
         };
 
-        template<size_t lengthSrc, size_t lengthRemove>
-        consteval auto CleanupOutputString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove])
+        template<size_t lengthSrc, size_t lengthRemove, size_t lengthReplace>
+        consteval auto ReplaceString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove], const char(&replace)[lengthReplace])
         {
-            CleanupResult<lengthSrc> result = {};
+            ReplaceResult<lengthSrc> result = {};
 
             size_t srcIndex = 0;
             size_t dstIndex = 0;
@@ -97,11 +97,19 @@ namespace Kmplete
 
                 if (matchIndex == lengthRemove - 1)
                 {
+                    size_t replaceIndex = 0;
+                    while (replaceIndex < lengthReplace - 1)
+                    {
+                        result.data[dstIndex++] = replace[replaceIndex++];
+                    }
+
                     srcIndex += matchIndex;
                 }
-
-                result.data[dstIndex++] = (src[srcIndex] == '"' ? '\'' : src[srcIndex]);
-                srcIndex++;
+                else
+                {
+                    result.data[dstIndex++] = src[srcIndex];
+                    srcIndex++;
+                }
             }
 
             return result;
@@ -113,9 +121,15 @@ namespace Kmplete
 #define KMP_PROFILE true
 #if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
     #define _KMP_PROFILE_SCOPE_LINE2(name, line) \
-        constexpr auto fixedNameCdecl##line = ::Kmplete::ProfilerUtils::CleanupOutputString(name, "__cdecl ");\
-        constexpr auto fixedNameKmplete##line = ::Kmplete::ProfilerUtils::CleanupOutputString(fixedNameCdecl##line.data, "Kmplete::");\
-        ::Kmplete::ProfilerTimer timer##line(fixedNameKmplete##line.data)
+        constexpr auto fixedNameCdecl##line     = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
+        constexpr auto fixedNameKmplete##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
+        constexpr auto fixedNameUPtr##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
+        constexpr auto fixedNamePtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
+        constexpr auto fixedNameString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
+        constexpr auto fixedNameWString##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
+        constexpr auto fixedNameInt64##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
+        constexpr auto fixedNamePath##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Path");\
+        ::Kmplete::ProfilerTimer timer##line(fixedNamePath##line.data)
     #define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
 
     #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
