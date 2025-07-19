@@ -89,21 +89,21 @@ namespace Kmplete
             if (_logSettings.outputConsole)
             {
                 const auto stdoutSink = CreatePtr<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::automatic);
-                stdoutSink->set_pattern("%^[%T.%e] [%l] %n: %v%$");
+                stdoutSink->set_pattern("%^%T.%e %L \"%n\" | %v%$");
                 logSinks.push_back(stdoutSink);
             }
 
             if (_logSettings.outputFile)
             {
                 const auto fileSink = CreatePtr<spdlog::sinks::basic_file_sink_mt>(_logSettings.filename, _logSettings.truncate);
-                fileSink->set_pattern("[%T.%e] [%l] %n: %v");
+                fileSink->set_pattern("%T.%e %L \"%n\" | %v");
                 logSinks.push_back(fileSink);
             }
 
             if (_logSettings.outputStringBuffer)
             {
                 const auto stringBufferSink = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
-                stringBufferSink->set_pattern("[%T.%e] [%l] %n: %v");
+                stringBufferSink->set_pattern("%T.%e %L \"%n\" | %v");
                 logSinks.push_back(stringBufferSink);
             }
 
