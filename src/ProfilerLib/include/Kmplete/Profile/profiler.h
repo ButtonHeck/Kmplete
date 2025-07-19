@@ -19,8 +19,8 @@ namespace Kmplete
     struct ProfileResult
     {
         String name;
-        std::chrono::duration<double, std::micro> startTime;
-        float elapsedTimeMicrosec;
+        std::chrono::high_resolution_clock::time_point start;
+        std::chrono::high_resolution_clock::time_point end;
         std::thread::id threadId;
     };
     static_assert(std::is_move_constructible_v<ProfileResult> == true);
@@ -81,7 +81,7 @@ namespace Kmplete
 
     private:
         const char* _name;
-        std::chrono::high_resolution_clock::time_point _last;
+        std::chrono::high_resolution_clock::time_point _start;
     };
     //--------------------------------------------------------------------------
 
