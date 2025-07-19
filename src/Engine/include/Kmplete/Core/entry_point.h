@@ -80,7 +80,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
         return 1;
     }
 
-    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json", 100'000);
+    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json", 10'000);
     app->Run();
     KMP_PROFILE_END_SESSION();
 

@@ -8,6 +8,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/macro.h"
 
+#include <fstream>
 #include <chrono>
 #include <thread>
 #include <mutex>
@@ -48,6 +49,7 @@ namespace Kmplete
 
         void BeginSessionInternal(const String& name, const Path& filepath, int storageSize);
         void EndSessionInternal();
+        void WriteProfileResults(std::ofstream& outputFileStream);
 
     private:
         friend class ProfilerTimer;
@@ -58,6 +60,7 @@ namespace Kmplete
         Path _outputFilePath;
         std::vector<ProfileResult> _profileResults;
         int _storageSize;
+        int _storeCycles;
     };
     //--------------------------------------------------------------------------
 
