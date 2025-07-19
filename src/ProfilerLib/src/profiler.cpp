@@ -1,4 +1,7 @@
 #include "Kmplete/Profile/profiler.h"
+
+#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
+
 #include "Kmplete/Log/log.h"
 
 #include <fstream>
@@ -118,3 +121,4 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 }
+#endif

@@ -16,7 +16,10 @@ void TerminationHandler()
 {
     try
     {
+#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
         Kmplete::Profiler::Get().EndSession();
+#endif
+
         const auto exception = std::current_exception();
         if (exception)
         {

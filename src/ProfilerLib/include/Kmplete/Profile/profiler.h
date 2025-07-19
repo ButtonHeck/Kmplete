@@ -1,5 +1,8 @@
 #pragma once
 
+#define KMP_PROFILE true
+#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
+
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/kmplete_api.h"
@@ -118,27 +121,26 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#define KMP_PROFILE true
-#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
-    #define _KMP_PROFILE_SCOPE_LINE2(name, line) \
-        constexpr auto fixedNameCdecl##line     = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
-        constexpr auto fixedNameKmplete##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
-        constexpr auto fixedNameUPtr##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
-        constexpr auto fixedNamePtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
-        constexpr auto fixedNameString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
-        constexpr auto fixedNameWString##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
-        constexpr auto fixedNameInt64##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
-        constexpr auto fixedNamePath##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Path");\
-        ::Kmplete::ProfilerTimer timer##line(fixedNamePath##line.data)
-    #define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
+#define _KMP_PROFILE_SCOPE_LINE2(name, line) \
+    constexpr auto fixedNameCdecl##line     = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
+    constexpr auto fixedNameKmplete##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
+    constexpr auto fixedNameUPtr##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
+    constexpr auto fixedNamePtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
+    constexpr auto fixedNameString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
+    constexpr auto fixedNameWString##line   = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
+    constexpr auto fixedNameInt64##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
+    constexpr auto fixedNamePath##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Path");\
+    ::Kmplete::ProfilerTimer timer##line(fixedNamePath##line.data)
+#define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
 
-    #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
-    #define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
-    #define KMP_PROFILE_SCOPE(name) _KMP_PROFILE_SCOPE_LINE(name, __LINE__)
-    #define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)
+#define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
+#define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
+#define KMP_PROFILE_SCOPE(name) _KMP_PROFILE_SCOPE_LINE(name, __LINE__)
+#define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)
+
 #else
-    #define KMP_PROFILE_BEGIN_SESSION(name, filepath)
-    #define KMP_PROFILE_END_SESSION()
-    #define KMP_PROFILE_SCOPE(name)
-    #define KMP_PROFILE_FUNCTION()
+#define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize)
+#define KMP_PROFILE_END_SESSION()
+#define KMP_PROFILE_SCOPE(name)
+#define KMP_PROFILE_FUNCTION()
 #endif
