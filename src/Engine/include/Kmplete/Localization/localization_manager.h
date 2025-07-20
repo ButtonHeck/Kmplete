@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_library.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <boost/locale.hpp>
 
@@ -16,6 +17,11 @@ namespace Kmplete
 
     class LocalizationManager
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         using LocaleChangeCallback = std::function<void()>;
 

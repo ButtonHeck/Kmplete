@@ -4,7 +4,6 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <iostream>
 
@@ -14,13 +13,19 @@ namespace Kmplete
     constexpr static auto SettingsLocaleStr = "Locale";
 
     LocalizationManager::LocalizationManager() noexcept
-        : _localeGenerator()
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("LocalizationManager::LocalizationManager() noexcept")),
+#endif
+        _localeGenerator()
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())
     {
-        KMP_PROFILE_FUNCTION();
-
         SetLocale(LocaleEnUTF8Keyword);
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

@@ -1,15 +1,22 @@
 #include "Kmplete/Localization/localization_library.h"
 #include "Kmplete/Localization/localization_dictionary.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     static const auto NoTranslation = TranslationStr("");
 
     LocalizationLibrary::LocalizationLibrary() noexcept
-        : _currentLocaleSid(SidTrInvalidLocale)
-    {}
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("LocalizationLibrary::LocalizationLibrary() noexcept")),
+#endif
+        _currentLocaleSid(SidTrInvalidLocale)
+    {
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
+    }
     //--------------------------------------------------------------------------
 
     void LocalizationLibrary::SetLocale(const LocaleStrSID& localeSid) noexcept

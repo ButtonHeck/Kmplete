@@ -1,14 +1,21 @@
 #include "Kmplete/Localization/localization_dictionary.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     LocalizationDictionary::LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid /*= SidTrInvalidLocale*/) noexcept
-        : _domain(domain)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("LocalizationDictionary::LocalizationDictionary(const DomainStrSID&, const LocaleStrSID&)")),
+#endif
+        _domain(domain)
         , _currentLocaleSid(localeSid)
-    {}
+    {
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
+    }
     //--------------------------------------------------------------------------
 
     const DomainStrSID& LocalizationDictionary::GetDomain() const

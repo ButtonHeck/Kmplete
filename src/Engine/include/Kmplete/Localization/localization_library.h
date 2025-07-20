@@ -4,6 +4,7 @@
 #include "Kmplete/Localization/localization_dictionary.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <unordered_map>
 
@@ -11,6 +12,11 @@ namespace Kmplete
 {
     class LocalizationLibrary
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(LocalizationLibrary)
 
