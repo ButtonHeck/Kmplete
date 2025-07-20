@@ -3,11 +3,17 @@
 #include "editor_ui.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     class EditorApplication : public WindowApplication
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(EditorApplication)
 

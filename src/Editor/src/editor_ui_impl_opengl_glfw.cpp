@@ -1,5 +1,4 @@
 #include "editor_ui_impl_opengl_glfw.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -10,10 +9,15 @@ namespace Kmplete
 {
     EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(Window& mainWindow)
         : EditorUIImpl(mainWindow)
+#if defined(KMP_PROFILE)
+        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorUIImplOpenglGLFW::EditorUIImplOpenglGLFW(Window&)"))
+#endif
     {
-        KMP_PROFILE_FUNCTION();
-
         Initialize();
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

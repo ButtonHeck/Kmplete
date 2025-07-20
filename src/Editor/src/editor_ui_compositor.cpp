@@ -11,7 +11,6 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/texture_manager.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
@@ -24,16 +23,22 @@ namespace Kmplete
     constexpr static auto MetricsFractionalStr = "MetricsFractional";
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
-        : _mainWindow(mainWindow)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorUICompositor::EditorUICompositor(Window&, GraphicsBackend&, LocalizationManager&, const SystemMetricsManager&)")),
+#endif
+        _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
         , _needCheckImguiIniFile(true)
     {
-        KMP_PROFILE_FUNCTION();
-
         FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::FillDictionary));
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

@@ -8,6 +8,7 @@
 #include "Kmplete/Core/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
@@ -17,6 +18,11 @@ namespace Kmplete
 
     class EditorUI
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)
 

@@ -3,7 +3,6 @@
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <imgui.h>
 #include <forkawesome-webfont.h>
@@ -14,16 +13,22 @@ namespace Kmplete
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
     EditorUI::EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
-        : _systemMetricsManager(systemMetricsManager)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorUI::EditorUI(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")),
+#endif
+        _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _uiImpl(nullptr)
         , _compositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
-        KMP_PROFILE_FUNCTION();
-
         Initialize();
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

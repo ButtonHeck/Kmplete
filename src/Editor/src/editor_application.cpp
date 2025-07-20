@@ -3,7 +3,6 @@
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/function_utils.h"
-#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
@@ -32,11 +31,16 @@ namespace Kmplete
 
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
         : WindowApplication(applicationParameters)
+#if defined(KMP_PROFILE)
+        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorApplication::EditorApplication(const ApplicationParameters&)"))
+#endif
         , _ui(nullptr)
     {
-        KMP_PROFILE_FUNCTION();
-
         Initialize();
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 
