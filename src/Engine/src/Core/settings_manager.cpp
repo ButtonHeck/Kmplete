@@ -2,13 +2,20 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     SettingsManager::SettingsManager(const Path& filename)
-        : _filename(filename)
-    {}
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("SettingsManager::SettingsManager(const Path&)")),
+#endif
+        _filename(filename)
+    {
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
+    }
     //--------------------------------------------------------------------------
 
     Nullable<Settings*> SettingsManager::PutSettings(const String& name)

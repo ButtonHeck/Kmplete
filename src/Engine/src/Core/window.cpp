@@ -1,7 +1,6 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
@@ -11,12 +10,23 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     Window::Window(WindowSettings& settings)
-        : _settings(settings)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("Window::Window(WindowSettings&)")),
+#endif
+        _settings(settings)
     {
         if (settings.name.empty())
         {
+#if defined(KMP_PROFILE)
+            _constructorProfilerTimer.reset(nullptr);
+#endif
             throw std::exception();
         }
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

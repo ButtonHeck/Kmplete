@@ -5,7 +5,6 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 
@@ -25,11 +24,16 @@ namespace Kmplete
 
     WindowGlfw::WindowGlfw(WindowSettings& settings)
         : Window(settings)
+#if defined(KMP_PROFILE)
+        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("WindowGlfw::WindowGlfw(WindowSettings&)"))
+#endif
         , _window(nullptr)
     {
-        KMP_PROFILE_FUNCTION();
-
         Initialize();
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

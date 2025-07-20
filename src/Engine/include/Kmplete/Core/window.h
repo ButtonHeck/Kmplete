@@ -5,6 +5,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Event/event.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <functional>
 
@@ -12,6 +13,11 @@ namespace Kmplete
 {
     class Window
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 

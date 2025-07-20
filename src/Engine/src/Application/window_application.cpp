@@ -2,7 +2,6 @@
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -19,13 +18,18 @@ namespace Kmplete
 
     WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
         : Application(applicationParameters)
+#if defined(KMP_PROFILE)
+        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("WindowApplication::WindowApplication(const ApplicationParameters&)"))
+#endif
         , _windowBackend(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _graphicsBackend(nullptr)
     {
-        KMP_PROFILE_FUNCTION();
-
         Initialize();
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

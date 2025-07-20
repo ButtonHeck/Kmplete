@@ -5,6 +5,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Core/settings.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <unordered_map>
 
@@ -12,6 +13,11 @@ namespace Kmplete
 {
     class SettingsManager
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(SettingsManager)
 

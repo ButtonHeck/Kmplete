@@ -5,11 +5,17 @@
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     class WindowApplication : public Application
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(WindowApplication)
 

@@ -16,7 +16,7 @@ void TerminationHandler()
 {
     try
     {
-#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
+#if defined(KMP_PROFILE)
         Kmplete::Profiler::Get().EndSession();
 #endif
 

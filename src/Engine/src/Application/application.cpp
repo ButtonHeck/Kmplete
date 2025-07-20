@@ -3,7 +3,6 @@
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -12,14 +11,20 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "Application";
 
     Application::Application(const ApplicationParameters& applicationParameters)
-        : _applicationName(applicationParameters.applicationName)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("Application::Application(const ApplicationParameters&)")),
+#endif
+        _applicationName(applicationParameters.applicationName)
         , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
-        KMP_PROFILE_FUNCTION();
-
         Initialize(applicationParameters);
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

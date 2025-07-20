@@ -2,11 +2,17 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/platform.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     class SystemMetricsManager
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         struct SystemMetrics
         {

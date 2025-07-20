@@ -4,11 +4,17 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Json/json_document.h"
+#include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
 {
     class Settings
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(Settings)
 

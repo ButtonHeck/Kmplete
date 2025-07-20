@@ -4,6 +4,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Core/window.h"
+#include "Kmplete/Profile/profiler.h"
 
 struct GLFWwindow;
 
@@ -11,6 +12,11 @@ namespace Kmplete
 {
     class WindowGlfw : public Window
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
