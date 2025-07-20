@@ -1,6 +1,6 @@
 #include "Kmplete/Profile/profiler.h"
 
-#if (KMP_PROFILE && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
+#if defined(KMP_PROFILE)
 
 #include "Kmplete/Log/log.h"
 
