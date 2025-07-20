@@ -21,7 +21,7 @@ namespace Kmplete
         if (!scope.empty())
         {
             scope.pop_back();
-            scopeString = Utils::StringVectorToString(scope, '/');
+            scopeString = scope.empty() ? "" : Utils::StringVectorToString(scope, '/');
             return true;
         }
 
