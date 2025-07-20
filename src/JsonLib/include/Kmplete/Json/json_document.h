@@ -5,6 +5,7 @@
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Json/json_writer.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
@@ -15,6 +16,11 @@ namespace Kmplete
 {
     class JsonDocument
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(JsonDocument)
 

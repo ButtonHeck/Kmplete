@@ -1,16 +1,23 @@
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/pointer.h>
 
 namespace Kmplete
 {
     JsonReader::JsonReader(rapidjson::Document& document)
-        : _document(document)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonReader::JsonReader(rapidjson::Document&)")),
+#endif
+        _document(document)
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
-    {}
+    {
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
+    }
     //--------------------------------------------------------------------------
 
     bool JsonReader::StartObject(const char* objectName)

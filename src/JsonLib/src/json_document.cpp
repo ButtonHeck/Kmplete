@@ -1,7 +1,6 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/istreamwrapper.h>
 #include <rapidjson/prettywriter.h>
@@ -19,27 +18,47 @@
 namespace Kmplete
 {
     JsonDocument::JsonDocument()
-        : _filename()
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonDocument::JsonDocument()")),
+#endif
+        _filename()
         , _document()
         , _error(false)
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
         _document.SetObject();
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(rapidjson::Document&& document)
-        : _filename()
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonDocument::JsonDocument(rapidjson::Document&&)")),
+#endif
+        _filename()
         , _document(std::move(document))
         , _error(_document.HasParseError())
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
-    {}
+    {
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
+    }
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(const Path& filename)
-        : _filename(filename)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonDocument::JsonDocument(const Path&)")),
+#endif
+        _filename(filename)
         , _document()
         , _error(false)
         , _reader(new JsonReader(_document))
@@ -49,6 +68,10 @@ namespace Kmplete
         {
             KMP_LOG_ERROR("JsonDocument: creation from '{}' failed", _filename);
         }
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

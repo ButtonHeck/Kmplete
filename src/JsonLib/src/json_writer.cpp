@@ -1,22 +1,27 @@
 #include "Kmplete/Json/json_writer.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/pointer.h>
 
 namespace Kmplete
 {
     JsonWriter::JsonWriter(rapidjson::Document& document)
-        : _document(document)
+        :
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonWriter::JsonWriter(rapidjson::Document&)")),
+#endif
+        _document(document)
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
     {
-        KMP_PROFILE_FUNCTION();
-
         if (!_currentObject->IsObject())
         {
             _currentObject->SetObject();
         }
+
+#if defined(KMP_PROFILE)
+        _constructorProfilerTimer.reset(nullptr);
+#endif
     }
     //--------------------------------------------------------------------------
 

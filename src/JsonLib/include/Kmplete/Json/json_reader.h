@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types.h"
 #include "Kmplete/Json/json_scope.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/document.h>
 
@@ -10,6 +11,11 @@ namespace Kmplete
 {
     class JsonReader
     {
+#if defined(KMP_PROFILE)
+    private:
+        UPtr<ProfilerTimer> _constructorProfilerTimer;
+#endif
+
     public:
         KMP_DISABLE_COPY_MOVE(JsonReader)
 
