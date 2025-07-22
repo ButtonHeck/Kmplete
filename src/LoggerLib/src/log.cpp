@@ -34,7 +34,7 @@ namespace Kmplete
             {}
         };
 
-        static std::vector<BootMessage> bootMessages;
+        static Vector<BootMessage> bootMessages;
     }
     //--------------------------------------------------------------------------
 
@@ -84,7 +84,7 @@ namespace Kmplete
 
         if (_logSettings.enabled)
         {
-            std::vector<spdlog::sink_ptr> logSinks;
+            Vector<spdlog::sink_ptr> logSinks;
 
             if (_logSettings.outputConsole)
             {

@@ -6,9 +6,13 @@
 
 namespace Kmplete
 {
+    template<typename T>
+    using Vector = std::vector<T>;
+
     using String = std::string;
     using WString = std::wstring;
-    using StringVector = std::vector<String>;
+    using StringVector = Vector<String>;
+
     using Path = std::filesystem::path;
-    using PathVector = std::vector<Path>;
+    using PathVector = Vector<Path>;
 }

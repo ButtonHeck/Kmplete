@@ -66,7 +66,7 @@ namespace Kmplete
         std::mutex _mutex;
         UPtr<ProfilingSession> _currentSession;
         Path _outputFilePath;
-        std::vector<ProfileResult> _profileResults;
+        Vector<ProfileResult> _profileResults;
         int _storageSize;
         int _storeCycles;
     };

@@ -76,7 +76,7 @@ namespace Kmplete
         boost::locale::generator _localeGenerator;
         UPtr<LocalizationLibrary> _library;
         LocaleStr _currentLocale;
-        std::vector<LocaleChangeCallback> _localeChangedCallbacks;
+        Vector<LocaleChangeCallback> _localeChangedCallbacks;
     };
     //--------------------------------------------------------------------------
 }

@@ -19,11 +19,11 @@ namespace Kmplete
 {
     namespace
     {
-        std::vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor)
+        Vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor)
         {
             KMP_PROFILE_FUNCTION();
 
-            std::vector<WindowBackend::MonitorVideoMode> outputModes;
+            Vector<WindowBackend::MonitorVideoMode> outputModes;
 
             if (!monitor)
             {
@@ -287,7 +287,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const
+    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -296,7 +296,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(int index) const
+    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(int index) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -313,7 +313,7 @@ namespace Kmplete
             return GetVideoModes(monitor);
         }
 
-        return std::vector<WindowBackend::MonitorVideoMode>();
+        return Vector<WindowBackend::MonitorVideoMode>();
     }
     //--------------------------------------------------------------------------
 

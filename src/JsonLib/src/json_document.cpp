@@ -261,11 +261,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const
+    Vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const
     {
         KMP_PROFILE_FUNCTION();
 
-        std::vector<std::pair<String, Ptr<JsonDocument>>> children;
+        Vector<std::pair<String, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
         {

@@ -74,7 +74,7 @@ namespace Kmplete
             const unsigned int len = str.length();
             const char* ptr = str.c_str();
             const ssize_t bufSize = len * sizeof(String::value_type) + 1;
-            std::vector<wchar_t> buf(bufSize, 0);
+            Vector<wchar_t> buf(bufSize, 0);
             const ssize_t res = std::mbsrtowcs(&buf[0], &ptr, bufSize, &st);
             return (res >= 0) ? WString(buf.begin(), buf.begin() + res) : L"?";
 #endif
@@ -95,7 +95,7 @@ namespace Kmplete
             const unsigned int wlen = wstr.length();
             const wchar_t* wptr = wstr.c_str();
             const ssize_t bufSize = wlen * sizeof(WString::value_type) + 1;
-            std::vector<char> buf(bufSize, 0);
+            Vector<char> buf(bufSize, 0);
             const ssize_t res = std::wcsrtombs(&buf[0], &wptr, bufSize, &st);
             return (res >= 0) ? String(buf.begin(), buf.begin() + res) : "?";
 #endif
