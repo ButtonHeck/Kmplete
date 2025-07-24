@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/nullability.h"
-#include "Kmplete/Base/types.h"
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/graphics_base.h"
 
 namespace Kmplete

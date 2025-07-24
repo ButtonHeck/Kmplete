@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/platform.h"
-#include "Kmplete/Base/types.h"
+#include "Kmplete/Base/types_aliases.h"
 
 #include <boost/program_options.hpp>
 

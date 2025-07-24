@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Base/types.h"
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Utils/string_id.h"
 
 #include <type_traits>
