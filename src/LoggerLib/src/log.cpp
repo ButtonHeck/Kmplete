@@ -148,6 +148,8 @@ namespace Kmplete
         _logger->flush();
         spdlog::drop_all();
         spdlog::shutdown();
+
+        _logger = nullptr;
     }
     //--------------------------------------------------------------------------
 
