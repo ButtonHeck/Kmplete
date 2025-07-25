@@ -31,16 +31,12 @@ namespace Kmplete
 
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
         : WindowApplication(applicationParameters)
-#if defined(KMP_PROFILE)
-        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorApplication::EditorApplication(const ApplicationParameters&)"))
-#endif
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const ApplicationParameters&)")
         , _ui(nullptr)
     {
         Initialize();
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

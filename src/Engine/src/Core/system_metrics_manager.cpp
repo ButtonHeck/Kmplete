@@ -19,11 +19,8 @@
 namespace Kmplete
 {
     SystemMetricsManager::SystemMetricsManager()
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("SystemMetricsManager::SystemMetricsManager()")),
-#endif
-        _lastCPUTimestamp(0ULL)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SystemMetricsManager::SystemMetricsManager()")
+          _lastCPUTimestamp(0ULL)
         , _lastSysCPUTimestamp(0ULL)
         , _lastUserCPUTimestamp(0ULL)
         , _currentProcessId(0)
@@ -33,9 +30,7 @@ namespace Kmplete
     {
         Initialize();
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

@@ -13,19 +13,14 @@ namespace Kmplete
     constexpr static auto SettingsLocaleStr = "Locale";
 
     LocalizationManager::LocalizationManager() noexcept
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("LocalizationManager::LocalizationManager() noexcept")),
-#endif
-        _localeGenerator()
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("LocalizationManager::LocalizationManager() noexcept")
+          _localeGenerator()
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())
     {
         SetLocale(LocaleEnUTF8Keyword);
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

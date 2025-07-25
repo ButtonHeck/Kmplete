@@ -6,11 +6,8 @@
 namespace Kmplete
 {
     JsonWriter::JsonWriter(rapidjson::Document& document)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonWriter::JsonWriter(rapidjson::Document&)")),
-#endif
-        _document(document)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonWriter::JsonWriter(rapidjson::Document&)")
+          _document(document)
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
     {
@@ -19,9 +16,7 @@ namespace Kmplete
             _currentObject->SetObject();
         }
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

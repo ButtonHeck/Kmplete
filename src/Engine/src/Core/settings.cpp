@@ -3,30 +3,20 @@
 namespace Kmplete
 {
     Settings::Settings(const String& name, Ptr<JsonDocument> document)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("Settings::Settings(const String&, Ptr<JsonDocument>)")),
-#endif
-        _name(name)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Settings::Settings(const String&, Ptr<JsonDocument>)")
+          _name(name)
         , _document(document)
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 
     Settings::Settings(const String& name)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("Settings::Settings(const String&)")),
-#endif
-        _name(name)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Settings::Settings(const String&)")
+          _name(name)
         , _document(new JsonDocument())
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

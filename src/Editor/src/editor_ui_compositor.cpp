@@ -23,11 +23,8 @@ namespace Kmplete
     constexpr static auto MetricsFractionalStr = "MetricsFractional";
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorUICompositor::EditorUICompositor(Window&, GraphicsBackend&, LocalizationManager&, const SystemMetricsManager&)")),
-#endif
-        _mainWindow(mainWindow)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUICompositor::EditorUICompositor(Window&, GraphicsBackend&, LocalizationManager&, const SystemMetricsManager&)")
+          _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
@@ -36,9 +33,7 @@ namespace Kmplete
         FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::FillDictionary));
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

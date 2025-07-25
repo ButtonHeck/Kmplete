@@ -24,16 +24,12 @@ namespace Kmplete
 
     WindowGlfw::WindowGlfw(WindowSettings& settings)
         : Window(settings)
-#if defined(KMP_PROFILE)
-        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("WindowGlfw::WindowGlfw(WindowSettings&)"))
-#endif
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowGlfw::WindowGlfw(WindowSettings&)")
         , _window(nullptr)
     {
         Initialize();
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

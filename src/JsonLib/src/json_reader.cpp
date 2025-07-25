@@ -6,17 +6,12 @@
 namespace Kmplete
 {
     JsonReader::JsonReader(rapidjson::Document& document)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonReader::JsonReader(rapidjson::Document&)")),
-#endif
-        _document(document)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonReader::JsonReader(rapidjson::Document&)")
+          _document(document)
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

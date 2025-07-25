@@ -18,10 +18,7 @@ namespace Kmplete
 
     class EditorUI
     {
-#if defined(KMP_PROFILE)
-    private:
-        UPtr<ProfilerTimer> _constructorProfilerTimer;
-#endif
+        KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
         KMP_DISABLE_COPY_MOVE(EditorUI)

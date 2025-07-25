@@ -6,15 +6,10 @@
 namespace Kmplete
 {
     SettingsManager::SettingsManager(const Path& filename)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("SettingsManager::SettingsManager(const Path&)")),
-#endif
-        _filename(filename)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsManager::SettingsManager(const Path&)")
+          _filename(filename)
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

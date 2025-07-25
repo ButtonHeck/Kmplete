@@ -153,9 +153,27 @@ namespace Kmplete
 #define KMP_PROFILE_SCOPE(name) _KMP_PROFILE_SCOPE_LINE(name, __LINE__)
 #define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)
 
+#define KMP_PROFILE_CONSTRUCTOR_DECLARE() \
+    private:\
+    UPtr<ProfilerTimer> _constructorProfilerTimer;
+
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name) \
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name)),
+
+#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name) \
+    , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name))
+
+#define KMP_PROFILE_CONSTRUCTOR_END() \
+    _constructorProfilerTimer.reset(nullptr);
+
 #else
 #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize)
 #define KMP_PROFILE_END_SESSION()
 #define KMP_PROFILE_SCOPE(name)
 #define KMP_PROFILE_FUNCTION()
+
+#define KMP_PROFILE_CONSTRUCTOR_DECLARE()
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name)
+#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name)
+#define KMP_PROFILE_CONSTRUCTOR_END()
 #endif

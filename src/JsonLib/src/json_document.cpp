@@ -18,11 +18,8 @@
 namespace Kmplete
 {
     JsonDocument::JsonDocument()
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonDocument::JsonDocument()")),
-#endif
-        _filename()
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument()")
+          _filename()
         , _document()
         , _error(false)
         , _reader(new JsonReader(_document))
@@ -30,35 +27,25 @@ namespace Kmplete
     {
         _document.SetObject();
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(rapidjson::Document&& document)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonDocument::JsonDocument(rapidjson::Document&&)")),
-#endif
-        _filename()
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument(rapidjson::Document&&)")
+          _filename()
         , _document(std::move(document))
         , _error(_document.HasParseError())
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(const Path& filename)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("JsonDocument::JsonDocument(const Path&)")),
-#endif
-        _filename(filename)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument(const Path&)")
+          _filename(filename)
         , _document()
         , _error(false)
         , _reader(new JsonReader(_document))
@@ -69,9 +56,7 @@ namespace Kmplete
             KMP_LOG_ERROR("JsonDocument: creation from '{}' failed", _filename);
         }
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

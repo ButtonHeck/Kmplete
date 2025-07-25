@@ -7,15 +7,10 @@ namespace Kmplete
     static const auto NoTranslation = TranslationStr("");
 
     LocalizationLibrary::LocalizationLibrary() noexcept
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("LocalizationLibrary::LocalizationLibrary() noexcept")),
-#endif
-        _currentLocaleSid(SidTrInvalidLocale)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("LocalizationLibrary::LocalizationLibrary() noexcept")
+          _currentLocaleSid(SidTrInvalidLocale)
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

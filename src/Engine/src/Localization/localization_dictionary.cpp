@@ -5,16 +5,11 @@
 namespace Kmplete
 {
     LocalizationDictionary::LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid /*= SidTrInvalidLocale*/) noexcept
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("LocalizationDictionary::LocalizationDictionary(const DomainStrSID&, const LocaleStrSID&)")),
-#endif
-        _domain(domain)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("LocalizationDictionary::LocalizationDictionary(const DomainStrSID&, const LocaleStrSID&)")
+          _domain(domain)
         , _currentLocaleSid(localeSid)
     {
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

@@ -10,23 +10,16 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     Window::Window(WindowSettings& settings)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("Window::Window(WindowSettings&)")),
-#endif
-        _settings(settings)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Window::Window(WindowSettings&)")
+          _settings(settings)
     {
         if (settings.name.empty())
         {
-#if defined(KMP_PROFILE)
-            _constructorProfilerTimer.reset(nullptr);
-#endif
+            KMP_PROFILE_CONSTRUCTOR_END()
             throw std::exception();
         }
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

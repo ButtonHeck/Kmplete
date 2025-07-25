@@ -18,18 +18,14 @@ namespace Kmplete
 
     WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
         : Application(applicationParameters)
-#if defined(KMP_PROFILE)
-        , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("WindowApplication::WindowApplication(const ApplicationParameters&)"))
-#endif
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowApplication::WindowApplication(const ApplicationParameters&)")
         , _windowBackend(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _graphicsBackend(nullptr)
     {
         Initialize();
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

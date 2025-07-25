@@ -11,20 +11,15 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "Application";
 
     Application::Application(const ApplicationParameters& applicationParameters)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("Application::Application(const ApplicationParameters&)")),
-#endif
-        _applicationName(applicationParameters.applicationName)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Application::Application(const ApplicationParameters&)")
+          _applicationName(applicationParameters.applicationName)
         , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
         Initialize(applicationParameters);
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

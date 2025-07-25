@@ -13,11 +13,8 @@ namespace Kmplete
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
     EditorUI::EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
-        :
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("EditorUI::EditorUI(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")),
-#endif
-        _systemMetricsManager(systemMetricsManager)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUI::EditorUI(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
+          _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _uiImpl(nullptr)
@@ -26,9 +23,7 @@ namespace Kmplete
     {
         Initialize();
 
-#if defined(KMP_PROFILE)
-        _constructorProfilerTimer.reset(nullptr);
-#endif
+        KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
 

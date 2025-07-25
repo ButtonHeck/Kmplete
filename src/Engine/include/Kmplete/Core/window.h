@@ -13,10 +13,7 @@ namespace Kmplete
 {
     class Window
     {
-#if defined(KMP_PROFILE)
-    private:
-        UPtr<ProfilerTimer> _constructorProfilerTimer;
-#endif
+        KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
         using EventCallbackFn = std::function<void(Event&)>;
