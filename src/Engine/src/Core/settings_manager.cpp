@@ -5,8 +5,8 @@
 
 namespace Kmplete
 {
-    SettingsManager::SettingsManager(const Path& filename)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsManager::SettingsManager(const Path&)")
+    SettingsManager::SettingsManager(const Filepath& filename)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsManager::SettingsManager(const Filepath&)")
           _filename(filename)
     {
         KMP_PROFILE_CONSTRUCTOR_END()
@@ -81,13 +81,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::SetFilename(const Path& filename) noexcept
+    void SettingsManager::SetFilename(const Filepath& filename) noexcept
     {
         _filename = filename;
     }
     //--------------------------------------------------------------------------
 
-    const Path& SettingsManager::GetFilename() const noexcept
+    const Filepath& SettingsManager::GetFilename() const noexcept
     {
         return _filename;
     }

@@ -43,8 +43,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    JsonDocument::JsonDocument(const Path& filename)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument(const Path&)")
+    JsonDocument::JsonDocument(const Filepath& filename)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument(const Filepath&)")
           _filename(filename)
         , _document()
         , _error(false)
@@ -60,7 +60,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void JsonDocument::SetFilename(const Path& filename) noexcept
+    void JsonDocument::SetFilename(const Filepath& filename) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -73,13 +73,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const Path& JsonDocument::GetFilename() const noexcept
+    const Filepath& JsonDocument::GetFilename() const noexcept
     {
         return _filename;
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Load(const Path& filename)
+    bool JsonDocument::Load(const Filepath& filename)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -131,7 +131,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(const Path& filename, bool pretty /*= true*/)
+    bool JsonDocument::Save(const Filepath& filename, bool pretty /*= true*/)
     {
         KMP_PROFILE_FUNCTION();
 

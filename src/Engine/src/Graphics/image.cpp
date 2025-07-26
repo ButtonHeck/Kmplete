@@ -6,7 +6,7 @@
 
 namespace Kmplete
 {
-    Image::Image(const Path& filename, bool flipVertically /*= false*/)
+    Image::Image(const Filepath& filename, bool flipVertically /*= false*/)
         : Image(Filesystem::ToGenericString(filename).c_str(), flipVertically)
     {}
     //--------------------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Image::Image(const Path& filename, ImageChannels desiredChannels, bool flipVertically /*= false*/)
+    Image::Image(const Filepath& filename, ImageChannels desiredChannels, bool flipVertically /*= false*/)
         : Image(Filesystem::ToGenericString(filename).c_str(), desiredChannels, flipVertically)
     {}
     //--------------------------------------------------------------------------

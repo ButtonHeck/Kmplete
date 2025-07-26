@@ -21,7 +21,7 @@ namespace Kmplete
         // main entryPoint
         KMP_API void ProcessCommandLine(int argc, char** argv);
 
-        KMP_NODISCARD KMP_API const Path& GetSettingsFilePath() const;
+        KMP_NODISCARD KMP_API const Filepath& GetSettingsFilePath() const;
 
     private:
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -35,7 +35,7 @@ namespace Kmplete
         void ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser);
 
     private:
-        Path _settingsFilePath;
+        Filepath _settingsFilePath;
     };
     //--------------------------------------------------------------------------
 }

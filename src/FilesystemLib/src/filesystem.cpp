@@ -12,7 +12,7 @@
 
 namespace Kmplete
 {
-    Path Filesystem::GetCurrentPath() noexcept
+    Filepath Filesystem::GetCurrentPath() noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -23,12 +23,12 @@ namespace Kmplete
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
             KMP_LOG_ERROR("Filesystem: failed to get current path: '{}'", fe.what());
-            return Path{};
+            return Filepath{};
         }
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::PathExists(const Path& path) noexcept
+    bool Filesystem::PathExists(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -44,7 +44,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::FilePathIsValid(const Path& path) noexcept
+    bool Filesystem::FilePathIsValid(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -52,7 +52,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectories(const Path& path, bool pathIsFile /*= false*/) noexcept
+    bool Filesystem::CreateDirectories(const Filepath& path, bool pathIsFile /*= false*/) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -69,7 +69,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::RemoveDirectories(const Path& path) noexcept
+    bool Filesystem::RemoveDirectories(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -85,7 +85,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateFile(const Path& path) noexcept
+    bool Filesystem::CreateFile(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -114,7 +114,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::RemoveFile(const Path& path) noexcept
+    bool Filesystem::RemoveFile(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -130,7 +130,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::IsFile(const Path& path) noexcept
+    bool Filesystem::IsFile(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -146,7 +146,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::IsDirectory(const Path& path) noexcept
+    bool Filesystem::IsDirectory(const Filepath& path) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -162,7 +162,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToGenericU8String(const Path& path)
+    String Filesystem::ToGenericU8String(const Filepath& path)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -170,7 +170,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToGenericString(const Path& path)
+    String Filesystem::ToGenericString(const Filepath& path)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -178,7 +178,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToNativeU8String(const Path& path)
+    String Filesystem::ToNativeU8String(const Filepath& path)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -186,7 +186,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToNativeString(const Path& path)
+    String Filesystem::ToNativeString(const Filepath& path)
     {
         KMP_PROFILE_FUNCTION();
 

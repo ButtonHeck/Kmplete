@@ -136,11 +136,11 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
             PrintUsage(optionsDescription);
             return ReturnCode::SourceDirectoriesAreNotSet;
         }
-        PathVector sourceDirectories;
+        FilepathVector sourceDirectories;
         sourceDirectories.reserve(sourceDirectoryStrings.size());
         for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
         {
-            const auto sourceDirectory = Path(sourceDirectoryStr);
+            const auto sourceDirectory = Filepath(sourceDirectoryStr);
             if (!Filesystem::PathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
             {
                 KMP_LOG_ERROR("Translator: one of source directories does not exist or is not of a directory type ({})", sourceDirectory);
@@ -177,7 +177,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         PrintUsage(optionsDescription);
         return ReturnCode::OutputDirectoryIsNotSet;
     }
-    const auto outputDirectory = Path(outputDirectoryStr);
+    const auto outputDirectory = Filepath(outputDirectoryStr);
 
     if (!Filesystem::CreateDirectories(outputDirectory))
     {

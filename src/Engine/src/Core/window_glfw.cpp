@@ -122,7 +122,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetIcon(const Path& path)
+    void WindowGlfw::SetIcon(const Filepath& path)
     {
         KMP_PROFILE_FUNCTION();
 

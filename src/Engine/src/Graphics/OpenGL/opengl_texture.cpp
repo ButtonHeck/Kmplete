@@ -6,7 +6,7 @@
 
 namespace Kmplete
 {
-    OpenGLTexture::OpenGLTexture(const Path& filename, bool flipVertically /*= false*/)
+    OpenGLTexture::OpenGLTexture(const Filepath& filename, bool flipVertically /*= false*/)
     {
         Load(Filesystem::ToGenericString(filename).c_str(), flipVertically);
     }

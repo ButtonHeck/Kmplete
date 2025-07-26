@@ -18,7 +18,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(SettingsManager)
 
-        KMP_API explicit SettingsManager(const Path& filename);
+        KMP_API explicit SettingsManager(const Filepath& filename);
         ~SettingsManager() = default;
 
         KMP_NODISCARD KMP_API Nullable<Settings*> PutSettings(const String& name);
@@ -27,11 +27,11 @@ namespace Kmplete
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;
 
-        KMP_API void SetFilename(const Path& path) noexcept;
-        KMP_NODISCARD KMP_API const Path& GetFilename() const noexcept;
+        KMP_API void SetFilename(const Filepath& path) noexcept;
+        KMP_NODISCARD KMP_API const Filepath& GetFilename() const noexcept;
 
     private:
-        Path _filename;
+        Filepath _filename;
         std::unordered_map<String, UPtr<Settings>> _namedSettings;
     };
     //--------------------------------------------------------------------------

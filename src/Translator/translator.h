@@ -12,10 +12,10 @@ namespace Kmplete
         struct TranslatorParameters
         {
             String workMode;
-            PathVector sourceDirectories;
+            FilepathVector sourceDirectories;
             StringVector filesExtensions;
             bool isRecursive = false;
-            Path outputDirectory;
+            Filepath outputDirectory;
             String outputFileName;
             bool logging = false;
         };
@@ -32,7 +32,7 @@ namespace Kmplete
             KMP_NODISCARD int Update() const;
             KMP_NODISCARD int Compile() const;
 
-            KMP_NODISCARD PathVector GatherFilesToUpdate(const TranslatorParameters& parameters) const;
+            KMP_NODISCARD FilepathVector GatherFilesToUpdate(const TranslatorParameters& parameters) const;
             KMP_NODISCARD bool IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const;
             KMP_NODISCARD String CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const;
 

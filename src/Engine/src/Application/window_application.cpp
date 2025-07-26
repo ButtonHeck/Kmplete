@@ -37,7 +37,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettings(const Path& path /*= Path()*/) const
+    void WindowApplication::SaveSettings(const Filepath& path /*= Filepath()*/) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -46,7 +46,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::LoadSettings(const Path& path /*= Path()*/)
+    void WindowApplication::LoadSettings(const Filepath& path /*= Filepath()*/)
     {
         KMP_PROFILE_FUNCTION();
 

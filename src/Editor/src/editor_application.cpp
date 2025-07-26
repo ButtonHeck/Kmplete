@@ -90,7 +90,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::SaveSettings(const Path& path /*= Path()*/) const
+    void EditorApplication::SaveSettings(const Filepath& path /*= Filepath()*/) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -99,7 +99,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::LoadSettings(const Path& path /*= Path()*/)
+    void EditorApplication::LoadSettings(const Filepath& path /*= Filepath()*/)
     {
         KMP_PROFILE_FUNCTION();
 

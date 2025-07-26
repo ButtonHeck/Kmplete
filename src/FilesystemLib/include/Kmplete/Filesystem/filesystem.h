@@ -7,22 +7,22 @@ namespace Kmplete
 {
     namespace Filesystem
     {
-        KMP_NODISCARD KMP_API Path GetCurrentPath() noexcept;
+        KMP_NODISCARD KMP_API Filepath GetCurrentPath() noexcept;
         
-        KMP_NODISCARD KMP_API bool PathExists(const Path& path) noexcept;
-        KMP_NODISCARD KMP_API bool FilePathIsValid(const Path& path) noexcept;
-        KMP_NODISCARD KMP_API bool CreateDirectories(const Path& path, bool pathIsFile = false) noexcept;
-        KMP_NODISCARD KMP_API bool RemoveDirectories(const Path& path) noexcept;
-        KMP_NODISCARD KMP_API bool CreateFile(const Path& path) noexcept;
-        KMP_NODISCARD KMP_API bool RemoveFile(const Path& path) noexcept;
+        KMP_NODISCARD KMP_API bool PathExists(const Filepath& path) noexcept;
+        KMP_NODISCARD KMP_API bool FilePathIsValid(const Filepath& path) noexcept;
+        KMP_NODISCARD KMP_API bool CreateDirectories(const Filepath& path, bool pathIsFile = false) noexcept;
+        KMP_NODISCARD KMP_API bool RemoveDirectories(const Filepath& path) noexcept;
+        KMP_NODISCARD KMP_API bool CreateFile(const Filepath& path) noexcept;
+        KMP_NODISCARD KMP_API bool RemoveFile(const Filepath& path) noexcept;
         
-        KMP_NODISCARD KMP_API bool IsFile(const Path& path) noexcept;
-        KMP_NODISCARD KMP_API bool IsDirectory(const Path& path) noexcept;
+        KMP_NODISCARD KMP_API bool IsFile(const Filepath& path) noexcept;
+        KMP_NODISCARD KMP_API bool IsDirectory(const Filepath& path) noexcept;
         
-        KMP_NODISCARD KMP_API String ToGenericU8String(const Path& path);
-        KMP_NODISCARD KMP_API String ToGenericString(const Path& path);
-        KMP_NODISCARD KMP_API String ToNativeU8String(const Path& path);
-        KMP_NODISCARD KMP_API String ToNativeString(const Path& path);
+        KMP_NODISCARD KMP_API String ToGenericU8String(const Filepath& path);
+        KMP_NODISCARD KMP_API String ToGenericString(const Filepath& path);
+        KMP_NODISCARD KMP_API String ToNativeU8String(const Filepath& path);
+        KMP_NODISCARD KMP_API String ToNativeString(const Filepath& path);
     };
     //--------------------------------------------------------------------------
 }

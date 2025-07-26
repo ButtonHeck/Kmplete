@@ -62,12 +62,12 @@ namespace Kmplete
 
         void Run() override {}
 
-        void SaveSettings(const Path& path = Path()) const override
+        void SaveSettings(const Filepath& path = Filepath()) const override
         {
             Application::SaveSettings(path);
         }
 
-        void LoadSettings(const Path& path = Path()) override
+        void LoadSettings(const Filepath& path = Filepath()) override
         {
             Application::LoadSettings(path);
         }

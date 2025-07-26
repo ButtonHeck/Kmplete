@@ -19,8 +19,8 @@ namespace Kmplete
         KMP_API explicit WindowApplication(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~WindowApplication();
 
-        KMP_API void SaveSettings(const Path& path = Path()) const override;
-        KMP_API void LoadSettings(const Path& path = Path()) override;
+        KMP_API void SaveSettings(const Filepath& path = Filepath()) const override;
+        KMP_API void LoadSettings(const Filepath& path = Filepath()) override;
 
     protected:
         KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { return true; }

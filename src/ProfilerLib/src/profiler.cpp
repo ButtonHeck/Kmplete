@@ -26,7 +26,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::BeginSession(const String& name, const Path& filepath, int storageSize)
+    void Profiler::BeginSession(const String& name, const Filepath& filepath, int storageSize)
     {
         KMP_MB_UNUSED std::lock_guard lock(_mutex);
         BeginSessionInternal(name, filepath, storageSize);
@@ -40,7 +40,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Profiler::BeginSessionInternal(const String& name, const Path& filepath, int storageSize)
+    void Profiler::BeginSessionInternal(const String& name, const Filepath& filepath, int storageSize)
     {
         if (_currentSession)
         {
@@ -178,7 +178,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Path Profiler::CreateIntermediateFilePath(int intermediateCount) const
+    Filepath Profiler::CreateIntermediateFilePath(int intermediateCount) const
     {
         const auto intermediateStorageFilename = _outputFilePath.stem().generic_u8string().append(std::to_string(intermediateCount));
         return _outputFilePath.parent_path() / intermediateStorageFilename;

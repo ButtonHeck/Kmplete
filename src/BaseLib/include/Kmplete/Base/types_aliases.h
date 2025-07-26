@@ -13,6 +13,6 @@ namespace Kmplete
     using WString = std::wstring;
     using StringVector = Vector<String>;
 
-    using Path = std::filesystem::path;
-    using PathVector = Vector<Path>;
+    using Filepath = std::filesystem::path;
+    using FilepathVector = Vector<Filepath>;
 }

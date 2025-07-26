@@ -23,15 +23,15 @@ namespace Kmplete
 
         KMP_API JsonDocument();
         KMP_API explicit JsonDocument(rapidjson::Document&& document);
-        KMP_API explicit JsonDocument(const Path& filename);
+        KMP_API explicit JsonDocument(const Filepath& filename);
         ~JsonDocument() = default;
 
-        KMP_API void SetFilename(const Path& filename) noexcept;
-        KMP_NODISCARD KMP_API const Path& GetFilename() const noexcept;
+        KMP_API void SetFilename(const Filepath& filename) noexcept;
+        KMP_NODISCARD KMP_API const Filepath& GetFilename() const noexcept;
 
-        KMP_NODISCARD KMP_API bool Load(const Path& filename);
+        KMP_NODISCARD KMP_API bool Load(const Filepath& filename);
         KMP_NODISCARD KMP_API bool Load();
-        KMP_NODISCARD KMP_API bool Save(const Path& filename, bool pretty = true);
+        KMP_NODISCARD KMP_API bool Save(const Filepath& filename, bool pretty = true);
         KMP_NODISCARD KMP_API bool Save(bool pretty = true);
         KMP_NODISCARD KMP_API String ToString(bool pretty = true);
 
@@ -92,7 +92,7 @@ namespace Kmplete
         KMP_NODISCARD bool SaveToFile(const rapidjson::StringBuffer& buffer);
 
     private:
-        Path _filename;
+        Filepath _filename;
         rapidjson::Document _document;
         bool _error;
         UPtr<JsonReader> _reader;

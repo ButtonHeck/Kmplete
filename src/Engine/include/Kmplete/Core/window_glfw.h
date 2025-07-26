@@ -26,7 +26,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
 
         KMP_API void SetTitle(const char* title) override;
-        KMP_API void SetIcon(const Path& path) override;
+        KMP_API void SetIcon(const Filepath& path) override;
 
         KMP_API void SetShouldClose(bool close) override;
         KMP_NODISCARD KMP_API bool ShouldClose() const override;

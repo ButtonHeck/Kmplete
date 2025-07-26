@@ -88,10 +88,10 @@ namespace Kmplete
 }
 
 template<>
-struct fmt::formatter<Kmplete::Path> : fmt::formatter<Kmplete::String>
+struct fmt::formatter<Kmplete::Filepath> : fmt::formatter<Kmplete::String>
 {
     template <typename FormatContext>
-    auto format(const Kmplete::Path& path, FormatContext& ctx)
+    auto format(const Kmplete::Filepath& path, FormatContext& ctx)
     {
         return fmt::formatter<Kmplete::String>::format(path.generic_u8string(), ctx);
     }

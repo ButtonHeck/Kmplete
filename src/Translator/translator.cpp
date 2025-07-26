@@ -57,7 +57,7 @@ namespace Kmplete
             }
 
             const auto filesList = std::accumulate(filesToProcess.begin(), filesToProcess.end(), String(),
-                [](const Path& a, const Path& b) {
+                [](const Filepath& a, const Filepath& b) {
                     return a.string() + (a.empty() ? "" : " ") + b.string();
                 }
             );
@@ -246,9 +246,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        PathVector TranslatorProcessor::GatherFilesToUpdate(const TranslatorParameters& parameters) const
+        FilepathVector TranslatorProcessor::GatherFilesToUpdate(const TranslatorParameters& parameters) const
         {
-            PathVector filesToProcess;
+            FilepathVector filesToProcess;
             for (const auto& sourceDirectory : parameters.sourceDirectories)
             {
                 if (parameters.isRecursive)

@@ -18,11 +18,11 @@ namespace Kmplete
 
         KMP_API explicit TextureManager(GraphicsBackendType backendType);
 
-        KMP_API bool CreateTexture(Utils::StringID textureSid, const Path& filename, bool flipVertically = false);
+        KMP_API bool CreateTexture(Utils::StringID textureSid, const Filepath& filename, bool flipVertically = false);
         KMP_NODISCARD KMP_API Texture& GetTexture(Utils::StringID textureSid);
 
     private:
-        bool CreateErrorTexture(const Path& filename, bool flipVertically);
+        bool CreateErrorTexture(const Filepath& filename, bool flipVertically);
 
     private:
         const GraphicsBackendType _backendType;

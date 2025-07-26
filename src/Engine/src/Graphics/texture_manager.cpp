@@ -11,7 +11,7 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Path& filename, bool flipVertically /*= false*/)
+    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filename, bool flipVertically /*= false*/)
     {
         if (textureSid == 0)
         {
@@ -46,7 +46,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateErrorTexture(const Path& filename, bool flipVertically)
+    bool TextureManager::CreateErrorTexture(const Filepath& filename, bool flipVertically)
     {
         if (_errorTexture)
         {

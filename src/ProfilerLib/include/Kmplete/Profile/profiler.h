@@ -41,14 +41,14 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API static Profiler& Get();
 
-        KMP_API void BeginSession(const String& name, const Path& filepath, int storageSize);
+        KMP_API void BeginSession(const String& name, const Filepath& filepath, int storageSize);
         KMP_API void EndSession();
 
     private:
         Profiler() noexcept;
         ~Profiler();
 
-        void BeginSessionInternal(const String& name, const Path& filepath, int storageSize);
+        void BeginSessionInternal(const String& name, const Filepath& filepath, int storageSize);
         void EndSessionInternal();
 
         void WriteProfileHeader(std::ofstream& outputFileStream) const;
@@ -56,7 +56,7 @@ namespace Kmplete
         void WriteProfileResultsToIntermediate() const;
         void WriteProfileResultsFromIntermediate(std::ofstream& outputFileStream) const;
         void WriteProfileFooter(std::ofstream& outputFileStream) const;
-        Path CreateIntermediateFilePath(int intermediateCount) const;
+        Filepath CreateIntermediateFilePath(int intermediateCount) const;
         void BeginNewCycle();
 
     private:
@@ -65,7 +65,7 @@ namespace Kmplete
     private:
         std::mutex _mutex;
         UPtr<ProfilingSession> _currentSession;
-        Path _outputFilePath;
+        Filepath _outputFilePath;
         Vector<ProfileResult> _profileResults;
         int _storageSize;
         int _storeCycles;
@@ -140,7 +140,7 @@ namespace Kmplete
     constexpr auto fixedNameString##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
     constexpr auto fixedNameWString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
     constexpr auto fixedNameInt64##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
-    constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Path");\
+    constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Filepath");\
     constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "class ", "");\
     constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
     constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\

@@ -12,9 +12,9 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY(Image)
 
-        KMP_API explicit Image(const Path& filename, bool flipVertically = false);
+        KMP_API explicit Image(const Filepath& filename, bool flipVertically = false);
         KMP_API explicit Image(const char* filename, bool flipVertically = false);
-        KMP_API Image(const Path& filename, ImageChannels desiredChannels, bool flipVertically = false);
+        KMP_API Image(const Filepath& filename, ImageChannels desiredChannels, bool flipVertically = false);
         KMP_API Image(const char* filename, ImageChannels desiredChannels, bool flipVertically = false);
         KMP_API ~Image();
         KMP_API Image(Image&& rhs) noexcept;
