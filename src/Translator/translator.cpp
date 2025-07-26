@@ -111,7 +111,7 @@ namespace Kmplete
                 // 4. invoke msginit if necessary for creation of .po file
                 const auto poFile = Utils::RegexReplace(poTemplateFile, ".pot", ".po");
 
-                if (!Filesystem::PathExists(poFile))
+                if (!Filesystem::FilepathExists(poFile))
                 {
                     const auto msginitCommand = Utils::Concatenate(
                         MSGINIT_EXECUTABLE_PATH,
@@ -207,7 +207,7 @@ namespace Kmplete
                 outputDirectory /= locale;
                 outputDirectory /= "LC_MESSAGES";
 
-                if (!Filesystem::PathExists(outputDirectory))
+                if (!Filesystem::FilepathExists(outputDirectory))
                 {
                     KMP_LOG_ERROR("TranslatorProcessor::Compile: output directory for locale '{}' not found", locale);
                     continue;
@@ -216,7 +216,7 @@ namespace Kmplete
                 auto poTemplateFile = outputDirectory;
                 poTemplateFile /= (_parameters.outputFileName + ".po");
 
-                if (!Filesystem::PathExists(poTemplateFile))
+                if (!Filesystem::FilepathExists(poTemplateFile))
                 {
                     KMP_LOG_ERROR("TranslatorProcessor::Compile: source .pot file not found ({})", poTemplateFile);
                     continue;

@@ -91,9 +91,9 @@ template<>
 struct fmt::formatter<Kmplete::Filepath> : fmt::formatter<Kmplete::String>
 {
     template <typename FormatContext>
-    auto format(const Kmplete::Filepath& path, FormatContext& ctx)
+    auto format(const Kmplete::Filepath& filepath, FormatContext& ctx)
     {
-        return fmt::formatter<Kmplete::String>::format(path.generic_u8string(), ctx);
+        return fmt::formatter<Kmplete::String>::format(filepath.generic_u8string(), ctx);
     }
 };
 //--------------------------------------------------------------------------

@@ -336,9 +336,9 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     auto localizationManager = Kmplete::LocalizationManager();
     localizationManager.SetLocale("ru_RU.UTF8");
 
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("json_document_test_temp.json");
-    const auto settingsPathStr = Kmplete::Filesystem::ToGenericString(settingsPath);
-    const auto nonExistSettingsPath = Kmplete::Filesystem::GetCurrentPath().append("non-exist.json");
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("json_document_test_temp.json");
+    const auto settingsPathStr = Kmplete::Filesystem::ToGenericString(settingsFilepath);
+    const auto nonExistSettingsPath = Kmplete::Filesystem::GetCurrentFilepath().append("non-exist.json");
 
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.StartSetObject("Obj1"));
@@ -350,9 +350,9 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
         REQUIRE(rootDoc.SetString("RawString", R"rjs("Quote" string)rjs"));
     REQUIRE(rootDoc.EndSetObject());
 
-    REQUIRE(rootDoc.Save(settingsPath));
+    REQUIRE(rootDoc.Save(settingsFilepath));
 
-    Kmplete::JsonDocument loadedDoc(settingsPath);
+    Kmplete::JsonDocument loadedDoc(settingsFilepath);
     REQUIRE_FALSE(loadedDoc.HasError());
     auto childrenDocuments = loadedDoc.GetChildren();
     REQUIRE(childrenDocuments.size() == 1);
@@ -368,7 +368,7 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     childrenDocuments = loadedDoc.GetChildren();
     REQUIRE(childrenDocuments.size() == 2);
 
-    loadedDoc.SetFilename("");
+    loadedDoc.SetFilepath("");
     REQUIRE_FALSE(loadedDoc.Save());
     REQUIRE(loadedDoc.Save(settingsPathStr));
 
@@ -380,7 +380,7 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
 
 TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][document]")
 {
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("json_document_test_temp_unescaped.json");
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
     const Kmplete::String unescaped = R"rjs("Quote" unescaped)rjs";
@@ -388,9 +388,9 @@ TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][do
 
     REQUIRE(rootDoc.SetString("Unescaped", unescaped));
     REQUIRE(rootDoc.SetString("Unescaped2", unsecaped2));
-    REQUIRE(rootDoc.Save(settingsPath));
+    REQUIRE(rootDoc.Save(settingsFilepath));
 
-    Kmplete::JsonDocument loadedDoc(settingsPath);
+    Kmplete::JsonDocument loadedDoc(settingsFilepath);
     REQUIRE_FALSE(loadedDoc.HasError());
 }
 //--------------------------------------------------------------------------
@@ -402,13 +402,13 @@ TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][
 
     const auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
     const auto settingsSubPathWide = Kmplete::Utils::NarrowToWide(settingsSubPath);
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append(settingsSubPathWide).append("json_document_test_temp_unescaped.json");
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append(settingsSubPathWide).append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
     REQUIRE(rootDoc.SetInt("AnInt", 13));
-    REQUIRE(rootDoc.Save(settingsPath));
+    REQUIRE(rootDoc.Save(settingsFilepath));
 
-    Kmplete::JsonDocument loadedDoc(settingsPath);
+    Kmplete::JsonDocument loadedDoc(settingsFilepath);
     REQUIRE_FALSE(loadedDoc.HasError());
     REQUIRE(loadedDoc.GetInt("AnInt") == 13);
 }

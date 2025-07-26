@@ -12,7 +12,7 @@
 
 namespace Kmplete
 {
-    Filepath Filesystem::GetCurrentPath() noexcept
+    Filepath Filesystem::GetCurrentFilepath() noexcept
     {
         KMP_PROFILE_FUNCTION();
 
@@ -22,19 +22,19 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: failed to get current path: '{}'", fe.what());
+            KMP_LOG_ERROR("Filesystem: failed to get current filepath: '{}'", fe.what());
             return Filepath{};
         }
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::PathExists(const Filepath& path) noexcept
+    bool Filesystem::FilepathExists(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            return std::filesystem::exists(path);
+            return std::filesystem::exists(filepath);
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
@@ -44,22 +44,22 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::FilePathIsValid(const Filepath& path) noexcept
+    bool Filesystem::FilepathIsValid(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
-        return !path.empty() && path.has_filename();
+        return !filepath.empty() && filepath.has_filename();
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateDirectories(const Filepath& path, bool pathIsFile /*= false*/) noexcept
+    bool Filesystem::CreateDirectories(const Filepath& filepath, bool pathIsFile /*= false*/) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            std::filesystem::create_directories(pathIsFile ? path.parent_path() : path);
-            return PathExists(pathIsFile ? path.parent_path() : path);
+            std::filesystem::create_directories(pathIsFile ? filepath.parent_path() : filepath);
+            return FilepathExists(pathIsFile ? filepath.parent_path() : filepath);
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
@@ -69,13 +69,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::RemoveDirectories(const Filepath& path) noexcept
+    bool Filesystem::RemoveDirectories(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            return std::filesystem::remove_all(path) != 0;
+            return std::filesystem::remove_all(filepath) != 0;
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
@@ -85,42 +85,42 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::CreateFile(const Filepath& path) noexcept
+    bool Filesystem::CreateFile(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            if (PathExists(path))
+            if (FilepathExists(filepath))
             {
-                KMP_LOG_INFO("Filesystem::CreateFile - file '{}' already exists", path);
+                KMP_LOG_INFO("Filesystem::CreateFile - file '{}' already exists", filepath);
                 return true;
             }
 
-            if (!CreateDirectories(path, true))
+            if (!CreateDirectories(filepath, true))
             {
-                KMP_LOG_ERROR("Filesystem::CreateFile - cannot create directories for file '{}'", path);
+                KMP_LOG_ERROR("Filesystem::CreateFile - cannot create directories for file '{}'", filepath);
                 return false;
             }
 
-            std::ofstream(path).flush();
+            std::ofstream(filepath).flush();
         }
         catch (KMP_MB_UNUSED const std::ios_base::failure& e)
         {
-            KMP_LOG_ERROR("Filesystem: failed to create [{}]: '{}'", path, e.what());
+            KMP_LOG_ERROR("Filesystem: failed to create [{}]: '{}'", filepath, e.what());
         }
 
-        return PathExists(path);
+        return FilepathExists(filepath);
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::RemoveFile(const Filepath& path) noexcept
+    bool Filesystem::RemoveFile(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            return std::filesystem::remove(path);
+            return std::filesystem::remove(filepath);
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
@@ -130,13 +130,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::IsFile(const Filepath& path) noexcept
+    bool Filesystem::IsFile(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            return std::filesystem::is_regular_file(path);
+            return std::filesystem::is_regular_file(filepath);
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
@@ -146,13 +146,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Filesystem::IsDirectory(const Filepath& path) noexcept
+    bool Filesystem::IsDirectory(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
         try
         {
-            return std::filesystem::is_directory(path);
+            return std::filesystem::is_directory(filepath);
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
@@ -162,35 +162,35 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToGenericU8String(const Filepath& path)
+    String Filesystem::ToGenericU8String(const Filepath& filepath)
     {
         KMP_PROFILE_FUNCTION();
 
-        return path.generic_u8string();
+        return filepath.generic_u8string();
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToGenericString(const Filepath& path)
+    String Filesystem::ToGenericString(const Filepath& filepath)
     {
         KMP_PROFILE_FUNCTION();
 
-        return path.generic_string();
+        return filepath.generic_string();
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToNativeU8String(const Filepath& path)
+    String Filesystem::ToNativeU8String(const Filepath& filepath)
     {
         KMP_PROFILE_FUNCTION();
 
-        return path.u8string();
+        return filepath.u8string();
     }
     //--------------------------------------------------------------------------
 
-    String Filesystem::ToNativeString(const Filepath& path)
+    String Filesystem::ToNativeString(const Filepath& filepath)
     {
         KMP_PROFILE_FUNCTION();
 
-        return path.string();
+        return filepath.string();
     }
     //--------------------------------------------------------------------------
 }

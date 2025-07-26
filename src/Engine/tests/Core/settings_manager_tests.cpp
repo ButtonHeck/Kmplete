@@ -5,10 +5,10 @@
 
 TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 {
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_settings_unit_tests.json");
-    Kmplete::SettingsManager settingsManager(settingsPath);
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");
+    Kmplete::SettingsManager settingsManager(settingsFilepath);
 
-    REQUIRE(!settingsManager.GetFilename().empty());
+    REQUIRE(!settingsManager.GetFilepath().empty());
     REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettings("NonExisting");
@@ -35,22 +35,22 @@ TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 
 TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
 {
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_settings_unit_tests.json");
-    Kmplete::SettingsManager settingsManager(settingsPath);
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");
+    Kmplete::SettingsManager settingsManager(settingsFilepath);
 
-    REQUIRE(!settingsManager.GetFilename().empty());
+    REQUIRE(!settingsManager.GetFilepath().empty());
     REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettings("ObjA");
     REQUIRE(settings->SaveInt("PropA", 999));
 
-    const auto swapSettingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_settings_unit_tests_swap.json");
-    settingsManager.SetFilename(swapSettingsPath);
+    const auto swapSettingsPath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests_swap.json");
+    settingsManager.SetFilepath(swapSettingsPath);
     REQUIRE(settingsManager.SaveSettings());
 
 
     Kmplete::SettingsManager swapSettingsManager(swapSettingsPath);
-    REQUIRE(!swapSettingsManager.GetFilename().empty());
+    REQUIRE(!swapSettingsManager.GetFilepath().empty());
     REQUIRE(swapSettingsManager.LoadSettings());
 
     settings = swapSettingsManager.GetSettings("ObjA");

@@ -14,7 +14,7 @@ namespace Kmplete
         {
             ApplicationParameters applicationParameters{
                 .applicationName = "Kmplete Editor",
-                .settingsPath = programOptions.GetSettingsFilePath()
+                .settingsFilepath = programOptions.GetSettingsFilepath()
             };
 
             return CreateUPtr<EditorApplication>(applicationParameters);
@@ -90,20 +90,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::SaveSettings(const Filepath& path /*= Filepath()*/) const
+    void EditorApplication::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
     {
         KMP_PROFILE_FUNCTION();
 
         SaveSettingsInternal();
-        WindowApplication::SaveSettings(path);
+        WindowApplication::SaveSettings(filepath);
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::LoadSettings(const Filepath& path /*= Filepath()*/)
+    void EditorApplication::LoadSettings(const Filepath& filepath /*= Filepath()*/)
     {
         KMP_PROFILE_FUNCTION();
 
-        WindowApplication::LoadSettings(path);
+        WindowApplication::LoadSettings(filepath);
         LoadSettingsInternal();
     }
     //--------------------------------------------------------------------------

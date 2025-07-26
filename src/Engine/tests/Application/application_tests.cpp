@@ -62,14 +62,14 @@ namespace Kmplete
 
         void Run() override {}
 
-        void SaveSettings(const Filepath& path = Filepath()) const override
+        void SaveSettings(const Filepath& filepath = Filepath()) const override
         {
-            Application::SaveSettings(path);
+            Application::SaveSettings(filepath);
         }
 
-        void LoadSettings(const Filepath& path = Filepath()) override
+        void LoadSettings(const Filepath& filepath = Filepath()) override
         {
-            Application::LoadSettings(path);
+            Application::LoadSettings(filepath);
         }
 
     protected:
@@ -123,12 +123,12 @@ TEST_CASE("Test application initialize", "[application]")
         const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("TestApplication", "", "Kmplete_unit_tests_settings.json"));
 
         REQUIRE(application);
-        REQUIRE(!Kmplete::Filesystem::GetCurrentPath().empty());
+        REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
     }
 
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_unit_tests_settings.json");
-    REQUIRE(Kmplete::Filesystem::FilePathIsValid(settingsPath));
-    REQUIRE(Kmplete::Filesystem::PathExists(settingsPath));
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_unit_tests_settings.json");
+    REQUIRE(Kmplete::Filesystem::FilepathIsValid(settingsFilepath));
+    REQUIRE(Kmplete::Filesystem::FilepathExists(settingsFilepath));
 }
 //--------------------------------------------------------------------------
 
@@ -168,10 +168,10 @@ TEST_CASE("Test application runtime settings save", "[application]")
 
     REQUIRE(application);
 
-    const auto newSettingsPath = Kmplete::Filesystem::GetCurrentPath().append("Kmplete_unit_test_settings_runtime.json");
+    const auto newSettingsPath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_unit_test_settings_runtime.json");
     application->SaveSettings(newSettingsPath);
 
-    REQUIRE(Kmplete::Filesystem::PathExists(newSettingsPath));
+    REQUIRE(Kmplete::Filesystem::FilepathExists(newSettingsPath));
 }
 //--------------------------------------------------------------------------
 

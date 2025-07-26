@@ -11,11 +11,11 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filename, bool flipVertically /*= false*/)
+    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
     {
         if (textureSid == 0)
         {
-            return CreateErrorTexture(filename, flipVertically);
+            return CreateErrorTexture(filepath, flipVertically);
         }
 
         if (_textures.contains(textureSid))
@@ -28,7 +28,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(filename, flipVertically));
+            texture.reset(new OpenGLTexture(filepath, flipVertically));
             break;
 
         default:
@@ -37,7 +37,7 @@ namespace Kmplete
 
         if (!texture)
         {
-            KMP_LOG_ERROR("TextureManager: failed to create texture '{}'", filename);
+            KMP_LOG_ERROR("TextureManager: failed to create texture '{}'", filepath);
             return false;
         }
 
@@ -46,7 +46,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateErrorTexture(const Filepath& filename, bool flipVertically)
+    bool TextureManager::CreateErrorTexture(const Filepath& filepath, bool flipVertically)
     {
         if (_errorTexture)
         {
@@ -57,7 +57,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            _errorTexture.reset(new OpenGLTexture(filename, flipVertically));
+            _errorTexture.reset(new OpenGLTexture(filepath, flipVertically));
             break;
 
         default:

@@ -8,53 +8,53 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
 {
     SECTION("Current path is not empty")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         REQUIRE(!path.empty());
     }
 
     SECTION("Current path exists")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
-        REQUIRE(Kmplete::Filesystem::PathExists(path));
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        REQUIRE(Kmplete::Filesystem::FilepathExists(path));
     }
 
     SECTION("Current path is directory")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         REQUIRE(Kmplete::Filesystem::IsDirectory(path));
     }
 
     SECTION("Current path ToGenericU8String is not empty")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToGenericU8String(path);
         REQUIRE(!pathStr.empty());
     }
 
     SECTION("Current path ToGenericString is not empty")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToGenericString(path);
         REQUIRE(!pathStr.empty());
     }
 
     SECTION("Current path ToNativeU8String is not empty")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToNativeU8String(path);
         REQUIRE(!pathStr.empty());
     }
 
     SECTION("Current path ToNativeString is not empty")
     {
-        const auto path = Kmplete::Filesystem::GetCurrentPath();
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToNativeString(path);
         REQUIRE(!pathStr.empty());
     }
 
     SECTION("CreateDirectories/RemoveDirectories test directory")
     {
-        auto path = Kmplete::Filesystem::GetCurrentPath();
+        auto path = Kmplete::Filesystem::GetCurrentFilepath();
         path /= "test";
         REQUIRE(Kmplete::Filesystem::CreateDirectories(path));
         REQUIRE(Kmplete::Filesystem::RemoveDirectories(path));
@@ -62,7 +62,7 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
 
     SECTION("CreateDirectories test nested directories")
     {
-        auto path = Kmplete::Filesystem::GetCurrentPath();
+        auto path = Kmplete::Filesystem::GetCurrentFilepath();
         path /= "test_nest_0";
         path /= "test_nest_1";
         path /= "test_nest_2";
@@ -76,7 +76,7 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
 
     SECTION("CreateDirectories test invalid character in a name")
     {
-        auto path = Kmplete::Filesystem::GetCurrentPath();
+        auto path = Kmplete::Filesystem::GetCurrentFilepath();
 #if defined (KMP_PLATFORM_WINDOWS)
         path /= "*";
         REQUIRE_FALSE(Kmplete::Filesystem::CreateDirectories(path));
@@ -87,7 +87,7 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
 
     SECTION("CreateFile/RemoveFile in existing directory")
     {
-        auto path = Kmplete::Filesystem::GetCurrentPath();
+        auto path = Kmplete::Filesystem::GetCurrentFilepath();
         path /= "test_file.txt";
         REQUIRE(Kmplete::Filesystem::CreateFile(path));
         REQUIRE(Kmplete::Filesystem::RemoveFile(path));
@@ -95,7 +95,7 @@ TEST_CASE("Filesystem functions", "[core][filesystem]")
 
     SECTION("CreateFile in non-existent directory")
     {
-        auto path = Kmplete::Filesystem::GetCurrentPath();
+        auto path = Kmplete::Filesystem::GetCurrentFilepath();
         path /= "test";
         Kmplete::UUID uuid;
         path /= std::to_string(uuid);

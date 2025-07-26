@@ -51,7 +51,7 @@ namespace Kmplete
         _storageSize = storageSize;
         _storeCycles = 0;
         _profileResults.reserve(storageSize);
-        _outputFilePath = filepath;
+        _outputFilepath = filepath;
         _currentSession.reset(new ProfilingSession({ name, 0 }));
     }
     //--------------------------------------------------------------------------
@@ -60,7 +60,7 @@ namespace Kmplete
     {
         if (_currentSession)
         {
-            std::ofstream outputFileStream(_outputFilePath);
+            std::ofstream outputFileStream(_outputFilepath);
             if (outputFileStream.is_open())
             {
                 WriteProfileHeader(outputFileStream);
@@ -76,7 +76,7 @@ namespace Kmplete
             }
             else
             {
-                KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", _currentSession->name, _outputFilePath);
+                KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", _currentSession->name, _outputFilepath);
             }            
         }
 
@@ -118,7 +118,7 @@ namespace Kmplete
 
     void Profiler::WriteProfileResultsToIntermediate() const
     {
-        const auto intermediateStoragePath = CreateIntermediateFilePath(_storeCycles);
+        const auto intermediateStoragePath = CreateIntermediateFilepath(_storeCycles);
 
         std::ofstream intermediateFileStream(intermediateStoragePath);
         if (intermediateFileStream.is_open())
@@ -142,7 +142,7 @@ namespace Kmplete
         int storeCycle = 0;
         while (storeCycle < _storeCycles)
         {
-            const auto intermediateStoragePath = CreateIntermediateFilePath(storeCycle);
+            const auto intermediateStoragePath = CreateIntermediateFilepath(storeCycle);
 
             std::ifstream intermediateFileInputStream(intermediateStoragePath);
             if (intermediateFileInputStream.is_open())
@@ -178,10 +178,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Filepath Profiler::CreateIntermediateFilePath(int intermediateCount) const
+    Filepath Profiler::CreateIntermediateFilepath(int intermediateCount) const
     {
-        const auto intermediateStorageFilename = _outputFilePath.stem().generic_u8string().append(std::to_string(intermediateCount));
-        return _outputFilePath.parent_path() / intermediateStorageFilename;
+        const auto intermediateStorageFilename = _outputFilepath.stem().generic_u8string().append(std::to_string(intermediateCount));
+        return _outputFilepath.parent_path() / intermediateStorageFilename;
     }
     //--------------------------------------------------------------------------
 

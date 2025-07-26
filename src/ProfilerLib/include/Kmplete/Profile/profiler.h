@@ -56,7 +56,7 @@ namespace Kmplete
         void WriteProfileResultsToIntermediate() const;
         void WriteProfileResultsFromIntermediate(std::ofstream& outputFileStream) const;
         void WriteProfileFooter(std::ofstream& outputFileStream) const;
-        Filepath CreateIntermediateFilePath(int intermediateCount) const;
+        Filepath CreateIntermediateFilepath(int intermediateCount) const;
         void BeginNewCycle();
 
     private:
@@ -65,7 +65,7 @@ namespace Kmplete
     private:
         std::mutex _mutex;
         UPtr<ProfilingSession> _currentSession;
-        Filepath _outputFilePath;
+        Filepath _outputFilepath;
         Vector<ProfileResult> _profileResults;
         int _storageSize;
         int _storeCycles;

@@ -44,7 +44,7 @@ namespace Kmplete
         if (_needCheckImguiIniFile)
         {
             _needCheckImguiIniFile = false;
-            if (!Filesystem::PathExists(Filesystem::GetCurrentPath().append(ImGui::GetIO().IniFilename)))
+            if (!Filesystem::FilepathExists(Filesystem::GetCurrentFilepath().append(ImGui::GetIO().IniFilename)))
             {
                 ComposeDefaultLayout();
             }

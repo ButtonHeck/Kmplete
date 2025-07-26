@@ -171,12 +171,12 @@ TEST_CASE("Test window application initialize", "[window_application][applicatio
         const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
 
         REQUIRE(application);
-        REQUIRE(!Kmplete::Filesystem::GetCurrentPath().empty());
+        REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
     }
 
-    const auto settingsPath = Kmplete::Filesystem::GetCurrentPath().append(KMP_TEST_SETTINGS_JSON);
-    REQUIRE(Kmplete::Filesystem::FilePathIsValid(settingsPath));
-    REQUIRE(Kmplete::Filesystem::PathExists(settingsPath));
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append(KMP_TEST_SETTINGS_JSON);
+    REQUIRE(Kmplete::Filesystem::FilepathIsValid(settingsFilepath));
+    REQUIRE(Kmplete::Filesystem::FilepathExists(settingsFilepath));
 }
 //--------------------------------------------------------------------------
 
@@ -209,7 +209,7 @@ TEST_CASE("Test window application key events", "[window_application][applicatio
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
 
     REQUIRE(application);
-    REQUIRE(!Kmplete::Filesystem::GetCurrentPath().empty());
+    REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
 
     REQUIRE_FALSE(application->IsKeyPressEventInvoked());
     REQUIRE_FALSE(application->IsKeyReleaseEventInvoked());
@@ -236,7 +236,7 @@ TEST_CASE("Test window application mouse events", "[window_application][applicat
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
 
     REQUIRE(application);
-    REQUIRE(!Kmplete::Filesystem::GetCurrentPath().empty());
+    REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
 
     REQUIRE_FALSE(application->IsMouseMoveEventInvoked());
     REQUIRE_FALSE(application->IsMouseScrollEventInvoked());
@@ -267,7 +267,7 @@ TEST_CASE("Test window application window events", "[window_application][applica
     const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
 
     REQUIRE(application);
-    REQUIRE(!Kmplete::Filesystem::GetCurrentPath().empty());
+    REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
 
     REQUIRE_FALSE(application->IsWindowCloseEventInvoked());
     REQUIRE_FALSE(application->IsWindowMoveEventInvoked());
@@ -316,12 +316,12 @@ TEST_CASE("Test window application save settings with cyrillic path", "[window_a
                                                                    "Save settings to some cyrillic path then close window", 
                                                                    Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto filenameSave = Kmplete::FileDialogs::SaveFile("Test window application save", Kmplete::Filesystem::GetCurrentPath(), { "JSON Files", "*.json" }, true);
-    application->SaveSettings(filenameSave);
+    const auto filepathSave = Kmplete::FileDialogs::SaveFile("Test window application save", Kmplete::Filesystem::GetCurrentFilepath(), { "JSON Files", "*.json" }, true);
+    application->SaveSettings(filepathSave);
     application->Run();
 
-    REQUIRE(Kmplete::Filesystem::FilePathIsValid(filenameSave));
-    REQUIRE(Kmplete::Filesystem::PathExists(filenameSave));
-    REQUIRE(Kmplete::Filesystem::IsFile(filenameSave));
+    REQUIRE(Kmplete::Filesystem::FilepathIsValid(filepathSave));
+    REQUIRE(Kmplete::Filesystem::FilepathExists(filepathSave));
+    REQUIRE(Kmplete::Filesystem::IsFile(filepathSave));
 }
 //--------------------------------------------------------------------------

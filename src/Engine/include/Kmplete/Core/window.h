@@ -78,7 +78,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
 
         KMP_API virtual void SetTitle(const char* title) = 0;
-        KMP_API virtual void SetIcon(const Filepath& path) = 0;
+        KMP_API virtual void SetIcon(const Filepath& filepath) = 0;
 
         KMP_API virtual void SetShouldClose(bool close) = 0;
         KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;

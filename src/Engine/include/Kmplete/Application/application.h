@@ -17,7 +17,7 @@ namespace Kmplete
     struct ApplicationParameters
     {
         const String applicationName;
-        const Filepath settingsPath;
+        const Filepath settingsFilepath;
         const String defaultSettingsFileName = "Kmplete_settings.json";
     };
     //--------------------------------------------------------------------------
@@ -36,8 +36,8 @@ namespace Kmplete
 
         KMP_API virtual void Run() = 0;
 
-        KMP_API virtual void SaveSettings(const Filepath& path = Filepath()) const;
-        KMP_API virtual void LoadSettings(const Filepath& path = Filepath());
+        KMP_API virtual void SaveSettings(const Filepath& filepath = Filepath()) const;
+        KMP_API virtual void LoadSettings(const Filepath& filepath = Filepath());
 
     protected:
         virtual void OnEvent(Event&) {}

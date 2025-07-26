@@ -5,9 +5,9 @@
 
 namespace Kmplete
 {
-    SettingsManager::SettingsManager(const Filepath& filename)
+    SettingsManager::SettingsManager(const Filepath& filepath)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsManager::SettingsManager(const Filepath&)")
-          _filename(filename)
+          _filepath(filepath)
     {
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -44,10 +44,10 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        JsonDocument document(_filename);
+        JsonDocument document(_filepath);
         if (document.HasError())
         {
-            KMP_LOG_WARN("SettingsManager: failed to load settings from '{}'", _filename);
+            KMP_LOG_WARN("SettingsManager: failed to load settings from '{}'", _filepath);
             return false;
         }
 
@@ -77,19 +77,19 @@ namespace Kmplete
             summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
         }
 
-        return summaryDocument.Save(_filename);
+        return summaryDocument.Save(_filepath);
     }
     //--------------------------------------------------------------------------
 
-    void SettingsManager::SetFilename(const Filepath& filename) noexcept
+    void SettingsManager::SetFilepath(const Filepath& filepath) noexcept
     {
-        _filename = filename;
+        _filepath = filepath;
     }
     //--------------------------------------------------------------------------
 
-    const Filepath& SettingsManager::GetFilename() const noexcept
+    const Filepath& SettingsManager::GetFilepath() const noexcept
     {
-        return _filename;
+        return _filepath;
     }
     //--------------------------------------------------------------------------
 }

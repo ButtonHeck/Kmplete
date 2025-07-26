@@ -37,20 +37,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettings(const Filepath& path /*= Filepath()*/) const
+    void WindowApplication::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
     {
         KMP_PROFILE_FUNCTION();
 
         SaveSettingsInternal();
-        Application::SaveSettings(path);
+        Application::SaveSettings(filepath);
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::LoadSettings(const Filepath& path /*= Filepath()*/)
+    void WindowApplication::LoadSettings(const Filepath& filepath /*= Filepath()*/)
     {
         KMP_PROFILE_FUNCTION();
 
-        Application::LoadSettings(path);
+        Application::LoadSettings(filepath);
         LoadSettingsInternal();
     }
     //--------------------------------------------------------------------------

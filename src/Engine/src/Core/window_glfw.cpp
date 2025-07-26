@@ -122,11 +122,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetIcon(const Filepath& path)
+    void WindowGlfw::SetIcon(const Filepath& filepath)
     {
         KMP_PROFILE_FUNCTION();
 
-        Image img(path, ImageChannels::RGBAlpha);
+        Image img(filepath, ImageChannels::RGBAlpha);
         GLFWimage icon{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
 
         if (icon.pixels)

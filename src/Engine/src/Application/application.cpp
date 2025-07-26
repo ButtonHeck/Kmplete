@@ -37,26 +37,26 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettings(const Filepath& path /*= Filepath()*/) const
+    void Application::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
     {
         KMP_PROFILE_FUNCTION();
 
-        if (!path.empty())
+        if (!filepath.empty())
         {
-            _settingsManager->SetFilename(path);
+            _settingsManager->SetFilepath(filepath);
         }
 
         SaveSettingsInternal();
     }
     //--------------------------------------------------------------------------
 
-    void Application::LoadSettings(const Filepath& path /*= Filepath()*/)
+    void Application::LoadSettings(const Filepath& filepath /*= Filepath()*/)
     {
         KMP_PROFILE_FUNCTION();
 
-        if (!path.empty())
+        if (!filepath.empty())
         {
-            _settingsManager->SetFilename(path);
+            _settingsManager->SetFilepath(filepath);
         }
 
         LoadSettingsInternal();
@@ -74,10 +74,10 @@ namespace Kmplete
         }
 #endif
 
-        const auto applicationPath = Filesystem::GetCurrentPath();
-        if (!Filesystem::PathExists(applicationPath))
+        const auto applicationPath = Filesystem::GetCurrentFilepath();
+        if (!Filesystem::FilepathExists(applicationPath))
         {
-            throw std::runtime_error("Application path initialization failed");
+            throw std::runtime_error("Application filepath initialization failed");
         }
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();
@@ -91,9 +91,9 @@ namespace Kmplete
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
 
-        _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsPath.empty() 
+        _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsFilepath.empty() 
             ? applicationPath / applicationParameters.defaultSettingsFileName
-            : applicationParameters.settingsPath);
+            : applicationParameters.settingsFilepath);
         KMP_ASSERT(_settingsManager);
 
         LoadSettingsInternal();

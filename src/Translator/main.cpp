@@ -141,7 +141,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
         {
             const auto sourceDirectory = Filepath(sourceDirectoryStr);
-            if (!Filesystem::PathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
+            if (!Filesystem::FilepathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
             {
                 KMP_LOG_ERROR("Translator: one of source directories does not exist or is not of a directory type ({})", sourceDirectory);
                 PrintUsage(optionsDescription);

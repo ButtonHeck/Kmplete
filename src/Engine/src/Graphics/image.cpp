@@ -6,12 +6,12 @@
 
 namespace Kmplete
 {
-    Image::Image(const Filepath& filename, bool flipVertically /*= false*/)
-        : Image(Filesystem::ToGenericString(filename).c_str(), flipVertically)
+    Image::Image(const Filepath& filepath, bool flipVertically /*= false*/)
+        : Image(Filesystem::ToGenericString(filepath).c_str(), flipVertically)
     {}
     //--------------------------------------------------------------------------
 
-    Image::Image(const char* filename, bool flipVertically /*= false*/)
+    Image::Image(const char* filepath, bool flipVertically /*= false*/)
         : _width(0)
         , _height(0)
         , _channels(ImageChannels::RGB)
@@ -20,26 +20,26 @@ namespace Kmplete
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
-        _pixels = stbi_load(filename, &_width, &_height, &channelsInFile, 0);
+        _pixels = stbi_load(filepath, &_width, &_height, &channelsInFile, 0);
         _channels = static_cast<ImageChannels>(channelsInFile);
 
         if (!_pixels)
         {
-            KMP_LOG_ERROR("Image: '{}' loading error", filename);
+            KMP_LOG_ERROR("Image: '{}' loading error", filepath);
         }
         else
         {
-            KMP_LOG_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filename);
+            KMP_LOG_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
         }
     }
     //--------------------------------------------------------------------------
 
-    Image::Image(const Filepath& filename, ImageChannels desiredChannels, bool flipVertically /*= false*/)
-        : Image(Filesystem::ToGenericString(filename).c_str(), desiredChannels, flipVertically)
+    Image::Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically /*= false*/)
+        : Image(Filesystem::ToGenericString(filepath).c_str(), desiredChannels, flipVertically)
     {}
     //--------------------------------------------------------------------------
 
-    Image::Image(const char* filename, ImageChannels desiredChannels, bool flipVertically /*= false*/)
+    Image::Image(const char* filepath, ImageChannels desiredChannels, bool flipVertically /*= false*/)
         : _width(0)
         , _height(0)
         , _channels(desiredChannels)
@@ -48,21 +48,21 @@ namespace Kmplete
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
-        _pixels = stbi_load(filename, &_width, &_height, &channelsInFile, desiredChannels);
+        _pixels = stbi_load(filepath, &_width, &_height, &channelsInFile, desiredChannels);
 
         if (channelsInFile != _channels)
         {
-            KMP_LOG_WARN("Image: '{}' channels mismatch (desired: {}, actual: {})", filename, static_cast<int>(_channels), channelsInFile);
+            KMP_LOG_WARN("Image: '{}' channels mismatch (desired: {}, actual: {})", filepath, static_cast<int>(_channels), channelsInFile);
             _channels = static_cast<ImageChannels>(channelsInFile);
         }
 
         if (!_pixels)
         {
-            KMP_LOG_ERROR("Image: '{}' loading error", filename);
+            KMP_LOG_ERROR("Image: '{}' loading error", filepath);
         }
         else
         {
-            KMP_LOG_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filename);
+            KMP_LOG_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
         }
     }
     //--------------------------------------------------------------------------

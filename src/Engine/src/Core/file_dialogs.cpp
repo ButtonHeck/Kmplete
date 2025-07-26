@@ -11,9 +11,9 @@ namespace Kmplete
 
     namespace FileDialogs
     {
-        Filepath OpenFile(const String& title, const Filepath& startPath, const StringVector& filters /*= { "Any Files", "*.*" }*/)
+        Filepath OpenFile(const String& title, const Filepath& startFilepath, const StringVector& filters /*= { "Any Files", "*.*" }*/)
         {
-            pfd::open_file opener(title, FilepathToStringConverterFn(startPath), filters, pfd::opt::none);
+            pfd::open_file opener(title, FilepathToStringConverterFn(startFilepath), filters, pfd::opt::none);
 
             const auto files = opener.result();
             if (files.empty())
@@ -26,31 +26,31 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        FilepathVector OpenFiles(const String& title, const Filepath& startPath, const StringVector& filters /*= { "Any Files", "*.*" }*/)
+        FilepathVector OpenFiles(const String& title, const Filepath& startFilepath, const StringVector& filters /*= { "Any Files", "*.*" }*/)
         {
-            pfd::open_file opener(title, FilepathToStringConverterFn(startPath), filters, pfd::opt::multiselect);
+            pfd::open_file opener(title, FilepathToStringConverterFn(startFilepath), filters, pfd::opt::multiselect);
 
-            auto paths = FilepathVector();
+            auto filepaths = FilepathVector();
             const auto files = opener.result();
             if (files.empty())
             {
-                return paths;
+                return filepaths;
             }
 
-            paths.reserve(files.size());
+            filepaths.reserve(files.size());
             for (const auto& file : files)
             {
                 const auto fileToEmplace = StringToFilepathConverterFn(file);
-                paths.emplace_back(Utils::NarrowToWide(fileToEmplace));
+                filepaths.emplace_back(Utils::NarrowToWide(fileToEmplace));
             }
 
-            return paths;
+            return filepaths;
         }
         //--------------------------------------------------------------------------
 
-        Filepath OpenDirectory(const String& title, const Filepath& startPath)
+        Filepath OpenDirectory(const String& title, const Filepath& startFilepath)
         {
-            pfd::select_folder opener(title, FilepathToStringConverterFn(startPath), pfd::opt::force_path);
+            pfd::select_folder opener(title, FilepathToStringConverterFn(startFilepath), pfd::opt::force_path);
 
             auto directory = opener.result();
             if (directory.empty())
@@ -63,9 +63,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Filepath SaveFile(const String& title, const Filepath& startPath, const StringVector& filters /*= { "Any Files", "*.*" }*/, bool forceOverwrite /*= false*/)
+        Filepath SaveFile(const String& title, const Filepath& startFilepath, const StringVector& filters /*= { "Any Files", "*.*" }*/, bool forceOverwrite /*= false*/)
         {
-            pfd::save_file saver(title, FilepathToStringConverterFn(startPath), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
+            pfd::save_file saver(title, FilepathToStringConverterFn(startFilepath), filters, forceOverwrite ? pfd::opt::force_overwrite : pfd::opt::none);
 
             auto dialogResult = saver.result();
             dialogResult = StringToFilepathConverterFn(dialogResult);

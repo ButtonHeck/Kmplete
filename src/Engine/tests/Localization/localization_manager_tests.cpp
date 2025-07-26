@@ -205,7 +205,7 @@ TEST_CASE("Localization manager callbacks", "[localization][locale]")
 
 TEST_CASE("Localization manager add/remove domain", "[localization][locale]")
 {
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
 
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
@@ -247,7 +247,7 @@ TEST_CASE("Localization translator without context singular", "[localization][lo
     REQUIRE(yesStr == "Yes"); // without translation
 
     // add path
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes"); // without translation
@@ -295,7 +295,7 @@ TEST_CASE("Localization translator with context singular", "[localization][local
     REQUIRE(openVerbStr == "Open");
 
     // add path
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
@@ -333,7 +333,7 @@ TEST_CASE("Localization manager Translation functions without context singular",
 {
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
@@ -406,7 +406,7 @@ TEST_CASE("Localization manager Translation functions with context singular", "[
 
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
@@ -538,7 +538,7 @@ TEST_CASE("Localization manager dictionaries without context singular", "[locali
     REQUIRE(noStr == "No");
 
     // try add again after messages path set
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     REQUIRE_NOTHROW(ok = localizationManager.RemoveMessagesDomain(KMP_TR_DOMAIN_TESTS));
     REQUIRE(ok);
@@ -570,7 +570,7 @@ TEST_CASE("Localization manager dictionaries with context singular", "[localizat
 {
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
@@ -652,7 +652,7 @@ TEST_CASE("Localization translator without context plural", "[localization][loca
 {
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
@@ -716,7 +716,7 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
 {
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
@@ -820,7 +820,7 @@ TEST_CASE("Localization manager dictionaries with context plural", "[localizatio
 {
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleRuUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
@@ -905,7 +905,7 @@ TEST_CASE("Localization manager translate from other locale", "[localization][lo
 {
     LocalizationManager localizationManager;
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
-    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentPath().append(LocalesDirectory));
+    const auto defaultTranslationsPath = Filesystem::ToGenericU8String(Filesystem::GetCurrentFilepath().append(LocalesDirectory));
     REQUIRE_NOTHROW(localizationManager.AddMessagesPath(defaultTranslationsPath));
     bool ok = false;
     REQUIRE_NOTHROW(ok = localizationManager.AddMessagesDomain(KMP_TR_DOMAIN_TESTS));
