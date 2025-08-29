@@ -72,7 +72,13 @@ namespace Kmplete
     private:
         void Initialize();
         void InitializeHints() const;
+
         void InitializeCallbacks() const;
+        void InitializeErrorCallback() const;
+        void InitializeWindowCallbacks() const;
+        void InitializeKeyboardCallbacks() const;
+        void InitializeMouseCallbacks() const;
+
         void Finalize();
 
     private:

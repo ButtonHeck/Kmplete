@@ -326,11 +326,24 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
+        InitializeErrorCallback();
+        InitializeWindowCallbacks();
+        InitializeKeyboardCallbacks();
+        InitializeMouseCallbacks();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::InitializeErrorCallback() const
+    {
         glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
             KMP_LOG_ERROR("WindowGlfw: GLFW internal error '{}': {}", code, description);
             }
         );
+    }
+    //--------------------------------------------------------------------------
 
+    void WindowGlfw::InitializeWindowCallbacks() const
+    {
         glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
             const NonNull<UserData*> userData = GetUserPointer(window);
             if (userData->eventCallback)
@@ -413,7 +426,11 @@ namespace Kmplete
             }
             }
         );
+    }
+    //--------------------------------------------------------------------------
 
+    void WindowGlfw::InitializeKeyboardCallbacks() const
+    {
         glfwSetKeyCallback(_window, [](GLFWwindow* window, int key, KMP_MB_UNUSED int scancode, int action, int mods) {
             const NonNull<UserData*> userData = GetUserPointer(window);
             if (userData->eventCallback)
@@ -454,7 +471,11 @@ namespace Kmplete
             }
             }
         );
+    }
+    //--------------------------------------------------------------------------
 
+    void WindowGlfw::InitializeMouseCallbacks() const
+    {
         glfwSetMouseButtonCallback(_window, [](GLFWwindow* window, int button, int action, int mods) {
             const NonNull<UserData*> userData = GetUserPointer(window);
             if (userData->eventCallback)
