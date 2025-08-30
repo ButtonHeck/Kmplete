@@ -45,7 +45,7 @@ namespace Kmplete
             ImbueLocale();
             NotifyLocaleListeners();
 
-            KMP_LOG_INFO("LocalizationManager: set locale '{}'", _currentLocale);
+            KMP_LOG_TEST("set locale '{}'", _currentLocale);
             return true;
         }
         catch (KMP_MB_UNUSED const std::exception& e)

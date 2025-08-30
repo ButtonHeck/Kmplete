@@ -5,6 +5,7 @@
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_library.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <boost/locale.hpp>
 
@@ -17,6 +18,9 @@ namespace Kmplete
 
     class LocalizationManager
     {
+        KMP_LOG_CLASSNAME(LocalizationManager)
+
+    public:
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

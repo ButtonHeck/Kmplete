@@ -10,6 +10,7 @@ project(LoggerLib LANGUAGES CXX)
 set(LoggerLib_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log_api.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log_class_macro.h
     ${CMAKE_CURRENT_LIST_DIR}/src/log.cpp
 )
 source_group("Log" FILES ${LoggerLib_SOURCES})
@@ -43,6 +44,7 @@ set_target_properties(LoggerLib PROPERTIES
 
 set(LoggerInterfaceLib_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log_class_macro.h
 )
 source_group("Log" FILES ${LoggerInterfaceLib_SOURCES})
 
