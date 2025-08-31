@@ -3,11 +3,13 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 namespace Kmplete
 {
     class SystemMetricsManager
     {
+        KMP_LOG_CLASSNAME(SystemMetricsManager)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

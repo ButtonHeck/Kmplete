@@ -6,6 +6,7 @@
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Json/json_writer.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
@@ -16,6 +17,7 @@ namespace Kmplete
 {
     class JsonDocument
     {
+        KMP_LOG_CLASSNAME(JsonDocument)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

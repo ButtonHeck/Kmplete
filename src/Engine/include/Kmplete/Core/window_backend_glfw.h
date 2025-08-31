@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Core/window_backend.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <unordered_map>
 
@@ -9,6 +10,8 @@ namespace Kmplete
 {
     class WindowBackendGlfw : public WindowBackend
     {
+        KMP_LOG_CLASSNAME(WindowBackendGlfw)
+
     public:
         KMP_DISABLE_COPY_MOVE(WindowBackendGlfw)
 

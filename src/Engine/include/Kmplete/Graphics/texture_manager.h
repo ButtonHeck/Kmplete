@@ -6,6 +6,7 @@
 #include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Graphics/graphics_base.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <unordered_map>
 
@@ -13,6 +14,8 @@ namespace Kmplete
 {
     class TextureManager
     {
+        KMP_LOG_CLASSNAME(TextureManager)
+
     public:
         KMP_DISABLE_COPY_MOVE(TextureManager)
 

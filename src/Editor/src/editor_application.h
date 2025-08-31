@@ -4,11 +4,13 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 namespace Kmplete
 {
     class EditorApplication : public WindowApplication
     {
+        KMP_LOG_CLASSNAME(EditorApplication)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

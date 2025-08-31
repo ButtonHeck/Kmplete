@@ -44,7 +44,7 @@ namespace Kmplete
     {
         if (_currentSession)
         {
-            KMP_LOG_ERROR("Profiler: cannot start session '{}' when session '{}' already started", name, _currentSession->name);
+            KMP_LOG_ERROR("cannot start session '{}' when session '{}' already started", name, _currentSession->name);
             EndSessionInternal();
         }
 
@@ -76,7 +76,7 @@ namespace Kmplete
             }
             else
             {
-                KMP_LOG_ERROR("Profiler: failed to open profiling session '{}' file '{}'", _currentSession->name, _outputFilepath);
+                KMP_LOG_ERROR("failed to open profiling session '{}' file '{}'", _currentSession->name, _outputFilepath);
             }            
         }
 
@@ -128,11 +128,11 @@ namespace Kmplete
             intermediateFileStream.flush();
             intermediateFileStream.close();
 
-            KMP_LOG_INFO("Profiler: write to intermediate file '{}'", intermediateStoragePath);
+            KMP_LOG_INFO("write to intermediate file '{}'", intermediateStoragePath);
         }
         else
         {
-            KMP_LOG_ERROR("Profiler: failed to write to intermediate file '{}'", intermediateStoragePath);
+            KMP_LOG_ERROR("failed to write to intermediate file '{}'", intermediateStoragePath);
         }
     }
     //--------------------------------------------------------------------------
@@ -155,17 +155,17 @@ namespace Kmplete
 
                 if (!std::filesystem::remove(intermediateStoragePath))
                 {
-                    KMP_LOG_WARN("Profiler: failed to remove temporary intermediate file '{}'", intermediateStoragePath);
+                    KMP_LOG_WARN("failed to remove temporary intermediate file '{}'", intermediateStoragePath);
                 }
             }
             else
             {
-                KMP_LOG_ERROR("Profiler: failed to write from intermediate file '{}'", intermediateStoragePath);
+                KMP_LOG_ERROR("failed to write from intermediate file '{}'", intermediateStoragePath);
             }
 
             outputFileStream.flush();
 
-            KMP_LOG_INFO("Profiler: write from intermediate file '{}'", intermediateStoragePath);
+            KMP_LOG_INFO("write from intermediate file '{}'", intermediateStoragePath);
 
             ++storeCycle;
         }

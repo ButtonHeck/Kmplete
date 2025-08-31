@@ -44,7 +44,7 @@ namespace Kmplete
             _windowsProcessHandle = GetCurrentProcess();
             if (!_windowsProcessHandle)
             {
-                KMP_LOG_ERROR("SystemMetricsManager: update failed on GetCurrentProcess handle");
+                KMP_LOG_ERROR("update failed on GetCurrentProcess handle");
                 return false;
             }
         }
@@ -139,7 +139,7 @@ namespace Kmplete
         memoryInfo.dwLength = sizeof(MEMORYSTATUSEX);
         if (!static_cast<bool>(GlobalMemoryStatusEx(&memoryInfo)))
         {
-            KMP_LOG_ERROR("SystemMetricsManager: initialization failed on GlobalMemoryStatusEx, error {}", GetLastError());
+            KMP_LOG_ERROR("initialization failed on GlobalMemoryStatusEx, error {}", GetLastError());
             return false;
         }
 
@@ -150,7 +150,7 @@ namespace Kmplete
         const auto error = sysinfo(&memoryInfo);
         if (error != 0)
         {
-            KMP_LOG_ERROR("SystemMetricsManager: initialization failed on sysinfo");
+            KMP_LOG_ERROR("initialization failed on sysinfo");
             return false;
         }
     
@@ -194,7 +194,7 @@ namespace Kmplete
         _windowsProcessHandle = GetCurrentProcess();
         if (!_windowsProcessHandle)
         {
-            KMP_LOG_ERROR("SystemMetricsManager: initialization failed on GetCurrentProcess handle");
+            KMP_LOG_ERROR("initialization failed on GetCurrentProcess handle");
             return false;
         }
 #else
@@ -217,7 +217,7 @@ namespace Kmplete
 
         if (!static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
         {
-            KMP_LOG_ERROR("SystemMetricsManager: initialization failed on GetProcessTimes, error {}", GetLastError());
+            KMP_LOG_ERROR("initialization failed on GetProcessTimes, error {}", GetLastError());
             return false;
         }
 
@@ -244,7 +244,7 @@ namespace Kmplete
         threadSnapHandle = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0);
         if (threadSnapHandle == INVALID_HANDLE_VALUE)
         {
-            KMP_LOG_WARN("SystemMetricsManager: failed to take snapshot of all running threads");
+            KMP_LOG_WARN("failed to take snapshot of all running threads");
         }
         else
         {
@@ -253,7 +253,7 @@ namespace Kmplete
 
             if (!Thread32First(threadSnapHandle, &threadEntry))
             {
-                KMP_LOG_WARN("SystemMetricsManager: failed to retrieve information about the first thread");
+                KMP_LOG_WARN("failed to retrieve information about the first thread");
                 CloseHandle(threadSnapHandle);
             }
             else
@@ -312,7 +312,7 @@ namespace Kmplete
         PROCESS_MEMORY_COUNTERS_EX pmc;
         if (!static_cast<bool>(GetProcessMemoryInfo(reinterpret_cast<HANDLE>(_windowsProcessHandle), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))))
         {
-            KMP_LOG_ERROR("SystemMetricsManager: update failed on GetProcessMemoryInfo, error {}", GetLastError());
+            KMP_LOG_ERROR("update failed on GetProcessMemoryInfo, error {}", GetLastError());
             return false;
         }
 
@@ -375,7 +375,7 @@ namespace Kmplete
 
         if (!static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
         {
-            KMP_LOG_ERROR("SystemMetricsManager: update failed on GetProcessTimes, error {}", GetLastError());
+            KMP_LOG_ERROR("update failed on GetProcessTimes, error {}", GetLastError());
             return false;
         }
 

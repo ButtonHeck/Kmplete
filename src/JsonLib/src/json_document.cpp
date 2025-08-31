@@ -53,7 +53,7 @@ namespace Kmplete
     {
         if (!Load(_filepath))
         {
-            KMP_LOG_ERROR("JsonDocument: creation from '{}' failed", _filepath);
+            KMP_LOG_ERROR("creation from '{}' failed", _filepath);
         }
 
         KMP_PROFILE_CONSTRUCTOR_END()
@@ -68,7 +68,7 @@ namespace Kmplete
 
         if (!Filesystem::FilepathIsValid(_filepath))
         {
-            KMP_LOG_WARN("JsonDocument: invalid filepath was set '{}'", _filepath);
+            KMP_LOG_WARN("invalid filepath was set '{}'", _filepath);
         }
     }
     //--------------------------------------------------------------------------
@@ -95,12 +95,12 @@ namespace Kmplete
         _error = false;
         if (!Filesystem::FilepathExists(_filepath))
         {
-            KMP_LOG_WARN("JsonDocument: failed to load due to insufficient filepath '{}'", _filepath);
+            KMP_LOG_WARN("failed to load due to insufficient filepath '{}'", _filepath);
             _error = true;
             return false;
         }
 
-        KMP_LOG_INFO("JsonDocument: loading from '{}'", _filepath);
+        KMP_LOG_INFO("loading from '{}'", _filepath);
 
         std::ifstream inputStream(_filepath);
         if (!inputStream.is_open() || !inputStream.good())
@@ -116,7 +116,7 @@ namespace Kmplete
 
         if (newDocument.HasParseError())
         {
-            KMP_LOG_ERROR("JsonDocument: failed to load from '{}', JSON parsing error '{}'", _filepath, rapidjson::GetParseError_En(newDocument.GetParseError()));
+            KMP_LOG_ERROR("failed to load from '{}', JSON parsing error '{}'", _filepath, rapidjson::GetParseError_En(newDocument.GetParseError()));
             _error = true;
             return false;
         }
@@ -163,7 +163,7 @@ namespace Kmplete
             }
         }
 
-        KMP_LOG_WARN("JsonDocument: failed to write document in '{}'", _filepath);
+        KMP_LOG_WARN("failed to write document in '{}'", _filepath);
         _error = true;
         return false;
     }
@@ -195,7 +195,7 @@ namespace Kmplete
             }
         }
 
-        KMP_LOG_WARN("JsonDocument: failed to write document to string");
+        KMP_LOG_WARN("failed to write document to string");
         _error = true;
         return String("");
     }
@@ -213,7 +213,7 @@ namespace Kmplete
 
         if (name.empty())
         {
-            KMP_LOG_ERROR("JsonDocument: cannot add child document - name is empty");
+            KMP_LOG_ERROR("cannot add child document - name is empty");
             return false;
         }
 
@@ -225,7 +225,7 @@ namespace Kmplete
             }
             else
             {
-                KMP_LOG_WARN("JsonDocument: already contains member '{}' and overwrite set to false", name);
+                KMP_LOG_WARN("already contains member '{}' and overwrite set to false", name);
                 return false;
             }
         }
@@ -233,7 +233,7 @@ namespace Kmplete
         auto& childDocument = child._document;
         if (!childDocument.IsObject() || childDocument.HasParseError())
         {
-            KMP_LOG_ERROR("JsonDocument: cannot add '{}' child document - not an object or has errors", name);
+            KMP_LOG_ERROR("cannot add '{}' child document - not an object or has errors", name);
             return false;
         }
 
@@ -516,7 +516,7 @@ namespace Kmplete
 
         if (!Filesystem::CreateDirectories(_filepath, true))
         {
-            KMP_LOG_WARN("JsonDocument: failed to create directories for '{}'", _filepath);
+            KMP_LOG_WARN("failed to create directories for '{}'", _filepath);
             _error = true;
             return false;
         }
@@ -524,7 +524,7 @@ namespace Kmplete
         std::ofstream outputStream(_filepath, std::ios::out | std::ios::trunc);
         if (!outputStream.is_open() || !outputStream.good())
         {
-            KMP_LOG_WARN("JsonDocument: failed to open file stream for saving in '{}'", _filepath);
+            KMP_LOG_WARN("failed to open file stream for saving in '{}'", _filepath);
             _error = true;
             return false;
         }
@@ -532,7 +532,7 @@ namespace Kmplete
         outputStream << buffer.GetString();
         outputStream.close();
 
-        KMP_LOG_INFO("JsonDocument: document written successfully in '{}'", _filepath);
+        KMP_LOG_INFO("document written successfully in '{}'", _filepath);
         _error = false;
         return true;
     }

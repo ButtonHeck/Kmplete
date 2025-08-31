@@ -136,7 +136,7 @@ namespace Kmplete
         auto settings = _settingsManager->PutSettings(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_WARN("Application: failed to create settings entry for saving");
+            KMP_LOG_WARN("failed to create settings entry for saving");
             return;
         }
 
@@ -168,7 +168,7 @@ namespace Kmplete
         const auto settings = _settingsManager->GetSettings(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_WARN("Application: failed to get settings entry for loading");
+            KMP_LOG_WARN("failed to get settings entry for loading");
             return;
         }
 

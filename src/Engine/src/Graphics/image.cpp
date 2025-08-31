@@ -25,11 +25,11 @@ namespace Kmplete
 
         if (!_pixels)
         {
-            KMP_LOG_ERROR("Image: '{}' loading error", filepath);
+            KMP_LOG_ERROR("'{}' loading error", filepath);
         }
         else
         {
-            KMP_LOG_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
+            KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
         }
     }
     //--------------------------------------------------------------------------
@@ -52,17 +52,17 @@ namespace Kmplete
 
         if (channelsInFile != _channels)
         {
-            KMP_LOG_WARN("Image: '{}' channels mismatch (desired: {}, actual: {})", filepath, static_cast<int>(_channels), channelsInFile);
+            KMP_LOG_WARN("'{}' channels mismatch (desired: {}, actual: {})", filepath, static_cast<int>(_channels), channelsInFile);
             _channels = static_cast<ImageChannels>(channelsInFile);
         }
 
         if (!_pixels)
         {
-            KMP_LOG_ERROR("Image: '{}' loading error", filepath);
+            KMP_LOG_ERROR("'{}' loading error", filepath);
         }
         else
         {
-            KMP_LOG_INFO("Image: created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
+            KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
         }
     }
     //--------------------------------------------------------------------------

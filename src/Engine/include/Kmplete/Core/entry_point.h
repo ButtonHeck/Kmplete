@@ -28,11 +28,11 @@ void TerminationHandler()
     }
     catch (KMP_MB_UNUSED const std::exception& e)
     {
-        KMP_LOG_CRITICAL("Uncaught exception: '{}'", e.what());
+        KMP_LOG_CRITICAL_FN("Uncaught exception: '{}'", e.what());
     }
     catch (...)
     {
-        KMP_LOG_CRITICAL("Uncaught exception");
+        KMP_LOG_CRITICAL_FN("Uncaught exception");
     }
 
     abort();

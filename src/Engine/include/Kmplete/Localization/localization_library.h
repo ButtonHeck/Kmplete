@@ -5,6 +5,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <unordered_map>
 
@@ -12,6 +13,7 @@ namespace Kmplete
 {
     class LocalizationLibrary
     {
+        KMP_LOG_CLASSNAME(LocalizationLibrary)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

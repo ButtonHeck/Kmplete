@@ -22,7 +22,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: failed to get current filepath: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: failed to get current filepath: '{}'", fe.what());
             return Filepath{};
         }
     }
@@ -38,7 +38,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: exists failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: exists failed: '{}'", fe.what());
             return false;
         }
     }
@@ -63,7 +63,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: create directories failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: create directories failed: '{}'", fe.what());
             return false;
         }
     }
@@ -79,7 +79,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: remove directories failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: remove directories failed: '{}'", fe.what());
             return false;
         }
     }
@@ -93,13 +93,13 @@ namespace Kmplete
         {
             if (FilepathExists(filepath))
             {
-                KMP_LOG_INFO("Filesystem::CreateFile - file '{}' already exists", filepath);
+                KMP_LOG_INFO_FN("Filesystem::CreateFile - file '{}' already exists", filepath);
                 return true;
             }
 
             if (!CreateDirectories(filepath, true))
             {
-                KMP_LOG_ERROR("Filesystem::CreateFile - cannot create directories for file '{}'", filepath);
+                KMP_LOG_ERROR_FN("Filesystem::CreateFile - cannot create directories for file '{}'", filepath);
                 return false;
             }
 
@@ -107,7 +107,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::ios_base::failure& e)
         {
-            KMP_LOG_ERROR("Filesystem: failed to create [{}]: '{}'", filepath, e.what());
+            KMP_LOG_ERROR_FN("Filesystem: failed to create [{}]: '{}'", filepath, e.what());
         }
 
         return FilepathExists(filepath);
@@ -124,7 +124,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: remove file failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: remove file failed: '{}'", fe.what());
             return false;
         }
     }
@@ -140,7 +140,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: 'isFile' failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: 'isFile' failed: '{}'", fe.what());
             return false;
         }
     }
@@ -156,7 +156,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR("Filesystem: 'isDirectory' failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: 'isDirectory' failed: '{}'", fe.what());
             return false;
         }
     }

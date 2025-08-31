@@ -8,6 +8,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/macro.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <fstream>
 #include <chrono>
@@ -36,6 +37,8 @@ namespace Kmplete
 
     class Profiler
     {
+        KMP_LOG_CLASSNAME(Profiler)
+
     public:
         KMP_DISABLE_COPY_MOVE(Profiler)
 

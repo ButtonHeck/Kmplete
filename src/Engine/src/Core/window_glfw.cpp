@@ -54,7 +54,7 @@ namespace Kmplete
 
         if (!_window)
         {
-            KMP_LOG_ERROR("WindowGlfw: creation failed");
+            KMP_LOG_ERROR("creation failed");
             throw std::runtime_error("WindowGlfw creation failed");
         }
 
@@ -135,7 +135,7 @@ namespace Kmplete
         }
         else
         {
-            KMP_LOG_WARN("WindowGlfw: cannot set window icon");
+            KMP_LOG_WARN("cannot set window icon");
         }
     }
     //--------------------------------------------------------------------------
@@ -232,7 +232,7 @@ namespace Kmplete
 
     void WindowGlfw::SetResizable(bool resizable)
     {
-        KMP_LOG_WARN("WindowGlfw: resizable setting will be applied after restart");
+        KMP_LOG_WARN("resizable setting will be applied after restart");
         _settings.resizable = resizable;
     }
     //--------------------------------------------------------------------------
@@ -245,7 +245,7 @@ namespace Kmplete
 
     void WindowGlfw::SetDecorated(bool decorated)
     {
-        KMP_LOG_WARN("WindowGlfw: decorated settings will be applied after restart");
+        KMP_LOG_WARN("decorated settings will be applied after restart");
         _settings.decorated = decorated;
     }
     //--------------------------------------------------------------------------
@@ -336,7 +336,7 @@ namespace Kmplete
     void WindowGlfw::InitializeErrorCallback() const
     {
         glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
-            KMP_LOG_ERROR("WindowGlfw: GLFW internal error '{}': {}", code, description);
+            KMP_LOG_ERROR("GLFW internal error '{}': {}", code, description);
             }
         );
     }

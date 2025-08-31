@@ -5,6 +5,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Core/window.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 struct GLFWwindow;
 
@@ -12,6 +13,7 @@ namespace Kmplete
 {
     class WindowGlfw : public Window
     {
+        KMP_LOG_CLASSNAME(WindowGlfw)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

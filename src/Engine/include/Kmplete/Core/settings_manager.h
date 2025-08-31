@@ -6,6 +6,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <unordered_map>
 
@@ -13,6 +14,7 @@ namespace Kmplete
 {
     class SettingsManager
     {
+        KMP_LOG_CLASSNAME(SettingsManager)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

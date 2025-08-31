@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Json/json_scope.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <rapidjson/document.h>
 
@@ -11,6 +12,7 @@ namespace Kmplete
 {
     class JsonReader
     {
+        KMP_LOG_CLASSNAME(JsonReader)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

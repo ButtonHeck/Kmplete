@@ -25,13 +25,13 @@ namespace Kmplete
 
         if (!ok)
         {
-            KMP_LOG_ERROR("OpenGLGraphicsBackend: failed to initialize");
+            KMP_LOG_ERROR("failed to initialize");
             return;
         }
 
-        KMP_LOG_INFO("OpenGLGraphicsBackend: vendor - {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
-        KMP_LOG_INFO("OpenGLGraphicsBackend: renderer - {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
-        KMP_LOG_INFO("OpenGLGraphicsBackend: version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+        KMP_LOG_INFO("vendor - {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+        KMP_LOG_INFO("renderer - {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+        KMP_LOG_INFO("version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
     }
     //--------------------------------------------------------------------------
 }

@@ -34,7 +34,7 @@ namespace Kmplete
         {
             if (_translationMap[_currentLocaleSid][sourceSid] != translation)
             {
-                KMP_LOG_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"", _domain, sourceSid);
+                KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"", _domain, sourceSid);
             }
         }
         else
@@ -54,7 +54,7 @@ namespace Kmplete
             !_translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm].empty() && 
             _translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm] != translation)
         {
-            KMP_LOG_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")",
+            KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")",
                           _domain, sourceSidSingular, sourceSidPlural, static_cast<int>(pluralityForm));
             return;
         }
@@ -82,7 +82,7 @@ namespace Kmplete
         {
             if (_translationCtxMap[_currentLocaleSid][contextedSource] != translation)
             {
-                KMP_LOG_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
+                KMP_LOG_WARN("\"{}\" possible duplicate \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
             }
         }
         else
@@ -103,7 +103,7 @@ namespace Kmplete
             !_translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm].empty() &&
             _translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm] != translation)
         {
-            KMP_LOG_WARN("LocalizationDictionary: \"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")",
+            KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")",
                           _domain, sourceSidSingular, sourceSidPlural, contextSid, static_cast<int>(pluralityForm));
             return;
         }

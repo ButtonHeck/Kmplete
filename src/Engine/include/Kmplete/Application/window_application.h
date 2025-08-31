@@ -6,11 +6,13 @@
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 namespace Kmplete
 {
     class WindowApplication : public Application
     {
+        KMP_LOG_CLASSNAME(WindowApplication)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

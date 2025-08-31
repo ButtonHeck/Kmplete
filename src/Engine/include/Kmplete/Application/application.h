@@ -4,6 +4,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/system_metrics_manager.h"
@@ -24,6 +25,7 @@ namespace Kmplete
 
     class Application
     {
+        KMP_LOG_CLASSNAME(Application)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:

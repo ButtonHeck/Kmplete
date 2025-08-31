@@ -47,7 +47,7 @@ namespace Kmplete
         JsonDocument document(_filepath);
         if (document.HasError())
         {
-            KMP_LOG_WARN("SettingsManager: failed to load settings from '{}'", _filepath);
+            KMP_LOG_WARN("failed to load settings from '{}'", _filepath);
             return false;
         }
 

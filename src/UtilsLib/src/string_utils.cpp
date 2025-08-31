@@ -20,7 +20,7 @@ namespace Kmplete
 
             if (regexp == nullptr || replacement == nullptr)
             {
-                KMP_LOG_WARN("Utils: RegexReplace - either regexp or replacement string is nullptr");
+                KMP_LOG_WARN_FN("Utils: RegexReplace - either regexp or replacement string is nullptr");
                 return source;
             }
 
@@ -31,7 +31,7 @@ namespace Kmplete
             }
             catch (KMP_MB_UNUSED const std::regex_error& re)
             {
-                KMP_LOG_ERROR("Utils: regex '{}' error for string '{}': '{}'", regexp, source, re.what());
+                KMP_LOG_ERROR_FN("Utils: regex '{}' error for string '{}': '{}'", regexp, source, re.what());
                 return source;
             }
         }
@@ -49,7 +49,7 @@ namespace Kmplete
 
             if (stringVector.empty())
             {
-                KMP_LOG_WARN("Utils: StringVectorToString - stringVector is empty");
+                KMP_LOG_WARN_FN("Utils: StringVectorToString - stringVector is empty");
                 return "";
             }
 

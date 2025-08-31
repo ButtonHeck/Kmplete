@@ -6,6 +6,7 @@
 #include "Kmplete/Base/macro.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <sstream>
 
@@ -21,6 +22,8 @@ namespace Kmplete
 {
     class Assertion
     {
+        KMP_LOG_CLASSNAME(Assertion)
+
     public:
         enum class Consequence
         {

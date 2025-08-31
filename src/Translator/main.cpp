@@ -113,13 +113,13 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto workMode = vm.count(ProcessorArgumentWorkMode) ? vm[ProcessorArgumentWorkMode].as<String>() : String();
     if (workMode.empty())
     {
-        KMP_LOG_ERROR("Translator: work mode is not set");
+        KMP_LOG_ERROR_FN("Translator: work mode is not set");
         PrintUsage(optionsDescription);
         return ReturnCode::WorkModeIsNotSet;
     }
     if (!WorkModeIsValid(workMode))
     {
-        KMP_LOG_ERROR("Translator: work mode is not valid ({})", workMode);
+        KMP_LOG_ERROR_FN("Translator: work mode is not valid ({})", workMode);
         PrintUsage(optionsDescription);
         return ReturnCode::WorkModeIsNotValid;
     }
@@ -132,7 +132,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto sourceDirectoryStrings = vm.count(ProcessorArgumentInputDirectories) ? vm[ProcessorArgumentInputDirectories].as<StringVector>() : StringVector();
         if (sourceDirectoryStrings.empty())
         {
-            KMP_LOG_ERROR("Translator: source directories are not set");
+            KMP_LOG_ERROR_FN("Translator: source directories are not set");
             PrintUsage(optionsDescription);
             return ReturnCode::SourceDirectoriesAreNotSet;
         }
@@ -143,7 +143,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
             const auto sourceDirectory = Filepath(sourceDirectoryStr);
             if (!Filesystem::FilepathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
             {
-                KMP_LOG_ERROR("Translator: one of source directories does not exist or is not of a directory type ({})", sourceDirectory);
+                KMP_LOG_ERROR_FN("Translator: one of source directories does not exist or is not of a directory type ({})", sourceDirectory);
                 PrintUsage(optionsDescription);
                 return ReturnCode::SourceDirectoriesAreNotValid;
             }
@@ -157,7 +157,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         const auto filesExtensions = vm.count(ProcessorArgumentExtensions) ? vm[ProcessorArgumentExtensions].as<StringVector>() : StringVector();
         if (filesExtensions.empty())
         {
-            KMP_LOG_ERROR("Translator: files extensions are not set");
+            KMP_LOG_ERROR_FN("Translator: files extensions are not set");
             PrintUsage(optionsDescription);
             return ReturnCode::FilesExtensionsAreNotSet;
         }
@@ -173,7 +173,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto outputDirectoryStr = vm.count(ProcessorArgumentOutputDirectory) ? vm[ProcessorArgumentOutputDirectory].as<String>() : String();
     if (outputDirectoryStr.empty())
     {
-        KMP_LOG_ERROR("Translator: output directory is not set");
+        KMP_LOG_ERROR_FN("Translator: output directory is not set");
         PrintUsage(optionsDescription);
         return ReturnCode::OutputDirectoryIsNotSet;
     }
@@ -181,7 +181,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
 
     if (!Filesystem::CreateDirectories(outputDirectory))
     {
-        KMP_LOG_ERROR("Translator: cannot create output directory ({})", outputDirectory);
+        KMP_LOG_ERROR_FN("Translator: cannot create output directory ({})", outputDirectory);
         PrintUsage(optionsDescription);
         return ReturnCode::OutputDirectoryIsNotValid;
     }
@@ -190,7 +190,7 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
     const auto outputFileNameStr = vm.count(ProcessorArgumentOutputFileName) ? vm[ProcessorArgumentOutputFileName].as<String>() : String();
     if (outputFileNameStr.empty())
     {
-        KMP_LOG_ERROR("Translator: output file name is not set");
+        KMP_LOG_ERROR_FN("Translator: output file name is not set");
         PrintUsage(optionsDescription);
         return ReturnCode::OutputFileNameIsNotSet;
     }

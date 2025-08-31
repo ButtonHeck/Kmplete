@@ -4,11 +4,14 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/graphics_base.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 namespace Kmplete
 {
     class Image
     {
+        KMP_LOG_CLASSNAME(Image)
+
     public:
         KMP_DISABLE_COPY(Image)
 

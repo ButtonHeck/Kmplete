@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Translator/translator_interface.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 namespace Kmplete
 {
@@ -23,6 +24,8 @@ namespace Kmplete
 
         class TranslatorProcessor
         {
+            KMP_LOG_CLASSNAME(TranslatorProcessor)
+
         public:
             explicit TranslatorProcessor(TranslatorParameters&& parameters) noexcept;
 

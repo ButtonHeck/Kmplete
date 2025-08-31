@@ -9,6 +9,13 @@
 #define KMP_LOG_ERROR(...)
 #define KMP_LOG_CRITICAL(...)
 
+#define KMP_LOG_TRACE_FN(...)
+#define KMP_LOG_DEBUG_FN(...)
+#define KMP_LOG_INFO_FN(...)
+#define KMP_LOG_WARN_FN(...)
+#define KMP_LOG_ERROR_FN(...)
+#define KMP_LOG_CRITICAL_FN(...)
+
 #else
 #include "Kmplete/Log/log_api.h"
 #include "Kmplete/Base/kmplete_api.h"
@@ -98,13 +105,18 @@ struct fmt::formatter<Kmplete::Filepath> : fmt::formatter<Kmplete::String>
 };
 //--------------------------------------------------------------------------
 
-#define KMP_LOG_TEST(fmtstr, ...)  ::Kmplete::Log::Info("{}: {}", this->GetLogClassName(), fmt::format(fmt::runtime(fmtstr), __VA_ARGS__));
+#define KMP_LOG_TRACE(...)          ::Kmplete::Log::Trace("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
+#define KMP_LOG_DEBUG(...)          ::Kmplete::Log::Debug("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
+#define KMP_LOG_INFO(...)           ::Kmplete::Log::Info("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
+#define KMP_LOG_WARN(...)           ::Kmplete::Log::Warn("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
+#define KMP_LOG_ERROR(...)          ::Kmplete::Log::Error("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
+#define KMP_LOG_CRITICAL(...)       ::Kmplete::Log::Critical("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
 
-#define KMP_LOG_TRACE(...)      ::Kmplete::Log::Trace(__VA_ARGS__)
-#define KMP_LOG_DEBUG(...)      ::Kmplete::Log::Debug(__VA_ARGS__)
-#define KMP_LOG_INFO(...)       ::Kmplete::Log::Info(__VA_ARGS__)
-#define KMP_LOG_WARN(...)       ::Kmplete::Log::Warn(__VA_ARGS__)
-#define KMP_LOG_ERROR(...)      ::Kmplete::Log::Error(__VA_ARGS__)
-#define KMP_LOG_CRITICAL(...)   ::Kmplete::Log::Critical(__VA_ARGS__)
+#define KMP_LOG_TRACE_FN(...)       ::Kmplete::Log::Trace(__VA_ARGS__)
+#define KMP_LOG_DEBUG_FN(...)       ::Kmplete::Log::Debug(__VA_ARGS__)
+#define KMP_LOG_INFO_FN(...)        ::Kmplete::Log::Info(__VA_ARGS__)
+#define KMP_LOG_WARN_FN(...)        ::Kmplete::Log::Warn(__VA_ARGS__)
+#define KMP_LOG_ERROR_FN(...)       ::Kmplete::Log::Error(__VA_ARGS__)
+#define KMP_LOG_CRITICAL_FN(...)    ::Kmplete::Log::Critical(__VA_ARGS__)
 
 #endif
