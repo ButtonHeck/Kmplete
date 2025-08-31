@@ -24,13 +24,22 @@ namespace Kmplete
             float cpuUsagePercent = 0.0f;
         };
 
+        enum SystemMetricsUpdateMode
+        {
+            MemoryUsed      = 1 << 0,
+            CPUUsed         = 1 << 1,
+            NumThreads      = 1 << 2,
+            MemoryAndCPU    = MemoryUsed | CPUUsed,
+            Everything      = MemoryUsed | CPUUsed | NumThreads
+        };
+
     public:
         KMP_DISABLE_COPY_MOVE(SystemMetricsManager)
 
         KMP_API SystemMetricsManager();
         ~SystemMetricsManager() = default;
 
-        KMP_API bool Update();
+        KMP_API bool Update(SystemMetricsUpdateMode updateMode);
         KMP_NODISCARD KMP_API const SystemMetrics& GetMetrics() const noexcept;
 
     private:

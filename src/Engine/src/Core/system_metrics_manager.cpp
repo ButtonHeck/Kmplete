@@ -34,7 +34,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::Update()
+    bool SystemMetricsManager::Update(SystemMetricsUpdateMode updateMode)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -50,19 +50,28 @@ namespace Kmplete
         }
 #endif
 
-        if (!UpdateNumThreads())
+        if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::NumThreads)
         {
-            return false;
+            if (!UpdateNumThreads())
+            {
+                return false;
+            }
         }
 
-        if (!UpdateMemoryUsed())
+        if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::MemoryUsed)
         {
-            return false;
+            if (!UpdateMemoryUsed())
+            {
+                return false;
+            }
         }
 
-        if (!UpdateCPUUsed())
+        if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::CPUUsed)
         {
-            return false;
+            if (!UpdateCPUUsed())
+            {
+                return false;
+            }
         }
 
         return true;

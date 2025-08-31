@@ -113,7 +113,7 @@ namespace Kmplete
         if (_metricsTimer.ReachedTimeout())
         {
             _metricsTimer.Mark();
-            _systemMetricsManager.Update();
+            _systemMetricsManager.Update(SystemMetricsManager::SystemMetricsUpdateMode::MemoryAndCPU);
         }
 
         NewFrame();
