@@ -85,6 +85,46 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Filesystem::CopyDirectories(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::recursive*/) noexcept
+    {
+        KMP_PROFILE_FUNCTION();
+
+        if (!IsDirectory(from))
+        {
+            KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}' is no a directory", from);
+            return false;
+        }
+
+        try
+        {
+            std::filesystem::copy(from, to, copyOptions);
+        }
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+        {
+            KMP_LOG_ERROR_FN("Filesystem: copy file failed: '{}'", fe.what());
+            return false;
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Filesystem::IsDirectory(const Filepath& filepath) noexcept
+    {
+        KMP_PROFILE_FUNCTION();
+
+        try
+        {
+            return std::filesystem::is_directory(filepath);
+        }
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+        {
+            KMP_LOG_ERROR_FN("Filesystem: 'isDirectory' failed: '{}'", fe.what());
+            return false;
+        }
+    }
+    //--------------------------------------------------------------------------
+
     bool Filesystem::CreateFile(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
@@ -130,6 +170,22 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Filesystem::CopyFile(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::skip_existing*/) noexcept
+    {
+        KMP_PROFILE_FUNCTION();
+
+        try
+        {
+            return std::filesystem::copy_file(from, to, copyOptions);
+        }
+        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+        {
+            KMP_LOG_ERROR_FN("Filesystem: copy file failed: '{}'", fe.what());
+            return false;
+        }
+    }
+    //--------------------------------------------------------------------------
+
     bool Filesystem::IsFile(const Filepath& filepath) noexcept
     {
         KMP_PROFILE_FUNCTION();
@@ -141,22 +197,6 @@ namespace Kmplete
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
             KMP_LOG_ERROR_FN("Filesystem: 'isFile' failed: '{}'", fe.what());
-            return false;
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::IsDirectory(const Filepath& filepath) noexcept
-    {
-        KMP_PROFILE_FUNCTION();
-
-        try
-        {
-            return std::filesystem::is_directory(filepath);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: 'isDirectory' failed: '{}'", fe.what());
             return false;
         }
     }

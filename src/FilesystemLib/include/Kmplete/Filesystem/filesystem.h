@@ -11,13 +11,16 @@ namespace Kmplete
         
         KMP_NODISCARD KMP_API bool FilepathExists(const Filepath& filepath) noexcept;
         KMP_NODISCARD KMP_API bool FilepathIsValid(const Filepath& filepath) noexcept;
+
         KMP_NODISCARD KMP_API bool CreateDirectories(const Filepath& filepath, bool pathIsFile = false) noexcept;
         KMP_NODISCARD KMP_API bool RemoveDirectories(const Filepath& filepath) noexcept;
+        KMP_NODISCARD KMP_API bool CopyDirectories(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions = std::filesystem::copy_options::recursive) noexcept;
+        KMP_NODISCARD KMP_API bool IsDirectory(const Filepath& filepath) noexcept;
+
         KMP_NODISCARD KMP_API bool CreateFile(const Filepath& filepath) noexcept;
         KMP_NODISCARD KMP_API bool RemoveFile(const Filepath& filepath) noexcept;
-        
+        KMP_NODISCARD KMP_API bool CopyFile(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions = std::filesystem::copy_options::skip_existing) noexcept;
         KMP_NODISCARD KMP_API bool IsFile(const Filepath& filepath) noexcept;
-        KMP_NODISCARD KMP_API bool IsDirectory(const Filepath& filepath) noexcept;
         
         KMP_NODISCARD KMP_API String ToGenericU8String(const Filepath& filepath);
         KMP_NODISCARD KMP_API String ToGenericString(const Filepath& filepath);
