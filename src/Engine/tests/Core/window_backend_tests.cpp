@@ -321,18 +321,18 @@ TEST_CASE("Window screen mode change", "[core][window_backend][window]")
                 {
                     if (evt.GetKeyCode() == Kmplete::Key::F)
                     {
-                        window.SetScreenMode(Kmplete::Window::FullscreenMode);
-                        fullscreenOk = (window.GetScreenMode() == Kmplete::Window::FullscreenMode);
+                        window.SetScreenMode(Kmplete::Window::ScreenMode::Fullscreen);
+                        fullscreenOk = (window.GetScreenMode() == Kmplete::Window::ScreenMode::Fullscreen);
                     }
                     else if (evt.GetKeyCode() == Kmplete::Key::W)
                     {
-                        window.SetScreenMode(Kmplete::Window::WindowedMode);
-                        windowedOk = (window.GetScreenMode() == Kmplete::Window::WindowedMode);
+                        window.SetScreenMode(Kmplete::Window::ScreenMode::Windowed);
+                        windowedOk = (window.GetScreenMode() == Kmplete::Window::ScreenMode::Windowed);
                     }
                     else if (evt.GetKeyCode() == Kmplete::Key::E)
                     {
-                        window.SetScreenMode(Kmplete::Window::WindowedFullscreenMode);
-                        windowedFullscreenOk = (window.GetScreenMode() == Kmplete::Window::WindowedFullscreenMode);
+                        window.SetScreenMode(Kmplete::Window::ScreenMode::WindowedFullscreen);
+                        windowedFullscreenOk = (window.GetScreenMode() == Kmplete::Window::ScreenMode::WindowedFullscreen);
                     }
                     else if (evt.GetKeyCode() == Kmplete::Key::Y)
                     {

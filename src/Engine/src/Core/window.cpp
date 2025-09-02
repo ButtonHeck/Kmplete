@@ -29,50 +29,50 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Window::ModeToString(Mode mode) noexcept
+    String Window::ScreenModeToString(ScreenMode screenMode) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
-        switch (mode)
+        switch (screenMode)
         {
-        case FullscreenMode:
+        case ScreenMode::Fullscreen:
             return String(FullscreenModeStr);
 
-        case WindowedFullscreenMode:
+        case ScreenMode::WindowedFullscreen:
             return String(WindowedFullscreenModeStr);
 
-        case WindowedMode:
+        case ScreenMode::Windowed:
             return String(WindowedModeStr);
 
         default:
         {
-            KMP_LOG_WARN("ModeToString unknown mode '{}'", int(mode));
+            KMP_LOG_WARN("ScreenModeToString unknown mode '{}'", int(screenMode));
             return String("Unknown");
         }
         }
     }
     //--------------------------------------------------------------------------
 
-    Window::Mode Window::StringToMode(const String& modeStr) noexcept
+    Window::ScreenMode Window::StringToScreenMode(const String& screenModeStr) noexcept
     {
         KMP_PROFILE_FUNCTION();
 
-        if (modeStr == FullscreenModeStr)
+        if (screenModeStr == FullscreenModeStr)
         {
-            return Window::Mode::FullscreenMode;
+            return Window::ScreenMode::Fullscreen;
         }
-        else if (modeStr == WindowedFullscreenModeStr)
+        else if (screenModeStr == WindowedFullscreenModeStr)
         {
-            return Window::Mode::WindowedFullscreenMode;
+            return Window::ScreenMode::WindowedFullscreen;
         }
-        else if (modeStr == WindowedModeStr)
+        else if (screenModeStr == WindowedModeStr)
         {
-            return Window::Mode::WindowedMode;
+            return Window::ScreenMode::Windowed;
         }
         else
         {
-            KMP_LOG_WARN("StringToMode unknown mode '{}', return Windowed as default", modeStr);
-            return Window::Mode::WindowedMode;
+            KMP_LOG_WARN("StringToScreenMode unknown mode '{}', return Windowed as default", screenModeStr);
+            return Window::ScreenMode::Windowed;
         }
     }
     //--------------------------------------------------------------------------

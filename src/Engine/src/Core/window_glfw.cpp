@@ -66,7 +66,7 @@ namespace Kmplete
         SetVSync(_settings.vSync);
         SetScreenMode(_settings.screenMode);
 
-        if (_settings.screenMode == WindowedMode)
+        if (_settings.screenMode == ScreenMode::Windowed)
         {
             glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
         }
@@ -156,28 +156,28 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetScreenMode(Mode mode)
+    void WindowGlfw::SetScreenMode(ScreenMode screenMode)
     {
         KMP_PROFILE_FUNCTION();
 
         const NonNull<UserData*> userData = GetUserPointer(_window);
-        if (userData->screenMode == mode)
+        if (userData->screenMode == screenMode)
         {
             return;
         }
 
-        userData->screenMode = mode;
+        userData->screenMode = screenMode;
 
         const auto monitor = glfwGetPrimaryMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
         const auto monitorWidth = videoMode->width;
         const auto monitorHeight = videoMode->height;
 
-        if (mode == FullscreenMode)
+        if (screenMode == ScreenMode::Fullscreen)
         {
             glfwSetWindowMonitor(_window, monitor, 0, 0, monitorWidth, monitorHeight, videoMode->refreshRate);
         }
-        else if (mode == WindowedFullscreenMode)
+        else if (screenMode == ScreenMode::WindowedFullscreen)
         {
             int workingAreaX;
             int workingAreaY;
@@ -196,7 +196,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Window::Mode WindowGlfw::GetScreenMode() const
+    Window::ScreenMode WindowGlfw::GetScreenMode() const
     {
         const NonNull<UserData*> userData = GetUserPointer(_window);
         return userData->screenMode;
@@ -208,15 +208,15 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         _settings.cursorMode = cursorMode;
-        if (cursorMode == Default)
+        if (cursorMode == CursorMode::Default)
         {
             glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
-        else if (cursorMode == Hidden)
+        else if (cursorMode == CursorMode::Hidden)
         {
             glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
         }
-        else if (cursorMode == Disabled)
+        else if (cursorMode == CursorMode::Disabled)
         {
             glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
         }
@@ -417,7 +417,7 @@ namespace Kmplete
             userData->width = width;
             userData->height = height;
 
-            if (userData->screenMode == WindowedMode)
+            if (userData->screenMode == ScreenMode::Windowed)
             {
                 userData->windowedWidth = width;
                 userData->windowedHeight = height;

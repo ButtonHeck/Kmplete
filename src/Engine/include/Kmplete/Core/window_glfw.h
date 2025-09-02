@@ -33,8 +33,8 @@ namespace Kmplete
         KMP_API void SetShouldClose(bool close) override;
         KMP_NODISCARD KMP_API bool ShouldClose() const override;
 
-        KMP_API void SetScreenMode(Mode mode) override;
-        KMP_NODISCARD KMP_API Mode GetScreenMode() const override;
+        KMP_API void SetScreenMode(ScreenMode screenMode) override;
+        KMP_NODISCARD KMP_API ScreenMode GetScreenMode() const override;
 
         KMP_API void SetCursorMode(CursorMode cursorMode) override;
         KMP_NODISCARD KMP_API CursorMode GetCursorMode() const override;
@@ -63,7 +63,7 @@ namespace Kmplete
         {
             explicit UserData(WindowSettings& settings);
 
-            Mode& screenMode;
+            ScreenMode& screenMode;
             int& width;
             int& height;
             int& windowedWidth;

@@ -35,18 +35,21 @@ namespace Kmplete
         constexpr static auto DefaultHeight = 1080;
 
     public:
-        enum Mode
+        enum class ScreenMode
         {
-            FullscreenMode,
-            WindowedFullscreenMode,
-            WindowedMode
+            Fullscreen,
+            WindowedFullscreen,
+            Windowed
         };
 
         constexpr static auto FullscreenModeStr = "Fullscreen";
         constexpr static auto WindowedFullscreenModeStr = "WindowedFullscreen";
         constexpr static auto WindowedModeStr = "Windowed";
 
-        enum CursorMode
+        KMP_NODISCARD static String ScreenModeToString(ScreenMode screenMode) noexcept;
+        KMP_NODISCARD static ScreenMode StringToScreenMode(const String& screenModeStr) noexcept;
+
+        enum class CursorMode
         {
             Default,
             Hidden,
@@ -62,17 +65,14 @@ namespace Kmplete
             int height = DefaultHeight;
             int windowedWidth = DefaultWidth;
             int windowedHeight = DefaultHeight;
-            Mode screenMode = WindowedMode;
-            CursorMode cursorMode = Default;
+            ScreenMode screenMode = ScreenMode::Windowed;
+            CursorMode cursorMode = CursorMode::Default;
             bool vSync = true;
             bool updateContinuously = true;
             bool resizable = true;
             bool decorated = true;
             float dpiScale = 1.0f;
         };
-
-        KMP_NODISCARD static String ModeToString(Mode mode) noexcept;
-        KMP_NODISCARD static Mode StringToMode(const String& modeStr) noexcept;
 
     public:
         KMP_DISABLE_COPY_MOVE(Window)
@@ -93,8 +93,8 @@ namespace Kmplete
         KMP_API virtual void SetShouldClose(bool close) = 0;
         KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;
 
-        KMP_API virtual void SetScreenMode(Mode mode) = 0;
-        KMP_NODISCARD KMP_API virtual Mode GetScreenMode() const = 0;
+        KMP_API virtual void SetScreenMode(ScreenMode mode) = 0;
+        KMP_NODISCARD KMP_API virtual ScreenMode GetScreenMode() const = 0;
 
         KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;
         KMP_NODISCARD KMP_API virtual CursorMode GetCursorMode() const = 0;

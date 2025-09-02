@@ -104,7 +104,7 @@ namespace Kmplete
         {}
 
         void Run() override {}
-        bool UpdateMetrics() { return _systemMetricsManager->Update(); }
+        bool UpdateMetrics() { return _systemMetricsManager->Update(SystemMetricsManager::SystemMetricsUpdateMode::Everything); }
 
         bool IsMetricsNumProcessorsOk() const { return _systemMetricsManager->GetMetrics().numProcessors > 0; }
         bool IsMetricsNumThreadsOk() const { return _systemMetricsManager->GetMetrics().numThreads > 0; }

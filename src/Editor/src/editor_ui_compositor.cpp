@@ -171,10 +171,10 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         const auto screenMode = _mainWindow.GetScreenMode();
-        auto isFullscreen = screenMode == Window::WindowedFullscreenMode;
+        auto isFullscreen = screenMode == Window::ScreenMode::WindowedFullscreen;
         if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), Shortcuts::Fullscreen.text, &isFullscreen))
         {
-            _mainWindow.SetScreenMode(isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
+            _mainWindow.SetScreenMode(isFullscreen ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
         }
     }
     //--------------------------------------------------------------------------
@@ -209,8 +209,8 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto isFullscreen = _mainWindow.GetScreenMode() == Window::WindowedFullscreenMode;
-        _mainWindow.SetScreenMode(!isFullscreen ? Window::WindowedFullscreenMode : Window::WindowedMode);
+        const auto isFullscreen = _mainWindow.GetScreenMode() == Window::ScreenMode::WindowedFullscreen;
+        _mainWindow.SetScreenMode(!isFullscreen ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
     }
     //--------------------------------------------------------------------------
 

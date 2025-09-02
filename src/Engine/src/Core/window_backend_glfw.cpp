@@ -352,7 +352,7 @@ namespace Kmplete
         settings.SaveInt(Window::HeightStr, _mainWindowSettings->height);
         settings.SaveInt(Window::WindowedWidthStr, _mainWindowSettings->windowedWidth);
         settings.SaveInt(Window::WindowedHeightStr, _mainWindowSettings->windowedHeight);
-        settings.SaveString(Window::ScreenModeStr, Window::ModeToString(_mainWindowSettings->screenMode));
+        settings.SaveString(Window::ScreenModeStr, Window::ScreenModeToString(_mainWindowSettings->screenMode));
         settings.SaveBool(Window::VSyncStr, _mainWindowSettings->vSync);
         settings.SaveBool(Window::UpdateContinuouslyStr, _mainWindowSettings->updateContinuously);
         settings.SaveBool(Window::ResizableStr, _mainWindowSettings->resizable);
@@ -380,7 +380,7 @@ namespace Kmplete
             settings.SaveInt(Window::HeightStr, windowSettings.height);
             settings.SaveInt(Window::WindowedWidthStr, windowSettings.windowedWidth);
             settings.SaveInt(Window::WindowedHeightStr, windowSettings.windowedHeight);
-            settings.SaveString(Window::ScreenModeStr, Window::ModeToString(windowSettings.screenMode));
+            settings.SaveString(Window::ScreenModeStr, Window::ScreenModeToString(windowSettings.screenMode));
             settings.SaveBool(Window::VSyncStr, windowSettings.vSync);
             settings.SaveBool(Window::UpdateContinuouslyStr, windowSettings.updateContinuously);
             settings.SaveBool(Window::ResizableStr, windowSettings.resizable);
@@ -423,7 +423,7 @@ namespace Kmplete
             _mainWindowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
             _mainWindowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
             _mainWindowSettings->windowedHeight = settings.GetInt(Window::WindowedHeightStr, Window::DefaultHeight);
-            _mainWindowSettings->screenMode = Window::StringToMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
+            _mainWindowSettings->screenMode = Window::StringToScreenMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
             _mainWindowSettings->vSync = settings.GetBool(Window::VSyncStr, true);
             _mainWindowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
             _mainWindowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
@@ -455,7 +455,7 @@ namespace Kmplete
                 windowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
                 windowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
                 windowSettings->windowedHeight = settings.GetInt(Window::WindowedHeightStr, Window::DefaultHeight);
-                windowSettings->screenMode = Window::StringToMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
+                windowSettings->screenMode = Window::StringToScreenMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
                 windowSettings->vSync = settings.GetBool(Window::VSyncStr, true);
                 windowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
                 windowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
