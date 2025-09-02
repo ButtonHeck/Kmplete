@@ -46,6 +46,13 @@ namespace Kmplete
         constexpr static auto WindowedFullscreenModeStr = "WindowedFullscreen";
         constexpr static auto WindowedModeStr = "Windowed";
 
+        enum CursorMode
+        {
+            Default,
+            Hidden,
+            Disabled
+        };
+
         struct WindowSettings
         {
             KMP_API explicit WindowSettings(const String& name) noexcept;
@@ -56,6 +63,7 @@ namespace Kmplete
             int windowedWidth = DefaultWidth;
             int windowedHeight = DefaultHeight;
             Mode screenMode = WindowedMode;
+            CursorMode cursorMode = Default;
             bool vSync = true;
             bool updateContinuously = true;
             bool resizable = true;
@@ -87,6 +95,9 @@ namespace Kmplete
 
         KMP_API virtual void SetScreenMode(Mode mode) = 0;
         KMP_NODISCARD KMP_API virtual Mode GetScreenMode() const = 0;
+
+        KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;
+        KMP_NODISCARD KMP_API virtual CursorMode GetCursorMode() const = 0;
 
         KMP_API virtual void SetVSync(bool vSync) = 0;
         KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;

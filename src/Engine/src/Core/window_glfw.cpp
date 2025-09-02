@@ -203,6 +203,32 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowGlfw::SetCursorMode(CursorMode cursorMode)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        _settings.cursorMode = cursorMode;
+        if (cursorMode == Default)
+        {
+            glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+        else if (cursorMode == Hidden)
+        {
+            glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        }
+        else if (cursorMode == Disabled)
+        {
+            glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    Window::CursorMode WindowGlfw::GetCursorMode() const
+    {
+        return _settings.cursorMode;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::SetVSync(bool vSync)
     {
         KMP_PROFILE_FUNCTION();
