@@ -8,6 +8,7 @@
 namespace Kmplete
 {
     class Settings;
+    class WindowCursor;
 
     class WindowBackend
     {
@@ -46,6 +47,10 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual Vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const = 0;
         KMP_NODISCARD KMP_API virtual Vector<MonitorVideoMode> GetMonitorVideoModes(int index) const = 0;
         KMP_NODISCARD KMP_API virtual float GetPrimaryMonitorDPIScale() const = 0;
+
+        // TODO: try replace return type with optional<cursor&>
+        KMP_NODISCARD KMP_API virtual Nullable<WindowCursor*> AddCursor(const String& name, const Filepath& filepath, int hotspotX = 0, int hotspotY = 0) = 0;
+        KMP_NODISCARD KMP_API virtual Nullable<WindowCursor*> GetCursor(const String& name) const = 0;
 
         KMP_API virtual void SaveSettings(Settings& settings) const = 0;
         KMP_API virtual void LoadSettings(Settings& settings) = 0;

@@ -36,6 +36,7 @@ namespace Kmplete
         KMP_API void SetScreenMode(ScreenMode screenMode) override;
         KMP_NODISCARD KMP_API ScreenMode GetScreenMode() const override;
 
+        KMP_API void SetCursor(const WindowCursor& cursor) const override;
         KMP_API void SetCursorMode(CursorMode cursorMode) override;
         KMP_NODISCARD KMP_API CursorMode GetCursorMode() const override;
 

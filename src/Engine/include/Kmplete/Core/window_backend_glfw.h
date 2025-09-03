@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Core/window_backend.h"
+#include "Kmplete/Core/window_cursor.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <unordered_map>
@@ -32,6 +33,9 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Vector<MonitorVideoMode> GetMonitorVideoModes(int index) const override;
         KMP_NODISCARD KMP_API float GetPrimaryMonitorDPIScale() const override;
 
+        KMP_NODISCARD KMP_API Nullable<WindowCursor*> AddCursor(const String& name, const Filepath& filepath, int hotspotX = 0, int hotspotY = 0) override;
+        KMP_NODISCARD KMP_API Nullable<WindowCursor*> GetCursor(const String& name) const override;
+
         KMP_API void SaveSettings(Settings& settings) const override;
         KMP_API void LoadSettings(Settings& settings) override;
 
@@ -51,6 +55,8 @@ namespace Kmplete
 
         std::unordered_map<String, UPtr<Window::WindowSettings>> _auxWindowsSettings;
         std::unordered_map<String, UPtr<Window>> _auxWindows;
+
+        std::unordered_map<String, UPtr<WindowCursor>> _cursors;
     };
     //--------------------------------------------------------------------------
 }

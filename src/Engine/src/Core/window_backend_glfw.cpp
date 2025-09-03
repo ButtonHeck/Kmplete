@@ -1,5 +1,6 @@
 #include "Kmplete/Core/window_backend_glfw.h"
 #include "Kmplete/Core/window_glfw.h"
+#include "Kmplete/Core/window_cursor_glfw.h"
 #include "Kmplete/Core/settings.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
@@ -133,6 +134,7 @@ namespace Kmplete
         }
 
         _auxWindowsSettings.clear();
+        _cursors.clear();
 
         {
             KMP_PROFILE_SCOPE("GLFW termination");
@@ -325,6 +327,40 @@ namespace Kmplete
         float scale = 1.0f;
         glfwGetMonitorContentScale(monitor, &scale, &scale);
         return scale;
+    }
+    //--------------------------------------------------------------------------
+
+    Nullable<WindowCursor*> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
+    {
+        if (_cursors.contains(name))
+        {
+            KMP_LOG_WARN("cursor named '{}' already added", name);
+            return _cursors.at(name).get();
+        }
+
+        try
+        {
+            _cursors.emplace(name, CreateUPtr<WindowCursorGlfw>(filepath, hotspotX, hotspotY));
+        }
+        catch (const std::runtime_error& error)
+        {
+            KMP_LOG_ERROR("failed to add cursor '{}' from '{}' ({})", name, filepath, error.what());
+            return nullptr;
+        }
+
+        return _cursors.at(name).get();
+    }
+    //--------------------------------------------------------------------------
+
+    Nullable<WindowCursor*> WindowBackendGlfw::GetCursor(const String& name) const
+    {
+        if (!_cursors.contains(name))
+        {
+            KMP_LOG_WARN("cannot find cursor named '{}'", name);
+            return nullptr;
+        }
+
+        return _cursors.at(name).get();
     }
     //--------------------------------------------------------------------------
 

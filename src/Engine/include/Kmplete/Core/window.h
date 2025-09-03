@@ -12,6 +12,8 @@
 
 namespace Kmplete
 {
+    class WindowCursor;
+
     class Window
     {
         KMP_LOG_CLASSNAME(Window)
@@ -96,6 +98,7 @@ namespace Kmplete
         KMP_API virtual void SetScreenMode(ScreenMode mode) = 0;
         KMP_NODISCARD KMP_API virtual ScreenMode GetScreenMode() const = 0;
 
+        KMP_API virtual void SetCursor(const WindowCursor& cursor) const = 0;
         KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;
         KMP_NODISCARD KMP_API virtual CursorMode GetCursorMode() const = 0;
 

@@ -1,4 +1,5 @@
 #include "Kmplete/Core/window_glfw.h"
+#include "Kmplete/Core/window_cursor_glfw.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Event/window_event.h"
@@ -200,6 +201,16 @@ namespace Kmplete
     {
         const NonNull<UserData*> userData = GetUserPointer(_window);
         return userData->screenMode;
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::SetCursor(const WindowCursor& cursor) const
+    {
+        KMP_PROFILE_FUNCTION();
+
+        KMP_ASSERT(cursor.GetImplPointer());
+
+        glfwSetCursor(_window, reinterpret_cast<GLFWcursor*>(cursor.GetImplPointer()));
     }
     //--------------------------------------------------------------------------
 
