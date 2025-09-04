@@ -164,7 +164,7 @@ namespace Kmplete
             KMP_LOG_INFO("creating window '{}' with previously loaded settings", windowName);
             try
             {
-                _auxWindows[windowName] = CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]);
+                _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
                 return GetAuxWindow(windowName);
             }
             catch (KMP_MB_UNUSED const std::exception& e)
@@ -176,11 +176,11 @@ namespace Kmplete
         else
         {
             KMP_LOG_INFO("creating window '{}' with default settings", windowName);
-            _auxWindowsSettings[windowName] = CreateUPtr<Window::WindowSettings>(windowName);
+            _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowName));
 
             try
             {
-                _auxWindows[windowName] = CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]);
+                _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
                 return GetAuxWindow(windowName);
             }
             catch (KMP_MB_UNUSED const std::exception& e)
@@ -211,10 +211,10 @@ namespace Kmplete
             else
             {
                 KMP_LOG_INFO("window '{}' will be created with provided settings", windowName);
-                _auxWindowsSettings.insert({ windowName, CreateUPtr<Window::WindowSettings>(windowSettings) });
+                _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowSettings));
             }
 
-            _auxWindows[windowName] = CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]);
+            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
             return GetAuxWindow(windowName);
         }
         catch (KMP_MB_UNUSED const std::exception& e)
@@ -496,7 +496,7 @@ namespace Kmplete
                 windowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
                 windowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
                 windowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
-                _auxWindowsSettings.insert({ windowName, std::move(windowSettings) });
+                _auxWindowsSettings.emplace(windowName, std::move(windowSettings));
             }
 
             settings.EndLoadObject();
