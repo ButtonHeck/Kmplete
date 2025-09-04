@@ -330,12 +330,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<WindowCursor*> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
+    std::optional<std::reference_wrapper<const WindowCursor>> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
     {
         if (_cursors.contains(name))
         {
             KMP_LOG_WARN("cursor named '{}' already added", name);
-            return _cursors.at(name).get();
+            return std::cref(*_cursors.at(name).get());
         }
 
         try
@@ -345,22 +345,22 @@ namespace Kmplete
         catch (const std::runtime_error& error)
         {
             KMP_LOG_ERROR("failed to add cursor '{}' from '{}' ({})", name, filepath, error.what());
-            return nullptr;
+            return std::nullopt;
         }
 
-        return _cursors.at(name).get();
+        return std::cref(*_cursors.at(name).get());
     }
     //--------------------------------------------------------------------------
 
-    Nullable<WindowCursor*> WindowBackendGlfw::GetCursor(const String& name) const
+    std::optional<std::reference_wrapper<const WindowCursor>> WindowBackendGlfw::GetCursor(const String& name) const
     {
         if (!_cursors.contains(name))
         {
             KMP_LOG_WARN("cannot find cursor named '{}'", name);
-            return nullptr;
+            return std::nullopt;
         }
 
-        return _cursors.at(name).get();
+        return std::cref(*_cursors.at(name).get());
     }
     //--------------------------------------------------------------------------
 
