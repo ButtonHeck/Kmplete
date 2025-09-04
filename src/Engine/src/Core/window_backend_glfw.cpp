@@ -330,7 +330,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::optional<std::reference_wrapper<const WindowCursor>> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
+    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
     {
         if (_cursors.contains(name))
         {
@@ -352,7 +352,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::optional<std::reference_wrapper<const WindowCursor>> WindowBackendGlfw::GetCursor(const String& name) const
+    OptionalRef<const WindowCursor> WindowBackendGlfw::GetCursor(const String& name) const
     {
         if (!_cursors.contains(name))
         {
