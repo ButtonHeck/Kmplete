@@ -39,7 +39,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual Window& GetMainWindow() = 0;
 
         KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateAuxWindow(const String& windowName) = 0;
-        KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateAuxWindow(Window::WindowSettings& windowSettings) = 0;
+        KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateAuxWindow(const Window::WindowSettings& windowSettings) = 0;
         KMP_NODISCARD KMP_API virtual Nullable<Window*> GetAuxWindow(const String& windowName) const = 0;
         KMP_API virtual bool DestroyAuxWindow(const String& windowName) = 0;
 

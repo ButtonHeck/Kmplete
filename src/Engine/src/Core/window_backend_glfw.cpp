@@ -192,7 +192,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(Window::WindowSettings& windowSettings)
+    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const Window::WindowSettings& windowSettings)
     {
         KMP_PROFILE_FUNCTION();
 

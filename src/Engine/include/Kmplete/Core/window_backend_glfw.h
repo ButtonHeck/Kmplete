@@ -23,7 +23,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Window& GetMainWindow() override;
 
         KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(const String& windowName) override;
-        KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(Window::WindowSettings& windowSettings) override;
+        KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(const Window::WindowSettings& windowSettings) override;
         KMP_NODISCARD KMP_API Nullable<Window*> GetAuxWindow(const String& windowName) const override;
         KMP_API bool DestroyAuxWindow(const String& windowName) override;
 
