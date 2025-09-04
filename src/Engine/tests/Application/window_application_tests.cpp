@@ -162,6 +162,77 @@ namespace Kmplete
             mainWindow.SetIcon(KMP_TEST_ICON_PATH);
         }
     };
+
+    class CursorTestApplication : public TestWindowApplication
+    {
+    public:
+        CursorTestApplication(const ApplicationParameters& applicationParameters)
+            : TestWindowApplication(applicationParameters)
+        {
+            const auto cursor = _windowBackend->AddCursor("test cursor", Utils::Concatenate(KMP_ICONS_FOLDER, "test_cursor.png"));
+            auto& mainWindow = _windowBackend->GetMainWindow();
+
+            if (cursor)
+            {
+                mainWindow.SetCursor(*cursor);
+            }
+
+            mainWindow.SetEventCallback(KMP_BIND(CursorTestApplication::OnEvent));
+        }
+
+        void OnEvent(Event& event) override
+        {
+            EventDispatcher dispatcher(event);
+            dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(CursorTestApplication::OnMouseMoveEvent));
+            dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(CursorTestApplication::OnMouseButtonPressEvent));
+            dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestWindowApplication::OnKeyPressEvent));
+        }
+
+        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent& evt) override
+        {
+            _mouseX = static_cast<int>(evt.GetX());
+            _mouseY = static_cast<int>(evt.GetY());
+
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            const auto title = String("[X = ") + std::to_string(_mouseX) + ", Y = " + std::to_string(_mouseY) + "]";
+            mainWindow.SetTitle(title.c_str());
+
+            return WindowApplication::OnMouseMoveEvent(evt);
+        }
+
+        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt) override
+        {
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            if (evt.GetMouseButton() == Mouse::ButtonLeft)
+            {
+                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Hidden);
+                }
+                else
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Default);
+                }
+            }
+            else if (evt.GetMouseButton() == Mouse::ButtonRight)
+            {
+                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+                }
+                else
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Default);
+                }
+            }
+
+            return WindowApplication::OnMouseButtonPressEvent(evt);
+        }
+
+    private:
+        int _mouseX = 0;
+        int _mouseY = 0;
+    };
 }
 //--------------------------------------------------------------------------
 
@@ -200,6 +271,20 @@ TEST_CASE("Test window application custom icon", "[window_application][applicati
     KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", 
                                                                    "Press Y if this window has an icon (red square upper-left and yellow square bottom-right)", 
                                                                    Kmplete::FileDialogs::MessageChoice::Ok);
+    application->Run();
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test window application custom cursor and modes", "[window_application][application][window]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::CursorTestApplication>(Kmplete::ApplicationParameters("TestApplication", "", KMP_TEST_SETTINGS_JSON));
+    REQUIRE(application);
+
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application cursor test",
+                                                                   "Press Y if all conditions checked:\n"
+                                                                   "1) this window has a custom cursor 2) cursor hidden/disabled by clicking LMB/RMB",
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
+
     application->Run();
 }
 //--------------------------------------------------------------------------
