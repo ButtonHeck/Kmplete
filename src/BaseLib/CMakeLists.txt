@@ -11,6 +11,7 @@ set(BaseLib_BASE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/nullability.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/pointers.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/types_aliases.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/optional.h
 )
 source_group("Base" FILES ${BaseLib_BASE})
 
