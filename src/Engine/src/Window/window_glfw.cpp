@@ -363,19 +363,9 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        InitializeErrorCallback();
         InitializeWindowCallbacks();
         InitializeKeyboardCallbacks();
         InitializeMouseCallbacks();
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowGlfw::InitializeErrorCallback() const
-    {
-        glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
-            KMP_LOG_ERROR("GLFW internal error '{}': {}", code, description);
-            }
-        );
     }
     //--------------------------------------------------------------------------
 

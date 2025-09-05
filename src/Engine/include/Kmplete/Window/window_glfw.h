@@ -80,7 +80,6 @@ namespace Kmplete
         void InitializeHints() const;
 
         void InitializeCallbacks() const;
-        void InitializeErrorCallback() const;
         void InitializeWindowCallbacks() const;
         void InitializeKeyboardCallbacks() const;
         void InitializeMouseCallbacks() const;

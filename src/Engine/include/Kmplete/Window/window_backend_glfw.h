@@ -41,6 +41,9 @@ namespace Kmplete
 
     private:
         void Initialize();
+        void InitializeCallbacks() const;
+        void InitializeErrorCallback() const;
+
         void Finalize();
 
         void SaveMainWindowSettings(Settings& settings) const;

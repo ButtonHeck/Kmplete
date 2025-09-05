@@ -115,7 +115,24 @@ namespace Kmplete
             throw std::runtime_error("WindowBackendGlfw initialization failed");
         }
 
+        InitializeCallbacks();
+
         _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowBackendGlfw::InitializeCallbacks() const
+    {
+        InitializeErrorCallback();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowBackendGlfw::InitializeErrorCallback() const
+    {
+        glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
+            KMP_LOG_ERROR("GLFW internal error '{}': {}", code, description);
+            }
+        );
     }
     //--------------------------------------------------------------------------
 
