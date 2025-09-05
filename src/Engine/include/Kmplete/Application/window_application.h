@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Application/application.h"
-#include "Kmplete/Core/window_backend.h"
+#include "Kmplete/Window/window_backend.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/graphics_backend.h"

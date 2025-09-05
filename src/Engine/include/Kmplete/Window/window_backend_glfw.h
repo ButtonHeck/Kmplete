@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Core/window_backend.h"
-#include "Kmplete/Core/window_cursor.h"
+#include "Kmplete/Window/window_backend.h"
+#include "Kmplete/Window/window_cursor.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <unordered_map>

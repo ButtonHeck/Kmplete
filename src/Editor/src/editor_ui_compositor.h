@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Core/window.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Profile/profiler.h"

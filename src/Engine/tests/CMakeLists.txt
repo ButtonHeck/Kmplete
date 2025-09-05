@@ -91,10 +91,10 @@ SetupUnitTestsTargetProperties(
 
 # Window Application Tests
 
-set(Kmplete_WindowApplicationTests_CORE
-    ${CMAKE_CURRENT_LIST_DIR}/Core/window_backend_tests.cpp
+set(Kmplete_WindowApplicationTests_WINDOW
+    ${CMAKE_CURRENT_LIST_DIR}/Window/window_backend_tests.cpp
 )
-source_group("Core" FILES ${Kmplete_WindowApplicationTests_CORE})
+source_group("Window" FILES ${Kmplete_WindowApplicationTests_WINDOW})
 
 set(Kmplete_WindowApplicationTests_APPLICATION
     ${CMAKE_CURRENT_LIST_DIR}/Application/window_application_tests.cpp
@@ -102,7 +102,7 @@ set(Kmplete_WindowApplicationTests_APPLICATION
 source_group("Application" FILES ${Kmplete_WindowApplicationTests_APPLICATION})
 
 add_executable(Kmplete_WindowApplicationTests
-    ${Kmplete_WindowApplicationTests_CORE}
+    ${Kmplete_WindowApplicationTests_WINDOW}
     ${Kmplete_WindowApplicationTests_APPLICATION}
 )
 

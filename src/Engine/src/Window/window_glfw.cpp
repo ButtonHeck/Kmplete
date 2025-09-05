@@ -1,5 +1,5 @@
-#include "Kmplete/Core/window_glfw.h"
-#include "Kmplete/Core/window_cursor_glfw.h"
+#include "Kmplete/Window/window_glfw.h"
+#include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Event/window_event.h"

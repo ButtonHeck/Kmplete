@@ -1,4 +1,4 @@
-#include "Kmplete/Core/window_cursor_glfw.h"
+#include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"

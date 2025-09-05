@@ -1,5 +1,5 @@
-#include "Kmplete/Core/window_backend.h"
-#include "Kmplete/Core/window_backend_glfw.h"
+#include "Kmplete/Window/window_backend.h"
+#include "Kmplete/Window/window_backend_glfw.h"
 #include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete

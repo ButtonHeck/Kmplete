@@ -4,7 +4,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
-#include "Kmplete/Core/window.h"
+#include "Kmplete/Window/window.h"
 
 namespace Kmplete
 {

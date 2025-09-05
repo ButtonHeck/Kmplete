@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kmplete/Core/window.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 
