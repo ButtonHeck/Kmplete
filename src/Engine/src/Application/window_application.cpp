@@ -100,7 +100,7 @@ namespace Kmplete
             return;
         }
         
-        settings->SaveString(GraphicsBackendTypeStr, GraphicsBackendTypeToString(_graphicsBackendType));
+        settings->get().SaveString(GraphicsBackendTypeStr, GraphicsBackendTypeToString(_graphicsBackendType));
         _windowBackend->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
@@ -116,7 +116,7 @@ namespace Kmplete
             return;
         }
 
-        _graphicsBackendType = StringToGraphicsBackendType(settings->GetString(GraphicsBackendTypeStr, DefaultAPIStr));
+        _graphicsBackendType = StringToGraphicsBackendType(settings->get().GetString(GraphicsBackendTypeStr, DefaultAPIStr));
         _windowBackend->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------

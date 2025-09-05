@@ -141,16 +141,16 @@ namespace Kmplete
         }
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-        settings->StartSaveObject(SettingsEntryName);
-        settings->SaveString(Log::FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
-        settings->SaveBool(Log::EnabledStr, _logSettings.enabled);
-        settings->SaveBool(Log::TruncateStr, _logSettings.truncate);
-        settings->SaveBool(Log::OutputConsoleStr, _logSettings.outputConsole);
-        settings->SaveBool(Log::OutputFileStr, _logSettings.outputFile);
-        settings->SaveBool(Log::OutputStringBufferStr, _logSettings.outputStringBuffer);
-        settings->SaveInt(Log::LevelStr, _logSettings.level);
-        settings->SaveInt(Log::LevelFlushStr, _logSettings.levelFlush);
-        settings->EndSaveObject();
+        settings->get().StartSaveObject(SettingsEntryName);
+        settings->get().SaveString(Log::FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
+        settings->get().SaveBool(Log::EnabledStr, _logSettings.enabled);
+        settings->get().SaveBool(Log::TruncateStr, _logSettings.truncate);
+        settings->get().SaveBool(Log::OutputConsoleStr, _logSettings.outputConsole);
+        settings->get().SaveBool(Log::OutputFileStr, _logSettings.outputFile);
+        settings->get().SaveBool(Log::OutputStringBufferStr, _logSettings.outputStringBuffer);
+        settings->get().SaveInt(Log::LevelStr, _logSettings.level);
+        settings->get().SaveInt(Log::LevelFlushStr, _logSettings.levelFlush);
+        settings->get().EndSaveObject();
 #endif
 
         _localizationManager->SaveSettings(*settings);
@@ -173,16 +173,16 @@ namespace Kmplete
         }
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-        settings->StartLoadObject(SettingsEntryName);
-        _logSettings.filename = Utils::Utf8ToNarrow(settings->GetString(Log::FilenameStr, "Kmplete_log.txt"));
-        _logSettings.enabled = settings->GetBool(Log::EnabledStr, true);
-        _logSettings.truncate = settings->GetBool(Log::TruncateStr, false);
-        _logSettings.outputConsole = settings->GetBool(Log::OutputConsoleStr, true);
-        _logSettings.outputFile = settings->GetBool(Log::OutputFileStr, true);
-        _logSettings.outputStringBuffer = settings->GetBool(Log::OutputStringBufferStr, false);
-        _logSettings.level = settings->GetInt(Log::LevelStr, spdlog::level::trace);
-        _logSettings.levelFlush = settings->GetInt(Log::LevelFlushStr, spdlog::level::trace);
-        settings->EndLoadObject();
+        settings->get().StartLoadObject(SettingsEntryName);
+        _logSettings.filename = Utils::Utf8ToNarrow(settings->get().GetString(Log::FilenameStr, "Kmplete_log.txt"));
+        _logSettings.enabled = settings->get().GetBool(Log::EnabledStr, true);
+        _logSettings.truncate = settings->get().GetBool(Log::TruncateStr, false);
+        _logSettings.outputConsole = settings->get().GetBool(Log::OutputConsoleStr, true);
+        _logSettings.outputFile = settings->get().GetBool(Log::OutputFileStr, true);
+        _logSettings.outputStringBuffer = settings->get().GetBool(Log::OutputStringBufferStr, false);
+        _logSettings.level = settings->get().GetInt(Log::LevelStr, spdlog::level::trace);
+        _logSettings.levelFlush = settings->get().GetInt(Log::LevelFlushStr, spdlog::level::trace);
+        settings->get().EndLoadObject();
 #endif
 
         _localizationManager->LoadSettings(*settings);

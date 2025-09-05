@@ -16,18 +16,18 @@ TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 
     settings = settingsManager.GetSettings("ObjA");
     REQUIRE(settings);
-    REQUIRE(settings->GetInt("PropA") == 12);
+    REQUIRE(settings->get().GetInt("PropA") == 12);
 
     settings = settingsManager.GetSettings("ObjB");
     REQUIRE(settings);
-    REQUIRE(settings->GetInt("PropA") == 0);
-    REQUIRE(settings->GetBool("PropB") == true);
+    REQUIRE(settings->get().GetInt("PropA") == 0);
+    REQUIRE(settings->get().GetBool("PropB") == true);
 
     settings = settingsManager.GetSettings("ObjC");
     REQUIRE(settings);
-    REQUIRE(settings->GetString("PropA") == "hello");
-    REQUIRE(settings->GetDouble("PropB") == -44.55);
-    REQUIRE(settings->GetInt("PropC") == 8);
+    REQUIRE(settings->get().GetString("PropA") == "hello");
+    REQUIRE(settings->get().GetDouble("PropB") == -44.55);
+    REQUIRE(settings->get().GetInt("PropC") == 8);
 
     REQUIRE(settingsManager.SaveSettings());
 }
@@ -42,7 +42,8 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
     REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettings("ObjA");
-    REQUIRE(settings->SaveInt("PropA", 999));
+    REQUIRE(settings);
+    REQUIRE(settings->get().SaveInt("PropA", 999));
 
     const auto swapSettingsPath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests_swap.json");
     settingsManager.SetFilepath(swapSettingsPath);
@@ -55,7 +56,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
 
     settings = swapSettingsManager.GetSettings("ObjA");
     REQUIRE(settings);
-    REQUIRE(settings->GetInt("PropA") == 999);
+    REQUIRE(settings->get().GetInt("PropA") == 999);
 
     settings = swapSettingsManager.GetSettings("ObjB");
     REQUIRE(settings); // didn't change ObjB but expect it to be in swapSettings json file

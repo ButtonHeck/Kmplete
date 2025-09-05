@@ -13,7 +13,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Settings*> SettingsManager::PutSettings(const String& name)
+    OptionalRef<Settings> SettingsManager::PutSettings(const String& name)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -22,21 +22,21 @@ namespace Kmplete
             _namedSettings.erase(name);
         }
 
-        _namedSettings.insert({ name, CreateUPtr<Settings>(name) });
+        _namedSettings.emplace(name, CreateUPtr<Settings>(name));
         return GetSettings(name);
     }
     //--------------------------------------------------------------------------
 
-    Nullable<Settings*> SettingsManager::GetSettings(const String& name) const
+    OptionalRef<Settings> SettingsManager::GetSettings(const String& name) const
     {
         KMP_PROFILE_FUNCTION();
 
         if (_namedSettings.contains(name))
         {
-            return _namedSettings.at(name).get();
+            return std::ref(*_namedSettings.at(name).get());
         }
 
-        return nullptr;
+        return std::nullopt;
     }
     //--------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ namespace Kmplete
                 _namedSettings.erase(name);
             }
 
-            _namedSettings.insert({ name, CreateUPtr<Settings>(name, childDocument) });
+            _namedSettings.emplace(name, CreateUPtr<Settings>(name, childDocument));
         }
 
         return true;
