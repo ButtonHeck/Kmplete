@@ -9,6 +9,7 @@ namespace Kmplete
     {
     public:
         virtual ~WindowCursor() = default;
+
         KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const noexcept = 0;
     };
     //--------------------------------------------------------------------------
