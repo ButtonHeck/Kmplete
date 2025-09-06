@@ -42,14 +42,41 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    Nullable<GLFWwindow*> WindowGlfw::CreateGLFWwindow()
+    {
+        KMP_PROFILE_FUNCTION();
+
+        const auto monitor = glfwGetPrimaryMonitor();
+        const auto videoMode = glfwGetVideoMode(monitor);
+
+        GLFWwindow* window = nullptr;
+
+        if (IsFullscreen())
+        {
+            _settings.width = videoMode->width;
+            _settings.height = videoMode->height;
+            window = glfwCreateWindow(_settings.width, _settings.height, "", monitor, nullptr);
+        }
+        else if (IsWindowedFullscreen())
+        {
+            _settings.width = videoMode->width;
+            _settings.height = videoMode->height;
+            window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+        }
+        else
+        {
+            window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+        }
+
+        return window;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::Initialize()
     {
         KMP_PROFILE_FUNCTION();
 
-        InitializeHints();
-
-        const auto monitor = glfwGetPrimaryMonitor();
-        const auto videoMode = glfwGetVideoMode(monitor);
+        InitializeWindowHints();
 
         _window = CreateGLFWwindow();
 
@@ -59,26 +86,14 @@ namespace Kmplete
             throw std::runtime_error("WindowGlfw creation failed");
         }
 
-        glfwSetWindowUserPointer(_window, new UserData(_settings));
-        KMP_ASSERT(GetUserPointer(_window));
-
         MakeContextCurrent();
+
+        InitializeUserPointer();
         InitializeCallbacks();
+        InitializeSize();
+        InitializeDPIScale();
+
         SetVSync(_settings.vSync);
-
-        if (IsWindowedFullscreen())
-        {
-            glfwSetWindowAttrib(_window, GLFW_DECORATED, GLFW_FALSE);
-            glfwSetWindowMonitor(_window, nullptr, 0, 0, _settings.width, _settings.height, videoMode->refreshRate);
-        }
-        else if (IsWindowed())
-        {
-            glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
-        }
-
-        auto scale = 1.0f;
-        glfwGetWindowContentScale(_window, &scale, &scale);
-        _settings.dpiScale = scale;
 
         glfwShowWindow(_window);
     }
@@ -185,17 +200,15 @@ namespace Kmplete
 
         const auto monitor = glfwGetPrimaryMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
-        const auto monitorWidth = videoMode->width;
-        const auto monitorHeight = videoMode->height;
 
         if (screenMode == ScreenMode::Fullscreen)
         {
-            glfwSetWindowMonitor(_window, monitor, 0, 0, monitorWidth, monitorHeight, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, monitor, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate);
         }
         else if (screenMode == ScreenMode::WindowedFullscreen)
         {
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, 0, 0, monitorWidth, monitorHeight, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate);
         }
         else
         {
@@ -208,8 +221,8 @@ namespace Kmplete
             userData->windowedHeight = windowedHeight;
 
             glfwSetWindowMonitor(_window, nullptr,
-                (monitorWidth - userData->windowedWidth) / 2,
-                (monitorHeight - userData->windowedHeight) / 2,
+                (videoMode->width - userData->windowedWidth) / 2,
+                (videoMode->height - userData->windowedHeight) / 2,
                 userData->windowedWidth, userData->windowedHeight, videoMode->refreshRate);
         }
     }
@@ -364,7 +377,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeHints() const
+    void WindowGlfw::InitializeWindowHints() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -374,6 +387,15 @@ namespace Kmplete
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::InitializeUserPointer() const
+    {
+        KMP_PROFILE_FUNCTION();
+
+        glfwSetWindowUserPointer(_window, new UserData(_settings));
+        KMP_ASSERT(GetUserPointer(_window));
     }
     //--------------------------------------------------------------------------
 
@@ -568,33 +590,32 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<GLFWwindow*> WindowGlfw::CreateGLFWwindow()
+    void WindowGlfw::InitializeSize()
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto monitor = glfwGetPrimaryMonitor();
-        const auto videoMode = glfwGetVideoMode(monitor);
-
-        GLFWwindow* window = nullptr;
-
-        if (IsFullscreen())
+        if (IsWindowedFullscreen())
         {
-            _settings.width = videoMode->width;
-            _settings.height = videoMode->height;
-            window = glfwCreateWindow(_settings.width, _settings.height, "", monitor, nullptr);
-        }
-        else if (IsWindowedFullscreen())
-        {
-            _settings.width = videoMode->width;
-            _settings.height = videoMode->height;
-            window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
-        }
-        else
-        {
-            window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
-        }
+            const auto monitor = glfwGetPrimaryMonitor();
+            const auto videoMode = glfwGetVideoMode(monitor);
 
-        return window;
+            SetDecorated(false);
+            glfwSetWindowMonitor(_window, nullptr, 0, 0, _settings.width, _settings.height, videoMode->refreshRate);
+        }
+        else if (IsWindowed())
+        {
+            glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::InitializeDPIScale()
+    {
+        KMP_PROFILE_FUNCTION();
+
+        auto scale = 1.0f;
+        glfwGetWindowContentScale(_window, &scale, &scale);
+        _settings.dpiScale = scale;
     }
     //--------------------------------------------------------------------------
 }

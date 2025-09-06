@@ -77,15 +77,19 @@ namespace Kmplete
         KMP_NODISCARD static NonNull<UserData*> GetUserPointer(GLFWwindow* window);
 
     private:
-        void Initialize();
-        void InitializeHints() const;
+        Nullable<GLFWwindow*> CreateGLFWwindow();
 
+        void Initialize();
+        void InitializeWindowHints() const;
+
+        void InitializeUserPointer() const;
         void InitializeCallbacks() const;
         void InitializeWindowCallbacks() const;
         void InitializeKeyboardCallbacks() const;
         void InitializeMouseCallbacks() const;
 
-        Nullable<GLFWwindow*> CreateGLFWwindow();
+        void InitializeSize();
+        void InitializeDPIScale();
 
         void Finalize();
 
