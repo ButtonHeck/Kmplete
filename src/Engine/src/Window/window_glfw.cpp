@@ -50,7 +50,20 @@ namespace Kmplete
 
         {
             KMP_PROFILE_SCOPE("GLFW window creation");
-            _window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+            const auto isFullscreen = _settings.screenMode == Window::ScreenMode::Fullscreen;
+            if (isFullscreen)
+            {
+                const auto monitor = glfwGetPrimaryMonitor();
+                const auto videoMode = glfwGetVideoMode(monitor);
+                _settings.width = videoMode->width;
+                _settings.height = videoMode->height;
+
+                _window = glfwCreateWindow(_settings.width, _settings.height, "", monitor, nullptr);
+            }
+            else
+            {
+                _window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+            }
         }
 
         if (!_window)
@@ -65,7 +78,6 @@ namespace Kmplete
         MakeContextCurrent();
         InitializeCallbacks();
         SetVSync(_settings.vSync);
-        SetScreenMode(_settings.screenMode);
 
         if (_settings.screenMode == ScreenMode::Windowed)
         {
