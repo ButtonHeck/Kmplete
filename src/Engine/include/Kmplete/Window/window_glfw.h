@@ -85,6 +85,8 @@ namespace Kmplete
         void InitializeKeyboardCallbacks() const;
         void InitializeMouseCallbacks() const;
 
+        Nullable<GLFWwindow*> CreateGLFWwindow();
+
         void Finalize();
 
     private:
