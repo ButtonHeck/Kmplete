@@ -515,3 +515,39 @@ TEST_CASE("Window backend decorated OFF", "[core][window_backend][window]")
     REQUIRE(windowCb.conditionOk);
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Window backend SetPosition", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Window::WindowSettings settings("SomeWindow");
+    settings.width = 400;
+    settings.height = 400;
+    settings.windowedWidth = 400;
+    settings.windowedHeight = 400;
+    settings.vSync = true;
+    settings.updateContinuously = true;
+    settings.decorated = true;
+
+    Kmplete::Window* window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
+    REQUIRE(window);
+
+    WindowCallbackUserSingleCondition windowCb(*window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window SetPosition test",
+        "Press Y if window is at [500, 50] coordinates",
+        Kmplete::FileDialogs::MessageChoice::Ok);
+
+    window->SetPosition(500, 50);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+
+    REQUIRE(windowCb.conditionOk);
+}
+//--------------------------------------------------------------------------

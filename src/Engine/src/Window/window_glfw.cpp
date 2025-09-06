@@ -141,6 +141,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowGlfw::SetPosition(int x, int y)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        glfwSetWindowPos(_window, x, y);
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::SetShouldClose(bool close)
     {
         KMP_PROFILE_FUNCTION();

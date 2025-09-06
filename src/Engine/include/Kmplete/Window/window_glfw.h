@@ -29,6 +29,7 @@ namespace Kmplete
 
         KMP_API void SetTitle(const char* title) override;
         KMP_API void SetIcon(const Filepath& filepath) override;
+        KMP_API void SetPosition(int x, int y) override;
 
         KMP_API void SetShouldClose(bool close) override;
         KMP_NODISCARD KMP_API bool ShouldClose() const override;
