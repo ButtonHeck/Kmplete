@@ -76,4 +76,41 @@ namespace Kmplete
         }
     }
     //--------------------------------------------------------------------------
+
+    bool Window::IsFullscreen() const noexcept
+    {
+        return _settings.IsFullscreen();
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::IsWindowed() const noexcept
+    {
+        return _settings.IsWindowed();
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::IsWindowedFullscreen() const noexcept
+    {
+        return _settings.IsWindowedFullscreen();
+    }
+    //--------------------------------------------------------------------------
+
+
+    bool Window::WindowSettings::IsFullscreen() const noexcept
+    {
+        return screenMode == Window::ScreenMode::Fullscreen;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::WindowSettings::IsWindowed() const noexcept
+    {
+        return screenMode == Window::ScreenMode::Windowed;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::WindowSettings::IsWindowedFullscreen() const noexcept
+    {
+        return screenMode == Window::ScreenMode::WindowedFullscreen;
+    }
+    //--------------------------------------------------------------------------
 }

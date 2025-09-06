@@ -74,6 +74,10 @@ namespace Kmplete
             bool resizable = true;
             bool decorated = true;
             float dpiScale = 1.0f;
+
+            KMP_NODISCARD KMP_API bool IsFullscreen() const noexcept;
+            KMP_NODISCARD KMP_API bool IsWindowed() const noexcept;
+            KMP_NODISCARD KMP_API bool IsWindowedFullscreen() const noexcept;
         };
 
     public:
@@ -98,6 +102,10 @@ namespace Kmplete
 
         KMP_API virtual void SetScreenMode(ScreenMode mode) = 0;
         KMP_NODISCARD KMP_API virtual ScreenMode GetScreenMode() const = 0;
+
+        KMP_NODISCARD KMP_API bool IsFullscreen() const noexcept;
+        KMP_NODISCARD KMP_API bool IsWindowed() const noexcept;
+        KMP_NODISCARD KMP_API bool IsWindowedFullscreen() const noexcept;
 
         KMP_API virtual void SetCursor(const WindowCursor& cursor) const = 0;
         KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;

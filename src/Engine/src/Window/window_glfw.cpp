@@ -66,12 +66,12 @@ namespace Kmplete
         InitializeCallbacks();
         SetVSync(_settings.vSync);
 
-        if (_settings.screenMode == Window::ScreenMode::WindowedFullscreen)
+        if (IsWindowedFullscreen())
         {
             glfwSetWindowAttrib(_window, GLFW_DECORATED, GLFW_FALSE);
             glfwSetWindowMonitor(_window, nullptr, 0, 0, _settings.width, _settings.height, videoMode->refreshRate);
         }
-        else if (_settings.screenMode == ScreenMode::Windowed)
+        else if (IsWindowed())
         {
             glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
         }
@@ -577,13 +577,13 @@ namespace Kmplete
 
         GLFWwindow* window = nullptr;
 
-        if (_settings.screenMode == Window::ScreenMode::Fullscreen)
+        if (IsFullscreen())
         {
             _settings.width = videoMode->width;
             _settings.height = videoMode->height;
             window = glfwCreateWindow(_settings.width, _settings.height, "", monitor, nullptr);
         }
-        else if (_settings.screenMode == Window::ScreenMode::WindowedFullscreen)
+        else if (IsWindowedFullscreen())
         {
             _settings.width = videoMode->width;
             _settings.height = videoMode->height;
