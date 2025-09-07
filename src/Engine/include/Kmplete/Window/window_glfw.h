@@ -8,6 +8,7 @@
 #include "Kmplete/Log/log_class_macro.h"
 
 struct GLFWwindow;
+struct GLFWmonitor;
 
 namespace Kmplete
 {
@@ -83,6 +84,7 @@ namespace Kmplete
 
     private:
         Nullable<GLFWwindow*> CreateGLFWwindow();
+        NonNull<GLFWmonitor*> GetCurrentMonitor() const;
 
         void Initialize();
         void InitializeWindowHints() const;

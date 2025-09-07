@@ -72,6 +72,51 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    NonNull<GLFWmonitor*> WindowGlfw::GetCurrentMonitor() const
+    {
+        KMP_PROFILE_FUNCTION();
+
+        const auto windowSize = GetSize();
+        const auto windowPosition = GetPosition();
+
+        int count = 0;
+        const auto monitors = glfwGetMonitors(&count);
+
+        if (count && monitors)
+        {
+            for (auto i = 0; i < count; i++)
+            {
+                const auto monitor = monitors[i];
+                if (monitor)
+                {
+                    const auto videoMode = glfwGetVideoMode(monitor);
+                    const auto monitorScreenWidth = videoMode->width;
+                    const auto monitorScreenHeight = videoMode->height;
+                    KMP_ASSERT(monitorScreenWidth != 0 && monitorScreenHeight != 0);
+
+                    int monitorX = 0;
+                    int monitorY = 0;
+                    glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+
+                    // TODO: logically it's just a check if a point is inside a rectangle, maybe extract to some math function in a future
+                    const auto windowCenterX = windowPosition.first + (windowSize.first / 2);
+                    const auto windowCenterY = windowPosition.second + (windowSize.second / 2);
+                    const auto isInsideX = (windowCenterX >= monitorX && windowCenterX <= (monitorX + monitorScreenWidth));
+                    const auto isInsideY = (windowCenterY >= monitorY && windowCenterY <= (monitorY + monitorScreenHeight));
+                    if (isInsideX && isInsideY)
+                    {
+                        return monitor;
+                    }
+                }
+            }
+        }
+
+        KMP_LOG_WARN("cannot get window's current monitor, primary monitor will be used");
+
+        return glfwGetPrimaryMonitor();
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::Initialize()
     {
         KMP_PROFILE_FUNCTION();
@@ -209,17 +254,20 @@ namespace Kmplete
 
         userData->screenMode = screenMode;
 
-        const auto monitor = glfwGetPrimaryMonitor();
+        const auto monitor = GetCurrentMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
+        int monitorX = 0;
+        int monitorY = 0;
+        glfwGetMonitorPos(monitor, &monitorX, &monitorY);
 
         if (screenMode == ScreenMode::Fullscreen)
         {
-            glfwSetWindowMonitor(_window, monitor, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, monitor, monitorX, monitorY, videoMode->width, videoMode->height, videoMode->refreshRate);
         }
         else if (screenMode == ScreenMode::WindowedFullscreen)
         {
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, 0, 0, videoMode->width, videoMode->height, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, monitorX, monitorY, videoMode->width, videoMode->height, videoMode->refreshRate);
         }
         else
         {
@@ -232,8 +280,8 @@ namespace Kmplete
             userData->windowedHeight = windowedHeight;
 
             glfwSetWindowMonitor(_window, nullptr,
-                (videoMode->width - userData->windowedWidth) / 2,
-                (videoMode->height - userData->windowedHeight) / 2,
+                monitorX + (videoMode->width - userData->windowedWidth) / 2,
+                monitorY + (videoMode->height - userData->windowedHeight) / 2,
                 userData->windowedWidth, userData->windowedHeight, videoMode->refreshRate);
         }
     }
