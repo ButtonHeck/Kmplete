@@ -33,6 +33,7 @@ namespace Kmplete
 
         KMP_API void SetPosition(int x, int y) override;
         KMP_NODISCARD KMP_API std::pair<int, int> GetPosition() const override;
+        KMP_API void PositionAtCurrentScreenCenter() override;
 
         KMP_API void SetShouldClose(bool close) override;
         KMP_NODISCARD KMP_API bool ShouldClose() const override;

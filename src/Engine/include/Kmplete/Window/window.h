@@ -100,6 +100,7 @@ namespace Kmplete
 
         KMP_API virtual void SetPosition(int x, int y) = 0;
         KMP_NODISCARD KMP_API virtual std::pair<int, int> GetPosition() const = 0;
+        KMP_API virtual void PositionAtCurrentScreenCenter() = 0;
 
         KMP_API virtual void SetShouldClose(bool close) = 0;
         KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;

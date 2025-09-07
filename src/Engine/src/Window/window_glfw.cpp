@@ -224,6 +224,35 @@ namespace Kmplete
         glfwGetWindowPos(_window, &x, &y);
         return std::pair<int, int>(x, y);
     }
+
+    void WindowGlfw::PositionAtCurrentScreenCenter()
+    {
+        if (!IsWindowed())
+        {
+            KMP_LOG_WARN("positioning at the current screen's center applied only to windowed screen mode");
+            return;
+        }
+
+        const auto currentMonitor = GetCurrentMonitor();
+        const auto videoMode = glfwGetVideoMode(currentMonitor);
+        const auto monitorScreenWidth = videoMode->width;
+        const auto monitorScreenHeight = videoMode->height;
+
+        int monitorX = 0;
+        int monitorY = 0;
+        glfwGetMonitorPos(currentMonitor, &monitorX, &monitorY);
+
+        const auto monitorCenterX = monitorX + (monitorScreenWidth / 2);
+        const auto monitorCenterY = monitorY + (monitorScreenHeight / 2);
+
+        const auto windowedSize = GetWindowedSize();
+        const NonNull<UserData*> userData = GetUserPointer(_window);
+
+        glfwSetWindowMonitor(_window, nullptr,
+            monitorCenterX - windowedSize.first / 2,
+            monitorCenterY - windowedSize.second / 2,
+            userData->windowedWidth, userData->windowedHeight, videoMode->refreshRate);
+    }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::SetShouldClose(bool close)
@@ -279,10 +308,7 @@ namespace Kmplete
             userData->windowedWidth = windowedWidth;
             userData->windowedHeight = windowedHeight;
 
-            glfwSetWindowMonitor(_window, nullptr,
-                monitorX + (videoMode->width - userData->windowedWidth) / 2,
-                monitorY + (videoMode->height - userData->windowedHeight) / 2,
-                userData->windowedWidth, userData->windowedHeight, videoMode->refreshRate);
+            PositionAtCurrentScreenCenter();
         }
     }
     //--------------------------------------------------------------------------
