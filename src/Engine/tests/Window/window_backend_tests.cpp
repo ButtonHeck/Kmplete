@@ -595,3 +595,38 @@ TEST_CASE("Window backend GetPosition", "[core][window_backend][window]")
     REQUIRE(windowCb.conditionOk);
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Window backend is alwaysOnTop", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Window::WindowSettings settings("SomeWindow");
+    settings.width = 600;
+    settings.height = 200;
+    settings.windowedWidth = 600;
+    settings.windowedHeight = 200;
+    settings.vSync = true;
+    settings.updateContinuously = true;
+    settings.decorated = true;
+    settings.alwaysOnTop = true;
+
+    Kmplete::Window* window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
+    REQUIRE(window);
+
+    WindowCallbackUserSingleCondition windowCb(*window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window alwaysOnTop test",
+        "Press Y if window is always on top of other windows",
+        Kmplete::FileDialogs::MessageChoice::Ok);
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+    }
+
+    REQUIRE(windowCb.conditionOk);
+}
+//--------------------------------------------------------------------------
