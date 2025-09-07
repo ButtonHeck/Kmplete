@@ -551,3 +551,47 @@ TEST_CASE("Window backend SetPosition", "[core][window_backend][window]")
     REQUIRE(windowCb.conditionOk);
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Window backend GetPosition", "[core][window_backend][window]")
+{
+    const auto windowBackend = Kmplete::WindowBackend::Create();
+    REQUIRE(windowBackend);
+
+    Kmplete::Window::WindowSettings settings("SomeWindow");
+    settings.width = 600;
+    settings.height = 200;
+    settings.windowedWidth = 600;
+    settings.windowedHeight = 200;
+    settings.vSync = true;
+    settings.updateContinuously = true;
+    settings.decorated = true;
+
+    Kmplete::Window* window;
+    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
+    REQUIRE(window);
+
+    WindowCallbackUserSingleCondition windowCb(*window);
+
+    KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window GetPosition test",
+        "Move window and press Y if window position (shown as title) seems correct",
+        Kmplete::FileDialogs::MessageChoice::Ok);
+
+    int x = 0;
+    int y = 0;
+
+    while (!window->ShouldClose())
+    {
+        window->ProcessEvents();
+        window->SwapBuffers();
+
+        const auto position = window->GetPosition();
+        x = position.first;
+        y = position.second;
+
+        const Kmplete::String title = Kmplete::String("window position = [") + std::to_string(x) + ", " + std::to_string(y) + "]";
+        window->SetTitle(title.c_str());
+    }
+
+    REQUIRE(windowCb.conditionOk);
+}
+//--------------------------------------------------------------------------

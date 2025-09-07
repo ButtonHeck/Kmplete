@@ -170,6 +170,17 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    std::pair<int, int> WindowGlfw::GetPosition() const
+    {
+        KMP_PROFILE_FUNCTION();
+
+        int x;
+        int y;
+        glfwGetWindowPos(_window, &x, &y);
+        return std::pair<int, int>(x, y);
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::SetShouldClose(bool close)
     {
         KMP_PROFILE_FUNCTION();
