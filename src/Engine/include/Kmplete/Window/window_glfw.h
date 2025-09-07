@@ -55,6 +55,9 @@ namespace Kmplete
         KMP_API void SetDecorated(bool decorated) override;
         KMP_NODISCARD KMP_API bool IsDecorated() const override;
 
+        KMP_API void SetAlwaysOnTop(bool alwaysOnTop) override;
+        KMP_NODISCARD KMP_API bool IsAlwaysOnTop() const override;
+
         KMP_API void ProcessEvents() override;
         KMP_API void SwapBuffers() const override;
         KMP_API void MakeContextCurrent() override;

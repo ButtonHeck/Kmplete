@@ -335,6 +335,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowGlfw::SetAlwaysOnTop(bool alwaysOnTop)
+    {
+        _settings.alwaysOnTop = alwaysOnTop;
+        glfwSetWindowAttrib(_window, GLFW_FLOATING, alwaysOnTop ? GLFW_TRUE : GLFW_FALSE);
+    }
+    //--------------------------------------------------------------------------
+
+    bool WindowGlfw::IsAlwaysOnTop() const
+    {
+        return _settings.alwaysOnTop;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::ProcessEvents()
     {
         if (_settings.updateContinuously)
@@ -398,6 +411,7 @@ namespace Kmplete
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
+        glfwWindowHint(GLFW_FLOATING, _settings.alwaysOnTop ? GLFW_TRUE : GLFW_FALSE);
     }
     //--------------------------------------------------------------------------
 

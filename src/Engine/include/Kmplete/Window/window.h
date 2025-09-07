@@ -32,6 +32,7 @@ namespace Kmplete
         constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
         constexpr static auto ResizableStr = "Resizable";
         constexpr static auto DecoratedStr = "Decorated";
+        constexpr static auto AlwaysOnTopStr = "AlwaysOnTop";
 
         constexpr static auto DefaultWidth = 1920;
         constexpr static auto DefaultHeight = 1080;
@@ -73,6 +74,7 @@ namespace Kmplete
             bool updateContinuously = true;
             bool resizable = true;
             bool decorated = true;
+            bool alwaysOnTop = false;
             float dpiScale = 1.0f;
 
             KMP_NODISCARD KMP_API bool IsFullscreen() const noexcept;
@@ -124,6 +126,9 @@ namespace Kmplete
 
         KMP_API virtual void SetDecorated(bool decorated) = 0;
         KMP_NODISCARD KMP_API virtual bool IsDecorated() const = 0;
+
+        KMP_API virtual void SetAlwaysOnTop(bool alwaysOnTop) = 0;
+        KMP_NODISCARD KMP_API virtual bool IsAlwaysOnTop() const = 0;
 
         KMP_API virtual void ProcessEvents() = 0;
         KMP_API virtual void SwapBuffers() const = 0;

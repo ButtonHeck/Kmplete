@@ -410,6 +410,7 @@ namespace Kmplete
         settings.SaveBool(Window::UpdateContinuouslyStr, _mainWindowSettings->updateContinuously);
         settings.SaveBool(Window::ResizableStr, _mainWindowSettings->resizable);
         settings.SaveBool(Window::DecoratedStr, _mainWindowSettings->decorated);
+        settings.SaveBool(Window::AlwaysOnTopStr, _mainWindowSettings->alwaysOnTop);
 
         settings.EndSaveObject();
     }
@@ -438,6 +439,7 @@ namespace Kmplete
             settings.SaveBool(Window::UpdateContinuouslyStr, windowSettings.updateContinuously);
             settings.SaveBool(Window::ResizableStr, windowSettings.resizable);
             settings.SaveBool(Window::DecoratedStr, windowSettings.decorated);
+            settings.SaveBool(Window::AlwaysOnTopStr, windowSettings.alwaysOnTop);
 
             settings.EndSaveObject();
             ++index;
@@ -481,6 +483,7 @@ namespace Kmplete
             _mainWindowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
             _mainWindowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
             _mainWindowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
+            _mainWindowSettings->alwaysOnTop = settings.GetBool(Window::AlwaysOnTopStr, false);
         }
 
         settings.EndLoadObject();
@@ -513,6 +516,7 @@ namespace Kmplete
                 windowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
                 windowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
                 windowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
+                windowSettings->alwaysOnTop = settings.GetBool(Window::AlwaysOnTopStr, false);
                 _auxWindowsSettings.emplace(windowName, std::move(windowSettings));
             }
 

@@ -27,7 +27,8 @@
                 "VSync": true,
                 "UpdateContinuously": true,
                 "Resizable": true,
-                "Decorated": true
+                "Decorated": true,
+                "AlwaysOnTop": false
             },
             "AuxWindows": []
         }
