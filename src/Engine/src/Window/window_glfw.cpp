@@ -15,6 +15,8 @@ namespace Kmplete
 {
     WindowGlfw::UserData::UserData(WindowSettings& settings)
         : screenMode(settings.screenMode)
+        , x(settings.x)
+        , y(settings.y)
         , width(settings.width)
         , height(settings.height)
         , windowedWidth(settings.windowedWidth)
@@ -65,7 +67,7 @@ namespace Kmplete
         }
         else
         {
-            window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+            window = glfwCreateWindow(_settings.windowedWidth, _settings.windowedHeight, "", nullptr, nullptr);
         }
 
         return window;
@@ -512,6 +514,9 @@ namespace Kmplete
     {
         glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
             const NonNull<UserData*> userData = GetUserPointer(window);
+            userData->x = x;
+            userData->y = y;
+
             if (userData->eventCallback)
             {
                 WindowMoveEvent event(x, y);

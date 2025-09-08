@@ -23,6 +23,8 @@ namespace Kmplete
         using EventCallbackFn = std::function<void(Event&)>;
 
         constexpr static auto NameStr = "Name";
+        constexpr static auto XStr = "X";
+        constexpr static auto YStr = "Y";
         constexpr static auto WidthStr = "Width";
         constexpr static auto HeightStr = "Height";
         constexpr static auto WindowedWidthStr = "WindowedWidth";
@@ -64,6 +66,8 @@ namespace Kmplete
             KMP_API explicit WindowSettings(const String& name) noexcept;
 
             const String name = "";
+            int x = 0;
+            int y = 0;
             int width = DefaultWidth;
             int height = DefaultHeight;
             int windowedWidth = DefaultWidth;

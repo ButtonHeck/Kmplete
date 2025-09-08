@@ -73,6 +73,8 @@ namespace Kmplete
             explicit UserData(WindowSettings& settings);
 
             ScreenMode& screenMode;
+            int& x;
+            int& y;
             int& width;
             int& height;
             int& windowedWidth;

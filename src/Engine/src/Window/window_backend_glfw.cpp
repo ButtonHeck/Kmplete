@@ -401,6 +401,8 @@ namespace Kmplete
         settings.StartSaveObject(MainWindowStr);
 
         settings.SaveString(Window::NameStr, _mainWindowSettings->name);
+        settings.SaveInt(Window::XStr, _mainWindowSettings->x);
+        settings.SaveInt(Window::YStr, _mainWindowSettings->y);
         settings.SaveInt(Window::WidthStr, _mainWindowSettings->width);
         settings.SaveInt(Window::HeightStr, _mainWindowSettings->height);
         settings.SaveInt(Window::WindowedWidthStr, _mainWindowSettings->windowedWidth);
@@ -430,6 +432,8 @@ namespace Kmplete
             settings.StartSaveObject(index);
 
             settings.SaveString(Window::NameStr, windowSettings.name);
+            settings.SaveInt(Window::XStr, windowSettings.x);
+            settings.SaveInt(Window::YStr, windowSettings.y);
             settings.SaveInt(Window::WidthStr, windowSettings.width);
             settings.SaveInt(Window::HeightStr, windowSettings.height);
             settings.SaveInt(Window::WindowedWidthStr, windowSettings.windowedWidth);
@@ -474,6 +478,8 @@ namespace Kmplete
         }
         else
         {
+            _mainWindowSettings->x = settings.GetInt(Window::XStr, 0);
+            _mainWindowSettings->y = settings.GetInt(Window::YStr, 0);
             _mainWindowSettings->width = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
             _mainWindowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
             _mainWindowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
@@ -507,6 +513,8 @@ namespace Kmplete
             else
             {
                 auto windowSettings = CreateUPtr<Window::WindowSettings>(windowName);
+                windowSettings->x = settings.GetInt(Window::XStr, 0);
+                windowSettings->y = settings.GetInt(Window::YStr, 0);
                 windowSettings->width = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
                 windowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
                 windowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
