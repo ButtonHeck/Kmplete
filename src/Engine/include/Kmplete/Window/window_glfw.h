@@ -87,7 +87,7 @@ namespace Kmplete
 
     private:
         Nullable<GLFWwindow*> CreateGLFWwindow();
-        NonNull<GLFWmonitor*> GetCurrentMonitor() const;
+        NonNull<GLFWmonitor*> GetSuitableMonitor(const std::pair<int, int>& windowSize, const std::pair<int, int>& windowPosition) const;
 
         void Initialize();
         void InitializeWindowHints() const;
@@ -98,7 +98,7 @@ namespace Kmplete
         void InitializeKeyboardCallbacks() const;
         void InitializeMouseCallbacks() const;
 
-        void InitializeSize();
+        void InitializeGeometry();
         void InitializeDPIScale();
 
         void Finalize();
