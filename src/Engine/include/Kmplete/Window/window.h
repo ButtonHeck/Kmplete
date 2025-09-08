@@ -66,8 +66,8 @@ namespace Kmplete
             KMP_API explicit WindowSettings(const String& name) noexcept;
 
             const String name = "";
-            int x = 0;
-            int y = 0;
+            int x = 100;
+            int y = 100;
             int width = DefaultWidth;
             int height = DefaultHeight;
             int windowedWidth = DefaultWidth;

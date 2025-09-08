@@ -48,7 +48,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto monitor = GetSuitableMonitor();
+        const auto [isFound, monitor] = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
 
         GLFWwindow* window = nullptr;
@@ -74,7 +74,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    NonNull<GLFWmonitor*> WindowGlfw::GetSuitableMonitor() const
+    std::pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::GetSuitableMonitor() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -107,7 +107,7 @@ namespace Kmplete
                     const auto isInsideY = (windowCenterY >= monitorY && windowCenterY <= (monitorY + monitorScreenHeight));
                     if (isInsideX && isInsideY)
                     {
-                        return monitor;
+                        return {true, monitor};
                     }
                 }
             }
@@ -115,7 +115,7 @@ namespace Kmplete
 
         KMP_LOG_WARN("cannot get window's current monitor, primary monitor will be used");
 
-        return glfwGetPrimaryMonitor();
+        return {false, glfwGetPrimaryMonitor()};
     }
     //--------------------------------------------------------------------------
 
@@ -235,7 +235,7 @@ namespace Kmplete
             return;
         }
 
-        const auto currentMonitor = GetSuitableMonitor();
+        const auto [isFound, currentMonitor] = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(currentMonitor);
         const auto monitorScreenWidth = videoMode->width;
         const auto monitorScreenHeight = videoMode->height;
@@ -285,7 +285,7 @@ namespace Kmplete
 
         userData->screenMode = screenMode;
 
-        const auto monitor = GetSuitableMonitor();
+        const auto [isFound, monitor] = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
         int monitorX = 0;
         int monitorY = 0;
@@ -698,7 +698,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto monitor = GetSuitableMonitor();
+        const auto [isFound, monitor] = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
 
         if (IsWindowedFullscreen())
@@ -713,8 +713,16 @@ namespace Kmplete
         else if (IsWindowed())
         {
             glfwSetWindowMonitor(_window, nullptr, _settings.x, _settings.y, _settings.windowedWidth, _settings.windowedHeight, videoMode->refreshRate);
-            SetPosition(_settings.x, _settings.y);
-            glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
+
+            if (isFound)
+            {
+                SetPosition(_settings.x, _settings.y);
+                glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
+            }
+            else
+            {
+                PositionAtCurrentScreenCenter();
+            }
         }
     }
     //--------------------------------------------------------------------------

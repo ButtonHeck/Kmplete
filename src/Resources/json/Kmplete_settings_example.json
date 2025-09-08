@@ -19,8 +19,8 @@
         "WindowBackend": {
             "MainWindow": {
                 "Name": "Main",
-                "X": 0,
-                "Y": 0,
+                "X": 100,
+                "Y": 100,
                 "Width": 1920,
                 "Height": 1080,
                 "WindowedWidth": 1920,
