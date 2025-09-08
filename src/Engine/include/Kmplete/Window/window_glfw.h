@@ -87,7 +87,7 @@ namespace Kmplete
 
     private:
         Nullable<GLFWwindow*> CreateGLFWwindow();
-        NonNull<GLFWmonitor*> GetSuitableMonitor(const std::pair<int, int>& windowSize, const std::pair<int, int>& windowPosition) const;
+        NonNull<GLFWmonitor*> GetSuitableMonitor() const;
 
         void Initialize();
         void InitializeWindowHints() const;

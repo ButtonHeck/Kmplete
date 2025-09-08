@@ -48,9 +48,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto windowSizeFromSettings = std::pair<int, int>{_settings.width, _settings.height};
-        const auto windowPositionFromSettings = std::pair<int, int>{_settings.x, _settings.y};
-        const auto monitor = GetSuitableMonitor(windowSizeFromSettings, windowPositionFromSettings);
+        const auto monitor = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
 
         GLFWwindow* window = nullptr;
@@ -76,9 +74,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    NonNull<GLFWmonitor*> WindowGlfw::GetSuitableMonitor(const std::pair<int, int>& windowSize, const std::pair<int, int>& windowPosition) const
+    NonNull<GLFWmonitor*> WindowGlfw::GetSuitableMonitor() const
     {
         KMP_PROFILE_FUNCTION();
+
+        const auto windowSize = std::pair<int, int>{ _settings.width, _settings.height };
+        const auto windowPosition = std::pair<int, int>{ _settings.x, _settings.y };
 
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
@@ -234,7 +235,7 @@ namespace Kmplete
             return;
         }
 
-        const auto currentMonitor = GetSuitableMonitor(GetSize(), GetPosition());
+        const auto currentMonitor = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(currentMonitor);
         const auto monitorScreenWidth = videoMode->width;
         const auto monitorScreenHeight = videoMode->height;
@@ -284,7 +285,7 @@ namespace Kmplete
 
         userData->screenMode = screenMode;
 
-        const auto monitor = GetSuitableMonitor(GetSize(), GetPosition());
+        const auto monitor = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
         int monitorX = 0;
         int monitorY = 0;
@@ -697,9 +698,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto windowSizeFromSettings = std::pair<int, int>{ _settings.width, _settings.height };
-        const auto windowPositionFromSettings = std::pair<int, int>{ _settings.x, _settings.y };
-        const auto monitor = GetSuitableMonitor(windowSizeFromSettings, windowPositionFromSettings);
+        const auto monitor = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
 
         if (IsWindowedFullscreen())
