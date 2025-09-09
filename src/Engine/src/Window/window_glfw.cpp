@@ -302,15 +302,8 @@ namespace Kmplete
         }
         else
         {
-            const auto windowedWidth = userData->windowedWidth;
-            const auto windowedHeight = userData->windowedHeight;
-
-            SetDecorated(true);
-
-            userData->windowedWidth = windowedWidth;
-            userData->windowedHeight = windowedHeight;
-
             PositionAtCurrentScreenCenter();
+            SetDecorated(true);
         }
     }
     //--------------------------------------------------------------------------

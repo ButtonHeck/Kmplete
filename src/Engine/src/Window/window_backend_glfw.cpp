@@ -478,8 +478,8 @@ namespace Kmplete
         }
         else
         {
-            _mainWindowSettings->x = settings.GetInt(Window::XStr, 0);
-            _mainWindowSettings->y = settings.GetInt(Window::YStr, 0);
+            _mainWindowSettings->x = settings.GetInt(Window::XStr, Window::DefaultX);
+            _mainWindowSettings->y = settings.GetInt(Window::YStr, Window::DefaultY);
             _mainWindowSettings->width = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
             _mainWindowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
             _mainWindowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
@@ -513,8 +513,8 @@ namespace Kmplete
             else
             {
                 auto windowSettings = CreateUPtr<Window::WindowSettings>(windowName);
-                windowSettings->x = settings.GetInt(Window::XStr, 0);
-                windowSettings->y = settings.GetInt(Window::YStr, 0);
+                windowSettings->x = settings.GetInt(Window::XStr, Window::DefaultX);
+                windowSettings->y = settings.GetInt(Window::YStr, Window::DefaultY);
                 windowSettings->width = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
                 windowSettings->height = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
                 windowSettings->windowedWidth = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);

@@ -36,6 +36,8 @@ namespace Kmplete
         constexpr static auto DecoratedStr = "Decorated";
         constexpr static auto AlwaysOnTopStr = "AlwaysOnTop";
 
+        constexpr static auto DefaultX = 100;
+        constexpr static auto DefaultY = 100;
         constexpr static auto DefaultWidth = 1920;
         constexpr static auto DefaultHeight = 1080;
 
@@ -66,8 +68,8 @@ namespace Kmplete
             KMP_API explicit WindowSettings(const String& name) noexcept;
 
             const String name = "";
-            int x = 100;
-            int y = 100;
+            int x = DefaultX;
+            int y = DefaultY;
             int width = DefaultWidth;
             int height = DefaultHeight;
             int windowedWidth = DefaultWidth;
