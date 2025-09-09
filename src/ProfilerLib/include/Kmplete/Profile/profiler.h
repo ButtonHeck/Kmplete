@@ -1,7 +1,7 @@
 #pragma once
 
 #define KMP_PROFILE_MANUAL_SET true
-#if (KMP_PROFILE_MANUAL_SET && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
+#if ((!defined KMP_BUILD_STATIC || KMP_PROFILE_MANUAL_SET) && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
 #define KMP_PROFILE
 
 #include "Kmplete/Base/types_aliases.h"
