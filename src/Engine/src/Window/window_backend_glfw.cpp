@@ -359,7 +359,7 @@ namespace Kmplete
         {
             _cursors.emplace(name, CreateUPtr<WindowCursorGlfw>(filepath, hotspotX, hotspotY));
         }
-        catch (const std::runtime_error& error)
+        catch (KMP_MB_UNUSED const std::runtime_error& error)
         {
             KMP_LOG_ERROR("failed to add cursor '{}' from '{}' ({})", name, filepath, error.what());
             return std::nullopt;
