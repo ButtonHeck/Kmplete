@@ -14,6 +14,7 @@ add_subdirectory(LoggerLib)
 add_subdirectory(UtilsLib)
 add_subdirectory(FilesystemLib)
 add_subdirectory(JsonLib)
+add_subdirectory(MathLib)
 add_subdirectory(ProfilerLib)
 add_subdirectory(Engine)
 add_subdirectory(Editor)
@@ -27,6 +28,7 @@ if(${KMPLETE_BUILD_TESTS})
         FilesystemLib_UnitTests
         JsonLib_UnitTests
         UtilsLib_UnitTests
+        MathLib_UnitTests
         Kmplete_UnitTests
         Kmplete_FileDialogsTests
         Kmplete_WindowApplicationTests
