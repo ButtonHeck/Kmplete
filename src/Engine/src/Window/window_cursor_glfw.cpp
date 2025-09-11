@@ -7,7 +7,7 @@
 
 namespace Kmplete
 {
-    WindowCursorGlfw::WindowCursorGlfw(const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
+    WindowCursorGlfw::WindowCursorGlfw(const Filepath& filepath, const Point2I& hotspot /*= Point2I()*/)
         : _cursor(nullptr)
     {
         KMP_PROFILE_FUNCTION();
@@ -17,7 +17,7 @@ namespace Kmplete
 
         if (cursorImg.pixels)
         {
-            _cursor = glfwCreateCursor(&cursorImg, hotspotX, hotspotY);
+            _cursor = glfwCreateCursor(&cursorImg, hotspot.x, hotspot.y);
         }
         else
         {

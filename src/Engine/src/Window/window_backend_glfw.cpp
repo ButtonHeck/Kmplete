@@ -347,7 +347,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, int hotspotX /*= 0*/, int hotspotY /*= 0*/)
+    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, const Point2I& hotspot /*= Point2I()*/)
     {
         if (_cursors.contains(name))
         {
@@ -357,7 +357,7 @@ namespace Kmplete
 
         try
         {
-            _cursors.emplace(name, CreateUPtr<WindowCursorGlfw>(filepath, hotspotX, hotspotY));
+            _cursors.emplace(name, CreateUPtr<WindowCursorGlfw>(filepath, hotspot));
         }
         catch (KMP_MB_UNUSED const std::runtime_error& error)
         {
