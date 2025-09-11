@@ -92,7 +92,7 @@ namespace Kmplete
         KMP_API explicit Window(WindowSettings& settings);
         virtual ~Window() = default;
 
-        KMP_NODISCARD KMP_API const String& GetName() const;
+        KMP_NODISCARD KMP_API const String& GetName() const noexcept;
 
         KMP_NODISCARD KMP_API virtual Size2I GetSize() const = 0;
         KMP_NODISCARD KMP_API virtual Size2I GetWindowedSize() const = 0;

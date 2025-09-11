@@ -4,11 +4,6 @@
 
 namespace Kmplete
 {
-    Window::WindowSettings::WindowSettings(const String& name) noexcept
-        : name(name)
-    {}
-    //--------------------------------------------------------------------------
-
     Window::Window(WindowSettings& settings)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Window::Window(WindowSettings&)")
           _settings(settings)
@@ -23,7 +18,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const String& Window::GetName() const
+    const String& Window::GetName() const noexcept
     {
         return _settings.name;
     }
@@ -95,6 +90,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+
+    Window::WindowSettings::WindowSettings(const String& name) noexcept
+        : name(name)
+    {}
+    //--------------------------------------------------------------------------
 
     bool Window::WindowSettings::IsFullscreen() const noexcept
     {
