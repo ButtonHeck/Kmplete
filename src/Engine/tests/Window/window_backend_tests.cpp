@@ -97,13 +97,13 @@ TEST_CASE("Window backend single window", "[core][window_backend][window]")
     auto& mainWindow = windowBackend->CreateMainWindow();
     REQUIRE(mainWindow.GetName() == "Main");
 
-    const auto [width, height] = mainWindow.GetSize();
-    REQUIRE(width > 0);
-    REQUIRE(height > 0);
+    const auto size = mainWindow.GetSize();
+    REQUIRE(size.x > 0);
+    REQUIRE(size.y > 0);
 
-    const auto [windowedWidth, windowedHeight] = mainWindow.GetWindowedSize();
-    REQUIRE(windowedWidth > 0);
-    REQUIRE(windowedHeight > 0);
+    const auto windowedSize = mainWindow.GetWindowedSize();
+    REQUIRE(windowedSize.x > 0);
+    REQUIRE(windowedSize.y > 0);
 
     mainWindow.SetVSync(true);
     REQUIRE(mainWindow.IsVSync());
@@ -387,10 +387,10 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
     REQUIRE(settings.name == "SomeWindow");
-    settings.width = 200;
-    settings.height = 200;
-    settings.windowedWidth = 200;
-    settings.windowedHeight = 200;
+    settings.size.x = 200;
+    settings.size.y = 200;
+    settings.windowedSize.x = 200;
+    settings.windowedSize.y = 200;
     settings.vSync = true;
     settings.updateContinuously = true;
     
@@ -432,8 +432,8 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
 
     Kmplete::Window::WindowSettings settings2 = Kmplete::Window::WindowSettings("ValidName-InvalidWidth");
     REQUIRE(settings2.name == "ValidName-InvalidWidth");
-    settings2.width = 65000;
-    settings2.height = 200;
+    settings2.size.x = 65000;
+    settings2.size.y = 200;
 
     REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings2));
     REQUIRE(window);
@@ -454,10 +454,10 @@ TEST_CASE("Window backend resizable OFF", "[core][window_backend][window]")
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.width = 400;
-    settings.height = 400;
-    settings.windowedWidth = 400;
-    settings.windowedHeight = 400;
+    settings.size.x = 400;
+    settings.size.y = 400;
+    settings.windowedSize.x = 400;
+    settings.windowedSize.y = 400;
     settings.vSync = true;
     settings.updateContinuously = true;
     settings.resizable = false;
@@ -488,10 +488,10 @@ TEST_CASE("Window backend decorated OFF", "[core][window_backend][window]")
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.width = 400;
-    settings.height = 400;
-    settings.windowedWidth = 400;
-    settings.windowedHeight = 400;
+    settings.size.x = 400;
+    settings.size.y = 400;
+    settings.windowedSize.x = 400;
+    settings.windowedSize.y = 400;
     settings.vSync = true;
     settings.updateContinuously = true;
     settings.decorated = false;
@@ -522,10 +522,10 @@ TEST_CASE("Window backend SetPosition", "[core][window_backend][window]")
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.width = 400;
-    settings.height = 400;
-    settings.windowedWidth = 400;
-    settings.windowedHeight = 400;
+    settings.size.x = 400;
+    settings.size.y = 400;
+    settings.windowedSize.x = 400;
+    settings.windowedSize.y = 400;
     settings.vSync = true;
     settings.updateContinuously = true;
     settings.decorated = true;
@@ -558,10 +558,10 @@ TEST_CASE("Window backend GetPosition", "[core][window_backend][window]")
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.width = 600;
-    settings.height = 200;
-    settings.windowedWidth = 600;
-    settings.windowedHeight = 200;
+    settings.size.x = 600;
+    settings.size.y = 200;
+    settings.windowedSize.x = 600;
+    settings.windowedSize.y = 200;
     settings.vSync = true;
     settings.updateContinuously = true;
     settings.decorated = true;
@@ -585,8 +585,8 @@ TEST_CASE("Window backend GetPosition", "[core][window_backend][window]")
         window->SwapBuffers();
 
         const auto position = window->GetPosition();
-        x = position.first;
-        y = position.second;
+        x = position.x;
+        y = position.y;
 
         const Kmplete::String title = Kmplete::String("window position = [") + std::to_string(x) + ", " + std::to_string(y) + "]";
         window->SetTitle(title.c_str());
@@ -602,10 +602,10 @@ TEST_CASE("Window backend center at current screen", "[core][window_backend][win
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.width = 600;
-    settings.height = 200;
-    settings.windowedWidth = 600;
-    settings.windowedHeight = 200;
+    settings.size.x = 600;
+    settings.size.y = 200;
+    settings.windowedSize.x = 600;
+    settings.windowedSize.y = 200;
     settings.vSync = true;
     settings.updateContinuously = true;
     settings.decorated = true;
@@ -638,10 +638,10 @@ TEST_CASE("Window backend is alwaysOnTop", "[core][window_backend][window]")
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.width = 600;
-    settings.height = 200;
-    settings.windowedWidth = 600;
-    settings.windowedHeight = 200;
+    settings.size.x = 600;
+    settings.size.y = 200;
+    settings.windowedSize.x = 600;
+    settings.windowedSize.y = 200;
     settings.vSync = true;
     settings.updateContinuously = true;
     settings.decorated = true;
