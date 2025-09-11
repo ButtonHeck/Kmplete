@@ -6,6 +6,8 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
+#include <type_traits>
+
 namespace Kmplete
 {
     using Point2I = glm::ivec2;
@@ -23,16 +25,80 @@ namespace Kmplete
     using Size3I = glm::ivec3;
     using Size3F = glm::vec3;
 
-    // TODO: make templated
-    struct Rect2I
+    
+    template<class PositionType, class SizeType>
+    requires (std::disjunction_v<
+                std::conjunction<
+                    std::is_same<PositionType, Point2I>, 
+                    std::is_same<SizeType, Size2I>>,
+                std::conjunction<
+                    std::is_same<PositionType, Point3I>, 
+                    std::is_same<SizeType, Size3I>>
+             >)
+    struct RectI
     {
-        KMP_API Rect2I(const Point2I& position, const Size2I& size) noexcept;
+        RectI(const PositionType& position, const SizeType& size) noexcept
+            : position(position)
+            , size(size)
+        {}
 
-        KMP_NODISCARD KMP_API Point2I GetCenter() const noexcept;
-        KMP_NODISCARD KMP_API bool ContainsPoint(const Point2I& point) const noexcept;
+        KMP_NODISCARD PositionType GetCenter() const noexcept
+        {
+            return position + size / 2;
+        }
 
-        Point2I position;
-        Size2I size;
+        KMP_NODISCARD bool ContainsPoint(const PositionType& point) const noexcept
+        {
+            return point.x >= position.x &&
+                   point.x <= (position.x + size.x) &&
+                   point.y >= position.y &&
+                   point.y <= (position.y + size.y);
+        }
+
+        PositionType position;
+        SizeType size;
     };
     //--------------------------------------------------------------------------
+
+
+    template<class PositionType, class SizeType>
+        requires (std::disjunction_v<
+                    std::conjunction<
+                        std::is_same<PositionType, Point2F>, 
+                        std::is_same<SizeType, Size2F>>,
+                    std::conjunction<
+                        std::is_same<PositionType, Point3F>, 
+                        std::is_same<SizeType, Size3F>>
+                 >)
+    struct RectF
+    {
+        RectF(const PositionType& position, const SizeType& size) noexcept
+            : position(position)
+            , size(size)
+        {}
+
+        KMP_NODISCARD PositionType GetCenter() const noexcept
+        {
+            return (position + size) / 2;
+        }
+
+        KMP_NODISCARD bool ContainsPoint(const PositionType& point) const noexcept
+        {
+            return point.x >= position.x &&
+                   point.x <= (position.x + size.x) &&
+                   point.y >= position.y &&
+                   point.y <= (position.y + size.y);
+        }
+
+        PositionType position;
+        SizeType size;
+    };
+    //--------------------------------------------------------------------------
+
+
+    using Rect2I = RectI<Point2I, Size2I>;
+    using Rect2F = RectF<Point2F, Size2F>;
+
+    using Rect3I = RectI<Point3I, Size3I>;
+    using Rect3F = RectF<Point3F, Size3F>;
 }
