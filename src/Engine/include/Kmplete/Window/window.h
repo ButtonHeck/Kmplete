@@ -5,6 +5,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Event/event.h"
+#include "Kmplete/Math/math.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -68,12 +69,9 @@ namespace Kmplete
             KMP_API explicit WindowSettings(const String& name) noexcept;
 
             const String name = "";
-            int x = DefaultX;
-            int y = DefaultY;
-            int width = DefaultWidth;
-            int height = DefaultHeight;
-            int windowedWidth = DefaultWidth;
-            int windowedHeight = DefaultHeight;
+            Point2I position = Point2I(DefaultX, DefaultY);
+            Size2I size = Size2I(DefaultWidth, DefaultHeight);
+            Size2I windowedSize = Size2I(DefaultWidth, DefaultWidth);
             ScreenMode screenMode = ScreenMode::Windowed;
             CursorMode cursorMode = CursorMode::Default;
             bool vSync = true;
@@ -96,8 +94,8 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API const String& GetName() const;
 
-        KMP_NODISCARD KMP_API virtual std::pair<int, int> GetSize() const = 0; //TODO: make geometric struct instead of std pair
-        KMP_NODISCARD KMP_API virtual std::pair<int, int> GetWindowedSize() const = 0;
+        KMP_NODISCARD KMP_API virtual Size2I GetSize() const = 0;
+        KMP_NODISCARD KMP_API virtual Size2I GetWindowedSize() const = 0;
 
         KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
 
@@ -105,7 +103,7 @@ namespace Kmplete
         KMP_API virtual void SetIcon(const Filepath& filepath) = 0;
 
         KMP_API virtual void SetPosition(int x, int y) = 0;
-        KMP_NODISCARD KMP_API virtual std::pair<int, int> GetPosition() const = 0;
+        KMP_NODISCARD KMP_API virtual Point2I GetPosition() const = 0;
         KMP_API virtual void PositionAtCurrentScreenCenter() = 0;
 
         KMP_API virtual void SetShouldClose(bool close) = 0;

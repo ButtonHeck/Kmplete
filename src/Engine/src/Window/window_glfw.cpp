@@ -15,12 +15,9 @@ namespace Kmplete
 {
     WindowGlfw::UserData::UserData(WindowSettings& settings)
         : screenMode(settings.screenMode)
-        , x(settings.x)
-        , y(settings.y)
-        , width(settings.width)
-        , height(settings.height)
-        , windowedWidth(settings.windowedWidth)
-        , windowedHeight(settings.windowedHeight)
+        , position(settings.position)
+        , size(settings.size)
+        , windowedSize(settings.windowedSize)
         , dpiScale(settings.dpiScale)
     {}
     //--------------------------------------------------------------------------
@@ -55,19 +52,19 @@ namespace Kmplete
 
         if (IsFullscreen())
         {
-            _settings.width = videoMode->width;
-            _settings.height = videoMode->height;
-            window = glfwCreateWindow(_settings.width, _settings.height, "", monitor, nullptr);
+            _settings.size.x = videoMode->width;
+            _settings.size.y = videoMode->height;
+            window = glfwCreateWindow(_settings.size.x, _settings.size.y, "", monitor, nullptr);
         }
         else if (IsWindowedFullscreen())
         {
-            _settings.width = videoMode->width;
-            _settings.height = videoMode->height;
-            window = glfwCreateWindow(_settings.width, _settings.height, "", nullptr, nullptr);
+            _settings.size.x = videoMode->width;
+            _settings.size.y = videoMode->height;
+            window = glfwCreateWindow(_settings.size.x, _settings.size.y, "", nullptr, nullptr);
         }
         else
         {
-            window = glfwCreateWindow(_settings.windowedWidth, _settings.windowedHeight, "", nullptr, nullptr);
+            window = glfwCreateWindow(_settings.windowedSize.x, _settings.windowedSize.y, "", nullptr, nullptr);
         }
 
         return window;
@@ -78,8 +75,8 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto windowSize = std::pair<int, int>{ _settings.width, _settings.height };
-        const auto windowPosition = std::pair<int, int>{ _settings.x, _settings.y };
+        const auto windowRectangle = Rect2I(_settings.position, _settings.size);
+        const auto windowCenter = windowRectangle.GetCenter();
 
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
@@ -100,12 +97,8 @@ namespace Kmplete
                     int monitorY = 0;
                     glfwGetMonitorPos(monitor, &monitorX, &monitorY);
 
-                    // TODO: logically it's just a check if a point is inside a rectangle, maybe extract to some math function in a future
-                    const auto windowCenterX = windowPosition.first + (windowSize.first / 2);
-                    const auto windowCenterY = windowPosition.second + (windowSize.second / 2);
-                    const auto isInsideX = (windowCenterX >= monitorX && windowCenterX <= (monitorX + monitorScreenWidth));
-                    const auto isInsideY = (windowCenterY >= monitorY && windowCenterY <= (monitorY + monitorScreenHeight));
-                    if (isInsideX && isInsideY)
+                    const auto monitorRectangle = Rect2I(Point2I(monitorX, monitorY), Size2I(monitorScreenWidth, monitorScreenHeight));
+                    if (monitorRectangle.ContainsPoint(windowCenter))
                     {
                         return {true, monitor};
                     }
@@ -157,23 +150,23 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::pair<int, int> WindowGlfw::GetSize() const
+    Size2I WindowGlfw::GetSize() const
     {
         KMP_PROFILE_FUNCTION();
 
         int width;
         int height;
         glfwGetWindowSize(_window, &width, &height);
-        return std::pair<int, int>(width, height);
+        return Size2I(width, height);
     }
     //--------------------------------------------------------------------------
 
-    std::pair<int, int> WindowGlfw::GetWindowedSize() const
+    Size2I WindowGlfw::GetWindowedSize() const
     {
         KMP_PROFILE_FUNCTION();
 
         const NonNull<UserData*> userData = GetUserPointer(_window);
-        return std::pair<int, int>(userData->windowedWidth, userData->windowedHeight);
+        return Size2I(userData->windowedSize.x, userData->windowedSize.y);
     }
     //--------------------------------------------------------------------------
 
@@ -217,15 +210,16 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::pair<int, int> WindowGlfw::GetPosition() const
+    Point2I WindowGlfw::GetPosition() const
     {
         KMP_PROFILE_FUNCTION();
 
         int x;
         int y;
         glfwGetWindowPos(_window, &x, &y);
-        return std::pair<int, int>(x, y);
+        return Point2I(x, y);
     }
+    //--------------------------------------------------------------------------
 
     void WindowGlfw::PositionAtCurrentScreenCenter()
     {
@@ -251,9 +245,9 @@ namespace Kmplete
         const NonNull<UserData*> userData = GetUserPointer(_window);
 
         glfwSetWindowMonitor(_window, nullptr,
-            monitorCenterX - windowedSize.first / 2,
-            monitorCenterY - windowedSize.second / 2,
-            userData->windowedWidth, userData->windowedHeight, videoMode->refreshRate);
+            monitorCenterX - windowedSize.x / 2,
+            monitorCenterY - windowedSize.y / 2,
+            userData->windowedSize.x, userData->windowedSize.y, videoMode->refreshRate);
     }
     //--------------------------------------------------------------------------
 
@@ -507,8 +501,8 @@ namespace Kmplete
     {
         glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
             const NonNull<UserData*> userData = GetUserPointer(window);
-            userData->x = x;
-            userData->y = y;
+            userData->position.x = x;
+            userData->position.y = y;
 
             if (userData->eventCallback)
             {
@@ -552,13 +546,13 @@ namespace Kmplete
 
         glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
             const NonNull<UserData*> userData = GetUserPointer(window);
-            userData->width = width;
-            userData->height = height;
+            userData->size.x = width;
+            userData->size.y = height;
 
             if (userData->screenMode == ScreenMode::Windowed)
             {
-                userData->windowedWidth = width;
-                userData->windowedHeight = height;
+                userData->windowedSize.x = width;
+                userData->windowedSize.y = height;
             }
 
             if (userData->eventCallback)
@@ -701,16 +695,16 @@ namespace Kmplete
             glfwGetMonitorPos(monitor, &monitorX, &monitorY);
 
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, monitorX, monitorY, _settings.width, _settings.height, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, monitorX, monitorY, _settings.size.x, _settings.size.y, videoMode->refreshRate);
         }
         else if (IsWindowed())
         {
-            glfwSetWindowMonitor(_window, nullptr, _settings.x, _settings.y, _settings.windowedWidth, _settings.windowedHeight, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, _settings.position.x, _settings.position.y, _settings.windowedSize.x, _settings.windowedSize.y, videoMode->refreshRate);
 
             if (isFound)
             {
-                SetPosition(_settings.x, _settings.y);
-                glfwSetWindowSize(_window, _settings.windowedWidth, _settings.windowedHeight);
+                SetPosition(_settings.position.x, _settings.position.y);
+                glfwSetWindowSize(_window, _settings.windowedSize.x, _settings.windowedSize.y);
             }
             else
             {

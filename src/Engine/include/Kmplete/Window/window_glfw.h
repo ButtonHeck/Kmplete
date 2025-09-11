@@ -23,8 +23,8 @@ namespace Kmplete
         KMP_API explicit WindowGlfw(WindowSettings& settings);
         KMP_API ~WindowGlfw();
 
-        KMP_NODISCARD KMP_API std::pair<int, int> GetSize() const override;
-        KMP_NODISCARD KMP_API std::pair<int, int> GetWindowedSize() const override;
+        KMP_NODISCARD KMP_API Size2I GetSize() const override;
+        KMP_NODISCARD KMP_API Size2I GetWindowedSize() const override;
 
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
 
@@ -32,7 +32,7 @@ namespace Kmplete
         KMP_API void SetIcon(const Filepath& filepath) override;
 
         KMP_API void SetPosition(int x, int y) override;
-        KMP_NODISCARD KMP_API std::pair<int, int> GetPosition() const override;
+        KMP_NODISCARD KMP_API Point2I GetPosition() const override;
         KMP_API void PositionAtCurrentScreenCenter() override;
 
         KMP_API void SetShouldClose(bool close) override;
@@ -73,12 +73,9 @@ namespace Kmplete
             explicit UserData(WindowSettings& settings);
 
             ScreenMode& screenMode;
-            int& x;
-            int& y;
-            int& width;
-            int& height;
-            int& windowedWidth;
-            int& windowedHeight;
+            Point2I& position;
+            Size2I& size;
+            Size2I& windowedSize;
             float& dpiScale;
             EventCallbackFn eventCallback;
         };
