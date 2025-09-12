@@ -88,16 +88,7 @@ namespace Kmplete
                 const auto monitor = monitors[i];
                 if (monitor)
                 {
-                    const auto videoMode = glfwGetVideoMode(monitor);
-                    const auto monitorScreenWidth = videoMode->width;
-                    const auto monitorScreenHeight = videoMode->height;
-                    KMP_ASSERT(monitorScreenWidth != 0 && monitorScreenHeight != 0);
-
-                    int monitorX = 0;
-                    int monitorY = 0;
-                    glfwGetMonitorPos(monitor, &monitorX, &monitorY);
-
-                    const auto monitorRectangle = Rect2I(Point2I(monitorX, monitorY), Size2I(monitorScreenWidth, monitorScreenHeight));
+                    const auto monitorRectangle = GetMonitorRectangle(monitor);
                     if (monitorRectangle.ContainsPoint(windowCenter))
                     {
                         return {true, monitor};
@@ -109,6 +100,23 @@ namespace Kmplete
         KMP_LOG_WARN("cannot get window's current monitor, primary monitor will be used");
 
         return {false, glfwGetPrimaryMonitor()};
+    }
+    //--------------------------------------------------------------------------
+
+    Rect2I WindowGlfw::GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const
+    {
+        KMP_PROFILE_FUNCTION();
+
+        const auto videoMode = glfwGetVideoMode(monitor);
+        const auto monitorScreenWidth = videoMode->width;
+        const auto monitorScreenHeight = videoMode->height;
+        KMP_ASSERT(monitorScreenWidth != 0 && monitorScreenHeight != 0);
+
+        int monitorX = 0;
+        int monitorY = 0;
+        glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+
+        return Rect2I(Point2I(monitorX, monitorY), Size2I(monitorScreenWidth, monitorScreenHeight));
     }
     //--------------------------------------------------------------------------
 
@@ -231,22 +239,15 @@ namespace Kmplete
 
         const auto [isFound, currentMonitor] = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(currentMonitor);
-        const auto monitorScreenWidth = videoMode->width;
-        const auto monitorScreenHeight = videoMode->height;
-
-        int monitorX = 0;
-        int monitorY = 0;
-        glfwGetMonitorPos(currentMonitor, &monitorX, &monitorY);
-
-        const auto monitorCenterX = monitorX + (monitorScreenWidth / 2);
-        const auto monitorCenterY = monitorY + (monitorScreenHeight / 2);
+        const auto monitorRectangle = GetMonitorRectangle(currentMonitor);
+        const auto monitorCenter = monitorRectangle.GetCenter();
 
         const auto windowedSize = GetWindowedSize();
         const NonNull<UserData*> userData = GetUserPointer(_window);
 
         glfwSetWindowMonitor(_window, nullptr,
-            monitorCenterX - windowedSize.x / 2,
-            monitorCenterY - windowedSize.y / 2,
+            monitorCenter.x - windowedSize.x / 2,
+            monitorCenter.y - windowedSize.y / 2,
             userData->windowedSize.x, userData->windowedSize.y, videoMode->refreshRate);
     }
     //--------------------------------------------------------------------------
@@ -281,18 +282,16 @@ namespace Kmplete
 
         const auto [isFound, monitor] = GetSuitableMonitor();
         const auto videoMode = glfwGetVideoMode(monitor);
-        int monitorX = 0;
-        int monitorY = 0;
-        glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+        const auto monitorRectangle = GetMonitorRectangle(monitor);
 
         if (screenMode == ScreenMode::Fullscreen)
         {
-            glfwSetWindowMonitor(_window, monitor, monitorX, monitorY, videoMode->width, videoMode->height, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, monitor, monitorRectangle.position.x, monitorRectangle.position.y, monitorRectangle.size.x, monitorRectangle.size.y, videoMode->refreshRate);
         }
         else if (screenMode == ScreenMode::WindowedFullscreen)
         {
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, monitorX, monitorY, videoMode->width, videoMode->height, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, monitorRectangle.size.x, monitorRectangle.size.y, videoMode->refreshRate);
         }
         else
         {
@@ -690,12 +689,10 @@ namespace Kmplete
 
         if (IsWindowedFullscreen())
         {
-            int monitorX = 0;
-            int monitorY = 0;
-            glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+            const auto monitorRectangle = GetMonitorRectangle(monitor);
 
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, monitorX, monitorY, _settings.size.x, _settings.size.y, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, _settings.size.x, _settings.size.y, videoMode->refreshRate);
         }
         else if (IsWindowed())
         {

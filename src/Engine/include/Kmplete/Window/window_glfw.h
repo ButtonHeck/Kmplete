@@ -83,8 +83,9 @@ namespace Kmplete
         KMP_NODISCARD static NonNull<UserData*> GetUserPointer(GLFWwindow* window);
 
     private:
-        Nullable<GLFWwindow*> CreateGLFWwindow();
-        std::pair<bool, NonNull<GLFWmonitor*>> GetSuitableMonitor() const;
+        KMP_NODISCARD Nullable<GLFWwindow*> CreateGLFWwindow();
+        KMP_NODISCARD std::pair<bool, NonNull<GLFWmonitor*>> GetSuitableMonitor() const;
+        KMP_NODISCARD Rect2I GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const;
 
         void Initialize();
         void InitializeWindowHints() const;
