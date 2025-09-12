@@ -6,28 +6,29 @@ project(MathLib LANGUAGES CXX)
 
 set(MathLib_MATH
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Math/math.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/math.cpp
 )
 source_group("Math" FILES ${MathLib_MATH})
 
-add_library(MathLib
+add_library(MathLib INTERFACE
     ${MathLib_MATH}
 )
 
-SetupCompilerOptions(MathLib)
+#TODO: uncomment after MathLib becomes non header-only and change INTERFACE to PUBLIC/PRIVATE
+#SetupCompilerOptions(MathLib)
 
 target_include_directories(MathLib
-    PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
-    PUBLIC ${glm_SOURCE_DIR}
+    INTERFACE "${CMAKE_CURRENT_LIST_DIR}/include"
+    INTERFACE "${glm_SOURCE_DIR}"
 )
 
 target_link_libraries(MathLib
-    PUBLIC BaseLib
+    INTERFACE BaseLib
 )
 
-target_compile_definitions(MathLib
-    PRIVATE KMP_EXPORTS
-)
+#TODO: uncomment after MathLib becomes non header-only and change INTERFACE to PUBLIC/PRIVATE
+#target_compile_definitions(MathLib
+#    PRIVATE KMP_EXPORTS
+#)
 
 set_target_properties(MathLib PROPERTIES
     FOLDER Kmplete/MathLib
