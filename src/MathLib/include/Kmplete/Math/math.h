@@ -7,6 +7,7 @@
 #include <glm/vec4.hpp>
 
 #include <type_traits>
+#include <algorithm>
 
 namespace Kmplete
 {
@@ -32,27 +33,28 @@ namespace Kmplete
                     std::is_same<PositionType, Point2I>, 
                     std::is_same<SizeType, Size2I>>,
                 std::conjunction<
-                    std::is_same<PositionType, Point3I>, 
-                    std::is_same<SizeType, Size3I>>
+                    std::is_same<PositionType, Point2F>, 
+                    std::is_same<SizeType, Size2F>>
              >)
-    struct RectI
+    struct Rect2
     {
-        RectI(const PositionType& position, const SizeType& size) noexcept
+        Rect2(const PositionType& position, const SizeType& size) noexcept
             : position(position)
             , size(size)
         {}
 
         KMP_NODISCARD PositionType GetCenter() const noexcept
         {
-            return position + size / 2;
+            return position + size / static_cast<decltype(size.x)>(2);
         }
 
         KMP_NODISCARD bool ContainsPoint(const PositionType& point) const noexcept
         {
-            return point.x >= position.x &&
-                   point.x <= (position.x + size.x) &&
-                   point.y >= position.y &&
-                   point.y <= (position.y + size.y);
+            const auto [minX, maxX] = std::minmax(position.x, position.x + size.x);
+            const auto [minY, maxY] = std::minmax(position.y, position.y + size.y);
+
+            return point.x >= minX && point.x <= maxX &&
+                   point.y >= minY && point.y <= maxY;
         }
 
         PositionType position;
@@ -64,30 +66,33 @@ namespace Kmplete
     template<class PositionType, class SizeType>
         requires (std::disjunction_v<
                     std::conjunction<
-                        std::is_same<PositionType, Point2F>, 
-                        std::is_same<SizeType, Size2F>>,
+                        std::is_same<PositionType, Point3I>, 
+                        std::is_same<SizeType, Size3I>>,
                     std::conjunction<
                         std::is_same<PositionType, Point3F>, 
                         std::is_same<SizeType, Size3F>>
                  >)
-    struct RectF
+    struct Rect3
     {
-        RectF(const PositionType& position, const SizeType& size) noexcept
+        Rect3(const PositionType& position, const SizeType& size) noexcept
             : position(position)
             , size(size)
         {}
 
         KMP_NODISCARD PositionType GetCenter() const noexcept
         {
-            return (position + size) / 2;
+            return position + size / static_cast<decltype(size.x)>(2);
         }
 
         KMP_NODISCARD bool ContainsPoint(const PositionType& point) const noexcept
         {
-            return point.x >= position.x &&
-                   point.x <= (position.x + size.x) &&
-                   point.y >= position.y &&
-                   point.y <= (position.y + size.y);
+            const auto [minX, maxX] = std::minmax(position.x, position.x + size.x);
+            const auto [minY, maxY] = std::minmax(position.y, position.y + size.y);
+            const auto [minZ, maxZ] = std::minmax(position.z, position.z + size.z);
+
+            return point.x >= minX && point.x <= maxX &&
+                   point.y >= minY && point.y <= maxY &&
+                   point.z >= minZ && point.z <= maxZ;
         }
 
         PositionType position;
@@ -96,9 +101,9 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    using Rect2I = RectI<Point2I, Size2I>;
-    using Rect2F = RectF<Point2F, Size2F>;
+    using Rect2I = Rect2<Point2I, Size2I>;
+    using Rect2F = Rect2<Point2F, Size2F>;
 
-    using Rect3I = RectI<Point3I, Size3I>;
-    using Rect3F = RectF<Point3F, Size3F>;
+    using Rect3I = Rect3<Point3I, Size3I>;
+    using Rect3F = Rect3<Point3F, Size3F>;
 }
