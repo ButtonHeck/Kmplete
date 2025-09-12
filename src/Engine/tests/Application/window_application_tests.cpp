@@ -1,6 +1,6 @@
 #include "Kmplete/Application/window_application.h"
 #include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Core/file_dialogs.h"
+#include "Kmplete/FileDialogs/file_dialogs.h"
 #include "Kmplete/Utils/function_utils.h"
 
 #include <catch2/catch_test_macros.hpp>

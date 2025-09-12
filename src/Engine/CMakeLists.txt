@@ -8,7 +8,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/entry_point.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/file_dialogs.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/memory_checker.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
@@ -18,7 +17,6 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/rng.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/uuid.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/file_dialogs.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/memory_checker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
@@ -114,8 +112,6 @@ SetupCompilerOptions(Kmplete)
 target_include_directories(Kmplete
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
     PUBLIC "${GLFW_SOURCE_DIR}/include"
-
-    PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
 )
 
 option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)

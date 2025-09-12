@@ -1,4 +1,4 @@
-#include "Kmplete/Core/file_dialogs.h"
+#include "Kmplete/FileDialogs/file_dialogs.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Utils/string_utils.h"
 

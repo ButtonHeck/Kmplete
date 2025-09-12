@@ -13,6 +13,7 @@ add_subdirectory(BaseLib)
 add_subdirectory(LoggerLib)
 add_subdirectory(UtilsLib)
 add_subdirectory(FilesystemLib)
+add_subdirectory(FileDialogsLib)
 add_subdirectory(JsonLib)
 add_subdirectory(MathLib)
 add_subdirectory(ProfilerLib)
@@ -26,11 +27,12 @@ if(${KMPLETE_BUILD_TESTS})
     add_dependencies(_BuildAllTests
         BaseLib_UnitTests
         FilesystemLib_UnitTests
+        FileDialogsLib_UnitTests
         JsonLib_UnitTests
         UtilsLib_UnitTests
         MathLib_UnitTests
+
         Kmplete_UnitTests
-        Kmplete_FileDialogsTests
         Kmplete_WindowApplicationTests
         Kmplete_LocaleTests
     )

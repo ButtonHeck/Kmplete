@@ -62,33 +62,6 @@ SetupUnitTestsTargetProperties(
 )
 
 
-# File Dialogs Tests
-
-set(Kmplete_FileDialogsTests_CORE
-    ${CMAKE_CURRENT_LIST_DIR}/Core/file_dialogs_tests.cpp
-)
-source_group("Core" FILES ${Kmplete_FileDialogsTests_CORE})
-
-add_executable(Kmplete_FileDialogsTests
-    ${Kmplete_FileDialogsTests_CORE}
-)
-
-
-target_include_directories(Kmplete_FileDialogsTests
-    PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
-    
-    PUBLIC "${spdlog_SOURCE_DIR}/include"
-    PUBLIC "${RapidJSON_SOURCE_DIR}/include"
-    PRIVATE "${portable_file_dialogs_SOURCE_DIR}"
-)
-
-SetupUnitTestsTargetProperties(
-    Kmplete_FileDialogsTests 
-    Kmplete/Tests
-    Catch2::Catch2WithMain Kmplete
-)
-
-
 # Window Application Tests
 
 set(Kmplete_WindowApplicationTests_WINDOW
@@ -143,7 +116,7 @@ add_custom_command(
 SetupUnitTestsTargetProperties(
     Kmplete_WindowApplicationTests 
     Kmplete/Tests
-    Catch2::Catch2WithMain Kmplete
+    Catch2::Catch2WithMain Kmplete FileDialogsLib
 )
 
 

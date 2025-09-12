@@ -1,5 +1,5 @@
 #include "Kmplete/Window/window_backend.h"
-#include "Kmplete/Core/file_dialogs.h"
+#include "Kmplete/FileDialogs/file_dialogs.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
