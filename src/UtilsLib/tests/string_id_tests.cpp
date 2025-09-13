@@ -47,28 +47,28 @@ TEST_CASE("StringID of c-string via named variable", "[utils][string_id]")
 TEST_CASE("StringID of empty String is 0", "[utils][string_id]")
 {
     const auto str = Kmplete::String("");
-    REQUIRE(Kmplete::Utils::ToStringID(str) == Kmplete::Utils::StringID(0));
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str)) == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of 0 String is 0", "[utils][string_id]")
 {
     const auto str = Kmplete::String("\0");
-    REQUIRE(Kmplete::Utils::ToStringID(str) == Kmplete::Utils::StringID(0));
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str)) == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of an String is non-zero", "[utils][string_id]")
 {
     const auto str = Kmplete::String("Test");
-    REQUIRE(Kmplete::Utils::ToStringID(str) != Kmplete::Utils::StringID(0));
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str)) != Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of different Strings are different", "[utils][string_id]")
 {
     const auto str1 = Kmplete::String("One");
     const auto str2 = Kmplete::String("Two");
-    REQUIRE(Kmplete::Utils::ToStringID(str1) != Kmplete::Utils::StringID(0));
-    REQUIRE(Kmplete::Utils::ToStringID(str2) != Kmplete::Utils::StringID(0));
-    REQUIRE(Kmplete::Utils::ToStringID(str1) != Kmplete::Utils::ToStringID(str2));
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str1)) != Kmplete::Utils::StringID(0));
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str2)) != Kmplete::Utils::StringID(0));
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str1)) != Kmplete::Utils::ToStringID(KMP_SID_PARAM(str2)));
 }
 //--------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ TEST_CASE("_sid and function of same String return same results", "[utils][strin
     using namespace Kmplete; // for _sid literal
 
     const auto str1 = String("Test");
-    REQUIRE(Kmplete::Utils::ToStringID(str1) == "Test"_sid);
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str1)) == "Test"_sid);
 }
 
 TEST_CASE("_sid and function of different String return different results", "[utils][string_id]")
@@ -131,6 +131,6 @@ TEST_CASE("_sid and function of different String return different results", "[ut
     using namespace Kmplete; // for _sid literal
 
     const auto str1 = String("Test");
-    REQUIRE(Kmplete::Utils::ToStringID(str1) != "blah"_sid);
+    REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str1)) != "blah"_sid);
 }
 //--------------------------------------------------------------------------

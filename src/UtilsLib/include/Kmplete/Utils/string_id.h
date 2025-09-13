@@ -30,11 +30,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+#if defined (__cpp_lib_constexpr_string) && __cpp_lib_constexpr_string >= 201907L
+#define KMP_SID_PARAM(str) str
+
         KMP_NODISCARD constexpr StringID ToStringID(const String& str)
         {
             return ToStringID(str.c_str());
         }
         //--------------------------------------------------------------------------
+#else
+#define KMP_SID_PARAM(str) str.c_str()
+#endif
     }
 
     KMP_NODISCARD consteval Utils::StringID operator ""_sid(const char* cstr, std::size_t)

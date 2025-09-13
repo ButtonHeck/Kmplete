@@ -123,8 +123,8 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         const auto translation = Localization::Translate(domain, source);
-        const auto domainSid = Utils::ToStringID(domain);
-        const auto sourceSid = Utils::ToStringID(source);
+        const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
+        const auto sourceSid = Utils::ToStringID(KMP_SID_PARAM(source));
         _library->Add(domainSid, sourceSid, translation);
 
         return translation;
@@ -136,9 +136,9 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         const auto translation = Localization::Translate(domain, sourceSingular, sourcePlural, count);
-        const auto domainSid = Utils::ToStringID(domain);
-        const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
-        const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
+        const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
+        const auto sourceSingularSid = Utils::ToStringID(KMP_SID_PARAM(sourceSingular));
+        const auto sourcePluralSid = Utils::ToStringID(KMP_SID_PARAM(sourcePlural));
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         _library->Add(domainSid, sourceSingularSid, sourcePluralSid, pluralityDispatcher.GetPluralityForm(count), translation);
 
@@ -151,9 +151,9 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         const auto translation = Localization::TranslateCtx(domain, source, context);
-        const auto domainSid = Utils::ToStringID(domain);
-        const auto sourceSid = Utils::ToStringID(source);
-        const auto contextSid = Utils::ToStringID(context);
+        const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
+        const auto sourceSid = Utils::ToStringID(KMP_SID_PARAM(source));
+        const auto contextSid = Utils::ToStringID(KMP_SID_PARAM(context));
         _library->Add(domainSid, sourceSid, contextSid, translation);
 
         return translation;
@@ -166,10 +166,10 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         const auto translation = Localization::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
-        const auto domainSid = Utils::ToStringID(domain);
-        const auto sourceSingularSid = Utils::ToStringID(sourceSingular);
-        const auto sourcePluralSid = Utils::ToStringID(sourcePlural);
-        const auto contextSid = Utils::ToStringID(context);
+        const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
+        const auto sourceSingularSid = Utils::ToStringID(KMP_SID_PARAM(sourceSingular));
+        const auto sourcePluralSid = Utils::ToStringID(KMP_SID_PARAM(sourcePlural));
+        const auto contextSid = Utils::ToStringID(KMP_SID_PARAM(context));
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         _library->Add(domainSid, sourceSingularSid, sourcePluralSid, pluralityDispatcher.GetPluralityForm(count), contextSid, translation);
 
