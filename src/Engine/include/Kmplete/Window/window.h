@@ -71,7 +71,7 @@ namespace Kmplete
             const String name = "";
             Point2I position = Point2I(DefaultX, DefaultY);
             Size2I size = Size2I(DefaultWidth, DefaultHeight);
-            Size2I windowedSize = Size2I(DefaultWidth, DefaultWidth);
+            Size2I windowedSize = Size2I(DefaultWidth, DefaultHeight);
             ScreenMode screenMode = ScreenMode::Windowed;
             CursorMode cursorMode = CursorMode::Default;
             bool vSync = true;
