@@ -66,6 +66,7 @@ SetupUnitTestsTargetProperties(
 
 set(Kmplete_WindowApplicationTests_WINDOW
     ${CMAKE_CURRENT_LIST_DIR}/Window/window_backend_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Window/window_tests.cpp
 )
 source_group("Window" FILES ${Kmplete_WindowApplicationTests_WINDOW})
 
