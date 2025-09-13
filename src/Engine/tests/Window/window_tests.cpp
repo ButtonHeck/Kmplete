@@ -409,26 +409,17 @@ TEST_CASE("Window decorated OFF", "[core][window_backend][window]")
         "Press Y if window is not decorated",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
-    REQUIRE(windowBackend);
+    auto [windowBackend, mainWindow, windowNameIsMain] = TestStartResult::InitializeTestData();
+    REQUIRE((windowBackend && windowNameIsMain));
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.size = {400, 400};
-    settings.windowedSize = {400, 400};
-    settings.vSync = true;
-    settings.updateContinuously = true;
-    settings.decorated = false;
+    mainWindow.SetDecorated(false);
 
-    Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
-    REQUIRE(window);
+    WindowCallbackUserSingleCondition windowCb(mainWindow);
 
-    WindowCallbackUserSingleCondition windowCb(*window);
-
-    while (!window->ShouldClose())
+    while (!mainWindow.ShouldClose())
     {
-        window->ProcessEvents();
-        window->SwapBuffers();
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
     }
 
     REQUIRE(windowCb.conditionOk);
@@ -441,28 +432,17 @@ TEST_CASE("Window SetPosition", "[core][window_backend][window]")
         "Press Y if window is at [500, 50] coordinates",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
-    REQUIRE(windowBackend);
+    auto [windowBackend, mainWindow, windowNameIsMain] = TestStartResult::InitializeTestData();
+    REQUIRE((windowBackend && windowNameIsMain));
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.size = { 400, 400 };
-    settings.windowedSize = { 400, 400 };
-    settings.vSync = true;
-    settings.updateContinuously = true;
-    settings.decorated = true;
+    WindowCallbackUserSingleCondition windowCb(mainWindow);
 
-    Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
-    REQUIRE(window);
+    mainWindow.SetPosition(500, 50);
 
-    WindowCallbackUserSingleCondition windowCb(*window);
-
-    window->SetPosition(500, 50);
-
-    while (!window->ShouldClose())
+    while (!mainWindow.ShouldClose())
     {
-        window->ProcessEvents();
-        window->SwapBuffers();
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
     }
 
     REQUIRE(windowCb.conditionOk);
@@ -475,36 +455,25 @@ TEST_CASE("Window GetPosition", "[core][window_backend][window]")
         "Move window and press Y if window position (shown as title) seems correct",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
-    REQUIRE(windowBackend);
+    auto [windowBackend, mainWindow, windowNameIsMain] = TestStartResult::InitializeTestData();
+    REQUIRE((windowBackend && windowNameIsMain));
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.size = {600, 200};
-    settings.windowedSize = {600, 200};
-    settings.vSync = true;
-    settings.updateContinuously = true;
-    settings.decorated = true;
-
-    Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
-    REQUIRE(window);
-
-    WindowCallbackUserSingleCondition windowCb(*window);
+    WindowCallbackUserSingleCondition windowCb(mainWindow);
 
     int x = 0;
     int y = 0;
 
-    while (!window->ShouldClose())
+    while (!mainWindow.ShouldClose())
     {
-        window->ProcessEvents();
-        window->SwapBuffers();
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
 
-        const auto position = window->GetPosition();
+        const auto position = mainWindow.GetPosition();
         x = position.x;
         y = position.y;
 
         const Kmplete::String title = Kmplete::String("window position = [") + std::to_string(x) + ", " + std::to_string(y) + "]";
-        window->SetTitle(title.c_str());
+        mainWindow.SetTitle(title.c_str());
     }
 
     REQUIRE(windowCb.conditionOk);
@@ -517,28 +486,17 @@ TEST_CASE("Window center at current screen", "[core][window_backend][window]")
         "Press Y if window is at the current screen's center",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
-    REQUIRE(windowBackend);
+    auto [windowBackend, mainWindow, windowNameIsMain] = TestStartResult::InitializeTestData();
+    REQUIRE((windowBackend && windowNameIsMain));
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.size = {600, 200};
-    settings.windowedSize = {600, 200};
-    settings.vSync = true;
-    settings.updateContinuously = true;
-    settings.decorated = true;
+    mainWindow.PositionAtCurrentScreenCenter();
 
-    Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
-    REQUIRE(window);
+    WindowCallbackUserSingleCondition windowCb(mainWindow);
 
-    window->PositionAtCurrentScreenCenter();
-
-    WindowCallbackUserSingleCondition windowCb(*window);
-
-    while (!window->ShouldClose())
+    while (!mainWindow.ShouldClose())
     {
-        window->ProcessEvents();
-        window->SwapBuffers();
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
     }
 
     REQUIRE(windowCb.conditionOk);
@@ -551,27 +509,17 @@ TEST_CASE("Window is alwaysOnTop", "[core][window_backend][window]")
         "Press Y if window is always on top of other windows",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
-    REQUIRE(windowBackend);
+    auto [windowBackend, mainWindow, windowNameIsMain] = TestStartResult::InitializeTestData();
+    REQUIRE((windowBackend && windowNameIsMain));
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.size = {600, 200};
-    settings.windowedSize = {600, 200};
-    settings.vSync = true;
-    settings.updateContinuously = true;
-    settings.decorated = true;
-    settings.alwaysOnTop = true;
+    mainWindow.SetAlwaysOnTop(true);
 
-    Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
-    REQUIRE(window);
+    WindowCallbackUserSingleCondition windowCb(mainWindow);
 
-    WindowCallbackUserSingleCondition windowCb(*window);
-
-    while (!window->ShouldClose())
+    while (!mainWindow.ShouldClose())
     {
-        window->ProcessEvents();
-        window->SwapBuffers();
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
     }
 
     REQUIRE(windowCb.conditionOk);
