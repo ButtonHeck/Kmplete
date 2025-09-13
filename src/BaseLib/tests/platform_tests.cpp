@@ -2,6 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("Platform compiler definition", "[core][platform][compiler]")
 {
 #if defined (KMP_COMPILER_OTHER)

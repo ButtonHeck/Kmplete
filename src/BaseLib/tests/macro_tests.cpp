@@ -5,6 +5,7 @@
 
 using namespace std::string_literals;
 
+
 TEST_CASE("Stringify macro string", "[core][macro]")
 {
     const auto strMacro = KMP_M_STRINGIFY("Hello world");

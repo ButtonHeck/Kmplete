@@ -2,6 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("Assertion exception", "[core][assertion]")
 {
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)

@@ -7,6 +7,7 @@
 #include <set>
 #include <unordered_set>
 
+
 TEST_CASE("UUID default constructor is not invalid", "[core][uuid]")
 {
     REQUIRE(Kmplete::UUID() != Kmplete::UUID::InvalidUuid);

@@ -3,6 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 {
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");

@@ -2,6 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("Math GetCenter 2D tests", "[math]")
 {
     Kmplete::Rect2I rectInt({0, 0}, {10, 10});

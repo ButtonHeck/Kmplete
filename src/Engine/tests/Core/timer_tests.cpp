@@ -7,6 +7,7 @@
 
 static constexpr auto timerTimeMs = 200;
 
+
 TEST_CASE("Timer creation nothrow", "[core][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;

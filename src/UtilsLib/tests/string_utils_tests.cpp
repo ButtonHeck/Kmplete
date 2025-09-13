@@ -8,6 +8,7 @@
     #include <cstddef>
 #endif
 
+
 TEST_CASE("Concatenate empty", "[utils][string]")
 {
     const auto result = Kmplete::Utils::Concatenate("");

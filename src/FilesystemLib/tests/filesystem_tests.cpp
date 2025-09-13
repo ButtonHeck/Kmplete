@@ -4,6 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("Filesystem Current path", "[core][filesystem]")
 {
     SECTION("Current path is not empty")

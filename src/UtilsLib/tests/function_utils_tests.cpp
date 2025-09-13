@@ -4,6 +4,7 @@
 
 #include <functional>
 
+
 TEST_CASE("GetArgsCount 0", "[utils][function]")
 {
     REQUIRE(Kmplete::Utils::GetArgsCount() == 0);

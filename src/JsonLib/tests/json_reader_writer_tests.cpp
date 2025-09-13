@@ -3,6 +3,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("Json Reader/Writer overwriting", "[json][reader][writer]")
 {
     const char* BasicJson = R"rjs(

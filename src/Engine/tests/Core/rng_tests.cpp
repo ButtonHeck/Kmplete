@@ -4,6 +4,7 @@
 
 #include <unordered_set>
 
+
 TEST_CASE("RNG uint32_t unbounded", "[core][rng]")
 {
     Kmplete::RNGUInt32 rng;

@@ -4,6 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("File dialog open single file - OPEN", "[file_dialogs][open]")
 {
     auto localizationManager = Kmplete::LocalizationManager();

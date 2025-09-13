@@ -10,6 +10,7 @@
 using namespace Kmplete; // for _sid literal and Utils
 static constexpr auto SidTrDomainTests = Utils::ToStringID(KMP_TR_DOMAIN_TESTS);
 
+
 TEST_CASE("Locale tests", "[localization][locale]")
 {
     bool ok = true;

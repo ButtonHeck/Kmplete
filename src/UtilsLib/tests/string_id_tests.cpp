@@ -2,6 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 TEST_CASE("StringID of nullptr", "[utils][string_id]")
 {
     constexpr auto nullSid = Kmplete::Utils::ToStringID(nullptr);
