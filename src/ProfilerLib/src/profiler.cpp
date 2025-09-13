@@ -215,7 +215,7 @@ namespace Kmplete
         ++profiler._currentSession->profilesCount;
         profiler._profileResults.emplace_back(_name, _start, end, std::this_thread::get_id());
 
-        if (profiler._profileResults.size() < profiler._storageSize)
+        if (profiler._profileResults.size() < static_cast<size_t>(profiler._storageSize))
         {
             return;
         }

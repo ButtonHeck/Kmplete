@@ -7,16 +7,16 @@
 
 TEST_CASE("GetArgsCount 0", "[utils][function]")
 {
-    REQUIRE(Kmplete::Utils::GetArgsCount() == 0);
+    REQUIRE(Kmplete::Utils::GetArgsCount() == size_t(0));
 }
 //--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 1", "[utils][function]")
 {
     const auto arg1 = 0;
-    REQUIRE(Kmplete::Utils::GetArgsCount(arg1) == 1);
-    REQUIRE(Kmplete::Utils::GetArgsCount(nullptr) == 1);
-    REQUIRE(Kmplete::Utils::GetArgsCount((arg1 ? arg1 : 42)) == 1);
+    REQUIRE(Kmplete::Utils::GetArgsCount(arg1) == size_t(1));
+    REQUIRE(Kmplete::Utils::GetArgsCount(nullptr) == size_t(1));
+    REQUIRE(Kmplete::Utils::GetArgsCount((arg1 ? arg1 : 42)) == size_t(1));
 }
 //--------------------------------------------------------------------------
 
@@ -24,8 +24,8 @@ TEST_CASE("GetArgsCount 2", "[utils][function]")
 {
     const auto arg1 = 0;
     const auto arg2 = "s";
-    REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2) == 2);
-    REQUIRE(Kmplete::Utils::GetArgsCount(nullptr, nullptr) == 2);
+    REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2) == size_t(2));
+    REQUIRE(Kmplete::Utils::GetArgsCount(nullptr, nullptr) == size_t(2));
 }
 //--------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ TEST_CASE("GetArgsCount 3", "[utils][function]")
     const auto arg1 = 0;
     const auto arg2 = "s";
     const auto arg3 = 'c';
-    REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3) == 3);
+    REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3) == size_t(3));
 }
 //--------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ TEST_CASE("GetArgsCount 4", "[utils][function]")
     const auto arg2 = "s";
     const auto arg3 = 'c';
     const auto arg4 = S();
-    REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3, arg4) == 4);
+    REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3, arg4) == size_t(4));
 }
 //--------------------------------------------------------------------------
 

@@ -60,7 +60,7 @@ TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer
     REQUIRE(childrenDocuments.empty());
 
     childrenDocuments = jsonDocument.GetChildren(false);
-    REQUIRE(childrenDocuments.size() == 4);
+    REQUIRE(childrenDocuments.size() == size_t(4));
 
     REQUIRE_FALSE(jsonDocument.StartGetArray(0));
     REQUIRE_FALSE(jsonDocument.StartGetArray(-1));
@@ -86,21 +86,21 @@ TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer
 
     REQUIRE_FALSE(jsonDocument.SetInt(0, -10));
     childrenDocuments = jsonDocument.GetChildren(false);
-    REQUIRE(childrenDocuments.size() == 4);
+    REQUIRE(childrenDocuments.size() == size_t(4));
 
     // Create new int
     REQUIRE(jsonDocument.SetInt("BrandNewInt", -10));
     childrenDocuments = jsonDocument.GetChildren(false);
-    REQUIRE(childrenDocuments.size() == 5);
+    REQUIRE(childrenDocuments.size() == size_t(5));
     REQUIRE(jsonDocument.GetInt("BrandNewInt") == -10);
 
     // replace BrandNewInt with an object with same name
     REQUIRE(jsonDocument.StartSetObject("BrandNewInt"));
     REQUIRE(jsonDocument.EndSetObject());
     childrenDocuments = jsonDocument.GetChildren(false);
-    REQUIRE(childrenDocuments.size() == 5);
+    REQUIRE(childrenDocuments.size() == size_t(5));
     childrenDocuments = jsonDocument.GetChildren();
-    REQUIRE(childrenDocuments.size() == 1);
+    REQUIRE(childrenDocuments.size() == size_t(1));
     REQUIRE(jsonDocument.GetInt("BrandNewInt") == 0);
 
     // replace BrandNewInt with an array
@@ -109,7 +109,7 @@ TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer
     childrenDocuments = jsonDocument.GetChildren();
     REQUIRE(childrenDocuments.empty());
     childrenDocuments = jsonDocument.GetChildren(false);
-    REQUIRE(childrenDocuments.size() == 5);
+    REQUIRE(childrenDocuments.size() == size_t(5));
 
     // check document string
     auto documentString = jsonDocument.ToString(); //pretty
@@ -166,7 +166,7 @@ TEST_CASE("Json document add children documents positive", "[json][reader][write
             REQUIRE(rootDoc.AddChildDocument(ChildStr, child1));
             REQUIRE(rootDoc.AddChildDocument("Child2", child2));
             childrenDocuments = rootDoc.GetChildren();
-            REQUIRE(childrenDocuments.size() == 2);
+            REQUIRE(childrenDocuments.size() == size_t(2));
 
             rootDocStringBeforeScopeExit = rootDoc.ToString();
         }
@@ -201,7 +201,7 @@ TEST_CASE("Json document add children - default constructed", "[json][reader][wr
     Kmplete::JsonDocument defaultCreatedChild;
     REQUIRE(rootDoc.AddChildDocument("Child", defaultCreatedChild));
     childrenDocuments = rootDoc.GetChildren();
-    REQUIRE(childrenDocuments.size() == 1);
+    REQUIRE(childrenDocuments.size() == size_t(1));
 }
 //--------------------------------------------------------------------------
 
@@ -269,7 +269,7 @@ TEST_CASE("Json document add children - overwrite existing object", "[json][read
     REQUIRE(rootDoc.EndSetObject());
 
     auto childrenDocuments = rootDoc.GetChildren();
-    REQUIRE(childrenDocuments.size() == 1);
+    REQUIRE(childrenDocuments.size() == size_t(1));
 
     const char* BasicJsonStr = R"rjs(
     {
@@ -290,7 +290,7 @@ TEST_CASE("Json document add children - overwrite existing object", "[json][read
     REQUIRE(rootDoc.AddChildDocument("Obj1", childDoc));
     const auto rootDocStr = rootDoc.ToString();
     childrenDocuments = rootDoc.GetChildren();
-    REQUIRE(childrenDocuments.size() == 1);
+    REQUIRE(childrenDocuments.size() == size_t(1));
     REQUIRE(rootDoc.StartGetObject("Obj1"));
         REQUIRE_FALSE(rootDoc.GetBool("Bool") == true);
         REQUIRE_FALSE(rootDoc.GetInt("Int") == 33);
@@ -328,7 +328,7 @@ TEST_CASE("Json document add children during filling another object", "[json][re
     REQUIRE(rootDoc.EndSetObject());
 
     auto childrenDocuments = rootDoc.GetChildren();
-    REQUIRE(childrenDocuments.size() == 2);
+    REQUIRE(childrenDocuments.size() == size_t(2));
 }
 //--------------------------------------------------------------------------
 
@@ -356,7 +356,7 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     Kmplete::JsonDocument loadedDoc(settingsFilepath);
     REQUIRE_FALSE(loadedDoc.HasError());
     auto childrenDocuments = loadedDoc.GetChildren();
-    REQUIRE(childrenDocuments.size() == 1);
+    REQUIRE(childrenDocuments.size() == size_t(1));
 
     REQUIRE(loadedDoc.StartGetObject("Obj1"));
         REQUIRE(loadedDoc.GetString("Строка") == "Строчечка");
@@ -367,7 +367,7 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
     REQUIRE(loadedDoc.StartSetObject("Obj2"));
     REQUIRE(loadedDoc.EndSetObject());
     childrenDocuments = loadedDoc.GetChildren();
-    REQUIRE(childrenDocuments.size() == 2);
+    REQUIRE(childrenDocuments.size() == size_t(2));
 
     loadedDoc.SetFilepath("");
     REQUIRE_FALSE(loadedDoc.Save());

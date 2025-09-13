@@ -6,33 +6,33 @@
 TEST_CASE("StringID of nullptr", "[utils][string_id]")
 {
     constexpr auto nullSid = Kmplete::Utils::ToStringID(nullptr);
-    REQUIRE(nullSid == 0);
+    REQUIRE(nullSid == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of empty c-string", "[utils][string_id]")
 {
     constexpr auto emptySid = Kmplete::Utils::ToStringID("");
-    REQUIRE(emptySid == 0);
+    REQUIRE(emptySid == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of 0 c-string", "[utils][string_id]")
 {
     constexpr auto sid = Kmplete::Utils::ToStringID("\0");
-    REQUIRE(sid == 0);
+    REQUIRE(sid == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of non-empty c-string", "[utils][string_id]")
 {
     constexpr auto sid = Kmplete::Utils::ToStringID("some string");
-    REQUIRE(sid != 0);
+    REQUIRE(sid != Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of different c-strings are different", "[utils][string_id]")
 {
     constexpr auto sid1 = Kmplete::Utils::ToStringID("string1");
     constexpr auto sid2 = Kmplete::Utils::ToStringID("string2");
-    REQUIRE(sid1 != 0);
-    REQUIRE(sid2 != 0);
+    REQUIRE(sid1 != Kmplete::Utils::StringID(0));
+    REQUIRE(sid2 != Kmplete::Utils::StringID(0));
     REQUIRE(sid1 != sid2);
 }
 
@@ -40,34 +40,34 @@ TEST_CASE("StringID of c-string via named variable", "[utils][string_id]")
 {
     constexpr const char* someText = "some_text";
     constexpr auto sid = Kmplete::Utils::ToStringID(someText);
-    REQUIRE(sid != 0);
+    REQUIRE(sid != Kmplete::Utils::StringID(0));
 }
 //--------------------------------------------------------------------------
 
 TEST_CASE("StringID of empty String is 0", "[utils][string_id]")
 {
     const auto str = Kmplete::String("");
-    REQUIRE(Kmplete::Utils::ToStringID(str) == 0);
+    REQUIRE(Kmplete::Utils::ToStringID(str) == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of 0 String is 0", "[utils][string_id]")
 {
     const auto str = Kmplete::String("\0");
-    REQUIRE(Kmplete::Utils::ToStringID(str) == 0);
+    REQUIRE(Kmplete::Utils::ToStringID(str) == Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of an String is non-zero", "[utils][string_id]")
 {
     const auto str = Kmplete::String("Test");
-    REQUIRE(Kmplete::Utils::ToStringID(str) != 0);
+    REQUIRE(Kmplete::Utils::ToStringID(str) != Kmplete::Utils::StringID(0));
 }
 
 TEST_CASE("StringID of different Strings are different", "[utils][string_id]")
 {
     const auto str1 = Kmplete::String("One");
     const auto str2 = Kmplete::String("Two");
-    REQUIRE(Kmplete::Utils::ToStringID(str1) != 0);
-    REQUIRE(Kmplete::Utils::ToStringID(str2) != 0);
+    REQUIRE(Kmplete::Utils::ToStringID(str1) != Kmplete::Utils::StringID(0));
+    REQUIRE(Kmplete::Utils::ToStringID(str2) != Kmplete::Utils::StringID(0));
     REQUIRE(Kmplete::Utils::ToStringID(str1) != Kmplete::Utils::ToStringID(str2));
 }
 //--------------------------------------------------------------------------
