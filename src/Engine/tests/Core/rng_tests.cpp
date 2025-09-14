@@ -7,6 +7,7 @@
 
 TEST_CASE("RNG uint32_t unbounded", "[core][rng]")
 {
+    const auto min = 0;
     Kmplete::RNGUInt32 rng;
 
     std::unordered_set<uint32_t> set;
@@ -15,7 +16,7 @@ TEST_CASE("RNG uint32_t unbounded", "[core][rng]")
     for (auto i = 0; i < iterations; i++)
     {
         const auto value = rng.Generate();
-        conditionCheck &= value >= 0;
+        conditionCheck &= value >= min;
         set.insert(value);
     }
 
