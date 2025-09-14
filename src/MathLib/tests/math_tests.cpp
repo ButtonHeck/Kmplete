@@ -89,7 +89,7 @@ TEST_CASE("Math GetCenter 3D tests", "[math]")
 
     rectFloat = Kmplete::Rect3F({ -20.0f, -20.0f, -20.0f }, { 40.0f, 40.0f, 40.0f });
     centerFloat = rectFloat.GetCenter();
-    REQUIRE((centerFloat.x == 0.0f && centerFloat.y == 0.0f, centerFloat.z == 0.0f));
+    REQUIRE((centerFloat.x == 0.0f && centerFloat.y == 0.0f && centerFloat.z == 0.0f));
 
     rectFloat = Kmplete::Rect3F({ 0.0f, 0.0f, 0.0f }, { -10.0f, -10.0f, -10.0f });
     centerFloat = rectFloat.GetCenter();
@@ -97,7 +97,7 @@ TEST_CASE("Math GetCenter 3D tests", "[math]")
 
     rectFloat = Kmplete::Rect3F({ -20.0f, 100.0f, 200.0f }, { 40.0f, -10.0f, 40.0f });
     centerFloat = rectFloat.GetCenter();
-    REQUIRE((centerFloat.x == 0.0f && centerFloat.y == 95.0f, centerFloat.z == 220.0f));
+    REQUIRE((centerFloat.x == 0.0f && centerFloat.y == 95.0f && centerFloat.z == 220.0f));
 
     rectFloat = Kmplete::Rect3F({ 11.0f, 11.0f, 11.0f }, { 5.0f, 5.0f, 5.0f });
     centerFloat = rectFloat.GetCenter();
