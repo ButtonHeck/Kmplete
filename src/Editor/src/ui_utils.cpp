@@ -1,5 +1,6 @@
 #include "ui_utils.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Base/platform.h"
 
 #include <imgui_internal.h>
 
@@ -140,7 +141,19 @@ namespace Kmplete
 
             if (ImGui::IsItemHovered(flags))
             {
+#if defined (KMP_COMPILER_MINGW) || defined (KMP_COMPILER_GCC)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-security"
                 ImGui::SetTooltip(text);
+#pragma GCC diagnostic pop
+#elif defined (KMP_COMPILER_CLANG)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wformat-security"
+                ImGui::SetTooltip(text);
+#pragma clang diagnostic pop
+#else
+                ImGui::SetTooltip(text);
+#endif
             }
         }
         //--------------------------------------------------------------------------
