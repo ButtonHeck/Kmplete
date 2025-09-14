@@ -45,7 +45,7 @@ int Main(const Kmplete::ProgramOptions& programOptions);
 #include <Windows.h>
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 {
-    set_terminate(TerminationHandler);
+    std::set_terminate(TerminationHandler);
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(lpCmdLine);
@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 #else
 int main(int argc, char** argv)
 {
-    set_terminate(TerminationHandler);
+    std::set_terminate(TerminationHandler);
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(argc, argv);
