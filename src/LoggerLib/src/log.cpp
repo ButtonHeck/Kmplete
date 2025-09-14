@@ -153,9 +153,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::string_view Log::StringLogOutput()
+    std::stringstream& Log::StringLogOutput()
     {
-        return _stringStream.view();
+        return _stringStream;
     }
     //--------------------------------------------------------------------------
 }

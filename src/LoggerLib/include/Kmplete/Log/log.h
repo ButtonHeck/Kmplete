@@ -66,7 +66,7 @@ namespace Kmplete
         KMP_LOG_API static void Initialize(const LogSettings& settings, const String& programName);
         KMP_LOG_API static void Finalize();
 
-        KMP_NODISCARD KMP_LOG_API static std::string_view StringLogOutput();
+        KMP_NODISCARD KMP_LOG_API static std::stringstream& StringLogOutput();
 
         template <typename... Args>
         static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->trace(fmt, std::forward<Args>(args)...); }
