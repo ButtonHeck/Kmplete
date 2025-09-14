@@ -76,7 +76,7 @@ TEST_CASE("_sid literal compilation check", "[utils][string_id]")
 {
     using namespace Kmplete; // for _sid literal
     const Utils::StringID sid = 0;
-    int a = 0;
+    KMP_MB_UNUSED int a = 0;
 
     // make sure _sid is constexpr (can be used in switch cases)
     switch (sid)
@@ -87,9 +87,11 @@ TEST_CASE("_sid literal compilation check", "[utils][string_id]")
 
     case ""_sid:
         a = 0;
+        break;
 
     case "very long string that contains important information"_sid:
         a = 999;
+        break;
     }
     
     SUCCEED();
