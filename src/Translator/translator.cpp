@@ -21,7 +21,7 @@ namespace Kmplete
     namespace Translator
     {
         static constexpr std::array<const char*, 2> Locales = {
-                "en_EN",
+                "en_US",
                 "ru_RU"
         };
 

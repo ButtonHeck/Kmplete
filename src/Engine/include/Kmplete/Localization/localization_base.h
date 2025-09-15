@@ -15,7 +15,7 @@ namespace Kmplete
     static constexpr auto TranslateDeferKeyword = "TranslateDefer";
     static constexpr auto TranslateCtxDeferKeyword = "TranslateCtxDefer";
 
-    static constexpr auto LocaleEnUTF8Keyword = "en_EN.UTF-8";
+    static constexpr auto LocaleEnUTF8Keyword = "en_US.UTF-8";
     static constexpr auto LocaleEnName = "English";
     static constexpr auto LocaleRuUTF8Keyword = "ru_RU.UTF-8";
     static constexpr auto LocaleRuName = "Russian";

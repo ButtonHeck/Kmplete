@@ -48,7 +48,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
     REQUIRE(currentLocale == "C");
 
 #else
-    // Set 'en_EN.UTF-8' locale
+    // Set 'en_US.UTF-8' locale
     REQUIRE_NOTHROW(ok = localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE_FALSE(ok); // already set locale
     localeC = std::setlocale(LC_ALL, NULL);
@@ -155,7 +155,7 @@ TEST_CASE("Localization manager set/get locale", "[localization][locale]")
     REQUIRE_NOTHROW(localeStr = localizationManager.GetLocale());
     REQUIRE(localeStr == LocaleEnUTF8Keyword);
 
-    // set en_EN.UTF-8 again
+    // set en_US.UTF-8 again
     REQUIRE_NOTHROW(ok = localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE_FALSE(ok);
 
@@ -197,7 +197,7 @@ TEST_CASE("Localization manager callbacks", "[localization][locale]")
     REQUIRE(testValue == 1);
     REQUIRE(anotherTestValue == 100);
 
-    // en_EN.UTF-8
+    // en_US.UTF-8
     REQUIRE_NOTHROW(localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE(testValue == 2);
     REQUIRE(anotherTestValue == 101);
@@ -262,7 +262,7 @@ TEST_CASE("Localization translator without context singular", "[localization][lo
     REQUIRE_NOTHROW(untranslatedStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Untranslated"));
     REQUIRE(untranslatedStr == "Untranslated");
 
-    // switch to en_EN
+    // switch to en_US
     REQUIRE(localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE_NOTHROW(yesStr = Localization::Translate(KMP_TR_DOMAIN_TESTS, "Yes"));
     REQUIRE(yesStr == "Yes");
@@ -310,7 +310,7 @@ TEST_CASE("Localization translator with context singular", "[localization][local
     REQUIRE_NOTHROW(untranslatedStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Untranslated", "Some context"));
     REQUIRE(untranslatedStr == "Untranslated");
 
-    // switch to en_EN
+    // switch to en_US
     REQUIRE(localizationManager.SetLocale(LocaleEnUTF8Keyword));
     REQUIRE_NOTHROW(openVerbStr = Localization::TranslateCtx(KMP_TR_DOMAIN_TESTS, "Open", "Verb"));
     REQUIRE(openVerbStr == "Open");
