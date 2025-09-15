@@ -50,8 +50,8 @@ namespace Kmplete
 
         KMP_NODISCARD bool ContainsPoint(const PositionType& point) const noexcept
         {
-            const auto [minX, maxX] = std::minmax(position.x, position.x + size.x);
-            const auto [minY, maxY] = std::minmax(position.y, position.y + size.y);
+            const auto [minX, maxX] = std::minmax({position.x, position.x + size.x});
+            const auto [minY, maxY] = std::minmax({position.y, position.y + size.y});
 
             return point.x >= minX && point.x <= maxX &&
                    point.y >= minY && point.y <= maxY;
@@ -86,9 +86,9 @@ namespace Kmplete
 
         KMP_NODISCARD bool ContainsPoint(const PositionType& point) const noexcept
         {
-            const auto [minX, maxX] = std::minmax(position.x, position.x + size.x);
-            const auto [minY, maxY] = std::minmax(position.y, position.y + size.y);
-            const auto [minZ, maxZ] = std::minmax(position.z, position.z + size.z);
+            const auto [minX, maxX] = std::minmax({position.x, position.x + size.x});
+            const auto [minY, maxY] = std::minmax({position.y, position.y + size.y});
+            const auto [minZ, maxZ] = std::minmax({position.z, position.z + size.z});
 
             return point.x >= minX && point.x <= maxX &&
                    point.y >= minY && point.y <= maxY &&
