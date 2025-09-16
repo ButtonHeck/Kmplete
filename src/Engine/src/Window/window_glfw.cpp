@@ -238,7 +238,6 @@ namespace Kmplete
         }
 
         const auto [isFound, currentMonitor] = GetSuitableMonitor();
-        const auto videoMode = glfwGetVideoMode(currentMonitor);
         const auto monitorRectangle = GetMonitorRectangle(currentMonitor);
         const auto monitorCenter = monitorRectangle.GetCenter();
 
@@ -248,7 +247,7 @@ namespace Kmplete
         glfwSetWindowMonitor(_window, nullptr,
             monitorCenter.x - windowedSize.x / 2,
             monitorCenter.y - windowedSize.y / 2,
-            userData->windowedSize.x, userData->windowedSize.y, videoMode->refreshRate);
+            userData->windowedSize.x, userData->windowedSize.y, GLFW_DONT_CARE); 
     }
     //--------------------------------------------------------------------------
 
@@ -291,12 +290,14 @@ namespace Kmplete
         else if (screenMode == ScreenMode::WindowedFullscreen)
         {
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, monitorRectangle.size.x, monitorRectangle.size.y, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, monitorRectangle.size.x, monitorRectangle.size.y, GLFW_DONT_CARE);
         }
         else
         {
+            glfwHideWindow(_window);
             PositionAtCurrentScreenCenter();
             SetDecorated(true);
+            glfwShowWindow(_window);
         }
     }
     //--------------------------------------------------------------------------
@@ -685,18 +686,17 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         const auto [isFound, monitor] = GetSuitableMonitor();
-        const auto videoMode = glfwGetVideoMode(monitor);
 
         if (IsWindowedFullscreen())
         {
             const auto monitorRectangle = GetMonitorRectangle(monitor);
 
             SetDecorated(false);
-            glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, _settings.size.x, _settings.size.y, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, _settings.size.x, _settings.size.y, GLFW_DONT_CARE);
         }
         else if (IsWindowed())
         {
-            glfwSetWindowMonitor(_window, nullptr, _settings.position.x, _settings.position.y, _settings.windowedSize.x, _settings.windowedSize.y, videoMode->refreshRate);
+            glfwSetWindowMonitor(_window, nullptr, _settings.position.x, _settings.position.y, _settings.windowedSize.x, _settings.windowedSize.y, GLFW_DONT_CARE);
 
             if (isFound)
             {
