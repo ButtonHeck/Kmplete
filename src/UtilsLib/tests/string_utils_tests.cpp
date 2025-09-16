@@ -589,7 +589,7 @@ TEST_CASE("RegexReplace negative", "[utils][string]")
     REQUIRE(str4 == "TEST test");
 
     auto str5 = Kmplete::String("TEST   test");
-    REQUIRE_NOTHROW(str5 = Kmplete::Utils::RegexReplace(str5, " ++", "_"));
+    REQUIRE_NOTHROW(str5 = Kmplete::Utils::RegexReplace(str5, "\\ \\++", "_"));
     REQUIRE(str5 == "TEST   test");
 }
 //--------------------------------------------------------------------------

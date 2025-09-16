@@ -26,7 +26,7 @@ namespace Kmplete
 
             try
             {
-                const std::regex regexObject(regexp);
+                const std::regex regexObject(regexp, std::regex_constants::ECMAScript);
                 return std::regex_replace(source, regexObject, replacement);
             }
             catch (KMP_MB_UNUSED const std::regex_error& re)
