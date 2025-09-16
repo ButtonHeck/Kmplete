@@ -116,7 +116,7 @@ TEST_CASE("Filesystem directories functions", "[core][filesystem]")
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto from = path / "existing_test_directory";
         REQUIRE(Kmplete::Filesystem::CreateDirectories(from));
-        const auto to = "DD:\\con";
+        const auto to = "\0DD:\\con";
         REQUIRE_FALSE(Kmplete::Filesystem::CopyDirectories(from, to));
     }
 
@@ -192,7 +192,7 @@ TEST_CASE("Filesystem files functions", "[core][filesystem]")
     {
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto from = path / "test_file_to_copy1.txt";
-        const auto to = "DD:\\con\\blah.txt";
+        const auto to = "\0DD:\\con\\blah.txt";
         REQUIRE(Kmplete::Filesystem::CreateFile(from));
         REQUIRE_FALSE(Kmplete::Filesystem::CopyFile(from, to));
     }
