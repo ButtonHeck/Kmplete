@@ -693,6 +693,7 @@ namespace Kmplete
 
             SetDecorated(false);
             glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, _settings.size.x, _settings.size.y, GLFW_DONT_CARE);
+            SetPosition(monitorRectangle.position.x, monitorRectangle.position.y);
         }
         else if (IsWindowed())
         {
