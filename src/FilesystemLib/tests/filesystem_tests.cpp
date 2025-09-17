@@ -1,4 +1,5 @@
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Core/uuid.h"
 #include "Kmplete/Base/platform.h"
 
@@ -166,6 +167,15 @@ TEST_CASE("Filesystem files functions", "[core][filesystem]")
     {
         auto path = Kmplete::Filesystem::GetCurrentFilepath();
         path /= "test_file.txt";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
+        REQUIRE(Kmplete::Filesystem::RemoveFile(path));
+    }
+
+    SECTION("CreateFile/RemoveFile with cyrillic characters")
+    {
+        auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto cyrillic = Kmplete::Utils::NarrowToFilepath("Привет_мир");
+        REQUIRE_NOTHROW(path.append(cyrillic));
         REQUIRE(Kmplete::Filesystem::CreateFile(path));
         REQUIRE(Kmplete::Filesystem::RemoveFile(path));
     }

@@ -140,5 +140,15 @@ namespace Kmplete
 #endif
         }
         //--------------------------------------------------------------------------
+
+        Filepath::string_type NarrowToFilepath(const String& str)
+        {
+#if defined (KMP_PLATFORM_WINDOWS)
+            return NarrowToWide(str);
+#else
+            return str;
+#endif
+        }
+        //--------------------------------------------------------------------------
     }
 }

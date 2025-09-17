@@ -22,7 +22,7 @@ namespace Kmplete
             }
 
             const auto file = StringToFilepathConverterFn(files.front());
-            return Filepath(Utils::NarrowToWide(file));
+            return Filepath(Utils::NarrowToFilepath(file));
         }
         //--------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ namespace Kmplete
             for (const auto& file : files)
             {
                 const auto fileToEmplace = StringToFilepathConverterFn(file);
-                filepaths.emplace_back(Utils::NarrowToWide(fileToEmplace));
+                filepaths.emplace_back(Utils::NarrowToFilepath(fileToEmplace));
             }
 
             return filepaths;
@@ -59,7 +59,7 @@ namespace Kmplete
             }
 
             directory = StringToFilepathConverterFn(directory);
-            return Filepath(Utils::NarrowToWide(directory));
+            return Filepath(Utils::NarrowToFilepath(directory));
         }
         //--------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ namespace Kmplete
 
             auto dialogResult = saver.result();
             dialogResult = StringToFilepathConverterFn(dialogResult);
-            return Filepath(Utils::NarrowToWide(dialogResult));
+            return Filepath(Utils::NarrowToFilepath(dialogResult));
         }
         //--------------------------------------------------------------------------
 

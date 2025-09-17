@@ -404,13 +404,7 @@ TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][
     auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath();
     const auto settingsSubPath = Kmplete::Utils::Utf8ToNarrow("Тест");
 
-#if defined (KMP_PLATFORM_WINDOWS)
-    const auto settingsSubPathWide = Kmplete::Utils::NarrowToWide(settingsSubPath);
-    settingsFilepath.append(settingsSubPathWide);
-#else
-    settingsFilepath.append(settingsSubPath);
-#endif
-
+    settingsFilepath.append(Kmplete::Utils::NarrowToFilepath(settingsSubPath));
     settingsFilepath.append("json_document_test_temp_unescaped.json");
 
     Kmplete::JsonDocument rootDoc;
