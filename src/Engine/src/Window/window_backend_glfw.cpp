@@ -399,21 +399,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         settings.StartSaveObject(MainWindowStr);
-
-        settings.SaveString(Window::NameStr, _mainWindowSettings->name);
-        settings.SaveInt(Window::XStr, _mainWindowSettings->position.x);
-        settings.SaveInt(Window::YStr, _mainWindowSettings->position.y);
-        settings.SaveInt(Window::WidthStr, _mainWindowSettings->size.x);
-        settings.SaveInt(Window::HeightStr, _mainWindowSettings->size.y);
-        settings.SaveInt(Window::WindowedWidthStr, _mainWindowSettings->windowedSize.x);
-        settings.SaveInt(Window::WindowedHeightStr, _mainWindowSettings->windowedSize.y);
-        settings.SaveString(Window::ScreenModeStr, Window::ScreenModeToString(_mainWindowSettings->screenMode));
-        settings.SaveBool(Window::VSyncStr, _mainWindowSettings->vSync);
-        settings.SaveBool(Window::UpdateContinuouslyStr, _mainWindowSettings->updateContinuously);
-        settings.SaveBool(Window::ResizableStr, _mainWindowSettings->resizable);
-        settings.SaveBool(Window::DecoratedStr, _mainWindowSettings->decorated);
-        settings.SaveBool(Window::AlwaysOnTopStr, _mainWindowSettings->alwaysOnTop);
-
+        _mainWindowSettings->SaveSettings(settings);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
@@ -430,22 +416,9 @@ namespace Kmplete
             const auto& windowSettings = *windowEntry.second;
 
             settings.StartSaveObject(index);
-
-            settings.SaveString(Window::NameStr, windowSettings.name);
-            settings.SaveInt(Window::XStr, windowSettings.position.x);
-            settings.SaveInt(Window::YStr, windowSettings.position.y);
-            settings.SaveInt(Window::WidthStr, windowSettings.size.x);
-            settings.SaveInt(Window::HeightStr, windowSettings.size.y);
-            settings.SaveInt(Window::WindowedWidthStr, windowSettings.windowedSize.x);
-            settings.SaveInt(Window::WindowedHeightStr, windowSettings.windowedSize.y);
-            settings.SaveString(Window::ScreenModeStr, Window::ScreenModeToString(windowSettings.screenMode));
-            settings.SaveBool(Window::VSyncStr, windowSettings.vSync);
-            settings.SaveBool(Window::UpdateContinuouslyStr, windowSettings.updateContinuously);
-            settings.SaveBool(Window::ResizableStr, windowSettings.resizable);
-            settings.SaveBool(Window::DecoratedStr, windowSettings.decorated);
-            settings.SaveBool(Window::AlwaysOnTopStr, windowSettings.alwaysOnTop);
-
+            windowSettings.SaveSettings(settings);
             settings.EndSaveObject();
+
             ++index;
         }
 
@@ -478,18 +451,7 @@ namespace Kmplete
         }
         else
         {
-            _mainWindowSettings->position.x = settings.GetInt(Window::XStr, Window::DefaultX);
-            _mainWindowSettings->position.y = settings.GetInt(Window::YStr, Window::DefaultY);
-            _mainWindowSettings->size.x = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
-            _mainWindowSettings->size.y = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
-            _mainWindowSettings->windowedSize.x = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
-            _mainWindowSettings->windowedSize.y = settings.GetInt(Window::WindowedHeightStr, Window::DefaultHeight);
-            _mainWindowSettings->screenMode = Window::StringToScreenMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
-            _mainWindowSettings->vSync = settings.GetBool(Window::VSyncStr, true);
-            _mainWindowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
-            _mainWindowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
-            _mainWindowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
-            _mainWindowSettings->alwaysOnTop = settings.GetBool(Window::AlwaysOnTopStr, false);
+            _mainWindowSettings->LoadSettings(settings);
         }
 
         settings.EndLoadObject();
@@ -513,18 +475,7 @@ namespace Kmplete
             else
             {
                 auto windowSettings = CreateUPtr<Window::WindowSettings>(windowName);
-                windowSettings->position.x = settings.GetInt(Window::XStr, Window::DefaultX);
-                windowSettings->position.y = settings.GetInt(Window::YStr, Window::DefaultY);
-                windowSettings->size.x = settings.GetInt(Window::WidthStr, Window::DefaultWidth);
-                windowSettings->size.y = settings.GetInt(Window::HeightStr, Window::DefaultHeight);
-                windowSettings->windowedSize.x = settings.GetInt(Window::WindowedWidthStr, Window::DefaultWidth);
-                windowSettings->windowedSize.y = settings.GetInt(Window::WindowedHeightStr, Window::DefaultHeight);
-                windowSettings->screenMode = Window::StringToScreenMode(settings.GetString(Window::ScreenModeStr, Window::WindowedModeStr));
-                windowSettings->vSync = settings.GetBool(Window::VSyncStr, true);
-                windowSettings->updateContinuously = settings.GetBool(Window::UpdateContinuouslyStr, true);
-                windowSettings->resizable = settings.GetBool(Window::ResizableStr, true);
-                windowSettings->decorated = settings.GetBool(Window::DecoratedStr, true);
-                windowSettings->alwaysOnTop = settings.GetBool(Window::AlwaysOnTopStr, false);
+                windowSettings->LoadSettings(settings);
                 _auxWindowsSettings.emplace(windowName, std::move(windowSettings));
             }
 

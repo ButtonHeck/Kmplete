@@ -1,5 +1,6 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Core/settings.h"
 #include "Kmplete/Log/log.h"
 
 namespace Kmplete
@@ -111,6 +112,41 @@ namespace Kmplete
     bool Window::WindowSettings::IsWindowedFullscreen() const noexcept
     {
         return screenMode == Window::ScreenMode::WindowedFullscreen;
+    }
+    //--------------------------------------------------------------------------
+
+    void Window::WindowSettings::SaveSettings(Settings& settings) const
+    {
+        settings.SaveString(NameStr, name);
+        settings.SaveInt(XStr, position.x);
+        settings.SaveInt(YStr, position.y);
+        settings.SaveInt(WidthStr, size.x);
+        settings.SaveInt(HeightStr, size.y);
+        settings.SaveInt(WindowedWidthStr, windowedSize.x);
+        settings.SaveInt(WindowedHeightStr, windowedSize.y);
+        settings.SaveString(ScreenModeStr, ScreenModeToString(screenMode));
+        settings.SaveBool(VSyncStr, vSync);
+        settings.SaveBool(UpdateContinuouslyStr, updateContinuously);
+        settings.SaveBool(ResizableStr, resizable);
+        settings.SaveBool(DecoratedStr, decorated);
+        settings.SaveBool(AlwaysOnTopStr, alwaysOnTop);
+    }
+    //--------------------------------------------------------------------------
+
+    void Window::WindowSettings::LoadSettings(Settings& settings)
+    {
+        position.x = settings.GetInt(XStr, DefaultX);
+        position.y = settings.GetInt(YStr, DefaultY);
+        size.x = settings.GetInt(WidthStr, DefaultWidth);
+        size.y = settings.GetInt(HeightStr, DefaultHeight);
+        windowedSize.x = settings.GetInt(WindowedWidthStr, DefaultWidth);
+        windowedSize.y = settings.GetInt(WindowedHeightStr, DefaultHeight);
+        screenMode = StringToScreenMode(settings.GetString(ScreenModeStr, WindowedModeStr));
+        vSync = settings.GetBool(VSyncStr, true);
+        updateContinuously = settings.GetBool(UpdateContinuouslyStr, true);
+        resizable = settings.GetBool(ResizableStr, true);
+        decorated = settings.GetBool(DecoratedStr, true);
+        alwaysOnTop = settings.GetBool(AlwaysOnTopStr, false);
     }
     //--------------------------------------------------------------------------
 }
