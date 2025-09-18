@@ -10,7 +10,7 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/memory_checker.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/assertion.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings_document.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/settings_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/system_metrics_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/timer.h
@@ -19,7 +19,7 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/program_options.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/memory_checker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/assertion.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings_document.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/system_metrics_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/timer.cpp

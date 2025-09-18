@@ -9,7 +9,7 @@
 
 namespace Kmplete
 {
-    class Settings;
+    class SettingsDocument;
     class WindowCursor;
 
     class WindowBackend
@@ -53,8 +53,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Point2I& hotspot = Point2I()) = 0;
         KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> GetCursor(const String& name) const = 0;
 
-        KMP_API virtual void SaveSettings(Settings& settings) const = 0;
-        KMP_API virtual void LoadSettings(Settings& settings) = 0;
+        KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
+        KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
     };
     //--------------------------------------------------------------------------
 }

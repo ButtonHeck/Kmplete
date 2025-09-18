@@ -14,7 +14,7 @@
 namespace Kmplete
 {
     class WindowCursor;
-    class Settings;
+    class SettingsDocument;
 
     class Window
     {
@@ -86,8 +86,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool IsWindowed() const noexcept;
             KMP_NODISCARD KMP_API bool IsWindowedFullscreen() const noexcept;
 
-            KMP_API void SaveSettings(Settings& settings) const;
-            KMP_API void LoadSettings(Settings& settings);
+            KMP_API void SaveSettings(SettingsDocument& settings) const;
+            KMP_API void LoadSettings(SettingsDocument& settings);
         };
 
     public:

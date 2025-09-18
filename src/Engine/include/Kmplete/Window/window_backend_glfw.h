@@ -36,8 +36,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Point2I& hotspot = Point2I()) override;
         KMP_NODISCARD KMP_API OptionalRef<const WindowCursor> GetCursor(const String& name) const override;
 
-        KMP_API void SaveSettings(Settings& settings) const override;
-        KMP_API void LoadSettings(Settings& settings) override;
+        KMP_API void SaveSettings(SettingsDocument& settings) const override;
+        KMP_API void LoadSettings(SettingsDocument& settings) override;
 
     private:
         void Initialize();
@@ -46,11 +46,11 @@ namespace Kmplete
 
         void Finalize();
 
-        void SaveMainWindowSettings(Settings& settings) const;
-        void SaveAuxWindowsSettings(Settings& settings) const;
+        void SaveMainWindowSettings(SettingsDocument& settings) const;
+        void SaveAuxWindowsSettings(SettingsDocument& settings) const;
 
-        void LoadMainWindowSettings(Settings& settings);
-        void LoadAuxWindowsSettings(Settings& settings);
+        void LoadMainWindowSettings(SettingsDocument& settings);
+        void LoadAuxWindowsSettings(SettingsDocument& settings);
 
     private:
         UPtr<Window::WindowSettings> _mainWindowSettings;

@@ -4,7 +4,7 @@
 #include "editor_ui_compositor.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
@@ -45,8 +45,8 @@ namespace Kmplete
         KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event);
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
-        void SaveSettings(Settings& settings) const;
-        void LoadSettings(Settings& settings);
+        void SaveSettings(SettingsDocument& settings) const;
+        void LoadSettings(SettingsDocument& settings);
 
     private:
         void Initialize();

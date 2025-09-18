@@ -4,7 +4,7 @@
 #include <catch2/catch_test_macros.hpp>
 
 
-TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
+TEST_CASE("SettingsManager basic test", "[core][settings_document][manager]")
 {
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsFilepath);
@@ -34,7 +34,7 @@ TEST_CASE("SettingsManager basic test", "[core][settings][manager]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("SettingsManager read/write and back", "[core][settings][manager]")
+TEST_CASE("SettingsManager read/write and back", "[core][settings_document][manager]")
 {
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsFilepath);

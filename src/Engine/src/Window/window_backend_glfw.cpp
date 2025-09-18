@@ -1,7 +1,7 @@
 #include "Kmplete/Window/window_backend_glfw.h"
 #include "Kmplete/Window/window_glfw.h"
 #include "Kmplete/Window/window_cursor_glfw.h"
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -381,7 +381,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveSettings(Settings& settings) const
+    void WindowBackendGlfw::SaveSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -394,7 +394,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveMainWindowSettings(Settings& settings) const
+    void WindowBackendGlfw::SaveMainWindowSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -404,7 +404,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveAuxWindowsSettings(Settings& settings) const
+    void WindowBackendGlfw::SaveAuxWindowsSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -426,7 +426,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadSettings(Settings& settings)
+    void WindowBackendGlfw::LoadSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -439,7 +439,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadMainWindowSettings(Settings& settings)
+    void WindowBackendGlfw::LoadMainWindowSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -458,7 +458,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadAuxWindowsSettings(Settings& settings)
+    void WindowBackendGlfw::LoadAuxWindowsSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 

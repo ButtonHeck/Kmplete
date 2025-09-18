@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.20)
 
 set(Kmplete_UnitTests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/uuid_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Core/settings_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Core/settings_document_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_manager_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/assertion_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/rng_tests.cpp

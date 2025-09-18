@@ -5,7 +5,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -24,8 +24,8 @@ namespace Kmplete
         KMP_API explicit SettingsManager(const Filepath& filepath);
         ~SettingsManager() = default;
 
-        KMP_NODISCARD KMP_API OptionalRef<Settings> PutSettings(const String& name);
-        KMP_NODISCARD KMP_API OptionalRef<Settings> GetSettings(const String& name) const;
+        KMP_NODISCARD KMP_API OptionalRef<SettingsDocument> PutSettings(const String& name);
+        KMP_NODISCARD KMP_API OptionalRef<SettingsDocument> GetSettings(const String& name) const;
 
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;
@@ -35,7 +35,7 @@ namespace Kmplete
 
     private:
         Filepath _filepath;
-        std::unordered_map<String, UPtr<Settings>> _namedSettings;
+        std::unordered_map<String, UPtr<SettingsDocument>> _namedSettings;
     };
     //--------------------------------------------------------------------------
 }

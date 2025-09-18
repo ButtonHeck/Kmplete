@@ -1,11 +1,11 @@
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 
 #include <catch2/catch_test_macros.hpp>
 
 
-TEST_CASE("Settings minimal saving", "[core][settings]")
+TEST_CASE("SettingsDocument minimal saving", "[core][settings_document]")
 {
-    Kmplete::Settings settings("TestSettings");
+    Kmplete::SettingsDocument settings("TestSettings");
 
     REQUIRE(settings.GetName() == "TestSettings");
     REQUIRE_FALSE(settings.EndLoadObject());
@@ -15,7 +15,7 @@ TEST_CASE("Settings minimal saving", "[core][settings]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Settings normal saving", "[core][settings]")
+TEST_CASE("SettingsDocument normal saving", "[core][settings_document]")
 {
     /* Reference
     {
@@ -38,7 +38,7 @@ TEST_CASE("Settings normal saving", "[core][settings]")
     }
     */
 
-    Kmplete::Settings settings("TestSettings");
+    Kmplete::SettingsDocument settings("TestSettings");
 
     REQUIRE(settings.StartSaveObject("Group1"));
         REQUIRE(settings.SaveInt("Prop1", 11));
@@ -79,7 +79,7 @@ TEST_CASE("Settings normal saving", "[core][settings]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Settings normal loading", "[core][settings]")
+TEST_CASE("SettingsDocument normal loading", "[core][settings_document]")
 {
     const char* BasicJson = R"rjs(
     {
@@ -112,7 +112,7 @@ TEST_CASE("Settings normal loading", "[core][settings]")
     const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
     REQUIRE(jsonDocument);
 
-    Kmplete::Settings settings("TestSettings", jsonDocument);
+    Kmplete::SettingsDocument settings("TestSettings", jsonDocument);
     REQUIRE(settings.GetName() == "TestSettings");
 
     REQUIRE_FALSE(settings.StartLoadObject("Obj"));
@@ -174,7 +174,7 @@ TEST_CASE("Settings normal loading", "[core][settings]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Settings loading malformed json", "[core][settings]")
+TEST_CASE("SettingsDocument loading malformed json", "[core][settings_document]")
 {
     const char* MalformedJsonStr = R"rjs(
     {
@@ -191,7 +191,7 @@ TEST_CASE("Settings loading malformed json", "[core][settings]")
     const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
     REQUIRE(jsonDocument);
 
-    Kmplete::Settings settings("SettingsWithError", jsonDocument);
+    Kmplete::SettingsDocument settings("SettingsWithError", jsonDocument);
 
     REQUIRE_FALSE(settings.GetInt("Hello") == 321);
     REQUIRE_FALSE(settings.GetBool("Var") == true);
@@ -199,7 +199,7 @@ TEST_CASE("Settings loading malformed json", "[core][settings]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Settings loading document with null value", "[core][settings]")
+TEST_CASE("SettingsDocument loading document with null value", "[core][settings_document]")
 {
     const char* BasicJsonStr = R"rjs(
     {
@@ -217,14 +217,14 @@ TEST_CASE("Settings loading document with null value", "[core][settings]")
     const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
     REQUIRE(jsonDocument);
 
-    Kmplete::Settings settings("SettingsWithNull", jsonDocument);
+    Kmplete::SettingsDocument settings("SettingsWithNull", jsonDocument);
 
     REQUIRE(settings.GetInt("Hello", 99) == 321);
     REQUIRE(settings.GetInt("Ptr", 99) == 99);
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Settings loading duplicate values", "[core][settings]")
+TEST_CASE("SettingsDocument loading duplicate values", "[core][settings_document]")
 {
     const char* BasicJsonStr = R"rjs(
     {
@@ -242,7 +242,7 @@ TEST_CASE("Settings loading duplicate values", "[core][settings]")
     const auto jsonDocument = Kmplete::CreatePtr<Kmplete::JsonDocument>(std::move(document));
     REQUIRE(jsonDocument);
 
-    Kmplete::Settings settings("SettingsWithDups", jsonDocument);
+    Kmplete::SettingsDocument settings("SettingsWithDups", jsonDocument);
 
     REQUIRE(settings.GetInt("Hello") == 321);
 }

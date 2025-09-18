@@ -1,6 +1,6 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
 
 namespace Kmplete
@@ -115,7 +115,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Window::WindowSettings::SaveSettings(Settings& settings) const
+    void Window::WindowSettings::SaveSettings(SettingsDocument& settings) const
     {
         settings.SaveString(NameStr, name);
         settings.SaveInt(XStr, position.x);
@@ -133,7 +133,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Window::WindowSettings::LoadSettings(Settings& settings)
+    void Window::WindowSettings::LoadSettings(SettingsDocument& settings)
     {
         position.x = settings.GetInt(XStr, DefaultX);
         position.y = settings.GetInt(YStr, DefaultY);

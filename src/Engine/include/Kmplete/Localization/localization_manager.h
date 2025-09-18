@@ -14,7 +14,7 @@
 
 namespace Kmplete
 {
-    class Settings;
+    class SettingsDocument;
 
     class LocalizationManager
     {
@@ -42,8 +42,8 @@ namespace Kmplete
 
         KMP_API void AddLocaleChangedCallback(const LocaleChangeCallback& callback);
 
-        void SaveSettings(Settings& settings) const;
-        void LoadSettings(Settings& settings);
+        void SaveSettings(SettingsDocument& settings) const;
+        void LoadSettings(SettingsDocument& settings);
 
         KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source);
         KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count);

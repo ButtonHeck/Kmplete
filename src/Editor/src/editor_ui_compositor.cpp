@@ -6,7 +6,7 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Core/timer.h"
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
@@ -302,7 +302,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::SaveSettings(Settings& settings) const
+    void EditorUICompositor::SaveSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -312,7 +312,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::LoadSettings(Settings& settings)
+    void EditorUICompositor::LoadSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 

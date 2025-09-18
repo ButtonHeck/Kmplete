@@ -1,7 +1,7 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Localization/localization_translator.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
@@ -97,7 +97,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::SaveSettings(Settings& settings) const
+    void LocalizationManager::SaveSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -107,7 +107,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::LoadSettings(Settings& settings)
+    void LocalizationManager::LoadSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 

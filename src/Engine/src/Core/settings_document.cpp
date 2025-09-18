@@ -1,9 +1,9 @@
-#include "Kmplete/Core/settings.h"
+#include "Kmplete/Core/settings_document.h"
 
 namespace Kmplete
 {
-    Settings::Settings(const String& name, Ptr<JsonDocument> document)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Settings::Settings(const String&, Ptr<JsonDocument>)")
+    SettingsDocument::SettingsDocument(const String& name, Ptr<JsonDocument> document)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsDocument::SettingsDocument(const String&, Ptr<JsonDocument>)")
           _name(name)
         , _document(document)
     {
@@ -11,8 +11,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Settings::Settings(const String& name)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Settings::Settings(const String&)")
+    SettingsDocument::SettingsDocument(const String& name)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsDocument::SettingsDocument(const String&)")
           _name(name)
         , _document(new JsonDocument())
     {
@@ -20,253 +20,253 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const String& Settings::GetName() const noexcept
+    const String& SettingsDocument::GetName() const noexcept
     {
         return _name;
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveObject(const char* objectName)
+    bool SettingsDocument::StartSaveObject(const char* objectName)
     {
         return _document->StartSetObject(objectName);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveObject(int index)
+    bool SettingsDocument::StartSaveObject(int index)
     {
         return _document->StartSetObject(index);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::EndSaveObject()
+    bool SettingsDocument::EndSaveObject()
     {
         return _document->EndSetObject();
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(const char* arrayName, bool overwrite /*= true*/)
+    bool SettingsDocument::StartSaveArray(const char* arrayName, bool overwrite /*= true*/)
     {
         return _document->StartSetArray(arrayName, overwrite);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartSaveArray(int index, bool overwrite /*= true*/)
+    bool SettingsDocument::StartSaveArray(int index, bool overwrite /*= true*/)
     {
         return _document->StartSetArray(index, overwrite);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::EndSaveArray()
+    bool SettingsDocument::EndSaveArray()
     {
         return _document->EndSetArray();
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveBool(int index, bool value)
+    bool SettingsDocument::SaveBool(int index, bool value)
     {
         return _document->SetBool(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveBool(const char* name, bool value)
+    bool SettingsDocument::SaveBool(const char* name, bool value)
     {
         return _document->SetBool(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt(int index, int value)
+    bool SettingsDocument::SaveInt(int index, int value)
     {
         return _document->SetInt(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt(const char* name, int value)
+    bool SettingsDocument::SaveInt(const char* name, int value)
     {
         return _document->SetInt(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt(int index, unsigned int value)
+    bool SettingsDocument::SaveUInt(int index, unsigned int value)
     {
         return _document->SetUInt(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt(const char* name, unsigned int value)
+    bool SettingsDocument::SaveUInt(const char* name, unsigned int value)
     {
         return _document->SetUInt(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt64(int index, int64_t value)
+    bool SettingsDocument::SaveInt64(int index, int64_t value)
     {
         return _document->SetInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveInt64(const char* name, int64_t value)
+    bool SettingsDocument::SaveInt64(const char* name, int64_t value)
     {
         return _document->SetInt64(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt64(int index, uint64_t value)
+    bool SettingsDocument::SaveUInt64(int index, uint64_t value)
     {
         return _document->SetUInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveUInt64(const char* name, uint64_t value)
+    bool SettingsDocument::SaveUInt64(const char* name, uint64_t value)
     {
         return _document->SetUInt64(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveDouble(int index, double value)
+    bool SettingsDocument::SaveDouble(int index, double value)
     {
         return _document->SetDouble(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveDouble(const char* name, double value)
+    bool SettingsDocument::SaveDouble(const char* name, double value)
     {
         return _document->SetDouble(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveString(int index, const String& value)
+    bool SettingsDocument::SaveString(int index, const String& value)
     {
         return _document->SetString(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::SaveString(const char* name, const String& value)
+    bool SettingsDocument::SaveString(const char* name, const String& value)
     {
         return _document->SetString(name, value);
     }
     //--------------------------------------------------------------------------
 
-    const JsonDocument& Settings::GetDocument() const
+    const JsonDocument& SettingsDocument::GetDocument() const
     {
         return *_document.get();
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartLoadObject(const char* objectName)
+    bool SettingsDocument::StartLoadObject(const char* objectName)
     {
         return _document->StartGetObject(objectName);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::StartLoadObject(int index)
+    bool SettingsDocument::StartLoadObject(int index)
     {
         return _document->StartGetObject(index);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::EndLoadObject()
+    bool SettingsDocument::EndLoadObject()
     {
         return _document->EndGetObject();
     }
     //--------------------------------------------------------------------------
 
-    int Settings::StartLoadArray(const char* arrayName)
+    int SettingsDocument::StartLoadArray(const char* arrayName)
     {
         return _document->StartGetArray(arrayName);
     }
     //--------------------------------------------------------------------------
 
-    int Settings::StartLoadArray(int index)
+    int SettingsDocument::StartLoadArray(int index)
     {
         return _document->StartGetArray(index);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::EndLoadArray()
+    bool SettingsDocument::EndLoadArray()
     {
         return _document->EndGetArray();
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::GetBool(int index, bool defaultValue /*= false*/)
+    bool SettingsDocument::GetBool(int index, bool defaultValue /*= false*/)
     {
         return _document->GetBool(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    bool Settings::GetBool(const char* name, bool defaultValue /*= false*/)
+    bool SettingsDocument::GetBool(const char* name, bool defaultValue /*= false*/)
     {
         return _document->GetBool(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int Settings::GetInt(int index, int defaultValue /*= 0*/)
+    int SettingsDocument::GetInt(int index, int defaultValue /*= 0*/)
     {
         return _document->GetInt(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int Settings::GetInt(const char* name, int defaultValue /*= 0*/)
+    int SettingsDocument::GetInt(const char* name, int defaultValue /*= 0*/)
     {
         return _document->GetInt(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    unsigned int Settings::GetUInt(int index, unsigned int defaultValue /*= 0*/)
+    unsigned int SettingsDocument::GetUInt(int index, unsigned int defaultValue /*= 0*/)
     {
         return _document->GetUInt(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    unsigned int Settings::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
+    unsigned int SettingsDocument::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
     {
         return _document->GetUInt(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t Settings::GetInt64(int index, int64_t defaultValue /*= 0*/)
+    int64_t SettingsDocument::GetInt64(int index, int64_t defaultValue /*= 0*/)
     {
         return _document->GetInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t Settings::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
+    int64_t SettingsDocument::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
     {
         return _document->GetInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t Settings::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
+    uint64_t SettingsDocument::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
     {
         return _document->GetUInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t Settings::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
+    uint64_t SettingsDocument::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
     {
         return _document->GetUInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    double Settings::GetDouble(int index, double defaultValue /*= 0.0*/)
+    double SettingsDocument::GetDouble(int index, double defaultValue /*= 0.0*/)
     {
         return _document->GetDouble(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    double Settings::GetDouble(const char* name, double defaultValue /*= 0.0*/)
+    double SettingsDocument::GetDouble(const char* name, double defaultValue /*= 0.0*/)
     {
         return _document->GetDouble(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    String Settings::GetString(int index, const String& defaultValue /*= ""*/)
+    String SettingsDocument::GetString(int index, const String& defaultValue /*= ""*/)
     {
         return _document->GetString(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    String Settings::GetString(const char* name, const String& defaultValue /*= ""*/)
+    String SettingsDocument::GetString(const char* name, const String& defaultValue /*= ""*/)
     {
         return _document->GetString(name, defaultValue);
     }

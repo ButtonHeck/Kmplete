@@ -11,7 +11,7 @@ namespace Kmplete
     class LocalizationManager;
     class SystemMetricsManager;
     class Timer;
-    class Settings;
+    class SettingsDocument;
     class GraphicsBackend;
 
     class EditorUICompositor
@@ -29,8 +29,8 @@ namespace Kmplete
         KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
-        void SaveSettings(Settings& settings) const;
-        void LoadSettings(Settings& settings);
+        void SaveSettings(SettingsDocument& settings) const;
+        void LoadSettings(SettingsDocument& settings);
 
     private:
         void ComposeDefaultLayout();

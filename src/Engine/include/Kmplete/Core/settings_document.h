@@ -8,16 +8,16 @@
 
 namespace Kmplete
 {
-    class Settings
+    class SettingsDocument
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
-        KMP_DISABLE_COPY_MOVE(Settings)
+        KMP_DISABLE_COPY_MOVE(SettingsDocument)
 
-        KMP_API Settings(const String& name, Ptr<JsonDocument> document);
-        KMP_API explicit Settings(const String& name);
-        ~Settings() = default;
+        KMP_API SettingsDocument(const String& name, Ptr<JsonDocument> document);
+        KMP_API explicit SettingsDocument(const String& name);
+        ~SettingsDocument() = default;
 
         KMP_NODISCARD KMP_API const String& GetName() const noexcept;
 

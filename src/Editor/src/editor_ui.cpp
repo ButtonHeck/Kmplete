@@ -327,7 +327,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::SaveSettings(Settings& settings) const
+    void EditorUI::SaveSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -338,7 +338,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::LoadSettings(Settings& settings)
+    void EditorUI::LoadSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 
