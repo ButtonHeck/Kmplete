@@ -24,8 +24,8 @@ namespace Kmplete
         KMP_API explicit SettingsManager(const Filepath& filepath);
         ~SettingsManager() = default;
 
-        KMP_NODISCARD KMP_API OptionalRef<SettingsDocument> PutSettings(const String& name);
-        KMP_NODISCARD KMP_API OptionalRef<SettingsDocument> GetSettings(const String& name) const;
+        KMP_NODISCARD KMP_API OptionalRef<SettingsDocument> PutSettingsDocument(const String& name);
+        KMP_NODISCARD KMP_API OptionalRef<SettingsDocument> GetSettingsDocument(const String& name) const;
 
         KMP_API bool LoadSettings();
         KMP_API bool SaveSettings() const;
@@ -35,7 +35,7 @@ namespace Kmplete
 
     private:
         Filepath _filepath;
-        std::unordered_map<String, UPtr<SettingsDocument>> _namedSettings;
+        std::unordered_map<String, UPtr<SettingsDocument>> _namedSettingsDocuments;
     };
     //--------------------------------------------------------------------------
 }

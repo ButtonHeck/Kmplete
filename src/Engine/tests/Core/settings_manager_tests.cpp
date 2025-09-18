@@ -12,19 +12,19 @@ TEST_CASE("SettingsManager basic test", "[core][settings_document][manager]")
     REQUIRE(!settingsManager.GetFilepath().empty());
     REQUIRE(settingsManager.LoadSettings());
 
-    auto settings = settingsManager.GetSettings("NonExisting");
+    auto settings = settingsManager.GetSettingsDocument("NonExisting");
     REQUIRE_FALSE(settings);
 
-    settings = settingsManager.GetSettings("ObjA");
+    settings = settingsManager.GetSettingsDocument("ObjA");
     REQUIRE(settings);
     REQUIRE(settings->get().GetInt("PropA") == 12);
 
-    settings = settingsManager.GetSettings("ObjB");
+    settings = settingsManager.GetSettingsDocument("ObjB");
     REQUIRE(settings);
     REQUIRE(settings->get().GetInt("PropA") == 0);
     REQUIRE(settings->get().GetBool("PropB") == true);
 
-    settings = settingsManager.GetSettings("ObjC");
+    settings = settingsManager.GetSettingsDocument("ObjC");
     REQUIRE(settings);
     REQUIRE(settings->get().GetString("PropA") == "hello");
     REQUIRE(settings->get().GetDouble("PropB") == -44.55);
@@ -42,7 +42,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings_document][mana
     REQUIRE(!settingsManager.GetFilepath().empty());
     REQUIRE(settingsManager.LoadSettings());
 
-    auto settings = settingsManager.GetSettings("ObjA");
+    auto settings = settingsManager.GetSettingsDocument("ObjA");
     REQUIRE(settings);
     REQUIRE(settings->get().SaveInt("PropA", 999));
 
@@ -55,11 +55,11 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings_document][mana
     REQUIRE(!swapSettingsManager.GetFilepath().empty());
     REQUIRE(swapSettingsManager.LoadSettings());
 
-    settings = swapSettingsManager.GetSettings("ObjA");
+    settings = swapSettingsManager.GetSettingsDocument("ObjA");
     REQUIRE(settings);
     REQUIRE(settings->get().GetInt("PropA") == 999);
 
-    settings = swapSettingsManager.GetSettings("ObjB");
+    settings = swapSettingsManager.GetSettingsDocument("ObjB");
     REQUIRE(settings); // didn't change ObjB but expect it to be in swapSettings json file
 }
 //--------------------------------------------------------------------------

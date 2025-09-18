@@ -93,7 +93,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        auto settings = _settingsManager->PutSettings(SettingsEntryName);
+        auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
         {
             KMP_LOG_WARN("failed to create settings entry for saving");
@@ -109,7 +109,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto settings = _settingsManager->GetSettings(SettingsEntryName);
+        const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)
         {
             KMP_LOG_WARN("failed to get setting entry for loading");

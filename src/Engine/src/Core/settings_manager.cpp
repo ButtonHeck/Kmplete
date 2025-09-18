@@ -13,27 +13,27 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    OptionalRef<SettingsDocument> SettingsManager::PutSettings(const String& name)
+    OptionalRef<SettingsDocument> SettingsManager::PutSettingsDocument(const String& name)
     {
         KMP_PROFILE_FUNCTION();
 
-        if (_namedSettings.contains(name))
+        if (_namedSettingsDocuments.contains(name))
         {
-            _namedSettings.erase(name);
+            _namedSettingsDocuments.erase(name);
         }
 
-        _namedSettings.emplace(name, CreateUPtr<SettingsDocument>(name));
-        return GetSettings(name);
+        _namedSettingsDocuments.emplace(name, CreateUPtr<SettingsDocument>(name));
+        return GetSettingsDocument(name);
     }
     //--------------------------------------------------------------------------
 
-    OptionalRef<SettingsDocument> SettingsManager::GetSettings(const String& name) const
+    OptionalRef<SettingsDocument> SettingsManager::GetSettingsDocument(const String& name) const
     {
         KMP_PROFILE_FUNCTION();
 
-        if (_namedSettings.contains(name))
+        if (_namedSettingsDocuments.contains(name))
         {
-            return std::ref(*_namedSettings.at(name).get());
+            return std::ref(*_namedSettingsDocuments.at(name).get());
         }
 
         return std::nullopt;
@@ -54,12 +54,12 @@ namespace Kmplete
         const auto documentChildren = document.GetChildren();
         for (const auto& [name, childDocument] : documentChildren)
         {
-            if (_namedSettings.contains(name))
+            if (_namedSettingsDocuments.contains(name))
             {
-                _namedSettings.erase(name);
+                _namedSettingsDocuments.erase(name);
             }
 
-            _namedSettings.emplace(name, CreateUPtr<SettingsDocument>(name, childDocument));
+            _namedSettingsDocuments.emplace(name, CreateUPtr<SettingsDocument>(name, childDocument));
         }
 
         return true;
@@ -72,7 +72,7 @@ namespace Kmplete
 
         JsonDocument summaryDocument;
 
-        for (const auto& [settingsEntryName, settingsEntry] : _namedSettings)
+        for (const auto& [settingsEntryName, settingsEntry] : _namedSettingsDocuments)
         {
             summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
         }
