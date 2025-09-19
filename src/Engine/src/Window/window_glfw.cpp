@@ -19,6 +19,7 @@ namespace Kmplete
         , size(settings.size)
         , windowedSize(settings.windowedSize)
         , dpiScale(settings.dpiScale)
+        , iconified(false)
     {}
     //--------------------------------------------------------------------------
 
@@ -175,6 +176,13 @@ namespace Kmplete
 
         const NonNull<UserData*> userData = GetUserPointer(_window);
         return Size2I(userData->windowedSize.x, userData->windowedSize.y);
+    }
+    //--------------------------------------------------------------------------
+
+    bool WindowGlfw::IsIconified() const
+    {
+        const NonNull<UserData*> userData = GetUserPointer(_window);
+        return userData->iconified;
     }
     //--------------------------------------------------------------------------
 
@@ -536,6 +544,7 @@ namespace Kmplete
 
         glfwSetWindowIconifyCallback(_window, [](GLFWwindow* window, int iconified) {
             const NonNull<UserData*> userData = GetUserPointer(window);
+            userData->iconified = (iconified == GLFW_TRUE);
             if (userData->eventCallback)
             {
                 WindowIconifyEvent event(iconified);

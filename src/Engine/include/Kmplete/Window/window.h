@@ -100,6 +100,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API virtual Size2I GetSize() const = 0;
         KMP_NODISCARD KMP_API virtual Size2I GetWindowedSize() const = 0;
+        KMP_NODISCARD KMP_API virtual bool IsIconified() const = 0;
 
         KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
 

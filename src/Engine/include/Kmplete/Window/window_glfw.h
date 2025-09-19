@@ -25,6 +25,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API Size2I GetSize() const override;
         KMP_NODISCARD KMP_API Size2I GetWindowedSize() const override;
+        KMP_NODISCARD KMP_API bool IsIconified() const override;
 
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
 
@@ -78,6 +79,7 @@ namespace Kmplete
             Size2I& windowedSize;
             float& dpiScale;
             EventCallbackFn eventCallback;
+            bool iconified;
         };
 
         KMP_NODISCARD static NonNull<UserData*> GetUserPointer(GLFWwindow* window);
