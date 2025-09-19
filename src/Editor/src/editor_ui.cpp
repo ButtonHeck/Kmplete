@@ -116,6 +116,11 @@ namespace Kmplete
             _systemMetricsManager.Update(SystemMetricsManager::SystemMetricsUpdateMode::MemoryAndCPU);
         }
 
+        if (_mainWindow.IsIconified())
+        {
+            return;
+        }
+
         NewFrame();
         {
             BeginApplicationArea();
