@@ -32,6 +32,7 @@ namespace Kmplete
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
         : WindowApplication(applicationParameters)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const ApplicationParameters&)")
+        , _mainWindow(_windowBackend->GetMainWindow())
         , _ui(nullptr)
     {
         Initialize();
@@ -52,15 +53,14 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        auto& mainWindow = _windowBackend->GetMainWindow();
-        mainWindow.SetTitle(_applicationName.c_str());
-        mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
+        _mainWindow.SetTitle(_applicationName.c_str());
+        _mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _ui.reset(new EditorUI(mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
+        _ui.reset(new EditorUI(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
 
         LoadSettingsInternal();
     }
@@ -76,14 +76,12 @@ namespace Kmplete
 
     void EditorApplication::Run()
     {
-        auto& mainWindow = _windowBackend->GetMainWindow();
-
         KMP_LOG_DEBUG("main loop started...");
-        while (!mainWindow.ShouldClose())
+        while (!_mainWindow.ShouldClose())
         {
-            mainWindow.ProcessEvents();
+            _mainWindow.ProcessEvents();
             _ui->LoopIteration();
-            mainWindow.SwapBuffers();
+            _mainWindow.SwapBuffers();
         }
 
         KMP_LOG_DEBUG("main loop finished");

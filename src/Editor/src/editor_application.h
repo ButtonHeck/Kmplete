@@ -40,6 +40,7 @@ namespace Kmplete
         void LoadSettingsInternal();
 
     private:
+        Window& _mainWindow;
         UPtr<EditorUI> _ui;
     };
     //--------------------------------------------------------------------------
