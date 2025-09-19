@@ -26,19 +26,8 @@ namespace Kmplete
         EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
         ~EditorUI();
 
-        void LoopIteration();
-
-        void NewFrame();
-        void BeginApplicationArea() const;
-        void BeginMainWorkingArea() const;
-        void ComposeMainArea();
-        void EndMainWorkingArea() const;
-        void BeginStatusBarArea() const;
-        void ComposeStatusBar();
-        void EndStatusBarArea() const;
-        void EndApplicationArea() const;
+        void Update();
         void Render();
-        void EndFrame() const;
 
         KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
         KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
@@ -54,6 +43,17 @@ namespace Kmplete
         void AddIconsFont(float dpiScale) const;
         void Stylize(float dpiScale) const;
         void Finalize() const;
+
+        void NewFrame();
+        void BeginApplicationArea() const;
+        void BeginMainWorkingArea() const;
+        void ComposeMainArea();
+        void EndMainWorkingArea() const;
+        void BeginStatusBarArea() const;
+        void ComposeStatusBar();
+        void EndStatusBarArea() const;
+        void EndApplicationArea() const;
+        void EndFrame() const;
 
     private:
         SystemMetricsManager& _systemMetricsManager;

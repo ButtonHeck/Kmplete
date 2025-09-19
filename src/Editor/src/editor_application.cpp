@@ -80,7 +80,13 @@ namespace Kmplete
         while (!_mainWindow.ShouldClose())
         {
             _mainWindow.ProcessEvents();
-            _ui->LoopIteration();
+
+            _ui->Update();
+            if (!_mainWindow.IsIconified())
+            {
+                _ui->Render();
+            }
+
             _mainWindow.SwapBuffers();
         }
 

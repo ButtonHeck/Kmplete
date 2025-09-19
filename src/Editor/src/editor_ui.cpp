@@ -106,7 +106,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::LoopIteration()
+    void EditorUI::Update()
     {
         KMP_PROFILE_FUNCTION();
 
@@ -115,11 +115,12 @@ namespace Kmplete
             _metricsTimer.Mark();
             _systemMetricsManager.Update(SystemMetricsManager::SystemMetricsUpdateMode::MemoryAndCPU);
         }
+    }
+    //--------------------------------------------------------------------------
 
-        if (_mainWindow.IsIconified())
-        {
-            return;
-        }
+    void EditorUI::Render()
+    {
+        KMP_PROFILE_FUNCTION();
 
         NewFrame();
         {
@@ -143,8 +144,76 @@ namespace Kmplete
             }
             EndApplicationArea();
         }
-        Render();
+
+        ImGui::Render();
+        _uiImpl->Render();
         EndFrame();
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorUI::OnWindowCloseEvent(WindowCloseEvent& event)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        return _compositor->OnWindowCloseEvent(event);
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorUI::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        Render();
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorUI::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        _uiImpl.reset();
+        _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
+
+        auto& io = ImGui::GetIO();
+        io.Fonts->Clear();
+        const auto scale = event.GetScale();
+        AddDefaultFont(scale);
+        AddIconsFont(scale);
+        io.Fonts->Build();
+        Stylize(scale);
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorUI::OnKeyPressEvent(KeyPressEvent& event)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        return _compositor->OnKeyPressEvent(event);
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::SaveSettings(SettingsDocument& settings) const
+    {
+        KMP_PROFILE_FUNCTION();
+
+        settings.StartSaveObject(SettingsEntryName);
+        settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
+        _compositor->SaveSettings(settings);
+        settings.EndSaveObject();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::LoadSettings(SettingsDocument& settings)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        settings.StartLoadObject(SettingsEntryName);
+        _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
+        _compositor->LoadSettings(settings);
+        settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
 
@@ -271,86 +340,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Render()
-    {
-        KMP_PROFILE_FUNCTION();
-
-        ImGui::Render();
-        _uiImpl->Render();
-    }
-    //--------------------------------------------------------------------------
-
     void EditorUI::EndFrame() const
     {
         KMP_PROFILE_FUNCTION();
 
         ImGui::EndFrame();
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorUI::OnWindowCloseEvent(WindowCloseEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        return _compositor->OnWindowCloseEvent(event);
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorUI::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        LoopIteration();
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorUI::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        _uiImpl.reset();
-        _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
-
-        auto& io = ImGui::GetIO();
-        io.Fonts->Clear();
-        const auto scale = event.GetScale();
-        AddDefaultFont(scale);
-        AddIconsFont(scale);
-        io.Fonts->Build();
-        Stylize(scale);
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorUI::OnKeyPressEvent(KeyPressEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        return _compositor->OnKeyPressEvent(event);
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorUI::SaveSettings(SettingsDocument& settings) const
-    {
-        KMP_PROFILE_FUNCTION();
-
-        settings.StartSaveObject(SettingsEntryName);
-        settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
-        _compositor->SaveSettings(settings);
-        settings.EndSaveObject();
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorUI::LoadSettings(SettingsDocument& settings)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        settings.StartLoadObject(SettingsEntryName);
-        _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
-        _compositor->LoadSettings(settings);
-        settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
 }
