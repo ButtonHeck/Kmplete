@@ -150,6 +150,7 @@ namespace Kmplete
         if (ImGui::BeginMenu(_localizationManager.Translation(SidTrDomainEditor, "View"_sid).c_str()))
         {
             ComposeMenuViewFullscreen();
+            ComposeMenuViewAlwaysOnTop();
             ImGui::EndMenu();
         }
     }
@@ -174,6 +175,19 @@ namespace Kmplete
         if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), Shortcuts::Fullscreen.text, &isWindowedFullscreen))
         {
             _mainWindow.SetScreenMode(isWindowedFullscreen ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUICompositor::ComposeMenuViewAlwaysOnTop()
+    {
+        KMP_PROFILE_FUNCTION();
+
+        const auto isWindowed = _mainWindow.IsWindowed();
+        auto isAlwaysOnTop = _mainWindow.IsAlwaysOnTop();
+        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Always on top"_sid).c_str(), Shortcuts::AlwaysOnTop.text, &isAlwaysOnTop, isWindowed))
+        {
+            _mainWindow.SetAlwaysOnTop(isAlwaysOnTop);
         }
     }
     //--------------------------------------------------------------------------
@@ -209,6 +223,14 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         _mainWindow.SetScreenMode(!_mainWindow.IsWindowedFullscreen() ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUICompositor::SwitchAlwaysOnTop()
+    {
+        KMP_PROFILE_FUNCTION();
+
+        _mainWindow.SetAlwaysOnTop(!_mainWindow.IsAlwaysOnTop());
     }
     //--------------------------------------------------------------------------
 
@@ -297,6 +319,10 @@ namespace Kmplete
         {
             SwitchFullscreen();
         }
+        else if (Shortcuts::AlwaysOnTop.Accept(mods, keyCode))
+        {
+            SwitchAlwaysOnTop();
+        }
 
         return true;
     }
@@ -333,6 +359,7 @@ namespace Kmplete
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Metrics update period (ms)");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Show fractional");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Change language");
+        _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "Always on top");
     }
     //--------------------------------------------------------------------------
 }

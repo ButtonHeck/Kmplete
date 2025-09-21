@@ -41,11 +41,13 @@ namespace Kmplete
         void ComposeMenuView();
         void ComposeMenuFileQuit();
         void ComposeMenuViewFullscreen();
+        void ComposeMenuViewAlwaysOnTop();
 
         void ComposePopups();
         void PopupQuit();
 
         void SwitchFullscreen();
+        void SwitchAlwaysOnTop();
 
         void FillDictionary();
 
