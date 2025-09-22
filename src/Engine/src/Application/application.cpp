@@ -13,6 +13,7 @@ namespace Kmplete
     Application::Application(const ApplicationParameters& applicationParameters)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Application::Application(const ApplicationParameters&)")
           _applicationName(applicationParameters.applicationName)
+        , _running(false)
         , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
@@ -34,6 +35,18 @@ namespace Kmplete
     const String& Application::GetApplicationName() const noexcept
     {
         return _applicationName;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Application::ConfirmExit()
+    {
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    void Application::AddFrameListener(ApplicationFrameListener& frameListener)
+    {
+        _frameListeners.push_back(std::ref(frameListener));
     }
     //--------------------------------------------------------------------------
 
@@ -115,6 +128,8 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         SaveSettingsInternal();
+
+        _frameListeners.clear();
 
         _settingsManager.reset();
         _localizationManager.reset();

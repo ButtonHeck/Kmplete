@@ -2,6 +2,7 @@
 
 #include "editor_ui_impl.h"
 #include "editor_ui_compositor.h"
+#include "Kmplete/Application/application_frame_listener.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Core/settings_document.h"
@@ -16,7 +17,7 @@ namespace Kmplete
     class SystemMetricsManager;
     class GraphicsBackend;
 
-    class EditorUI
+    class EditorUI : public ApplicationFrameListener
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
@@ -26,13 +27,10 @@ namespace Kmplete
         EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
         ~EditorUI();
 
-        void Update();
-        void Render();
+        void Update(float frameTimestep, bool applicationIsIconified) override;
+        void Render() override;
 
-        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
-        KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
-        KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event);
-        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
+        void OnEvent(Event& event) override;
 
         void SaveSettings(SettingsDocument& settings) const;
         void LoadSettings(SettingsDocument& settings);
@@ -54,6 +52,11 @@ namespace Kmplete
         void EndStatusBarArea() const;
         void EndApplicationArea() const;
         void EndFrame() const;
+
+        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
+        KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
+        KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event);
+        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
     private:
         SystemMetricsManager& _systemMetricsManager;

@@ -3,6 +3,8 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/optional.h"
+#include "Kmplete/Application/application_frame_listener.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Core/program_options.h"
@@ -37,6 +39,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const String& GetApplicationName() const noexcept;
 
         KMP_API virtual void Run() = 0;
+        KMP_NODISCARD KMP_API virtual bool ConfirmExit();
+        KMP_API virtual void AddFrameListener(ApplicationFrameListener& frameListener);
 
         KMP_API virtual void SaveSettings(const Filepath& filepath = Filepath()) const;
         KMP_API virtual void LoadSettings(const Filepath& filepath = Filepath());
@@ -58,6 +62,7 @@ namespace Kmplete
 
     protected:
         const String _applicationName;
+        bool _running;
 
         UPtr<SystemMetricsManager> _systemMetricsManager;
         UPtr<LocalizationManager> _localizationManager;
@@ -66,6 +71,8 @@ namespace Kmplete
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         Log::LogSettings _logSettings;
 #endif
+
+        Vector<Ref<ApplicationFrameListener>> _frameListeners;
     };
     //--------------------------------------------------------------------------
 

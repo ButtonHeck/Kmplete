@@ -19,19 +19,8 @@ namespace Kmplete
         explicit EditorApplication(const ApplicationParameters& applicationParameters);
         virtual ~EditorApplication();
 
-        void Run() override;
-
         void SaveSettings(const Filepath& filepath = Filepath()) const override;
         void LoadSettings(const Filepath& filepath = Filepath()) override;
-
-    protected:
-        void OnEvent(Event& event) override;
-
-        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event) override;
-        KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event) override;
-        KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event) override;
-
-        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event) override;
 
     private:
         void Initialize();

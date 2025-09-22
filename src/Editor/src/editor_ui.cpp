@@ -3,6 +3,7 @@
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Utils/function_utils.h"
 
 #include <imgui.h>
 #include <forkawesome-webfont.h>
@@ -13,8 +14,9 @@ namespace Kmplete
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
     EditorUI::EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUI::EditorUI(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
-          _systemMetricsManager(systemMetricsManager)
+        : ApplicationFrameListener("EditorUI")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorUI::EditorUI(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
+        , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _uiImpl(nullptr)
@@ -106,7 +108,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Update()
+    void EditorUI::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -148,6 +150,20 @@ namespace Kmplete
         ImGui::Render();
         _uiImpl->Render();
         EndFrame();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorUI::OnEvent(Event& event)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        EventDispatcher dispatcher(event);
+
+        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorUI::OnWindowCloseEvent));
+        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorUI::OnWindowFramebufferRefreshEvent));
+        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorUI::OnWindowContentScaleEvent));
+
+        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorUI::OnKeyPressEvent));
     }
     //--------------------------------------------------------------------------
 

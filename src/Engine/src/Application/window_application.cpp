@@ -2,6 +2,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Utils/function_utils.h"
 
 #include <stdexcept>
 
@@ -37,6 +38,53 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowApplication::Run()
+    {
+        KMP_LOG_INFO_FN("'{}' main loop started...", _applicationName);
+
+        _running = true;
+
+        auto& mainWindow = _windowBackend->GetMainWindow();
+
+        while (_running)
+        {
+            mainWindow.ProcessEvents();
+
+            if (mainWindow.ShouldClose())
+            {
+                if (ConfirmExit())
+                {
+                    _running = false;
+                    break;
+                }
+                else
+                {
+                    mainWindow.SetShouldClose(false);
+                }
+            }
+
+            const auto mainWindowIsIconified = mainWindow.IsIconified();
+
+            for (auto& frameListener : _frameListeners)
+            {
+                frameListener.get().Update(0.0f, mainWindowIsIconified);
+            }
+
+            if (!mainWindowIsIconified)
+            {
+                for (auto& frameListener : _frameListeners)
+                {
+                    frameListener.get().Render();
+                }
+            }
+
+            mainWindow.SwapBuffers();
+        }
+
+        KMP_LOG_INFO_FN("'{}' main loop finished", _applicationName);
+    }
+    //--------------------------------------------------------------------------
+
     void WindowApplication::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
     {
         KMP_PROFILE_FUNCTION();
@@ -52,6 +100,20 @@ namespace Kmplete
 
         Application::LoadSettings(filepath);
         LoadSettingsInternal();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::OnEvent(Event& event)
+    {
+        for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)
+        {
+            if (event.handled)
+            {
+                break;
+            }
+
+            (*iter).get().OnEvent(event);
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -75,6 +137,8 @@ namespace Kmplete
             KMP_LOG_CRITICAL("error texture loading failed");
             throw std::runtime_error("WindowApplication: error texture loading failed");
         }
+
+        mainWindow.SetEventCallback(KMP_BIND(WindowApplication::OnEvent));
     }
     //--------------------------------------------------------------------------
 

@@ -21,10 +21,14 @@ namespace Kmplete
         KMP_API explicit WindowApplication(const ApplicationParameters& applicationParameters);
         KMP_API virtual ~WindowApplication();
 
+        KMP_API void Run() override;
+
         KMP_API void SaveSettings(const Filepath& filepath = Filepath()) const override;
         KMP_API void LoadSettings(const Filepath& filepath = Filepath()) override;
 
     protected:
+        KMP_API void OnEvent(Event& event) override;
+
         KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { return true; }
         KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&) { return true; }
         KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent&) { return true; }

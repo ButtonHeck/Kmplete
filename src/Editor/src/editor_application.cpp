@@ -2,7 +2,6 @@
 #include "Kmplete/Core/entry_point.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Utils/function_utils.h"
 
 namespace Kmplete
 {
@@ -54,7 +53,6 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         _mainWindow.SetTitle(_applicationName.c_str());
-        _mainWindow.SetEventCallback(KMP_BIND(EditorApplication::OnEvent));
 
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
@@ -63,6 +61,8 @@ namespace Kmplete
         _ui.reset(new EditorUI(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
 
         LoadSettingsInternal();
+
+        AddFrameListener(*_ui.get());
     }
     //--------------------------------------------------------------------------
 
@@ -71,26 +71,6 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         SaveSettingsInternal();
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorApplication::Run()
-    {
-        KMP_LOG_DEBUG("main loop started...");
-        while (!_mainWindow.ShouldClose())
-        {
-            _mainWindow.ProcessEvents();
-
-            _ui->Update();
-            if (!_mainWindow.IsIconified())
-            {
-                _ui->Render();
-            }
-
-            _mainWindow.SwapBuffers();
-        }
-
-        KMP_LOG_DEBUG("main loop finished");
     }
     //--------------------------------------------------------------------------
 
@@ -109,52 +89,6 @@ namespace Kmplete
 
         WindowApplication::LoadSettings(filepath);
         LoadSettingsInternal();
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorApplication::OnEvent(Event& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        EventDispatcher dispatcher(event);
-
-        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorApplication::OnWindowCloseEvent));
-        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorApplication::OnWindowFramebufferRefreshEvent));
-        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorApplication::OnWindowContentScaleEvent));
-
-        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorApplication::OnKeyPressEvent));
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorApplication::OnWindowCloseEvent(WindowCloseEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        return _ui->OnWindowCloseEvent(event);
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorApplication::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        return _ui->OnWindowFramebufferRefreshEvent(event);
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorApplication::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        return _ui->OnWindowContentScaleEvent(event);
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorApplication::OnKeyPressEvent(KeyPressEvent& event)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        return _ui->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 
