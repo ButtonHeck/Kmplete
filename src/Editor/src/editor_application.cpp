@@ -32,7 +32,7 @@ namespace Kmplete
         : WindowApplication(applicationParameters)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const ApplicationParameters&)")
         , _mainWindow(_windowBackend->GetMainWindow())
-        , _ui(nullptr)
+        , _uiFrameListener(nullptr)
     {
         Initialize();
 
@@ -58,11 +58,11 @@ namespace Kmplete
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _ui.reset(new EditorUI(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
+        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
 
         LoadSettingsInternal();
 
-        AddFrameListener(_ui.get());
+        AddFrameListener(_uiFrameListener.get());
     }
     //--------------------------------------------------------------------------
 
@@ -103,7 +103,7 @@ namespace Kmplete
             return;
         }
 
-        _ui->SaveSettings(*settings);
+        _uiFrameListener->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ namespace Kmplete
             return;
         }
 
-        _ui->LoadSettings(*settings);
+        _uiFrameListener->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

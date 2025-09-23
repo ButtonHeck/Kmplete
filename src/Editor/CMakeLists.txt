@@ -7,8 +7,8 @@ project(Editor LANGUAGES CXX)
 set(Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.h
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/editor_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/editor_frame_listener.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_compositor.h
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_compositor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl.h

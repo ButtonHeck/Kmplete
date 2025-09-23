@@ -1,4 +1,4 @@
-#include "editor_ui.h"
+#include "editor_frame_listener.h"
 #include "ui_utils.h"
 #include "ui_identifiers.h"
 #include "Kmplete/Core/system_metrics_manager.h"
@@ -10,17 +10,17 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "EditorUI";
+    constexpr static auto SettingsEntryName = "EditorFrameListener";
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
-    EditorUI::EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
-        : ApplicationFrameListener("EditorUI")
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorUI::EditorUI(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
+    EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
+        : ApplicationFrameListener("EditorFrameListener")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorFrameListener::EditorFrameListener(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
         , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _uiImpl(nullptr)
-        , _compositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, localizationManager, systemMetricsManager))
+        , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
         Initialize();
@@ -29,7 +29,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    EditorUI::~EditorUI()
+    EditorFrameListener::~EditorFrameListener()
     {
         KMP_PROFILE_FUNCTION();
 
@@ -38,7 +38,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Initialize()
+    void EditorFrameListener::Initialize()
     {
         KMP_PROFILE_FUNCTION();
 
@@ -58,7 +58,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddDefaultFont(float dpiScale) const
+    void EditorFrameListener::AddDefaultFont(float dpiScale) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -69,7 +69,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::AddIconsFont(float dpiScale) const
+    void EditorFrameListener::AddIconsFont(float dpiScale) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -85,7 +85,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Stylize(float dpiScale) const
+    void EditorFrameListener::Stylize(float dpiScale) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -100,7 +100,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Finalize() const
+    void EditorFrameListener::Finalize() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -108,7 +108,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    void EditorFrameListener::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -120,7 +120,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::Render()
+    void EditorFrameListener::Render()
     {
         KMP_PROFILE_FUNCTION();
 
@@ -153,29 +153,29 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::OnEvent(Event& event)
+    void EditorFrameListener::OnEvent(Event& event)
     {
         KMP_PROFILE_FUNCTION();
 
         EventDispatcher dispatcher(event);
 
-        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorUI::OnWindowCloseEvent));
-        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorUI::OnWindowFramebufferRefreshEvent));
-        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorUI::OnWindowContentScaleEvent));
+        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorFrameListener::OnWindowCloseEvent));
+        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorFrameListener::OnWindowFramebufferRefreshEvent));
+        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorFrameListener::OnWindowContentScaleEvent));
 
-        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorUI::OnKeyPressEvent));
+        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorFrameListener::OnKeyPressEvent));
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUI::OnWindowCloseEvent(WindowCloseEvent& event)
+    bool EditorFrameListener::OnWindowCloseEvent(WindowCloseEvent& event)
     {
         KMP_PROFILE_FUNCTION();
 
-        return _compositor->OnWindowCloseEvent(event);
+        return _uiCompositor->OnWindowCloseEvent(event);
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUI::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+    bool EditorFrameListener::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -184,7 +184,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUI::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
+    bool EditorFrameListener::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -203,37 +203,37 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUI::OnKeyPressEvent(KeyPressEvent& event)
+    bool EditorFrameListener::OnKeyPressEvent(KeyPressEvent& event)
     {
         KMP_PROFILE_FUNCTION();
 
-        return _compositor->OnKeyPressEvent(event);
+        return _uiCompositor->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::SaveSettings(SettingsDocument& settings) const
+    void EditorFrameListener::SaveSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION();
 
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
-        _compositor->SaveSettings(settings);
+        _uiCompositor->SaveSettings(settings);
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::LoadSettings(SettingsDocument& settings)
+    void EditorFrameListener::LoadSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION();
 
         settings.StartLoadObject(SettingsEntryName);
         _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
-        _compositor->LoadSettings(settings);
+        _uiCompositor->LoadSettings(settings);
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::NewFrame()
+    void EditorFrameListener::NewFrame()
     {
         KMP_PROFILE_FUNCTION();
 
@@ -242,7 +242,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::BeginApplicationArea() const
+    void EditorFrameListener::BeginApplicationArea() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -266,7 +266,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::BeginMainWorkingArea() const
+    void EditorFrameListener::BeginMainWorkingArea() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -299,15 +299,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::ComposeMainArea()
+    void EditorFrameListener::ComposeMainArea()
     {
         KMP_PROFILE_FUNCTION();
 
-        _compositor->ComposeMainArea();
+        _uiCompositor->ComposeMainArea();
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndMainWorkingArea() const
+    void EditorFrameListener::EndMainWorkingArea() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -315,7 +315,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::BeginStatusBarArea() const
+    void EditorFrameListener::BeginStatusBarArea() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -332,15 +332,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::ComposeStatusBar()
+    void EditorFrameListener::ComposeStatusBar()
     {
         KMP_PROFILE_FUNCTION();
 
-        _compositor->ComposeStatusBar(_metricsTimer);
+        _uiCompositor->ComposeStatusBar(_metricsTimer);
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndStatusBarArea() const
+    void EditorFrameListener::EndStatusBarArea() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -348,7 +348,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndApplicationArea() const
+    void EditorFrameListener::EndApplicationArea() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -356,7 +356,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUI::EndFrame() const
+    void EditorFrameListener::EndFrame() const
     {
         KMP_PROFILE_FUNCTION();
 

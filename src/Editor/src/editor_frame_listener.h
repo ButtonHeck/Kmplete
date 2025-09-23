@@ -17,15 +17,15 @@ namespace Kmplete
     class SystemMetricsManager;
     class GraphicsBackend;
 
-    class EditorUI : public ApplicationFrameListener
+    class EditorFrameListener : public ApplicationFrameListener
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
-        KMP_DISABLE_COPY_MOVE(EditorUI)
+        KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
-        EditorUI(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
-        ~EditorUI();
+        EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
+        ~EditorFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;
@@ -62,7 +62,7 @@ namespace Kmplete
         Window& _mainWindow;
         GraphicsBackend& _graphicsBackend;
         UPtr<EditorUIImpl> _uiImpl;
-        UPtr<EditorUICompositor> _compositor;
+        UPtr<EditorUICompositor> _uiCompositor;
         Timer _metricsTimer;
     };
     //--------------------------------------------------------------------------

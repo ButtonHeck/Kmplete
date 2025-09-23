@@ -1,6 +1,6 @@
 #pragma once
 
-#include "editor_ui.h"
+#include "editor_frame_listener.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"
 #include "Kmplete/Profile/profiler.h"
@@ -30,7 +30,7 @@ namespace Kmplete
 
     private:
         Window& _mainWindow;
-        UPtr<EditorUI> _ui;
+        UPtr<EditorFrameListener> _uiFrameListener;
     };
     //--------------------------------------------------------------------------
 }
