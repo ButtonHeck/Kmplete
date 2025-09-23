@@ -67,14 +67,14 @@ namespace Kmplete
 
             for (auto& frameListener : _frameListeners)
             {
-                frameListener.get().Update(0.0f, mainWindowIsIconified);
+                frameListener->Update(0.0f, mainWindowIsIconified);
             }
 
             if (!mainWindowIsIconified)
             {
                 for (auto& frameListener : _frameListeners)
                 {
-                    frameListener.get().Render();
+                    frameListener->Render();
                 }
             }
 
@@ -112,7 +112,7 @@ namespace Kmplete
                 break;
             }
 
-            (*iter).get().OnEvent(event);
+            (*iter)->OnEvent(event);
         }
     }
     //--------------------------------------------------------------------------

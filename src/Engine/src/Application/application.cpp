@@ -44,9 +44,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::AddFrameListener(ApplicationFrameListener& frameListener)
+    void Application::AddFrameListener(NonNull<ApplicationFrameListener*> frameListener)
     {
-        _frameListeners.push_back(std::ref(frameListener));
+        _frameListeners.push_back(frameListener);
     }
     //--------------------------------------------------------------------------
 

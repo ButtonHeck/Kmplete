@@ -14,7 +14,6 @@ namespace Kmplete
 
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}
-
         KMP_API virtual void OnEvent(Event&) {}
 
     protected:

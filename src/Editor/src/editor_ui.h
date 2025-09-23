@@ -29,7 +29,6 @@ namespace Kmplete
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;
-
         void OnEvent(Event& event) override;
 
         void SaveSettings(SettingsDocument& settings) const;

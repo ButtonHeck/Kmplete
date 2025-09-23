@@ -62,7 +62,7 @@ namespace Kmplete
 
         LoadSettingsInternal();
 
-        AddFrameListener(*_ui.get());
+        AddFrameListener(_ui.get());
     }
     //--------------------------------------------------------------------------
 

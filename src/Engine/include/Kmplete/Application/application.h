@@ -3,7 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Base/optional.h"
+#include "Kmplete/Base/nullability.h"
 #include "Kmplete/Application/application_frame_listener.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -11,8 +11,6 @@
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Localization/localization_manager.h"
-#include "Kmplete/Event/event.h"
-#include "Kmplete/Event/key_event.h"
 #include "Kmplete/Profile/profiler.h"
 
 namespace Kmplete
@@ -40,17 +38,10 @@ namespace Kmplete
 
         KMP_API virtual void Run() = 0;
         KMP_NODISCARD KMP_API virtual bool ConfirmExit();
-        KMP_API virtual void AddFrameListener(ApplicationFrameListener& frameListener);
+        KMP_API virtual void AddFrameListener(NonNull<ApplicationFrameListener*> frameListener);
 
         KMP_API virtual void SaveSettings(const Filepath& filepath = Filepath()) const;
         KMP_API virtual void LoadSettings(const Filepath& filepath = Filepath());
-
-    protected:
-        virtual void OnEvent(Event&) {}
-
-        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { return true; }
 
     private:
         void Initialize(const ApplicationParameters& applicationParameters);
@@ -72,7 +63,7 @@ namespace Kmplete
         Log::LogSettings _logSettings;
 #endif
 
-        Vector<Ref<ApplicationFrameListener>> _frameListeners;
+        Vector<Nullable<ApplicationFrameListener*>> _frameListeners;
     };
     //--------------------------------------------------------------------------
 

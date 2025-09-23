@@ -294,7 +294,6 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         _popups.quit = true;
-        _mainWindow.SetShouldClose(false);
         return true;
     }
     //--------------------------------------------------------------------------

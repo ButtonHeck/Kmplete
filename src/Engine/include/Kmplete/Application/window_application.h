@@ -2,8 +2,6 @@
 
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Window/window_backend.h"
-#include "Kmplete/Event/window_event.h"
-#include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -27,21 +25,7 @@ namespace Kmplete
         KMP_API void LoadSettings(const Filepath& filepath = Filepath()) override;
 
     protected:
-        KMP_API void OnEvent(Event& event) override;
-
-        KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnWindowContentScaleEvent(WindowContentScaleEvent&) { return true; }
-
-        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent&) { return true; }
-        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { return true; }
+        void OnEvent(Event& event);
 
     private:
         void Initialize();
