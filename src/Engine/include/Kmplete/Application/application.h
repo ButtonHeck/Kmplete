@@ -39,14 +39,12 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual bool ConfirmExit();
         KMP_API virtual void AddFrameListener(NonNull<ApplicationFrameListener*> frameListener);
 
-        KMP_API virtual void SaveSettings(const Filepath& filepath = Filepath()) const;
-        KMP_API virtual void LoadSettings(const Filepath& filepath = Filepath());
-
     private:
         void Initialize(const ApplicationParameters& applicationParameters);
         void Finalize();
-        void SaveSettingsInternal() const;
-        void LoadSettingsInternal();
+
+        void SaveSettings() const;
+        void LoadSettings();
 
         void FillDictionary();
 

@@ -21,17 +21,15 @@ namespace Kmplete
 
         KMP_API void Run() override;
 
-        KMP_API void SaveSettings(const Filepath& filepath = Filepath()) const override;
-        KMP_API void LoadSettings(const Filepath& filepath = Filepath()) override;
-
     protected:
         void OnEvent(Event& event);
 
     private:
         void Initialize();
         void Finalize();
-        void SaveSettingsInternal() const;
-        void LoadSettingsInternal();
+
+        void SaveSettings() const;
+        void LoadSettings();
 
     protected:
         UPtr<WindowBackend> _windowBackend;

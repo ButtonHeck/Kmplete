@@ -85,24 +85,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
-    {
-        KMP_PROFILE_FUNCTION();
-
-        SaveSettingsInternal();
-        Application::SaveSettings(filepath);
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::LoadSettings(const Filepath& filepath /*= Filepath()*/)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        Application::LoadSettings(filepath);
-        LoadSettingsInternal();
-    }
-    //--------------------------------------------------------------------------
-
     void WindowApplication::OnEvent(Event& event)
     {
         for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)
@@ -124,7 +106,7 @@ namespace Kmplete
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
 
-        LoadSettingsInternal();
+        LoadSettings();
 
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
@@ -146,14 +128,14 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        SaveSettingsInternal();
+        SaveSettings();
 
         _graphicsBackend.reset();
         _windowBackend.reset();
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettingsInternal() const
+    void WindowApplication::SaveSettings() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -169,7 +151,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::LoadSettingsInternal()
+    void WindowApplication::LoadSettings()
     {
         KMP_PROFILE_FUNCTION();
 

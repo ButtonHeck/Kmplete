@@ -19,14 +19,12 @@ namespace Kmplete
         explicit EditorApplication(const ApplicationParameters& applicationParameters);
         virtual ~EditorApplication();
 
-        void SaveSettings(const Filepath& filepath = Filepath()) const override;
-        void LoadSettings(const Filepath& filepath = Filepath()) override;
-
     private:
         void Initialize();
         void Finalize();
-        void SaveSettingsInternal() const;
-        void LoadSettingsInternal();
+
+        void SaveSettings() const;
+        void LoadSettings();
 
     private:
         Window& _mainWindow;

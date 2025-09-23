@@ -38,7 +38,7 @@ namespace Kmplete
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
         _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
 
-        LoadSettingsInternal();
+        LoadSettings();
 
         AddFrameListener(_uiFrameListener.get());
     }
@@ -48,29 +48,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        SaveSettingsInternal();
+        SaveSettings();
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
-    {
-        KMP_PROFILE_FUNCTION();
-
-        SaveSettingsInternal();
-        WindowApplication::SaveSettings(filepath);
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorApplication::LoadSettings(const Filepath& filepath /*= Filepath()*/)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        WindowApplication::LoadSettings(filepath);
-        LoadSettingsInternal();
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorApplication::SaveSettingsInternal() const
+    void EditorApplication::SaveSettings() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -85,7 +67,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::LoadSettingsInternal()
+    void EditorApplication::LoadSettings()
     {
         KMP_PROFILE_FUNCTION();
 

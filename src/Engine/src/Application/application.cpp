@@ -51,32 +51,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettings(const Filepath& filepath /*= Filepath()*/) const
-    {
-        KMP_PROFILE_FUNCTION();
-
-        if (!filepath.empty())
-        {
-            _settingsManager->SetFilepath(filepath);
-        }
-
-        SaveSettingsInternal();
-    }
-    //--------------------------------------------------------------------------
-
-    void Application::LoadSettings(const Filepath& filepath /*= Filepath()*/)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        if (!filepath.empty())
-        {
-            _settingsManager->SetFilepath(filepath);
-        }
-
-        LoadSettingsInternal();
-    }
-    //--------------------------------------------------------------------------
-
     void Application::Initialize(const ApplicationParameters& applicationParameters)
     {
         KMP_PROFILE_FUNCTION();
@@ -110,7 +84,7 @@ namespace Kmplete
             : applicationParameters.settingsFilepath);
         KMP_ASSERT(_settingsManager);
 
-        LoadSettingsInternal();
+        LoadSettings();
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
@@ -128,7 +102,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        SaveSettingsInternal();
+        SaveSettings();
 
         _frameListeners.clear();
 
@@ -145,7 +119,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettingsInternal() const
+    void Application::SaveSettings() const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -176,7 +150,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::LoadSettingsInternal()
+    void Application::LoadSettings()
     {
         KMP_PROFILE_FUNCTION();
 
