@@ -21,6 +21,8 @@ set(Editor_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/src/ui_identifiers.h
     ${CMAKE_CURRENT_LIST_DIR}/src/shortcuts.h
     ${CMAKE_CURRENT_LIST_DIR}/src/localization_base.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/system_metrics_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/system_metrics_frame_listener.cpp
 )
 source_group("Editor" FILES ${Editor_SOURCES})
 

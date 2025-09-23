@@ -11,6 +11,7 @@ namespace Kmplete
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const ApplicationParameters&)")
         , _mainWindow(_windowBackend->GetMainWindow())
         , _uiFrameListener(nullptr)
+        , _systemMetricsFrameListener(nullptr)
     {
         Initialize();
 
@@ -36,10 +37,14 @@ namespace Kmplete
         _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
-        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager));
+
+        _systemMetricsFrameListener.reset(new SystemMetricsFrameListener(*_systemMetricsManager));
+
+        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager, _systemMetricsFrameListener->GetTimer()));
 
         LoadSettings();
 
+        AddFrameListener(_systemMetricsFrameListener.get());
         AddFrameListener(_uiFrameListener.get());
     }
     //--------------------------------------------------------------------------
@@ -49,6 +54,9 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         SaveSettings();
+
+        _uiFrameListener.reset();
+        _systemMetricsFrameListener.reset();
     }
     //--------------------------------------------------------------------------
 
@@ -63,6 +71,7 @@ namespace Kmplete
             return;
         }
 
+        _systemMetricsFrameListener->SaveSettings(*settings);
         _uiFrameListener->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
@@ -78,6 +87,7 @@ namespace Kmplete
             return;
         }
 
+        _systemMetricsFrameListener->LoadSettings(*settings);
         _uiFrameListener->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
