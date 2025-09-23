@@ -5,7 +5,6 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Application/application_frame_listener.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Core/program_options.h"
 #include "Kmplete/Core/settings_manager.h"
@@ -58,10 +57,6 @@ namespace Kmplete
         UPtr<SystemMetricsManager> _systemMetricsManager;
         UPtr<LocalizationManager> _localizationManager;
         UPtr<SettingsManager> _settingsManager;
-
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-        Log::LogSettings _logSettings;
-#endif
 
         Vector<Nullable<ApplicationFrameListener*>> _frameListeners;
     };

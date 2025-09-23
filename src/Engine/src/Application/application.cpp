@@ -1,4 +1,5 @@
 #include "Kmplete/Application/application.h"
+#include "Kmplete/Log/log.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -114,7 +115,7 @@ namespace Kmplete
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger initialization");
-            Log::Initialize(_logSettings, _applicationName);
+            Log::Initialize(_applicationName);
         }
 #endif
 
@@ -156,15 +157,16 @@ namespace Kmplete
         }
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+        const auto& logSettings = Log::GetSettings();
         settings->get().StartSaveObject(SettingsEntryName);
-        settings->get().SaveString(Log::FilenameStr, Utils::NarrowToUtf8(_logSettings.filename));
-        settings->get().SaveBool(Log::EnabledStr, _logSettings.enabled);
-        settings->get().SaveBool(Log::TruncateStr, _logSettings.truncate);
-        settings->get().SaveBool(Log::OutputConsoleStr, _logSettings.outputConsole);
-        settings->get().SaveBool(Log::OutputFileStr, _logSettings.outputFile);
-        settings->get().SaveBool(Log::OutputStringBufferStr, _logSettings.outputStringBuffer);
-        settings->get().SaveInt(Log::LevelStr, _logSettings.level);
-        settings->get().SaveInt(Log::LevelFlushStr, _logSettings.levelFlush);
+        settings->get().SaveString(Log::FilenameStr, Utils::NarrowToUtf8(logSettings.filename));
+        settings->get().SaveBool(Log::EnabledStr, logSettings.enabled);
+        settings->get().SaveBool(Log::TruncateStr, logSettings.truncate);
+        settings->get().SaveBool(Log::OutputConsoleStr, logSettings.outputConsole);
+        settings->get().SaveBool(Log::OutputFileStr, logSettings.outputFile);
+        settings->get().SaveBool(Log::OutputStringBufferStr, logSettings.outputStringBuffer);
+        settings->get().SaveInt(Log::LevelStr, logSettings.level);
+        settings->get().SaveInt(Log::LevelFlushStr, logSettings.levelFlush);
         settings->get().EndSaveObject();
 #endif
 
@@ -189,14 +191,18 @@ namespace Kmplete
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         settings->get().StartLoadObject(SettingsEntryName);
-        _logSettings.filename = Utils::Utf8ToNarrow(settings->get().GetString(Log::FilenameStr, "Kmplete_log.txt"));
-        _logSettings.enabled = settings->get().GetBool(Log::EnabledStr, true);
-        _logSettings.truncate = settings->get().GetBool(Log::TruncateStr, false);
-        _logSettings.outputConsole = settings->get().GetBool(Log::OutputConsoleStr, true);
-        _logSettings.outputFile = settings->get().GetBool(Log::OutputFileStr, true);
-        _logSettings.outputStringBuffer = settings->get().GetBool(Log::OutputStringBufferStr, false);
-        _logSettings.level = settings->get().GetInt(Log::LevelStr, spdlog::level::trace);
-        _logSettings.levelFlush = settings->get().GetInt(Log::LevelFlushStr, spdlog::level::trace);
+
+        Log::LogSettings logSettings;
+        logSettings.filename = Utils::Utf8ToNarrow(settings->get().GetString(Log::FilenameStr, "Kmplete_log.txt"));
+        logSettings.enabled = settings->get().GetBool(Log::EnabledStr, true);
+        logSettings.truncate = settings->get().GetBool(Log::TruncateStr, false);
+        logSettings.outputConsole = settings->get().GetBool(Log::OutputConsoleStr, true);
+        logSettings.outputFile = settings->get().GetBool(Log::OutputFileStr, true);
+        logSettings.outputStringBuffer = settings->get().GetBool(Log::OutputStringBufferStr, false);
+        logSettings.level = settings->get().GetInt(Log::LevelStr, spdlog::level::trace);
+        logSettings.levelFlush = settings->get().GetInt(Log::LevelFlushStr, spdlog::level::trace);
+        Log::SetSettings(logSettings);
+
         settings->get().EndLoadObject();
 #endif
 

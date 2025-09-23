@@ -75,12 +75,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const LogSettings& settings, const String& programName)
+    void Log::Initialize(const String& programName)
     {
         spdlog::drop_all();
         spdlog::init_thread_pool(1024, 1);
-
-        _logSettings = settings;
 
         if (_logSettings.enabled)
         {
@@ -150,6 +148,18 @@ namespace Kmplete
         spdlog::shutdown();
 
         _logger = nullptr;
+    }
+    //--------------------------------------------------------------------------
+
+    void Log::SetSettings(const LogSettings& settings)
+    {
+        _logSettings = settings;
+    }
+    //--------------------------------------------------------------------------
+
+    const Log::LogSettings& Log::GetSettings()
+    {
+        return _logSettings;
     }
     //--------------------------------------------------------------------------
 

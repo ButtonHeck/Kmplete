@@ -9,6 +9,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Core/memory_checker.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log.h"
 
 #include <exception>
 
