@@ -1,7 +1,7 @@
 #pragma once
 
 #if defined (KMP_ENGINE_PRIVATE)
-    #error "entry_point.h should be included only in client code"
+    #error "main.h should be included only in client code"
 #endif
 
 #include "Kmplete/Application/application.h"

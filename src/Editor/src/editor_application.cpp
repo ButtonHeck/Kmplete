@@ -1,31 +1,9 @@
 #include "editor_application.h"
-#include "Kmplete/Core/entry_point.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
 
 namespace Kmplete
 {
-    UPtr<Application> CreateApplication(const ProgramOptions& programOptions)
-    {
-        KMP_PROFILE_FUNCTION();
-
-        try
-        {
-            ApplicationParameters applicationParameters{
-                .applicationName = "Kmplete Editor",
-                .settingsFilepath = programOptions.GetSettingsFilepath()
-            };
-
-            return CreateUPtr<EditorApplication>(applicationParameters);
-        }
-        catch (const std::exception&)
-        {
-            KMP_LOG_CRITICAL_FN("CreateApplication: failed to create Editor instance");
-            return nullptr;
-        }
-    }
-    //--------------------------------------------------------------------------
-
     constexpr static auto SettingsEntryName = "EditorApplication";
 
     EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
