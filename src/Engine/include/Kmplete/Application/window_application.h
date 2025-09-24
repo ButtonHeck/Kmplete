@@ -33,6 +33,7 @@ namespace Kmplete
 
         void UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
         void RenderFrameListeners();
+        void ProcessEventsFrameListeners(Event& event);
 
         void SaveSettings() const;
         void LoadSettings();

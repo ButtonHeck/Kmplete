@@ -92,15 +92,7 @@ namespace Kmplete
 
     void WindowApplication::OnEvent(Event& event)
     {
-        for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)
-        {
-            if (event.handled)
-            {
-                break;
-            }
-
-            (*iter)->OnEvent(event);
-        }
+        ProcessEventsFrameListeners(event);
     }
     //--------------------------------------------------------------------------
 
@@ -146,7 +138,10 @@ namespace Kmplete
     {
         for (auto& frameListener : _frameListeners)
         {
-            frameListener->Update(frameTimestep, mainWindowIsIconified);
+            if (frameListener->IsActive())
+            {
+                frameListener->Update(frameTimestep, mainWindowIsIconified);
+            }
         }
     }
     //--------------------------------------------------------------------------
@@ -155,7 +150,28 @@ namespace Kmplete
     {
         for (auto& frameListener : _frameListeners)
         {
-            frameListener->Render();
+            if (frameListener->IsActive())
+            {
+                frameListener->Render();
+            }
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::ProcessEventsFrameListeners(Event& event)
+    {
+        for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)
+        {
+            auto frameListener = *iter;
+            if (frameListener->IsActive())
+            {
+                if (event.handled)
+                {
+                    break;
+                }
+
+                frameListener->OnEvent(event);
+            }
         }
     }
     //--------------------------------------------------------------------------
