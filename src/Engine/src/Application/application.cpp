@@ -40,12 +40,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool Application::ConfirmExit()
-    {
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
     void Application::AddFrameListener(NonNull<ApplicationFrameListener*> frameListener)
     {
         _frameListeners.push_back(frameListener);

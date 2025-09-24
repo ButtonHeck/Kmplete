@@ -37,7 +37,6 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const String& GetApplicationName() const noexcept;
 
         KMP_API virtual void Run() = 0;
-        KMP_NODISCARD KMP_API virtual bool ConfirmExit();
         KMP_API virtual void AddFrameListener(NonNull<ApplicationFrameListener*> frameListener);
 
     private:

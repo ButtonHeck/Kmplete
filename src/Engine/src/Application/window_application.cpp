@@ -86,6 +86,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool WindowApplication::ConfirmExit()
+    {
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
     void WindowApplication::OnEvent(Event& event)
     {
         for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)

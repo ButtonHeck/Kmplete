@@ -21,6 +21,7 @@ namespace Kmplete
         KMP_API virtual ~WindowApplication();
 
         KMP_API void Run() override;
+        KMP_NODISCARD KMP_API virtual bool ConfirmExit();
 
     protected:
         void OnEvent(Event& event);
