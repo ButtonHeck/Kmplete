@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Core/timer.h"
 
 
 namespace Kmplete
@@ -30,6 +31,9 @@ namespace Kmplete
         void Initialize();
         void Finalize();
 
+        void UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
+        void RenderFrameListeners();
+
         void SaveSettings() const;
         void LoadSettings();
 
@@ -37,6 +41,9 @@ namespace Kmplete
         UPtr<WindowBackend> _windowBackend;
         GraphicsBackendType _graphicsBackendType;
         UPtr<GraphicsBackend> _graphicsBackend;
+
+    private:
+        Timer _frameTimer;
     };
     //--------------------------------------------------------------------------
 }

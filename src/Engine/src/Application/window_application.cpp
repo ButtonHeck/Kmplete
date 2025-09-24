@@ -3,6 +3,7 @@
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Utils/string_utils.h"
 
 #include <stdexcept>
 
@@ -24,6 +25,7 @@ namespace Kmplete
         , _windowBackend(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _graphicsBackend(nullptr)
+        , _frameTimer(0)
     {
         Initialize();
 
@@ -49,6 +51,8 @@ namespace Kmplete
 
         while (_running)
         {
+            const auto frameTimestep = _frameTimer.Mark();
+
             mainWindow.ProcessEvents();
 
             if (mainWindow.ShouldClose())
@@ -66,17 +70,11 @@ namespace Kmplete
 
             const auto mainWindowIsIconified = mainWindow.IsIconified();
 
-            for (auto& frameListener : _frameListeners)
-            {
-                frameListener->Update(0.0f, mainWindowIsIconified);
-            }
+            UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
 
             if (!mainWindowIsIconified)
             {
-                for (auto& frameListener : _frameListeners)
-                {
-                    frameListener->Render();
-                }
+                RenderFrameListeners();
             }
 
             mainWindow.SwapBuffers();
@@ -128,6 +126,8 @@ namespace Kmplete
         }
 
         mainWindow.SetEventCallback(KMP_BIND(WindowApplication::OnEvent));
+
+        _frameTimer.Mark();
     }
     //--------------------------------------------------------------------------
 
@@ -139,6 +139,24 @@ namespace Kmplete
 
         _graphicsBackend.reset();
         _windowBackend.reset();
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
+    {
+        for (auto& frameListener : _frameListeners)
+        {
+            frameListener->Update(frameTimestep, mainWindowIsIconified);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::RenderFrameListeners()
+    {
+        for (auto& frameListener : _frameListeners)
+        {
+            frameListener->Render();
+        }
     }
     //--------------------------------------------------------------------------
 
