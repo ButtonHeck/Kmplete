@@ -4,6 +4,7 @@
 
 #include <glad/glad.h>
 
+
 namespace Kmplete
 {
     OpenGLTexture::OpenGLTexture(const Filepath& filepath, bool flipVertically /*= false*/)

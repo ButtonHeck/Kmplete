@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace Kmplete
 {
     constexpr static auto IdApp_ApplicationWindow = "ApplicationWindow";

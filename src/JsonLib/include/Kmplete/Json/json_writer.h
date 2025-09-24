@@ -8,6 +8,7 @@
 
 #include <rapidjson/document.h>
 
+
 namespace Kmplete
 {
     class JsonWriter

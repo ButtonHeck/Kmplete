@@ -9,6 +9,7 @@
 #include <type_traits>
 #include <algorithm>
 
+
 namespace Kmplete
 {
     using Point2I = glm::ivec2;

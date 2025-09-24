@@ -1,5 +1,6 @@
 #include "Kmplete/Version/kmplete_version.h"
 
+
 namespace Kmplete
 {
     const char* GetKmpleteVersion()

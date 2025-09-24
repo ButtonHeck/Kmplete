@@ -4,6 +4,7 @@
 #include <concepts>
 #include <cstdint>
 
+
 namespace Kmplete
 {
     enum class RNGBitWidth

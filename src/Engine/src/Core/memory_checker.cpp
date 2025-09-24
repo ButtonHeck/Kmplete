@@ -5,6 +5,7 @@
     #define _CRTDBG_MAP_ALLOC
 #endif
 
+
 namespace Kmplete
 {
     void MemoryChecker::Prepare()

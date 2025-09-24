@@ -10,6 +10,7 @@
 
 #include <stdexcept>
 
+
 #if defined (CreateWindow)
     #pragma push_macro("CreateWindow")
     #undef CreateWindow

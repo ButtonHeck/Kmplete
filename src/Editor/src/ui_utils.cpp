@@ -1,8 +1,10 @@
 #include "ui_utils.h"
+
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Base/platform.h"
 
 #include <imgui_internal.h>
+
 
 namespace Kmplete
 {

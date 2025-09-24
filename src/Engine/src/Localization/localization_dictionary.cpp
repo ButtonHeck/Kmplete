@@ -2,6 +2,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Core/assertion.h"
 
+
 namespace Kmplete
 {
     LocalizationDictionary::LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid /*= SidTrInvalidLocale*/) noexcept

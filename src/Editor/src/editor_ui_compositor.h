@@ -6,6 +6,7 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Profile/profiler.h"
 
+
 namespace Kmplete
 {
     class LocalizationManager;

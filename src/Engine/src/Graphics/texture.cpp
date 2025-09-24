@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/texture.h"
 
+
 namespace Kmplete
 {
     void* Texture::GetHandle() const

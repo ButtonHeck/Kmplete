@@ -3,6 +3,7 @@
 
 #include <rapidjson/pointer.h>
 
+
 namespace Kmplete
 {
     JsonWriter::JsonWriter(rapidjson::Document& document)

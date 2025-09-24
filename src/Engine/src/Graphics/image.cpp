@@ -4,6 +4,7 @@
 
 #include <stb_image.h>
 
+
 namespace Kmplete
 {
     Image::Image(const Filepath& filepath, bool flipVertically /*= false*/)

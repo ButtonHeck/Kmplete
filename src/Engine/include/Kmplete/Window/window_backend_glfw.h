@@ -7,6 +7,7 @@
 
 #include <unordered_map>
 
+
 namespace Kmplete
 {
     class WindowBackendGlfw : public WindowBackend

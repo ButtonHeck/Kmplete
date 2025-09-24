@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+
 namespace Kmplete
 {
     String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept

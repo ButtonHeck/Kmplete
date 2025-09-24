@@ -10,6 +10,7 @@
 
 #include <unordered_map>
 
+
 namespace Kmplete
 {
     class TextureManager

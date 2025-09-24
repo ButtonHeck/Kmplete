@@ -3,6 +3,7 @@
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
 
+
 namespace Kmplete
 {
     Window::Window(WindowSettings& settings)

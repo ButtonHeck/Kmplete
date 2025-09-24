@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
 
+
 namespace Kmplete
 {
     class Image

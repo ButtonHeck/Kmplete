@@ -4,6 +4,7 @@
 
 #include "Kmplete/Log/log.h"
 
+
 namespace Kmplete
 {
     Profiler::Profiler() noexcept

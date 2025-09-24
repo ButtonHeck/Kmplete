@@ -3,6 +3,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
+
 namespace Kmplete
 {
     TextureManager::TextureManager(GraphicsBackendType backendType)

@@ -7,6 +7,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 
+
 namespace Kmplete
 {
     class SettingsDocument;

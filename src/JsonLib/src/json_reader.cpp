@@ -3,6 +3,7 @@
 
 #include <rapidjson/pointer.h>
 
+
 namespace Kmplete
 {
     JsonReader::JsonReader(rapidjson::Document& document)

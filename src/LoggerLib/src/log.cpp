@@ -15,6 +15,7 @@
     #include <iomanip>
 #endif
 
+
 namespace Kmplete
 {
     Log::LogSettings Log::_logSettings;

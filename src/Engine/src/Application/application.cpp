@@ -7,6 +7,7 @@
 
 #include <stdexcept>
 
+
 namespace Kmplete
 {
     constexpr static auto SettingsEntryName = "Application";

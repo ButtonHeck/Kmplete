@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Log/log_class_macro.h"
 
+
 namespace Kmplete
 {
     struct JsonScope

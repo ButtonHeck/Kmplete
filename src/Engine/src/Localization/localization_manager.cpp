@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+
 namespace Kmplete
 {
     constexpr static auto SettingsEntryName = "LocalizationManager";

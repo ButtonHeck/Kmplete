@@ -11,6 +11,7 @@
 
 #include <functional>
 
+
 namespace Kmplete
 {
     class WindowCursor;

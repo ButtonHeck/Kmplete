@@ -4,6 +4,7 @@
 
 #include <portable-file-dialogs.h>
 
+
 namespace Kmplete
 {
     static constexpr auto StringToFilepathConverterFn = Utils::Utf8ToNarrow;

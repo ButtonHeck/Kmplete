@@ -3,6 +3,7 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Log/log_class_macro.h"
 
+
 namespace Kmplete
 {
     class OpenGLGraphicsBackend : public GraphicsBackend

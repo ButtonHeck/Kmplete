@@ -4,6 +4,7 @@
 #include "Kmplete/Event/mouse_codes.h"
 #include "Kmplete/Utils/string_utils.h"
 
+
 namespace Kmplete
 {
     struct MouseMoveEvent : public Event

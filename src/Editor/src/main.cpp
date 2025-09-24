@@ -1,5 +1,7 @@
 #include "editor_application.h"
+
 #include "Kmplete/Core/main.h"
+
 
 namespace Kmplete
 {

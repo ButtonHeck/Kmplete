@@ -1,5 +1,6 @@
 #pragma once
 
+
 #if defined (_MSC_VER)
     #define KMP_COMPILER_MSVC
 #elif defined (__MINGW32__) || defined (__MINGW64__)

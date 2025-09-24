@@ -3,6 +3,7 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Profile/profiler.h"
 
+
 namespace Kmplete
 {
     void JsonScope::Push(const String& entry)

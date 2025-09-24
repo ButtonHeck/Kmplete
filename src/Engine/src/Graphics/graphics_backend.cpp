@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Core/assertion.h"
 
+
 namespace Kmplete
 {
     UPtr<GraphicsBackend> GraphicsBackend::Create(GraphicsBackendType type)

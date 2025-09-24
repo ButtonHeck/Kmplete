@@ -5,6 +5,7 @@
 
 #include <GLFW/glfw3.h>
 
+
 namespace Kmplete
 {
     WindowCursorGlfw::WindowCursorGlfw(const Filepath& filepath, const Point2I& hotspot /*= Point2I()*/)

@@ -13,6 +13,7 @@
 
 #include <exception>
 
+
 void TerminationHandler()
 {
     try

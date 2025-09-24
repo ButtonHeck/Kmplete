@@ -1,5 +1,6 @@
 #include "Kmplete/Core/timer.h"
 
+
 namespace Kmplete
 {
     Timer::Timer(unsigned int timeoutMs /*= 0*/) noexcept

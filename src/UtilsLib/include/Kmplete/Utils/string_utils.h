@@ -6,6 +6,7 @@
 
 #include <sstream>
 
+
 namespace Kmplete
 {
     namespace Utils

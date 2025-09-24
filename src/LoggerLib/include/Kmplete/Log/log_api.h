@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/platform.h"
 
+
 #if defined (KMP_BUILD_STATIC)
     #define KMP_LOG_API
     #define KMP_LOG_NO_EXPORT

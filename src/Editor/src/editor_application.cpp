@@ -1,6 +1,8 @@
 #include "editor_application.h"
+
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
+
 
 namespace Kmplete
 {

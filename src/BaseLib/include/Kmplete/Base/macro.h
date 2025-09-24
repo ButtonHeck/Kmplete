@@ -1,5 +1,6 @@
 #pragma once
 
+
 #define KMP_M_CONCAT_(x, y) x ## y
 #define KMP_M_CONCAT(x, y) KMP_M_CONCAT_(x, y)
 #define KMP_M_STRINGIFY_(x) #x

@@ -4,6 +4,7 @@
 
 #include <memory>
 
+
 namespace Kmplete
 {
     template<typename T>

@@ -6,6 +6,7 @@
 
 #include <type_traits>
 
+
 namespace Kmplete
 {
     static constexpr auto LocalesDirectory = "locale";

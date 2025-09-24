@@ -9,6 +9,7 @@
 
 #include <fstream>
 
+
 #if defined (GetObject)
     #pragma push_macro("GetObject")
     #undef GetObject

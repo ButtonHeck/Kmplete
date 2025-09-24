@@ -3,6 +3,7 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
+
 namespace Kmplete
 {
     SettingsManager::SettingsManager(const Filepath& filepath)

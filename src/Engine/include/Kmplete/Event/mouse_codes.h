@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace Kmplete
 {
     using MouseCode = int;

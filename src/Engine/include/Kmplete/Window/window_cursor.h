@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/nullability.h"
 
+
 namespace Kmplete
 {
     class WindowCursor

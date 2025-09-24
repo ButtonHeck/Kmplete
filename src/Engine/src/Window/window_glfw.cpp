@@ -11,6 +11,7 @@
 
 #include <stdexcept>
 
+
 namespace Kmplete
 {
     WindowGlfw::UserData::UserData(WindowSettings& settings)

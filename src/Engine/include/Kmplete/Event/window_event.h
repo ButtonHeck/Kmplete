@@ -3,6 +3,7 @@
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Utils/string_utils.h"
 
+
 namespace Kmplete
 {
     struct WindowEvent : public Event

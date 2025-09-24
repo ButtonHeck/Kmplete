@@ -2,6 +2,7 @@
 #include "Kmplete/Localization/localization_dictionary.h"
 #include "Kmplete/Log/log.h"
 
+
 namespace Kmplete
 {
     static const auto NoTranslation = TranslationStr("");

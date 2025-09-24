@@ -10,6 +10,7 @@
 #include <streambuf>
 #include <numeric>
 
+
 #if defined (CreateFile)
     #pragma push_macro("CreateFile")
     #undef CreateFile

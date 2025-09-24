@@ -16,6 +16,7 @@
     #include <cstdlib>
 #endif
 
+
 namespace Kmplete
 {
     SystemMetricsManager::SystemMetricsManager()

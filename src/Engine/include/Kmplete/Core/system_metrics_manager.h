@@ -5,6 +5,7 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
+
 namespace Kmplete
 {
     class SystemMetricsManager

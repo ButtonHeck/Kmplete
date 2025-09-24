@@ -9,6 +9,7 @@
 
 #include <unordered_map>
 
+
 namespace Kmplete
 {
     class LocalizationLibrary

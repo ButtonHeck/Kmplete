@@ -5,6 +5,7 @@
 
 #include <ostream>
 
+
 namespace Kmplete
 {
     enum class EventType

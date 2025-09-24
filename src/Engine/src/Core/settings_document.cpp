@@ -1,5 +1,6 @@
 #include "Kmplete/Core/settings_document.h"
 
+
 namespace Kmplete
 {
     SettingsDocument::SettingsDocument(const String& name, Ptr<JsonDocument> document)

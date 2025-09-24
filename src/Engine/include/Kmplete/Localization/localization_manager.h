@@ -12,6 +12,7 @@
 #include <vector>
 #include <functional>
 
+
 namespace Kmplete
 {
     class SettingsDocument;

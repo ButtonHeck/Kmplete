@@ -12,6 +12,7 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Profile/profiler.h"
 
+
 namespace Kmplete
 {
     struct ApplicationParameters

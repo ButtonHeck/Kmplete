@@ -5,6 +5,7 @@
 
 #include <boost/locale.hpp>
 
+
 namespace Kmplete
 {
     namespace Localization

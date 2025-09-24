@@ -3,6 +3,7 @@
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 
+
 namespace Kmplete
 {
     Assertion::Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence /*= Consequence::Terminate*/)

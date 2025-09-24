@@ -1,5 +1,6 @@
 #pragma once
 
+
 namespace Kmplete
 {
     const char* GetKmpleteVersion();

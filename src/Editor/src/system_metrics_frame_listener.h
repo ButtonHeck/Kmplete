@@ -3,6 +3,7 @@
 #include "Kmplete/Application/application_frame_listener.h"
 #include "Kmplete/Core/timer.h"
 
+
 namespace Kmplete
 {
     class SettingsDocument;

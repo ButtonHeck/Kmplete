@@ -34,6 +34,7 @@
 
 #include <sstream>
 
+
 namespace Kmplete
 {
     class Log

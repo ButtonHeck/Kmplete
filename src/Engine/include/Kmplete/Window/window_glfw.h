@@ -7,6 +7,7 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
+
 struct GLFWwindow;
 struct GLFWmonitor;
 

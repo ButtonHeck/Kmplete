@@ -6,6 +6,7 @@
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Profile/profiler.h"
 
+
 namespace Kmplete
 {
     class SettingsDocument

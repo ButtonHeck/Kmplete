@@ -4,6 +4,7 @@
 
 #include <fstream>
 
+
 #if defined (CreateFile)
     #pragma push_macro("CreateFile")
     #undef CreateFile

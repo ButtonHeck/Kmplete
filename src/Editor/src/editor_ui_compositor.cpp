@@ -3,6 +3,7 @@
 #include "shortcuts.h"
 #include "ui_identifiers.h"
 #include "localization_base.h"
+
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Core/timer.h"
@@ -16,6 +17,7 @@
 #include <imgui_internal.h> // for ImGui::DockBuilder api
 #include <misc/cpp/imgui_stdlib.h> // for ImGui::InputText wrappers for std::string
 #include <forkawesome-webfont.h>
+
 
 namespace Kmplete
 {

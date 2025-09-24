@@ -6,6 +6,7 @@
     #include <GLFW/glfw3.h>
 #endif
 
+
 namespace Kmplete
 {
     OpenGLGraphicsBackend::OpenGLGraphicsBackend()

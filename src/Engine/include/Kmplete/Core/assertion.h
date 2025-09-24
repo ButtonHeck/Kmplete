@@ -10,6 +10,7 @@
 
 #include <sstream>
 
+
 #if !defined (KMP_ASSERTS_ACTIVE)
     #if defined NDEBUG
         #define KMP_ASSERTS_ACTIVE false
