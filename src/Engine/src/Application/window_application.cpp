@@ -19,15 +19,15 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "WindowApplication";
     constexpr static auto GraphicsBackendTypeStr = "GraphicsBackendType";
 
-    WindowApplication::WindowApplication(const ApplicationParameters& applicationParameters)
-        : Application(applicationParameters)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowApplication::WindowApplication(const ApplicationParameters&)")
+    WindowApplication::WindowApplication(const WindowApplicationParameters& parameters)
+        : Application(parameters.applicationParameters)
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowApplication::WindowApplication(const WindowApplicationParameters&)")
         , _windowBackend(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _graphicsBackend(nullptr)
         , _frameTimer(0)
     {
-        Initialize();
+        Initialize(parameters);
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -96,7 +96,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::Initialize()
+    void WindowApplication::Initialize(const WindowApplicationParameters& parameters)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -107,6 +107,7 @@ namespace Kmplete
 
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
+        mainWindow.SetResizable(parameters.resizable);
 
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_graphicsBackend);

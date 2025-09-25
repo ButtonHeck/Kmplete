@@ -128,8 +128,6 @@ namespace Kmplete
         settings.SaveString(ScreenModeStr, ScreenModeToString(screenMode));
         settings.SaveBool(VSyncStr, vSync);
         settings.SaveBool(UpdateContinuouslyStr, updateContinuously);
-        settings.SaveBool(ResizableStr, resizable);
-        settings.SaveBool(DecoratedStr, decorated);
         settings.SaveBool(AlwaysOnTopStr, alwaysOnTop);
     }
     //--------------------------------------------------------------------------
@@ -145,8 +143,6 @@ namespace Kmplete
         screenMode = StringToScreenMode(settings.GetString(ScreenModeStr, WindowedModeStr));
         vSync = settings.GetBool(VSyncStr, true);
         updateContinuously = settings.GetBool(UpdateContinuouslyStr, true);
-        resizable = settings.GetBool(ResizableStr, true);
-        decorated = settings.GetBool(DecoratedStr, true);
         alwaysOnTop = settings.GetBool(AlwaysOnTopStr, false);
     }
     //--------------------------------------------------------------------------

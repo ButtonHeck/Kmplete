@@ -11,12 +11,15 @@ namespace Kmplete
 
         try
         {
-            ApplicationParameters applicationParameters{
-                .applicationName = "Kmplete Editor",
-                .settingsFilepath = programOptions.GetSettingsFilepath()
+            WindowApplicationParameters parameters = WindowApplicationParameters{
+                .applicationParameters = 
+                    {.applicationName = "Kmplete Editor",
+                     .settingsFilepath = programOptions.GetSettingsFilepath()
+                    },
+                .resizable = true
             };
 
-            return CreateUPtr<EditorApplication>(applicationParameters);
+            return CreateUPtr<EditorApplication>(parameters);
         }
         catch (const std::exception&)
         {

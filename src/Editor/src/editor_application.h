@@ -19,7 +19,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorApplication)
 
-        explicit EditorApplication(const ApplicationParameters& applicationParameters);
+        explicit EditorApplication(const WindowApplicationParameters& parameters);
         virtual ~EditorApplication();
 
     private:

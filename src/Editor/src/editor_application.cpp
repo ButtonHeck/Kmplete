@@ -8,9 +8,9 @@ namespace Kmplete
 {
     constexpr static auto SettingsEntryName = "EditorApplication";
 
-    EditorApplication::EditorApplication(const ApplicationParameters& applicationParameters)
-        : WindowApplication(applicationParameters)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const ApplicationParameters&)")
+    EditorApplication::EditorApplication(const WindowApplicationParameters& parameters)
+        : WindowApplication(parameters)
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const WindowApplicationParameters&)")
         , _mainWindow(_windowBackend->GetMainWindow())
         , _uiFrameListener(nullptr)
         , _systemMetricsFrameListener(nullptr)

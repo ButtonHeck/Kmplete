@@ -12,15 +12,15 @@ namespace Kmplete
 {
     constexpr static auto SettingsEntryName = "Application";
 
-    Application::Application(const ApplicationParameters& applicationParameters)
+    Application::Application(const ApplicationParameters& parameters)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Application::Application(const ApplicationParameters&)")
-          _applicationName(applicationParameters.applicationName)
+          _applicationName(parameters.applicationName)
         , _running(false)
         , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
-        Initialize(applicationParameters);
+        Initialize(parameters);
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -46,7 +46,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::Initialize(const ApplicationParameters& applicationParameters)
+    void Application::Initialize(const ApplicationParameters& parameters)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -74,9 +74,9 @@ namespace Kmplete
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
 
-        _settingsManager = CreateUPtr<SettingsManager>(applicationParameters.settingsFilepath.empty() 
-            ? applicationPath / applicationParameters.defaultSettingsFileName
-            : applicationParameters.settingsFilepath);
+        _settingsManager = CreateUPtr<SettingsManager>(parameters.settingsFilepath.empty()
+            ? applicationPath / parameters.defaultSettingsFileName
+            : parameters.settingsFilepath);
         KMP_ASSERT(_settingsManager);
 
         LoadSettings();

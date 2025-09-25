@@ -31,7 +31,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(Application)
 
-        KMP_API explicit Application(const ApplicationParameters& applicationParameters);
+        KMP_API explicit Application(const ApplicationParameters& parameters);
         KMP_API virtual ~Application();
 
         KMP_NODISCARD KMP_API const String& GetApplicationName() const noexcept;
@@ -40,7 +40,7 @@ namespace Kmplete
         KMP_API virtual void AddFrameListener(NonNull<ApplicationFrameListener*> frameListener);
 
     private:
-        void Initialize(const ApplicationParameters& applicationParameters);
+        void Initialize(const ApplicationParameters& parameters);
         void Finalize();
 
         void SaveSettings() const;

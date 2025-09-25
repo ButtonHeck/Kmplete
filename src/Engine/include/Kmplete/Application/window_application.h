@@ -10,6 +10,13 @@
 
 namespace Kmplete
 {
+    struct WindowApplicationParameters
+    {
+        const ApplicationParameters applicationParameters;
+        const bool resizable;
+    };
+    //--------------------------------------------------------------------------
+
     class WindowApplication : public Application
     {
         KMP_LOG_CLASSNAME(WindowApplication)
@@ -18,7 +25,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowApplication)
 
-        KMP_API explicit WindowApplication(const ApplicationParameters& applicationParameters);
+        KMP_API explicit WindowApplication(const WindowApplicationParameters& parameters);
         KMP_API virtual ~WindowApplication();
 
         KMP_API void Run() override;
@@ -28,7 +35,7 @@ namespace Kmplete
         void OnEvent(Event& event);
 
     private:
-        void Initialize();
+        void Initialize(const WindowApplicationParameters& parameters);
         void Finalize();
 
         void UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);

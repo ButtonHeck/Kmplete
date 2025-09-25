@@ -383,27 +383,25 @@ namespace Kmplete
 
     void WindowGlfw::SetResizable(bool resizable)
     {
-        KMP_LOG_WARN("resizable setting will be applied after restart");
-        _settings.resizable = resizable;
+        glfwSetWindowAttrib(_window, GLFW_RESIZABLE, resizable ? GLFW_TRUE : GLFW_FALSE);
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsResizable() const
     {
-        return _settings.resizable;
+        return glfwGetWindowAttrib(_window, GLFW_RESIZABLE) == GLFW_TRUE;
     }
     //--------------------------------------------------------------------------
 
     void WindowGlfw::SetDecorated(bool decorated)
     {
-        _settings.decorated = decorated;
         glfwSetWindowAttrib(_window, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsDecorated() const
     {
-        return _settings.decorated;
+        return glfwGetWindowAttrib(_window, GLFW_DECORATED) == GLFW_TRUE;
     }
     //--------------------------------------------------------------------------
 
@@ -477,9 +475,9 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        glfwWindowHint(GLFW_RESIZABLE, _settings.resizable ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_DECORATED, _settings.decorated ? GLFW_TRUE : GLFW_FALSE);
+        glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
         glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);

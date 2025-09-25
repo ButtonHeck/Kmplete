@@ -35,8 +35,6 @@ namespace Kmplete
         constexpr static auto ScreenModeStr = "ScreenMode";
         constexpr static auto VSyncStr = "VSync";
         constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
-        constexpr static auto ResizableStr = "Resizable";
-        constexpr static auto DecoratedStr = "Decorated";
         constexpr static auto AlwaysOnTopStr = "AlwaysOnTop";
 
         constexpr static auto DefaultX = 100;
@@ -78,8 +76,6 @@ namespace Kmplete
             CursorMode cursorMode = CursorMode::Default;
             bool vSync = true;
             bool updateContinuously = true;
-            bool resizable = true;
-            bool decorated = true;
             bool alwaysOnTop = false;
             float dpiScale = 1.0f;
 
