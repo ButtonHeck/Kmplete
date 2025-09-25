@@ -47,10 +47,10 @@ namespace Kmplete
 
     protected:
         UPtr<WindowBackend> _windowBackend;
-        GraphicsBackendType _graphicsBackendType;
         UPtr<GraphicsBackend> _graphicsBackend;
 
     private:
+        GraphicsBackendType _graphicsBackendType;
         Timer _frameTimer;
     };
     //--------------------------------------------------------------------------
