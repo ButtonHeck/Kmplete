@@ -106,7 +106,8 @@ int ParseParameters(const bpo::options_description& optionsDescription, bpo::var
         logSettings.outputStringBuffer = false;
         logSettings.level = 0;
         logSettings.levelFlush = 0;
-        Log::Initialize(logSettings, "Kmplete Translator");
+        Log::SetSettings(logSettings);
+        Log::Initialize("Kmplete Translator");
     }
 #endif
 
