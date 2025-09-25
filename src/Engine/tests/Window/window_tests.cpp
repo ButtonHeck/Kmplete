@@ -377,26 +377,16 @@ TEST_CASE("Window resizable OFF", "[core][window_backend][window]")
         "Press Y if window cannot be resized",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
-    REQUIRE(windowBackend);
+    auto [windowBackend, mainWindow, windowNameIsMain] = TestStartResult::InitializeTestData();
+    REQUIRE((windowBackend && windowNameIsMain));
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    settings.size = {400, 400};
-    settings.windowedSize = {400, 400};
-    settings.vSync = true;
-    settings.updateContinuously = true;
-    settings.resizable = false;
+    mainWindow.SetResizable(false);
+    WindowCallbackUserSingleCondition windowCb(mainWindow);
 
-    Kmplete::Window* window;
-    REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings));
-    REQUIRE(window);
-
-    WindowCallbackUserSingleCondition windowCb(*window);
-
-    while (!window->ShouldClose())
+    while (!mainWindow.ShouldClose())
     {
-        window->ProcessEvents();
-        window->SwapBuffers();
+        mainWindow.ProcessEvents();
+        mainWindow.SwapBuffers();
     }
 
     REQUIRE(windowCb.conditionOk);
@@ -413,7 +403,6 @@ TEST_CASE("Window decorated OFF", "[core][window_backend][window]")
     REQUIRE((windowBackend && windowNameIsMain));
 
     mainWindow.SetDecorated(false);
-
     WindowCallbackUserSingleCondition windowCb(mainWindow);
 
     while (!mainWindow.ShouldClose())

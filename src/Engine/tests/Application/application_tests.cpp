@@ -7,100 +7,26 @@
 #include <functional>
 #include <thread>
 
+
 namespace Kmplete
 {
-    using EventCallbackFn = std::function<void(Event&)>;
-
-    class EventSender
-    {
-    public:
-        void SetCallbackFn(const EventCallbackFn& fn) { _callback = fn; }
-
-        void SendKeyPressEvent() const
-        {
-            KeyPressEvent evt(Kmplete::Key::A, 0);
-            _callback(evt);
-        }
-
-        void SendKeyReleaseEvent() const
-        {
-            KeyReleaseEvent evt(Kmplete::Key::A);
-            _callback(evt);
-        }
-
-        void SendKeyCharEvent() const
-        {
-            KeyCharEvent evt(Kmplete::Key::A);
-            _callback(evt);
-        }
-
-    private:
-        EventCallbackFn _callback = nullptr;
-    };
-
     class TestApplication : public Application
     {
     public:
-        TestApplication(const ApplicationParameters& applicationParameters)
-            : Application(applicationParameters)
-        {
-            _localizationManager->SetLocale("ru_RU.UTF8");
-        }
-
-        void SetSender(Ptr<EventSender> sender)
-        {
-            _sender = sender;
-            _sender->SetCallbackFn(KMP_BIND(TestApplication::OnEvent));
-        }
-
-        bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
-        bool IsKeyReleaseEventInvoked() const { return _keyReleaseEventInvoked; }
-        bool IsKeyCharEventInvoked() const { return _keyCharEventInvoked; }
-        bool IsApplicationKeyPressEventInvoked() const { return _applicationKeyPressEventInvoked; }
-        bool IsApplicationKeyReleaseEventInvoked() const { return _applicationKeyReleaseEventInvoked; }
-        bool IsApplicationKeyCharEventInvoked() const { return _applicationKeyCharEventInvoked; }
+        TestApplication(const ApplicationParameters& parameters)
+            : Application(parameters)
+        {}
 
         void Run() override {}
 
-        void SaveSettings(const Filepath& filepath = Filepath()) const override
-        {
-            Application::SaveSettings(filepath);
-        }
-
-        void LoadSettings(const Filepath& filepath = Filepath()) override
-        {
-            Application::LoadSettings(filepath);
-        }
-
-    protected:
-        void OnEvent(Event& event) override
-        {
-            EventDispatcher dispatcher(event);
-
-            _applicationKeyPressEventInvoked = dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestApplication::OnKeyPressEvent));
-            _applicationKeyReleaseEventInvoked = dispatcher.Dispatch<KeyReleaseEvent>(KMP_BIND(TestApplication::OnKeyReleaseEvent));
-            _applicationKeyCharEventInvoked = dispatcher.Dispatch<KeyCharEvent>(KMP_BIND(TestApplication::OnKeyCharEvent));
-        }
-
-        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent& evt) override { _keyPressEventInvoked = true; return Application::OnKeyPressEvent(evt); }
-        KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent& evt) override { _keyReleaseEventInvoked = true; return Application::OnKeyReleaseEvent(evt); }
-        KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent& evt) override { _keyCharEventInvoked = true; return Application::OnKeyCharEvent(evt); }
-
     private:
-        Ptr<EventSender> _sender = nullptr;
-        bool _keyPressEventInvoked = false;
-        bool _keyReleaseEventInvoked = false;
-        bool _keyCharEventInvoked = false;
-        bool _applicationKeyPressEventInvoked = false;
-        bool _applicationKeyReleaseEventInvoked = false;
-        bool _applicationKeyCharEventInvoked = false;
     };
 
     class MetricsTestApplication : public Application
     {
     public:
-        MetricsTestApplication(const ApplicationParameters& applicationParameters)
-            : Application(applicationParameters)
+        MetricsTestApplication(const ApplicationParameters& parameters)
+            : Application(parameters)
         {}
 
         void Run() override {}
@@ -132,57 +58,13 @@ TEST_CASE("Test application initialize", "[application]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Test application events", "[application]")
+TEST_CASE("Test application name", "[application]")
 {
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("TestApplication", "", "Kmplete_unit_tests_settings.json"));
-
+    const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("MetricsTestApplication", "", "Kmplete_unit_tests_settings.json"));
     REQUIRE(application);
-
-    const auto eventSender = Kmplete::CreatePtr<Kmplete::EventSender>();
-    application->SetSender(eventSender);
-
-    REQUIRE_FALSE(application->IsKeyPressEventInvoked());
-    REQUIRE_FALSE(application->IsKeyReleaseEventInvoked());
-    REQUIRE_FALSE(application->IsKeyCharEventInvoked());
-    REQUIRE_FALSE(application->IsApplicationKeyPressEventInvoked());
-    REQUIRE_FALSE(application->IsApplicationKeyReleaseEventInvoked());
-    REQUIRE_FALSE(application->IsApplicationKeyCharEventInvoked());
-
-    eventSender->SendKeyPressEvent();
-    REQUIRE(application->IsApplicationKeyPressEventInvoked());
-    REQUIRE(application->IsKeyPressEventInvoked());
-
-    eventSender->SendKeyReleaseEvent();
-    REQUIRE(application->IsApplicationKeyReleaseEventInvoked());
-    REQUIRE(application->IsKeyReleaseEventInvoked());
-
-    eventSender->SendKeyCharEvent();
-    REQUIRE(application->IsApplicationKeyCharEventInvoked());
-    REQUIRE(application->IsKeyCharEventInvoked());
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test application runtime settings save", "[application]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("TestApplication", "", "Kmplete_unit_tests_settings.json"));
-
-    REQUIRE(application);
-
-    const auto newSettingsPath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_unit_test_settings_runtime.json");
-    application->SaveSettings(newSettingsPath);
-
-    REQUIRE(Kmplete::Filesystem::FilepathExists(newSettingsPath));
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test application runtime settings load", "[application]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("TestApplication", "", "Kmplete_unit_tests_settings.json"));
-
-    REQUIRE(application);
-
-    application->LoadSettings();
-    SUCCEED(); // just check succeed build and no exceptions
+    Kmplete::String appName = "";
+    REQUIRE_NOTHROW(appName = application->GetApplicationName());
+    REQUIRE(!appName.empty());
 }
 //--------------------------------------------------------------------------
 
