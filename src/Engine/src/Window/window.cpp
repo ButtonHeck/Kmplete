@@ -6,6 +6,18 @@
 
 namespace Kmplete
 {
+    constexpr static auto NameStr = "Name";
+    constexpr static auto XStr = "X";
+    constexpr static auto YStr = "Y";
+    constexpr static auto WidthStr = "Width";
+    constexpr static auto HeightStr = "Height";
+    constexpr static auto WindowedWidthStr = "WindowedWidth";
+    constexpr static auto WindowedHeightStr = "WindowedHeight";
+    constexpr static auto ScreenModeStr = "ScreenMode";
+    constexpr static auto VSyncStr = "VSync";
+    constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
+    constexpr static auto AlwaysOnTopStr = "AlwaysOnTop";
+
     Window::Window(WindowSettings& settings)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Window::Window(WindowSettings&)")
           _settings(settings)
@@ -93,11 +105,6 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    Window::WindowSettings::WindowSettings(const String& name) noexcept
-        : name(name)
-    {}
-    //--------------------------------------------------------------------------
-
     bool Window::WindowSettings::IsFullscreen() const noexcept
     {
         return screenMode == Window::ScreenMode::Fullscreen;
@@ -134,6 +141,7 @@ namespace Kmplete
 
     void Window::WindowSettings::LoadSettings(SettingsDocument& settings)
     {
+        name = settings.GetString(NameStr, "");
         position.x = settings.GetInt(XStr, DefaultX);
         position.y = settings.GetInt(YStr, DefaultY);
         size.x = settings.GetInt(WidthStr, DefaultWidth);

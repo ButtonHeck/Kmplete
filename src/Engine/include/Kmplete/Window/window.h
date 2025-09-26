@@ -25,23 +25,6 @@ namespace Kmplete
     public:
         using EventCallbackFn = std::function<void(Event&)>;
 
-        constexpr static auto NameStr = "Name";
-        constexpr static auto XStr = "X";
-        constexpr static auto YStr = "Y";
-        constexpr static auto WidthStr = "Width";
-        constexpr static auto HeightStr = "Height";
-        constexpr static auto WindowedWidthStr = "WindowedWidth";
-        constexpr static auto WindowedHeightStr = "WindowedHeight";
-        constexpr static auto ScreenModeStr = "ScreenMode";
-        constexpr static auto VSyncStr = "VSync";
-        constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
-        constexpr static auto AlwaysOnTopStr = "AlwaysOnTop";
-
-        constexpr static auto DefaultX = 100;
-        constexpr static auto DefaultY = 100;
-        constexpr static auto DefaultWidth = 1920;
-        constexpr static auto DefaultHeight = 1080;
-
     public:
         enum class ScreenMode
         {
@@ -66,9 +49,12 @@ namespace Kmplete
 
         struct WindowSettings
         {
-            KMP_API explicit WindowSettings(const String& name) noexcept;
+            constexpr static auto DefaultX = 100;
+            constexpr static auto DefaultY = 100;
+            constexpr static auto DefaultWidth = 1920;
+            constexpr static auto DefaultHeight = 1080;
 
-            const String name = "";
+            String name = "";
             Point2I position = Point2I(DefaultX, DefaultY);
             Size2I size = Size2I(DefaultWidth, DefaultHeight);
             Size2I windowedSize = Size2I(DefaultWidth, DefaultHeight);

@@ -467,20 +467,18 @@ namespace Kmplete
         for (auto i = 0; i < windowsCount; i++)
         {
             settings.StartLoadObject(i);
+            Window::WindowSettings windowSettings;
+            windowSettings.LoadSettings(settings);
+            settings.EndLoadObject();
 
-            const auto windowName = settings.GetString(Window::NameStr, "");
-            if (windowName.empty())
+            if (windowSettings.name.empty())
             {
                 KMP_LOG_ERROR("loading settings for unnamed window is prohibited, current object would be skipped, remove it from settings");
             }
             else
             {
-                auto windowSettings = CreateUPtr<Window::WindowSettings>(windowName);
-                windowSettings->LoadSettings(settings);
-                _auxWindowsSettings.emplace(windowName, std::move(windowSettings));
+                _auxWindowsSettings.emplace(windowSettings.name, CreateUPtr<Window::WindowSettings>(windowSettings));
             }
-
-            settings.EndLoadObject();
         }
 
         settings.EndLoadArray();

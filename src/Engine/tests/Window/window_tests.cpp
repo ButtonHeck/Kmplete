@@ -316,8 +316,8 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    Kmplete::Window::WindowSettings settings("SomeWindow");
-    REQUIRE(settings.name == "SomeWindow");
+    Kmplete::Window::WindowSettings settings;
+    settings.name = "Some window";
     settings.size = {200, 200};
     settings.windowedSize = {200, 200};
     settings.vSync = true;
@@ -347,15 +347,15 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
     const auto windowBackend = Kmplete::WindowBackend::Create();
     REQUIRE(windowBackend);
 
-    Kmplete::Window::WindowSettings settings("");
+    Kmplete::Window::WindowSettings settings;
     REQUIRE(settings.name == "");
 
     Kmplete::Window* window;
     REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings)); //expect exception during creation but catching it in window backend
     REQUIRE_FALSE(window);
 
-    Kmplete::Window::WindowSettings settings2 = Kmplete::Window::WindowSettings("ValidName-InvalidWidth");
-    REQUIRE(settings2.name == "ValidName-InvalidWidth");
+    Kmplete::Window::WindowSettings settings2;
+    settings2.name = "ValidName-InvalidWidth";
     settings2.size = {65000, 200};
 
     REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings2));
