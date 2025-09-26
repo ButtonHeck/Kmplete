@@ -40,12 +40,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::AddFrameListener(NonNull<ApplicationFrameListener*> frameListener)
-    {
-        _frameListeners.push_back(frameListener);
-    }
-    //--------------------------------------------------------------------------
-
     void Application::Initialize(const ApplicationParameters& parameters)
     {
         KMP_PROFILE_FUNCTION();
@@ -98,8 +92,6 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         SaveSettings();
-
-        _frameListeners.clear();
 
         _settingsManager.reset();
         _localizationManager.reset();

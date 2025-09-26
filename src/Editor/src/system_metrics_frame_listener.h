@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kmplete/Application/application_frame_listener.h"
+#include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Core/timer.h"
 
 
@@ -9,7 +9,7 @@ namespace Kmplete
     class SettingsDocument;
     class SystemMetricsManager;
 
-    class SystemMetricsFrameListener : public ApplicationFrameListener
+    class SystemMetricsFrameListener : public FrameListener
     {
     public:
         explicit SystemMetricsFrameListener(SystemMetricsManager& metricsManager);

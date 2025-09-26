@@ -15,7 +15,7 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "EditorFrameListener";
 
     EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer)
-        : ApplicationFrameListener("EditorFrameListener")
+        : FrameListener("EditorFrameListener")
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorFrameListener::EditorFrameListener(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
         , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)

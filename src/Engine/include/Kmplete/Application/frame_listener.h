@@ -7,11 +7,11 @@
 
 namespace Kmplete
 {
-    class ApplicationFrameListener
+    class FrameListener
     {
     public:
-        KMP_API explicit ApplicationFrameListener(const String& name) noexcept;
-        virtual ~ApplicationFrameListener() = default;
+        KMP_API explicit FrameListener(const String& name) noexcept;
+        virtual ~FrameListener() = default;
 
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}

@@ -3,7 +3,7 @@
 #include "editor_ui_impl.h"
 #include "editor_ui_compositor.h"
 
-#include "Kmplete/Application/application_frame_listener.h"
+#include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Core/settings_document.h"
@@ -19,7 +19,7 @@ namespace Kmplete
     class SystemMetricsManager;
     class GraphicsBackend;
 
-    class EditorFrameListener : public ApplicationFrameListener
+    class EditorFrameListener : public FrameListener
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 

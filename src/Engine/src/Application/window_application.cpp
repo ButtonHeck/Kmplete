@@ -84,6 +84,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowApplication::AddFrameListener(NonNull<FrameListener*> frameListener)
+    {
+        _frameListeners.push_back(frameListener);
+    }
+    //--------------------------------------------------------------------------
+
     bool WindowApplication::ConfirmExit()
     {
         return true;
@@ -129,6 +135,8 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION();
 
         SaveSettings();
+
+        _frameListeners.clear();
 
         _graphicsBackend.reset();
         _windowBackend.reset();

@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Kmplete/Application/application.h"
+#include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window_backend.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Core/timer.h"
+#include "Kmplete/Base/nullability.h"
 
 
 namespace Kmplete
@@ -29,6 +31,8 @@ namespace Kmplete
         KMP_API virtual ~WindowApplication();
 
         KMP_API void Run() override;
+        KMP_API void AddFrameListener(NonNull<FrameListener*> frameListener);
+
         KMP_NODISCARD KMP_API virtual bool ConfirmExit();
 
     protected:
@@ -52,6 +56,7 @@ namespace Kmplete
     private:
         GraphicsBackendType _graphicsBackendType;
         Timer _frameTimer;
+        Vector<Nullable<FrameListener*>> _frameListeners;
     };
     //--------------------------------------------------------------------------
 }

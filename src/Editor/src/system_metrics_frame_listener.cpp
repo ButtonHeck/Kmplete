@@ -11,7 +11,7 @@ namespace Kmplete
     constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
 
     SystemMetricsFrameListener::SystemMetricsFrameListener(SystemMetricsManager& metricsManager)
-        : ApplicationFrameListener("SystemMetrics")
+        : FrameListener("SystemMetrics")
         , _metricsManager(metricsManager)
         , _timer(1000)
     {}
