@@ -6,6 +6,7 @@ project(MathLib LANGUAGES CXX)
 
 set(MathLib_MATH
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Math/math.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Math/geometry.h
 )
 source_group("Math" FILES ${MathLib_MATH})
 

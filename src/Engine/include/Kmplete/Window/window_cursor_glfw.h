@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Window/window_cursor.h"
-#include "Kmplete/Math/math.h"
+#include "Kmplete/Math/geometry.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -17,7 +17,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(WindowCursorGlfw)
 
-        KMP_API explicit WindowCursorGlfw(const Filepath& filepath, const Point2I& hotspot = Point2I());
+        KMP_API explicit WindowCursorGlfw(const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I());
         KMP_API ~WindowCursorGlfw();
 
         KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const noexcept override;

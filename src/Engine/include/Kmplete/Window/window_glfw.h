@@ -24,8 +24,8 @@ namespace Kmplete
         KMP_API explicit WindowGlfw(WindowSettings& settings);
         KMP_API ~WindowGlfw();
 
-        KMP_NODISCARD KMP_API Size2I GetSize() const override;
-        KMP_NODISCARD KMP_API Size2I GetWindowedSize() const override;
+        KMP_NODISCARD KMP_API Math::Size2I GetSize() const override;
+        KMP_NODISCARD KMP_API Math::Size2I GetWindowedSize() const override;
         KMP_NODISCARD KMP_API bool IsIconified() const override;
 
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
@@ -34,7 +34,7 @@ namespace Kmplete
         KMP_API void SetIcon(const Filepath& filepath) override;
 
         KMP_API void SetPosition(int x, int y) override;
-        KMP_NODISCARD KMP_API Point2I GetPosition() const override;
+        KMP_NODISCARD KMP_API Math::Point2I GetPosition() const override;
         KMP_API void PositionAtCurrentScreenCenter() override;
 
         KMP_API void SetShouldClose(bool close) override;
@@ -75,9 +75,9 @@ namespace Kmplete
             explicit UserData(WindowSettings& settings);
 
             ScreenMode& screenMode;
-            Point2I& position;
-            Size2I& size;
-            Size2I& windowedSize;
+            Math::Point2I& position;
+            Math::Size2I& size;
+            Math::Size2I& windowedSize;
             float& dpiScale;
             EventCallbackFn eventCallback;
             bool iconified;
@@ -88,7 +88,7 @@ namespace Kmplete
     private:
         KMP_NODISCARD Nullable<GLFWwindow*> CreateGLFWwindow();
         KMP_NODISCARD std::pair<bool, NonNull<GLFWmonitor*>> GetSuitableMonitor() const;
-        KMP_NODISCARD Rect2I GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const;
+        KMP_NODISCARD Math::Rect2I GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const;
 
         void Initialize();
         void InitializeWindowHints() const;

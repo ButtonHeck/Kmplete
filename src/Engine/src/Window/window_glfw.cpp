@@ -77,7 +77,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION();
 
-        const auto windowRectangle = Rect2I(_settings.position, _settings.size);
+        const auto windowRectangle = Math::Rect2I(_settings.position, _settings.size);
         const auto windowCenter = windowRectangle.GetCenter();
 
         int count = 0;
@@ -105,7 +105,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Rect2I WindowGlfw::GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const
+    Math::Rect2I WindowGlfw::GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const
     {
         KMP_PROFILE_FUNCTION();
 
@@ -118,7 +118,7 @@ namespace Kmplete
         int monitorY = 0;
         glfwGetMonitorPos(monitor, &monitorX, &monitorY);
 
-        return Rect2I(Point2I(monitorX, monitorY), Size2I(monitorScreenWidth, monitorScreenHeight));
+        return Math::Rect2I(Math::Point2I(monitorX, monitorY), Math::Size2I(monitorScreenWidth, monitorScreenHeight));
     }
     //--------------------------------------------------------------------------
 
@@ -160,23 +160,23 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Size2I WindowGlfw::GetSize() const
+    Math::Size2I WindowGlfw::GetSize() const
     {
         KMP_PROFILE_FUNCTION();
 
         int width;
         int height;
         glfwGetWindowSize(_window, &width, &height);
-        return Size2I(width, height);
+        return Math::Size2I(width, height);
     }
     //--------------------------------------------------------------------------
 
-    Size2I WindowGlfw::GetWindowedSize() const
+    Math::Size2I WindowGlfw::GetWindowedSize() const
     {
         KMP_PROFILE_FUNCTION();
 
         const NonNull<UserData*> userData = GetUserPointer(_window);
-        return Size2I(userData->windowedSize.x, userData->windowedSize.y);
+        return Math::Size2I(userData->windowedSize.x, userData->windowedSize.y);
     }
     //--------------------------------------------------------------------------
 
@@ -227,14 +227,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Point2I WindowGlfw::GetPosition() const
+    Math::Point2I WindowGlfw::GetPosition() const
     {
         KMP_PROFILE_FUNCTION();
 
         int x;
         int y;
         glfwGetWindowPos(_window, &x, &y);
-        return Point2I(x, y);
+        return Math::Point2I(x, y);
     }
     //--------------------------------------------------------------------------
 

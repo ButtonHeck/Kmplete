@@ -4,6 +4,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Math/math.h"
 
 #include <stdexcept>
 
@@ -51,7 +52,7 @@ namespace Kmplete
 
         while (_running)
         {
-            const auto frameTimestep = _frameTimer.Mark();
+            const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
 
             mainWindow.ProcessEvents();
 

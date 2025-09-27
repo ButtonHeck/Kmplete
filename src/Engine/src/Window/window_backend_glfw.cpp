@@ -348,7 +348,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, const Point2I& hotspot /*= Point2I()*/)
+    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot /*= Math::Point2I()*/)
     {
         if (_cursors.contains(name))
         {

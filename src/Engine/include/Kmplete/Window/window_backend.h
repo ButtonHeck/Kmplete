@@ -5,7 +5,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
-#include "Kmplete/Math/math.h"
+#include "Kmplete/Math/geometry.h"
 
 
 namespace Kmplete
@@ -51,7 +51,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual Vector<MonitorVideoMode> GetMonitorVideoModes(int index) const = 0;
         KMP_NODISCARD KMP_API virtual float GetPrimaryMonitorDPIScale() const = 0;
 
-        KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Point2I& hotspot = Point2I()) = 0;
+        KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I()) = 0;
         KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> GetCursor(const String& name) const = 0;
 
         KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;

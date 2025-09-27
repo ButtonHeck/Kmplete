@@ -8,7 +8,7 @@
 
 namespace Kmplete
 {
-    WindowCursorGlfw::WindowCursorGlfw(const Filepath& filepath, const Point2I& hotspot /*= Point2I()*/)
+    WindowCursorGlfw::WindowCursorGlfw(const Filepath& filepath, const Math::Point2I& hotspot /*= Math::Point2I()*/)
         : _cursor(nullptr)
     {
         KMP_PROFILE_FUNCTION();
