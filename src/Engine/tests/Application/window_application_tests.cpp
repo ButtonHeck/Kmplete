@@ -166,6 +166,23 @@ namespace Kmplete
         }
     };
 
+    class CustomBufferIconApplication : public TestWindowApplication
+    {
+    public:
+        CustomBufferIconApplication(const WindowApplicationParameters& parameters)
+            : TestWindowApplication(parameters)
+        {
+            const auto iconBufferSize = 4 * 2 * 4;
+            unsigned char iconBuffer[] = { 
+                /*blue*/ 0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255, 
+                /*red */ 255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255 };
+            Kmplete::Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Kmplete::Math::Size2I(4, 2), Kmplete::ImageChannels::RGBAlpha);
+
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            mainWindow.SetIcon(iconFromBuffer);
+        }
+    };
+
     class CursorTestApplication : public TestWindowApplication
     {
     public:
@@ -273,6 +290,18 @@ TEST_CASE("Test window application custom icon", "[window_application][applicati
 
     KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", 
                                                                    "Press Y if this window has an icon (red square upper-left and yellow square bottom-right)", 
+                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
+    application->Run();
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Test window application custom buffer icon", "[window_application][application][window]")
+{
+    const auto application = Kmplete::CreateUPtr<Kmplete::CustomBufferIconApplication>(Kmplete::WindowApplicationParameters{.applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true});
+    REQUIRE(application);
+
+    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application buffer icon test", 
+                                                                   "Press Y if this window has an icon (blue-red)", 
                                                                    Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
 }

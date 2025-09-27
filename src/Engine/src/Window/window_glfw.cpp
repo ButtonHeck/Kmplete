@@ -5,7 +5,6 @@
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
-#include "Kmplete/Graphics/image.h"
 
 #include <GLFW/glfw3.h>
 
@@ -207,6 +206,23 @@ namespace Kmplete
 
         Image img(filepath, ImageChannels::RGBAlpha);
         GLFWimage icon{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
+
+        if (icon.pixels)
+        {
+            glfwSetWindowIcon(_window, 1, &icon);
+        }
+        else
+        {
+            KMP_LOG_WARN("cannot set window icon");
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::SetIcon(const Image& image)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        GLFWimage icon{ image.GetWidth(), image.GetHeight(), image.GetPixels() };
 
         if (icon.pixels)
         {

@@ -5,6 +5,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Math/geometry.h"
 
 
 namespace Kmplete
@@ -20,6 +21,7 @@ namespace Kmplete
         KMP_API explicit Image(const char* filepath, bool flipVertically = false);
         KMP_API Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically = false);
         KMP_API Image(const char* filepath, ImageChannels desiredChannels, bool flipVertically = false);
+        KMP_API Image(const unsigned char* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);
         KMP_API ~Image();
         KMP_API Image(Image&& rhs) noexcept;
         KMP_API Image& operator=(Image&& rhs) noexcept;
@@ -30,6 +32,10 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Nullable<unsigned char*> GetPixels() const noexcept;
 
     private:
+        void DeleteData();
+
+    private:
+        bool _loadedFromFile;
         int _width;
         int _height;
         ImageChannels _channels;

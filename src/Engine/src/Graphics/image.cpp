@@ -3,6 +3,7 @@
 #include "Kmplete/Filesystem/filesystem.h"
 
 #include <stb_image.h>
+#include <cstring>
 
 
 namespace Kmplete
@@ -13,7 +14,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     Image::Image(const char* filepath, bool flipVertically /*= false*/)
-        : _width(0)
+        : _loadedFromFile(true)
+        , _width(0)
         , _height(0)
         , _channels(ImageChannels::RGB)
         , _pixels(nullptr)
@@ -41,7 +43,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     Image::Image(const char* filepath, ImageChannels desiredChannels, bool flipVertically /*= false*/)
-        : _width(0)
+        : _loadedFromFile(true)
+        , _width(0)
         , _height(0)
         , _channels(desiredChannels)
         , _pixels(nullptr)
@@ -68,17 +71,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    Image::Image(const unsigned char* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels)
+        : _loadedFromFile(false)
+        , _width(size.x)
+        , _height(size.y)
+        , _channels(channels)
+        , _pixels(nullptr)
+    {
+        if (pixelBuffer == nullptr)
+        {
+            KMP_LOG_ERROR("given buffer is nullptr");
+            return;
+        }
+
+        if (size.x <= 0 || size.y <= 0)
+        {
+            KMP_LOG_ERROR("size dimensions should not be negative, {}x{}", size.x, size.y);
+            return;
+        }
+
+        if (bufferSize != size.x * size.y * channels)
+        {
+            KMP_LOG_ERROR("buffer size ({}) mismatch with other parameters, {}x{} ({} channels)", bufferSize, size.x, size.y, static_cast<int>(_channels));
+            return;
+        }
+
+        _pixels = new unsigned char[bufferSize];
+        std::memcpy(_pixels, pixelBuffer, bufferSize);
+
+        KMP_LOG_INFO("created [{}x{}] ({} channels) from pixel buffer", _width, _height, static_cast<int>(_channels));
+    }
+    //--------------------------------------------------------------------------
+
     Image::~Image()
     {
-        if (_pixels)
-        {
-            stbi_image_free(_pixels);
-        }
+        DeleteData();
     }
     //--------------------------------------------------------------------------
 
     Image::Image(Image&& rhs) noexcept
-        : _width(rhs._width)
+        : _loadedFromFile(rhs._loadedFromFile)
+        , _width(rhs._width)
         , _height(rhs._height)
         , _channels(rhs._channels)
         , _pixels(rhs._pixels)
@@ -89,11 +122,9 @@ namespace Kmplete
 
     Image& Image::operator=(Image&& rhs) noexcept
     {
-        if (_pixels)
-        {
-            stbi_image_free(_pixels);
-        }
+        DeleteData();
 
+        _loadedFromFile = rhs._loadedFromFile;
         _width = rhs._width;
         _height = rhs._height;
         _channels = rhs._channels;
@@ -126,6 +157,22 @@ namespace Kmplete
     Nullable<unsigned char*> Image::GetPixels() const noexcept
     {
         return _pixels;
+    }
+    //--------------------------------------------------------------------------
+
+    void Image::DeleteData()
+    {
+        if (_pixels)
+        {
+            if (_loadedFromFile)
+            {
+                stbi_image_free(_pixels);
+            }
+            else
+            {
+                delete[] _pixels;
+            }
+        }
     }
     //--------------------------------------------------------------------------
 }
