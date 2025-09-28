@@ -7,15 +7,16 @@
 
 namespace Kmplete
 {
+    constexpr static Utils::StringID ErrorTextureSID = 0;
+
     TextureManager::TextureManager(GraphicsBackendType backendType)
         : _backendType(backendType)
-        , _errorTexture(nullptr)
     {}
     //--------------------------------------------------------------------------
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
     {
-        if (textureSid == 0)
+        if (textureSid == ErrorTextureSID)
         {
             KMP_LOG_ERROR("cannot create texture with zero id");
             return false;
@@ -51,7 +52,7 @@ namespace Kmplete
 
     bool TextureManager::CreateErrorTexture()
     {
-        if (_errorTexture)
+        if (_textures.contains(ErrorTextureSID))
         {
             KMP_LOG_WARN("error texture already created");
             return false;
@@ -60,14 +61,14 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            _errorTexture.reset(new OpenGLTexture(errorTextureImage));
+            _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(errorTextureImage);
             break;
 
         default:
             break;
         }
 
-        if (!_errorTexture)
+        if (!_textures.contains(ErrorTextureSID))
         {
             KMP_LOG_ERROR("error texture failed to load");
             return false;
@@ -82,7 +83,7 @@ namespace Kmplete
         if (!_textures.contains(textureSid))
         {
             KMP_LOG_WARN("texture '{}' not found", textureSid);
-            return *_errorTexture;
+            return *_textures[ErrorTextureSID];
         }
 
         return *_textures[textureSid];
