@@ -1,4 +1,5 @@
 #include "Kmplete/Application/window_application.h"
+#include "Kmplete/Application/default_window_icon_data.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
@@ -113,7 +114,7 @@ namespace Kmplete
         LoadSettings();
 
         auto& mainWindow = _windowBackend->CreateMainWindow();
-        mainWindow.SetIcon(KMP_DEFAULT_WINDOW_ICON_PATH);
+        mainWindow.SetIcon(defaultWindowIcon);
         mainWindow.SetResizable(parameters.resizable);
 
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);

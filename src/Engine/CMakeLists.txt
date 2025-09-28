@@ -30,6 +30,7 @@ set(Kmplete_APPLICATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/default_window_icon_data.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/window_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/frame_listener.cpp
@@ -126,7 +127,6 @@ else()
 endif()
 
 target_compile_definitions(Kmplete
-    PUBLIC KMP_DEFAULT_WINDOW_ICON_PATH=\"${KmpleteResourcesFolder}/icons/Kmplete128.png\"
     PUBLIC KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
     PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
     PRIVATE KMP_EXPORTS
