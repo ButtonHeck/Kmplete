@@ -28,17 +28,29 @@ namespace Kmplete
 
         using Size3I = glm::ivec3;
         using Size3F = glm::vec3;
+        //--------------------------------------------------------------------------
+
+
+        template<typename T1, typename T2>
+        using Same = std::is_same<T1, T2>;
+
+        template<typename T1, typename T2>
+        using Both = std::conjunction<T1, T2>;
+
+        template<typename T1, typename T2>
+        using Either = std::disjunction<T1, T2>;
+        //--------------------------------------------------------------------------
 
     
         template<class PositionType, class SizeType>
-        requires (std::disjunction_v<
-                    std::conjunction<
-                        std::is_same<PositionType, Point2I>, 
-                        std::is_same<SizeType, Size2I>>,
-                    std::conjunction<
-                        std::is_same<PositionType, Point2F>, 
-                        std::is_same<SizeType, Size2F>>
-                 >)
+        requires (Either<
+                    Both<
+                        Same<PositionType, Point2I>, 
+                        Same<SizeType, Size2I>>,
+                    Both<
+                        Same<PositionType, Point2F>, 
+                        Same<SizeType, Size2F>>
+                 >::value)
         struct Rect2
         {
             Rect2(const PositionType& position, const SizeType& size) noexcept
@@ -67,14 +79,14 @@ namespace Kmplete
 
 
         template<class PositionType, class SizeType>
-        requires (std::disjunction_v<
-                    std::conjunction<
-                        std::is_same<PositionType, Point3I>, 
-                        std::is_same<SizeType, Size3I>>,
-                    std::conjunction<
-                        std::is_same<PositionType, Point3F>, 
-                        std::is_same<SizeType, Size3F>>
-                    >)
+        requires (Either<
+                    Both<
+                        Same<PositionType, Point3I>, 
+                        Same<SizeType, Size3I>>,
+                    Both<
+                        Same<PositionType, Point3F>, 
+                        Same<SizeType, Size3F>>
+                 >::value)
         struct Rect3
         {
             Rect3(const PositionType& position, const SizeType& size) noexcept
@@ -109,5 +121,6 @@ namespace Kmplete
 
         using Rect3I = Rect3<Point3I, Size3I>;
         using Rect3F = Rect3<Point3F, Size3F>;
+        //--------------------------------------------------------------------------
     }
 }
