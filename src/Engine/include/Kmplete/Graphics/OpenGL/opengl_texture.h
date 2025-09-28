@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Graphics/texture.h"
+#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Base/types_aliases.h"
 
 
@@ -11,9 +12,10 @@ namespace Kmplete
     public:
         KMP_API explicit OpenGLTexture(const Filepath& filepath, bool flipVertically = false);
         KMP_API explicit OpenGLTexture(const char* filepath, bool flipVertically = false);
+        KMP_API explicit OpenGLTexture(const Image& image);
 
     private:
-        void Load(const char* filepath, bool flipVertically);
+        void Load(const Image& image);
     };
     //--------------------------------------------------------------------------
 }

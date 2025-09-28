@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Graphics/error_texture_data.h"
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
@@ -16,7 +17,8 @@ namespace Kmplete
     {
         if (textureSid == 0)
         {
-            return CreateErrorTexture(filepath, flipVertically);
+            KMP_LOG_ERROR("cannot create texture with zero id");
+            return false;
         }
 
         if (_textures.contains(textureSid))
@@ -47,7 +49,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateErrorTexture(const Filepath& filepath, bool flipVertically)
+    bool TextureManager::CreateErrorTexture()
     {
         if (_errorTexture)
         {
@@ -58,7 +60,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            _errorTexture.reset(new OpenGLTexture(filepath, flipVertically));
+            _errorTexture.reset(new OpenGLTexture(errorTextureImage));
             break;
 
         default:

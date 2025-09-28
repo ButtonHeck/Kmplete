@@ -7,8 +7,6 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Math/math.h"
 
-#include <stdexcept>
-
 
 #if defined (CreateWindow)
     #pragma push_macro("CreateWindow")
@@ -119,12 +117,6 @@ namespace Kmplete
 
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_graphicsBackend);
-
-        if (!_graphicsBackend->GetTextureManager().CreateTexture(0, Utils::Concatenate(KMP_ICONS_FOLDER, "error.jpg")))
-        {
-            KMP_LOG_CRITICAL("error texture loading failed");
-            throw std::runtime_error("WindowApplication: error texture loading failed");
-        }
 
         mainWindow.SetEventCallback(KMP_BIND(WindowApplication::OnEvent));
 

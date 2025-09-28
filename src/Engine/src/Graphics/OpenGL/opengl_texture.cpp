@@ -9,19 +9,26 @@ namespace Kmplete
 {
     OpenGLTexture::OpenGLTexture(const Filepath& filepath, bool flipVertically /*= false*/)
     {
-        Load(Filesystem::ToGenericString(filepath).c_str(), flipVertically);
+        Image image(Filesystem::ToGenericString(filepath).c_str(), flipVertically);
+        Load(image);
     }
     //--------------------------------------------------------------------------
 
     OpenGLTexture::OpenGLTexture(const char* filepath, bool flipVertically /*= false*/)
     {
-        Load(filepath, flipVertically);
+        Image image(filepath, flipVertically);
+        Load(image);
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLTexture::Load(const char* filepath, bool flipVertically)
+    OpenGLTexture::OpenGLTexture(const Image& image)
     {
-        Image image(filepath, flipVertically);
+        Load(image);
+    }
+    //--------------------------------------------------------------------------
+
+    void OpenGLTexture::Load(const Image& image)
+    {
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
         glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO abstraction
