@@ -9,40 +9,11 @@
 namespace Kmplete
 {
     Image::Image(const Filepath& filepath, bool flipVertically /*= false*/)
-        : Image(Filesystem::ToGenericString(filepath).c_str(), flipVertically)
+        : Image(filepath, ImageChannels::RGB, flipVertically)
     {}
-    //--------------------------------------------------------------------------
-
-    Image::Image(const char* filepath, bool flipVertically /*= false*/)
-        : _loadedFromFile(true)
-        , _width(0)
-        , _height(0)
-        , _channels(ImageChannels::RGB)
-        , _pixels(nullptr)
-    {
-        stbi_set_flip_vertically_on_load(flipVertically);
-
-        auto channelsInFile = 0;
-        _pixels = stbi_load(filepath, &_width, &_height, &channelsInFile, 0);
-        _channels = static_cast<ImageChannels>(channelsInFile);
-
-        if (!_pixels)
-        {
-            KMP_LOG_ERROR("'{}' loading error", filepath);
-        }
-        else
-        {
-            KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
-        }
-    }
     //--------------------------------------------------------------------------
 
     Image::Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically /*= false*/)
-        : Image(Filesystem::ToGenericString(filepath).c_str(), desiredChannels, flipVertically)
-    {}
-    //--------------------------------------------------------------------------
-
-    Image::Image(const char* filepath, ImageChannels desiredChannels, bool flipVertically /*= false*/)
         : _loadedFromFile(true)
         , _width(0)
         , _height(0)
@@ -52,7 +23,7 @@ namespace Kmplete
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
-        _pixels = stbi_load(filepath, &_width, &_height, &channelsInFile, desiredChannels);
+        _pixels = stbi_load(Filesystem::ToGenericString(filepath).c_str(), &_width, &_height, &channelsInFile, desiredChannels);
 
         if (channelsInFile != _channels)
         {
