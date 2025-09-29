@@ -1,3 +1,4 @@
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Application/window_application.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/FileDialogs/file_dialogs.h"
@@ -5,6 +6,7 @@
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Graphics/image.h"
 
 #include <catch2/catch_test_macros.hpp>
 
@@ -162,7 +164,8 @@ namespace Kmplete
             : TestWindowApplication(parameters)
         {
             auto& mainWindow = _windowBackend->GetMainWindow();
-            mainWindow.SetIcon(KMP_TEST_ICON_PATH);
+            const auto iconImage = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
+            mainWindow.SetIcon(iconImage);
         }
     };
 
@@ -176,7 +179,7 @@ namespace Kmplete
             unsigned char iconBuffer[] = { 
                 /*blue*/ 0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255, 
                 /*red */ 255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255 };
-            Kmplete::Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Kmplete::Math::Size2I(4, 2), Kmplete::ImageChannels::RGBAlpha);
+            Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Math::Size2I(4, 2), ImageChannels::RGBAlpha);
 
             auto& mainWindow = _windowBackend->GetMainWindow();
             mainWindow.SetIcon(iconFromBuffer);
