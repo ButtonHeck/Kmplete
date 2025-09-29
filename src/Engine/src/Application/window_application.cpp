@@ -1,5 +1,5 @@
 #include "Kmplete/Application/window_application.h"
-#include "Kmplete/Application/default_window_icon_data.h"
+#include "Kmplete/Internal/default_window_icon_data.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"

@@ -30,7 +30,6 @@ set(Kmplete_APPLICATION
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/frame_listener.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/default_window_icon_data.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/window_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/frame_listener.cpp
@@ -68,7 +67,6 @@ set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_manager.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/error_texture_data.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
@@ -99,6 +97,12 @@ set(Kmplete_LOCALIZATION
 )
 source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
+set(Kmplete_INTERNAL
+    ${CMAKE_CURRENT_LIST_DIR}/internal/Kmplete/Internal/default_window_icon_data.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/Kmplete/Internal/error_texture_data.h
+)
+source_group("Internal" FILES ${Kmplete_INTERNAL})
+
 add_library(Kmplete
     ${Kmplete_CORE}
     ${Kmplete_APPLICATION}
@@ -107,6 +111,7 @@ add_library(Kmplete
     ${Kmplete_GRAPHICS}
     ${Kmplete_GRAPHICS_OPENGL}
     ${Kmplete_LOCALIZATION}
+    ${Kmplete_INTERNAL}
 )
 
 
@@ -116,6 +121,8 @@ SetupCompilerOptions(Kmplete)
 target_include_directories(Kmplete
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
     PUBLIC "${GLFW_SOURCE_DIR}/include"
+    
+    PRIVATE "${CMAKE_CURRENT_LIST_DIR}/internal"
 )
 
 option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)
