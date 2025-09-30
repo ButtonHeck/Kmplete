@@ -19,10 +19,23 @@ namespace Kmplete
 
         KMP_NODISCARD Byte AssetTypeToByte(AssetType type);
         KMP_NODISCARD AssetType ByteToAssetType(Byte byte);
+        //--------------------------------------------------------------------------
 
-        struct AssetFileHeader
+        struct AssetDataEntryHeader
         {
-            AssetType type;
+            Byte type;
+            Byte tags;
+            Utils::StringID sid;
+            uint64_t bufferSize;
+            uint64_t bufferOffset;
         };
+        //--------------------------------------------------------------------------
+
+        struct AssetDataFileHeader
+        {
+            uint32_t entryCount;
+            Vector<AssetDataEntryHeader> entryHeaders;
+        };
+        //--------------------------------------------------------------------------
     }
 }
