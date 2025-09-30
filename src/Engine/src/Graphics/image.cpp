@@ -42,7 +42,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Image::Image(const unsigned char* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels)
+    Image::Image(const Byte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels)
         : _loadedFromFile(false)
         , _width(size.x)
         , _height(size.y)
@@ -67,7 +67,7 @@ namespace Kmplete
             return;
         }
 
-        _pixels = new unsigned char[bufferSize];
+        _pixels = new Byte[bufferSize];
         std::memcpy(_pixels, pixelBuffer, bufferSize);
 
         KMP_LOG_INFO("created [{}x{}] ({} channels) from pixel buffer", _width, _height, static_cast<int>(_channels));
@@ -125,7 +125,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<unsigned char*> Image::GetPixels() const noexcept
+    Nullable<Byte*> Image::GetPixels() const noexcept
     {
         return _pixels;
     }

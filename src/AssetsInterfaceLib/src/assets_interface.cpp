@@ -5,9 +5,9 @@ namespace Kmplete
 {
     namespace Assets
     {
-        constexpr static uint8_t ErrorAssetTypeValue = 255;
+        constexpr static Byte ErrorAssetTypeValue = 255;
 
-        uint8_t AssetTypeToByte(AssetType type)
+        Byte AssetTypeToByte(AssetType type)
         {
             switch (type)
             {
@@ -25,7 +25,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        AssetType ByteToAssetType(uint8_t byte)
+        AssetType ByteToAssetType(Byte byte)
         {
             if (byte == 0)
             {

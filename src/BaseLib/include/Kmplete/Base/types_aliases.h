@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <cstdint>
 
 
 namespace Kmplete
@@ -16,4 +17,6 @@ namespace Kmplete
 
     using Filepath = std::filesystem::path;
     using FilepathVector = Vector<Filepath>;
+
+    using Byte = uint8_t;
 }

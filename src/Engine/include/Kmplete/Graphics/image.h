@@ -19,7 +19,7 @@ namespace Kmplete
 
         KMP_API explicit Image(const Filepath& filepath, bool flipVertically = false);
         KMP_API Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically = false);
-        KMP_API Image(const unsigned char* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);
+        KMP_API Image(const Byte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);
         KMP_API ~Image();
         KMP_API Image(Image&& rhs) noexcept;
         KMP_API Image& operator=(Image&& rhs) noexcept;
@@ -27,7 +27,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API int GetWidth() const noexcept;
         KMP_NODISCARD KMP_API int GetHeight() const noexcept;
         KMP_NODISCARD KMP_API int GetChannels() const noexcept;
-        KMP_NODISCARD KMP_API Nullable<unsigned char*> GetPixels() const noexcept;
+        KMP_NODISCARD KMP_API Nullable<Byte*> GetPixels() const noexcept;
 
     private:
         void DeleteData();
@@ -37,7 +37,7 @@ namespace Kmplete
         int _width;
         int _height;
         ImageChannels _channels;
-        unsigned char* _pixels;
+        Byte* _pixels;
     };
     //--------------------------------------------------------------------------
 }
