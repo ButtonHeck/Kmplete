@@ -21,6 +21,7 @@ add_subdirectory(Engine)
 add_subdirectory(Editor)
 add_subdirectory(Translator)
 add_subdirectory(TranslatorInterfaceLib)
+add_subdirectory(AssetsInterfaceLib)
 
 if(${KMPLETE_BUILD_TESTS})
     add_custom_target(_BuildAllTests)

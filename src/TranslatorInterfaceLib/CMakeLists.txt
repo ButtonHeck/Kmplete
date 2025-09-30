@@ -4,13 +4,13 @@ cmake_minimum_required(VERSION 3.20)
 
 project(TranslatorInterfaceLib LANGUAGES CXX)
 
-set(TranslatorApiLib_HEADERS
+set(TranslatorInterfaceLib_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Translator/translator_interface.h
 )
-source_group("Translator" FILES ${TranslatorApiLib_HEADERS})
+source_group("Translator" FILES ${TranslatorInterfaceLib_HEADERS})
 
 add_library(TranslatorInterfaceLib INTERFACE
-    ${TranslatorApiLib_HEADERS}
+    ${TranslatorInterfaceLib_HEADERS}
 )
 
 target_include_directories(TranslatorInterfaceLib
