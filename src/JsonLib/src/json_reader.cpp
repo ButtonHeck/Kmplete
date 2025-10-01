@@ -281,7 +281,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonReader::GetInt64(int index, int64_t defaultValue /*= 0*/)
+    Int64 JsonReader::GetInt64(int index, Int64 defaultValue /*= 0*/)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -300,7 +300,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonReader::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
+    Int64 JsonReader::GetInt64(const char* name, Int64 defaultValue /*= 0*/)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -320,7 +320,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonReader::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
+    UInt64 JsonReader::GetUInt64(int index, UInt64 defaultValue /*= 0*/)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -339,7 +339,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonReader::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
+    UInt64 JsonReader::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/)
     {
         KMP_PROFILE_FUNCTION();
 

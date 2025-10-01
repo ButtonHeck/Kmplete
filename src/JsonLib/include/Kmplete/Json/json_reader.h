@@ -36,10 +36,10 @@ namespace Kmplete
         KMP_NODISCARD KMP_API int GetInt(const char* name, int defaultValue = 0);
         KMP_NODISCARD KMP_API unsigned int GetUInt(int index, unsigned int defaultValue = 0);
         KMP_NODISCARD KMP_API unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API int64_t GetInt64(int index, int64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API int64_t GetInt64(const char* name, int64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API uint64_t GetUInt64(int index, uint64_t defaultValue = 0);
-        KMP_NODISCARD KMP_API uint64_t GetUInt64(const char* name, uint64_t defaultValue = 0);
+        KMP_NODISCARD KMP_API Int64 GetInt64(int index, Int64 defaultValue = 0);
+        KMP_NODISCARD KMP_API Int64 GetInt64(const char* name, Int64 defaultValue = 0);
+        KMP_NODISCARD KMP_API UInt64 GetUInt64(int index, UInt64 defaultValue = 0);
+        KMP_NODISCARD KMP_API UInt64 GetUInt64(const char* name, UInt64 defaultValue = 0);
         KMP_NODISCARD KMP_API double GetDouble(int index, double defaultValue = 0.0);
         KMP_NODISCARD KMP_API double GetDouble(const char* name, double defaultValue = 0.0);
         KMP_NODISCARD KMP_API String GetString(int index, const String& defaultValue = "");

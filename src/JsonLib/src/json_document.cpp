@@ -342,25 +342,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetInt64(int index, int64_t value)
+    bool JsonDocument::SetInt64(int index, Int64 value)
     {
         return _writer->SetInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetInt64(const char* name, int64_t value)
+    bool JsonDocument::SetInt64(const char* name, Int64 value)
     {
         return _writer->SetInt64(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetUInt64(int index, uint64_t value)
+    bool JsonDocument::SetUInt64(int index, UInt64 value)
     {
         return _writer->SetUInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SetUInt64(const char* name, uint64_t value)
+    bool JsonDocument::SetUInt64(const char* name, UInt64 value)
     {
         return _writer->SetUInt64(name, value);
     }
@@ -463,25 +463,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonDocument::GetInt64(int index, int64_t defaultValue /*= 0*/)
+    Int64 JsonDocument::GetInt64(int index, Int64 defaultValue /*= 0*/)
     {
         return _reader->GetInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t JsonDocument::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
+    Int64 JsonDocument::GetInt64(const char* name, Int64 defaultValue /*= 0*/)
     {
         return _reader->GetInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonDocument::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
+    UInt64 JsonDocument::GetUInt64(int index, UInt64 defaultValue /*= 0*/)
     {
         return _reader->GetUInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t JsonDocument::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
+    UInt64 JsonDocument::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/)
     {
         return _reader->GetUInt64(name, defaultValue);
     }

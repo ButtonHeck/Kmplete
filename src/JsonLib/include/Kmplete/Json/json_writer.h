@@ -36,10 +36,10 @@ namespace Kmplete
         KMP_API bool SetInt(const char* name, int value);
         KMP_API bool SetUInt(int index, unsigned int value);
         KMP_API bool SetUInt(const char* name, unsigned int value);
-        KMP_API bool SetInt64(int index, int64_t value);
-        KMP_API bool SetInt64(const char* name, int64_t value);
-        KMP_API bool SetUInt64(int index, uint64_t value);
-        KMP_API bool SetUInt64(const char* name, uint64_t value);
+        KMP_API bool SetInt64(int index, Int64 value);
+        KMP_API bool SetInt64(const char* name, Int64 value);
+        KMP_API bool SetUInt64(int index, UInt64 value);
+        KMP_API bool SetUInt64(const char* name, UInt64 value);
         KMP_API bool SetDouble(int index, double value);
         KMP_API bool SetDouble(const char* name, double value);
         KMP_API bool SetString(int index, const String& value);

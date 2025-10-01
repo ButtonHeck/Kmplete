@@ -61,7 +61,7 @@ namespace Kmplete
         glTextureSubImage2D(handle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateTextureMipmap(handle);
 
-        _handle = static_cast<uint64_t>(handle);
+        _handle = static_cast<UInt64>(handle);
     }
     //--------------------------------------------------------------------------
 }

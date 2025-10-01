@@ -418,7 +418,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetInt64(int index, int64_t value)
+    bool JsonWriter::SetInt64(int index, Int64 value)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -454,7 +454,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetInt64(const char* name, int64_t value)
+    bool JsonWriter::SetInt64(const char* name, Int64 value)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -491,7 +491,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetUInt64(int index, uint64_t value)
+    bool JsonWriter::SetUInt64(int index, UInt64 value)
     {
         KMP_PROFILE_FUNCTION();
 
@@ -527,7 +527,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonWriter::SetUInt64(const char* name, uint64_t value)
+    bool JsonWriter::SetUInt64(const char* name, UInt64 value)
     {
         KMP_PROFILE_FUNCTION();
 

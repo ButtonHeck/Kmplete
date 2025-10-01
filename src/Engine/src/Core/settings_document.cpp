@@ -99,25 +99,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SettingsDocument::SaveInt64(int index, int64_t value)
+    bool SettingsDocument::SaveInt64(int index, Int64 value)
     {
         return _document->SetInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool SettingsDocument::SaveInt64(const char* name, int64_t value)
+    bool SettingsDocument::SaveInt64(const char* name, Int64 value)
     {
         return _document->SetInt64(name, value);
     }
     //--------------------------------------------------------------------------
 
-    bool SettingsDocument::SaveUInt64(int index, uint64_t value)
+    bool SettingsDocument::SaveUInt64(int index, UInt64 value)
     {
         return _document->SetUInt64(index, value);
     }
     //--------------------------------------------------------------------------
 
-    bool SettingsDocument::SaveUInt64(const char* name, uint64_t value)
+    bool SettingsDocument::SaveUInt64(const char* name, UInt64 value)
     {
         return _document->SetUInt64(name, value);
     }
@@ -225,25 +225,25 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    int64_t SettingsDocument::GetInt64(int index, int64_t defaultValue /*= 0*/)
+    Int64 SettingsDocument::GetInt64(int index, Int64 defaultValue /*= 0*/)
     {
         return _document->GetInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    int64_t SettingsDocument::GetInt64(const char* name, int64_t defaultValue /*= 0*/)
+    Int64 SettingsDocument::GetInt64(const char* name, Int64 defaultValue /*= 0*/)
     {
         return _document->GetInt64(name, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t SettingsDocument::GetUInt64(int index, uint64_t defaultValue /*= 0*/)
+    UInt64 SettingsDocument::GetUInt64(int index, UInt64 defaultValue /*= 0*/)
     {
         return _document->GetUInt64(index, defaultValue);
     }
     //--------------------------------------------------------------------------
 
-    uint64_t SettingsDocument::GetUInt64(const char* name, uint64_t defaultValue /*= 0*/)
+    UInt64 SettingsDocument::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/)
     {
         return _document->GetUInt64(name, defaultValue);
     }
