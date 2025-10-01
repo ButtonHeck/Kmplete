@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-
-#include <cstdint>
+#include "Kmplete/Base/types_aliases.h"
 
 
 namespace Kmplete
@@ -15,7 +14,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API void* GetHandle() const;
 
     protected:
-        uint64_t _handle;
+        UInt64 _handle;
     };
     //--------------------------------------------------------------------------
 }

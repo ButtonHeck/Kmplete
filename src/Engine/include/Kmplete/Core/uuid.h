@@ -1,8 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-
-#include <cstdint>
+#include "Kmplete/Base/types_aliases.h"
 
 
 namespace Kmplete
@@ -13,12 +12,12 @@ namespace Kmplete
         KMP_API static UUID InvalidUuid;
 
         KMP_API UUID();
-        KMP_API explicit UUID(uint64_t uuid) noexcept;
+        KMP_API explicit UUID(UInt64 uuid) noexcept;
 
-        KMP_NODISCARD KMP_API operator uint64_t() const noexcept;
+        KMP_NODISCARD KMP_API operator UInt64() const noexcept;
 
     private:
-        uint64_t _uuid;
+        UInt64 _uuid;
     };
     //--------------------------------------------------------------------------
 }
@@ -32,7 +31,7 @@ namespace std
     {
         size_t operator()(const Kmplete::UUID& uuid) const
         {
-            return uint64_t(uuid);
+            return Kmplete::UInt64(uuid);
         }
     };
     //--------------------------------------------------------------------------

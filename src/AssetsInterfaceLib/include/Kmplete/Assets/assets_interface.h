@@ -17,23 +17,23 @@ namespace Kmplete
             Error
         };
 
-        KMP_NODISCARD Byte AssetTypeToByte(AssetType type);
-        KMP_NODISCARD AssetType ByteToAssetType(Byte byte);
+        KMP_NODISCARD UByte AssetTypeToByte(AssetType type);
+        KMP_NODISCARD AssetType ByteToAssetType(UByte byte);
         //--------------------------------------------------------------------------
 
         struct AssetDataEntryHeader
         {
-            Byte type;
-            Byte tags;
+            UByte type;
+            UByte tags;
             Utils::StringID sid;
-            uint64_t bufferSize;
-            uint64_t bufferOffset;
+            UInt64 bufferSize;
+            UInt64 bufferOffset;
         };
         //--------------------------------------------------------------------------
 
         struct AssetDataFileHeader
         {
-            uint32_t entryCount;
+            UInt32 entryCount;
             Vector<AssetDataEntryHeader> entryHeaders;
         };
         //--------------------------------------------------------------------------

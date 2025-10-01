@@ -1,8 +1,8 @@
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/types_aliases.h"
 
 #include <random>
 #include <concepts>
-#include <cstdint>
 
 
 namespace Kmplete
@@ -132,10 +132,10 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    using RNGInt32 = RNGIntegral<int32_t, RNGBitWidth::RNGBitWidth32>;
-    using RNGUInt32 = RNGIntegral<uint32_t, RNGBitWidth::RNGBitWidth32>;
-    using RNGInt64 = RNGIntegral<int64_t, RNGBitWidth::RNGBitWidth64>;
-    using RNGUint64 = RNGIntegral<uint64_t, RNGBitWidth::RNGBitWidth64>;
+    using RNGInt32 = RNGIntegral<Int32, RNGBitWidth::RNGBitWidth32>;
+    using RNGUInt32 = RNGIntegral<UInt32, RNGBitWidth::RNGBitWidth32>;
+    using RNGInt64 = RNGIntegral<Int64, RNGBitWidth::RNGBitWidth64>;
+    using RNGUint64 = RNGIntegral<UInt64, RNGBitWidth::RNGBitWidth64>;
     using RNGFloat = RNGReal<float, RNGBitWidth::RNGBitWidth32>;
     using RNGDouble = RNGReal<double, RNGBitWidth::RNGBitWidth64>;
 }

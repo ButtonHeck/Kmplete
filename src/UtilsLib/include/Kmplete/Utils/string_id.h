@@ -3,14 +3,12 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 
-#include <cstdint>
-
 
 namespace Kmplete
 {
     namespace Utils
     {
-        using StringID = uint64_t;
+        using StringID = UInt64;
 
         KMP_NODISCARD constexpr StringID ToStringID(const char* cstr)
         {
