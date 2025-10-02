@@ -27,6 +27,9 @@ namespace Kmplete
         KMP_NODISCARD KMP_API String ToGenericString(const Filepath& filepath);
         KMP_NODISCARD KMP_API String ToNativeU8String(const Filepath& filepath);
         KMP_NODISCARD KMP_API String ToNativeString(const Filepath& filepath);
+
+        KMP_NODISCARD KMP_API String ReadFileAsText(const Filepath& filepath);
+        KMP_NODISCARD KMP_API Vector<UByte> ReadFileAsBinary(const Filepath& filepath);
     };
     //--------------------------------------------------------------------------
 }

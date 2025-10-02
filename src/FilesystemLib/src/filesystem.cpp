@@ -234,6 +234,48 @@ namespace Kmplete
         return filepath.string();
     }
     //--------------------------------------------------------------------------
+
+    String Filesystem::ReadFileAsText(const Filepath& filepath)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        if (!FilepathExists(filepath))
+        {
+            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
+            return String();
+        }
+
+        std::ifstream fileStream(filepath);
+        if (!fileStream.is_open() || !fileStream.good())
+        {
+            KMP_LOG_ERROR_FN("Update: cannot read file '{}' - failed to open", filepath);
+            return String();
+        }
+
+        return String((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
+    }
+    //--------------------------------------------------------------------------
+
+    Vector<UByte> Filesystem::ReadFileAsBinary(const Filepath& filepath)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        if (!FilepathExists(filepath))
+        {
+            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
+            return Vector<UByte>();
+        }
+
+        std::ifstream fileStream(filepath, std::ios::binary);
+        if (!fileStream.is_open() || !fileStream.good())
+        {
+            KMP_LOG_ERROR_FN("Update: cannot read file '{}' - failed to open", filepath);
+            return Vector<UByte>();
+        }
+
+        return Vector<UByte>((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
+    }
+    //--------------------------------------------------------------------------
 }
 
 #if defined (KMP_UNDEF_CreateFile)

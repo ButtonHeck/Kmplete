@@ -246,3 +246,104 @@ TEST_CASE("Filesystem files functions", "[core][filesystem]")
     }
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Filesystem read text files functions", "[core][filesystem]")
+{
+    SECTION("ReadFileAsText non-existing file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "this_file_do_not_exist.blah";
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::String content;
+        REQUIRE_NOTHROW(content = Kmplete::Filesystem::ReadFileAsText(path));
+        REQUIRE(content.empty());
+    }
+
+    SECTION("ReadFileAsText empty file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "this_file_is_empty.txt";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
+
+        Kmplete::String content;
+        REQUIRE_NOTHROW(content = Kmplete::Filesystem::ReadFileAsText(path));
+        REQUIRE(content.empty());
+    }
+
+    SECTION("ReadFileAsText regular text file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "this_file_contains_text.txt";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
+
+        const auto contentToWrite = Kmplete::String("13 characters");
+        std::ofstream outputFile(path);
+        if (outputFile.is_open())
+        {
+            outputFile << contentToWrite;
+            outputFile.close();
+
+            Kmplete::String contentToRead;
+            REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsText(path));
+            REQUIRE_FALSE(contentToRead.empty());
+            REQUIRE(contentToRead == "13 characters");
+        }
+        else
+        {
+            FAIL();
+        }
+    }
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Filesystem read binary files functions", "[core][filesystem]")
+{
+    SECTION("ReadFileAsBinary non-existing file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "this_file_do_not_exist.bin";
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::Vector<Kmplete::UByte> content;
+        REQUIRE_NOTHROW(content = Kmplete::Filesystem::ReadFileAsBinary(path));
+        REQUIRE(content.empty());
+    }
+
+    SECTION("ReadFileAsBinary empty file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "this_file_is_empty.bin";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
+
+        Kmplete::Vector<Kmplete::UByte> content;
+        REQUIRE_NOTHROW(content = Kmplete::Filesystem::ReadFileAsBinary(path));
+        REQUIRE(content.empty());
+    }
+
+    SECTION("ReadFileAsBinary regular binary file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "this_file_contains_binary.bin";
+        REQUIRE(Kmplete::Filesystem::CreateFile(path));
+
+        Kmplete::UByte contentToWrite[] = {
+            Kmplete::UByte(10),
+            Kmplete::UByte(11),
+            Kmplete::UByte(12),
+            Kmplete::UByte(13),
+            Kmplete::UByte(14)
+        };
+
+        std::ofstream outputFile(path, std::ios::binary);
+        if (outputFile.is_open())
+        {
+            outputFile.write(reinterpret_cast<const char*>(contentToWrite), sizeof(contentToWrite));
+            outputFile.close();
+
+            Kmplete::Vector<Kmplete::UByte> contentToRead;
+            REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsBinary(path));
+            REQUIRE_FALSE(contentToRead.empty());
+            REQUIRE(contentToRead.size() == size_t(5));
+        }
+        else
+        {
+            FAIL();
+        }
+    }
+}
+//--------------------------------------------------------------------------
