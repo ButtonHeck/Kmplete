@@ -94,15 +94,13 @@ namespace Kmplete
                 }
 
                 // 3. fix charset for generated .pot file
-                std::ifstream potFileStream(poTemplateFile);
-                if (!potFileStream.is_open() || !potFileStream.good())
+                String potFileContent = Filesystem::ReadFileAsText(poTemplateFile);
+                if (potFileContent.empty())
                 {
                     KMP_LOG_ERROR("Update: cannot open newly created .pot file ({})", poTemplateFile);
                     return ReturnCode::ProcessorOpenPotFailed;
                 }
 
-                String potFileContent((std::istreambuf_iterator<char>(potFileStream)), std::istreambuf_iterator<char>());
-                potFileStream.close();
                 potFileContent = Utils::RegexReplace(potFileContent, "CHARSET", "UTF-8");
 
                 std::ofstream potFileOutStream(poTemplateFile, std::ios::trunc);
