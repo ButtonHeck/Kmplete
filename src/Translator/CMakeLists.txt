@@ -21,7 +21,7 @@ SetupBoost(Translator)
 SetupCompilerOptions(Translator)
 
 set_target_properties(Translator PROPERTIES 
-    FOLDER Kmplete/Translator
+    FOLDER Kmplete/Tools/Translator
 )
 
 target_compile_definitions(Translator
@@ -33,9 +33,10 @@ target_compile_definitions(Translator
 )
 
 target_link_libraries(Translator
+    PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
+
     PRIVATE BaseLib
     PRIVATE UtilsLib
-    PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
     PRIVATE FilesystemLib
     PRIVATE TranslatorInterfaceLib
 )

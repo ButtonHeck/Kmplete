@@ -2,7 +2,6 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Translator/translator_interface.h"
 #include "Kmplete/Log/log_class_macro.h"
 

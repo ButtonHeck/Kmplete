@@ -1,6 +1,8 @@
 #include "translator.h"
+
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Utils/string_utils.h"
 
 #include <boost/process.hpp>
 

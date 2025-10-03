@@ -18,5 +18,5 @@ target_include_directories(TranslatorInterfaceLib
 )
 
 set_target_properties(TranslatorInterfaceLib PROPERTIES 
-    FOLDER Kmplete/TranslatorInterfaceLib
+    FOLDER Kmplete/Tools/TranslatorInterfaceLib
 )
