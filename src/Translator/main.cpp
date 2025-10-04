@@ -47,11 +47,27 @@ int main(int argc, char** argv)
     if (parseParametersResult != 0)
     {
         std::cerr << "Translator: failed to parse parameters\n";
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+        if (vm.count(ProcessorArgumentLogging))
+        {
+            Kmplete::Log::Finalize();
+        }
+#endif
+
         return parseParametersResult;
     }
 
     TranslatorProcessor processor(std::move(translatorParameters));
     const auto translatorResultCode = processor.Run();
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+    if (vm.count(ProcessorArgumentLogging))
+    {
+        Kmplete::Log::Finalize();
+    }
+#endif
+
     return translatorResultCode;
 }
 //--------------------------------------------------------------------------
