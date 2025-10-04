@@ -14,6 +14,8 @@ add_library(AssetsInterfaceLib
     ${AssetsInterfaceLib_SOURCES}
 )
 
+SetupCompilerOptions(AssetsInterfaceLib)
+
 target_include_directories(AssetsInterfaceLib
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
 )
@@ -23,6 +25,10 @@ target_link_libraries(AssetsInterfaceLib
     PUBLIC UtilsLib
 )
 
+target_compile_definitions(AssetsInterfaceLib
+    PRIVATE KMP_EXPORTS
+)
+
 set_target_properties(AssetsInterfaceLib PROPERTIES 
-    FOLDER Kmplete/AssetsInterfaceLib
+    FOLDER Kmplete/Tools/AssetsInterfaceLib
 )

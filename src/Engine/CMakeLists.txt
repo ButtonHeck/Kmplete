@@ -149,6 +149,7 @@ target_link_libraries(Kmplete
     PUBLIC FilesystemLib
     PUBLIC JsonLib
     PUBLIC MathLib
+    PUBLIC AssetsInterfaceLib
     PUBLIC $<IF:$<CONFIG:Production>,ProfilerInterfaceLib,ProfilerLib>
     PUBLIC glfw
     
