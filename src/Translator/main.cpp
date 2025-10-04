@@ -62,23 +62,23 @@ namespace Kmplete
     {
         bpo::options_description CreateOptionsDescription()
         {
-            const auto loggingArgument = Utils::Concatenate(ProcessorArgumentLogging, ",", ProcessorArgumentLoggingShort);
-            const auto modeArgument = Utils::Concatenate(ProcessorArgumentWorkMode, ",", ProcessorArgumentWorkModeShort);
-            const auto inputDirectoriesArgument = Utils::Concatenate(ProcessorArgumentInputDirectories, ",", ProcessorArgumentInputDirectoriesShort);
-            const auto extensionsArgument = Utils::Concatenate(ProcessorArgumentExtensions, ",", ProcessorArgumentExtensionsShort);
-            const auto recursiveArgument = Utils::Concatenate(ProcessorArgumentRecursive, ",", ProcessorArgumentRecursiveShort);
-            const auto outputDirectoryArgument = Utils::Concatenate(ProcessorArgumentOutputDirectory, ",", ProcessorArgumentOutputDirectoryShort);
-            const auto outputFileNameArgument = Utils::Concatenate(ProcessorArgumentOutputFileName, ",", ProcessorArgumentOutputFileNameShort);
+            const auto loggingArgument =            Utils::Concatenate(ProcessorArgumentLogging, ",", ProcessorArgumentLoggingShort);
+            const auto modeArgument =               Utils::Concatenate(ProcessorArgumentWorkMode, ",", ProcessorArgumentWorkModeShort);
+            const auto inputDirectoriesArgument =   Utils::Concatenate(ProcessorArgumentInputDirectories, ",", ProcessorArgumentInputDirectoriesShort);
+            const auto extensionsArgument =         Utils::Concatenate(ProcessorArgumentExtensions, ",", ProcessorArgumentExtensionsShort);
+            const auto recursiveArgument =          Utils::Concatenate(ProcessorArgumentRecursive, ",", ProcessorArgumentRecursiveShort);
+            const auto outputDirectoryArgument =    Utils::Concatenate(ProcessorArgumentOutputDirectory, ",", ProcessorArgumentOutputDirectoryShort);
+            const auto outputFileNameArgument =     Utils::Concatenate(ProcessorArgumentOutputFileName, ",", ProcessorArgumentOutputFileNameShort);
 
             bpo::options_description optionsDescription("Translator options");
             optionsDescription.add_options()
-                (loggingArgument.c_str(), "Is logging enabled")
-                (modeArgument.c_str(), bpo::value<String>(), "Working mode (Update, Compile)")
-                (inputDirectoriesArgument.c_str(), bpo::value<StringVector>()->multitoken(), "Directories to search files")
-                (extensionsArgument.c_str(), bpo::value<StringVector>()->multitoken(), "Files extensions to parse")
-                (recursiveArgument.c_str(), "Is recursive search in directory")
-                (outputDirectoryArgument.c_str(), bpo::value<String>(), "Output files directory")
-                (outputFileNameArgument.c_str(), bpo::value<String>(), "Output file name");
+                (loggingArgument.c_str(),                                                       "Is logging enabled")
+                (modeArgument.c_str(),              bpo::value<String>(),                       "Working mode (Update, Compile)")
+                (inputDirectoriesArgument.c_str(),  bpo::value<StringVector>()->multitoken(),   "Directories to search files")
+                (extensionsArgument.c_str(),        bpo::value<StringVector>()->multitoken(),   "Files extensions to parse")
+                (recursiveArgument.c_str(),                                                     "Is recursive search in directory")
+                (outputDirectoryArgument.c_str(),   bpo::value<String>(),                       "Output files directory")
+                (outputFileNameArgument.c_str(),    bpo::value<String>(),                       "Output file name");
 
             return optionsDescription;
         }

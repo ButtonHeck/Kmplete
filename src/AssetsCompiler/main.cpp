@@ -63,15 +63,15 @@ namespace Kmplete
         {
             using namespace Compiler;
 
-            const auto loggingArgument = Utils::Concatenate(CompilerArgumentLogging, ",", CompilerArgumentLoggingShort);
-            const auto inputFileNameArgument = Utils::Concatenate(CompilerArgumentInputFileName, ",", CompilerArgumentInputFileNameShort);
-            const auto outputFileNameArgument=  Utils::Concatenate(CompilerArgumentOutputFileName, ",", CompilerArgumentOutputFileNameShort);
+            const auto loggingArgument =            Utils::Concatenate(CompilerArgumentLogging, ",", CompilerArgumentLoggingShort);
+            const auto inputFileNameArgument =      Utils::Concatenate(CompilerArgumentInputFileName, ",", CompilerArgumentInputFileNameShort);
+            const auto outputFileNameArgument =     Utils::Concatenate(CompilerArgumentOutputFileName, ",", CompilerArgumentOutputFileNameShort);
 
             bpo::options_description optionsDescription("Assets compiler options");
             optionsDescription.add_options()
-                (loggingArgument.c_str(), "Is logging enabled")
-                (inputFileNameArgument.c_str(), "Input file name to read data from")
-                (outputFileNameArgument.c_str(), "Output file name to write data to");
+                (loggingArgument.c_str(),                                   "Is logging enabled")
+                (inputFileNameArgument.c_str(),     bpo::value<String>(),   "Input file name to read data from")
+                (outputFileNameArgument.c_str(),    bpo::value<String>(),   "Output file name to write data to");
 
             return optionsDescription;
         }

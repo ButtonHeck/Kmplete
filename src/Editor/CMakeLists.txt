@@ -143,6 +143,7 @@ CreateTranslationHelperTargets(
 
 # Assets compiler configuration file generation
 # --------------------------
+
 set(Editor_path_flag_russian 
     ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_russia_128.png
 )
@@ -150,3 +151,21 @@ set(Editor_path_flag_usa
     ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_usa_128.png
 )
 configure_file(editor_assets.json.in editor_assets.json @ONLY)
+
+
+# Assets compiler invocation
+# --------------------------
+
+add_custom_target(Editor_compile_assets
+    COMMAND ${CMAKE_COMMAND} -E echo "Compiling assets for Editor done"
+)
+add_custom_command(TARGET Editor_compile_assets PRE_BUILD
+    COMMAND AssetsCompiler 
+    "--input_file_name=\"${CMAKE_CURRENT_BINARY_DIR}/editor_assets.json\"" 
+    "--output_file_name=\"${exeDir}/Data/editor_assets.kmpdata\""
+)
+set_target_properties(Editor_compile_assets PROPERTIES
+    FOLDER Kmplete/Editor
+)
+
+add_dependencies(Editor Editor_compile_assets)
