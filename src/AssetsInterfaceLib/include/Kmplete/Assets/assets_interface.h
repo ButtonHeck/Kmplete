@@ -40,6 +40,11 @@ namespace Kmplete
 
         namespace Compiler
         {
+            static constexpr auto JsonConfigurationTopLevelName = "Assets";
+            static constexpr auto JsonConfigurationFileStr = "File";
+            static constexpr auto JsonConfigurationTypeStr = "Type";
+            static constexpr auto JsonConfigurationSidStr = "Sid";
+
             static constexpr auto CompilerArgumentLogging = "logging";
             static constexpr auto CompilerArgumentLoggingShort = "L";
             static constexpr auto CompilerArgumentInputFileName = "input_file_name";

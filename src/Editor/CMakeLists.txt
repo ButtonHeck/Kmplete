@@ -139,3 +139,14 @@ CreateTranslationHelperTargets(
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${EditorDomain}"
     "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${EditorDomain}"
 )
+
+
+# Assets compiler configuration file generation
+# --------------------------
+set(Editor_path_flag_russian 
+    ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_russia_128.png
+)
+set(Editor_path_flag_usa 
+    ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_usa_128.png
+)
+configure_file(editor_assets.json.in editor_assets.json @ONLY)

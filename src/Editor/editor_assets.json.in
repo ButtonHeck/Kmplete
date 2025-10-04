@@ -1,0 +1,14 @@
+{
+    "Assets": [
+        {
+            "File": "@Editor_path_flag_russian@",
+            "Type": 0,
+            "Sid": 10106586484732293905
+        },
+        {
+            "File": "@Editor_path_flag_usa@",
+            "Type": 0,
+            "Sid": 5842094581160485
+        }
+    ]
+}
