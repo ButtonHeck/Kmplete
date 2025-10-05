@@ -46,11 +46,27 @@ int main(int argc, char** argv)
     if (parseParametersResult != 0)
     {
         std::cerr << "AssetsCompiler: failed to parse parameters\n";
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+        if (vm.count(Compiler::CompilerArgumentLogging))
+        {
+            Kmplete::Log::Finalize();
+        }
+#endif
+
         return parseParametersResult;
     }
 
     Compiler::AssetsCompiler compiler(std::move(compilerParameters));
     const auto compilerReturnCode = compiler.Run();
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+    if (vm.count(Compiler::CompilerArgumentLogging))
+    {
+        Kmplete::Log::Finalize();
+    }
+#endif
+
     return compilerReturnCode;
 }
 //--------------------------------------------------------------------------
