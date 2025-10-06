@@ -34,9 +34,9 @@ namespace Kmplete
         {}
         //--------------------------------------------------------------------------
 
-        int TranslatorProcessor::Run() const
+        ReturnCode TranslatorProcessor::Run() const
         {
-            auto returnCode = 0;
+            ReturnCode returnCode = ReturnCode::Ok;
             if (_parameters.workMode == ProcessorWorkModeUpdate)
             {
                 returnCode = Update();
@@ -50,7 +50,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        int TranslatorProcessor::Update() const
+        ReturnCode TranslatorProcessor::Update() const
         {
             const auto filesToProcess = GatherFilesToUpdate(_parameters);
             if (filesToProcess.empty())
@@ -200,7 +200,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        int TranslatorProcessor::Compile() const
+        ReturnCode TranslatorProcessor::Compile() const
         {
             for (const auto& locale : Locales)
             {

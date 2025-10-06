@@ -29,11 +29,11 @@ namespace Kmplete
         public:
             explicit TranslatorProcessor(TranslatorParameters&& parameters) noexcept;
 
-            KMP_NODISCARD int Run() const;
+            KMP_NODISCARD ReturnCode Run() const;
 
         private:
-            KMP_NODISCARD int Update() const;
-            KMP_NODISCARD int Compile() const;
+            KMP_NODISCARD ReturnCode Update() const;
+            KMP_NODISCARD ReturnCode Compile() const;
 
             KMP_NODISCARD FilepathVector GatherFilesToUpdate(const TranslatorParameters& parameters) const;
             KMP_NODISCARD bool IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const;
