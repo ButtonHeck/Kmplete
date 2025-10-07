@@ -31,7 +31,7 @@ namespace Kmplete
                 if (assetCount == 0)
                 {
                     KMP_LOG_ERROR("required array '{}' not found or this array is empty", JsonConfigurationTopLevelName);
-                    return ReturnCode::InputFileProcessingError;
+                    return ReturnCode::InputFileFormatError;
                 }
 
                 std::ofstream outputFile(_parameters.outputFile, std::ios::binary);
@@ -56,7 +56,7 @@ namespace Kmplete
                 if (!sourceJson.EndGetArray())
                 {
                     KMP_LOG_ERROR("failed to end assets array");
-                    return ReturnCode::InputFileProcessingError;
+                    return ReturnCode::InputFileFormatError;
                 }
 
                 const auto writeDataResult = WriteAssetsData(assetCount, outputFile, assetsFilepaths, assetsTypes);
@@ -81,34 +81,34 @@ namespace Kmplete
                     if (!sourceJson.StartGetObject(assetIndex))
                     {
                         KMP_LOG_ERROR("failed to get asset json object at index {}", assetIndex);
-                        return ReturnCode::InputFileProcessingError;
+                        return ReturnCode::InputFileFormatError;
                     }
 
                     const auto assetFilename = sourceJson.GetString(JsonConfigurationFileStr);
                     if (assetFilename.empty())
                     {
                         KMP_LOG_ERROR("failed to get asset's filename at index {}", assetIndex);
-                        return ReturnCode::InputFileProcessingError;
+                        return ReturnCode::InputFileFormatError;
                     }
 
                     const auto assetType = static_cast<UByte>(sourceJson.GetUInt(JsonConfigurationTypeStr, ErrorAssetTypeValue));
                     if (assetType == ErrorAssetTypeValue)
                     {
                         KMP_LOG_ERROR("failed to get asset's type at index {}", assetIndex);
-                        return ReturnCode::InputFileProcessingError;
+                        return ReturnCode::InputFileFormatError;
                     }
 
                     const auto assetSid = sourceJson.GetUInt64(JsonConfigurationSidStr);
                     if (assetSid == 0)
                     {
                         KMP_LOG_ERROR("failed to get asset's sid at index {}", assetIndex);
-                        return ReturnCode::InputFileProcessingError;
+                        return ReturnCode::InputFileFormatError;
                     }
 
                     if (!sourceJson.EndGetObject())
                     {
                         KMP_LOG_ERROR("failed to end asset json object at index {}", assetIndex);
-                        return ReturnCode::InputFileProcessingError;
+                        return ReturnCode::InputFileFormatError;
                     }
 
                     AssetDataEntryHeader header{
