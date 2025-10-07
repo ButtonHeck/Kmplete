@@ -1,5 +1,7 @@
 #include "Kmplete/Assets/assets_interface.h"
 
+#include <fstream>
+
 
 namespace Kmplete
 {
@@ -41,6 +43,12 @@ namespace Kmplete
             {
                 return AssetType::Error;
             }
+        }
+        //--------------------------------------------------------------------------
+
+        void AssetDataEntryHeader::WriteToFile(std::ofstream& outputFile) const
+        {
+            outputFile.write(reinterpret_cast<const char*>(this), AssetDataEntryHeaderStructSize);
         }
         //--------------------------------------------------------------------------
     }

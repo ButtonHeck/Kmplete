@@ -35,6 +35,8 @@ namespace Kmplete
             Utils::StringID sid;
             UInt64 bufferSize;
             UInt64 bufferOffset;
+
+            KMP_API void WriteToFile(std::ofstream& outputFile) const;
         };
 #if defined (KMP_COMPILER_MSVC)
         #pragma pack(pop)

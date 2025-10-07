@@ -16,7 +16,7 @@ namespace Kmplete
             {}
             //--------------------------------------------------------------------------
 
-            int AssetsCompiler::Run() const
+            ReturnCode AssetsCompiler::Run() const
             {
                 auto sourceJson = JsonDocument(_parameters.sourceFile);
                 if (sourceJson.HasError())
@@ -39,12 +39,38 @@ namespace Kmplete
                     return ReturnCode::OutputFileOpeningFailed;
                 }
 
-                outputFile.write(reinterpret_cast<const char*>(&assetCount), sizeof(assetCount));
-
                 FilepathVector assetsFilepaths;
                 Vector<UByte> assetsTypes;
                 assetsFilepaths.reserve(assetCount);
                 assetsTypes.reserve(assetCount);
+
+                const auto writeHeadersResult = WriteHeaderData(sourceJson, assetCount, outputFile, assetsFilepaths, assetsTypes);
+                if (writeHeadersResult != ReturnCode::Ok)
+                {
+                    KMP_LOG_ERROR("failed to write assets headers data");
+                    return writeHeadersResult;
+                }
+
+                if (!sourceJson.EndGetArray())
+                {
+                    KMP_LOG_ERROR("failed to end assets array");
+                    return ReturnCode::InputFileProcessingError;
+                }
+
+                const auto writeDataResult = WriteAssetsData(assetCount, outputFile, assetsFilepaths, assetsTypes);
+                if (writeDataResult != ReturnCode::Ok)
+                {
+                    KMP_LOG_ERROR("failed to write assets buffers data");
+                    return writeDataResult;
+                }
+
+                return ReturnCode::Ok;
+            }
+            //--------------------------------------------------------------------------
+
+            ReturnCode AssetsCompiler::WriteHeaderData(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, Vector<UByte>& assetsTypes) const
+            {
+                outputFile.write(reinterpret_cast<const char*>(&assetCount), sizeof(assetCount));
 
                 for (UInt32 assetIndex = 0; assetIndex < assetCount; assetIndex++)
                 {
@@ -87,22 +113,22 @@ namespace Kmplete
                         .bufferSize = 0,
                         .bufferOffset = 0
                     };
-
-                    outputFile.write(reinterpret_cast<char*>(&header.type), AssetDataEntryHeaderStructSize);
+                    header.WriteToFile(outputFile);
 
                     assetsFilepaths.push_back(Filepath(assetFilename));
                     assetsTypes.push_back(assetType);
                 }
 
-                if (!sourceJson.EndGetArray())
-                {
-                    KMP_LOG_ERROR("failed to end assets array");
-                    return ReturnCode::InputFileProcessingError;
-                }
+                return ReturnCode::Ok;
+            }
+            //--------------------------------------------------------------------------
 
+            ReturnCode AssetsCompiler::WriteAssetsData(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, Vector<UByte>& assetsTypes) const
+            {
                 const auto headersOffset = sizeof(assetCount);
                 UInt64 assetDataBufferOffset = assetCount * AssetDataEntryHeaderStructSize + headersOffset;
                 UInt64 assetBufferSizeCurrentOffset = headersOffset + AssetDataEntryHeaderOffsetOfBufferSize;
+                UInt64 assetBufferOffsetCurrentOffset = headersOffset + AssetDataEntryHeaderOffsetOfBufferOffset;
 
                 for (UInt32 assetIndex = 0; assetIndex < assetCount; assetIndex++)
                 {
@@ -125,9 +151,12 @@ namespace Kmplete
 
                         outputFile.seekp(assetBufferSizeCurrentOffset);
                         outputFile.write(reinterpret_cast<const char*>(&textureDataSize), sizeof(textureDataSize));
+
+                        outputFile.seekp(assetBufferOffsetCurrentOffset);
                         outputFile.write(reinterpret_cast<char*>(&assetDataBufferOffset), sizeof(assetDataBufferOffset));
 
                         assetBufferSizeCurrentOffset += AssetDataEntryHeaderStructSize;
+                        assetBufferOffsetCurrentOffset += AssetDataEntryHeaderStructSize;
                         assetDataBufferOffset += textureDataSize;
 
                         outputFile.seekp(fileEndPosition);
