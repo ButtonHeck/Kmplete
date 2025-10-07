@@ -74,6 +74,35 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    Image::Image(const UByte* fileBuffer, int bufferSize, ImageChannels desiredChannels, bool flipVertically /*= false*/)
+        : _loadedFromFile(true)
+        , _width(0)
+        , _height(0)
+        , _channels(desiredChannels)
+        , _pixels(nullptr)
+    {
+        stbi_set_flip_vertically_on_load(flipVertically);
+
+        auto channelsInFile = 0;
+        _pixels = stbi_load_from_memory(fileBuffer, bufferSize, &_width, &_height, &channelsInFile, desiredChannels);
+
+        if (channelsInFile != _channels)
+        {
+            KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
+            _channels = static_cast<ImageChannels>(channelsInFile);
+        }
+
+        if (!_pixels)
+        {
+            KMP_LOG_ERROR("file buffer loading error");
+        }
+        else
+        {
+            KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
+        }
+    }
+    //--------------------------------------------------------------------------
+
     Image::~Image()
     {
         DeleteData();

@@ -20,6 +20,7 @@ namespace Kmplete
         KMP_API explicit Image(const Filepath& filepath, bool flipVertically = false);
         KMP_API Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically = false);
         KMP_API Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);
+        KMP_API Image(const UByte* fileBuffer, int bufferSize, ImageChannels desiredChannels, bool flipVertically = false);
         KMP_API ~Image();
         KMP_API Image(Image&& rhs) noexcept;
         KMP_API Image& operator=(Image&& rhs) noexcept;
