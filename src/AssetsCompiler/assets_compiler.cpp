@@ -4,6 +4,8 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 
+#include <fstream>
+
 
 namespace Kmplete
 {
