@@ -4,6 +4,7 @@
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window_backend.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Core/timer.h"
@@ -52,6 +53,7 @@ namespace Kmplete
     protected:
         UPtr<WindowBackend> _windowBackend;
         UPtr<GraphicsBackend> _graphicsBackend;
+        UPtr<Assets::AssetsManager> _assetsManager;
 
     private:
         GraphicsBackendType _graphicsBackendType;

@@ -10,6 +10,10 @@ namespace Kmplete
 {
     namespace Assets
     {
+        constexpr static auto AssetsFolder = "Data";
+        constexpr static auto ErrorAssetTypeValue = UByte(255);
+
+
         enum class AssetType
         {
             Texture,
@@ -18,11 +22,10 @@ namespace Kmplete
             Error
         };
 
-        constexpr static UByte ErrorAssetTypeValue = 255;
-
         KMP_NODISCARD KMP_API UByte AssetTypeToByte(AssetType type);
         KMP_NODISCARD KMP_API AssetType ByteToAssetType(UByte byte);
         //--------------------------------------------------------------------------
+
 
 #if defined (KMP_COMPILER_MSVC)
         #pragma pack(push, 1)
@@ -80,5 +83,6 @@ namespace Kmplete
                 OutputFileOpeningFailed = -32
             };
         }
+        //--------------------------------------------------------------------------
     }
 }

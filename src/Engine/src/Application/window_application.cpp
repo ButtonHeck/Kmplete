@@ -6,6 +6,7 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Math/math.h"
+#include "Kmplete/Filesystem/filesystem.h"
 
 
 #if defined (CreateWindow)
@@ -23,8 +24,9 @@ namespace Kmplete
         : Application(parameters.applicationParameters)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowApplication::WindowApplication(const WindowApplicationParameters&)")
         , _windowBackend(nullptr)
-        , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _graphicsBackend(nullptr)
+        , _assetsManager(nullptr)
+        , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _frameTimer(0)
     {
         Initialize(parameters);
@@ -114,11 +116,13 @@ namespace Kmplete
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(defaultWindowIcon);
         mainWindow.SetResizable(parameters.resizable);
+        mainWindow.SetEventCallback(KMP_BIND(WindowApplication::OnEvent));
 
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_graphicsBackend);
 
-        mainWindow.SetEventCallback(KMP_BIND(WindowApplication::OnEvent));
+        _assetsManager = CreateUPtr<Assets::AssetsManager>(Filesystem::GetCurrentFilepath());
+        KMP_ASSERT(_assetsManager);
 
         _frameTimer.Mark();
     }
@@ -132,6 +136,7 @@ namespace Kmplete
 
         _frameListeners.clear();
 
+        _assetsManager.reset();
         _graphicsBackend.reset();
         _windowBackend.reset();
     }

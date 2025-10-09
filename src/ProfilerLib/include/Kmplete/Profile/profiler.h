@@ -162,7 +162,10 @@ namespace Kmplete
     UPtr<ProfilerTimer> _constructorProfilerTimer;
 
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name) \
-    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name)),
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name)) ,
+
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST(name) \
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name))
 
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name) \
     , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name))
@@ -178,6 +181,7 @@ namespace Kmplete
 
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE()
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name)
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST(name)
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name)
 #define KMP_PROFILE_CONSTRUCTOR_END()
 #endif

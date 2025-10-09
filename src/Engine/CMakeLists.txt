@@ -97,6 +97,12 @@ set(Kmplete_LOCALIZATION
 )
 source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
+set(Kmplete_ASSETS
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Assets/assets_manager.cpp
+)
+source_group("Assets" FILES ${Kmplete_ASSETS})
+
 set(Kmplete_INTERNAL
     ${CMAKE_CURRENT_LIST_DIR}/internal/Kmplete/Internal/default_window_icon_data.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/Kmplete/Internal/error_texture_data.h
@@ -111,6 +117,7 @@ add_library(Kmplete
     ${Kmplete_GRAPHICS}
     ${Kmplete_GRAPHICS_OPENGL}
     ${Kmplete_LOCALIZATION}
+    ${Kmplete_ASSETS}
     ${Kmplete_INTERNAL}
 )
 
