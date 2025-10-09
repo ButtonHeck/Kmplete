@@ -47,6 +47,7 @@ namespace Kmplete
 
     protected:
         const String _applicationName;
+        const Filepath _applicationPath;
         bool _running;
 
         UPtr<SystemMetricsManager> _systemMetricsManager;
