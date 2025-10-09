@@ -91,6 +91,7 @@ target_include_directories(Kmplete_WindowApplicationTests
 
 set(KmpleteWindowApplicationTestsSettingsFile "Kmplete_window_application_tests_settings.json")
 target_compile_definitions(Kmplete_WindowApplicationTests
+    PRIVATE KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
     PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
     PRIVATE KMP_TEST_SETTINGS_JSON=\"${KmpleteWindowApplicationTestsSettingsFile}\"
 )
