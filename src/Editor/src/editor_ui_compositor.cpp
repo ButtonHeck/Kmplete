@@ -12,6 +12,7 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Assets/assets_manager.h"
 
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
@@ -24,10 +25,11 @@ namespace Kmplete
     constexpr static auto SettingsEntryName = "EditorUICompositor";
     constexpr static auto MetricsFractionalStr = "MetricsFractional";
 
-    EditorUICompositor::EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUICompositor::EditorUICompositor(Window&, GraphicsBackend&, LocalizationManager&, const SystemMetricsManager&)")
+    EditorUICompositor::EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUICompositor::EditorUICompositor(Window&, GraphicsBackend&, Assets::AssetsManager&, LocalizationManager&, const SystemMetricsManager&)")
           _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
         , _needCheckImguiIniFile(true)
@@ -87,8 +89,8 @@ namespace Kmplete
         const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
 
         static const ImTextureID languageIcons[] = {
-            static_cast<ImTextureID>(_graphicsBackend.GetTextureManager().GetTexture("_flag_usa"_sid).GetHandle()),
-            static_cast<ImTextureID>(_graphicsBackend.GetTextureManager().GetTexture("_flag_russian"_sid).GetHandle())
+            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTexture("_flag_usa"_sid).GetHandle()),
+            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTexture("_flag_russian"_sid).GetHandle())
         };
 
         int languageIndex = 0;

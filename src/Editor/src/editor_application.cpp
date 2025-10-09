@@ -35,14 +35,15 @@ namespace Kmplete
 
         _mainWindow.SetTitle(_applicationName.c_str());
 
-        _graphicsBackend->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));
-        _graphicsBackend->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
+        // TODO: load editor_assets.kmpdata here
+        //_assetsManager->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));
+        //_assetsManager->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
 
         _systemMetricsFrameListener.reset(new SystemMetricsFrameListener(*_systemMetricsManager));
 
-        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_localizationManager, *_systemMetricsManager, _systemMetricsFrameListener->GetTimer()));
+        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager, _systemMetricsFrameListener->GetTimer()));
 
         LoadSettings();
 

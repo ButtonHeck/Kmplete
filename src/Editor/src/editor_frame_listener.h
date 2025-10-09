@@ -19,6 +19,11 @@ namespace Kmplete
     class SystemMetricsManager;
     class GraphicsBackend;
 
+    namespace Assets
+    {
+        class AssetsManager;
+    }
+
     class EditorFrameListener : public FrameListener
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -26,7 +31,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
-        EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer);
+        EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer);
         ~EditorFrameListener();
 
         void Render() override;
@@ -62,6 +67,7 @@ namespace Kmplete
         SystemMetricsManager& _systemMetricsManager;
         Window& _mainWindow;
         GraphicsBackend& _graphicsBackend;
+        Assets::AssetsManager& _assetsManager;
         UPtr<EditorUIImpl> _uiImpl;
         UPtr<EditorUICompositor> _uiCompositor;
         Timer& _metricsTimer;

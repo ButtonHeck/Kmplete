@@ -4,6 +4,8 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
+#include <stdexcept>
+
 
 namespace Kmplete
 {
@@ -11,7 +13,13 @@ namespace Kmplete
 
     TextureManager::TextureManager(GraphicsBackendType backendType)
         : _backendType(backendType)
-    {}
+    {
+        if (!CreateErrorTexture())
+        {
+            KMP_LOG_CRITICAL("error texture loading failed");
+            throw std::runtime_error("TextureManager: error texture loading failed");
+        }
+    }
     //--------------------------------------------------------------------------
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)

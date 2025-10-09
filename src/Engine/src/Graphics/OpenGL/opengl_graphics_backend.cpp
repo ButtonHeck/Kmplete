@@ -6,8 +6,6 @@
     #include <GLFW/glfw3.h>
 #endif
 
-#include <stdexcept>
-
 
 namespace Kmplete
 {
@@ -35,12 +33,6 @@ namespace Kmplete
         KMP_LOG_INFO("vendor - {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
         KMP_LOG_INFO("renderer - {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
         KMP_LOG_INFO("version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-
-        if (!_textureManager->CreateErrorTexture())
-        {
-            KMP_LOG_CRITICAL("error texture loading failed");
-            throw std::runtime_error("OpenGLGraphicsBackend: error texture loading failed");
-        }
     }
     //--------------------------------------------------------------------------
 }

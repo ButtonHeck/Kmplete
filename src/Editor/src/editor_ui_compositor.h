@@ -15,6 +15,11 @@ namespace Kmplete
     class SettingsDocument;
     class GraphicsBackend;
 
+    namespace Assets
+    {
+        class AssetsManager;
+    }
+
     class EditorUICompositor
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -22,7 +27,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
-        EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
+        EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
 
         void ComposeMainArea();
         void ComposeStatusBar(Timer& metricsTimer);
@@ -66,6 +71,7 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         GraphicsBackend& _graphicsBackend;
+        Assets::AssetsManager& _assetsManager;
         LocalizationManager& _localizationManager;
         const SystemMetricsManager& _systemMetricsManager;
         UIComponentsState _state;

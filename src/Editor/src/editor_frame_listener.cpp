@@ -4,6 +4,7 @@
 
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Utils/function_utils.h"
 
 #include <imgui.h>
@@ -14,14 +15,15 @@ namespace Kmplete
 {
     constexpr static auto SettingsEntryName = "EditorFrameListener";
 
-    EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer)
+    EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer)
         : FrameListener("EditorFrameListener")
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorFrameListener::EditorFrameListener(Window&, GraphicsBackend&, LocalizationManager&, SystemMetricsManager&)")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorFrameListener::EditorFrameListener(Window&, GraphicsBackend&, Assets::AssetsManager&, LocalizationManager&, SystemMetricsManager&)")
         , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _assetsManager(assetsManager)
         , _uiImpl(nullptr)
-        , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, localizationManager, systemMetricsManager))
+        , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _graphicsBackend, _assetsManager, localizationManager, systemMetricsManager))
         , _metricsTimer(metricsTimer)
     {
         Initialize();

@@ -121,7 +121,7 @@ namespace Kmplete
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_graphicsBackend);
 
-        _assetsManager = CreateUPtr<Assets::AssetsManager>(_applicationPath);
+        _assetsManager = CreateUPtr<Assets::AssetsManager>(_applicationPath, _graphicsBackend->GetType());
         KMP_ASSERT(_assetsManager);
 
         _frameTimer.Mark();
