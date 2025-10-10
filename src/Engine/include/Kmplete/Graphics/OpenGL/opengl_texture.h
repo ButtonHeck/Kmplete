@@ -12,11 +12,10 @@ namespace Kmplete
     {
     public:
         KMP_API explicit OpenGLTexture(const Filepath& filepath, bool flipVertically = false);
-        KMP_API explicit OpenGLTexture(const char* filepath, bool flipVertically = false);
         KMP_API explicit OpenGLTexture(const Image& image);
 
     private:
-        void Load(const Image& image);
+        void LoadFromImage(const Image& image);
     };
     //--------------------------------------------------------------------------
 }

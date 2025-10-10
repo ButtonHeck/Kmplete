@@ -1,6 +1,5 @@
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Filesystem/filesystem.h"
 
 #include <glad/glad.h>
 
@@ -9,25 +8,18 @@ namespace Kmplete
 {
     OpenGLTexture::OpenGLTexture(const Filepath& filepath, bool flipVertically /*= false*/)
     {
-        Image image(Filesystem::ToGenericString(filepath).c_str(), flipVertically);
-        Load(image);
-    }
-    //--------------------------------------------------------------------------
-
-    OpenGLTexture::OpenGLTexture(const char* filepath, bool flipVertically /*= false*/)
-    {
         Image image(filepath, flipVertically);
-        Load(image);
+        LoadFromImage(image);
     }
     //--------------------------------------------------------------------------
 
     OpenGLTexture::OpenGLTexture(const Image& image)
     {
-        Load(image);
+        LoadFromImage(image);
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLTexture::Load(const Image& image)
+    void OpenGLTexture::LoadFromImage(const Image& image)
     {
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
