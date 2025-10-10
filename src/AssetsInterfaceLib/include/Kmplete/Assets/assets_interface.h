@@ -53,6 +53,15 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        struct AssetLookupInfo
+        {
+            Filepath filepath;
+            UInt64 bufferSize;
+            UInt64 bufferOffset;
+        };
+        //--------------------------------------------------------------------------
+
+
         namespace Compiler
         {
             static constexpr auto JsonConfigurationTopLevelName = "Assets";

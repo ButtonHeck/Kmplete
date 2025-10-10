@@ -120,6 +120,4 @@ namespace Kmplete
         "\377\000\376\377\000\376\377\000\376\377\000\376\377\000\376\377\000\376\377\000\376\377"
         "\000\376\377\000\376\377\000\376\377\000\376"
     };
-
-    static const Image errorTextureImage = Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB);
 }

@@ -27,7 +27,11 @@ namespace Kmplete
 
         if (channelsInFile != _channels)
         {
-            KMP_LOG_WARN("'{}' channels mismatch (desired: {}, actual: {})", filepath, static_cast<int>(_channels), channelsInFile);
+            if (desiredChannels != ImageChannels::Unknown)
+            {
+                KMP_LOG_WARN("'{}' channels mismatch (desired: {}, actual: {})", filepath, static_cast<int>(_channels), channelsInFile);
+            }
+
             _channels = static_cast<ImageChannels>(channelsInFile);
         }
 
@@ -88,7 +92,11 @@ namespace Kmplete
 
         if (channelsInFile != _channels)
         {
-            KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
+            if (desiredChannels != ImageChannels::Unknown)
+            {
+                KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
+            }
+
             _channels = static_cast<ImageChannels>(channelsInFile);
         }
 

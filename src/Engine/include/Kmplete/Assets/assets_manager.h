@@ -3,8 +3,11 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Assets/assets_interface.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
+
+#include <unordered_map>
 
 
 namespace Kmplete
@@ -24,9 +27,12 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API TextureManager& GetTextureManager();
 
+            KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadData = true);
+
         private:
             const Filepath _dataPath;
             UPtr<TextureManager> _textureManager;
+            std::unordered_map<Utils::StringID, AssetLookupInfo> _lookupTable;
         };
         //--------------------------------------------------------------------------
     }

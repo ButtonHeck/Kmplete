@@ -35,9 +35,10 @@ namespace Kmplete
 
         _mainWindow.SetTitle(_applicationName.c_str());
 
-        // TODO: load editor_assets.kmpdata here
-        //_assetsManager->GetTextureManager().CreateTexture("_flag_russian"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_russia_128.png"));
-        //_assetsManager->GetTextureManager().CreateTexture("_flag_usa"_sid, Utils::Concatenate(KMP_ICONS_FOLDER, "flag_usa_128.png"));
+        if (!_assetsManager->LoadAssetFile("editor_assets.kmpdata"))
+        {
+            KMP_LOG_ERROR("failed to load editor assets");
+        }
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
 

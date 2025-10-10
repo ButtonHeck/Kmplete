@@ -8,7 +8,8 @@ namespace Kmplete
 {
     enum ImageChannels
     {
-        Grey = 1,
+        Unknown = 0,
+        Grey,
         GreyAlpha,
         RGB,
         RGBAlpha

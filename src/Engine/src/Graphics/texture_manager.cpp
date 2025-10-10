@@ -24,15 +24,8 @@ namespace Kmplete
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
     {
-        if (textureSid == ErrorTextureSID)
+        if (!TextureSidIsValid(textureSid))
         {
-            KMP_LOG_ERROR("cannot create texture with zero id");
-            return false;
-        }
-
-        if (_textures.contains(textureSid))
-        {
-            KMP_LOG_WARN("already contains a texture with SID '{}'", textureSid);
             return false;
         }
 
@@ -58,6 +51,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool TextureManager::CreateTexture(Utils::StringID textureSid, Image&& image)
+    {
+        if (!TextureSidIsValid(textureSid))
+        {
+            return false;
+        }
+
+        UPtr<Texture> texture = nullptr;
+        switch (_backendType)
+        {
+        case GraphicsBackendType::OpenGL:
+            texture.reset(new OpenGLTexture(std::move(image)));
+            break;
+
+        default:
+            break;
+        }
+
+        if (!texture)
+        {
+            KMP_LOG_ERROR("failed to create texture from image");
+            return false;
+        }
+
+        _textures[textureSid] = std::move(texture);
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    Texture& TextureManager::GetTexture(Utils::StringID textureSid)
+    {
+        if (!_textures.contains(textureSid))
+        {
+            KMP_LOG_WARN("texture '{}' not found", textureSid);
+            return *_textures[ErrorTextureSID];
+        }
+
+        return *_textures[textureSid];
+    }
+    //--------------------------------------------------------------------------
+
     bool TextureManager::CreateErrorTexture()
     {
         if (_textures.contains(ErrorTextureSID))
@@ -69,7 +103,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(errorTextureImage);
+            _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
             break;
 
         default:
@@ -86,15 +120,21 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Texture& TextureManager::GetTexture(Utils::StringID textureSid)
+    bool TextureManager::TextureSidIsValid(Utils::StringID textureSid)
     {
-        if (!_textures.contains(textureSid))
+        if (textureSid == ErrorTextureSID)
         {
-            KMP_LOG_WARN("texture '{}' not found", textureSid);
-            return *_textures[ErrorTextureSID];
+            KMP_LOG_ERROR("cannot create texture with zero id");
+            return false;
         }
 
-        return *_textures[textureSid];
+        if (_textures.contains(textureSid))
+        {
+            KMP_LOG_WARN("already contains a texture with SID '{}'", textureSid);
+            return false;
+        }
+
+        return true;
     }
     //--------------------------------------------------------------------------
 }
