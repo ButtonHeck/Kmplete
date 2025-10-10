@@ -6,6 +6,7 @@ project(AssetsInterfaceLib LANGUAGES CXX)
 
 set(AssetsInterfaceLib_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_interface.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_compiler_interface.h
     ${CMAKE_CURRENT_LIST_DIR}/src/assets_interface.cpp
 )
 source_group("Assets" FILES ${AssetsInterfaceLib_SOURCES})
