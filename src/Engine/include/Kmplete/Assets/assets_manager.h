@@ -27,7 +27,11 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API TextureManager& GetTextureManager();
 
-            KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadData = true);
+            KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
+
+        private:
+            void LoadAssetFileHeaderData(const Vector<UByte>& fileBuffer, AssetCount assetCount, const Filepath& filepath);
+            void LoadAssetFileBinaryData(const Vector<UByte>& fileBuffer, AssetCount assetCount);
 
         private:
             const Filepath _dataPath;

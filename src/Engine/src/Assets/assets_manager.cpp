@@ -26,7 +26,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadData /*= true*/)
+        bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/)
         {
             const auto fullPath = _dataPath / filepath;
             if (!Filesystem::FilepathExists(fullPath))
@@ -39,35 +39,45 @@ namespace Kmplete
             const auto assetCount = *reinterpret_cast<const AssetCount*>(fileBuffer.data());
 
             KMP_LOG_INFO("start loading {} assets headers from '{}'", assetCount, filepath);
-            Vector<AssetDataEntryHeader> headers;
-            headers.reserve(assetCount);
+            LoadAssetFileHeaderData(fileBuffer, assetCount, filepath);
+
+            if (loadBinaries)
+            {
+                KMP_LOG_INFO("start loading assets binaries from '{}'", filepath);
+                LoadAssetFileBinaryData(fileBuffer, assetCount);
+            }
+
+            return true;
+        }
+        //--------------------------------------------------------------------------
+
+        void AssetsManager::LoadAssetFileHeaderData(const Vector<UByte>& fileBuffer, AssetCount assetCount, const Filepath& filepath)
+        {
             for (AssetCount i = 0; i < assetCount; i++)
             {
                 const auto bufferOffset = sizeof(assetCount) + i * sizeof(AssetDataEntryHeader);
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
-
                 const auto assetSid = assetHeader.sid;
-                _lookupTable.emplace(assetSid, AssetLookupInfo{.filepath = filepath, .bufferSize = assetHeader.bufferSize, .bufferOffset = assetHeader.bufferOffset});
+
+                _lookupTable.emplace(assetSid, AssetLookupInfo{ .filepath = filepath, .bufferSize = assetHeader.bufferSize, .bufferOffset = assetHeader.bufferOffset });
             }
+        }
+        //--------------------------------------------------------------------------
 
-            if (loadData)
+        void AssetsManager::LoadAssetFileBinaryData(const Vector<UByte>& fileBuffer, AssetCount assetCount)
+        {
+            for (AssetCount i = 0; i < assetCount; i++)
             {
-                KMP_LOG_INFO("start loading assets data from '{}'", filepath);
-                for (AssetCount i = 0; i < assetCount; i++)
-                {
-                    const auto bufferOffset = sizeof(assetCount) + i * sizeof(AssetDataEntryHeader);
-                    const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
-                    const auto assetType = assetHeader.type;
+                const auto bufferOffset = sizeof(assetCount) + i * sizeof(AssetDataEntryHeader);
+                const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
+                const auto assetType = assetHeader.type;
 
-                    if (ByteToAssetType(assetType) == AssetType::Texture)
-                    {
-                        auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                        _textureManager->CreateTexture(assetHeader.sid, std::move(assetImage));
-                    }
+                if (ByteToAssetType(assetType) == AssetType::Texture)
+                {
+                    auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
+                    _textureManager->CreateTexture(assetHeader.sid, std::move(assetImage));
                 }
             }
-
-            return true;
         }
         //--------------------------------------------------------------------------
     }
