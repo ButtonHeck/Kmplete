@@ -9,8 +9,6 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
-#include <unordered_map>
-
 
 namespace Kmplete
 {
@@ -36,7 +34,7 @@ namespace Kmplete
 
     private:
         Filepath _filepath;
-        std::unordered_map<String, UPtr<SettingsDocument>> _namedSettingsDocuments;
+        HashMap<String, UPtr<SettingsDocument>> _namedSettingsDocuments;
     };
     //--------------------------------------------------------------------------
 }

@@ -8,8 +8,6 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
 
-#include <unordered_map>
-
 
 namespace Kmplete
 {
@@ -35,7 +33,7 @@ namespace Kmplete
 
     private:
         const GraphicsBackendType _backendType;
-        std::unordered_map<Utils::StringID, UPtr<Texture>> _textures;
+        HashMap<Utils::StringID, UPtr<Texture>> _textures;
     };
     //--------------------------------------------------------------------------
 }

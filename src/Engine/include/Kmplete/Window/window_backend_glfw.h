@@ -5,8 +5,6 @@
 #include "Kmplete/Window/window_cursor.h"
 #include "Kmplete/Log/log_class_macro.h"
 
-#include <unordered_map>
-
 
 namespace Kmplete
 {
@@ -57,10 +55,10 @@ namespace Kmplete
         UPtr<Window::WindowSettings> _mainWindowSettings;
         UPtr<Window> _mainWindow;
 
-        std::unordered_map<String, UPtr<Window::WindowSettings>> _auxWindowsSettings;
-        std::unordered_map<String, UPtr<Window>> _auxWindows;
+        HashMap<String, UPtr<Window::WindowSettings>> _auxWindowsSettings;
+        HashMap<String, UPtr<Window>> _auxWindows;
 
-        std::unordered_map<String, UPtr<WindowCursor>> _cursors;
+        HashMap<String, UPtr<WindowCursor>> _cursors;
     };
     //--------------------------------------------------------------------------
 }

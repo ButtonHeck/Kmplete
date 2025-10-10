@@ -4,12 +4,16 @@
 #include <vector>
 #include <filesystem>
 #include <cstdint>
+#include <unordered_map>
 
 
 namespace Kmplete
 {
     template<typename T>
     using Vector = std::vector<T>;
+
+    template<typename Key, typename Value, typename Hasher = std::hash<Key>>
+    using HashMap = std::unordered_map<Key, Value, Hasher>;
 
     using String = std::string;
     using WString = std::wstring;

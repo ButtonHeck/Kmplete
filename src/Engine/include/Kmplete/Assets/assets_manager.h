@@ -7,8 +7,6 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
-#include <unordered_map>
-
 
 namespace Kmplete
 {
@@ -36,7 +34,7 @@ namespace Kmplete
         private:
             const Filepath _dataPath;
             UPtr<TextureManager> _textureManager;
-            std::unordered_map<Utils::StringID, AssetLookupInfo> _lookupTable;
+            HashMap<Utils::StringID, AssetLookupInfo> _lookupTable;
         };
         //--------------------------------------------------------------------------
     }

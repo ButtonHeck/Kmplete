@@ -6,7 +6,6 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
-#include <unordered_map>
 #include <array>
 
 
@@ -40,16 +39,16 @@ namespace Kmplete
                                                         PluralityForm pluralityForm, const ContextStrSID& contextSid);
 
     private:
-        using TranslationMap = std::unordered_map<SourceStrSID, TranslationStr>;
-        using ContextedTranslationMap = std::unordered_map<ContextedSource, TranslationStr, ContextedSourceHash>;
+        using TranslationMap = HashMap<SourceStrSID, TranslationStr>;
+        using ContextedTranslationMap = HashMap<ContextedSource, TranslationStr, ContextedSourceHash>;
         using PluralTranslations = std::array<TranslationStr, PluralityFormCount>;
-        using TranslationPluralMap = std::unordered_map<PluralSource, PluralTranslations, PluralSourceHash>;
-        using ContextedTranslationPluralMap = std::unordered_map<ContextedPluralSource, PluralTranslations, ContextedPluralSourceHash>;
+        using TranslationPluralMap = HashMap<PluralSource, PluralTranslations, PluralSourceHash>;
+        using ContextedTranslationPluralMap = HashMap<ContextedPluralSource, PluralTranslations, ContextedPluralSourceHash>;
 
-        using LocalizedTranslationMap = std::unordered_map<LocaleStrSID, TranslationMap>;
-        using LocalizedContextedTranslationMap = std::unordered_map<LocaleStrSID, ContextedTranslationMap>;
-        using LocalizedTranslationPluralMap = std::unordered_map<LocaleStrSID, TranslationPluralMap>;
-        using LocalizedContextedTranslationPluralMap = std::unordered_map<LocaleStrSID, ContextedTranslationPluralMap>;
+        using LocalizedTranslationMap = HashMap<LocaleStrSID, TranslationMap>;
+        using LocalizedContextedTranslationMap = HashMap<LocaleStrSID, ContextedTranslationMap>;
+        using LocalizedTranslationPluralMap = HashMap<LocaleStrSID, TranslationPluralMap>;
+        using LocalizedContextedTranslationPluralMap = HashMap<LocaleStrSID, ContextedTranslationPluralMap>;
 
     private:
         const DomainStrSID _domain;

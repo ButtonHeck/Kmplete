@@ -4,10 +4,9 @@
 #include "Kmplete/Localization/localization_dictionary.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
-
-#include <unordered_map>
 
 
 namespace Kmplete
@@ -47,7 +46,7 @@ namespace Kmplete
 
     private:
         LocaleStrSID _currentLocaleSid;
-        std::unordered_map<DomainStrSID, UPtr<LocalizationDictionary>> _dictionaryMap;
+        HashMap<DomainStrSID, UPtr<LocalizationDictionary>> _dictionaryMap;
     };
     //--------------------------------------------------------------------------
 }
