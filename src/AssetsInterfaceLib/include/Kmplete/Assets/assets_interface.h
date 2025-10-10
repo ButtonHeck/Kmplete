@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Utils/string_id.h"
@@ -11,19 +10,15 @@ namespace Kmplete
     namespace Assets
     {
         constexpr static auto AssetsFolder = "Data";
-        constexpr static auto ErrorAssetTypeValue = UByte(255);
 
 
-        enum class AssetType
+        enum AssetType : UByte
         {
             Texture,
             Font,
             Sound,
-            Error
+            Error = 255
         };
-
-        KMP_NODISCARD KMP_API UByte AssetTypeToByte(AssetType type);
-        KMP_NODISCARD KMP_API AssetType ByteToAssetType(UByte byte);
         //--------------------------------------------------------------------------
 
 
@@ -38,8 +33,6 @@ namespace Kmplete
             Utils::StringID sid;
             UInt64 bufferSize;
             UInt64 bufferOffset;
-
-            KMP_API void WriteToFile(std::ofstream& outputFile) const;
         };
 #if defined (KMP_COMPILER_MSVC)
         #pragma pack(pop)

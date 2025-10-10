@@ -70,9 +70,8 @@ namespace Kmplete
             {
                 const auto bufferOffset = sizeof(assetCount) + i * sizeof(AssetDataEntryHeader);
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
-                const auto assetType = assetHeader.type;
 
-                if (ByteToAssetType(assetType) == AssetType::Texture)
+                if (assetHeader.type == AssetType::Texture)
                 {
                     const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
                     _textureManager->CreateTexture(assetHeader.sid, assetImage);

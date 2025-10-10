@@ -93,8 +93,8 @@ namespace Kmplete
                         return ReturnCode::InputFileFormatError;
                     }
 
-                    const auto assetType = static_cast<UByte>(sourceJson.GetUInt(JsonConfigurationTypeStr, ErrorAssetTypeValue));
-                    if (assetType == ErrorAssetTypeValue)
+                    const auto assetType = static_cast<UByte>(sourceJson.GetUInt(JsonConfigurationTypeStr, AssetType::Error));
+                    if (assetType == AssetType::Error)
                     {
                         KMP_LOG_ERROR("failed to get asset's type at index {}", assetIndex);
                         return ReturnCode::InputFileFormatError;
@@ -119,7 +119,7 @@ namespace Kmplete
                         .bufferSize = 0,
                         .bufferOffset = 0
                     };
-                    header.WriteToFile(outputFile);
+                    outputFile.write(reinterpret_cast<const char*>(&header), AssetDataEntryHeaderStructSize);
 
                     assetsFilepaths.push_back(Filepath(assetFilename));
                     assetsTypes.push_back(assetType);
@@ -142,7 +142,7 @@ namespace Kmplete
 
                 for (UInt32 assetIndex = 0; assetIndex < assetCount; assetIndex++)
                 {
-                    const auto assetType = ByteToAssetType(assetsTypes[assetIndex]);
+                    const auto& assetType = assetsTypes[assetIndex];
                     const auto& assetPath = assetsFilepaths[assetIndex];
 
                     if (assetType == AssetType::Texture)
