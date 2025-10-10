@@ -74,8 +74,8 @@ namespace Kmplete
 
                 if (ByteToAssetType(assetType) == AssetType::Texture)
                 {
-                    auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                    _textureManager->CreateTexture(assetHeader.sid, std::move(assetImage));
+                    const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
+                    _textureManager->CreateTexture(assetHeader.sid, assetImage);
                 }
             }
         }

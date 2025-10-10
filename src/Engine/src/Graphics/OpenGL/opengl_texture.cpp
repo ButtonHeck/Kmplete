@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
+#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
 #include <glad/glad.h>
@@ -7,27 +8,26 @@
 namespace Kmplete
 {
     OpenGLTexture::OpenGLTexture(const Filepath& filepath, bool flipVertically /*= false*/)
-        : _image(Filesystem::ToGenericString(filepath).c_str(), flipVertically)
     {
-        Load();
+        Image image(Filesystem::ToGenericString(filepath).c_str(), flipVertically);
+        Load(image);
     }
     //--------------------------------------------------------------------------
 
     OpenGLTexture::OpenGLTexture(const char* filepath, bool flipVertically /*= false*/)
-        : _image(filepath, flipVertically)
     {
-        Load();
+        Image image(filepath, flipVertically);
+        Load(image);
     }
     //--------------------------------------------------------------------------
 
-    OpenGLTexture::OpenGLTexture(Image&& image)
-        : _image(std::move(image))
+    OpenGLTexture::OpenGLTexture(const Image& image)
     {
-        Load();
+        Load(image);
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLTexture::Load()
+    void OpenGLTexture::Load(const Image& image)
     {
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
@@ -36,10 +36,10 @@ namespace Kmplete
 
         GLenum internalFormat = GL_RGBA8;
         GLenum dataFormat = GL_RGBA;
-        const auto imageChannels = _image.GetChannels();
-        const auto width = _image.GetWidth();
-        const auto height = _image.GetHeight();
-        const auto data = _image.GetPixels();
+        const auto imageChannels = image.GetChannels();
+        const auto width = image.GetWidth();
+        const auto height = image.GetHeight();
+        const auto data = image.GetPixels();
         if (imageChannels == ImageChannels::RGBAlpha)
         {
             internalFormat = GL_RGBA8;

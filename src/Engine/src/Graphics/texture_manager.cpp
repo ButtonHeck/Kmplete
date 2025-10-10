@@ -1,6 +1,7 @@
-#include "Kmplete/Internal/error_texture_data.h"
 #include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
+#include "Kmplete/Internal/error_texture_data.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
@@ -51,7 +52,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateTexture(Utils::StringID textureSid, Image&& image)
+    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Image& image)
     {
         if (!TextureSidIsValid(textureSid))
         {
@@ -62,7 +63,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(std::move(image)));
+            texture.reset(new OpenGLTexture(image));
             break;
 
         default:
