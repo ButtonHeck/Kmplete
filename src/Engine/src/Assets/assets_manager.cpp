@@ -51,7 +51,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssetFileHeaderData(const Vector<UByte>& fileBuffer, AssetCount assetCount, const Filepath& filepath)
+        void AssetsManager::LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
         {
             for (AssetCount i = 0; i < assetCount; i++)
             {
@@ -64,7 +64,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssetFileBinaryData(const Vector<UByte>& fileBuffer, AssetCount assetCount)
+        void AssetsManager::LoadAssetFileBinaryData(const BinaryBuffer& fileBuffer, AssetCount assetCount)
         {
             for (AssetCount i = 0; i < assetCount; i++)
             {

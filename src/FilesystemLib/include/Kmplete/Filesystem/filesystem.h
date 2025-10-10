@@ -29,7 +29,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API String ToNativeString(const Filepath& filepath);
 
         KMP_NODISCARD KMP_API String ReadFileAsText(const Filepath& filepath);
-        KMP_NODISCARD KMP_API Vector<UByte> ReadFileAsBinary(const Filepath& filepath);
+        KMP_NODISCARD KMP_API BinaryBuffer ReadFileAsBinary(const Filepath& filepath);
     };
     //--------------------------------------------------------------------------
 }

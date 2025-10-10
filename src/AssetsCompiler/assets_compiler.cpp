@@ -44,7 +44,7 @@ namespace Kmplete
                 }
 
                 FilepathVector assetsFilepaths;
-                Vector<UByte> assetsTypes;
+                BinaryBuffer assetsTypes;
                 assetsFilepaths.reserve(assetCount);
                 assetsTypes.reserve(assetCount);
 
@@ -72,7 +72,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            ReturnCode AssetsCompiler::WriteHeaderData(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, Vector<UByte>& assetsTypes) const
+            ReturnCode AssetsCompiler::WriteHeaderData(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
             {
                 KMP_LOG_INFO("start writing header data...");
 
@@ -131,7 +131,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            ReturnCode AssetsCompiler::WriteAssetsData(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, Vector<UByte>& assetsTypes) const
+            ReturnCode AssetsCompiler::WriteAssetsData(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
             {
                 KMP_LOG_INFO("start writing assets data...");
 

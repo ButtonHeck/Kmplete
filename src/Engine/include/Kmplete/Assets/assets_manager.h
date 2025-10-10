@@ -28,8 +28,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
 
         private:
-            void LoadAssetFileHeaderData(const Vector<UByte>& fileBuffer, AssetCount assetCount, const Filepath& filepath);
-            void LoadAssetFileBinaryData(const Vector<UByte>& fileBuffer, AssetCount assetCount);
+            void LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
+            void LoadAssetFileBinaryData(const BinaryBuffer& fileBuffer, AssetCount assetCount);
 
         private:
             const Filepath _dataPath;

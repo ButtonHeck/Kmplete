@@ -256,24 +256,24 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Vector<UByte> Filesystem::ReadFileAsBinary(const Filepath& filepath)
+    BinaryBuffer Filesystem::ReadFileAsBinary(const Filepath& filepath)
     {
         KMP_PROFILE_FUNCTION();
 
         if (!FilepathExists(filepath))
         {
             KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
-            return Vector<UByte>();
+            return BinaryBuffer();
         }
 
         std::ifstream fileStream(filepath, std::ios::binary);
         if (!fileStream.is_open() || !fileStream.good())
         {
             KMP_LOG_ERROR_FN("Update: cannot read file '{}' - failed to open", filepath);
-            return Vector<UByte>();
+            return BinaryBuffer();
         }
 
-        return Vector<UByte>((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
+        return BinaryBuffer((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
     }
     //--------------------------------------------------------------------------
 }
