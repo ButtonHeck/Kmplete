@@ -28,6 +28,8 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/)
         {
+            KMP_PROFILE_FUNCTION();
+
             const auto fullPath = _dataPath / filepath;
             if (!Filesystem::FilepathExists(fullPath))
             {
@@ -53,9 +55,11 @@ namespace Kmplete
 
         void AssetsManager::LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
         {
+            KMP_PROFILE_FUNCTION();
+
             for (AssetCount i = 0; i < assetCount; i++)
             {
-                const auto bufferOffset = sizeof(assetCount) + i * sizeof(AssetDataEntryHeader);
+                const auto bufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
                 const auto assetSid = assetHeader.sid;
 
@@ -66,9 +70,11 @@ namespace Kmplete
 
         void AssetsManager::LoadAssetFileBinaryData(const BinaryBuffer& fileBuffer, AssetCount assetCount)
         {
+            KMP_PROFILE_FUNCTION();
+
             for (AssetCount i = 0; i < assetCount; i++)
             {
-                const auto bufferOffset = sizeof(assetCount) + i * sizeof(AssetDataEntryHeader);
+                const auto bufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
 
                 if (assetHeader.type == AssetType::Texture)
