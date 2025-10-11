@@ -20,7 +20,7 @@ namespace Kmplete
         public:
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
-            KMP_API explicit AssetsManager(const Filepath& applicationPath, GraphicsBackendType type);
+            KMP_API AssetsManager(const Filepath& applicationPath, GraphicsBackendType type);
             ~AssetsManager() = default;
 
             KMP_NODISCARD KMP_API TextureManager& GetTextureManager();

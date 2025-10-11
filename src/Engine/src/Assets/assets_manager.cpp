@@ -69,9 +69,8 @@ namespace Kmplete
             {
                 const auto bufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
-                const auto assetSid = assetHeader.sid;
 
-                _lookupTable.emplace(assetSid, AssetLookupInfo{ .filepath = filepath, .bufferSize = assetHeader.bufferSize, .bufferOffset = assetHeader.bufferOffset });
+                _lookupTable.emplace(assetHeader.sid, AssetLookupInfo{ .filepath = filepath, .bufferSize = assetHeader.bufferSize, .bufferOffset = assetHeader.bufferOffset });
             }
         }
         //--------------------------------------------------------------------------
