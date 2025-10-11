@@ -49,6 +49,7 @@ namespace Kmplete
         struct AssetLookupInfo
         {
             Filepath filepath;
+            UByte type;
             UInt64 bufferSize;
             UInt64 bufferOffset;
         };

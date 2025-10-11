@@ -27,7 +27,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        TextureManager& AssetsManager::GetTextureManager()
+        TextureManager& AssetsManager::GetTextureManager() noexcept
         {
             KMP_ASSERT(_textureManager);
             return *_textureManager;
@@ -61,16 +61,51 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void AssetsManager::UnloadAssets(const Vector<Utils::StringID>& assetsSids)
+        {
+            KMP_PROFILE_FUNCTION();
+
+            for (size_t i = 0; i < assetsSids.size(); i++)
+            {
+                const auto sid = assetsSids[i];
+                if (!_lookupTable.contains(sid))
+                {
+                    KMP_LOG_WARN("sid '{}' not found", sid);
+                    continue;
+                }
+
+                Vector<Utils::StringID> textureSidsToRemove;
+
+                const auto assetType = _lookupTable[sid].type;
+                if (assetType == AssetType::Texture)
+                {
+                    textureSidsToRemove.push_back(sid);
+                    _lookupTable.erase(sid);
+                }
+
+                if (!textureSidsToRemove.empty())
+                {
+                    _textureManager->RemoveTextures(textureSidsToRemove);
+                }
+            }
+        }
+        //--------------------------------------------------------------------------
+
         void AssetsManager::LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
         {
             KMP_PROFILE_FUNCTION();
 
             for (AssetCount i = 0; i < assetCount; i++)
             {
-                const auto bufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
-                const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
+                const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
+                const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
-                _lookupTable.emplace(assetHeader.sid, AssetLookupInfo{ .filepath = filepath, .bufferSize = assetHeader.bufferSize, .bufferOffset = assetHeader.bufferOffset });
+                _lookupTable.emplace(assetHeader.sid, AssetLookupInfo{ 
+                    .filepath = filepath, 
+                    .type = assetHeader.type, 
+                    .bufferSize = assetHeader.bufferSize, 
+                    .bufferOffset = assetHeader.bufferOffset
+                });
             }
         }
         //--------------------------------------------------------------------------
@@ -81,8 +116,8 @@ namespace Kmplete
 
             for (AssetCount i = 0; i < assetCount; i++)
             {
-                const auto bufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
-                const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + bufferOffset);
+                const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
+                const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
                 if (assetHeader.type == AssetType::Texture)
                 {

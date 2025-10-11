@@ -4,6 +4,7 @@
 #include "Kmplete/Internal/error_texture_data.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -25,6 +26,8 @@ namespace Kmplete
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!TextureSidIsValid(textureSid))
         {
             return false;
@@ -54,6 +57,8 @@ namespace Kmplete
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Image& image)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!TextureSidIsValid(textureSid))
         {
             return false;
@@ -83,6 +88,8 @@ namespace Kmplete
 
     Texture& TextureManager::GetTexture(Utils::StringID textureSid)
     {
+        KMP_PROFILE_FUNCTION();
+
         if (!_textures.contains(textureSid))
         {
             KMP_LOG_WARN("texture '{}' not found", textureSid);
@@ -93,8 +100,52 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void TextureManager::RemoveTextures(const Vector<Utils::StringID>& sids)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        auto ok = true;
+        for (const auto& sid : sids)
+        {
+            ok &= RemoveTexture(sid);
+        }
+
+        if (!ok)
+        {
+            KMP_LOG_WARN("some textures were not removed");
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    bool TextureManager::RemoveTexture(Utils::StringID sid)
+    {
+        KMP_PROFILE_FUNCTION();
+
+        if (sid == ErrorTextureSID)
+        {
+            KMP_LOG_WARN("cannot remove texture with reserved sid 0");
+            return false;
+        }
+        if (!_textures.contains(sid))
+        {
+            KMP_LOG_WARN("cannot remove texture with sid '{}' - not found", sid);
+            return false;
+        }
+
+        if (_textures.erase(sid) == 0)
+        {
+            KMP_LOG_WARN("failed to remove texture with sid '{}'", sid);
+            return false;
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
     bool TextureManager::CreateErrorTexture()
     {
+        KMP_PROFILE_FUNCTION();
+
         if (_textures.contains(ErrorTextureSID))
         {
             KMP_LOG_WARN("error texture already created");

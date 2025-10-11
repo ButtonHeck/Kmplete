@@ -23,9 +23,11 @@ namespace Kmplete
             KMP_API AssetsManager(const Filepath& applicationPath, GraphicsBackendType type);
             ~AssetsManager() = default;
 
-            KMP_NODISCARD KMP_API TextureManager& GetTextureManager();
+            KMP_NODISCARD KMP_API TextureManager& GetTextureManager() noexcept;
 
             KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
+
+            KMP_API void UnloadAssets(const Vector<Utils::StringID>& assetsSids);
 
         private:
             void LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
