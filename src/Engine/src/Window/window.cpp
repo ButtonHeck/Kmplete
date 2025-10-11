@@ -24,7 +24,7 @@ namespace Kmplete
     {
         if (settings.name.empty())
         {
-            KMP_PROFILE_CONSTRUCTOR_END()
+            KMP_LOG_ERROR("cannot create window with empty name");
             throw std::exception();
         }
 

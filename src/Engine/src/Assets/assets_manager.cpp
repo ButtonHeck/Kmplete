@@ -5,6 +5,8 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 
+#include <stdexcept>
+
 
 namespace Kmplete
 {
@@ -15,6 +17,12 @@ namespace Kmplete
               _dataPath(applicationPath / AssetsFolder)
             , _textureManager(CreateUPtr<TextureManager>(type))
         {
+            if (!Filesystem::FilepathExists(_dataPath))
+            {
+                KMP_LOG_CRITICAL("cannot create due to data path '{}' does not exist", _dataPath);
+                throw std::runtime_error("AssetsManager: cannot create due to data path does not exist");
+            }
+
             KMP_PROFILE_CONSTRUCTOR_END();
         }
         //--------------------------------------------------------------------------
