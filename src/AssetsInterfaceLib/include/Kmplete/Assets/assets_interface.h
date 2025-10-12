@@ -24,9 +24,9 @@ namespace Kmplete
 
 #if defined (KMP_COMPILER_MSVC)
         #pragma pack(push, 1)
-        struct AssetDataEntryHeader
+        struct AssetEntryHeader
 #elif defined (KMP_COMPILER_MINGW) || defined (KMP_COMPILER_GCC) || defined (KMP_COMPILER_CLANG)
-        struct __attribute__((packed)) AssetDataEntryHeader
+        struct __attribute__((packed)) AssetEntryHeader
 #endif
         {
             UByte type;
@@ -40,16 +40,16 @@ namespace Kmplete
 
         using AssetCount = UInt32;
 
-        static constexpr auto AssetDataEntryHeaderStructSize = sizeof(AssetDataEntryHeader);
-        static constexpr auto AssetDataEntryHeaderOffsetOfBufferSize = offsetof(AssetDataEntryHeader, bufferSize);
-        static constexpr auto AssetDataEntryHeaderOffsetOfBufferOffset = offsetof(AssetDataEntryHeader, bufferOffset);
+        static constexpr auto AssetEntryHeaderStructSize = sizeof(AssetEntryHeader);
+        static constexpr auto AssetEntryHeaderOffsetOfBufferSize = offsetof(AssetEntryHeader, bufferSize);
+        static constexpr auto AssetEntryHeaderOffsetOfBufferOffset = offsetof(AssetEntryHeader, bufferOffset);
         //--------------------------------------------------------------------------
 
 
         struct AssetLookupInfo
         {
             Filepath filepath;
-            AssetDataEntryHeader header;
+            AssetEntryHeader header;
         };
         //--------------------------------------------------------------------------
     }

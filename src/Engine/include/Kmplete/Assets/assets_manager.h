@@ -21,7 +21,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
             KMP_API AssetsManager(const Filepath& applicationPath, GraphicsBackendType type);
-            ~AssetsManager() = default;
+            KMP_API ~AssetsManager();
 
             KMP_NODISCARD KMP_API TextureManager& GetTextureManager() noexcept;
 
@@ -31,9 +31,15 @@ namespace Kmplete
             KMP_API void UnloadAssets(const Vector<Utils::StringID>& assetsSids);
 
         private:
-            void LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
-            void LoadAssetFileBinaryData(const BinaryBuffer& fileBuffer, AssetCount assetCount);
-            void LoadAssetBinary(const BinaryBuffer& fileBuffer, const AssetDataEntryHeader& assetHeader);
+            void Initialize(GraphicsBackendType type);
+            void Finalize();
+
+            void LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
+            void LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount);
+
+            Vector<AssetLookupInfo> GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const;
+            void LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& lookupVector);
+            void LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader);
 
         private:
             const Filepath _dataPath;

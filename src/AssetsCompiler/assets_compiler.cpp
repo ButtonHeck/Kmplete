@@ -113,13 +113,13 @@ namespace Kmplete
                         return ReturnCode::InputFileFormatError;
                     }
 
-                    AssetDataEntryHeader header{
+                    AssetEntryHeader header{
                         .type = assetType,
                         .sid = assetSid,
                         .bufferSize = 0,
                         .bufferOffset = 0
                     };
-                    outputFile.write(reinterpret_cast<const char*>(&header), AssetDataEntryHeaderStructSize);
+                    outputFile.write(reinterpret_cast<const char*>(&header), AssetEntryHeaderStructSize);
 
                     assetsFilepaths.push_back(Filepath(assetFilename));
                     assetsTypes.push_back(assetType);
@@ -136,9 +136,9 @@ namespace Kmplete
                 KMP_LOG_INFO("start writing assets data...");
 
                 const auto headersOffset = sizeof(assetCount);
-                UInt64 assetDataBufferOffset = assetCount * AssetDataEntryHeaderStructSize + headersOffset;
-                UInt64 assetBufferSizeCurrentOffset = headersOffset + AssetDataEntryHeaderOffsetOfBufferSize;
-                UInt64 assetBufferOffsetCurrentOffset = headersOffset + AssetDataEntryHeaderOffsetOfBufferOffset;
+                UInt64 assetDataBufferOffset = assetCount * AssetEntryHeaderStructSize + headersOffset;
+                UInt64 assetBufferSizeCurrentOffset = headersOffset + AssetEntryHeaderOffsetOfBufferSize;
+                UInt64 assetBufferOffsetCurrentOffset = headersOffset + AssetEntryHeaderOffsetOfBufferOffset;
 
                 for (UInt32 assetIndex = 0; assetIndex < assetCount; assetIndex++)
                 {
@@ -167,8 +167,8 @@ namespace Kmplete
 
                         KMP_LOG_INFO("write texture {}\tbytes at offset {}\t({})", textureDataSize, assetDataBufferOffset, assetPath);
 
-                        assetBufferSizeCurrentOffset += AssetDataEntryHeaderStructSize;
-                        assetBufferOffsetCurrentOffset += AssetDataEntryHeaderStructSize;
+                        assetBufferSizeCurrentOffset += AssetEntryHeaderStructSize;
+                        assetBufferOffsetCurrentOffset += AssetEntryHeaderStructSize;
                         assetDataBufferOffset += textureDataSize;
 
                         outputFile.seekp(fileEndPosition);
