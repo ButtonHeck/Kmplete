@@ -27,16 +27,18 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
 
+            KMP_API void LoadAssets(const Vector<Utils::StringID>& assetsSids);
             KMP_API void UnloadAssets(const Vector<Utils::StringID>& assetsSids);
 
         private:
             void LoadAssetFileHeaderData(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
             void LoadAssetFileBinaryData(const BinaryBuffer& fileBuffer, AssetCount assetCount);
+            void LoadAssetBinary(const BinaryBuffer& fileBuffer, const AssetDataEntryHeader& assetHeader);
 
         private:
             const Filepath _dataPath;
             UPtr<TextureManager> _textureManager;
-            HashMap<Utils::StringID, AssetLookupInfo> _lookupTable;
+            HashMap<Utils::StringID, AssetLookupInfo> _lookupMap;
         };
         //--------------------------------------------------------------------------
     }

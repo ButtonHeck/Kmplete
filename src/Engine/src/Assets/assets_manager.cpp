@@ -61,6 +61,60 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void AssetsManager::LoadAssets(const Vector<Utils::StringID>& assetsSids)
+        {
+            KMP_PROFILE_FUNCTION();
+
+            Vector<AssetLookupInfo> lookupVector;
+            lookupVector.reserve(assetsSids.size());
+
+            for (const auto& sid : assetsSids)
+            {
+                if (!_lookupMap.contains(sid))
+                {
+                    KMP_LOG_WARN("cannot load asset with sid '{}' - not found", sid);
+                    continue;
+                }
+
+                lookupVector.push_back(_lookupMap[sid]);
+            }
+
+            if (lookupVector.empty())
+            {
+                KMP_LOG_ERROR("nothing to load");
+                return;
+            }
+
+            std::sort(lookupVector.begin(), lookupVector.end(), [](const AssetLookupInfo& info1, const AssetLookupInfo& info2) { return info1.filepath > info2.filepath; });
+
+            auto currentFilepath = _dataPath / lookupVector[0].filepath;
+            auto fileBuffer = Filesystem::ReadFileAsBinary(currentFilepath);
+            if (fileBuffer.empty())
+            {
+                KMP_LOG_ERROR("failed to load data from '{}'", currentFilepath);
+                return;
+            }
+
+            for (size_t i = 0; i < lookupVector.size(); i++)
+            {
+                const auto& info = lookupVector[i];
+
+                if (currentFilepath != _dataPath / info.filepath)
+                {
+                    currentFilepath = _dataPath / info.filepath;
+                    fileBuffer = Filesystem::ReadFileAsBinary(currentFilepath);
+                    if (fileBuffer.empty())
+                    {
+                        KMP_LOG_ERROR("failed to load data from '{}'", currentFilepath);
+                        return;
+                    }
+                }
+
+                LoadAssetBinary(fileBuffer, info.header);
+            }
+        }
+        //--------------------------------------------------------------------------
+
         void AssetsManager::UnloadAssets(const Vector<Utils::StringID>& assetsSids)
         {
             KMP_PROFILE_FUNCTION();
@@ -68,7 +122,7 @@ namespace Kmplete
             for (size_t i = 0; i < assetsSids.size(); i++)
             {
                 const auto sid = assetsSids[i];
-                if (!_lookupTable.contains(sid))
+                if (!_lookupMap.contains(sid))
                 {
                     KMP_LOG_WARN("sid '{}' not found", sid);
                     continue;
@@ -76,11 +130,10 @@ namespace Kmplete
 
                 Vector<Utils::StringID> textureSidsToRemove;
 
-                const auto assetType = _lookupTable[sid].type;
+                const auto assetType = _lookupMap[sid].header.type;
                 if (assetType == AssetType::Texture)
                 {
                     textureSidsToRemove.push_back(sid);
-                    _lookupTable.erase(sid);
                 }
 
                 if (!textureSidsToRemove.empty())
@@ -100,11 +153,9 @@ namespace Kmplete
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
-                _lookupTable.emplace(assetHeader.sid, AssetLookupInfo{ 
+                _lookupMap.emplace(assetHeader.sid, AssetLookupInfo{ 
                     .filepath = filepath, 
-                    .type = assetHeader.type, 
-                    .bufferSize = assetHeader.bufferSize, 
-                    .bufferOffset = assetHeader.bufferOffset
+                    .header = assetHeader
                 });
             }
         }
@@ -119,11 +170,17 @@ namespace Kmplete
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetDataEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetDataEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
-                if (assetHeader.type == AssetType::Texture)
-                {
-                    const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                    _textureManager->CreateTexture(assetHeader.sid, assetImage);
-                }
+                LoadAssetBinary(fileBuffer, assetHeader);
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void AssetsManager::LoadAssetBinary(const BinaryBuffer& fileBuffer, const AssetDataEntryHeader& assetHeader)
+        {
+            if (assetHeader.type == AssetType::Texture)
+            {
+                const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
+                _textureManager->CreateTexture(assetHeader.sid, assetImage);
             }
         }
         //--------------------------------------------------------------------------

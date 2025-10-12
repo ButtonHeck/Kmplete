@@ -193,6 +193,16 @@ namespace Kmplete
         {
             _mainWindow.SetAlwaysOnTop(isAlwaysOnTop);
         }
+
+        // TODO: remove after completing assets loading/unloading
+        /*if (ImGui::MenuItem("unload assets test"))
+        {
+            _assetsManager.UnloadAssets({ "_flag_usa"_sid, "_flag_russian"_sid });
+        }
+        if (ImGui::MenuItem("load assets test"))
+        {
+            _assetsManager.LoadAssets({ "_flag_usa"_sid, "_flag_russian"_sid });
+        }*/
     }
     //--------------------------------------------------------------------------
 
