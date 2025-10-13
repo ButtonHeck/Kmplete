@@ -23,6 +23,7 @@ namespace Kmplete
         KMP_API void ProcessCommandLine(int argc, char** argv);
 
         KMP_NODISCARD KMP_API const Filepath& GetSettingsFilepath() const;
+        KMP_NODISCARD KMP_API int GetProfilingLevel() const;
 
     private:
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -37,6 +38,7 @@ namespace Kmplete
 
     private:
         Filepath _settingsFilepath;
+        int _profilingLevel;
     };
     //--------------------------------------------------------------------------
 }
