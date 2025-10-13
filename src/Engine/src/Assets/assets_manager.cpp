@@ -58,14 +58,14 @@ namespace Kmplete
             if (loadBinaries)
             {
                 KMP_LOG_INFO("start loading {} assets binaries from '{}'", assetCount, filepath);
-                LoadAssetFileBinaries(fileBuffer, assetCount);
+                return LoadAssetFileBinaries(fileBuffer, assetCount);
             }
 
             return true;
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssets(const Vector<Utils::StringID>& assetsSids)
+        bool AssetsManager::LoadAssets(const Vector<Utils::StringID>& assetsSids)
         {
             KMP_PROFILE_FUNCTION();
 
@@ -73,14 +73,14 @@ namespace Kmplete
             if (lookupVector.empty())
             {
                 KMP_LOG_ERROR("failed to load assets - nothing to load");
-                return;
+                return false;
             }
 
-            LoadAssetsEntriesBinaries(lookupVector);
+            return LoadAssetsEntriesBinaries(lookupVector);
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::UnloadAssets(const Vector<Utils::StringID>& assetsSids)
+        bool AssetsManager::UnloadAssets(const Vector<Utils::StringID>& assetsSids)
         {
             KMP_PROFILE_FUNCTION();
 
@@ -106,6 +106,8 @@ namespace Kmplete
                     _textureManager->RemoveTextures(textureSidsToRemove);
                 }
             }
+
+            return true;
         }
         //--------------------------------------------------------------------------
 
@@ -146,17 +148,20 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
+        bool AssetsManager::LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
         {
             KMP_PROFILE_FUNCTION();
 
+            auto loadedOk = true;
             for (AssetCount i = 0; i < assetCount; i++)
             {
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
-                LoadAssetEntryBinary(fileBuffer, assetHeader);
+                loadedOk &= LoadAssetEntryBinary(fileBuffer, assetHeader);
             }
+
+            return loadedOk;
         }
         //--------------------------------------------------------------------------
 
@@ -184,10 +189,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& lookupVector)
+        bool AssetsManager::LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& lookupVector)
         {
             auto currentFilepath = Filepath();
             auto fileBuffer = BinaryBuffer();
+            auto loadedOk = true;
 
             for (size_t i = 0; i < lookupVector.size(); i++)
             {
@@ -199,29 +205,33 @@ namespace Kmplete
                     if (!Filesystem::FilepathExists(currentFilepath))
                     {
                         KMP_LOG_ERROR("cannot load assets from '{}' - file not found", info.filepath);
-                        return;
+                        return false;
                     }
 
                     fileBuffer = Filesystem::ReadFileAsBinary(currentFilepath);
                     if (fileBuffer.empty())
                     {
                         KMP_LOG_ERROR("failed to load assets from '{}' - buffer is empty", info.filepath);
-                        return;
+                        return false;
                     }
                 }
 
-                LoadAssetEntryBinary(fileBuffer, info.header);
+                loadedOk &= LoadAssetEntryBinary(fileBuffer, info.header);
             }
+
+            return loadedOk;
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
+        bool AssetsManager::LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
         {
             if (assetHeader.type == AssetType::Texture)
             {
                 const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
                 _textureManager->CreateTexture(assetHeader.sid, assetImage);
             }
+
+            return true;
         }
         //--------------------------------------------------------------------------
     }
