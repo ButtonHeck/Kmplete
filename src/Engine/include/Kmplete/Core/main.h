@@ -77,7 +77,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     Kmplete::Profiler::Get().SetLevel(programOptions.GetProfilingLevel());
 #endif
 
-    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", 250);
+    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", 270);
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();
 
