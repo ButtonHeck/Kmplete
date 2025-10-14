@@ -29,7 +29,7 @@ namespace Kmplete
 
     Application::~Application()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         Finalize();
     }
@@ -43,11 +43,11 @@ namespace Kmplete
 
     void Application::Initialize(const ApplicationParameters& parameters)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
-            KMP_PROFILE_SCOPE("Application logger boot");
+            KMP_PROFILE_SCOPE("Application logger boot", ProfileLevelAlways);
             Log::Boot(_applicationName);
         }
 #endif
@@ -77,7 +77,7 @@ namespace Kmplete
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
-            KMP_PROFILE_SCOPE("Application logger initialization");
+            KMP_PROFILE_SCOPE("Application logger initialization", ProfileLevelAlways);
             Log::Initialize(_applicationName);
         }
 #endif
@@ -89,7 +89,7 @@ namespace Kmplete
 
     void Application::Finalize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         SaveSettings();
 
@@ -99,7 +99,7 @@ namespace Kmplete
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
-            KMP_PROFILE_SCOPE("Application logger finalization");
+            KMP_PROFILE_SCOPE("Application logger finalization", ProfileLevelAlways);
             Log::Finalize();
         }
 #endif
@@ -108,7 +108,7 @@ namespace Kmplete
 
     void Application::SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -139,7 +139,7 @@ namespace Kmplete
 
     void Application::LoadSettings()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         _settingsManager->LoadSettings();
 
@@ -173,7 +173,7 @@ namespace Kmplete
 
     void Application::FillDictionary()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");

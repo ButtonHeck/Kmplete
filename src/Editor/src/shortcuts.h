@@ -20,8 +20,8 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
-        static constexpr auto Quit = Shortcut{"Ctrl+Q", Mode::Ctrl, Key::Q};
-        static constexpr auto Fullscreen = Shortcut{"Alt+Enter", Mode::Alt, Key::Enter};
+        static constexpr auto Quit =        Shortcut{"Ctrl+Q", Mode::Ctrl, Key::Q};
+        static constexpr auto Fullscreen =  Shortcut{"Alt+Enter", Mode::Alt, Key::Enter};
         static constexpr auto AlwaysOnTop = Shortcut{"Ctrl+T", Mode::Ctrl, Key::T};
     }
 }

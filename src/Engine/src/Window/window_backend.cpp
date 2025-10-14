@@ -7,7 +7,7 @@ namespace Kmplete
 {
     UPtr<WindowBackend> WindowBackend::Create()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
         return CreateUPtr<WindowBackendGlfw>();

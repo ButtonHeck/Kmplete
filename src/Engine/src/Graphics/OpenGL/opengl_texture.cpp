@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <glad/glad.h>
 
@@ -8,6 +9,8 @@ namespace Kmplete
 {
     OpenGLTexture::OpenGLTexture(const Filepath& filepath, bool flipVertically /*= false*/)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         Image image(filepath, flipVertically);
         LoadFromImage(image);
     }
@@ -15,12 +18,16 @@ namespace Kmplete
 
     OpenGLTexture::OpenGLTexture(const Image& image)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         LoadFromImage(image);
     }
     //--------------------------------------------------------------------------
 
     void OpenGLTexture::LoadFromImage(const Image& image)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
         glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO abstraction

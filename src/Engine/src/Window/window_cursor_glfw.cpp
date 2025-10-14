@@ -11,7 +11,7 @@ namespace Kmplete
     WindowCursorGlfw::WindowCursorGlfw(const Filepath& filepath, const Math::Point2I& hotspot /*= Math::Point2I()*/)
         : _cursor(nullptr)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         Image img(filepath, ImageChannels::RGBAlpha);
         GLFWimage cursorImg{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
@@ -30,6 +30,8 @@ namespace Kmplete
 
     WindowCursorGlfw::~WindowCursorGlfw()
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         if (_cursor)
         {
             glfwDestroyCursor(_cursor);

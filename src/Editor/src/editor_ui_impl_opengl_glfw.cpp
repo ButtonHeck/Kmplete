@@ -20,7 +20,7 @@ namespace Kmplete
 
     EditorUIImplOpenglGLFW::~EditorUIImplOpenglGLFW()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         Finalize();
     }
@@ -28,7 +28,7 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::Initialize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         ImGui_ImplGlfw_InitForOpenGL(reinterpret_cast<GLFWwindow*>(_mainWindow.GetImplPointer()), true);
         ImGui_ImplOpenGL3_Init("#version 330");
@@ -37,7 +37,7 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::Finalize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         ImGui_ImplOpenGL3_Shutdown();
         ImGui_ImplGlfw_Shutdown();
@@ -46,7 +46,7 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::NewFrame()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -55,7 +55,7 @@ namespace Kmplete
 
     void EditorUIImplOpenglGLFW::Render()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

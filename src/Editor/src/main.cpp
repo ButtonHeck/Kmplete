@@ -7,7 +7,7 @@ namespace Kmplete
 {
     UPtr<Application> CreateApplication(const ProgramOptions& programOptions)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         try
         {

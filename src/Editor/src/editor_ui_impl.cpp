@@ -8,7 +8,7 @@ namespace Kmplete
 {
     EditorUIImpl* EditorUIImpl::CreateImpl(Window& mainWindow, GraphicsBackendType graphicsBackendType)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
         if (graphicsBackendType == GraphicsBackendType::OpenGL)

@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stb_image.h>
 #include <cstring>
@@ -20,6 +21,8 @@ namespace Kmplete
         , _channels(desiredChannels)
         , _pixels(nullptr)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
@@ -53,6 +56,8 @@ namespace Kmplete
         , _channels(channels)
         , _pixels(nullptr)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         if (pixelBuffer == nullptr)
         {
             KMP_LOG_ERROR("given buffer is nullptr");
@@ -85,6 +90,8 @@ namespace Kmplete
         , _channels(desiredChannels)
         , _pixels(nullptr)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
@@ -113,6 +120,8 @@ namespace Kmplete
 
     Image::~Image()
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         DeleteData();
     }
     //--------------------------------------------------------------------------
@@ -130,6 +139,8 @@ namespace Kmplete
 
     Image& Image::operator=(Image&& rhs) noexcept
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         DeleteData();
 
         _loadedFromFile = rhs._loadedFromFile;

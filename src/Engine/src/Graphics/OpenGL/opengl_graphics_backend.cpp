@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <glad/glad.h>
 #if defined (KMP_WINDOW_BACKEND_GLFW)
@@ -18,6 +19,8 @@ namespace Kmplete
 
     void OpenGLGraphicsBackend::Initialize() const
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         bool ok = false;
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)

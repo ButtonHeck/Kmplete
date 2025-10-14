@@ -14,7 +14,7 @@ namespace Kmplete
         template<typename... Ts>
         KMP_NODISCARD String Concatenate(Ts&&... args)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
             std::ostringstream oss;
             (oss << ... << std::forward<Ts>(args));
@@ -25,7 +25,7 @@ namespace Kmplete
         template<typename... Ts>
         std::ostringstream& ToSStream(std::ostringstream& oss, Ts&&... args)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
             (oss << ... << std::forward<Ts>(args));
             return oss;

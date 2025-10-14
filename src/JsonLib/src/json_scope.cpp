@@ -8,7 +8,7 @@ namespace Kmplete
 {
     void JsonScope::Push(const String& entry)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         scope.push_back(entry);
         scopeString = Utils::StringVectorToString(scope, '/');
@@ -17,7 +17,7 @@ namespace Kmplete
 
     bool JsonScope::Pop()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!scope.empty())
         {

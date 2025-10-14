@@ -26,7 +26,7 @@ namespace Kmplete
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         if (!TextureSidIsValid(textureSid))
         {
@@ -57,7 +57,7 @@ namespace Kmplete
 
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Image& image)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         if (!TextureSidIsValid(textureSid))
         {
@@ -88,7 +88,7 @@ namespace Kmplete
 
     Texture& TextureManager::GetTexture(Utils::StringID textureSid)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         if (!_textures.contains(textureSid))
         {
@@ -102,7 +102,7 @@ namespace Kmplete
 
     void TextureManager::RemoveTextures(const Vector<Utils::StringID>& sids)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         auto ok = true;
         for (const auto& sid : sids)
@@ -119,7 +119,7 @@ namespace Kmplete
 
     bool TextureManager::RemoveTexture(Utils::StringID sid)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         if (sid == ErrorTextureSID)
         {
@@ -144,7 +144,7 @@ namespace Kmplete
 
     bool TextureManager::CreateErrorTexture()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         if (_textures.contains(ErrorTextureSID))
         {

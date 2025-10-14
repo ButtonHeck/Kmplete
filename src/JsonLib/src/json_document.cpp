@@ -63,7 +63,7 @@ namespace Kmplete
 
     void JsonDocument::SetFilepath(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         _filepath = filepath;
 
@@ -82,7 +82,7 @@ namespace Kmplete
 
     bool JsonDocument::Load(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         SetFilepath(filepath);
         return Load();
@@ -91,7 +91,7 @@ namespace Kmplete
 
     bool JsonDocument::Load()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         _error = false;
         if (!Filesystem::FilepathExists(_filepath))
@@ -133,7 +133,7 @@ namespace Kmplete
 
     bool JsonDocument::Save(const Filepath& filepath, bool pretty /*= true*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         SetFilepath(filepath);
         return Save(pretty);
@@ -142,7 +142,7 @@ namespace Kmplete
 
     bool JsonDocument::Save(bool pretty /*= true*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         _error = false;
         rapidjson::StringBuffer buffer;
@@ -172,7 +172,7 @@ namespace Kmplete
 
     String JsonDocument::ToString(bool pretty /*= true*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         _error = false;
         rapidjson::StringBuffer buffer;
@@ -210,7 +210,7 @@ namespace Kmplete
 
     bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite /*= true*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         if (name.empty())
         {
@@ -248,7 +248,7 @@ namespace Kmplete
 
     Vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         Vector<std::pair<String, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
@@ -513,7 +513,7 @@ namespace Kmplete
 
     bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         if (!Filesystem::CreateDirectories(_filepath, true))
         {

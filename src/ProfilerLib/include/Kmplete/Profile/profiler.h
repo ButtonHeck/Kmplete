@@ -45,6 +45,9 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API static Profiler& Get();
 
+        KMP_API void SetLevel(unsigned int level);
+        KMP_NODISCARD KMP_API unsigned int GetLevel() const;
+
         KMP_API void BeginSession(const String& name, const Filepath& filepath, int storageSize);
         KMP_API void EndSession();
 
@@ -67,6 +70,7 @@ namespace Kmplete
         friend class ProfilerTimer;
 
     private:
+        unsigned int _level;
         std::mutex _mutex;
         UPtr<ProfilingSession> _currentSession;
         Filepath _outputFilepath;
@@ -81,10 +85,11 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(ProfilerTimer)
 
-        KMP_API explicit ProfilerTimer(const char* name);
+        KMP_API explicit ProfilerTimer(const char* name, unsigned int level = 0);
         KMP_API ~ProfilerTimer();
 
     private:
+        const bool _skip;
         const char* _name;
         std::chrono::high_resolution_clock::time_point _start;
     };
@@ -136,7 +141,10 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#define _KMP_PROFILE_SCOPE_LINE2(name, line) \
+#define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
+#define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
+
+#define _KMP_PROFILE_SCOPE_LINE2(name, line, level) \
     constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
     constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
     constexpr auto fixedNameUPtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
@@ -149,13 +157,10 @@ namespace Kmplete
     constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
     constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\
     constexpr auto fixedNameVoidParams##line = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVector##line.data, "(void)", "()");\
-    ::Kmplete::ProfilerTimer timer##line(fixedNameVoidParams##line.data)
-#define _KMP_PROFILE_SCOPE_LINE(name, line) _KMP_PROFILE_SCOPE_LINE2(name, line)
-
-#define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
-#define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
-#define KMP_PROFILE_SCOPE(name) _KMP_PROFILE_SCOPE_LINE(name, __LINE__)
-#define KMP_PROFILE_FUNCTION() KMP_PROFILE_SCOPE(KMP_FUNC_SIG)
+    ::Kmplete::ProfilerTimer timer##line(fixedNameVoidParams##line.data, level)
+#define _KMP_PROFILE_SCOPE_LINE(name, line, level) _KMP_PROFILE_SCOPE_LINE2(name, line, level)
+#define KMP_PROFILE_SCOPE(name, level) _KMP_PROFILE_SCOPE_LINE(name, __LINE__, level)
+#define KMP_PROFILE_FUNCTION(level) KMP_PROFILE_SCOPE(KMP_FUNC_SIG, level)
 
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE() \
     private:\
@@ -176,8 +181,9 @@ namespace Kmplete
 #else
 #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize)
 #define KMP_PROFILE_END_SESSION()
-#define KMP_PROFILE_SCOPE(name)
-#define KMP_PROFILE_FUNCTION()
+
+#define KMP_PROFILE_SCOPE(name, level)
+#define KMP_PROFILE_FUNCTION(level)
 
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE()
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name)
@@ -185,3 +191,17 @@ namespace Kmplete
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name)
 #define KMP_PROFILE_CONSTRUCTOR_END()
 #endif
+
+
+namespace Kmplete
+{
+    enum ProfileLevel : unsigned int
+    {
+        ProfileLevelAlways = 0,
+        ProfileLevelImportantFunctions = 1,
+        ProfileLevelImportantFunctionsVerbose = 2,
+        ProfileLevelMinorFunctions = 3,
+        ProfileLevelMinorFunctionsVerbose = 4
+    };
+    //--------------------------------------------------------------------------
+}

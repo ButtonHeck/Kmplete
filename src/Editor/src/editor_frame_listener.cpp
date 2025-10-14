@@ -34,7 +34,7 @@ namespace Kmplete
 
     EditorFrameListener::~EditorFrameListener()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         _uiImpl.reset();
         Finalize();
@@ -43,7 +43,7 @@ namespace Kmplete
 
     void EditorFrameListener::Initialize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
@@ -63,7 +63,7 @@ namespace Kmplete
 
     void EditorFrameListener::AddDefaultFont(float dpiScale) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         auto& io = ImGui::GetIO();
         const auto fontSize = 18 * dpiScale;
@@ -74,7 +74,7 @@ namespace Kmplete
 
     void EditorFrameListener::AddIconsFont(float dpiScale) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         auto& io = ImGui::GetIO();
         const auto fontSize = 18 * dpiScale;
@@ -90,7 +90,7 @@ namespace Kmplete
 
     void EditorFrameListener::Stylize(float dpiScale) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         ImGui::GetStyle() = ImGuiStyle();
 
@@ -105,7 +105,7 @@ namespace Kmplete
 
     void EditorFrameListener::Finalize() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         ImGui::DestroyContext();
     }
@@ -113,7 +113,7 @@ namespace Kmplete
 
     void EditorFrameListener::Render()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         NewFrame();
         {
@@ -146,7 +146,7 @@ namespace Kmplete
 
     void EditorFrameListener::OnEvent(Event& event)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         EventDispatcher dispatcher(event);
 
@@ -160,7 +160,7 @@ namespace Kmplete
 
     bool EditorFrameListener::OnWindowCloseEvent(WindowCloseEvent& event)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         return _uiCompositor->OnWindowCloseEvent(event);
     }
@@ -168,7 +168,7 @@ namespace Kmplete
 
     bool EditorFrameListener::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         Render();
         return true;
@@ -177,7 +177,7 @@ namespace Kmplete
 
     bool EditorFrameListener::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         _uiImpl.reset();
         _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
@@ -196,7 +196,7 @@ namespace Kmplete
 
     bool EditorFrameListener::OnKeyPressEvent(KeyPressEvent& event)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         return _uiCompositor->OnKeyPressEvent(event);
     }
@@ -204,7 +204,7 @@ namespace Kmplete
 
     void EditorFrameListener::SaveSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartSaveObject(SettingsEntryName);
         _uiCompositor->SaveSettings(settings);
@@ -214,7 +214,7 @@ namespace Kmplete
 
     void EditorFrameListener::LoadSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartLoadObject(SettingsEntryName);
         _uiCompositor->LoadSettings(settings);
@@ -224,7 +224,7 @@ namespace Kmplete
 
     void EditorFrameListener::NewFrame()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         _uiImpl->NewFrame();
         ImGui::NewFrame();
@@ -233,7 +233,7 @@ namespace Kmplete
 
     void EditorFrameListener::BeginApplicationArea() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -257,7 +257,7 @@ namespace Kmplete
 
     void EditorFrameListener::BeginMainWorkingArea() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -290,7 +290,7 @@ namespace Kmplete
 
     void EditorFrameListener::ComposeMainArea()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         _uiCompositor->ComposeMainArea();
     }
@@ -298,7 +298,7 @@ namespace Kmplete
 
     void EditorFrameListener::EndMainWorkingArea() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         ImGui::EndChild(); // IdApp_MainWorkingArea
     }
@@ -306,7 +306,7 @@ namespace Kmplete
 
     void EditorFrameListener::BeginStatusBarArea() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         UiUtils::StyleVarGuard styleVarGuard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
@@ -323,7 +323,7 @@ namespace Kmplete
 
     void EditorFrameListener::ComposeStatusBar()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         _uiCompositor->ComposeStatusBar(_metricsTimer);
     }
@@ -331,7 +331,7 @@ namespace Kmplete
 
     void EditorFrameListener::EndStatusBarArea() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         ImGui::EndChild(); // IdApp_StatusBar
     }
@@ -339,7 +339,7 @@ namespace Kmplete
 
     void EditorFrameListener::EndApplicationArea() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         ImGui::End(); // IdApp_ApplicationWindow
     }
@@ -347,7 +347,7 @@ namespace Kmplete
 
     void EditorFrameListener::EndFrame() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         ImGui::EndFrame();
     }

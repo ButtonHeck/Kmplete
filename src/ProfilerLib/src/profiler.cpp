@@ -8,7 +8,8 @@
 namespace Kmplete
 {
     Profiler::Profiler() noexcept
-        : _currentSession(nullptr)
+        : _level(0)
+        , _currentSession(nullptr)
         , _storageSize(0)
         , _storeCycles(0)
     {}
@@ -24,6 +25,18 @@ namespace Kmplete
     {
         static Profiler profilerInstance;
         return profilerInstance;
+    }
+    //--------------------------------------------------------------------------
+
+    void Profiler::SetLevel(unsigned int level)
+    {
+        _level = level;
+    }
+    //--------------------------------------------------------------------------
+
+    unsigned int Profiler::GetLevel() const
+    {
+        return _level;
     }
     //--------------------------------------------------------------------------
 
@@ -195,14 +208,20 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    ProfilerTimer::ProfilerTimer(const char* name)
-        : _name(name)
-        , _start(std::chrono::high_resolution_clock::now())
+    ProfilerTimer::ProfilerTimer(const char* name, unsigned int level /*= 0*/)
+        : _skip(Profiler::Get().GetLevel() < level)
+        , _name(name)
+        , _start(_skip ? std::chrono::steady_clock::time_point() : std::chrono::high_resolution_clock::now())
     {}
     //--------------------------------------------------------------------------
 
     ProfilerTimer::~ProfilerTimer()
     {
+        if (_skip)
+        {
+            return;
+        }
+
         const auto end = std::chrono::high_resolution_clock::now();
 
         auto& profiler = Profiler::Get();

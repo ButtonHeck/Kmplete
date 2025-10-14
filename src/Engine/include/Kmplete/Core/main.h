@@ -73,6 +73,10 @@ int Main(const Kmplete::ProgramOptions& programOptions)
 {
     Kmplete::MemoryChecker::Prepare();
 
+#if defined(KMP_PROFILE)
+    Kmplete::Profiler::Get().SetLevel(programOptions.GetProfilingLevel());
+#endif
+
     KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", 250);
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();

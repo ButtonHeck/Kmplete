@@ -37,7 +37,7 @@ namespace Kmplete
 
     WindowApplication::~WindowApplication()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         Finalize();
     }
@@ -53,6 +53,8 @@ namespace Kmplete
 
         while (_running)
         {
+            KMP_PROFILE_SCOPE("Frame iteration", ProfileLevelAlways);
+
             const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
 
             mainWindow.ProcessEvents();
@@ -106,7 +108,7 @@ namespace Kmplete
 
     void WindowApplication::Initialize(const WindowApplicationParameters& parameters)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
@@ -130,7 +132,7 @@ namespace Kmplete
 
     void WindowApplication::Finalize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         SaveSettings();
 
@@ -168,6 +170,8 @@ namespace Kmplete
 
     void WindowApplication::ProcessEventsFrameListeners(Event& event)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
         for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)
         {
             auto frameListener = *iter;
@@ -186,7 +190,7 @@ namespace Kmplete
 
     void WindowApplication::SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -202,7 +206,7 @@ namespace Kmplete
 
     void WindowApplication::LoadSettings()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)

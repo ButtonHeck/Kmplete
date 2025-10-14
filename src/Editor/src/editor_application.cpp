@@ -23,7 +23,7 @@ namespace Kmplete
 
     EditorApplication::~EditorApplication()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         Finalize();
     }
@@ -31,7 +31,7 @@ namespace Kmplete
 
     void EditorApplication::Initialize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         _mainWindow.SetTitle(_applicationName.c_str());
 
@@ -55,7 +55,7 @@ namespace Kmplete
 
     void EditorApplication::Finalize()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         SaveSettings();
 
@@ -66,7 +66,7 @@ namespace Kmplete
 
     void EditorApplication::SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -82,7 +82,7 @@ namespace Kmplete
 
     void EditorApplication::LoadSettings()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)

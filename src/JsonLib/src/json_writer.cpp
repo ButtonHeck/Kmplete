@@ -23,7 +23,7 @@ namespace Kmplete
 
     bool JsonWriter::StartObject(const char* objectName)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -59,7 +59,7 @@ namespace Kmplete
 
     bool JsonWriter::StartObject(int index)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -95,7 +95,7 @@ namespace Kmplete
 
     bool JsonWriter::EndObject()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (_scope.Pop())
         {
@@ -109,7 +109,7 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(const char* arrayName, bool overwrite /*= true*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -145,7 +145,7 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(int index, bool overwrite /*= true*/)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -181,7 +181,7 @@ namespace Kmplete
 
     bool JsonWriter::EndArray()
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -201,7 +201,7 @@ namespace Kmplete
 
     bool JsonWriter::SetBool(int index, bool value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -237,7 +237,7 @@ namespace Kmplete
 
     bool JsonWriter::SetBool(const char* name, bool value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -274,7 +274,7 @@ namespace Kmplete
 
     bool JsonWriter::SetInt(int index, int value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -310,7 +310,7 @@ namespace Kmplete
 
     bool JsonWriter::SetInt(const char* name, int value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -347,7 +347,7 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt(int index, unsigned int value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -383,7 +383,7 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt(const char* name, unsigned int value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -420,7 +420,7 @@ namespace Kmplete
 
     bool JsonWriter::SetInt64(int index, Int64 value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -456,7 +456,7 @@ namespace Kmplete
 
     bool JsonWriter::SetInt64(const char* name, Int64 value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -493,7 +493,7 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt64(int index, UInt64 value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -529,7 +529,7 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt64(const char* name, UInt64 value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -566,7 +566,7 @@ namespace Kmplete
 
     bool JsonWriter::SetDouble(int index, double value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -602,7 +602,7 @@ namespace Kmplete
 
     bool JsonWriter::SetDouble(const char* name, double value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -639,7 +639,7 @@ namespace Kmplete
 
     bool JsonWriter::SetString(int index, const String& value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {
@@ -676,7 +676,7 @@ namespace Kmplete
 
     bool JsonWriter::SetString(const char* name, const String& value)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (!_currentObject)
         {

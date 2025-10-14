@@ -19,7 +19,7 @@ namespace Kmplete
 
     void SystemMetricsFrameListener::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         if (_timer.ReachedTimeout())
         {
@@ -37,7 +37,7 @@ namespace Kmplete
 
     void SystemMetricsFrameListener::SaveSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveUInt(MetricsTimeoutStr, _timer.GetTimeout());
@@ -47,7 +47,7 @@ namespace Kmplete
 
     void SystemMetricsFrameListener::LoadSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartLoadObject(SettingsEntryName);
         _timer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));

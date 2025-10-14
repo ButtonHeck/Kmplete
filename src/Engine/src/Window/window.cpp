@@ -40,7 +40,7 @@ namespace Kmplete
 
     String Window::ScreenModeToString(ScreenMode screenMode) noexcept
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         switch (screenMode)
         {
@@ -64,7 +64,7 @@ namespace Kmplete
 
     Window::ScreenMode Window::StringToScreenMode(const String& screenModeStr) noexcept
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         if (screenModeStr == FullscreenModeStr)
         {
@@ -125,6 +125,8 @@ namespace Kmplete
 
     void Window::WindowSettings::SaveSettings(SettingsDocument& settings) const
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
         settings.SaveString(NameStr, name);
         settings.SaveInt(XStr, position.x);
         settings.SaveInt(YStr, position.y);
@@ -141,6 +143,8 @@ namespace Kmplete
 
     void Window::WindowSettings::LoadSettings(SettingsDocument& settings)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
         name = settings.GetString(NameStr, "");
         position.x = settings.GetInt(XStr, DefaultX);
         position.y = settings.GetInt(YStr, DefaultY);

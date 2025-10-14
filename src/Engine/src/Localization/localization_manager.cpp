@@ -27,7 +27,7 @@ namespace Kmplete
 
     bool LocalizationManager::SetLocale(const LocaleStr& localeString)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         if (_currentLocale == localeString)
         {
@@ -65,7 +65,7 @@ namespace Kmplete
 
     void LocalizationManager::AddMessagesPath(const String& path)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         _localeGenerator.add_messages_path(path);
     }
@@ -73,7 +73,7 @@ namespace Kmplete
 
     bool LocalizationManager::AddMessagesDomain(const DomainStr& domain)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         _localeGenerator.add_messages_domain(domain);
         ImbueLocale();
@@ -84,7 +84,7 @@ namespace Kmplete
 
     bool LocalizationManager::RemoveMessagesDomain(const DomainStr& domain)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         return _library->RemoveDictionary(domain);
     }
@@ -92,7 +92,7 @@ namespace Kmplete
 
     void LocalizationManager::AddLocaleChangedCallback(const LocaleChangeCallback& callback)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
         _localeChangedCallbacks.push_back(callback);
     }
@@ -100,7 +100,7 @@ namespace Kmplete
 
     void LocalizationManager::SaveSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveString(SettingsLocaleStr, _currentLocale);
@@ -110,7 +110,7 @@ namespace Kmplete
 
     void LocalizationManager::LoadSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartLoadObject(SettingsEntryName);
         const auto localeStr = settings.GetString(SettingsLocaleStr, LocaleEnUTF8Keyword);
@@ -121,7 +121,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& source)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::Translate(domain, source);
         const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
@@ -134,7 +134,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::Translate(domain, sourceSingular, sourcePlural, count);
         const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
@@ -149,7 +149,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::TranslateCtx(domain, source, context);
         const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
@@ -164,7 +164,7 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, 
                                                      int count, const ContextStr& context)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
         const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
@@ -180,7 +180,7 @@ namespace Kmplete
 
     const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         return _library->Get(domainSid, sourceSid);
     }
@@ -189,7 +189,7 @@ namespace Kmplete
     const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                            const SourceStrSID& sourceSidPlural, int count) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count));
@@ -199,7 +199,7 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                              const SourceStrSID& sourceSidPlural, int count) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         return Localization::Format(Translation(domainSid, sourceSidSingular, sourceSidPlural, count), count);
     }
@@ -208,7 +208,7 @@ namespace Kmplete
     const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                               const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count), contextSid);
@@ -218,7 +218,7 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                                 const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         return Localization::Format(TranslationCtx(domainSid, sourceSidSingular, sourceSidPlural, count, contextSid), count);
     }
@@ -226,7 +226,7 @@ namespace Kmplete
 
     const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         return _library->Get(domainSid, sourceSid, contextSid);
     }
@@ -234,7 +234,7 @@ namespace Kmplete
 
     const TranslationStr& LocalizationManager::TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& fallback) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto& translation = Translation(domainSid, sourceSid);
         return translation.empty() ? fallback : translation;
@@ -244,7 +244,7 @@ namespace Kmplete
     const TranslationStr& LocalizationManager::TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, 
                                                                         const ContextStrSID& contextSid, const TranslationStr& fallback) const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto& translation = TranslationCtx(domainSid, sourceSid, contextSid);
         return translation.empty() ? fallback : translation;
@@ -253,7 +253,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translation(const DomainStr& domain, const SourceStr& source, const LocaleStr& localeString)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::Translate(domain, source, _localeGenerator(localeString));
         return translation;
@@ -262,7 +262,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translation(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const LocaleStr& localeString)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::Translate(domain, sourceSingular, sourcePlural, count, _localeGenerator(localeString));
         return Localization::Format(translation, count);
@@ -271,7 +271,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::TranslationCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const LocaleStr& localeString)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::TranslateCtx(domain, source, context, _localeGenerator(localeString));
         return translation;
@@ -280,7 +280,7 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString)
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         const auto translation = Localization::TranslateCtx(domain, sourceSingular, sourcePlural, count, context, _localeGenerator(localeString));
         return Localization::Format(translation, count);
@@ -289,7 +289,7 @@ namespace Kmplete
 
     void LocalizationManager::ImbueLocale() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         std::locale::global(_localeGenerator(_currentLocale));
         const auto locale = std::locale();
@@ -301,7 +301,7 @@ namespace Kmplete
 
     void LocalizationManager::NotifyLocaleListeners() const
     {
-        KMP_PROFILE_FUNCTION();
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         for (const auto& callback : _localeChangedCallbacks)
         {

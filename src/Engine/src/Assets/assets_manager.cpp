@@ -25,7 +25,7 @@ namespace Kmplete
 
         AssetsManager::~AssetsManager()
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             Finalize();
         }
@@ -40,7 +40,7 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             const auto fullPath = _dataPath / filepath;
             if (!Filesystem::FilepathExists(fullPath))
@@ -67,7 +67,7 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssets(const Vector<Utils::StringID>& assetsSids)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             const auto lookupVector = GetSortedByFileAssetsInfos(assetsSids);
             if (lookupVector.empty())
@@ -82,7 +82,7 @@ namespace Kmplete
 
         bool AssetsManager::UnloadAssets(const Vector<Utils::StringID>& assetsSids)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             for (size_t i = 0; i < assetsSids.size(); i++)
             {
@@ -113,7 +113,7 @@ namespace Kmplete
 
         void AssetsManager::Initialize(GraphicsBackendType type)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             if (!Filesystem::FilepathExists(_dataPath))
             {
@@ -127,13 +127,15 @@ namespace Kmplete
 
         void AssetsManager::Finalize()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             _textureManager.reset();
         }
         //--------------------------------------------------------------------------
 
         void AssetsManager::LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             for (AssetCount i = 0; i < assetCount; i++)
             {
@@ -150,7 +152,7 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             auto loadedOk = true;
             for (AssetCount i = 0; i < assetCount; i++)
@@ -167,7 +169,7 @@ namespace Kmplete
 
         Vector<AssetLookupInfo> AssetsManager::GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const
         {
-            KMP_PROFILE_FUNCTION();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             Vector<AssetLookupInfo> lookupVector;
             lookupVector.reserve(assetsSids.size());
@@ -191,6 +193,8 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& lookupVector)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             auto currentFilepath = Filepath();
             auto fileBuffer = BinaryBuffer();
             auto loadedOk = true;
@@ -225,6 +229,8 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             if (assetHeader.type == AssetType::Texture)
             {
                 const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);

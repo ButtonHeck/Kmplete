@@ -5,6 +5,7 @@ namespace Kmplete
 {
     ProgramOptions::ProgramOptions() noexcept
         : _settingsFilepath(Filepath())
+        , _profilingLevel(0)
     {}
     //--------------------------------------------------------------------------
 
