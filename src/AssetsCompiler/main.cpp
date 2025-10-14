@@ -132,7 +132,7 @@ namespace Kmplete
             const auto inputFileNamePath = Filepath(inputFileNameStr);
             if (!Filesystem::FilepathExists(inputFileNamePath) || !Filesystem::IsFile(inputFileNamePath))
             {
-                KMP_LOG_ERROR_FN("AssetsCompiler: input file does not exist or is not of a file type ({})", inputFileNamePath);
+                KMP_LOG_ERROR_FN("AssetsCompiler: input file '{}' does not exist or is not of a file type", inputFileNamePath);
                 PrintUsage(optionsDescription);
                 return ReturnCode::InputFileIsNotValid;
             }
@@ -151,7 +151,7 @@ namespace Kmplete
             const auto outputFileNamePath = Filepath(outputFileNameStr);
             if (!Filesystem::CreateFile(outputFileNamePath))
             {
-                KMP_LOG_ERROR_FN("AssetsCompiler: cannot create output file ({})", outputFileNamePath);
+                KMP_LOG_ERROR_FN("AssetsCompiler: cannot create output file '{}'", outputFileNamePath);
                 PrintUsage(optionsDescription);
                 return ReturnCode::OutputFileCreationFailed;
             }

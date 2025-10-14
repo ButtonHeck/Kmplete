@@ -71,7 +71,7 @@ namespace Kmplete
                 const auto poTemplateFile = CreatePoTemplateFile(_parameters, locale);
                 if (poTemplateFile.empty())
                 {
-                    KMP_LOG_ERROR("Update: cannot create .pot file ({})", poTemplateFile);
+                    KMP_LOG_ERROR("Update: cannot create .pot file '{}'", poTemplateFile);
                     return ReturnCode::ProcessorCreatePotFailed;
                 }
 
@@ -99,7 +99,7 @@ namespace Kmplete
                 String potFileContent = Filesystem::ReadFileAsText(poTemplateFile);
                 if (potFileContent.empty())
                 {
-                    KMP_LOG_ERROR("Update: cannot open newly created .pot file ({})", poTemplateFile);
+                    KMP_LOG_ERROR("Update: cannot open newly created .pot file '{}'", poTemplateFile);
                     return ReturnCode::ProcessorOpenPotFailed;
                 }
 
@@ -219,7 +219,7 @@ namespace Kmplete
 
                 if (!Filesystem::FilepathExists(poTemplateFile))
                 {
-                    KMP_LOG_ERROR("Compile: source .pot file not found ({})", poTemplateFile);
+                    KMP_LOG_ERROR("Compile: source .pot file not found '{}'", poTemplateFile);
                     continue;
                 }
 
@@ -301,7 +301,7 @@ namespace Kmplete
 
             if (!Filesystem::CreateDirectories(poTemplateFilePath))
             {
-                KMP_LOG_ERROR("Update: cannot create .pot file directory hierarchy ({})", poTemplateFilePath);
+                KMP_LOG_ERROR("Update: cannot create .pot file directory hierarchy '{}'", poTemplateFilePath);
                 return String();
             }
 
@@ -310,7 +310,7 @@ namespace Kmplete
 
             if (!Filesystem::CreateFile(poTemplateFileName))
             {
-                KMP_LOG_ERROR("Update: failed to create .pot file ({})", poTemplateFileName);
+                KMP_LOG_ERROR("Update: failed to create .pot file '{}'", poTemplateFileName);
                 return String();
             }
 

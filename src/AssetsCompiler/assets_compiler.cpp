@@ -165,7 +165,7 @@ namespace Kmplete
                         outputFile.seekp(assetBufferOffsetCurrentOffset);
                         outputFile.write(reinterpret_cast<char*>(&assetDataBufferOffset), sizeof(assetDataBufferOffset));
 
-                        KMP_LOG_INFO("write texture {}\tbytes at offset {}\t({})", textureDataSize, assetDataBufferOffset, assetPath);
+                        KMP_LOG_INFO("write texture {}\tbytes at offset {}\t from '{}'", textureDataSize, assetDataBufferOffset, assetPath);
 
                         assetBufferSizeCurrentOffset += AssetEntryHeaderStructSize;
                         assetBufferOffsetCurrentOffset += AssetEntryHeaderStructSize;

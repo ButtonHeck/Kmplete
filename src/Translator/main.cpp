@@ -142,7 +142,7 @@ namespace Kmplete
             }
             if (!WorkModeIsValid(workMode))
             {
-                KMP_LOG_ERROR_FN("Translator: work mode is not valid ({})", workMode);
+                KMP_LOG_ERROR_FN("Translator: work mode '{}' is not valid", workMode);
                 PrintUsage(optionsDescription);
                 return ReturnCode::WorkModeIsNotValid;
             }
@@ -166,7 +166,7 @@ namespace Kmplete
                     const auto sourceDirectory = Filepath(sourceDirectoryStr);
                     if (!Filesystem::FilepathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
                     {
-                        KMP_LOG_ERROR_FN("Translator: one of source directories does not exist or is not of a directory type ({})", sourceDirectory);
+                        KMP_LOG_ERROR_FN("Translator: one of source directories '{}' does not exist or is not of a directory type", sourceDirectory);
                         PrintUsage(optionsDescription);
                         return ReturnCode::SourceDirectoriesAreNotValid;
                     }
@@ -204,7 +204,7 @@ namespace Kmplete
 
             if (!Filesystem::CreateDirectories(outputDirectory))
             {
-                KMP_LOG_ERROR_FN("Translator: cannot create output directory ({})", outputDirectory);
+                KMP_LOG_ERROR_FN("Translator: cannot create output directory '{}'", outputDirectory);
                 PrintUsage(optionsDescription);
                 return ReturnCode::OutputDirectoryIsNotValid;
             }

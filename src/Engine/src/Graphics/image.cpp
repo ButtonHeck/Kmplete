@@ -72,7 +72,7 @@ namespace Kmplete
 
         if (bufferSize != size.x * size.y * channels)
         {
-            KMP_LOG_ERROR("buffer size ({}) mismatch with other parameters, {}x{} ({} channels)", bufferSize, size.x, size.y, static_cast<int>(_channels));
+            KMP_LOG_ERROR("buffer size {} mismatch with other parameters, {}x{} ({} channels)", bufferSize, size.x, size.y, static_cast<int>(_channels));
             return;
         }
 
