@@ -40,3 +40,12 @@ set_target_properties(FileDialogsLib PROPERTIES
 if(${KMPLETE_BUILD_TESTS})
     add_subdirectory(tests)
 endif()
+
+
+# Installation
+# --------------------------
+
+install(TARGETS FileDialogsLib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

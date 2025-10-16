@@ -59,3 +59,12 @@ target_include_directories(ProfilerInterfaceLib
 set_target_properties(ProfilerInterfaceLib PROPERTIES 
     FOLDER Kmplete/ProfilerLib
 )
+
+
+# Installation
+# --------------------------
+
+install(TARGETS ProfilerLib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

@@ -46,3 +46,12 @@ set_target_properties(JsonLib PROPERTIES
 if(${KMPLETE_BUILD_TESTS})
     add_subdirectory(tests)
 endif()
+
+
+# Installation
+# --------------------------
+
+install(TARGETS JsonLib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

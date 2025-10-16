@@ -64,3 +64,16 @@ target_include_directories(LoggerInterfaceLib
 set_target_properties(LoggerInterfaceLib PROPERTIES 
     FOLDER Kmplete/LoggerLib
 )
+
+
+# Installation
+# --------------------------
+
+install(TARGETS LoggerLib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
+install(TARGETS spdlog
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

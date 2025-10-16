@@ -37,3 +37,12 @@ set_target_properties(FilesystemLib PROPERTIES
 if(${KMPLETE_BUILD_TESTS})
     add_subdirectory(tests)
 endif()
+
+
+# Installation
+# --------------------------
+
+install(TARGETS FilesystemLib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

@@ -186,3 +186,21 @@ CreateTranslationHelperTargets(
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" \"${CMAKE_CURRENT_LIST_DIR}/include\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
     "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
 )
+
+
+# Installation
+# --------------------------
+
+install(TARGETS Kmplete
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
+install(DIRECTORY locale
+    DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    COMPONENT ${KmpleteInstallEditorComponentName}
+    FILES_MATCHING PATTERN "*.mo"
+)
+install(TARGETS glfw
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

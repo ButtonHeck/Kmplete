@@ -39,3 +39,12 @@ set_target_properties(UtilsLib PROPERTIES
 if(${KMPLETE_BUILD_TESTS})
     add_subdirectory(tests)
 endif()
+
+
+# Installation
+# --------------------------
+
+install(TARGETS UtilsLib
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)

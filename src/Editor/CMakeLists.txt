@@ -169,3 +169,21 @@ set_target_properties(Editor_compile_assets PROPERTIES
 )
 
 add_dependencies(Editor Editor_compile_assets)
+
+
+# Installation
+# --------------------------
+
+install(TARGETS Editor
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
+install(DIRECTORY locale
+    DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    COMPONENT ${KmpleteInstallEditorComponentName}
+    FILES_MATCHING PATTERN "*.mo"
+)
+install(DIRECTORY ${exeDir}/Data
+    DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    COMPONENT ${KmpleteInstallEditorComponentName}
+)
