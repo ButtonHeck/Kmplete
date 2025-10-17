@@ -1,6 +1,6 @@
-#include "editor_frame_listener.h"
-#include "ui_utils.h"
-#include "ui_identifiers.h"
+#include "Application/editor_frame_listener.h"
+#include "UI/ui_utils.h"
+#include "UI/ui_identifiers.h"
 
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"

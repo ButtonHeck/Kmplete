@@ -4,27 +4,31 @@ cmake_minimum_required(VERSION 3.20)
 
 project(Editor LANGUAGES CXX)
 
-set(Editor_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_application.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_frame_listener.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_frame_listener.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_compositor.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_compositor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl_opengl_glfw.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/editor_ui_impl_opengl_glfw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/ui_utils.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/ui_utils.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/ui_identifiers.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/shortcuts.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/localization_base.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/system_metrics_frame_listener.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/system_metrics_frame_listener.cpp
+set(Editor_APPLICATION
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/localization_base.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/system_metrics_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/system_metrics_frame_listener.cpp
 )
-source_group("Editor" FILES ${Editor_SOURCES})
+source_group("Application" FILES ${Editor_APPLICATION})
+
+set(Editor_UI
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl_opengl_glfw.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl_opengl_glfw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_utils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/shortcuts.h
+)
+source_group("UI" FILES ${Editor_UI})
 
 if(WIN32)
     set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
@@ -46,7 +50,8 @@ source_group("Imgui" FILES
 )
 
 add_executable(Editor
-    ${Editor_SOURCES}
+    ${Editor_APPLICATION}
+    ${Editor_UI}
     ${Editor_WINRC}
     ${IMGUI_SOURCES}
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
@@ -59,6 +64,7 @@ SetupCompilerOptions(Editor)
 
 target_include_directories(Editor
     PRIVATE ${imgui_SOURCE_DIR}
+    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src
 )
 
 target_link_libraries(Editor

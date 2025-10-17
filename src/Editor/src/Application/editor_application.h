@@ -1,7 +1,7 @@
 #pragma once
 
-#include "editor_frame_listener.h"
-#include "system_metrics_frame_listener.h"
+#include "Application/editor_frame_listener.h"
+#include "Application/system_metrics_frame_listener.h"
 
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"

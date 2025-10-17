@@ -1,7 +1,7 @@
 #pragma once
 
-#include "editor_ui_impl.h"
-#include "editor_ui_compositor.h"
+#include "UI/editor_ui_impl.h"
+#include "UI/editor_ui_compositor.h"
 
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"

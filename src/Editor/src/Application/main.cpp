@@ -1,4 +1,4 @@
-#include "editor_application.h"
+#include "Application/editor_application.h"
 
 #include "Kmplete/Core/main.h"
 

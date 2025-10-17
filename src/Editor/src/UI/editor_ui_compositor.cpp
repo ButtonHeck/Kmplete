@@ -1,8 +1,8 @@
-#include "editor_ui_compositor.h"
-#include "ui_utils.h"
-#include "shortcuts.h"
-#include "ui_identifiers.h"
-#include "localization_base.h"
+#include "UI/editor_ui_compositor.h"
+#include "UI/ui_utils.h"
+#include "UI/shortcuts.h"
+#include "UI/ui_identifiers.h"
+#include "Application/localization_base.h"
 
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"

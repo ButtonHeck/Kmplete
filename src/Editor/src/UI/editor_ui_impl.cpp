@@ -1,5 +1,5 @@
-#include "editor_ui_impl.h"
-#include "editor_ui_impl_opengl_glfw.h"
+#include "UI/editor_ui_impl.h"
+#include "UI/editor_ui_impl_opengl_glfw.h"
 
 #include "Kmplete/Profile/profiler.h"
 
