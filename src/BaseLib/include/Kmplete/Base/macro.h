@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Kmplete/Base/platform.h"
+
 
 #define KMP_M_CONCAT_(x, y) x ## y
 #define KMP_M_CONCAT(x, y) KMP_M_CONCAT_(x, y)
@@ -26,4 +28,18 @@
     #define KMP_FUNC_SIG __func__
 #else
     #error "KMP_FUNC_SIG unknown!"
+#endif
+
+#if defined (KMP_COMPILER_MSVC)
+    #define KMP_COMPILER_DIAGNOSTIC_PUSH
+    #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)
+    #define KMP_COMPILER_DIAGNOSTIC_POP
+#elif defined (KMP_COMPILER_MINGW) || defined (KMP_COMPILER_GCC)
+    #define KMP_COMPILER_DIAGNOSTIC_PUSH            _Pragma("GCC diagnostic push")
+    #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(GCC diagnostic ignored value))
+    #define KMP_COMPILER_DIAGNOSTIC_POP             _Pragma("GCC diagnostic pop")
+#elif defined (KMP_COMPILER_CLANG)
+    #define KMP_COMPILER_DIAGNOSTIC_PUSH            _Pragma("clang diagnostic push")
+    #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(clang diagnostic ignored value))
+    #define KMP_COMPILER_DIAGNOSTIC_POP             _Pragma("clang diagnostic pop")
 #endif
