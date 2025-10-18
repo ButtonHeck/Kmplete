@@ -51,6 +51,8 @@ namespace Kmplete
         void LoadMainWindowSettings(SettingsDocument& settings);
         void LoadAuxWindowsSettings(SettingsDocument& settings);
 
+        KMP_NODISCARD bool IsAuxWindowNameAcceptable(const String& name) const noexcept;
+
     private:
         UPtr<Window::WindowSettings> _mainWindowSettings;
         UPtr<Window> _mainWindow;

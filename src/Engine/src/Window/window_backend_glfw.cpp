@@ -165,47 +165,30 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        if (windowName.empty())
+        if (!IsAuxWindowNameAcceptable(windowName))
         {
-            KMP_LOG_ERROR("creation of unnamed windows is prohibited");
             return nullptr;
         }
 
-        if (windowName == MainWindowName)
+        try
         {
-            KMP_LOG_ERROR("cannot create two \"Main\" windows");
+            if (_auxWindowsSettings.contains(windowName))
+            {
+                KMP_LOG_INFO("creating window '{}' with previously loaded settings", windowName);
+            }
+            else
+            {
+                KMP_LOG_INFO("creating window '{}' with default settings", windowName);
+                _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowName));
+            }
+
+            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
+            return GetAuxWindow(windowName);
+        }
+        catch (KMP_MB_UNUSED const std::exception& e)
+        {
+            KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
             return nullptr;
-        }
-
-        if (_auxWindowsSettings.contains(windowName))
-        {
-            KMP_LOG_INFO("creating window '{}' with previously loaded settings", windowName);
-            try
-            {
-                _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
-                return GetAuxWindow(windowName);
-            }
-            catch (KMP_MB_UNUSED const std::exception& e)
-            {
-                KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
-                return nullptr;
-            }
-        }
-        else
-        {
-            KMP_LOG_INFO("creating window '{}' with default settings", windowName);
-            _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowName));
-
-            try
-            {
-                _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
-                return GetAuxWindow(windowName);
-            }
-            catch (KMP_MB_UNUSED const std::exception& e)
-            {
-                KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
-                return nullptr;
-            }
         }
     }
     //--------------------------------------------------------------------------
@@ -214,21 +197,21 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
+        const auto& windowName = windowSettings.name;
+        if (!IsAuxWindowNameAcceptable(windowName))
+        {
+            return nullptr;
+        }
+
         try
         {
-            if (windowSettings.name.empty() || windowSettings.name == MainWindowName)
-            {
-                throw std::exception();
-            }
-
-            const auto& windowName = windowSettings.name;
             if (_auxWindowsSettings.contains(windowName))
             {
-                KMP_LOG_WARN("window '{}' will be created, but settings already contains this name and will be overriden", windowName);
+                KMP_LOG_WARN("creating window '{}' with previously loaded settings (provided settings will be discarded)", windowName);
             }
             else
             {
-                KMP_LOG_INFO("window '{}' will be created with provided settings", windowName);
+                KMP_LOG_INFO("creating window '{}' with provided settings", windowName);
                 _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowSettings));
             }
 
@@ -237,7 +220,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::exception& e)
         {
-            KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowSettings.name, e.what());
+            KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
             return nullptr;
         }
     }
@@ -486,6 +469,23 @@ namespace Kmplete
         }
 
         settings.EndLoadArray();
+    }
+    //--------------------------------------------------------------------------
+
+    bool WindowBackendGlfw::IsAuxWindowNameAcceptable(const String& name) const noexcept
+    {
+        if (name.empty())
+        {
+            KMP_LOG_ERROR("creation of unnamed windows is prohibited");
+            return false;
+        }
+        else if (name == MainWindowName)
+        {
+            KMP_LOG_ERROR("cannot create two \"Main\" windows");
+            return false;
+        }
+
+        return true;
     }
     //--------------------------------------------------------------------------
 }
