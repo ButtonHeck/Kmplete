@@ -49,7 +49,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
     }
 
-    constexpr static auto MainWindowName = "Main";
+    static constexpr auto MainWindowName = "Main";
 
 
     WindowBackendGlfw::WindowBackendGlfw()

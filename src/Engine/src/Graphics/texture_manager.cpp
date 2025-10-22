@@ -11,7 +11,7 @@
 
 namespace Kmplete
 {
-    constexpr static Utils::StringID ErrorTextureSID = 0;
+    static constexpr Utils::StringID ErrorTextureSID = 0;
 
     TextureManager::TextureManager(GraphicsBackendType backendType)
         : _backendType(backendType)

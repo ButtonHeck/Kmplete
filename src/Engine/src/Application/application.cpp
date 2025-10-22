@@ -10,7 +10,7 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "Application";
+    static constexpr auto SettingsEntryName = "Application";
 
     Application::Application(const ApplicationParameters& parameters)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Application::Application(const ApplicationParameters&)")

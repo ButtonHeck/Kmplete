@@ -6,7 +6,7 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "EditorApplication";
+    static constexpr auto SettingsEntryName = "EditorApplication";
 
     EditorApplication::EditorApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)

@@ -34,9 +34,9 @@ namespace Kmplete
             Windowed
         };
 
-        constexpr static auto FullscreenModeStr = "Fullscreen";
-        constexpr static auto WindowedFullscreenModeStr = "WindowedFullscreen";
-        constexpr static auto WindowedModeStr = "Windowed";
+        static constexpr auto FullscreenModeStr = "Fullscreen";
+        static constexpr auto WindowedFullscreenModeStr = "WindowedFullscreen";
+        static constexpr auto WindowedModeStr = "Windowed";
 
         KMP_NODISCARD static String ScreenModeToString(ScreenMode screenMode) noexcept;
         KMP_NODISCARD static ScreenMode StringToScreenMode(const String& screenModeStr) noexcept;
@@ -50,10 +50,10 @@ namespace Kmplete
 
         struct WindowSettings
         {
-            constexpr static auto DefaultX = 100;
-            constexpr static auto DefaultY = 100;
-            constexpr static auto DefaultWidth = 1920;
-            constexpr static auto DefaultHeight = 1080;
+            static constexpr auto DefaultX = 100;
+            static constexpr auto DefaultY = 100;
+            static constexpr auto DefaultWidth = 1920;
+            static constexpr auto DefaultHeight = 1080;
 
             String name = "";
             Math::Point2I position = Math::Point2I(DefaultX, DefaultY);

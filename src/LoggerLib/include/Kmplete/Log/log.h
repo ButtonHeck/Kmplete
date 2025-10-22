@@ -40,15 +40,15 @@ namespace Kmplete
     class Log
     {
     public:
-        constexpr static auto SettingsEntryName = "Log";
-        constexpr static auto FilenameStr = "Filename";
-        constexpr static auto EnabledStr = "Enabled";
-        constexpr static auto TruncateStr = "Truncate";
-        constexpr static auto OutputConsoleStr = "OutputConsole";
-        constexpr static auto OutputFileStr = "OutputFile";
-        constexpr static auto OutputStringBufferStr = "OutputStringBuffer";
-        constexpr static auto LevelStr = "Level";
-        constexpr static auto LevelFlushStr = "LevelFlush";
+        static constexpr auto SettingsEntryName = "Log";
+        static constexpr auto FilenameStr = "Filename";
+        static constexpr auto EnabledStr = "Enabled";
+        static constexpr auto TruncateStr = "Truncate";
+        static constexpr auto OutputConsoleStr = "OutputConsole";
+        static constexpr auto OutputFileStr = "OutputFile";
+        static constexpr auto OutputStringBufferStr = "OutputStringBuffer";
+        static constexpr auto LevelStr = "Level";
+        static constexpr auto LevelFlushStr = "LevelFlush";
 
         struct LogSettings
         {

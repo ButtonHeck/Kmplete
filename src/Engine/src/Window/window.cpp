@@ -6,17 +6,17 @@
 
 namespace Kmplete
 {
-    constexpr static auto NameStr = "Name";
-    constexpr static auto XStr = "X";
-    constexpr static auto YStr = "Y";
-    constexpr static auto WidthStr = "Width";
-    constexpr static auto HeightStr = "Height";
-    constexpr static auto WindowedWidthStr = "WindowedWidth";
-    constexpr static auto WindowedHeightStr = "WindowedHeight";
-    constexpr static auto ScreenModeStr = "ScreenMode";
-    constexpr static auto VSyncStr = "VSync";
-    constexpr static auto UpdateContinuouslyStr = "UpdateContinuously";
-    constexpr static auto AlwaysOnTopStr = "AlwaysOnTop";
+    static constexpr auto NameStr = "Name";
+    static constexpr auto XStr = "X";
+    static constexpr auto YStr = "Y";
+    static constexpr auto WidthStr = "Width";
+    static constexpr auto HeightStr = "Height";
+    static constexpr auto WindowedWidthStr = "WindowedWidth";
+    static constexpr auto WindowedHeightStr = "WindowedHeight";
+    static constexpr auto ScreenModeStr = "ScreenMode";
+    static constexpr auto VSyncStr = "VSync";
+    static constexpr auto UpdateContinuouslyStr = "UpdateContinuously";
+    static constexpr auto AlwaysOnTopStr = "AlwaysOnTop";
 
     Window::Window(WindowSettings& settings)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Window::Window(WindowSettings&)")

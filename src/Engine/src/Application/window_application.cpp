@@ -17,8 +17,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "WindowApplication";
-    constexpr static auto GraphicsBackendTypeStr = "GraphicsBackendType";
+    static constexpr auto SettingsEntryName = "WindowApplication";
+    static constexpr auto GraphicsBackendTypeStr = "GraphicsBackendType";
 
     WindowApplication::WindowApplication(const WindowApplicationParameters& parameters)
         : Application(parameters.applicationParameters)

@@ -16,9 +16,9 @@ namespace Kmplete
     class WindowBackend
     {
     protected:
-        constexpr static auto SettingsEntryName = "WindowBackend";
-        constexpr static auto MainWindowStr = "MainWindow";
-        constexpr static auto AuxWindowsStr = "AuxWindows";
+        static constexpr auto SettingsEntryName = "WindowBackend";
+        static constexpr auto MainWindowStr = "MainWindow";
+        static constexpr auto AuxWindowsStr = "AuxWindows";
 
     public:
         struct MonitorVideoMode

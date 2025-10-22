@@ -25,9 +25,9 @@ namespace Kmplete
     KMP_NODISCARD String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
     KMP_NODISCARD GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
 
-    constexpr static auto OpenGLStr = "OpenGL";
-    constexpr static auto UnknownStr = "Unknown";
-    constexpr static auto DefaultAPIStr = OpenGLStr;
+    static constexpr auto OpenGLStr = "OpenGL";
+    static constexpr auto UnknownStr = "Unknown";
+    static constexpr auto DefaultAPIStr = OpenGLStr;
     //--------------------------------------------------------------------------
 
     KMP_NODISCARD unsigned int GetMipLevelsCount(int width, int height) noexcept;

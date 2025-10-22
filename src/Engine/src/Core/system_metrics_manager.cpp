@@ -142,7 +142,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        constexpr static auto MibDivisor = 1024.0 * 1024.0;
+        static constexpr auto MibDivisor = 1024.0 * 1024.0;
         
 #if defined (KMP_PLATFORM_WINDOWS)
         MEMORYSTATUSEX memoryInfo;
@@ -318,7 +318,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
 #if defined (KMP_PLATFORM_WINDOWS)
-        constexpr static auto MibDivisor = 1024.0 * 1024.0;
+        static constexpr auto MibDivisor = 1024.0 * 1024.0;
         PROCESS_MEMORY_COUNTERS_EX pmc;
         if (!static_cast<bool>(GetProcessMemoryInfo(reinterpret_cast<HANDLE>(_windowsProcessHandle), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))))
         {

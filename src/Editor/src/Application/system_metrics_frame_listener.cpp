@@ -7,8 +7,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "SystemMetricsFrameListener";
-    constexpr static auto MetricsTimeoutStr = "MetricsTimeout";
+    static constexpr auto SettingsEntryName = "SystemMetricsFrameListener";
+    static constexpr auto MetricsTimeoutStr = "MetricsTimeout";
 
     SystemMetricsFrameListener::SystemMetricsFrameListener(SystemMetricsManager& metricsManager)
         : FrameListener("SystemMetrics")

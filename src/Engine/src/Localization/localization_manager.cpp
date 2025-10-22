@@ -10,8 +10,8 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "LocalizationManager";
-    constexpr static auto SettingsLocaleStr = "Locale";
+    static constexpr auto SettingsEntryName = "LocalizationManager";
+    static constexpr auto SettingsLocaleStr = "Locale";
 
     LocalizationManager::LocalizationManager() noexcept
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("LocalizationManager::LocalizationManager() noexcept")

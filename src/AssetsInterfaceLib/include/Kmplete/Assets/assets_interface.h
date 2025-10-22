@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Assets
     {
-        constexpr static auto AssetsFolder = "Data";
+        static constexpr auto AssetsFolder = "Data";
 
 
         enum AssetType : UByte

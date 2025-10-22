@@ -13,7 +13,7 @@
 
 namespace Kmplete
 {
-    constexpr static auto SettingsEntryName = "EditorFrameListener";
+    static constexpr auto SettingsEntryName = "EditorFrameListener";
 
     EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer)
         : FrameListener("EditorFrameListener")
@@ -246,7 +246,7 @@ namespace Kmplete
             {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
         });
 
-        constexpr static auto applicationWindowFlags =
+        static constexpr auto applicationWindowFlags =
             ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
             ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
             ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -271,7 +271,7 @@ namespace Kmplete
             });
 
             const auto statusBarHeight = 28 * _mainWindow.GetDPIScale();
-            constexpr static auto workingAreaFlags =
+            static constexpr auto workingAreaFlags =
                 ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
                 ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
@@ -316,7 +316,7 @@ namespace Kmplete
 
         UiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg)} });
 
-        constexpr static auto statusBarFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking;
+        static constexpr auto statusBarFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking;
         ImGui::BeginChild(IdApp_StatusBar, ImGui::GetContentRegionAvail(), false, statusBarFlags);
     }
     //--------------------------------------------------------------------------
