@@ -18,9 +18,10 @@
 
 namespace Kmplete
 {
-    Log::LogSettings Log::_logSettings;
+    static Log::LogSettings logSettings;
+    static std::stringstream stringStream;
+
     Ptr<spdlog::logger> Log::_logger;
-    std::stringstream Log::_stringStream;
 
     namespace
     {
@@ -81,33 +82,33 @@ namespace Kmplete
         spdlog::drop_all();
         spdlog::init_thread_pool(1024, 1);
 
-        if (_logSettings.enabled)
+        if (logSettings.enabled)
         {
             Vector<spdlog::sink_ptr> logSinks;
 
-            if (_logSettings.outputConsole)
+            if (logSettings.outputConsole)
             {
                 const auto stdoutSink = CreatePtr<spdlog::sinks::stdout_color_sink_mt>(spdlog::color_mode::automatic);
                 stdoutSink->set_pattern("%^%T.%e %L \"%n\" | %v%$");
                 logSinks.push_back(stdoutSink);
             }
 
-            if (_logSettings.outputFile)
+            if (logSettings.outputFile)
             {
-                const auto fileSink = CreatePtr<spdlog::sinks::basic_file_sink_mt>(_logSettings.filename, _logSettings.truncate);
+                const auto fileSink = CreatePtr<spdlog::sinks::basic_file_sink_mt>(logSettings.filename, logSettings.truncate);
                 fileSink->set_pattern("%T.%e %L \"%n\" | %v");
                 logSinks.push_back(fileSink);
             }
 
-            if (_logSettings.outputStringBuffer)
+            if (logSettings.outputStringBuffer)
             {
-                const auto stringBufferSink = CreatePtr<spdlog::sinks::ostream_sink_mt>(_stringStream);
+                const auto stringBufferSink = CreatePtr<spdlog::sinks::ostream_sink_mt>(stringStream);
                 stringBufferSink->set_pattern("%T.%e %L \"%n\" | %v");
                 logSinks.push_back(stringBufferSink);
             }
 
-            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.level, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
-            auto coreLevelFlush = static_cast<spdlog::level::level_enum>(std::clamp(_logSettings.levelFlush, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            const auto coreLevel = static_cast<spdlog::level::level_enum>(std::clamp(logSettings.level, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
+            auto coreLevelFlush = static_cast<spdlog::level::level_enum>(std::clamp(logSettings.levelFlush, SPDLOG_LEVEL_TRACE, SPDLOG_LEVEL_CRITICAL));
             if (coreLevelFlush < coreLevel)
             {
                 coreLevelFlush = coreLevel;
@@ -154,19 +155,19 @@ namespace Kmplete
 
     void Log::SetSettings(const LogSettings& settings)
     {
-        _logSettings = settings;
+        logSettings = settings;
     }
     //--------------------------------------------------------------------------
 
     const Log::LogSettings& Log::GetSettings()
     {
-        return _logSettings;
+        return logSettings;
     }
     //--------------------------------------------------------------------------
 
     std::stringstream& Log::StringLogOutput()
     {
-        return _stringStream;
+        return stringStream;
     }
     //--------------------------------------------------------------------------
 }

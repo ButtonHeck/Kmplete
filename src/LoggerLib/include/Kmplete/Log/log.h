@@ -91,9 +91,7 @@ namespace Kmplete
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->critical(fmt, std::forward<Args>(args)...); }
 
     private:
-        static LogSettings _logSettings;
         KMP_LOG_API static Ptr<spdlog::logger> _logger;
-        static std::stringstream _stringStream;
     };
     //--------------------------------------------------------------------------
 }
