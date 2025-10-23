@@ -70,6 +70,7 @@ target_include_directories(Editor
 target_link_libraries(Editor
     PRIVATE Kmplete
     PRIVATE TranslatorInterfaceLib
+    PRIVATE AssetsCompilerInterfaceLib
     PRIVATE icons_fonts
 )
 

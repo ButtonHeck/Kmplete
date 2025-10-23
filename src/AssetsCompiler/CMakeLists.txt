@@ -30,6 +30,7 @@ target_link_libraries(AssetsCompiler
     PRIVATE BaseLib
     PRIVATE UtilsLib
     PRIVATE AssetsInterfaceLib
+    PRIVATE AssetsCompilerInterfaceLib
     PRIVATE FilesystemLib
     PRIVATE JsonLib
 )
