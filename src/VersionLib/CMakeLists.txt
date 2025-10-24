@@ -22,7 +22,7 @@ add_library(VersionLib STATIC
 )
 
 set_target_properties(VersionLib PROPERTIES 
-    FOLDER Kmplete/VersionLib
+    FOLDER Kmplete/Libraries/VersionLib
     POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
 )
 

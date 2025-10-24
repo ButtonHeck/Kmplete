@@ -40,7 +40,7 @@ target_compile_definitions(JsonLib
 )
 
 set_target_properties(JsonLib PROPERTIES 
-    FOLDER Kmplete/JsonLib
+    FOLDER Kmplete/Libraries/JsonLib
 )
 
 if(${KMPLETE_BUILD_TESTS})

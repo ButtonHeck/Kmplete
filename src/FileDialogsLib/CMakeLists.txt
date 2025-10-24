@@ -34,7 +34,7 @@ target_compile_definitions(FileDialogsLib
 )
 
 set_target_properties(FileDialogsLib PROPERTIES 
-    FOLDER Kmplete/FileDialogsLib
+    FOLDER Kmplete/Libraries/FileDialogsLib
 )
 
 if(${KMPLETE_BUILD_TESTS})

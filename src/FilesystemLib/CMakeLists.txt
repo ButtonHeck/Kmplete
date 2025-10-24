@@ -31,7 +31,7 @@ target_compile_definitions(FilesystemLib
 )
 
 set_target_properties(FilesystemLib PROPERTIES 
-    FOLDER Kmplete/FilesystemLib
+    FOLDER Kmplete/Libraries/FilesystemLib
 )
 
 if(${KMPLETE_BUILD_TESTS})

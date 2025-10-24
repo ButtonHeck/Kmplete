@@ -94,7 +94,7 @@ if(MSVC)
 endif()
 
 set_target_properties(Editor PROPERTIES 
-    FOLDER Kmplete/Editor
+    FOLDER Kmplete/Tools/Editor
 )
 
 set(EditorCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
@@ -136,13 +136,13 @@ add_custom_command(TARGET Editor_copy_translations PRE_BUILD
     VERBATIM
 )
 set_target_properties(Editor_copy_translations PROPERTIES
-    FOLDER Kmplete/Editor
+    FOLDER Kmplete/Tools/Editor
 )
 
 add_dependencies(Editor Editor_copy_translations)
 
 CreateTranslationHelperTargets(
-    Editor Kmplete/Editor
+    Editor Kmplete/Tools/Editor
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${EditorDomain}"
     "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${EditorDomain}"
 )
@@ -172,7 +172,7 @@ add_custom_command(TARGET Editor_compile_assets PRE_BUILD
     "--output_file_name=\"${exeDir}/Data/editor_assets.kmpdata\""
 )
 set_target_properties(Editor_compile_assets PROPERTIES
-    FOLDER Kmplete/Editor
+    FOLDER Kmplete/Tools/Editor
 )
 
 add_dependencies(Editor Editor_compile_assets)

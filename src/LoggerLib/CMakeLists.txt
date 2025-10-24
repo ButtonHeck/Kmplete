@@ -36,7 +36,7 @@ target_compile_definitions(LoggerLib
 )
 
 set_target_properties(LoggerLib PROPERTIES 
-    FOLDER Kmplete/LoggerLib
+    FOLDER Kmplete/Libraries/LoggerLib
 )
 
 
@@ -62,7 +62,7 @@ target_include_directories(LoggerInterfaceLib
 )
 
 set_target_properties(LoggerInterfaceLib PROPERTIES 
-    FOLDER Kmplete/LoggerLib
+    FOLDER Kmplete/Libraries/LoggerLib
 )
 
 

@@ -33,7 +33,7 @@ target_compile_definitions(UtilsLib
 )
 
 set_target_properties(UtilsLib PROPERTIES 
-    FOLDER Kmplete/UtilsLib
+    FOLDER Kmplete/Libraries/UtilsLib
 )
 
 if(${KMPLETE_BUILD_TESTS})

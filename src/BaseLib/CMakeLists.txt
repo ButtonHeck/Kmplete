@@ -24,7 +24,7 @@ target_include_directories(BaseLib
 )
 
 set_target_properties(BaseLib PROPERTIES 
-    FOLDER Kmplete/BaseLib
+    FOLDER Kmplete/Libraries/BaseLib
 )
 
 if(${KMPLETE_BUILD_TESTS})

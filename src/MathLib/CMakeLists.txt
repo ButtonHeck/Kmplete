@@ -32,7 +32,7 @@ target_link_libraries(MathLib
 #)
 
 set_target_properties(MathLib PROPERTIES
-    FOLDER Kmplete/MathLib
+    FOLDER Kmplete/Libraries/MathLib
 )
 
 if(${KMPLETE_BUILD_TESTS})

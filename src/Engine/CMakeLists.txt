@@ -165,7 +165,7 @@ target_link_libraries(Kmplete
 )
 
 set_target_properties(Kmplete PROPERTIES 
-    FOLDER Kmplete/Engine
+    FOLDER Kmplete/Libraries/Engine
 )
 
 if(${KMPLETE_BUILD_TESTS})
@@ -182,7 +182,7 @@ target_compile_definitions(Kmplete
 )
 
 CreateTranslationHelperTargets(
-    Kmplete Kmplete/Engine
+    Kmplete Kmplete/Libraries/Engine
     "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" \"${CMAKE_CURRENT_LIST_DIR}/include\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
     "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${KmpleteDomain}"
 )

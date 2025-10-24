@@ -23,5 +23,5 @@ target_link_libraries(AssetsInterfaceLib
 )
 
 set_target_properties(AssetsInterfaceLib PROPERTIES 
-    FOLDER Kmplete/AssetsInterfaceLib
+    FOLDER Kmplete/Libraries/AssetsInterfaceLib
 )

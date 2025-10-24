@@ -33,7 +33,7 @@ target_compile_definitions(ProfilerLib
 )
 
 set_target_properties(ProfilerLib PROPERTIES 
-    FOLDER Kmplete/ProfilerLib
+    FOLDER Kmplete/Libraries/ProfilerLib
 )
 
 
@@ -57,7 +57,7 @@ target_include_directories(ProfilerInterfaceLib
 )
 
 set_target_properties(ProfilerInterfaceLib PROPERTIES 
-    FOLDER Kmplete/ProfilerLib
+    FOLDER Kmplete/Libraries/ProfilerLib
 )
 
 
