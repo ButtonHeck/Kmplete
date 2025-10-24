@@ -21,6 +21,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 
 option(KMPLETE_BUILD_TESTS "Build catch2 tests" ON)
+option(KMPLETE_MULTIPROCESSOR_BUILD "Use multiple processors during compilation" ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 include(NoInSourceBuilds)
