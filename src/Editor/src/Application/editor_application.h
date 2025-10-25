@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Application/editor_frame_listener.h"
-#include "Application/system_metrics_frame_listener.h"
 
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"
@@ -32,7 +31,6 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         UPtr<EditorFrameListener> _uiFrameListener;
-        UPtr<SystemMetricsFrameListener> _systemMetricsFrameListener;
     };
     //--------------------------------------------------------------------------
 }

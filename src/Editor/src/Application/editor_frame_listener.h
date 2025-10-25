@@ -31,9 +31,10 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
-        EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer);
+        EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
         ~EditorFrameListener();
 
+        void Update(float frameTimestep, bool applicationIsIconified);
         void Render() override;
         void OnEvent(Event& event) override;
 
@@ -64,12 +65,13 @@ namespace Kmplete
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
     private:
+        SystemMetricsManager& _systemMetricsManager;
         Window& _mainWindow;
         GraphicsBackend& _graphicsBackend;
         Assets::AssetsManager& _assetsManager;
         UPtr<EditorUIImpl> _uiImpl;
         UPtr<EditorUICompositor> _uiCompositor;
-        Timer& _metricsTimer;
+        Timer _metricsTimer;
     };
     //--------------------------------------------------------------------------
 }

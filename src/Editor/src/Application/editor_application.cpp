@@ -13,7 +13,6 @@ namespace Kmplete
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const WindowApplicationParameters&)")
         , _mainWindow(_windowBackend->GetMainWindow())
         , _uiFrameListener(nullptr)
-        , _systemMetricsFrameListener(nullptr)
     {
         Initialize();
 
@@ -42,10 +41,7 @@ namespace Kmplete
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
 
-        _systemMetricsFrameListener.reset(new SystemMetricsFrameListener(*_systemMetricsManager));
-        AddFrameListener(_systemMetricsFrameListener.get());
-
-        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager, _systemMetricsFrameListener->GetTimer()));
+        _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager));
         AddFrameListener(_uiFrameListener.get());
 
         LoadSettings();
@@ -59,7 +55,6 @@ namespace Kmplete
         SaveSettings();
 
         _uiFrameListener.reset();
-        _systemMetricsFrameListener.reset();
     }
     //--------------------------------------------------------------------------
 
@@ -74,7 +69,6 @@ namespace Kmplete
             return;
         }
 
-        _systemMetricsFrameListener->SaveSettings(*settings);
         _uiFrameListener->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
@@ -90,7 +84,6 @@ namespace Kmplete
             return;
         }
 
-        _systemMetricsFrameListener->LoadSettings(*settings);
         _uiFrameListener->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------

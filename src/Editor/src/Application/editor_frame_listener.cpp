@@ -2,6 +2,7 @@
 #include "UI/ui_utils.h"
 #include "UI/ui_identifiers.h"
 
+#include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -13,16 +14,18 @@
 namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "EditorFrameListener";
+    static constexpr auto MetricsTimeoutStr = "MetricsTimeout";
 
-    EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Timer& metricsTimer)
+    EditorFrameListener::EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
         : FrameListener("EditorFrameListener")
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorFrameListener::EditorFrameListener(Window&, GraphicsBackend&, Assets::AssetsManager&, LocalizationManager&, SystemMetricsManager&)")
+        , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _assetsManager(assetsManager)
         , _uiImpl(nullptr)
         , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager))
-        , _metricsTimer(metricsTimer)
+        , _metricsTimer(1000)
     {
         Initialize();
 
@@ -106,6 +109,18 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         ImGui::DestroyContext();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorFrameListener::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        if (_metricsTimer.ReachedTimeout())
+        {
+            _metricsTimer.Mark();
+            _systemMetricsManager.Update(SystemMetricsManager::SystemMetricsUpdateMode::MemoryAndCPU);
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -205,6 +220,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartSaveObject(SettingsEntryName);
+        settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
         _uiCompositor->SaveSettings(settings);
         settings.EndSaveObject();
     }
@@ -215,6 +231,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartLoadObject(SettingsEntryName);
+        _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
         _uiCompositor->LoadSettings(settings);
         settings.EndLoadObject();
     }

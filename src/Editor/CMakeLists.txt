@@ -11,8 +11,6 @@ set(Editor_APPLICATION
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/system_metrics_frame_listener.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/system_metrics_frame_listener.cpp
 )
 source_group("Application" FILES ${Editor_APPLICATION})
 
