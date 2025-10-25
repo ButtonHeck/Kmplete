@@ -43,13 +43,12 @@ namespace Kmplete
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
 
         _systemMetricsFrameListener.reset(new SystemMetricsFrameListener(*_systemMetricsManager));
+        AddFrameListener(_systemMetricsFrameListener.get());
 
         _uiFrameListener.reset(new EditorFrameListener(_mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager, _systemMetricsFrameListener->GetTimer()));
+        AddFrameListener(_uiFrameListener.get());
 
         LoadSettings();
-
-        AddFrameListener(_systemMetricsFrameListener.get());
-        AddFrameListener(_uiFrameListener.get());
     }
     //--------------------------------------------------------------------------
 
