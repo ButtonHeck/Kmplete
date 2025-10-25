@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/platform.h"
+#include "Kmplete/Base/macro.h"
 #include "Kmplete/Utils/string_id.h"
 
 
@@ -22,21 +23,14 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-#if defined (KMP_COMPILER_MSVC)
-        #pragma pack(push, 1)
-        struct AssetEntryHeader
-#elif defined (KMP_COMPILER_MINGW) || defined (KMP_COMPILER_GCC) || defined (KMP_COMPILER_CLANG)
-        struct __attribute__((packed)) AssetEntryHeader
-#endif
+        KMP_BEGIN_PACKED_STRUCT(AssetEntryHeader)
         {
             UByte type;
             Utils::StringID sid;
             UInt64 bufferSize;
             UInt64 bufferOffset;
         };
-#if defined (KMP_COMPILER_MSVC)
-        #pragma pack(pop)
-#endif
+        KMP_END_PACKED_STRUCT
 
         using AssetCount = UInt32;
 

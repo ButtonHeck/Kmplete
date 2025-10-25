@@ -43,3 +43,11 @@
     #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(clang diagnostic ignored value))
     #define KMP_COMPILER_DIAGNOSTIC_POP             _Pragma("clang diagnostic pop")
 #endif
+
+#if defined (KMP_COMPILER_MSVC)
+    #define KMP_BEGIN_PACKED_STRUCT(name)   _Pragma("pack(push, 1)") struct name
+    #define KMP_END_PACKED_STRUCT           _Pragma("pack(pop)")
+#elif defined (KMP_COMPILER_MINGW) || defined (KMP_COMPILER_GCC) || defined (KMP_COMPILER_CLANG)
+    #define KMP_BEGIN_PACKED_STRUCT(name)   struct __attribute__((packed)) name
+    #define KMP_END_PACKED_STRUCT
+#endif
