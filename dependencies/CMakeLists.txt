@@ -42,6 +42,10 @@ if(NOT glfw_POPULATED)
     
     set_target_properties(glfw PROPERTIES FOLDER Dependencies/GLFW)
     set_target_properties(update_mappings PROPERTIES FOLDER Dependencies/GLFW)
+    
+    target_compile_options(glfw PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
 endif()
 
 
@@ -113,6 +117,10 @@ if(NOT spdlog_POPULATED)
     add_subdirectory(${spdlog_SOURCE_DIR} ${spdlog_BINARY_DIR})
     
     set_target_properties(spdlog PROPERTIES FOLDER Dependencies/spdlog)
+    
+    target_compile_options(spdlog PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
 endif()
 
 
@@ -131,6 +139,13 @@ if(NOT catch2_POPULATED)
     
     set_target_properties(Catch2 PROPERTIES FOLDER Dependencies/Catch2)
     set_target_properties(Catch2WithMain PROPERTIES FOLDER Dependencies/Catch2)
+    
+    target_compile_options(Catch2 PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
+    target_compile_options(Catch2WithMain PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
 endif()
 
 
@@ -150,6 +165,10 @@ if(NOT glm_POPULATED)
     add_subdirectory(${glm_SOURCE_DIR} ${glm_BINARY_DIR})
     
     set_target_properties(glm PROPERTIES FOLDER Dependencies/glm)
+    
+    target_compile_options(glm PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
 endif()
 
 
@@ -164,7 +183,7 @@ FetchContent_GetProperties(entt)
 if(NOT entt_POPULATED)
     FetchContent_Populate(entt)
     
-    add_subdirectory(${entt_SOURCE_DIR} ${entt_BINARY_DIR})    
+    add_subdirectory(${entt_SOURCE_DIR} ${entt_BINARY_DIR})
 endif()
 
 
@@ -185,6 +204,10 @@ if(NOT freetype_POPULATED)
     add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
     
     set_target_properties(freetype PROPERTIES FOLDER Dependencies/FreeType)
+    
+    target_compile_options(freetype PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
 endif()
 
 
@@ -212,4 +235,8 @@ if(NOT openal-soft_POPULATED)
     set_target_properties(ex-common PROPERTIES FOLDER Dependencies/OpenAL)
     set_target_properties(OpenAL PROPERTIES FOLDER Dependencies/OpenAL)
     set_target_properties(openal-info PROPERTIES FOLDER Dependencies/OpenAL)
+    
+    target_compile_options(OpenAL PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
 endif()

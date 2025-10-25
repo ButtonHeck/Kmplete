@@ -12,3 +12,7 @@ target_include_directories(stb_image
 set_target_properties(stb_image PROPERTIES
     POSITION_INDEPENDENT_CODE ${BUILD_SHARED_LIBS}
 )
+
+target_compile_options(stb_image PUBLIC
+    $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+)
