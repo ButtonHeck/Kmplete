@@ -64,7 +64,6 @@ namespace Kmplete
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
 
     private:
-        SystemMetricsManager& _systemMetricsManager;
         Window& _mainWindow;
         GraphicsBackend& _graphicsBackend;
         Assets::AssetsManager& _assetsManager;

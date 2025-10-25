@@ -10,7 +10,6 @@
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
-#include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/texture_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
 
@@ -25,10 +24,9 @@ namespace Kmplete
     static constexpr auto SettingsEntryName = "EditorUICompositor";
     static constexpr auto MetricsFractionalStr = "MetricsFractional";
 
-    EditorUICompositor::EditorUICompositor(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUICompositor::EditorUICompositor(Window&, GraphicsBackend&, Assets::AssetsManager&, LocalizationManager&, const SystemMetricsManager&)")
+    EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUICompositor::EditorUICompositor(Window&, Assets::AssetsManager&, LocalizationManager&, const SystemMetricsManager&)")
           _mainWindow(mainWindow)
-        , _graphicsBackend(graphicsBackend)
         , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
