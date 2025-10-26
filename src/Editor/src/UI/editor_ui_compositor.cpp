@@ -11,9 +11,9 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Graphics/texture_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
-#include "Kmplete/ImGui/ui_utils.h"
+#include "Kmplete/ImGui/helper_functions.h"
+#include "Kmplete/ImGui/scope_guards.h"
 
-#include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
 #include <misc/cpp/imgui_stdlib.h> // for ImGui::InputText wrappers for std::string
 #include <forkawesome-webfont.h>
@@ -101,20 +101,20 @@ namespace Kmplete
             languageIndex = 1;
         }
 
-        UiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Button, ImColor(0, 0, 0, 0)}, {ImGuiCol_Border, ImColor(0, 0, 0, 0)} });
+        ImGuiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Button, ImColor(0, 0, 0, 0)}, {ImGuiCol_Border, ImColor(0, 0, 0, 0)} });
         if (ImGui::ImageButton(languageIcons[languageIndex], iconSize))
         {
             ImGui::OpenPopup(IdPopup_ChangeLanguage);
         }
-        UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Change language"_sid).c_str());
+        ImGuiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Change language"_sid).c_str());
 
         if (ImGui::BeginPopup(IdPopup_ChangeLanguage))
         {
             const auto EngButtonClicked = ImGui::ImageButton(languageIcons[0], iconSize);
-            UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEngine, "English"_sid).c_str());
+            ImGuiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEngine, "English"_sid).c_str());
 
             const auto RusButtonClicked = ImGui::ImageButton(languageIcons[1], iconSize);
-            UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEngine, "Russian"_sid).c_str());
+            ImGuiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEngine, "Russian"_sid).c_str());
 
             if (EngButtonClicked)
             {
@@ -259,7 +259,7 @@ namespace Kmplete
         {
             ImGui::OpenPopup(IdPopup_StatusBarSettings);
         }
-        UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Metrics update period (ms)"_sid).c_str());
+        ImGuiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Metrics update period (ms)"_sid).c_str());
 
         if (ImGui::BeginPopup(IdPopup_StatusBarSettings))
         {
@@ -278,13 +278,13 @@ namespace Kmplete
         ImGui::SameLine();
 
         {
-            UiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border)} });
+            ImGuiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border)} });
             if (ImGui::Button(ICON_FK_PERCENT, buttonSize))
             {
                 _state.metricsFractional = !_state.metricsFractional;
             }
         }
-        UiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Show fractional"_sid).c_str());
+        ImGuiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Show fractional"_sid).c_str());
 
         ImGui::SameLine();
 

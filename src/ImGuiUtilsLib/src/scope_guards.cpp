@@ -1,14 +1,12 @@
-#include "Kmplete/ImGui/ui_utils.h"
+#include "Kmplete/ImGui/scope_guards.h"
 #include "Kmplete/Profile/profiler.h"
-#include "Kmplete/Base/platform.h"
-#include "Kmplete/Base/macro.h"
 
 #include <imgui_internal.h>
 
 
 namespace Kmplete
 {
-    namespace UiUtils
+    namespace ImGuiUtils
     {
         DisableGuard::DisableGuard(bool condition)
             : _condition(condition)
@@ -133,21 +131,6 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
             ImGui::EndGroup();
-        }
-        //--------------------------------------------------------------------------
-
-
-        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags /*= ImGuiHoveredFlags_AllowWhenDisabled*/)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
-
-            if (ImGui::IsItemHovered(flags))
-            {
-                KMP_COMPILER_DIAGNOSTIC_PUSH
-                KMP_COMPILER_DIAGNOSTIC_IGNORE("-Wformat-security")
-                ImGui::SetTooltip(text);
-                KMP_COMPILER_DIAGNOSTIC_POP
-            }
         }
         //--------------------------------------------------------------------------
     }

@@ -5,8 +5,10 @@ cmake_minimum_required(VERSION 3.20)
 project(ImGuiUtilsLib LANGUAGES CXX)
 
 set(ImGuiUtilsLib_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/ui_utils.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/ui_utils.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/helper_functions.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/scope_guards.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/scope_guards.cpp
 )
 source_group("Utils" FILES ${ImGuiUtilsLib_SOURCES})
 

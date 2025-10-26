@@ -8,7 +8,7 @@
 
 namespace Kmplete
 {
-    namespace UiUtils
+    namespace ImGuiUtils
     {
         class DisableGuard
         {
@@ -68,9 +68,6 @@ namespace Kmplete
             GroupGuard();
             ~GroupGuard();
         };
-        //--------------------------------------------------------------------------
-
-        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags = ImGuiHoveredFlags_AllowWhenDisabled);
         //--------------------------------------------------------------------------
     }
 }

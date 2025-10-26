@@ -5,7 +5,8 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Utils/function_utils.h"
-#include "Kmplete/ImGui/ui_utils.h"
+#include "Kmplete/ImGui/helper_functions.h"
+#include "Kmplete/ImGui/scope_guards.h"
 
 #include <forkawesome-webfont.h>
 
@@ -45,10 +46,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        IMGUI_CHECKVERSION();
-        ImGui::CreateContext();
-        auto& io = ImGui::GetIO();
-        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable | ImGuiConfigFlags_ViewportsEnable;
+        ImGuiUtils::InitializeImGui(true, true);
 
         _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
 
@@ -135,7 +133,7 @@ namespace Kmplete
                 {
                     ComposeMainArea();
 
-                    UiUtils::StyleVarGuard styleVarGuard({
+                    ImGuiUtils::StyleVarGuard styleVarGuard({
                         {ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f)}
                     });
                     EndMainWorkingArea();
@@ -254,7 +252,7 @@ namespace Kmplete
         ImGui::SetNextWindowSize(viewport->WorkSize);
         ImGui::SetNextWindowViewport(viewport->ID);
 
-        UiUtils::StyleVarGuard guard({
+        ImGuiUtils::StyleVarGuard guard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
             {ImGuiStyleVar_WindowBorderSize, 0.0f},
             {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
@@ -278,7 +276,7 @@ namespace Kmplete
         ImGui::SetNextWindowViewport(viewport->ID);
 
         {
-            UiUtils::StyleVarGuard guard({
+            ImGuiUtils::StyleVarGuard guard({
                 {ImGuiStyleVar_WindowRounding, 0.0f},
                 {ImGuiStyleVar_WindowBorderSize, 0.0f},
                 {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
@@ -322,13 +320,13 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-        UiUtils::StyleVarGuard styleVarGuard({
+        ImGuiUtils::StyleVarGuard styleVarGuard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
             {ImGuiStyleVar_WindowBorderSize, 0.0f},
             {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
         });
 
-        UiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg)} });
+        ImGuiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg)} });
 
         static constexpr auto statusBarFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking;
         ImGui::BeginChild(IdApp_StatusBar, ImGui::GetContentRegionAvail(), false, statusBarFlags);
