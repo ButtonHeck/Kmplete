@@ -21,8 +21,6 @@ set(Editor_UI
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl_opengl_glfw.h
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl_opengl_glfw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_utils.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/shortcuts.h
 )
@@ -39,29 +37,15 @@ if(WIN32)
     source_group("Resources" FILES ${Editor_WINRC})
 endif()
 
-aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
-source_group("Imgui" FILES
-    ${IMGUI_SOURCES}
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
-    ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
-)
-
 add_executable(Editor
     ${Editor_APPLICATION}
     ${Editor_UI}
     ${Editor_WINRC}
-    ${IMGUI_SOURCES}
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
-    ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
 )
-
 
 SetupCompilerOptions(Editor)
 
 target_include_directories(Editor
-    PRIVATE ${imgui_SOURCE_DIR}
     PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src
 )
 
@@ -69,6 +53,7 @@ target_link_libraries(Editor
     PRIVATE Kmplete
     PRIVATE TranslatorInterfaceLib
     PRIVATE AssetsCompilerInterfaceLib
+    PRIVATE ImGuiUtilsLib
     PRIVATE icons_fonts
 )
 

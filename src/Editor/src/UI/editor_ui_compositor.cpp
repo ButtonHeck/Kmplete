@@ -1,5 +1,4 @@
 #include "UI/editor_ui_compositor.h"
-#include "UI/ui_utils.h"
 #include "UI/shortcuts.h"
 #include "UI/ui_identifiers.h"
 #include "Application/localization_base.h"
@@ -12,6 +11,7 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Graphics/texture_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
+#include "Kmplete/ImGui/ui_utils.h"
 
 #include <imgui.h>
 #include <imgui_internal.h> // for ImGui::DockBuilder api
