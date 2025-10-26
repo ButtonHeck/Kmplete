@@ -7,8 +7,11 @@ project(ImGuiUtilsLib LANGUAGES CXX)
 set(ImGuiUtilsLib_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/helper_functions.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/scope_guards.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation_glfw_opengl.h
     ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/scope_guards.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/implementation_glfw_opengl.cpp
 )
 source_group("Utils" FILES ${ImGuiUtilsLib_SOURCES})
 
