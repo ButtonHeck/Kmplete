@@ -20,6 +20,7 @@ namespace Kmplete
 
             void NewFrame() const;
             void Render() const;
+            void Stylize(float dpiScale) const;
 
         protected:
             ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled);

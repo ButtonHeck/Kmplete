@@ -50,7 +50,7 @@ namespace Kmplete
         const auto dpiScale = _mainWindow.GetDPIScale();
         AddDefaultFont(dpiScale);
         AddIconsFont(dpiScale);
-        Stylize(dpiScale);
+        _imguiImpl->Stylize(dpiScale);
 
         _metricsTimer.Mark();
     }
@@ -83,21 +83,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::Stylize(float dpiScale) const
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
-
-        ImGui::GetStyle() = ImGuiStyle();
-
-        auto& style = ImGui::GetStyle();
-        style.FrameBorderSize = 1.0f;
-        style.WindowMenuButtonPosition = ImGuiDir_None;
-        style.DisabledAlpha = 0.4f;
-
-        style.ScaleAllSizes(dpiScale);
-    }
-    //--------------------------------------------------------------------------
-
     void EditorFrameListener::Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -106,7 +91,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    void EditorFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -194,7 +179,7 @@ namespace Kmplete
         AddDefaultFont(scale);
         AddIconsFont(scale);
         io.Fonts->Build();
-        Stylize(scale);
+        _imguiImpl->Stylize(scale);
 
         return true;
     }

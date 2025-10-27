@@ -65,5 +65,20 @@ namespace Kmplete
             RenderImpl();
         }
         //--------------------------------------------------------------------------
+
+        void ImGuiImplementation::Stylize(float dpiScale) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            ImGui::GetStyle() = ImGuiStyle();
+
+            auto& style = ImGui::GetStyle();
+            style.FrameBorderSize = 1.0f;
+            style.WindowMenuButtonPosition = ImGuiDir_None;
+            style.DisabledAlpha = 0.4f;
+
+            style.ScaleAllSizes(dpiScale);
+        }
+        //--------------------------------------------------------------------------
     }
 }
