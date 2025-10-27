@@ -47,10 +47,16 @@ else()
     message(SEND_ERROR "No window backend is chosen")
 endif()
 
+target_compile_definitions(ImGuiUtilsLib
+    PRIVATE KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
+)
+
 target_link_libraries(ImGuiUtilsLib 
-    PUBLIC BaseLib
-    PUBLIC $<IF:$<CONFIG:Production>,ProfilerInterfaceLib,ProfilerLib>
-    PUBLIC glfw
+    PRIVATE BaseLib
+    PRIVATE UtilsLib
+    PRIVATE $<IF:$<CONFIG:Production>,ProfilerInterfaceLib,ProfilerLib>
+    PRIVATE glfw
+    PRIVATE icons_fonts
 )
 
 set_target_properties(ImGuiUtilsLib PROPERTIES 

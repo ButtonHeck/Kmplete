@@ -20,6 +20,9 @@ namespace Kmplete
 
             void NewFrame() const;
             void Render() const;
+
+            void AddDefaultFont(float dpiScale) const;
+            void AddIconsFont(float dpiScale) const;
             void Stylize(float dpiScale) const;
 
         protected:

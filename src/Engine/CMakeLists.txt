@@ -141,8 +141,6 @@ else()
 endif()
 
 target_compile_definitions(Kmplete
-    PUBLIC KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
-
     PRIVATE KMP_EXPORTS
     PRIVATE KMP_ENGINE_PRIVATE
 )

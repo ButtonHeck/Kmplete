@@ -43,8 +43,6 @@ namespace Kmplete
 
     private:
         void Initialize();
-        void AddDefaultFont(float dpiScale) const;
-        void AddIconsFont(float dpiScale) const;
         void Finalize();
 
         void NewFrame();

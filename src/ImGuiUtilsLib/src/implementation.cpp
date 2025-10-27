@@ -1,8 +1,10 @@
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/ImGui/implementation_glfw_opengl.h"
+#include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Profile/profiler.h"
 
 #include <imgui.h>
+#include <forkawesome-webfont.h>
 
 
 namespace Kmplete
@@ -63,6 +65,33 @@ namespace Kmplete
         {
             ImGui::Render();
             RenderImpl();
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementation::AddDefaultFont(float dpiScale) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            auto& io = ImGui::GetIO();
+            const auto fontSize = 18 * dpiScale;
+            const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
+            io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementation::AddIconsFont(float dpiScale) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            auto& io = ImGui::GetIO();
+            const auto fontSize = 18 * dpiScale;
+            ImFontConfig iconsConfig;
+            iconsConfig.MergeMode = true;
+            iconsConfig.GlyphMinAdvanceX = fontSize;
+            iconsConfig.PixelSnapH = true;
+            iconsConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
+            static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+            io.Fonts->AddFontFromFileTTF(Utils::Concatenate(KMP_FONTS_FOLDER, "forkawesome-webfont.ttf").c_str(), fontSize, &iconsConfig, iconsRanges);
         }
         //--------------------------------------------------------------------------
 
