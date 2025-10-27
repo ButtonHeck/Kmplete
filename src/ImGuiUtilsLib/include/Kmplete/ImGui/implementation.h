@@ -11,18 +11,18 @@ namespace Kmplete
         class ImGuiImplementation
         {
         public:
-            KMP_NODISCARD static ImGuiImplementation* CreateImpl(void* window, const String& graphicsBackendType);
+            KMP_NODISCARD static ImGuiImplementation* CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled);
 
         public:
             KMP_DISABLE_COPY_MOVE(ImGuiImplementation)
 
-            virtual ~ImGuiImplementation() = default;
+            virtual ~ImGuiImplementation();
 
             void NewFrame() const;
             void Render() const;
 
         protected:
-            ImGuiImplementation() = default;
+            ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled);
 
             virtual void NewFrameImpl() const = 0;
             virtual void RenderImpl() const = 0;

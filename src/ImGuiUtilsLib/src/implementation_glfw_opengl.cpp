@@ -10,8 +10,9 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window)
-            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST("ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*>)")
+        ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled)
+            : ImGuiImplementation(dockingEnabled, viewportsEnabled)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*>), bool, bool")
         {
             Initialize(window);
 

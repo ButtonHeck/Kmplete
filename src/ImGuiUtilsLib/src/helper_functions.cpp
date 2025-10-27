@@ -7,25 +7,6 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        void InitializeImGui(bool dockingEnabled, bool viewportsEnabled)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
-
-            IMGUI_CHECKVERSION();
-            ImGui::CreateContext();
-            auto& io = ImGui::GetIO();
-
-            if (dockingEnabled)
-            {
-                io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-            }
-            if (viewportsEnabled)
-            {
-                io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-            }
-        }
-        //--------------------------------------------------------------------------
-
         void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags /*= ImGuiHoveredFlags_AllowWhenDisabled*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);

@@ -37,7 +37,6 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        _imguiImpl.reset();
         Finalize();
     }
     //--------------------------------------------------------------------------
@@ -46,9 +45,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        ImGuiUtils::InitializeImGui(true, true);
-
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType())));
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
 
         const auto dpiScale = _mainWindow.GetDPIScale();
         AddDefaultFont(dpiScale);
@@ -101,11 +98,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::Finalize() const
+    void EditorFrameListener::Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        ImGui::DestroyContext();
+        _imguiImpl.reset();
     }
     //--------------------------------------------------------------------------
 
@@ -189,7 +186,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         _imguiImpl.reset();
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType())));
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
 
         auto& io = ImGui::GetIO();
         io.Fonts->Clear();
