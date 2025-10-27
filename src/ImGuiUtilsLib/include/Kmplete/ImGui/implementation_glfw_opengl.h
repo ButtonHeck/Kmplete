@@ -21,12 +21,12 @@ namespace Kmplete
             explicit ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window);
             virtual ~ImGuiImplementationGlfwOpenGL();
 
-            void NewFrame() override;
-            void Render() override;
-
         private:
-            void Initialize(NonNull<GLFWwindow*> window);
-            void Finalize();
+            void Initialize(NonNull<GLFWwindow*> window) const;
+            void Finalize() const;
+
+            void NewFrameImpl() const override;
+            void RenderImpl() const override;
         };
         //--------------------------------------------------------------------------
     }

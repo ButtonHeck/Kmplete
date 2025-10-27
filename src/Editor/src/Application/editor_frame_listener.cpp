@@ -23,7 +23,7 @@ namespace Kmplete
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _assetsManager(assetsManager)
-        , _uiImpl(nullptr)
+        , _imguiImpl(nullptr)
         , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
@@ -37,7 +37,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        _uiImpl.reset();
+        _imguiImpl.reset();
         Finalize();
     }
     //--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ namespace Kmplete
 
         ImGuiUtils::InitializeImGui(true, true);
 
-        _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType())));
 
         const auto dpiScale = _mainWindow.GetDPIScale();
         AddDefaultFont(dpiScale);
@@ -148,8 +148,7 @@ namespace Kmplete
             EndApplicationArea();
         }
 
-        ImGui::Render();
-        _uiImpl->Render();
+        _imguiImpl->Render();
         EndFrame();
     }
     //--------------------------------------------------------------------------
@@ -189,8 +188,8 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-        _uiImpl.reset();
-        _uiImpl.reset(EditorUIImpl::CreateImpl(_mainWindow, _graphicsBackend.GetType()));
+        _imguiImpl.reset();
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType())));
 
         auto& io = ImGui::GetIO();
         io.Fonts->Clear();
@@ -238,8 +237,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-        _uiImpl->NewFrame();
-        ImGui::NewFrame();
+        _imguiImpl->NewFrame();
     }
     //--------------------------------------------------------------------------
 

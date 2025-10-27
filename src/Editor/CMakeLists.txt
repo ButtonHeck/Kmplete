@@ -17,10 +17,6 @@ source_group("Application" FILES ${Editor_APPLICATION})
 set(Editor_UI
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl_opengl_glfw.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_impl_opengl_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/shortcuts.h
 )

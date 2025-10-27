@@ -132,7 +132,6 @@ target_include_directories(Kmplete
     PRIVATE "${CMAKE_CURRENT_LIST_DIR}/internal"
 )
 
-option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)
 if(${KMPLETE_USE_WINDOW_BACKEND_GLFW})
     target_compile_definitions(Kmplete PUBLIC 
         KMP_WINDOW_BACKEND_GLFW

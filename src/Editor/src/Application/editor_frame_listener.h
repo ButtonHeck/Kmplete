@@ -1,6 +1,5 @@
 #pragma once
 
-#include "UI/editor_ui_impl.h"
 #include "UI/editor_ui_compositor.h"
 
 #include "Kmplete/Application/frame_listener.h"
@@ -11,6 +10,7 @@
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/ImGui/implementation.h"
 
 
 namespace Kmplete
@@ -69,7 +69,7 @@ namespace Kmplete
         Window& _mainWindow;
         GraphicsBackend& _graphicsBackend;
         Assets::AssetsManager& _assetsManager;
-        UPtr<EditorUIImpl> _uiImpl;
+        UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         UPtr<EditorUICompositor> _uiCompositor;
         Timer _metricsTimer;
     };

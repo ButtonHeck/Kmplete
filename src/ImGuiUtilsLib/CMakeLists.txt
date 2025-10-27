@@ -11,6 +11,7 @@ set(ImGuiUtilsLib_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation_glfw_opengl.h
     ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/scope_guards.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/implementation.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/implementation_glfw_opengl.cpp
 )
 source_group("Utils" FILES ${ImGuiUtilsLib_SOURCES})
@@ -37,6 +38,14 @@ target_include_directories(ImGuiUtilsLib
     PUBLIC "${CMAKE_CURRENT_LIST_DIR}/include"
     PUBLIC ${imgui_SOURCE_DIR}
 )
+
+if(${KMPLETE_USE_WINDOW_BACKEND_GLFW})
+    target_compile_definitions(ImGuiUtilsLib PUBLIC 
+        KMP_WINDOW_BACKEND_GLFW
+    )
+else()
+    message(SEND_ERROR "No window backend is chosen")
+endif()
 
 target_link_libraries(ImGuiUtilsLib 
     PUBLIC BaseLib

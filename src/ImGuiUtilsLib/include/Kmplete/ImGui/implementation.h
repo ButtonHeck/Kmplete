@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/types_aliases.h"
 
 
 namespace Kmplete
@@ -10,13 +11,21 @@ namespace Kmplete
         class ImGuiImplementation
         {
         public:
+            KMP_NODISCARD static ImGuiImplementation* CreateImpl(void* window, const String& graphicsBackendType);
+
+        public:
             KMP_DISABLE_COPY_MOVE(ImGuiImplementation)
 
-            ImGuiImplementation() = default;
             virtual ~ImGuiImplementation() = default;
 
-            virtual void NewFrame() = 0;
-            virtual void Render() = 0;
+            void NewFrame() const;
+            void Render() const;
+
+        protected:
+            ImGuiImplementation() = default;
+
+            virtual void NewFrameImpl() const = 0;
+            virtual void RenderImpl() const = 0;
         };
         //--------------------------------------------------------------------------
     }

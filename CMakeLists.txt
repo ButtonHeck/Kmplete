@@ -22,6 +22,7 @@ set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 
 option(KMPLETE_BUILD_TESTS "Build catch2 tests" ON)
 option(KMPLETE_MULTIPROCESSOR_BUILD "Use multiple processors during compilation" ON)
+option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)
 
 include(NoInSourceBuilds)

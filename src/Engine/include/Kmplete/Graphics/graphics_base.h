@@ -22,8 +22,8 @@ namespace Kmplete
         Unknown
     };
 
-    KMP_NODISCARD String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
-    KMP_NODISCARD GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
+    KMP_NODISCARD KMP_API String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
+    KMP_NODISCARD KMP_API GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
 
     static constexpr auto OpenGLStr = "OpenGL";
     static constexpr auto UnknownStr = "Unknown";

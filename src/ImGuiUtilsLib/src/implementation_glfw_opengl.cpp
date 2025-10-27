@@ -27,7 +27,25 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::NewFrame()
+        void ImGuiImplementationGlfwOpenGL::Initialize(NonNull<GLFWwindow*> window) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+            ImGui_ImplGlfw_InitForOpenGL(window, true);
+            ImGui_ImplOpenGL3_Init("#version 330");
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementationGlfwOpenGL::Finalize() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+            ImGui_ImplOpenGL3_Shutdown();
+            ImGui_ImplGlfw_Shutdown();
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementationGlfwOpenGL::NewFrameImpl() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -36,7 +54,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::Render()
+        void ImGuiImplementationGlfwOpenGL::RenderImpl() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -50,24 +68,6 @@ namespace Kmplete
                 ImGui::RenderPlatformWindowsDefault();
                 glfwMakeContextCurrent(backupContext);
             }
-        }
-        //--------------------------------------------------------------------------
-
-        void ImGuiImplementationGlfwOpenGL::Initialize(NonNull<GLFWwindow*> window)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-            ImGui_ImplGlfw_InitForOpenGL(window, true);
-            ImGui_ImplOpenGL3_Init("#version 330");
-        }
-        //--------------------------------------------------------------------------
-
-        void ImGuiImplementationGlfwOpenGL::Finalize()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-            ImGui_ImplOpenGL3_Shutdown();
-            ImGui_ImplGlfw_Shutdown();
         }
         //--------------------------------------------------------------------------
     }
