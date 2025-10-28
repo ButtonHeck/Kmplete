@@ -16,7 +16,7 @@ namespace Kmplete
         enum AssetType : UByte
         {
             Texture,
-            Font,
+            FontTTF,
             Sound,
             Error = 255
         };

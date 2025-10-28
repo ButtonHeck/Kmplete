@@ -136,6 +136,12 @@ set(Editor_path_flag_russian
 set(Editor_path_flag_usa 
     ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_usa_128.png
 )
+set(Editor_path_font_opensans_regular
+    ${CMAKE_SOURCE_DIR}/src/Resources/fonts/OpenSans-Regular.ttf
+)
+set(Editor_path_font_forkawesome_webfont
+    ${CMAKE_SOURCE_DIR}/src/Resources/fonts/forkawesome-webfont.ttf
+)
 configure_file(editor_assets.json.in editor_assets.json @ONLY)
 
 

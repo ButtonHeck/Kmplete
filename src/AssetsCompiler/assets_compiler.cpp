@@ -136,9 +136,11 @@ namespace Kmplete
                 KMP_LOG_INFO("start writing assets data...");
 
                 const auto headersOffset = sizeof(assetCount);
-                UInt64 assetDataBufferOffset = assetCount * AssetEntryHeaderStructSize + headersOffset;
-                UInt64 assetBufferSizeCurrentOffset = headersOffset + AssetEntryHeaderOffsetOfBufferSize;
-                UInt64 assetBufferOffsetCurrentOffset = headersOffset + AssetEntryHeaderOffsetOfBufferOffset;
+                WriteBufferState writeState{
+                    .assetDataBufferOffset = assetCount * AssetEntryHeaderStructSize + headersOffset,
+                    .assetBufferSizeCurrentOffset = headersOffset + AssetEntryHeaderOffsetOfBufferSize,
+                    .assetBufferOffsetCurrentOffset = headersOffset + AssetEntryHeaderOffsetOfBufferOffset
+                };
 
                 for (UInt32 assetIndex = 0; assetIndex < assetCount; assetIndex++)
                 {
@@ -147,33 +149,53 @@ namespace Kmplete
 
                     if (assetType == AssetType::Texture)
                     {
-                        const auto textureData = Filesystem::ReadFileAsBinary(assetPath);
-                        if (textureData.empty())
+                        const auto writeResult = WriteBinaryBuffer(outputFile, assetPath, writeState, "Texture");
+                        if (writeResult != ReturnCode::Ok)
                         {
-                            KMP_LOG_ERROR("failed to read texture data from '{}'", assetPath);
-                            return ReturnCode::InputFileProcessingError;
+                            return writeResult;
                         }
-
-                        const auto textureDataSize = static_cast<UInt64>(textureData.size());
-
-                        outputFile.write(reinterpret_cast<const char*>(textureData.data()), textureDataSize);
-                        const auto fileEndPosition = outputFile.tellp();
-
-                        outputFile.seekp(assetBufferSizeCurrentOffset);
-                        outputFile.write(reinterpret_cast<const char*>(&textureDataSize), sizeof(textureDataSize));
-
-                        outputFile.seekp(assetBufferOffsetCurrentOffset);
-                        outputFile.write(reinterpret_cast<char*>(&assetDataBufferOffset), sizeof(assetDataBufferOffset));
-
-                        KMP_LOG_INFO("write texture {}\tbytes at offset {}\t from '{}'", textureDataSize, assetDataBufferOffset, assetPath);
-
-                        assetBufferSizeCurrentOffset += AssetEntryHeaderStructSize;
-                        assetBufferOffsetCurrentOffset += AssetEntryHeaderStructSize;
-                        assetDataBufferOffset += textureDataSize;
-
-                        outputFile.seekp(fileEndPosition);
+                    }
+                    else if (assetType == AssetType::FontTTF)
+                    {
+                        const auto writeResult = WriteBinaryBuffer(outputFile, assetPath, writeState, "FontTTF");
+                        if (writeResult != ReturnCode::Ok)
+                        {
+                            return writeResult;
+                        }
                     }
                 }
+
+                return ReturnCode::Ok;
+            }
+            //--------------------------------------------------------------------------
+
+            ReturnCode AssetsCompiler::WriteBinaryBuffer(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, KMP_MB_UNUSED const String& assetTypeName) const
+            {
+                const auto binaryBuffer = Filesystem::ReadFileAsBinary(filepath);
+                if (binaryBuffer.empty())
+                {
+                    KMP_LOG_ERROR("failed to read '{}' data from '{}'", assetTypeName, filepath);
+                    return ReturnCode::InputFileProcessingError;
+                }
+
+                const auto binaryBufferSize = static_cast<UInt64>(binaryBuffer.size());
+
+                outputFile.write(reinterpret_cast<const char*>(binaryBuffer.data()), binaryBufferSize);
+                const auto fileEndPosition = outputFile.tellp();
+
+                outputFile.seekp(writeState.assetBufferSizeCurrentOffset);
+                outputFile.write(reinterpret_cast<const char*>(&binaryBufferSize), sizeof(binaryBufferSize));
+
+                outputFile.seekp(writeState.assetBufferOffsetCurrentOffset);
+                outputFile.write(reinterpret_cast<char*>(&writeState.assetDataBufferOffset), sizeof(writeState.assetDataBufferOffset));
+
+                KMP_LOG_INFO("write '{}' {}\tbytes at offset {}\t from '{}'", assetTypeName, binaryBufferSize, writeState.assetDataBufferOffset, filepath);
+
+                writeState.assetBufferSizeCurrentOffset += AssetEntryHeaderStructSize;
+                writeState.assetBufferOffsetCurrentOffset += AssetEntryHeaderStructSize;
+                writeState.assetDataBufferOffset += binaryBufferSize;
+
+                outputFile.seekp(fileEndPosition);
 
                 return ReturnCode::Ok;
             }

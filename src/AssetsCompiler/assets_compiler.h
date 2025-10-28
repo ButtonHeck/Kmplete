@@ -33,8 +33,17 @@ namespace Kmplete
                 KMP_NODISCARD ReturnCode Run() const;
 
             private:
+                struct WriteBufferState
+                {
+                    UInt64 assetDataBufferOffset;
+                    UInt64 assetBufferSizeCurrentOffset;
+                    UInt64 assetBufferOffsetCurrentOffset;
+                };
+
+            private:
                 KMP_NODISCARD ReturnCode WriteHeaderData(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
                 KMP_NODISCARD ReturnCode WriteAssetsData(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode WriteBinaryBuffer(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, const String& assetTypeName) const;
 
             private:
                 const CompilerParameters _parameters;

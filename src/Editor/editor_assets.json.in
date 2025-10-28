@@ -9,6 +9,16 @@
             "File": "@Editor_path_flag_usa@",
             "Type": 0,
             "Sid": 5842094581160485
+        },
+        {
+            "File": "@Editor_path_font_opensans_regular@",
+            "Type": 1,
+            "Sid": 5443282125540987398
+        },
+        {
+            "File": "@Editor_path_font_forkawesome_webfont@",
+            "Type": 1,
+            "Sid": 10402757747795465949
         }
     ]
 }
