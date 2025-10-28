@@ -11,6 +11,7 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/ImGui/implementation.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 
 namespace Kmplete
@@ -26,6 +27,7 @@ namespace Kmplete
 
     class EditorFrameListener : public FrameListener
     {
+        KMP_LOG_CLASSNAME(EditorFrameListener)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
@@ -60,6 +62,8 @@ namespace Kmplete
         KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
         KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event);
         KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
+
+        void AddImGuiFonts(float scale);
 
     private:
         SystemMetricsManager& _systemMetricsManager;

@@ -67,11 +67,13 @@ set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font_manager.cpp
 )
 source_group("Graphics" FILES ${Kmplete_GRAPHICS})
 

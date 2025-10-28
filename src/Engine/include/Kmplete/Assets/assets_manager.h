@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Graphics/font_manager.h"
 #include "Kmplete/Assets/assets_interface.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -24,6 +25,7 @@ namespace Kmplete
             KMP_API ~AssetsManager();
 
             KMP_NODISCARD KMP_API TextureManager& GetTextureManager() noexcept;
+            KMP_NODISCARD KMP_API FontManager& GetFontManager() noexcept;
 
             KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
 
@@ -44,6 +46,7 @@ namespace Kmplete
         private:
             const Filepath _dataPath;
             UPtr<TextureManager> _textureManager;
+            UPtr<FontManager> _fontManager;
             HashMap<Utils::StringID, AssetLookupInfo> _lookupMap;
         };
         //--------------------------------------------------------------------------

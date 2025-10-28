@@ -7,6 +7,7 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -46,8 +47,9 @@ namespace Kmplete
         const auto dpiScale = _mainWindow.GetDPIScale();
 
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
-        _imguiImpl->AddDefaultFont(dpiScale);
-        _imguiImpl->AddIconsFont(dpiScale);
+
+        AddImGuiFonts(dpiScale);
+
         _imguiImpl->Stylize(dpiScale);
 
         _metricsTimer.Mark();
@@ -145,8 +147,9 @@ namespace Kmplete
 
         _imguiImpl.reset();
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
-        _imguiImpl->AddDefaultFont(scale);
-        _imguiImpl->AddIconsFont(scale);
+
+        AddImGuiFonts(scale);
+
         _imguiImpl->Stylize(scale);
 
         return true;
@@ -158,6 +161,30 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         return _uiCompositor->OnKeyPressEvent(event);
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorFrameListener::AddImGuiFonts(float scale)
+    {
+        const auto defaultFont = _assetsManager.GetFontManager().GetFont("OpenSans-Regular.ttf"_sid);
+        if (defaultFont.has_value())
+        {
+            _imguiImpl->AddFont(defaultFont.value(), scale);
+        }
+        else
+        {
+            KMP_LOG_WARN("OpenSans-Regular.ttf font loading failed");
+        }
+
+        const auto iconsFont = _assetsManager.GetFontManager().GetFont("forkawesome-webfont.ttf"_sid);
+        if (iconsFont.has_value())
+        {
+            _imguiImpl->AddIconsFont(iconsFont.value(), scale);
+        }
+        else
+        {
+            KMP_LOG_WARN("forkawesome-webfont.ttf font loading failed");
+        }
     }
     //--------------------------------------------------------------------------
 

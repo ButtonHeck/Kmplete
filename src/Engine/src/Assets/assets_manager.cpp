@@ -16,6 +16,7 @@ namespace Kmplete
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("AssetsManager::AssetsManager(const Filepath&, GraphicsBackendType)")
               _dataPath(applicationPath / AssetsFolder)
             , _textureManager(nullptr)
+            , _fontManager(nullptr)
         {
             Initialize(type);
 
@@ -35,6 +36,13 @@ namespace Kmplete
         {
             KMP_ASSERT(_textureManager);
             return *_textureManager;
+        }
+        //--------------------------------------------------------------------------
+
+        FontManager& AssetsManager::GetFontManager() noexcept
+        {
+            KMP_ASSERT(_fontManager);
+            return *_fontManager;
         }
         //--------------------------------------------------------------------------
 
@@ -122,6 +130,7 @@ namespace Kmplete
             }
 
             _textureManager.reset(new TextureManager(type));
+            _fontManager.reset(new FontManager());
         }
         //--------------------------------------------------------------------------
 
@@ -129,6 +138,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            _fontManager.reset();
             _textureManager.reset();
         }
         //--------------------------------------------------------------------------
@@ -235,6 +245,11 @@ namespace Kmplete
             {
                 const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
                 _textureManager->CreateTexture(assetHeader.sid, assetImage);
+            }
+            else if (assetHeader.type == AssetType::FontTTF)
+            {
+                const auto fontDataBuffer = BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize);
+                _fontManager->CreateFontTTF(assetHeader.sid, fontDataBuffer);
             }
 
             return true;

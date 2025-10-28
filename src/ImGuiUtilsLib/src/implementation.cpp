@@ -1,6 +1,7 @@
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/ImGui/implementation_glfw_opengl.h"
 #include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 
 #include <imgui.h>
@@ -68,30 +69,58 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddDefaultFont(float dpiScale) const
+        void ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             auto& io = ImGui::GetIO();
             const auto fontSize = 18 * dpiScale;
-            const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
-            io.Fonts->AddFontFromFileTTF(fontPath.c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+            ImFontConfig fontConfig;
+            fontConfig.FontDataOwnedByAtlas = false;
+            io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(reinterpret_cast<const void*>(fontDataBuffer.data())), static_cast<int>(fontDataBuffer.size()), fontSize, &fontConfig, io.Fonts->GetGlyphRangesCyrillic());
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddIconsFont(float dpiScale) const
+        void ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             auto& io = ImGui::GetIO();
             const auto fontSize = 18 * dpiScale;
-            ImFontConfig iconsConfig;
-            iconsConfig.MergeMode = true;
-            iconsConfig.GlyphMinAdvanceX = fontSize;
-            iconsConfig.PixelSnapH = true;
-            iconsConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
+            io.Fonts->AddFontFromFileTTF(Filesystem::ToGenericString(fontFilepath).c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            auto& io = ImGui::GetIO();
+            const auto fontSize = 18 * dpiScale;
+            ImFontConfig fontConfig;
+            fontConfig.MergeMode = true;
+            fontConfig.GlyphMinAdvanceX = fontSize;
+            fontConfig.PixelSnapH = true;
+            fontConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
+            fontConfig.FontDataOwnedByAtlas = false;
             static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
-            io.Fonts->AddFontFromFileTTF(Utils::Concatenate(KMP_FONTS_FOLDER, "forkawesome-webfont.ttf").c_str(), fontSize, &iconsConfig, iconsRanges);
+            io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(reinterpret_cast<const void*>(fontDataBuffer.data())), static_cast<int>(fontDataBuffer.size()), fontSize, &fontConfig, iconsRanges);
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            auto& io = ImGui::GetIO();
+            const auto fontSize = 18 * dpiScale;
+            ImFontConfig fontConfig;
+            fontConfig.MergeMode = true;
+            fontConfig.GlyphMinAdvanceX = fontSize;
+            fontConfig.PixelSnapH = true;
+            fontConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
+            static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
+            io.Fonts->AddFontFromFileTTF(Filesystem::ToGenericString(fontFilepath).c_str(), fontSize, &fontConfig, iconsRanges);
         }
         //--------------------------------------------------------------------------
 
