@@ -7,7 +7,8 @@
 
 namespace Kmplete
 {
-    OpenGLTexture::OpenGLTexture(const Filepath& filepath, bool flipVertically /*= false*/)
+    OpenGLTexture::OpenGLTexture(Utils::StringID sid, const Filepath& filepath, bool flipVertically /*= false*/)
+        : Texture(sid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -16,7 +17,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    OpenGLTexture::OpenGLTexture(const Image& image)
+    OpenGLTexture::OpenGLTexture(Utils::StringID sid, const Image& image)
+        : Texture(sid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 

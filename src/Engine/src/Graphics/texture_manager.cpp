@@ -37,7 +37,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(filepath, flipVertically));
+            texture.reset(new OpenGLTexture(textureSid, filepath, flipVertically));
             break;
 
         default:
@@ -68,7 +68,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(image));
+            texture.reset(new OpenGLTexture(textureSid, image));
             break;
 
         default:
@@ -155,7 +155,7 @@ namespace Kmplete
         switch (_backendType)
         {
         case GraphicsBackendType::OpenGL:
-            _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
+            _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(ErrorTextureSID, Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
             break;
 
         default:
