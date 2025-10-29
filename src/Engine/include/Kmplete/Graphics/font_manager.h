@@ -7,6 +7,8 @@
 #include "Kmplete/Log/log_class_macro.h"
 
 
+struct FT_LibraryRec_;
+
 namespace Kmplete
 {
     class FontManager
@@ -16,13 +18,15 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(FontManager)
 
-        FontManager() = default;
+        KMP_API FontManager();
+        KMP_API ~FontManager();
 
         KMP_API bool CreateFontTTF(Utils::StringID fontSid, const BinaryBuffer& fontData);
 
         KMP_NODISCARD KMP_API OptionalRef<const BinaryBuffer> GetFont(Utils::StringID fontSid) const;
 
     private:
+        FT_LibraryRec_* _freetypeLibInstance;
         HashMap<Utils::StringID, BinaryBuffer> _fonts;
     };
     //--------------------------------------------------------------------------

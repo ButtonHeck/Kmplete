@@ -2,9 +2,37 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 
 namespace Kmplete
 {
+    FontManager::FontManager()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        const auto freeTypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
+        if (freeTypeInitError)
+        {
+            KMP_LOG_CRITICAL("Failed to initialize FreeType library instance");
+            throw std::runtime_error("FontManager: failed to initialize FreeType library instance");
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    FontManager::~FontManager()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        const auto freeTypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
+        if (freeTypeDoneError)
+        {
+            KMP_LOG_ERROR("Failed to shutdown FreeType library instance");
+        }
+    }
+    //--------------------------------------------------------------------------
+
     bool FontManager::CreateFontTTF(Utils::StringID fontSid, const BinaryBuffer& fontData)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);

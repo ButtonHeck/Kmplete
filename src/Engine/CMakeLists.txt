@@ -161,6 +161,7 @@ target_link_libraries(Kmplete
     
     PRIVATE stb_image
     PRIVATE glad
+    PRIVATE freetype
 )
 
 set_target_properties(Kmplete PROPERTIES 
