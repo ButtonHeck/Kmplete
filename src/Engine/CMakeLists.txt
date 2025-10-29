@@ -103,7 +103,9 @@ source_group("Localization" FILES ${Kmplete_LOCALIZATION})
 
 set(Kmplete_ASSETS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/asset.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Assets/assets_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Assets/asset.cpp
 )
 source_group("Assets" FILES ${Kmplete_ASSETS})
 
