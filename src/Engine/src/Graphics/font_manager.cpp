@@ -4,18 +4,20 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <stdexcept>
 
 
 namespace Kmplete
 {
     FontManager::FontManager()
+        : _freetypeLibInstance(nullptr)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto freeTypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
-        if (freeTypeInitError)
+        const auto freetypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
+        if (freetypeInitError)
         {
-            KMP_LOG_CRITICAL("Failed to initialize FreeType library instance");
+            KMP_LOG_CRITICAL("failed to initialize FreeType library instance");
             throw std::runtime_error("FontManager: failed to initialize FreeType library instance");
         }
     }
@@ -25,10 +27,10 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto freeTypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
-        if (freeTypeDoneError)
+        const auto freetypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
+        if (freetypeDoneError)
         {
-            KMP_LOG_ERROR("Failed to shutdown FreeType library instance");
+            KMP_LOG_ERROR("failed to shutdown FreeType library instance");
         }
     }
     //--------------------------------------------------------------------------
