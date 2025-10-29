@@ -8,9 +8,10 @@
 
 namespace Kmplete
 {
-    Font::Font(FT_LibraryRec_& freetypeLib, const BinaryBuffer& fontBuffer)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Font::Font(FT_LibraryRec_&, const BinaryBuffer&)")
-          _freetypeFace(nullptr)
+    Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, const BinaryBuffer& fontBuffer)
+        : Assets::Asset(Assets::AssetType::FontTTF, sid)
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("Font::Font(Utils::StringID, FT_LibraryRec_&, const BinaryBuffer&)")
+        , _freetypeFace(nullptr)
         , _fontBuffer(fontBuffer)
     {
         const auto freetypeFontInitError = FT_New_Memory_Face(&freetypeLib, fontBuffer.data(), static_cast<FT_Long>(fontBuffer.size()), 0, &_freetypeFace);

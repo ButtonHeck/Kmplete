@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
+#include "Kmplete/Graphics/font.h"
 #include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -23,11 +24,11 @@ namespace Kmplete
 
         KMP_API bool CreateFontTTF(Utils::StringID fontSid, const BinaryBuffer& fontData);
 
-        KMP_NODISCARD KMP_API OptionalRef<const BinaryBuffer> GetFont(Utils::StringID fontSid) const;
+        KMP_NODISCARD KMP_API OptionalRef<const Font> GetFont(Utils::StringID fontSid) const;
 
     private:
         FT_LibraryRec_* _freetypeLibInstance;
-        HashMap<Utils::StringID, BinaryBuffer> _fonts;
+        HashMap<Utils::StringID, UPtr<Font>> _fonts;
     };
     //--------------------------------------------------------------------------
 }

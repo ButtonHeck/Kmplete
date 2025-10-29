@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <cstdint>
 #include <unordered_map>
+#include <unordered_set>
 
 
 namespace Kmplete
@@ -14,6 +15,9 @@ namespace Kmplete
 
     template<typename Key, typename Value, typename Hasher = std::hash<Key>>
     using HashMap = std::unordered_map<Key, Value, Hasher>;
+
+    template<typename Value, typename Hasher = std::hash<Value>>
+    using HashSet = std::unordered_set<Value, Hasher>;
 
     using String = std::string;
     using WString = std::wstring;

@@ -169,7 +169,7 @@ namespace Kmplete
         const auto defaultFont = _assetsManager.GetFontManager().GetFont("OpenSans-Regular.ttf"_sid);
         if (defaultFont.has_value())
         {
-            _imguiImpl->AddFont(defaultFont.value(), scale);
+            _imguiImpl->AddFont(defaultFont.value().get().GetBuffer(), scale);
         }
         else
         {
@@ -179,7 +179,7 @@ namespace Kmplete
         const auto iconsFont = _assetsManager.GetFontManager().GetFont("forkawesome-webfont.ttf"_sid);
         if (iconsFont.has_value())
         {
-            _imguiImpl->AddIconsFont(iconsFont.value(), scale);
+            _imguiImpl->AddIconsFont(iconsFont.value().get().GetBuffer(), scale);
         }
         else
         {

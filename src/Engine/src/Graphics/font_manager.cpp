@@ -27,6 +27,8 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+        _fonts.clear();
+
         const auto freetypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
         if (freetypeDoneError)
         {
@@ -45,12 +47,12 @@ namespace Kmplete
             return false;
         }
 
-        const auto result = _fonts.emplace(fontSid, fontData);
+        const auto result = _fonts.emplace(fontSid, CreateUPtr<Font>(fontSid, *_freetypeLibInstance, fontData));
         return result.second;
     }
     //--------------------------------------------------------------------------
 
-    OptionalRef<const BinaryBuffer> FontManager::GetFont(Utils::StringID fontSid) const
+    OptionalRef<const Font> FontManager::GetFont(Utils::StringID fontSid) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -60,7 +62,7 @@ namespace Kmplete
             return std::nullopt;
         }
 
-        return std::cref(_fonts.at(fontSid));
+        return std::cref(*_fonts.at(fontSid).get());
     }
     //--------------------------------------------------------------------------
 }
