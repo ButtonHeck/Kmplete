@@ -8,13 +8,13 @@
 
 namespace Kmplete
 {
-    Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, const BinaryBuffer& fontBuffer)
+    Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
         : Assets::Asset(Assets::AssetType::FontTTF, sid)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("Font::Font(Utils::StringID, FT_LibraryRec_&, const BinaryBuffer&)")
         , _freetypeFace(nullptr)
-        , _fontBuffer(fontBuffer)
+        , _fontBuffer(std::move(fontBuffer))
     {
-        const auto freetypeFontInitError = FT_New_Memory_Face(&freetypeLib, fontBuffer.data(), static_cast<FT_Long>(fontBuffer.size()), 0, &_freetypeFace);
+        const auto freetypeFontInitError = FT_New_Memory_Face(&freetypeLib, _fontBuffer.data(), static_cast<FT_Long>(_fontBuffer.size()), 0, &_freetypeFace);
         if (freetypeFontInitError)
         {
             KMP_LOG_ERROR("failed to load FreeType font from buffer");

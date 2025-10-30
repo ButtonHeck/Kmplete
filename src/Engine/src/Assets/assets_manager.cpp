@@ -250,8 +250,7 @@ namespace Kmplete
             }
             else if (assetHeader.type == AssetType::FontTTF)
             {
-                const auto fontDataBuffer = BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize);
-                _fontManager->CreateFontTTF(assetHeader.sid, fontDataBuffer);
+                _fontManager->CreateFontTTF(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
             }
 
             return true;

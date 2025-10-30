@@ -37,7 +37,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool FontManager::CreateFontTTF(Utils::StringID fontSid, const BinaryBuffer& fontData)
+    bool FontManager::CreateFontTTF(Utils::StringID fontSid, BinaryBuffer&& fontData)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -47,7 +47,7 @@ namespace Kmplete
             return false;
         }
 
-        const auto result = _fonts.emplace(fontSid, CreateUPtr<Font>(fontSid, *_freetypeLibInstance, fontData));
+        const auto result = _fonts.emplace(fontSid, CreateUPtr<Font>(fontSid, *_freetypeLibInstance, std::move(fontData)));
         return result.second;
     }
     //--------------------------------------------------------------------------
