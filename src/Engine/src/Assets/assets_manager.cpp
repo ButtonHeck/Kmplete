@@ -210,7 +210,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& lookupVector)
+        bool AssetsManager::LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -218,21 +218,16 @@ namespace Kmplete
             auto fileBuffer = BinaryBuffer();
             auto loadedOk = true;
 
-            for (const auto& info : lookupVector)
+            for (const auto& info : sortedLookupVector)
             {
                 if (currentFilepath != _dataPath / info.filepath)
                 {
                     currentFilepath = _dataPath / info.filepath;
-                    if (!Filesystem::FilepathExists(currentFilepath))
-                    {
-                        KMP_LOG_ERROR("cannot load assets from '{}' - file not found", info.filepath);
-                        return false;
-                    }
 
                     fileBuffer = Filesystem::ReadFileAsBinary(currentFilepath);
                     if (fileBuffer.empty())
                     {
-                        KMP_LOG_ERROR("failed to load assets from '{}' - buffer is empty", info.filepath);
+                        KMP_LOG_ERROR("failed to load assets from '{}' - buffer is empty or file not found", info.filepath);
                         return false;
                     }
                 }

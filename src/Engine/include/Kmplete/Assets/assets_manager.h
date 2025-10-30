@@ -40,7 +40,7 @@ namespace Kmplete
             KMP_NODISCARD bool LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount);
 
             Vector<AssetLookupInfo> GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const;
-            KMP_NODISCARD bool LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& lookupVector);
+            KMP_NODISCARD bool LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector);
             KMP_NODISCARD bool LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader);
 
         private:
