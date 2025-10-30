@@ -26,6 +26,9 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API OptionalRef<const Font> GetFont(Utils::StringID fontSid) const;
 
+        KMP_API void RemoveFonts(const Vector<Utils::StringID>& sids);
+        KMP_NODISCARD KMP_API bool RemoveFont(Utils::StringID sid);
+
     private:
         FT_LibraryRec_* _freetypeLibInstance;
         HashMap<Utils::StringID, UPtr<Font>> _fonts;

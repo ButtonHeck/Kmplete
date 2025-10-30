@@ -92,27 +92,36 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            for (size_t i = 0; i < assetsSids.size(); i++)
+            Vector<Utils::StringID> textureSidsToRemove;
+            Vector<Utils::StringID> fontsSidsToRemove;
+
+            for (const auto& sid : assetsSids)
             {
-                const auto sid = assetsSids[i];
                 if (!_lookupMap.contains(sid))
                 {
                     KMP_LOG_WARN("cannot unload asset with sid '{}' - not found", sid);
                     continue;
                 }
 
-                Vector<Utils::StringID> textureSidsToRemove;
-
                 const auto assetType = _lookupMap[sid].header.type;
                 if (assetType == AssetType::Texture)
                 {
                     textureSidsToRemove.push_back(sid);
                 }
-
-                if (!textureSidsToRemove.empty())
+                else if (assetType == AssetType::FontTTF)
                 {
-                    _textureManager->RemoveTextures(textureSidsToRemove);
+                    fontsSidsToRemove.push_back(sid);
                 }
+            }
+
+            if (!textureSidsToRemove.empty())
+            {
+                _textureManager->RemoveTextures(textureSidsToRemove);
+            }
+
+            if (!fontsSidsToRemove.empty())
+            {
+                _fontManager->RemoveFonts(fontsSidsToRemove);
             }
 
             return true;
@@ -209,10 +218,8 @@ namespace Kmplete
             auto fileBuffer = BinaryBuffer();
             auto loadedOk = true;
 
-            for (size_t i = 0; i < lookupVector.size(); i++)
+            for (const auto& info : lookupVector)
             {
-                const auto& info = lookupVector[i];
-
                 if (currentFilepath != _dataPath / info.filepath)
                 {
                     currentFilepath = _dataPath / info.filepath;

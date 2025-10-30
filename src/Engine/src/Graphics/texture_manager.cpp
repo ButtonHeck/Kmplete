@@ -126,15 +126,10 @@ namespace Kmplete
             KMP_LOG_WARN("cannot remove texture with reserved sid 0");
             return false;
         }
-        if (!_textures.contains(sid))
-        {
-            KMP_LOG_WARN("cannot remove texture with sid '{}' - not found", sid);
-            return false;
-        }
 
         if (_textures.erase(sid) == 0)
         {
-            KMP_LOG_WARN("failed to remove texture with sid '{}'", sid);
+            KMP_LOG_WARN("not found or failed to remove texture with sid '{}'", sid);
             return false;
         }
 

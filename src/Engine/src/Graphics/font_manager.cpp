@@ -65,4 +65,35 @@ namespace Kmplete
         return std::cref(*_fonts.at(fontSid).get());
     }
     //--------------------------------------------------------------------------
+
+    void FontManager::RemoveFonts(const Vector<Utils::StringID>& sids)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        auto ok = true;
+        for (const auto& sid : sids)
+        {
+            ok &= RemoveFont(sid);
+        }
+
+        if (!ok)
+        {
+            KMP_LOG_WARN("some fonts were not removed");
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    bool FontManager::RemoveFont(Utils::StringID sid)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        if (_fonts.erase(sid) == 0)
+        {
+            KMP_LOG_WARN("not found or failed to remove font with sid '{}'", sid);
+            return false;
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
 }
