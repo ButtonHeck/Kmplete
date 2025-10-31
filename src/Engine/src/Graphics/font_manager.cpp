@@ -33,6 +33,14 @@ namespace Kmplete
             KMP_LOG_CRITICAL("default font loading failed");
             throw std::runtime_error("FontManager: default font loading failed");
         }
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+        FT_Int freetypeVersionMajor = 0;
+        FT_Int freetypeVersionMinor = 0;
+        FT_Int freetypeVersionPatch = 0;
+        FT_Library_Version(_freetypeLibInstance, &freetypeVersionMajor, &freetypeVersionMinor, &freetypeVersionPatch);
+        KMP_LOG_INFO("use FreeType version {}.{}.{}", freetypeVersionMajor, freetypeVersionMinor, freetypeVersionPatch);
+#endif
     }
     //--------------------------------------------------------------------------
 
