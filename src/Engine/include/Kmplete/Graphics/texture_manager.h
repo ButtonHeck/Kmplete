@@ -25,7 +25,7 @@ namespace Kmplete
         KMP_API bool CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically = false);
         KMP_API bool CreateTexture(Utils::StringID textureSid, const Image& image);
 
-        KMP_NODISCARD KMP_API Texture& GetTexture(Utils::StringID textureSid);
+        KMP_NODISCARD KMP_API const Texture& GetTexture(Utils::StringID textureSid) const;
 
         KMP_API void RemoveTextures(const Vector<Utils::StringID>& sids);
         KMP_NODISCARD KMP_API bool RemoveTexture(Utils::StringID sid);

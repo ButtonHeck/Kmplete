@@ -23,7 +23,7 @@ namespace Kmplete
 
         KMP_API bool CreateFontTTF(Utils::StringID fontSid, BinaryBuffer&& fontData);
 
-        KMP_NODISCARD KMP_API Font& GetFont(Utils::StringID fontSid);
+        KMP_NODISCARD KMP_API const Font& GetFont(Utils::StringID fontSid) const;
 
         KMP_API void RemoveFonts(const Vector<Utils::StringID>& sids);
         KMP_NODISCARD KMP_API bool RemoveFont(Utils::StringID sid);

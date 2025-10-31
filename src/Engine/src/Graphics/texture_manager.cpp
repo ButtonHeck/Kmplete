@@ -86,17 +86,17 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Texture& TextureManager::GetTexture(Utils::StringID textureSid)
+    const Texture& TextureManager::GetTexture(Utils::StringID textureSid) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         if (!_textures.contains(textureSid))
         {
             KMP_LOG_WARN("texture '{}' not found", textureSid);
-            return *_textures[ErrorTextureSID];
+            return *_textures.at(ErrorTextureSID);
         }
 
-        return *_textures[textureSid];
+        return *_textures.at(textureSid);
     }
     //--------------------------------------------------------------------------
 
