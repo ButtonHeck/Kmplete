@@ -166,25 +166,11 @@ namespace Kmplete
 
     void EditorFrameListener::AddImGuiFonts(float scale)
     {
-        const auto defaultFont = _assetsManager.GetFontManager().GetFont("OpenSans-Regular.ttf"_sid);
-        if (defaultFont.has_value())
-        {
-            _imguiImpl->AddFont(defaultFont.value().get().GetBuffer(), scale);
-        }
-        else
-        {
-            KMP_LOG_WARN("OpenSans-Regular.ttf font loading failed");
-        }
+        const auto& defaultFont = _assetsManager.GetFontManager().GetFont("OpenSans-Regular.ttf"_sid);
+        _imguiImpl->AddFont(defaultFont.GetBuffer(), scale);
 
-        const auto iconsFont = _assetsManager.GetFontManager().GetFont("forkawesome-webfont.ttf"_sid);
-        if (iconsFont.has_value())
-        {
-            _imguiImpl->AddIconsFont(iconsFont.value().get().GetBuffer(), scale);
-        }
-        else
-        {
-            KMP_LOG_WARN("forkawesome-webfont.ttf font loading failed");
-        }
+        const auto& iconsFont = _assetsManager.GetFontManager().GetFont("forkawesome-webfont.ttf"_sid);
+        _imguiImpl->AddIconsFont(iconsFont.GetBuffer(), scale);
     }
     //--------------------------------------------------------------------------
 
