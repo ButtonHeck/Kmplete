@@ -19,42 +19,13 @@ namespace Kmplete
     FontManager::FontManager()
         : _freetypeLibInstance(nullptr)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-        const auto freetypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
-        if (freetypeInitError)
-        {
-            KMP_LOG_CRITICAL("failed to initialize FreeType library instance");
-            throw std::runtime_error("FontManager: failed to initialize FreeType library instance");
-        }
-
-        if (!CreateDefaultFont())
-        {
-            KMP_LOG_CRITICAL("default font loading failed");
-            throw std::runtime_error("FontManager: default font loading failed");
-        }
-
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-        FT_Int freetypeVersionMajor = 0;
-        FT_Int freetypeVersionMinor = 0;
-        FT_Int freetypeVersionPatch = 0;
-        FT_Library_Version(_freetypeLibInstance, &freetypeVersionMajor, &freetypeVersionMinor, &freetypeVersionPatch);
-        KMP_LOG_INFO("use FreeType version {}.{}.{}", freetypeVersionMajor, freetypeVersionMinor, freetypeVersionPatch);
-#endif
+        Initialize();
     }
     //--------------------------------------------------------------------------
 
     FontManager::~FontManager()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-        _fonts.clear();
-
-        const auto freetypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
-        if (freetypeDoneError)
-        {
-            KMP_LOG_ERROR("failed to shutdown FreeType library instance");
-        }
+        Finalize();
     }
     //--------------------------------------------------------------------------
 
@@ -74,8 +45,7 @@ namespace Kmplete
             return false;
         }
 
-        const auto result = _fonts.emplace(fontSid, CreateUPtr<Font>(fontSid, *_freetypeLibInstance, std::move(fontData)));
-        return result.second;
+        return AddFontToStorage(fontSid, std::move(fontData));
     }
     //--------------------------------------------------------------------------
 
@@ -130,6 +100,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void FontManager::Initialize()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        const auto freetypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
+        if (freetypeInitError)
+        {
+            KMP_LOG_CRITICAL("failed to initialize FreeType library instance");
+            throw std::runtime_error("FontManager: failed to initialize FreeType library instance");
+        }
+
+        if (!CreateDefaultFont())
+        {
+            KMP_LOG_CRITICAL("default font loading failed");
+            throw std::runtime_error("FontManager: default font loading failed");
+        }
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+        FT_Int freetypeVersionMajor = 0;
+        FT_Int freetypeVersionMinor = 0;
+        FT_Int freetypeVersionPatch = 0;
+        FT_Library_Version(_freetypeLibInstance, &freetypeVersionMajor, &freetypeVersionMinor, &freetypeVersionPatch);
+        KMP_LOG_INFO("use FreeType version {}.{}.{}", freetypeVersionMajor, freetypeVersionMinor, freetypeVersionPatch);
+#endif
+    }
+    //--------------------------------------------------------------------------
+
+    void FontManager::Finalize()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        _fonts.clear();
+
+        const auto freetypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
+        if (freetypeDoneError)
+        {
+            KMP_LOG_ERROR("failed to shutdown FreeType library instance");
+        }
+    }
+    //--------------------------------------------------------------------------
+
     bool FontManager::CreateDefaultFont()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -160,12 +171,20 @@ namespace Kmplete
         DeleteObject(fontDescriptor);
         ReleaseDC(NULL, hdc);
 
-        const auto [iterator, hasEmplaced] = _fonts.emplace(DefaultFontSID, CreateUPtr<Font>(DefaultFontSID, *_freetypeLibInstance, std::move(fontData)));
-        return hasEmplaced;
+        return AddFontToStorage(DefaultFontSID, std::move(fontData));
 #else
         //TODO: make similar in Linux (at least)
         return true;
 #endif
+    }
+    //--------------------------------------------------------------------------
+
+    bool FontManager::AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Font>(sid, *_freetypeLibInstance, std::move(fontData)));
+        return hasEmplaced;
     }
     //--------------------------------------------------------------------------
 }

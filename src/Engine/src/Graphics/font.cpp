@@ -21,6 +21,8 @@ namespace Kmplete
             throw std::runtime_error("Font: failed to load FreeType font from buffer");
         }
 
+        InitializeParameters();
+
         KMP_PROFILE_CONSTRUCTOR_END()
     }
     //--------------------------------------------------------------------------
@@ -40,6 +42,46 @@ namespace Kmplete
     const BinaryBuffer& Font::GetBuffer() const noexcept
     {
         return _fontBuffer;
+    }
+    //--------------------------------------------------------------------------
+
+    const Font::Parameters& Font::GetParameters() const noexcept
+    {
+        return _parameters;
+    }
+    //--------------------------------------------------------------------------
+
+    void Font::InitializeParameters() noexcept
+    {
+        _parameters.familyName = _freetypeFace->family_name;
+
+        const auto style = _freetypeFace->style_flags;
+        if (style & FT_STYLE_FLAG_BOLD)
+        {
+            _parameters.style = Parameters::Style::Bold;
+        }
+        else if (style & FT_STYLE_FLAG_ITALIC)
+        {
+            _parameters.style = Parameters::Style::Italic;
+        }
+        else
+        {
+            _parameters.style = Parameters::Style::Regular;
+        }
+
+        _parameters.scalable = _freetypeFace->face_flags & FT_FACE_FLAG_SCALABLE;
+        _parameters.monospace = _freetypeFace->face_flags & FT_FACE_FLAG_FIXED_WIDTH;
+        _parameters.numGlyphs = _freetypeFace->num_glyphs;
+        _parameters.unitsPerEM = _freetypeFace->units_per_EM;
+        _parameters.lineHeight = _freetypeFace->height;
+        _parameters.ascender = _freetypeFace->ascender;
+        _parameters.descender = _freetypeFace->descender;
+        _parameters.maxAdvance = _freetypeFace->max_advance_width;
+        _parameters.sizeMetrics.xPixelsPerEM = _freetypeFace->size->metrics.x_ppem;
+        _parameters.sizeMetrics.yPixelsPerEM = _freetypeFace->size->metrics.y_ppem;
+        _parameters.sizeMetrics.xScale = _freetypeFace->size->metrics.x_scale >> 16;
+        _parameters.sizeMetrics.yScale = _freetypeFace->size->metrics.y_scale >> 16;
+        _parameters.sizeMetrics.height = _freetypeFace->size->metrics.height >> 6;
     }
     //--------------------------------------------------------------------------
 }

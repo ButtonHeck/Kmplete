@@ -30,7 +30,11 @@ namespace Kmplete
         KMP_NODISCARD KMP_API bool RemoveFont(Utils::StringID sid);
 
     private:
+        void Initialize();
+        void Finalize();
+
         KMP_NODISCARD bool CreateDefaultFont();
+        KMP_NODISCARD bool AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData);
 
     private:
         FT_LibraryRec_* _freetypeLibInstance;
