@@ -161,10 +161,15 @@ namespace Kmplete
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
-                _lookupMap.emplace(assetHeader.sid, AssetLookupInfo{ 
+                const auto [iterator, hasEmplaced] = _lookupMap.emplace(assetHeader.sid, AssetLookupInfo{ 
                     .filepath = filepath, 
                     .header = assetHeader
                 });
+
+                if (!hasEmplaced)
+                {
+                    KMP_LOG_ERROR("Asset SID duplication detected - file '{}' already registered asset with SID '{}' as currently processed file '{}'", _lookupMap[assetHeader.sid].filepath, assetHeader.sid, filepath);
+                }
             }
         }
         //--------------------------------------------------------------------------
