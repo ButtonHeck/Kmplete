@@ -64,6 +64,7 @@ namespace Kmplete
             bool vSync = true;
             bool updateContinuously = true;
             bool alwaysOnTop = false;
+            UInt32 dpi = 96;
             float dpiScale = 1.0f;
 
             KMP_NODISCARD KMP_API bool IsFullscreen() const noexcept;
@@ -86,6 +87,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual Math::Size2I GetWindowedSize() const = 0;
         KMP_NODISCARD KMP_API virtual bool IsIconified() const = 0;
 
+        KMP_NODISCARD KMP_API virtual UInt32 GetDPI() const = 0;
         KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
 
         KMP_API virtual void SetTitle(const char* title) = 0;

@@ -6,6 +6,7 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Math/geometry.h"
 
 #include <GLFW/glfw3.h>
 
@@ -19,6 +20,7 @@ namespace Kmplete
         , position(settings.position)
         , size(settings.size)
         , windowedSize(settings.windowedSize)
+        , dpi(settings.dpi)
         , dpiScale(settings.dpiScale)
         , iconified(false)
     {}
@@ -142,6 +144,7 @@ namespace Kmplete
         InitializeGeometry();
         InitializeDPIScale();
         InitializeCallbacks();
+        UpdateDPI();
 
         SetVSync(_settings.vSync);
 
@@ -184,6 +187,12 @@ namespace Kmplete
     {
         const NonNull<UserData*> userData = GetUserPointer(_window);
         return userData->iconified;
+    }
+    //--------------------------------------------------------------------------
+
+    UInt32 WindowGlfw::GetDPI() const
+    {
+        return _settings.dpi;
     }
     //--------------------------------------------------------------------------
 
@@ -734,6 +743,19 @@ namespace Kmplete
         auto scale = 1.0f;
         glfwGetWindowContentScale(_window, &scale, &scale);
         _settings.dpiScale = scale;
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::UpdateDPI()
+    {
+        const auto [isFound, monitor] = GetSuitableMonitor();
+        const auto videoMode = glfwGetVideoMode(monitor);
+        auto monitorWidthMm = 0;
+        auto monitorHeightMm = 0;
+        glfwGetMonitorPhysicalSize(monitor, &monitorWidthMm, &monitorHeightMm);
+        const auto monitorDiagonalInch = glm::length(Math::Size2F(float(monitorWidthMm), float(monitorHeightMm))) / 25.4f;
+        const auto monitorDiagonalPixels = glm::length(Math::Size2F(float(videoMode->width), float(videoMode->height)));
+        _settings.dpi = UInt32(monitorDiagonalPixels / monitorDiagonalInch);
     }
     //--------------------------------------------------------------------------
 }

@@ -28,6 +28,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Math::Size2I GetWindowedSize() const override;
         KMP_NODISCARD KMP_API bool IsIconified() const override;
 
+        KMP_NODISCARD KMP_API UInt32 GetDPI() const override;
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
 
         KMP_API void SetTitle(const char* title) override;
@@ -78,6 +79,7 @@ namespace Kmplete
             Math::Point2I& position;
             Math::Size2I& size;
             Math::Size2I& windowedSize;
+            UInt32& dpi;
             float& dpiScale;
             EventCallbackFn eventCallback;
             bool iconified;
@@ -101,6 +103,8 @@ namespace Kmplete
 
         void InitializeGeometry();
         void InitializeDPIScale();
+
+        void UpdateDPI();
 
         void Finalize();
 
