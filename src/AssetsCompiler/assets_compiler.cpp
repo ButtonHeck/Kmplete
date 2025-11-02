@@ -48,7 +48,7 @@ namespace Kmplete
                 assetsFilepaths.reserve(assetCount);
                 assetsTypes.reserve(assetCount);
 
-                const auto writeHeadersResult = WriteHeaderData(sourceJson, assetCount, outputFile, assetsFilepaths, assetsTypes);
+                const auto writeHeadersResult = WriteHeaders(sourceJson, assetCount, outputFile, assetsFilepaths, assetsTypes);
                 if (writeHeadersResult != ReturnCode::Ok)
                 {
                     KMP_LOG_ERROR("failed to write assets headers data");
@@ -61,7 +61,7 @@ namespace Kmplete
                     return ReturnCode::InputFileFormatError;
                 }
 
-                const auto writeDataResult = WriteAssetsData(assetCount, outputFile, assetsFilepaths, assetsTypes);
+                const auto writeDataResult = WriteBinaries(assetCount, outputFile, assetsFilepaths, assetsTypes);
                 if (writeDataResult != ReturnCode::Ok)
                 {
                     KMP_LOG_ERROR("failed to write assets buffers data");
@@ -72,7 +72,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            ReturnCode AssetsCompiler::WriteHeaderData(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
+            ReturnCode AssetsCompiler::WriteHeaders(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
             {
                 KMP_LOG_INFO("start writing header data...");
 
@@ -80,49 +80,11 @@ namespace Kmplete
 
                 for (UInt32 assetIndex = 0; assetIndex < assetCount; assetIndex++)
                 {
-                    if (!sourceJson.StartGetObject(assetIndex))
+                    const auto writeHeaderResult = WriteHeader(assetIndex, sourceJson, outputFile, assetsFilepaths, assetsTypes);
+                    if (writeHeaderResult != ReturnCode::Ok)
                     {
-                        KMP_LOG_ERROR("failed to get asset json object at index {}", assetIndex);
-                        return ReturnCode::InputFileFormatError;
+                        return writeHeaderResult;
                     }
-
-                    const auto assetFilename = sourceJson.GetString(JsonConfigurationFileStr);
-                    if (assetFilename.empty())
-                    {
-                        KMP_LOG_ERROR("failed to get asset's filename at index {}", assetIndex);
-                        return ReturnCode::InputFileFormatError;
-                    }
-
-                    const auto assetType = static_cast<UByte>(sourceJson.GetUInt(JsonConfigurationTypeStr, AssetType::Error));
-                    if (assetType == AssetType::Error)
-                    {
-                        KMP_LOG_ERROR("failed to get asset's type at index {}", assetIndex);
-                        return ReturnCode::InputFileFormatError;
-                    }
-
-                    const auto assetSid = sourceJson.GetUInt64(JsonConfigurationSidStr);
-                    if (assetSid == 0)
-                    {
-                        KMP_LOG_ERROR("failed to get asset's sid at index {}", assetIndex);
-                        return ReturnCode::InputFileFormatError;
-                    }
-
-                    if (!sourceJson.EndGetObject())
-                    {
-                        KMP_LOG_ERROR("failed to end asset json object at index {}", assetIndex);
-                        return ReturnCode::InputFileFormatError;
-                    }
-
-                    AssetEntryHeader header{
-                        .type = assetType,
-                        .sid = assetSid,
-                        .bufferSize = 0,
-                        .bufferOffset = 0
-                    };
-                    outputFile.write(reinterpret_cast<const char*>(&header), AssetEntryHeaderStructSize);
-
-                    assetsFilepaths.push_back(Filepath(assetFilename));
-                    assetsTypes.push_back(assetType);
                 }
 
                 KMP_LOG_INFO("asset headers written: {}", assetCount);
@@ -131,7 +93,64 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            ReturnCode AssetsCompiler::WriteAssetsData(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
+            ReturnCode AssetsCompiler::WriteHeader(UInt32 assetIndex, JsonDocument& sourceJson, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
+            {
+                if (!sourceJson.StartGetObject(assetIndex))
+                {
+                    KMP_LOG_ERROR("failed to get asset json object at index {}", assetIndex);
+                    return ReturnCode::InputFileFormatError;
+                }
+
+                const auto assetFilename = sourceJson.GetString(JsonConfigurationFileStr);
+                if (assetFilename.empty())
+                {
+                    KMP_LOG_ERROR("failed to get asset's filename at index {}", assetIndex);
+                    return ReturnCode::InputFileFormatError;
+                }
+
+                const auto assetType = static_cast<UByte>(sourceJson.GetUInt(JsonConfigurationTypeStr, AssetType::Error));
+                if (assetType == AssetType::Error)
+                {
+                    KMP_LOG_ERROR("failed to get asset's type at index {}", assetIndex);
+                    return ReturnCode::InputFileFormatError;
+                }
+
+                const auto assetSid = sourceJson.GetUInt64(JsonConfigurationSidStr);
+                if (assetSid == 0)
+                {
+                    KMP_LOG_ERROR("failed to get asset's sid at index {}", assetIndex);
+                    return ReturnCode::InputFileFormatError;
+                }
+
+                const auto [iterator, hasEmplaced] = _processedSids.emplace(assetSid);
+                if (!hasEmplaced)
+                {
+                    KMP_LOG_ERROR("asset with sid '{}' has already been processsed, duplication is forbidden", assetSid);
+                    return ReturnCode::InputFileDuplicationsError;
+                }
+
+                if (!sourceJson.EndGetObject())
+                {
+                    KMP_LOG_ERROR("failed to end asset json object at index {}", assetIndex);
+                    return ReturnCode::InputFileFormatError;
+                }
+
+                AssetEntryHeader header{
+                    .type = assetType,
+                    .sid = assetSid,
+                    .bufferSize = 0,
+                    .bufferOffset = 0
+                };
+                outputFile.write(reinterpret_cast<const char*>(&header), AssetEntryHeaderStructSize);
+
+                assetsFilepaths.push_back(Filepath(assetFilename));
+                assetsTypes.push_back(assetType);
+
+                return ReturnCode::Ok;
+            }
+            //--------------------------------------------------------------------------
+
+            ReturnCode AssetsCompiler::WriteBinaries(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
             {
                 KMP_LOG_INFO("start writing assets data...");
 
@@ -149,7 +168,7 @@ namespace Kmplete
 
                     if (assetType == AssetType::Texture)
                     {
-                        const auto writeResult = WriteBinaryBuffer(outputFile, assetPath, writeState, "Texture");
+                        const auto writeResult = WriteBinary(outputFile, assetPath, writeState, "Texture");
                         if (writeResult != ReturnCode::Ok)
                         {
                             return writeResult;
@@ -157,7 +176,7 @@ namespace Kmplete
                     }
                     else if (assetType == AssetType::FontTTF)
                     {
-                        const auto writeResult = WriteBinaryBuffer(outputFile, assetPath, writeState, "FontTTF");
+                        const auto writeResult = WriteBinary(outputFile, assetPath, writeState, "FontTTF");
                         if (writeResult != ReturnCode::Ok)
                         {
                             return writeResult;
@@ -169,7 +188,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            ReturnCode AssetsCompiler::WriteBinaryBuffer(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, KMP_MB_UNUSED const String& assetTypeName) const
+            ReturnCode AssetsCompiler::WriteBinary(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, KMP_MB_UNUSED const String& assetTypeName) const
             {
                 const auto binaryBuffer = Filesystem::ReadFileAsBinary(filepath);
                 if (binaryBuffer.empty())

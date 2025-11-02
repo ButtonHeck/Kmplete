@@ -29,6 +29,7 @@ namespace Kmplete
                 InputFileParsingError = -22,
                 InputFileFormatError = -23,
                 InputFileProcessingError = -24,
+                InputFileDuplicationsError = -25,
 
                 OutputFileIsNotSet = -30,
                 OutputFileCreationFailed = -31,

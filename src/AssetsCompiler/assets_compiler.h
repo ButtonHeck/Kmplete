@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Assets/assets_interface.h"
 #include "Kmplete/Assets/assets_compiler_interface.h"
+#include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -41,12 +42,14 @@ namespace Kmplete
                 };
 
             private:
-                KMP_NODISCARD ReturnCode WriteHeaderData(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
-                KMP_NODISCARD ReturnCode WriteAssetsData(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
-                KMP_NODISCARD ReturnCode WriteBinaryBuffer(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, const String& assetTypeName) const;
+                KMP_NODISCARD ReturnCode WriteHeaders(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode WriteHeader(UInt32 assetIndex, JsonDocument& sourceJson, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode WriteBinaries(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode WriteBinary(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, const String& assetTypeName) const;
 
             private:
                 const CompilerParameters _parameters;
+                mutable HashSet<Utils::StringID> _processedSids;
             };
             //--------------------------------------------------------------------------
         }
