@@ -15,6 +15,95 @@
 
 namespace Kmplete
 {
+    NonNull<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(const NonNull<GLFWwindow*> window)
+    {
+        auto userData = glfwGetWindowUserPointer(window);
+        KMP_ASSERT(userData);
+
+        return reinterpret_cast<UserData*>(userData);
+    }
+    //--------------------------------------------------------------------------
+
+    std::pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::GetSuitableMonitor(const Math::Rect2I& windowRectangle)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+        const auto windowCenter = windowRectangle.GetCenter();
+
+        int count = 0;
+        const auto monitors = glfwGetMonitors(&count);
+
+        if (count && monitors)
+        {
+            for (auto i = 0; i < count; i++)
+            {
+                const auto monitor = monitors[i];
+                if (monitor)
+                {
+                    const auto monitorRectangle = GetMonitorRectangle(monitor);
+                    if (monitorRectangle.ContainsPoint(windowCenter))
+                    {
+                        return { true, monitor };
+                    }
+                }
+            }
+        }
+
+        KMP_LOG_WARN("cannot get window's current monitor, primary monitor will be used");
+
+        return { false, glfwGetPrimaryMonitor() };
+    }
+    //--------------------------------------------------------------------------
+
+    Math::Rect2I WindowGlfw::GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+        const auto videoMode = glfwGetVideoMode(monitor);
+        const auto monitorScreenWidth = videoMode->width;
+        const auto monitorScreenHeight = videoMode->height;
+        KMP_ASSERT(monitorScreenWidth != 0 && monitorScreenHeight != 0);
+
+        int monitorX = 0;
+        int monitorY = 0;
+        glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+
+        return Math::Rect2I(Math::Point2I(monitorX, monitorY), Math::Size2I(monitorScreenWidth, monitorScreenHeight));
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::UpdateDPI(const NonNull<GLFWwindow*> window)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+        const NonNull<UserData*> userData = GetUserPointer(window);
+
+        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(userData->position, userData->size));
+        const auto videoMode = glfwGetVideoMode(monitor);
+        auto monitorWidthMm = 0;
+        auto monitorHeightMm = 0;
+        glfwGetMonitorPhysicalSize(monitor, &monitorWidthMm, &monitorHeightMm);
+        const auto monitorDiagonalInch = glm::length(Math::Size2F(float(monitorWidthMm), float(monitorHeightMm))) / 25.4f;
+        const auto monitorDiagonalPixels = glm::length(Math::Size2F(float(videoMode->width), float(videoMode->height)));
+        userData->dpi = UInt32(monitorDiagonalPixels / monitorDiagonalInch);
+
+        KMP_LOG_INFO("Window DPI changed to {}", userData->dpi);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowGlfw::UpdateDPIScale(const NonNull<GLFWwindow*> window)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+        const NonNull<UserData*> userData = GetUserPointer(window);
+
+        auto scale = 1.0f;
+        glfwGetWindowContentScale(window, &scale, &scale);
+        userData->dpiScale = scale;
+    }
+    //--------------------------------------------------------------------------
+
+
     WindowGlfw::UserData::UserData(WindowSettings& settings)
         : screenMode(settings.screenMode)
         , position(settings.position)
@@ -49,7 +138,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto [isFound, monitor] = GetSuitableMonitor();
+        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
         const auto videoMode = glfwGetVideoMode(monitor);
 
         GLFWwindow* window = nullptr;
@@ -75,55 +164,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::GetSuitableMonitor() const
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
-
-        const auto windowRectangle = Math::Rect2I(_settings.position, _settings.size);
-        const auto windowCenter = windowRectangle.GetCenter();
-
-        int count = 0;
-        const auto monitors = glfwGetMonitors(&count);
-
-        if (count && monitors)
-        {
-            for (auto i = 0; i < count; i++)
-            {
-                const auto monitor = monitors[i];
-                if (monitor)
-                {
-                    const auto monitorRectangle = GetMonitorRectangle(monitor);
-                    if (monitorRectangle.ContainsPoint(windowCenter))
-                    {
-                        return {true, monitor};
-                    }
-                }
-            }
-        }
-
-        KMP_LOG_WARN("cannot get window's current monitor, primary monitor will be used");
-
-        return {false, glfwGetPrimaryMonitor()};
-    }
-    //--------------------------------------------------------------------------
-
-    Math::Rect2I WindowGlfw::GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-        const auto videoMode = glfwGetVideoMode(monitor);
-        const auto monitorScreenWidth = videoMode->width;
-        const auto monitorScreenHeight = videoMode->height;
-        KMP_ASSERT(monitorScreenWidth != 0 && monitorScreenHeight != 0);
-
-        int monitorX = 0;
-        int monitorY = 0;
-        glfwGetMonitorPos(monitor, &monitorX, &monitorY);
-
-        return Math::Rect2I(Math::Point2I(monitorX, monitorY), Math::Size2I(monitorScreenWidth, monitorScreenHeight));
-    }
-    //--------------------------------------------------------------------------
-
     void WindowGlfw::Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -142,9 +182,10 @@ namespace Kmplete
 
         InitializeUserPointer();
         InitializeGeometry();
-        InitializeDPIScale();
         InitializeCallbacks();
-        UpdateDPI();
+
+        UpdateDPIScale(_window);
+        UpdateDPI(_window);
 
         SetVSync(_settings.vSync);
 
@@ -256,7 +297,7 @@ namespace Kmplete
             return;
         }
 
-        const auto [isFound, currentMonitor] = GetSuitableMonitor();
+        const auto [isFound, currentMonitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
         const auto monitorRectangle = GetMonitorRectangle(currentMonitor);
         const auto monitorCenter = monitorRectangle.GetCenter();
 
@@ -298,7 +339,7 @@ namespace Kmplete
 
         userData->screenMode = screenMode;
 
-        const auto [isFound, monitor] = GetSuitableMonitor();
+        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
         const auto videoMode = glfwGetVideoMode(monitor);
         const auto monitorRectangle = GetMonitorRectangle(monitor);
 
@@ -472,15 +513,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    NonNull<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(GLFWwindow* window)
-    {
-        auto userData = glfwGetWindowUserPointer(window);
-        KMP_ASSERT(userData);
-
-        return reinterpret_cast<UserData*>(userData);
-    }
-    //--------------------------------------------------------------------------
-
     void WindowGlfw::InitializeWindowHints() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -533,7 +565,9 @@ namespace Kmplete
 
         glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
             const NonNull<UserData*> userData = GetUserPointer(window);
-            userData->dpiScale = xScale;
+            
+            UpdateDPIScale(window);
+            UpdateDPI(window);
 
             if (userData->eventCallback)
             {
@@ -709,7 +743,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto [isFound, monitor] = GetSuitableMonitor();
+        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
 
         if (IsWindowedFullscreen())
         {
@@ -733,29 +767,6 @@ namespace Kmplete
                 PositionAtCurrentScreenCenter();
             }
         }
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowGlfw::InitializeDPIScale()
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-        auto scale = 1.0f;
-        glfwGetWindowContentScale(_window, &scale, &scale);
-        _settings.dpiScale = scale;
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowGlfw::UpdateDPI()
-    {
-        const auto [isFound, monitor] = GetSuitableMonitor();
-        const auto videoMode = glfwGetVideoMode(monitor);
-        auto monitorWidthMm = 0;
-        auto monitorHeightMm = 0;
-        glfwGetMonitorPhysicalSize(monitor, &monitorWidthMm, &monitorHeightMm);
-        const auto monitorDiagonalInch = glm::length(Math::Size2F(float(monitorWidthMm), float(monitorHeightMm))) / 25.4f;
-        const auto monitorDiagonalPixels = glm::length(Math::Size2F(float(videoMode->width), float(videoMode->height)));
-        _settings.dpi = UInt32(monitorDiagonalPixels / monitorDiagonalInch);
     }
     //--------------------------------------------------------------------------
 }

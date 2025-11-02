@@ -85,12 +85,14 @@ namespace Kmplete
             bool iconified;
         };
 
-        KMP_NODISCARD static NonNull<UserData*> GetUserPointer(GLFWwindow* window);
+        KMP_NODISCARD static NonNull<UserData*> GetUserPointer(const NonNull<GLFWwindow*> window);
+        KMP_NODISCARD static std::pair<bool, NonNull<GLFWmonitor*>> GetSuitableMonitor(const Math::Rect2I& windowRectangle);
+        KMP_NODISCARD static Math::Rect2I GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor);
+        static void UpdateDPI(const NonNull<GLFWwindow*> window);
+        static void UpdateDPIScale(const NonNull<GLFWwindow*> window);
 
     private:
         KMP_NODISCARD Nullable<GLFWwindow*> CreateGLFWwindow();
-        KMP_NODISCARD std::pair<bool, NonNull<GLFWmonitor*>> GetSuitableMonitor() const;
-        KMP_NODISCARD Math::Rect2I GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor) const;
 
         void Initialize();
         void InitializeWindowHints() const;
@@ -100,11 +102,7 @@ namespace Kmplete
         void InitializeWindowCallbacks() const;
         void InitializeKeyboardCallbacks() const;
         void InitializeMouseCallbacks() const;
-
         void InitializeGeometry();
-        void InitializeDPIScale();
-
-        void UpdateDPI();
 
         void Finalize();
 
