@@ -8,6 +8,8 @@
 
 namespace Kmplete
 {
+    static constexpr auto DefaultFontPixelSize = 18;
+
     Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
         : Assets::Asset(Assets::AssetType::FontTTF, sid)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("Font::Font(Utils::StringID, FT_LibraryRec_&, const BinaryBuffer&)")
@@ -21,7 +23,8 @@ namespace Kmplete
             throw std::runtime_error("Font: failed to load FreeType font from buffer");
         }
 
-        InitializeParameters();
+        UpdateParameters();
+        SetPixelSize(DefaultFontPixelSize);
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -45,13 +48,45 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Font::SetPointSize(UInt8 size, UInt32 dpi)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+
+        const auto setSizeError = FT_Set_Char_Size(_freetypeFace, size * 64, 0, dpi, dpi);
+        if (setSizeError)
+        {
+            KMP_LOG_ERROR("failed to set point size to {}", size);
+            return false;
+        }
+
+        UpdateSizeMetrics();
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Font::SetPixelSize(UInt8 size)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+
+        const auto setSizeError = FT_Set_Pixel_Sizes(_freetypeFace, size, 0);
+        if (setSizeError)
+        {
+            KMP_LOG_ERROR("failed to set pixel size to {}", size);
+            return false;
+        }
+
+        UpdateSizeMetrics();
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
     const Font::Parameters& Font::GetParameters() const noexcept
     {
         return _parameters;
     }
     //--------------------------------------------------------------------------
 
-    void Font::InitializeParameters() noexcept
+    void Font::UpdateParameters() noexcept
     {
         _parameters.familyName = _freetypeFace->family_name;
 
@@ -77,6 +112,12 @@ namespace Kmplete
         _parameters.ascender = _freetypeFace->ascender;
         _parameters.descender = _freetypeFace->descender;
         _parameters.maxAdvance = _freetypeFace->max_advance_width;
+
+    }
+    //--------------------------------------------------------------------------
+
+    void Font::UpdateSizeMetrics() noexcept
+    {
         _parameters.sizeMetrics.xPixelsPerEM = _freetypeFace->size->metrics.x_ppem;
         _parameters.sizeMetrics.yPixelsPerEM = _freetypeFace->size->metrics.y_ppem;
         _parameters.sizeMetrics.xScale = _freetypeFace->size->metrics.x_scale >> 16;

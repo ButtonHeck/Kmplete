@@ -25,14 +25,17 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API const BinaryBuffer& GetBuffer() const noexcept;
 
+        KMP_API bool SetPointSize(UInt8 size, UInt32 dpi = 0);
+        KMP_API bool SetPixelSize(UInt8 size);
+
     public:
         struct Parameters
         {
             enum class Style
             {
                 Regular    = 0,
-                Italic      = 1 << 0,
-                Bold        = 1 << 1
+                Italic     = 1 << 0,
+                Bold       = 1 << 1
             };
 
             struct SizeMetrics
@@ -60,7 +63,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const Parameters& GetParameters() const noexcept;
 
     private:
-        void InitializeParameters() noexcept;
+        void UpdateParameters() noexcept;
+        void UpdateSizeMetrics() noexcept;
 
     private:
         FT_FaceRec_* _freetypeFace;
