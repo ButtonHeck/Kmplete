@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/nullability.h"
 #include "Kmplete/Event/event.h"
 
 
@@ -17,12 +18,15 @@ namespace Kmplete
         KMP_API virtual void Render() {}
         KMP_API virtual void OnEvent(Event&) {}
 
-        KMP_API void SetActive(bool active) noexcept;
-        KMP_NODISCARD KMP_API bool IsActive() const noexcept;
-
     private:
         const String _name;
-        bool _active;
+    };
+    //--------------------------------------------------------------------------
+
+    struct FrameListenerWrapper
+    {
+        Nullable<FrameListener*> frameListener;
+        bool isActive;
     };
     //--------------------------------------------------------------------------
 }

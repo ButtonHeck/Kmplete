@@ -58,7 +58,7 @@ namespace Kmplete
     private:
         GraphicsBackendType _graphicsBackendType;
         Timer _frameTimer;
-        Vector<Nullable<FrameListener*>> _frameListeners;
+        Vector<FrameListenerWrapper> _frameListenersWrappers;
     };
     //--------------------------------------------------------------------------
 }

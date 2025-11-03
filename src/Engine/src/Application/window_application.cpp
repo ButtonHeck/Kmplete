@@ -90,7 +90,7 @@ namespace Kmplete
 
     void WindowApplication::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
-        _frameListeners.push_back(frameListener);
+        _frameListenersWrappers.emplace_back(FrameListenerWrapper(frameListener, true));
     }
     //--------------------------------------------------------------------------
 
@@ -136,7 +136,7 @@ namespace Kmplete
 
         SaveSettings();
 
-        _frameListeners.clear();
+        _frameListenersWrappers.clear();
 
         _assetsManager.reset();
         _graphicsBackend.reset();
@@ -146,11 +146,11 @@ namespace Kmplete
 
     void WindowApplication::UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
     {
-        for (auto& frameListener : _frameListeners)
+        for (auto& wrapper : _frameListenersWrappers)
         {
-            if (frameListener->IsActive())
+            if (wrapper.isActive)
             {
-                frameListener->Update(frameTimestep, mainWindowIsIconified);
+                wrapper.frameListener->Update(frameTimestep, mainWindowIsIconified);
             }
         }
     }
@@ -158,11 +158,11 @@ namespace Kmplete
 
     void WindowApplication::RenderFrameListeners()
     {
-        for (auto& frameListener : _frameListeners)
+        for (auto& wrapper : _frameListenersWrappers)
         {
-            if (frameListener->IsActive())
+            if (wrapper.isActive)
             {
-                frameListener->Render();
+                wrapper.frameListener->Render();
             }
         }
     }
@@ -172,17 +172,17 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (auto iter = _frameListeners.rbegin(); iter != _frameListeners.rend(); ++iter)
+        for (auto iter = _frameListenersWrappers.rbegin(); iter != _frameListenersWrappers.rend(); ++iter)
         {
-            auto frameListener = *iter;
-            if (frameListener->IsActive())
+            auto wrapper = *iter;
+            if (wrapper.isActive)
             {
                 if (event.handled)
                 {
                     break;
                 }
 
-                frameListener->OnEvent(event);
+                wrapper.frameListener->OnEvent(event);
             }
         }
     }
