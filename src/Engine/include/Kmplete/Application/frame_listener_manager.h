@@ -6,17 +6,28 @@
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
+#include "Kmplete/Log/log_class_macro.h"
+
+#include <functional>
 
 
 namespace Kmplete
 {
     class FrameListenerManager
     {
+        KMP_LOG_CLASSNAME(FrameListenerManager)
+
+    public:
+        using FrameCommandBufferHandler = std::function<void()>;
+
     public:
         KMP_DISABLE_COPY_MOVE(FrameListenerManager)
 
         KMP_API FrameListenerManager() = default;
         KMP_API ~FrameListenerManager();
+
+        KMP_API void SetCommandBufferHandler(const FrameCommandBufferHandler& commandBufferHandler);
+        KMP_API void PushCommand(FrameListenerCommand&& command);
 
     private:
         friend class WindowApplication;
@@ -37,6 +48,7 @@ namespace Kmplete
     private:
         Vector<FrameListenerWrapper> _listeners;
         Vector<FrameListenerCommand> _commandBuffer;
+        FrameCommandBufferHandler _commandBufferHandler;
     };
     //--------------------------------------------------------------------------
 }

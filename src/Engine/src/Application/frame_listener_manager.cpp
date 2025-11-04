@@ -1,5 +1,6 @@
 #include "Kmplete/Application/frame_listener_manager.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -9,6 +10,27 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         _listeners.clear();
+    }
+    //--------------------------------------------------------------------------
+
+    void FrameListenerManager::SetCommandBufferHandler(const FrameCommandBufferHandler& commandBufferHandler)
+    {
+        if (_commandBufferHandler)
+        {
+            KMP_LOG_WARN("overwriting existing command buffer handler");
+        }
+        else
+        {
+            KMP_LOG_INFO("setting command buffer handler");
+        }
+
+        _commandBufferHandler = commandBufferHandler;
+    }
+    //--------------------------------------------------------------------------
+
+    void FrameListenerManager::PushCommand(FrameListenerCommand&& command)
+    {
+        _commandBuffer.emplace_back(std::move(command));
     }
     //--------------------------------------------------------------------------
 
@@ -71,6 +93,11 @@ namespace Kmplete
     void FrameListenerManager::ProcessFrameListenersCommands()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        if (_commandBufferHandler)
+        {
+            _commandBufferHandler();
+        }
 
         _commandBuffer.clear();
     }

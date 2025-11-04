@@ -9,7 +9,6 @@
 
 #include <boost/locale.hpp>
 
-#include <vector>
 #include <functional>
 
 
