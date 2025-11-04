@@ -18,7 +18,7 @@ namespace Kmplete
         KMP_LOG_CLASSNAME(FrameListenerManager)
 
     public:
-        using FrameCommandBufferHandler = std::function<void()>;
+        using FrameListenerCommandBufferHandler = std::function<void(const FrameListenerCommandBuffer&)>;
 
     public:
         KMP_DISABLE_COPY_MOVE(FrameListenerManager)
@@ -26,7 +26,7 @@ namespace Kmplete
         KMP_API FrameListenerManager() = default;
         KMP_API ~FrameListenerManager();
 
-        KMP_API void SetCommandBufferHandler(const FrameCommandBufferHandler& commandBufferHandler);
+        KMP_API void SetCommandBufferHandler(const FrameListenerCommandBufferHandler& commandBufferHandler);
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
     private:
@@ -47,8 +47,8 @@ namespace Kmplete
 
     private:
         Vector<FrameListenerWrapper> _listeners;
-        Vector<FrameListenerCommand> _commandBuffer;
-        FrameCommandBufferHandler _commandBufferHandler;
+        FrameListenerCommandBuffer _commandBuffer;
+        FrameListenerCommandBufferHandler _commandBufferHandler;
     };
     //--------------------------------------------------------------------------
 }

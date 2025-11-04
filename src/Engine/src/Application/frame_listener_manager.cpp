@@ -13,7 +13,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::SetCommandBufferHandler(const FrameCommandBufferHandler& commandBufferHandler)
+    void FrameListenerManager::SetCommandBufferHandler(const FrameListenerCommandBufferHandler& commandBufferHandler)
     {
         if (_commandBufferHandler)
         {
@@ -96,7 +96,7 @@ namespace Kmplete
 
         if (_commandBufferHandler)
         {
-            _commandBufferHandler();
+            _commandBufferHandler(_commandBuffer);
         }
 
         _commandBuffer.clear();

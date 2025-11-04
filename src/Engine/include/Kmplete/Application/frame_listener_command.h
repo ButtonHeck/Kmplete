@@ -2,6 +2,8 @@
 
 #include "Kmplete/Base/types_aliases.h"
 
+#include <type_traits>
+
 
 namespace Kmplete
 {
@@ -22,5 +24,8 @@ namespace Kmplete
         const String frameSourceName;
         const String frameDestinationName;
     };
+    static_assert(std::is_move_constructible_v<FrameListenerCommand> == true);
+
+    using FrameListenerCommandBuffer = Vector<FrameListenerCommand>;
     //--------------------------------------------------------------------------
 }
