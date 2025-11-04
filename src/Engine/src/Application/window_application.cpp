@@ -26,6 +26,7 @@ namespace Kmplete
         , _windowBackend(nullptr)
         , _graphicsBackend(nullptr)
         , _assetsManager(nullptr)
+        , _frameListenerManager(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _frameTimer(0)
     {
@@ -74,14 +75,14 @@ namespace Kmplete
 
             const auto mainWindowIsIconified = mainWindow.IsIconified();
 
-            UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
+            _frameListenerManager->UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
 
             if (!mainWindowIsIconified)
             {
-                RenderFrameListeners();
+                _frameListenerManager->RenderFrameListeners();
             }
 
-            ProcessFrameListenersCommands();
+            _frameListenerManager->ProcessFrameListenersCommands();
 
             mainWindow.SwapBuffers();
         }
@@ -92,7 +93,7 @@ namespace Kmplete
 
     void WindowApplication::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
-        _frameListenersWrappers.emplace_back(FrameListenerWrapper(frameListener, true));
+        _frameListenerManager->AddFrameListener(frameListener);
     }
     //--------------------------------------------------------------------------
 
@@ -104,7 +105,7 @@ namespace Kmplete
 
     void WindowApplication::OnEvent(Event& event)
     {
-        ProcessEventsFrameListeners(event);
+        _frameListenerManager->ProcessEventsFrameListeners(event);
     }
     //--------------------------------------------------------------------------
 
@@ -128,6 +129,9 @@ namespace Kmplete
         _assetsManager = CreateUPtr<Assets::AssetsManager>(_applicationPath, _graphicsBackend->GetType());
         KMP_ASSERT(_assetsManager);
 
+        _frameListenerManager = CreateUPtr<FrameListenerManager>();
+        KMP_ASSERT(_frameListenerManager);
+
         _frameTimer.Mark();
     }
     //--------------------------------------------------------------------------
@@ -138,64 +142,10 @@ namespace Kmplete
 
         SaveSettings();
 
-        _frameListenersWrappers.clear();
-
+        _frameListenerManager.reset();
         _assetsManager.reset();
         _graphicsBackend.reset();
         _windowBackend.reset();
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
-    {
-        for (auto& wrapper : _frameListenersWrappers)
-        {
-            if (wrapper.isActive)
-            {
-                wrapper.frameListener->Update(frameTimestep, mainWindowIsIconified);
-            }
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::RenderFrameListeners()
-    {
-        for (auto& wrapper : _frameListenersWrappers)
-        {
-            if (wrapper.isActive)
-            {
-                wrapper.frameListener->Render();
-            }
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::ProcessEventsFrameListeners(Event& event)
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-        for (auto iter = _frameListenersWrappers.rbegin(); iter != _frameListenersWrappers.rend(); ++iter)
-        {
-            auto wrapper = *iter;
-            if (wrapper.isActive)
-            {
-                if (event.handled)
-                {
-                    break;
-                }
-
-                wrapper.frameListener->OnEvent(event);
-            }
-        }
-    }
-    //--------------------------------------------------------------------------
-
-    void WindowApplication::ProcessFrameListenersCommands()
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-        ProcessFrameListenersCommandsImpl();
-        _frameListenersCommands.clear();
     }
     //--------------------------------------------------------------------------
 

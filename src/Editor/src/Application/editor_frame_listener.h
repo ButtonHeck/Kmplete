@@ -33,7 +33,7 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
-        EditorFrameListener(Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
+        EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
         ~EditorFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified);
