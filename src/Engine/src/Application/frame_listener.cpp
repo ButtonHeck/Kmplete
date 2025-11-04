@@ -4,10 +4,16 @@
 
 namespace Kmplete
 {
-    FrameListener::FrameListener(FrameListenerManager& frameListenerManager, const String& name) noexcept
-        : _name(name)
+    FrameListener::FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid) noexcept
+        : _sid(sid)
         , _frameListenerManager(frameListenerManager)
     {}
+    //--------------------------------------------------------------------------
+
+    Utils::StringID FrameListener::GetSID() const noexcept
+    {
+        return _sid;
+    }
     //--------------------------------------------------------------------------
 
     void FrameListener::PushCommand(FrameListenerCommand&& command) noexcept

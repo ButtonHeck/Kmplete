@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
 
@@ -13,9 +14,10 @@ namespace Kmplete
     class FrameListener
     {
     public:
-        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const String& name) noexcept;
+        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid) noexcept;
         virtual ~FrameListener() = default;
 
+        KMP_NODISCARD KMP_API Utils::StringID GetSID() const noexcept;
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}
         KMP_API virtual void OnEvent(Event&) {}
@@ -23,7 +25,7 @@ namespace Kmplete
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
     protected:
-        const String _name;
+        const Utils::StringID _sid;
 
     private:
         FrameListenerManager& _frameListenerManager;

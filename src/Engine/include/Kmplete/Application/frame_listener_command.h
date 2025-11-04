@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Utils/string_id.h"
 
 #include <type_traits>
 
@@ -21,8 +22,8 @@ namespace Kmplete
     struct FrameListenerCommand
     {
         const FrameListenerCommandCode command;
-        const String frameSourceName;
-        const String frameDestinationName;
+        const Utils::StringID frameListenerSidSource;
+        const Utils::StringID frameListenerSidDestination;
     };
     static_assert(std::is_move_constructible_v<FrameListenerCommand> == true);
 

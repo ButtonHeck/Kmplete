@@ -16,7 +16,7 @@ namespace Kmplete
     static constexpr auto MetricsTimeoutStr = "MetricsTimeout";
 
     EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
-        : FrameListener(frameListenerManager, "EditorFrameListener")
+        : FrameListener(frameListenerManager, "EditorFrameListener"_sid)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorFrameListener::EditorFrameListener(FrameListenerManager&, Window&, GraphicsBackend&, Assets::AssetsManager&, LocalizationManager&, SystemMetricsManager&)")
         , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)

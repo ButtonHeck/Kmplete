@@ -76,7 +76,7 @@ namespace Kmplete
 
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
-            auto listener = *iter;
+            auto& listener = *iter;
             if (listener.isActive)
             {
                 if (event.handled)
