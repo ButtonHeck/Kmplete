@@ -28,7 +28,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::PushCommand(FrameListenerCommand&& command)
+    void FrameListenerManager::PushCommand(FrameListenerCommand&& command) noexcept
     {
         _commandBuffer.emplace_back(std::move(command));
     }

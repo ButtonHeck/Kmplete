@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
 
 
@@ -19,9 +20,13 @@ namespace Kmplete
         KMP_API virtual void Render() {}
         KMP_API virtual void OnEvent(Event&) {}
 
+        KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
+
+    protected:
+        const String _name;
+
     private:
         FrameListenerManager& _frameListenerManager;
-        const String _name;
     };
     //--------------------------------------------------------------------------
 }

@@ -27,7 +27,7 @@ namespace Kmplete
         KMP_API ~FrameListenerManager();
 
         KMP_API void SetCommandBufferHandler(const FrameCommandBufferHandler& commandBufferHandler);
-        KMP_API void PushCommand(FrameListenerCommand&& command);
+        KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
     private:
         friend class WindowApplication;

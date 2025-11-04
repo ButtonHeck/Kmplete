@@ -5,8 +5,14 @@
 namespace Kmplete
 {
     FrameListener::FrameListener(FrameListenerManager& frameListenerManager, const String& name) noexcept
-        : _frameListenerManager(frameListenerManager)
-        , _name(name)
+        : _name(name)
+        , _frameListenerManager(frameListenerManager)
     {}
+    //--------------------------------------------------------------------------
+
+    void FrameListener::PushCommand(FrameListenerCommand&& command) noexcept
+    {
+        _frameListenerManager.PushCommand(std::move(command));
+    }
     //--------------------------------------------------------------------------
 }
