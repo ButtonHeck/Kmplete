@@ -81,6 +81,8 @@ namespace Kmplete
                 RenderFrameListeners();
             }
 
+            ProcessFrameListenersCommands();
+
             mainWindow.SwapBuffers();
         }
 
@@ -185,6 +187,15 @@ namespace Kmplete
                 wrapper.frameListener->OnEvent(event);
             }
         }
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::ProcessFrameListenersCommands()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        ProcessFrameListenersCommandsImpl();
+        _frameListenersCommands.clear();
     }
     //--------------------------------------------------------------------------
 

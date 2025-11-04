@@ -29,4 +29,23 @@ namespace Kmplete
         bool isActive;
     };
     //--------------------------------------------------------------------------
+
+    enum class FrameCommandCode
+    {
+        Activate,
+        Deactivate,
+        Replace,
+        Delete,
+        AddAfter,
+        AddBefore
+    };
+    //--------------------------------------------------------------------------
+
+    struct FrameListenerCommand
+    {
+        const FrameCommandCode command;
+        const String frameSourceName;
+        const String frameDestinationName;
+    };
+    //--------------------------------------------------------------------------
 }

@@ -39,6 +39,8 @@ namespace Kmplete
     protected:
         void OnEvent(Event& event);
 
+        virtual void ProcessFrameListenersCommandsImpl() {}
+
     private:
         void Initialize(const WindowApplicationParameters& parameters);
         void Finalize();
@@ -46,6 +48,7 @@ namespace Kmplete
         void UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
         void RenderFrameListeners();
         void ProcessEventsFrameListeners(Event& event);
+        void ProcessFrameListenersCommands();
 
         void SaveSettings() const;
         void LoadSettings();
@@ -59,6 +62,7 @@ namespace Kmplete
         GraphicsBackendType _graphicsBackendType;
         Timer _frameTimer;
         Vector<FrameListenerWrapper> _frameListenersWrappers;
+        Vector<FrameListenerCommand> _frameListenersCommands;
     };
     //--------------------------------------------------------------------------
 }
