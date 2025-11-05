@@ -14,6 +14,8 @@
 
 namespace Kmplete
 {
+    class Window;
+
     struct WindowApplicationParameters
     {
         const ApplicationParameters applicationParameters;
@@ -43,6 +45,8 @@ namespace Kmplete
     private:
         void Initialize(const WindowApplicationParameters& parameters);
         void Finalize();
+
+        KMP_NODISCARD bool RunFrameIteration(Window& window);
 
         void SaveSettings() const;
         void LoadSettings();

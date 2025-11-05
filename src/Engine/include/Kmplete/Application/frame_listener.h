@@ -13,6 +13,8 @@ namespace Kmplete
 
     class FrameListener
     {
+        KMP_DISABLE_COPY_MOVE(FrameListener)
+
     public:
         KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid) noexcept;
         virtual ~FrameListener() = default;

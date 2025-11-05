@@ -54,37 +54,10 @@ namespace Kmplete
 
         while (_running)
         {
-            KMP_PROFILE_SCOPE("Frame iteration", ProfileLevelAlways);
-
-            const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
-
-            mainWindow.ProcessEvents();
-
-            if (mainWindow.ShouldClose())
+            if (!RunFrameIteration(mainWindow))
             {
-                if (ConfirmExit())
-                {
-                    _running = false;
-                    break;
-                }
-                else
-                {
-                    mainWindow.SetShouldClose(false);
-                }
+                break;
             }
-
-            const auto mainWindowIsIconified = mainWindow.IsIconified();
-
-            _frameListenerManager->UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
-
-            if (!mainWindowIsIconified)
-            {
-                _frameListenerManager->RenderFrameListeners();
-            }
-
-            _frameListenerManager->ProcessFrameListenersCommands();
-
-            mainWindow.SwapBuffers();
         }
 
         KMP_LOG_INFO_FN("'{}' main loop finished", _applicationName);
@@ -146,6 +119,44 @@ namespace Kmplete
         _assetsManager.reset();
         _graphicsBackend.reset();
         _windowBackend.reset();
+    }
+    //--------------------------------------------------------------------------
+
+    bool WindowApplication::RunFrameIteration(Window& window)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
+
+        window.ProcessEvents();
+
+        if (window.ShouldClose())
+        {
+            if (ConfirmExit())
+            {
+                _running = false;
+                return false;
+            }
+            else
+            {
+                window.SetShouldClose(false);
+            }
+        }
+
+        const auto mainWindowIsIconified = window.IsIconified();
+
+        _frameListenerManager->UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
+
+        if (!mainWindowIsIconified)
+        {
+            _frameListenerManager->RenderFrameListeners();
+        }
+
+        _frameListenerManager->ProcessFrameListenersCommands();
+
+        window.SwapBuffers();
+
+        return true;
     }
     //--------------------------------------------------------------------------
 
