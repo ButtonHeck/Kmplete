@@ -13,7 +13,7 @@ namespace Kmplete
     static constexpr auto SettingsEntryName = "Application";
 
     Application::Application(const ApplicationParameters& parameters)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Application::Application(const ApplicationParameters&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _applicationName(parameters.applicationName)
         , _applicationPath(Filesystem::GetCurrentFilepath())
         , _running(false)

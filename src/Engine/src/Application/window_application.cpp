@@ -22,7 +22,7 @@ namespace Kmplete
 
     WindowApplication::WindowApplication(const WindowApplicationParameters& parameters)
         : Application(parameters.applicationParameters)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowApplication::WindowApplication(const WindowApplicationParameters&)")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _windowBackend(nullptr)
         , _graphicsBackend(nullptr)
         , _assetsManager(nullptr)

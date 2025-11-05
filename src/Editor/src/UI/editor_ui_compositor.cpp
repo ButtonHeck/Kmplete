@@ -25,7 +25,7 @@ namespace Kmplete
     static constexpr auto MetricsFractionalStr = "MetricsFractional";
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("EditorUICompositor::EditorUICompositor(Window&, Assets::AssetsManager&, LocalizationManager&, const SystemMetricsManager&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _mainWindow(mainWindow)
         , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)

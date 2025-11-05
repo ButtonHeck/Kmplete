@@ -19,7 +19,7 @@ namespace Kmplete
     static constexpr auto AlwaysOnTopStr = "AlwaysOnTop";
 
     Window::Window(WindowSettings& settings)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("Window::Window(WindowSettings&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _settings(settings)
     {
         if (settings.name.empty())

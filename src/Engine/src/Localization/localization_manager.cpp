@@ -14,7 +14,7 @@ namespace Kmplete
     static constexpr auto SettingsLocaleStr = "Locale";
 
     LocalizationManager::LocalizationManager() noexcept
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("LocalizationManager::LocalizationManager() noexcept")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _localeGenerator()
         , _library(CreateUPtr<LocalizationLibrary>())
         , _currentLocale(std::locale().name())

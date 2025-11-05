@@ -117,7 +117,7 @@ namespace Kmplete
 
     WindowGlfw::WindowGlfw(WindowSettings& settings)
         : Window(settings)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("WindowGlfw::WindowGlfw(WindowSettings&)")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _window(nullptr)
     {
         Initialize();

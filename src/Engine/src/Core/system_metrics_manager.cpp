@@ -20,7 +20,7 @@
 namespace Kmplete
 {
     SystemMetricsManager::SystemMetricsManager()
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SystemMetricsManager::SystemMetricsManager()")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _lastCPUTimestamp(0ULL)
         , _lastSysCPUTimestamp(0ULL)
         , _lastUserCPUTimestamp(0ULL)

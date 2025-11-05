@@ -10,7 +10,7 @@ namespace Kmplete
 
     EditorApplication::EditorApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("EditorApplication::EditorApplication(const WindowApplicationParameters&)")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _mainWindow(_windowBackend->GetMainWindow())
         , _uiFrameListener(nullptr)
     {

@@ -12,7 +12,7 @@ namespace Kmplete
 
     Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
         : Assets::Asset(Assets::AssetType::FontTTF, sid)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS("Font::Font(Utils::StringID, FT_LibraryRec_&, const BinaryBuffer&)")
+          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _freetypeFace(nullptr)
         , _fontBuffer(std::move(fontBuffer))
     {

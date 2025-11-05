@@ -4,7 +4,7 @@
 namespace Kmplete
 {
     SettingsDocument::SettingsDocument(const String& name, Ptr<JsonDocument> document)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsDocument::SettingsDocument(const String&, Ptr<JsonDocument>)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _name(name)
         , _document(document)
     {
@@ -13,7 +13,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     SettingsDocument::SettingsDocument(const String& name)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsDocument::SettingsDocument(const String&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _name(name)
         , _document(new JsonDocument())
     {

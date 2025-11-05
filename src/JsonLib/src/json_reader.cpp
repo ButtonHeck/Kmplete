@@ -7,7 +7,7 @@
 namespace Kmplete
 {
     JsonReader::JsonReader(rapidjson::Document& document)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonReader::JsonReader(rapidjson::Document&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _document(document)
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))

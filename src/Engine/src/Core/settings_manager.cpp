@@ -7,7 +7,7 @@
 namespace Kmplete
 {
     SettingsManager::SettingsManager(const Filepath& filepath)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("SettingsManager::SettingsManager(const Filepath&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _filepath(filepath)
     {
         KMP_PROFILE_CONSTRUCTOR_END()

@@ -13,7 +13,7 @@ namespace Kmplete
     namespace Assets
     {
         AssetsManager::AssetsManager(const Filepath& applicationPath, GraphicsBackendType type)
-            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("AssetsManager::AssetsManager(const Filepath&, GraphicsBackendType)")
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _dataPath(applicationPath / AssetsFolder)
             , _textureManager(nullptr)
             , _fontManager(nullptr)

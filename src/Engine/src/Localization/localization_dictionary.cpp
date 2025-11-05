@@ -6,7 +6,7 @@
 namespace Kmplete
 {
     LocalizationDictionary::LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid /*= SidTrInvalidLocale*/) noexcept
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("LocalizationDictionary::LocalizationDictionary(const DomainStrSID&, const LocaleStrSID&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _domain(domain)
         , _currentLocaleSid(localeSid)
     {

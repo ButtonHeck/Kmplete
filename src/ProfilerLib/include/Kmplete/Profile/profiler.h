@@ -104,7 +104,7 @@ namespace Kmplete
         };
 
         template<size_t lengthSrc, size_t lengthRemove, size_t lengthReplace>
-        consteval auto ReplaceString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove], const char(&replace)[lengthReplace])
+        constexpr auto ReplaceString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove], const char(&replace)[lengthReplace])
         {
             ReplaceResult<lengthSrc> result = {};
 
@@ -166,14 +166,40 @@ namespace Kmplete
     private:\
     UPtr<ProfilerTimer> _constructorProfilerTimer;
 
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name) \
-    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name)) ,
+#define _KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(name) \
+::Kmplete::ProfilerUtils::ReplaceString(\
+    ::Kmplete::ProfilerUtils::ReplaceString(\
+        ::Kmplete::ProfilerUtils::ReplaceString(\
+            ::Kmplete::ProfilerUtils::ReplaceString(\
+                ::Kmplete::ProfilerUtils::ReplaceString(\
+                    ::Kmplete::ProfilerUtils::ReplaceString(\
+                        ::Kmplete::ProfilerUtils::ReplaceString(\
+                            ::Kmplete::ProfilerUtils::ReplaceString(\
+                                ::Kmplete::ProfilerUtils::ReplaceString(\
+                                    ::Kmplete::ProfilerUtils::ReplaceString(\
+                                        ::Kmplete::ProfilerUtils::ReplaceString(\
+                                            ::Kmplete::ProfilerUtils::ReplaceString(name, \
+                                            "__cdecl ", "").data, \
+                                        "Kmplete::", "").data, \
+                                    "std::unique_ptr", "UPtr").data, \
+                                "std::shared_ptr", "Ptr").data, \
+                            "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String").data, \
+                        "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString").data, \
+                    "__int64", "int64").data, \
+                "std::filesystem::path", "Filepath").data, \
+            "class ", "").data, \
+        "struct ", "").data, \
+    "std::vector", "Vector").data, \
+"(void)", "()").data
 
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST(name) \
-    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name))
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS() \
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(_KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(KMP_FUNC_SIG))) ,
 
-#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name) \
-    , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(name))
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST() \
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(_KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(KMP_FUNC_SIG)))
+
+#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS() \
+    , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(_KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(KMP_FUNC_SIG)))
 
 #define KMP_PROFILE_CONSTRUCTOR_END() \
     _constructorProfilerTimer.reset(nullptr);
@@ -186,9 +212,9 @@ namespace Kmplete
 #define KMP_PROFILE_FUNCTION(level)
 
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE()
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS(name)
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST(name)
-#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS(name)
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST()
+#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
 #define KMP_PROFILE_CONSTRUCTOR_END()
 #endif
 

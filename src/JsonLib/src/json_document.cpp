@@ -19,7 +19,7 @@
 namespace Kmplete
 {
     JsonDocument::JsonDocument()
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument()")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _filepath()
         , _document()
         , _error(false)
@@ -33,7 +33,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(rapidjson::Document&& document)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument(rapidjson::Document&&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _filepath()
         , _document(std::move(document))
         , _error(_document.HasParseError())
@@ -45,7 +45,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     JsonDocument::JsonDocument(const Filepath& filepath)
-        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS("JsonDocument::JsonDocument(const Filepath&)")
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _filepath(filepath)
         , _document()
         , _error(false)
