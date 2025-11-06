@@ -50,12 +50,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool ProgramOptions::IsProfilingOnDemand() const
+    {
+        return _profilingOnDemand;
+    }
+    //--------------------------------------------------------------------------
+
     void ProgramOptions::ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser)
     {
         boost::program_options::options_description optDescription("Kmplete options");
         optDescription.add_options()
-            ("settings,S",      boost::program_options::value<String>(),    "Path to settings file")
-            ("profile_level,P", boost::program_options::value<int>(),       "Profiling level");
+            ("settings,S",          boost::program_options::value<String>(),    "Path to settings file")
+            ("profile_level,P",     boost::program_options::value<int>(),       "Profiling level")
+            ("profile_on_demand,D", boost::program_options::value<bool>(),      "Profiling on demand");
 
         boost::program_options::variables_map vm;
         boost::program_options::store(cmdParser.options(optDescription).run(), vm);
@@ -63,6 +70,7 @@ namespace Kmplete
 
         _settingsFilepath = Filepath(vm.count("settings") ? vm["settings"].as<String>() : "");
         _profilingLevel = vm.count("profile_level") ? vm["profile_level"].as<int>() : 0;
+        _profilingOnDemand = vm.count("profile_on_demand") ? vm["profile_on_demand"].as<bool>() : false;
     }
     //--------------------------------------------------------------------------
 }

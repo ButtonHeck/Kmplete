@@ -48,6 +48,9 @@ namespace Kmplete
         KMP_API void SetLevel(unsigned int level);
         KMP_NODISCARD KMP_API unsigned int GetLevel() const;
 
+        KMP_API void SetActive(bool active);
+        KMP_NODISCARD KMP_API bool IsActive() const;
+
         KMP_API void BeginSession(const String& name, const Filepath& filepath, int storageSize);
         KMP_API void EndSession();
 
@@ -71,6 +74,7 @@ namespace Kmplete
 
     private:
         unsigned int _level;
+        bool _active;
         std::mutex _mutex;
         UPtr<ProfilingSession> _currentSession;
         Filepath _outputFilepath;

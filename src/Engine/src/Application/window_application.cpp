@@ -7,6 +7,7 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Event/key_event.h"
 
 
 #if defined (CreateWindow)
@@ -78,6 +79,10 @@ namespace Kmplete
 
     void WindowApplication::OnEvent(Event& event)
     {
+#if defined KMP_PROFILE
+        SwitchProfilerActivation(event);
+#endif
+
         _frameListenerManager->ProcessEventsFrameListeners(event);
     }
     //--------------------------------------------------------------------------
@@ -191,6 +196,26 @@ namespace Kmplete
         _windowBackend->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
+
+#if defined KMP_PROFILE
+    void WindowApplication::SwitchProfilerActivation(Event& event)
+    {
+        if (event.GetType() == EventType::KeyPressEventType)
+        {
+            const auto& keyPressedEvent = dynamic_cast<KeyPressEvent&>(event);
+            const auto code = keyPressedEvent.GetKeyCode();
+            const auto mods = keyPressedEvent.GetMods();
+            if (code == Key::F11 && mods & Mode::Alt)
+            {
+                const auto isProfilerActive = Profiler::Get().IsActive();
+                Profiler::Get().SetActive(!isProfilerActive);
+
+                KMP_LOG_INFO("profiling activated: {}", !isProfilerActive);
+            }
+        }
+    }
+    //--------------------------------------------------------------------------
+#endif
 }
 
 #if defined (KMP_UNDEF_CreateWindow)

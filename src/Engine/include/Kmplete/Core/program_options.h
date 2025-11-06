@@ -24,6 +24,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API const Filepath& GetSettingsFilepath() const;
         KMP_NODISCARD KMP_API int GetProfilingLevel() const;
+        KMP_NODISCARD KMP_API bool IsProfilingOnDemand() const;
 
     private:
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -39,6 +40,7 @@ namespace Kmplete
     private:
         Filepath _settingsFilepath;
         int _profilingLevel;
+        bool _profilingOnDemand;
     };
     //--------------------------------------------------------------------------
 }

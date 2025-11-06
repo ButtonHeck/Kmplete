@@ -74,6 +74,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     Kmplete::MemoryChecker::Prepare();
 
 #if defined(KMP_PROFILE)
+    Kmplete::Profiler::Get().SetActive(!programOptions.IsProfilingOnDemand());
     Kmplete::Profiler::Get().SetLevel(programOptions.GetProfilingLevel());
 #endif
 
