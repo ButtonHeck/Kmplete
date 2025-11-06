@@ -88,9 +88,11 @@ namespace Kmplete
         KMP_API explicit ProfilerTimer(const char* name, unsigned int level = 0);
         KMP_API ~ProfilerTimer();
 
+        KMP_API void SetName(const char* name);
+
     private:
-        const bool _skip;
         const char* _name;
+        const bool _skip;
         std::chrono::high_resolution_clock::time_point _start;
     };
     //--------------------------------------------------------------------------
@@ -104,7 +106,7 @@ namespace Kmplete
         };
 
         template<size_t lengthSrc, size_t lengthRemove, size_t lengthReplace>
-        constexpr auto ReplaceString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove], const char(&replace)[lengthReplace])
+        consteval auto ReplaceString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove], const char(&replace)[lengthReplace])
         {
             ReplaceResult<lengthSrc> result = {};
 
@@ -166,42 +168,29 @@ namespace Kmplete
     private:\
     UPtr<ProfilerTimer> _constructorProfilerTimer;
 
-#define _KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(name) \
-::Kmplete::ProfilerUtils::ReplaceString(\
-    ::Kmplete::ProfilerUtils::ReplaceString(\
-        ::Kmplete::ProfilerUtils::ReplaceString(\
-            ::Kmplete::ProfilerUtils::ReplaceString(\
-                ::Kmplete::ProfilerUtils::ReplaceString(\
-                    ::Kmplete::ProfilerUtils::ReplaceString(\
-                        ::Kmplete::ProfilerUtils::ReplaceString(\
-                            ::Kmplete::ProfilerUtils::ReplaceString(\
-                                ::Kmplete::ProfilerUtils::ReplaceString(\
-                                    ::Kmplete::ProfilerUtils::ReplaceString(\
-                                        ::Kmplete::ProfilerUtils::ReplaceString(\
-                                            ::Kmplete::ProfilerUtils::ReplaceString(name, \
-                                            "__cdecl ", "").data, \
-                                        "Kmplete::", "").data, \
-                                    "std::unique_ptr", "UPtr").data, \
-                                "std::shared_ptr", "Ptr").data, \
-                            "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String").data, \
-                        "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString").data, \
-                    "__int64", "int64").data, \
-                "std::filesystem::path", "Filepath").data, \
-            "class ", "").data, \
-        "struct ", "").data, \
-    "std::vector", "Vector").data, \
-"(void)", "()").data
-
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS() \
-    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(_KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(KMP_FUNC_SIG))) ,
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("")) ,
 
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST() \
-    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(_KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(KMP_FUNC_SIG)))
+    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
 
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS() \
-    , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(_KMP_PROFILE_SCOPE_LINE_CONTRUCTOR(KMP_FUNC_SIG)))
+    , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
 
 #define KMP_PROFILE_CONSTRUCTOR_END() \
+    constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(KMP_FUNC_SIG, "__cdecl ", "");\
+    constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
+    constexpr auto fixedNameUPtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
+    constexpr auto fixedNamePtr##line        = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
+    constexpr auto fixedNameString##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
+    constexpr auto fixedNameWString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
+    constexpr auto fixedNameInt64##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
+    constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Filepath");\
+    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "class ", "");\
+    constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
+    constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\
+    constexpr auto fixedNameVoidParams##line = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVector##line.data, "(void)", "()");\
+    _constructorProfilerTimer->SetName(fixedNameVoidParams##line.data);\
     _constructorProfilerTimer.reset(nullptr);
 
 #else

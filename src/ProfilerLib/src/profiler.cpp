@@ -209,8 +209,8 @@ namespace Kmplete
 
 
     ProfilerTimer::ProfilerTimer(const char* name, unsigned int level /*= 0*/)
-        : _skip(Profiler::Get().GetLevel() < level)
-        , _name(name)
+        : _name(name)
+        , _skip(Profiler::Get().GetLevel() < level)
         , _start(_skip ? std::chrono::steady_clock::time_point() : std::chrono::high_resolution_clock::now())
     {}
     //--------------------------------------------------------------------------
@@ -242,6 +242,12 @@ namespace Kmplete
 
         profiler.WriteProfileResultsToIntermediate();
         profiler.BeginNewCycle();
+    }
+    //--------------------------------------------------------------------------
+
+    void ProfilerTimer::SetName(const char* name)
+    {
+        _name = name;
     }
     //--------------------------------------------------------------------------
 }
