@@ -15,7 +15,7 @@ namespace Kmplete
 
             if (_condition)
             {
-                ImGui::BeginDisabled();
+                ImGui::BeginDisabled(_condition);
             }
         }
         //--------------------------------------------------------------------------

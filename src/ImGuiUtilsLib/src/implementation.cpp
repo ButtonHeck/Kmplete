@@ -44,6 +44,8 @@ namespace Kmplete
             {
                 io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
             }
+
+            io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
         }
         //--------------------------------------------------------------------------
 
