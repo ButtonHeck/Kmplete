@@ -23,40 +23,39 @@ namespace Kmplete
     public:
         TestWindowApplication(const WindowApplicationParameters& parameters)
             : WindowApplication(parameters)
+            , _mainWindow(_windowBackend->GetMainWindow())
         {
             Initialize();
         }
 
         void Initialize()
         {
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
+            _mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
+            const auto scale = _mainWindow.GetDPIScale();
 
-            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
             ImGuiIO& io = ImGui::GetIO();
             io.IniFilename = "imgui_test_app.ini";
             const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
-            _imguiImpl->AddFont(defaultFont.GetBuffer(), mainWindow.GetDPIScale());
-            _imguiImpl->Stylize(mainWindow.GetDPIScale());
+            _imguiImpl->AddFont(defaultFont.GetBuffer(), scale);
+            _imguiImpl->Stylize(scale);
         }
 
         void Run() override
         {
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            while (!mainWindow.ShouldClose())
+            while (!_mainWindow.ShouldClose())
             {
                 Render();
 
-                mainWindow.ProcessEvents();
-                mainWindow.SwapBuffers();
+                _mainWindow.ProcessEvents();
+                _mainWindow.SwapBuffers();
             }
         }
 
         void SetCustomIconFromFilepath()
         {
-            auto& mainWindow = _windowBackend->GetMainWindow();
             const auto iconImage = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
-            mainWindow.SetIcon(iconImage);
+            _mainWindow.SetIcon(iconImage);
         }
 
         void SetCustomIconFromBuffer()
@@ -67,18 +66,16 @@ namespace Kmplete
                 /*red */ 255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255 };
             Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Math::Size2I(4, 2), ImageChannels::RGBAlpha);
 
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            mainWindow.SetIcon(iconFromBuffer);
+            _mainWindow.SetIcon(iconFromBuffer);
         }
 
         void SetCustomCursor()
         {
             const auto cursor = _windowBackend->AddCursor("test cursor", Utils::Concatenate(KMP_ICONS_FOLDER, "test_cursor.png"));
-            auto& mainWindow = _windowBackend->GetMainWindow();
 
             if (cursor)
             {
-                mainWindow.SetCursor(*cursor);
+                _mainWindow.SetCursor(*cursor);
             }
         }
 
@@ -279,10 +276,9 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnWindowContentScaleEvent(WindowContentScaleEvent& evt)
         {
             const auto scale = evt.GetScale();
-            auto& mainWindow = _windowBackend->GetMainWindow();
 
             _imguiImpl.reset();
-            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
             ImGuiIO& io = ImGui::GetIO();
             io.IniFilename = "imgui_test_app.ini";
 
@@ -296,13 +292,13 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&)
         {
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            mainWindow.SetShouldClose(true);
+            _mainWindow.SetShouldClose(true);
             _windowCloseEventInvoked = true;
             return true;
         }
 
     private:
+        Window& _mainWindow;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         bool _keyPressEventInvoked = false;
