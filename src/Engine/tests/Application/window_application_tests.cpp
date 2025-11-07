@@ -7,6 +7,8 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Graphics/font_manager.h"
+#include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/ImGui/scope_guards.h"
 
@@ -31,10 +33,11 @@ namespace Kmplete
             mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
 
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
-            _imguiImpl->Stylize(mainWindow.GetDPIScale());
-
             ImGuiIO& io = ImGui::GetIO();
             io.IniFilename = "imgui_test_app.ini";
+            const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
+            _imguiImpl->AddFont(defaultFont.GetBuffer(), mainWindow.GetDPIScale());
+            _imguiImpl->Stylize(mainWindow.GetDPIScale());
         }
 
         void Run() override
@@ -105,7 +108,7 @@ namespace Kmplete
             }
 
             static constexpr auto applicationWindowFlags =
-                ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+                ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
             ImGui::Begin("EventsWindow", nullptr, applicationWindowFlags);
             {
@@ -213,6 +216,8 @@ namespace Kmplete
             _windowApplicationWindowIconifyEventInvoked |= dispatcher.Dispatch<WindowIconifyEvent>(KMP_BIND(TestWindowApplication::OnWindowIconifyEvent));
             _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestWindowApplication::OnWindowFramebufferRefreshEvent));
             _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestWindowApplication::OnWindowFramebufferResizeEvent));
+
+            dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestWindowApplication::OnWindowContentScaleEvent));
         }
 
         KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { _keyPressEventInvoked = true; return true; }
@@ -264,7 +269,30 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent&) { _windowResizeEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent&) { _windowFocusEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent&) { _windowIconifyEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&) { _windowFramebufferRefreshEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+        {
+            _windowFramebufferRefreshEventInvoked = true;
+            Render();
+            return true;
+        }
+
+        KMP_NODISCARD virtual bool OnWindowContentScaleEvent(WindowContentScaleEvent& evt)
+        {
+            const auto scale = evt.GetScale();
+            auto& mainWindow = _windowBackend->GetMainWindow();
+
+            _imguiImpl.reset();
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
+            ImGuiIO& io = ImGui::GetIO();
+            io.IniFilename = "imgui_test_app.ini";
+
+            const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
+            _imguiImpl->AddFont(defaultFont.GetBuffer(), scale);
+            _imguiImpl->Stylize(scale);
+
+            return true;
+        }
+
         KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&)
         {
