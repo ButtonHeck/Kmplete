@@ -118,7 +118,7 @@ add_custom_command(
 SetupUnitTestsTargetProperties(
     Kmplete_WindowApplicationTests 
     Kmplete/Tests
-    Catch2::Catch2WithMain Kmplete FileDialogsLib
+    Catch2::Catch2WithMain Kmplete FileDialogsLib ImGuiUtilsLib
 )
 
 

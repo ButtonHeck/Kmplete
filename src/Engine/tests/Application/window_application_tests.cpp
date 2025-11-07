@@ -7,8 +7,11 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/ImGui/implementation.h"
+#include "Kmplete/ImGui/scope_guards.h"
 
 #include <catch2/catch_test_macros.hpp>
+#include <imgui.h>
 
 
 namespace Kmplete
@@ -22,20 +25,140 @@ namespace Kmplete
             Initialize();
         }
 
+        void Initialize()
+        {
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
+
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
+            _imguiImpl->Stylize(mainWindow.GetDPIScale());
+
+            ImGuiIO& io = ImGui::GetIO();
+            io.IniFilename = "imgui_test_app.ini";
+        }
+
         void Run() override
         {
             auto& mainWindow = _windowBackend->GetMainWindow();
-            while (!_completed)
+            while (!mainWindow.ShouldClose())
             {
+                Render();
+
                 mainWindow.ProcessEvents();
                 mainWindow.SwapBuffers();
             }
         }
 
-        void Initialize()
+        void SetCustomIconFromFilepath()
         {
             auto& mainWindow = _windowBackend->GetMainWindow();
-            mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
+            const auto iconImage = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
+            mainWindow.SetIcon(iconImage);
+        }
+
+        void SetCustomIconFromBuffer()
+        {
+            const auto iconBufferSize = 4 * 2 * 4;
+            unsigned char iconBuffer[] = {
+                /*blue*/ 0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,
+                /*red */ 255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255 };
+            Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Math::Size2I(4, 2), ImageChannels::RGBAlpha);
+
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            mainWindow.SetIcon(iconFromBuffer);
+        }
+
+        void SetCustomCursor()
+        {
+            const auto cursor = _windowBackend->AddCursor("test cursor", Utils::Concatenate(KMP_ICONS_FOLDER, "test_cursor.png"));
+            auto& mainWindow = _windowBackend->GetMainWindow();
+
+            if (cursor)
+            {
+                mainWindow.SetCursor(*cursor);
+            }
+        }
+
+        void Render()
+        {
+            _imguiImpl->NewFrame();
+
+            constexpr auto dockFlags =
+                ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+                ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
+                ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+            const ImGuiViewport* viewport = ImGui::GetMainViewport();
+            ImGui::SetNextWindowPos(viewport->WorkPos);
+            ImGui::SetNextWindowSize(viewport->WorkSize);
+            ImGui::SetNextWindowViewport(viewport->ID);
+            {
+                ImGuiUtils::StyleVarGuard colorGuard({ {ImGuiStyleVar_WindowRounding, 0.0f}, {ImGuiStyleVar_WindowBorderSize, 0.0f}, {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)} });
+                ImGui::Begin("DockSpace_test", nullptr, dockFlags);
+            }
+
+            const ImGuiIO& io = ImGui::GetIO();
+            if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+            {
+                ImGuiID dockspace_id = ImGui::GetID("DockSpace_test");
+                ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
+            }
+
+            static constexpr auto applicationWindowFlags =
+                ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+            ImGui::Begin("EventsWindow", nullptr, applicationWindowFlags);
+            {
+                const auto disableGuard = ImGuiUtils::DisableGuard(true);
+                ImGui::Checkbox("KeyPress", &_keyPressEventInvoked);
+                ImGui::Checkbox("KeyRelease", &_keyReleaseEventInvoked);
+                ImGui::Checkbox("KeyChar", &_keyCharEventInvoked);
+
+                ImGui::Separator();
+                ImGui::Checkbox("MouseMove", &_mouseMoveEventInvoked);
+                ImGui::Checkbox("MouseScroll", &_mouseScrollEventInvoked);
+                ImGui::Checkbox("MousePress", &_mouseButtonPressEventInvoked);
+                ImGui::Checkbox("MouseRelease", &_mouseButtonReleaseEventInvoked);
+
+                ImGui::Separator();
+                ImGui::Checkbox("WindowMove", &_windowMoveEventInvoked);
+                ImGui::Checkbox("WindowResize", &_windowResizeEventInvoked);
+                ImGui::Checkbox("WindowFocus", &_windowFocusEventInvoked);
+                ImGui::Checkbox("WindowIconify", &_windowIconifyEventInvoked);
+                ImGui::Checkbox("FramebufferRefresh", &_windowFramebufferRefreshEventInvoked);
+                ImGui::Checkbox("FramebufferResize", &_windowFramebufferResizeEventInvoked);
+            }
+            ImGui::End(); //"EventsWindow"
+
+            ImGui::Begin("ControlsWindow", nullptr, applicationWindowFlags);
+            {
+                if (ImGui::Button("Set icon from filepath"))
+                {
+                    SetCustomIconFromFilepath();
+                }
+
+                if (ImGui::Button("Set icon from buffer"))
+                {
+                    SetCustomIconFromBuffer();
+                }
+
+                if (ImGui::Button("Set custom cursor"))
+                {
+                    SetCustomCursor();
+                }
+            }
+            ImGui::End(); //"ControlsWindow"
+
+            ImGui::Begin("InfoWindow", nullptr, applicationWindowFlags);
+            {
+                ImGui::Text("Mouse position: [%d:%d]", _mouseX, _mouseY);
+            }
+            ImGui::End(); //"InfoWindow"
+
+            ImGui::End(); //"DockSpace_test"
+
+            _imguiImpl->Render();
+            ImGui::EndFrame();
         }
 
         bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
@@ -92,38 +215,67 @@ namespace Kmplete
             _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestWindowApplication::OnWindowFramebufferResizeEvent));
         }
 
-        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent& evt)
-        {
-            if (evt.GetKeyCode() == Key::Y)
-            {
-                _completed = true;
-            }
-            _keyPressEventInvoked = true; 
-            return true;
-        }
+        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { _keyPressEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent&) { _keyReleaseEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { _keyCharEventInvoked = true; return true; }
 
-        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent&) { _mouseMoveEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { _mouseScrollEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent&) { _mouseButtonPressEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { _mouseButtonReleaseEventInvoked = true; return true; }
-
-        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&)
+        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent& evt)
         {
-            _completed = true;
-            _windowCloseEventInvoked = true;
+            _mouseMoveEventInvoked = true;
+            _mouseX = static_cast<int>(evt.GetX());
+            _mouseY = static_cast<int>(evt.GetY());
+
             return true;
         }
+
+        KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { _mouseScrollEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt)
+        {
+            _mouseButtonPressEventInvoked = true; 
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            if (evt.GetMouseButton() == Mouse::ButtonLeft && evt.GetMods() & Mode::Ctrl)
+            {
+                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Hidden);
+                }
+                else
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Default);
+                }
+            }
+            else if (evt.GetMouseButton() == Mouse::ButtonRight && evt.GetMods() & Mode::Ctrl)
+            {
+                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+                }
+                else
+                {
+                    mainWindow.SetCursorMode(Window::CursorMode::Default);
+                }
+            }
+            return true;
+        }
+
+        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { _mouseButtonReleaseEventInvoked = true; return true; }
+
         KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { _windowMoveEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent&) { _windowResizeEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent&) { _windowFocusEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent&) { _windowIconifyEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&) { _windowFramebufferRefreshEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&)
+        {
+            auto& mainWindow = _windowBackend->GetMainWindow();
+            mainWindow.SetShouldClose(true);
+            _windowCloseEventInvoked = true;
+            return true;
+        }
 
     private:
-        bool _completed = false;
+        UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         bool _keyPressEventInvoked = false;
         bool _keyReleaseEventInvoked = false;
@@ -155,178 +307,15 @@ namespace Kmplete
         bool _windowApplicationWindowIconifyEventInvoked = false;
         bool _windowApplicationWindowFramebufferRefreshEventInvoked = false;
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
-    };
 
-    class CustomIconApplication : public TestWindowApplication
-    {
-    public:
-        CustomIconApplication(const WindowApplicationParameters& parameters)
-            : TestWindowApplication(parameters)
-        {
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            const auto iconImage = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
-            mainWindow.SetIcon(iconImage);
-        }
-    };
-
-    class CustomBufferIconApplication : public TestWindowApplication
-    {
-    public:
-        CustomBufferIconApplication(const WindowApplicationParameters& parameters)
-            : TestWindowApplication(parameters)
-        {
-            const auto iconBufferSize = 4 * 2 * 4;
-            unsigned char iconBuffer[] = { 
-                /*blue*/ 0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255, 
-                /*red */ 255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255 };
-            Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Math::Size2I(4, 2), ImageChannels::RGBAlpha);
-
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            mainWindow.SetIcon(iconFromBuffer);
-        }
-    };
-
-    class CursorTestApplication : public TestWindowApplication
-    {
-    public:
-        CursorTestApplication(const WindowApplicationParameters& parameters)
-            : TestWindowApplication(parameters)
-        {
-            const auto cursor = _windowBackend->AddCursor("test cursor", Utils::Concatenate(KMP_ICONS_FOLDER, "test_cursor.png"));
-            auto& mainWindow = _windowBackend->GetMainWindow();
-
-            if (cursor)
-            {
-                mainWindow.SetCursor(*cursor);
-            }
-
-            mainWindow.SetEventCallback(KMP_BIND(CursorTestApplication::OnEvent));
-        }
-
-        void OnEvent(Event& event)
-        {
-            EventDispatcher dispatcher(event);
-            dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(CursorTestApplication::OnMouseMoveEvent));
-            dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(CursorTestApplication::OnMouseButtonPressEvent));
-            dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestWindowApplication::OnKeyPressEvent));
-        }
-
-        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent& evt) override
-        {
-            _mouseX = static_cast<int>(evt.GetX());
-            _mouseY = static_cast<int>(evt.GetY());
-
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            const auto title = String("[X = ") + std::to_string(_mouseX) + ", Y = " + std::to_string(_mouseY) + "]";
-            mainWindow.SetTitle(title.c_str());
-
-            return true;
-        }
-
-        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt) override
-        {
-            auto& mainWindow = _windowBackend->GetMainWindow();
-            if (evt.GetMouseButton() == Mouse::ButtonLeft)
-            {
-                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
-                {
-                    mainWindow.SetCursorMode(Window::CursorMode::Hidden);
-                }
-                else
-                {
-                    mainWindow.SetCursorMode(Window::CursorMode::Default);
-                }
-            }
-            else if (evt.GetMouseButton() == Mouse::ButtonRight)
-            {
-                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
-                {
-                    mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-                }
-                else
-                {
-                    mainWindow.SetCursorMode(Window::CursorMode::Default);
-                }
-            }
-
-            return true;
-        }
-
-    private:
         int _mouseX = 0;
         int _mouseY = 0;
     };
 }
-//--------------------------------------------------------------------------
 
-TEST_CASE("Test window application initialize", "[window_application][application][window]")
+TEST_CASE("Test window application", "[window_application][application][window][event]")
 {
-    {
-        const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{.applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true});
-
-        REQUIRE(application);
-        REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
-    }
-
-    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append(KMP_TEST_SETTINGS_JSON);
-    REQUIRE(Kmplete::Filesystem::FilepathIsValid(settingsFilepath));
-    REQUIRE(Kmplete::Filesystem::FilepathExists(settingsFilepath));
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test window application default icon", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
-    REQUIRE(application);
-
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", 
-                                                                   "Press Y if this window has an icon", 
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
-    application->Run();
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test window application custom icon", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::CustomIconApplication>(Kmplete::WindowApplicationParameters{.applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true});
-    REQUIRE(application);
-
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application icon test", 
-                                                                   "Press Y if this window has an icon (red square upper-left and yellow square bottom-right)", 
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
-    application->Run();
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test window application custom buffer icon", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::CustomBufferIconApplication>(Kmplete::WindowApplicationParameters{.applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true});
-    REQUIRE(application);
-
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application buffer icon test", 
-                                                                   "Press Y if this window has an icon (blue-red)", 
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
-    application->Run();
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test window application custom cursor and modes", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::CursorTestApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
-    REQUIRE(application);
-
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application cursor test",
-                                                                   "Press Y if all conditions checked:\n"
-                                                                   "1) this window has a custom cursor 2) cursor hidden/disabled by clicking LMB/RMB",
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
-
-    application->Run();
-}
-//--------------------------------------------------------------------------
-
-TEST_CASE("Test window application key events", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
+    auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
 
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
@@ -338,26 +327,6 @@ TEST_CASE("Test window application key events", "[window_application][applicatio
     REQUIRE_FALSE(application->IsWindowApplicationKeyReleaseEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationKeyCharEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: KEY", 
-                                                                   "Press some keys and then press Y", 
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
-    application->Run();
-
-    REQUIRE(application->IsKeyPressEventInvoked());
-    REQUIRE(application->IsKeyReleaseEventInvoked());
-    REQUIRE(application->IsKeyCharEventInvoked());
-    REQUIRE(application->IsWindowApplicationKeyPressEventInvoked());
-    REQUIRE(application->IsWindowApplicationKeyReleaseEventInvoked());
-    REQUIRE(application->IsWindowApplicationKeyCharEventInvoked());
-}
-
-TEST_CASE("Test window application mouse events", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
-
-    REQUIRE(application);
-    REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
-
     REQUIRE_FALSE(application->IsMouseMoveEventInvoked());
     REQUIRE_FALSE(application->IsMouseScrollEventInvoked());
     REQUIRE_FALSE(application->IsMouseButtonPressEventInvoked());
@@ -366,28 +335,6 @@ TEST_CASE("Test window application mouse events", "[window_application][applicat
     REQUIRE_FALSE(application->IsWindowApplicationMouseScrollEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationMouseButtonPressEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
-
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: MOUSE", 
-                                                                   "Move mouse cursor, scroll, press/release some mouse button and then press Y", 
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
-    application->Run();
-
-    REQUIRE(application->IsMouseMoveEventInvoked());
-    REQUIRE(application->IsMouseScrollEventInvoked());
-    REQUIRE(application->IsMouseButtonPressEventInvoked());
-    REQUIRE(application->IsMouseButtonReleaseEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseMoveEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseButtonPressEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
-}
-
-TEST_CASE("Test window application window events", "[window_application][application][window]")
-{
-    const auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
-
-    REQUIRE(application);
-    REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
 
     REQUIRE_FALSE(application->IsWindowCloseEventInvoked());
     REQUIRE_FALSE(application->IsWindowMoveEventInvoked());
@@ -404,10 +351,23 @@ TEST_CASE("Test window application window events", "[window_application][applica
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
-    KMP_MB_UNUSED const auto r = Kmplete::FileDialogs::OpenMessage("Test window application test: WINDOW", 
-                                                                   "Move, resize, iconify/deiconify, focus/unfocus window and then close it", 
-                                                                   Kmplete::FileDialogs::MessageChoice::Ok);
     application->Run();
+
+    REQUIRE(application->IsKeyPressEventInvoked());
+    REQUIRE(application->IsKeyReleaseEventInvoked());
+    REQUIRE(application->IsKeyCharEventInvoked());
+    REQUIRE(application->IsWindowApplicationKeyPressEventInvoked());
+    REQUIRE(application->IsWindowApplicationKeyReleaseEventInvoked());
+    REQUIRE(application->IsWindowApplicationKeyCharEventInvoked());
+
+    REQUIRE(application->IsMouseMoveEventInvoked());
+    REQUIRE(application->IsMouseScrollEventInvoked());
+    REQUIRE(application->IsMouseButtonPressEventInvoked());
+    REQUIRE(application->IsMouseButtonReleaseEventInvoked());
+    REQUIRE(application->IsWindowApplicationMouseMoveEventInvoked());
+    REQUIRE(application->IsWindowApplicationMouseScrollEventInvoked());
+    REQUIRE(application->IsWindowApplicationMouseButtonPressEventInvoked());
+    REQUIRE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
     REQUIRE(application->IsWindowCloseEventInvoked());
     REQUIRE(application->IsWindowMoveEventInvoked());
@@ -423,5 +383,10 @@ TEST_CASE("Test window application window events", "[window_application][applica
     REQUIRE(application->IsWindowApplicationWindowIconifyEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
+
+    application.reset();
+
+    const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append(KMP_TEST_SETTINGS_JSON);
+    REQUIRE(Kmplete::Filesystem::FilepathIsValid(settingsFilepath));
+    REQUIRE(Kmplete::Filesystem::FilepathExists(settingsFilepath));
 }
-//--------------------------------------------------------------------------
