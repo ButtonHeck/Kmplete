@@ -14,8 +14,6 @@
 
 namespace Kmplete
 {
-    static constexpr Utils::StringID DefaultFontSID = 0;
-
     FontManager::FontManager()
         : _freetypeLibInstance(nullptr)
     {

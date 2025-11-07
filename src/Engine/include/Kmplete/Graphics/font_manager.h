@@ -17,6 +17,8 @@ namespace Kmplete
         KMP_LOG_CLASSNAME(FontManager)
 
     public:
+        static constexpr Utils::StringID DefaultFontSID = 0;
+
         KMP_DISABLE_COPY_MOVE(FontManager)
 
         KMP_API FontManager();
