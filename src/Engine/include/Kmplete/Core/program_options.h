@@ -22,9 +22,9 @@ namespace Kmplete
         // main entryPoint
         KMP_API void ProcessCommandLine(int argc, char** argv);
 
-        KMP_NODISCARD KMP_API const Filepath& GetSettingsFilepath() const;
-        KMP_NODISCARD KMP_API int GetProfilingLevel() const;
-        KMP_NODISCARD KMP_API bool IsProfilingOnDemand() const;
+        KMP_NODISCARD KMP_API const Filepath& GetSettingsFilepath() const noexcept;
+        KMP_NODISCARD KMP_API int GetProfilingLevel() const noexcept;
+        KMP_NODISCARD KMP_API bool IsProfilingOnDemand() const noexcept;
 
     private:
 #if defined (KMP_PLATFORM_WINDOWS)

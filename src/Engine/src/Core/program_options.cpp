@@ -38,19 +38,19 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const Filepath& ProgramOptions::GetSettingsFilepath() const
+    const Filepath& ProgramOptions::GetSettingsFilepath() const noexcept
     {
         return _settingsFilepath;
     }
     //--------------------------------------------------------------------------
 
-    int ProgramOptions::GetProfilingLevel() const
+    int ProgramOptions::GetProfilingLevel() const noexcept
     {
         return _profilingLevel;
     }
     //--------------------------------------------------------------------------
 
-    bool ProgramOptions::IsProfilingOnDemand() const
+    bool ProgramOptions::IsProfilingOnDemand() const noexcept
     {
         return _profilingOnDemand;
     }
