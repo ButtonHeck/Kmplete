@@ -33,9 +33,7 @@ namespace Kmplete
             _mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
             const auto scale = _mainWindow.GetDPIScale();
 
-            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
-            ImGuiIO& io = ImGui::GetIO();
-            io.IniFilename = "imgui_test_app.ini";
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
             const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
             _imguiImpl->AddFont(defaultFont.GetBuffer(), scale);
             _imguiImpl->Stylize(scale);
@@ -234,27 +232,26 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt)
         {
             _mouseButtonPressEventInvoked = true; 
-            auto& mainWindow = _windowBackend->GetMainWindow();
             if (evt.GetMouseButton() == Mouse::ButtonLeft && evt.GetMods() & Mode::Ctrl)
             {
-                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
+                if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
                 {
-                    mainWindow.SetCursorMode(Window::CursorMode::Hidden);
+                    _mainWindow.SetCursorMode(Window::CursorMode::Hidden);
                 }
                 else
                 {
-                    mainWindow.SetCursorMode(Window::CursorMode::Default);
+                    _mainWindow.SetCursorMode(Window::CursorMode::Default);
                 }
             }
             else if (evt.GetMouseButton() == Mouse::ButtonRight && evt.GetMods() & Mode::Ctrl)
             {
-                if (mainWindow.GetCursorMode() == Window::CursorMode::Default)
+                if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
                 {
-                    mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+                    _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
                 }
                 else
                 {
-                    mainWindow.SetCursorMode(Window::CursorMode::Default);
+                    _mainWindow.SetCursorMode(Window::CursorMode::Default);
                 }
             }
             return true;
@@ -278,9 +275,7 @@ namespace Kmplete
             const auto scale = evt.GetScale();
 
             _imguiImpl.reset();
-            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true));
-            ImGuiIO& io = ImGui::GetIO();
-            io.IniFilename = "imgui_test_app.ini";
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
 
             const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
             _imguiImpl->AddFont(defaultFont.GetBuffer(), scale);

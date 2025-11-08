@@ -12,14 +12,14 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementation* ImGuiImplementation::CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled)
+        ImGuiImplementation* ImGuiImplementation::CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= "imgui.ini"*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
             if (graphicsBackendType == "OpenGL")
             {
-                return new ImGuiImplementationGlfwOpenGL(reinterpret_cast<GLFWwindow*>(window), dockingEnabled, viewportsEnabled);
+                return new ImGuiImplementationGlfwOpenGL(reinterpret_cast<GLFWwindow*>(window), dockingEnabled, viewportsEnabled, configName);
             }
 #else
     #error "No suitable window/graphics backends are provided!"
@@ -28,7 +28,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        ImGuiImplementation::ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled)
+        ImGuiImplementation::ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName /*= "imgui.ini"*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -46,6 +46,7 @@ namespace Kmplete
             }
 
             io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+            io.IniFilename = configName;
         }
         //--------------------------------------------------------------------------
 

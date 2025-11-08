@@ -11,7 +11,7 @@ namespace Kmplete
         class ImGuiImplementation
         {
         public:
-            KMP_NODISCARD static ImGuiImplementation* CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled);
+            KMP_NODISCARD static ImGuiImplementation* CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
 
         public:
             KMP_DISABLE_COPY_MOVE(ImGuiImplementation)
@@ -29,7 +29,7 @@ namespace Kmplete
             void Stylize(float dpiScale) const;
 
         protected:
-            ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled);
+            ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
 
             virtual void NewFrameImpl() const = 0;
             virtual void RenderImpl() const = 0;

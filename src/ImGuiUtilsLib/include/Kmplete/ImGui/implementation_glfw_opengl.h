@@ -18,7 +18,7 @@ namespace Kmplete
         public:
             KMP_DISABLE_COPY_MOVE(ImGuiImplementationGlfwOpenGL)
 
-            ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled);
+            ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
             virtual ~ImGuiImplementationGlfwOpenGL();
 
         private:
