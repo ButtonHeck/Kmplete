@@ -47,6 +47,7 @@ namespace Kmplete
         KMP_API void SetCursor(const WindowCursor& cursor) const override;
         KMP_API void SetCursorMode(CursorMode cursorMode) override;
         KMP_NODISCARD KMP_API CursorMode GetCursorMode() const override;
+        KMP_NODISCARD KMP_API Math::Point2I GetCursorPosition() const override;
 
         KMP_API void SetVSync(bool vSync) override;
         KMP_NODISCARD KMP_API bool IsVSync() const override;
@@ -79,6 +80,7 @@ namespace Kmplete
             Math::Point2I& position;
             Math::Size2I& size;
             Math::Size2I& windowedSize;
+            Math::Point2I& cursorPosition;
             UInt32& dpi;
             float& dpiScale;
             EventCallbackFn eventCallback;

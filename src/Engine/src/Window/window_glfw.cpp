@@ -109,6 +109,7 @@ namespace Kmplete
         , position(settings.position)
         , size(settings.size)
         , windowedSize(settings.windowedSize)
+        , cursorPosition(settings.cursorPosition)
         , dpi(settings.dpi)
         , dpiScale(settings.dpiScale)
         , iconified(false)
@@ -402,6 +403,12 @@ namespace Kmplete
     Window::CursorMode WindowGlfw::GetCursorMode() const
     {
         return _settings.cursorMode;
+    }
+    //--------------------------------------------------------------------------
+
+    Math::Point2I WindowGlfw::GetCursorPosition() const
+    {
+        return _settings.cursorPosition;
     }
     //--------------------------------------------------------------------------
 
@@ -729,6 +736,9 @@ namespace Kmplete
 
         glfwSetCursorPosCallback(_window, [](GLFWwindow* window, double xPos, double yPos) {
             const NonNull<UserData*> userData = GetUserPointer(window);
+            userData->cursorPosition.x = int(xPos);
+            userData->cursorPosition.y = int(yPos);
+
             if (userData->eventCallback)
             {
                 MouseMoveEvent event(static_cast<float>(xPos), static_cast<float>(yPos));

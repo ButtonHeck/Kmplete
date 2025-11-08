@@ -61,6 +61,7 @@ namespace Kmplete
             Math::Size2I windowedSize = Math::Size2I(DefaultWidth, DefaultHeight);
             ScreenMode screenMode = ScreenMode::Windowed;
             CursorMode cursorMode = CursorMode::Default;
+            Math::Point2I cursorPosition = Math::Point2I(0, 0);
             bool vSync = true;
             bool updateContinuously = true;
             bool alwaysOnTop = false;
@@ -110,6 +111,7 @@ namespace Kmplete
         KMP_API virtual void SetCursor(const WindowCursor& cursor) const = 0;
         KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;
         KMP_NODISCARD KMP_API virtual CursorMode GetCursorMode() const = 0;
+        KMP_NODISCARD KMP_API virtual Math::Point2I GetCursorPosition() const = 0;
 
         KMP_API virtual void SetVSync(bool vSync) = 0;
         KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;
