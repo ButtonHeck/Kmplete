@@ -38,8 +38,8 @@ namespace Kmplete
         static constexpr auto WindowedFullscreenModeStr = "WindowedFullscreen";
         static constexpr auto WindowedModeStr = "Windowed";
 
-        KMP_NODISCARD static String ScreenModeToString(ScreenMode screenMode) noexcept;
-        KMP_NODISCARD static ScreenMode StringToScreenMode(const String& screenModeStr) noexcept;
+        KMP_NODISCARD KMP_API static String ScreenModeToString(ScreenMode screenMode) noexcept;
+        KMP_NODISCARD KMP_API static ScreenMode StringToScreenMode(const String& screenModeStr) noexcept;
 
         enum class CursorMode
         {
