@@ -18,6 +18,11 @@
 
 namespace Kmplete
 {
+    static constexpr auto Id_Dockspace = "DockSpace";
+    static constexpr auto Id_EventsWindow = "EventsWindow";
+    static constexpr auto Id_ControlsWindow = "ControlsWindow";
+    static constexpr auto Id_InfoWindow = "InfoWindow";
+
     class TestWindowApplication : public WindowApplication
     {
     public:
@@ -92,20 +97,20 @@ namespace Kmplete
             ImGui::SetNextWindowViewport(viewport->ID);
             {
                 ImGuiUtils::StyleVarGuard colorGuard({ {ImGuiStyleVar_WindowRounding, 0.0f}, {ImGuiStyleVar_WindowBorderSize, 0.0f}, {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)} });
-                ImGui::Begin("DockSpace_test", nullptr, dockFlags);
+                ImGui::Begin(Id_Dockspace, nullptr, dockFlags);
             }
 
             const ImGuiIO& io = ImGui::GetIO();
             if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
             {
-                ImGuiID dockspace_id = ImGui::GetID("DockSpace_test");
+                ImGuiID dockspace_id = ImGui::GetID(Id_Dockspace);
                 ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_None);
             }
 
             static constexpr auto applicationWindowFlags =
                 ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
-            ImGui::Begin("EventsWindow", nullptr, applicationWindowFlags);
+            ImGui::Begin(Id_EventsWindow, nullptr, applicationWindowFlags);
             {
                 const auto disableGuard = ImGuiUtils::DisableGuard(true);
                 ImGui::Checkbox("KeyPress", &_keyPressEventInvoked);
@@ -126,10 +131,76 @@ namespace Kmplete
                 ImGui::Checkbox("FramebufferRefresh", &_windowFramebufferRefreshEventInvoked);
                 ImGui::Checkbox("FramebufferResize", &_windowFramebufferResizeEventInvoked);
             }
-            ImGui::End(); //"EventsWindow"
+            ImGui::End(); //Id_EventsWindow
 
-            ImGui::Begin("ControlsWindow", nullptr, applicationWindowFlags);
+            ImGui::Begin(Id_ControlsWindow, nullptr, applicationWindowFlags);
             {
+                auto updateContinuously = _mainWindow.IsUpdatedContinuously();
+                if (ImGui::Checkbox("Update continuously", &updateContinuously))
+                {
+                    _mainWindow.SetUpdatedContinuously(updateContinuously);
+                }
+
+                auto vSync = _mainWindow.IsVSync();
+                if (ImGui::Checkbox("VSync", &vSync))
+                {
+                    _mainWindow.SetVSync(vSync);
+                }
+
+                auto alwaysOnTop = _mainWindow.IsAlwaysOnTop();
+                if (ImGui::Checkbox("Always on top", &alwaysOnTop))
+                {
+                    _mainWindow.SetAlwaysOnTop(alwaysOnTop);
+                }
+
+                auto decorated = _mainWindow.IsDecorated();
+                if (ImGui::Checkbox("Decorated", &decorated))
+                {
+                    _mainWindow.SetDecorated(decorated);
+                }
+
+                auto resizable = _mainWindow.IsResizable();
+                if (ImGui::Checkbox("Resizable", &resizable))
+                {
+                    _mainWindow.SetResizable(resizable);
+                }
+
+                const auto screenMode = _mainWindow.GetScreenMode();
+                const auto screenModeStr = Window::ScreenModeToString(_mainWindow.GetScreenMode());
+                if (ImGui::BeginCombo("Screen mode", screenModeStr.c_str()))
+                {
+                    if (ImGui::Selectable("Windowed", screenMode == Window::ScreenMode::Windowed))
+                    {
+                        _mainWindow.SetScreenMode(Window::ScreenMode::Windowed);
+                    }
+                    if (ImGui::Selectable("Fullscreen", screenMode == Window::ScreenMode::Fullscreen))
+                    {
+                        _mainWindow.SetScreenMode(Window::ScreenMode::Fullscreen);
+                    }
+                    if (ImGui::Selectable("Windowed Fullscreen", screenMode == Window::ScreenMode::WindowedFullscreen))
+                    {
+                        _mainWindow.SetScreenMode(Window::ScreenMode::WindowedFullscreen);
+                    }
+                    ImGui::EndCombo();
+                }
+
+                ImGui::Separator();
+
+                if (ImGui::Button("SetPosition 50x50"))
+                {
+                    _mainWindow.SetPosition(50, 50);
+                }
+
+                if (ImGui::Button("Position at screen's center"))
+                {
+                    _mainWindow.PositionAtCurrentScreenCenter();
+                }
+
+                if (ImGui::Button("Set custom title"))
+                {
+                    _mainWindow.SetTitle("Custom title successfully set!");
+                }
+
                 if (ImGui::Button("Set icon from filepath"))
                 {
                     SetCustomIconFromFilepath();
@@ -145,15 +216,61 @@ namespace Kmplete
                     SetCustomCursor();
                 }
             }
-            ImGui::End(); //"ControlsWindow"
+            ImGui::End(); //Id_ControlsWindow
 
-            ImGui::Begin("InfoWindow", nullptr, applicationWindowFlags);
+            ImGui::Begin(Id_InfoWindow, nullptr, applicationWindowFlags);
             {
-                ImGui::Text("Mouse position: [%d:%d]", _mouseX, _mouseY);
-            }
-            ImGui::End(); //"InfoWindow"
+                ImGuiStyle& style = ImGui::GetStyle();
+                const auto oldTextColor = style.Colors[ImGuiCol_Text];
+                style.Colors[ImGuiCol_Text] = ImVec4(0.0f, 1.0f, 0.0f, 1.0f);
+                ImGui::Text("Press Ctrl+LMB/RMB to changed cursor mode");
+                style.Colors[ImGuiCol_Text] = oldTextColor;
 
-            ImGui::End(); //"DockSpace_test"
+
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+
+
+                const auto windowPos = _mainWindow.GetPosition();
+                ImGui::Text("Window position: [%d:%d]", windowPos.x, windowPos.y);
+                ImGui::SameLine(0.0f, 32.0f);
+
+                const auto windowSize = _mainWindow.GetSize();
+                ImGui::Text("Window size: [%dx%d]", windowSize.x, windowSize.y);
+
+
+                const auto dpi = _mainWindow.GetDPI();
+                ImGui::Text("DPI: %d", dpi);
+                ImGui::SameLine(0.0f, 32.0f);
+
+                const auto dpiScale = _mainWindow.GetDPIScale();
+                ImGui::Text("DPI scale: %.2f", dpiScale);
+                ImGui::SameLine(0.0f, 32.0f);
+
+                const auto screenModeStr = Window::ScreenModeToString(_mainWindow.GetScreenMode());
+                ImGui::Text("Screen mode: %s", screenModeStr.c_str());
+                
+
+                const auto cursorPosition = _mainWindow.GetCursorPosition();
+                ImGui::Text("Mouse position: [%d:%d]", cursorPosition.x, cursorPosition.y);
+                ImGui::SameLine(0.0f, 32.0f);
+
+                const auto cursorMode = _mainWindow.GetCursorMode();
+                if (cursorMode == Window::CursorMode::Default)
+                {
+                    ImGui::Text("Cursor mode: Default");
+                }
+                else if (cursorMode == Window::CursorMode::Hidden)
+                {
+                    ImGui::Text("Cursor mode: Hidden");
+                }
+                else
+                {
+                    ImGui::Text("Cursor mode: Disabled");
+                }
+            }
+            ImGui::End(); //Id_InfoWindow
+
+            ImGui::End(); //Id_Dockspace
 
             _imguiImpl->Render();
             ImGui::EndFrame();
@@ -190,6 +307,34 @@ namespace Kmplete
         bool IsWindowApplicationWindowFramebufferRefreshEventInvoked() const { return _windowApplicationWindowFramebufferRefreshEventInvoked; }
         bool IsWindowApplicationWindowFramebufferResizeEventInvoked() const { return _windowApplicationWindowFramebufferResizeEventInvoked; }
 
+        bool MousePositionIsNotZero() const
+        {
+            const auto cursorPosition = _mainWindow.GetCursorPosition();
+            return cursorPosition.x != 0 && cursorPosition.y != 0;
+        }
+
+        bool DPIIsNotZero() const
+        {
+            return _mainWindow.GetDPI() > 0;
+        }
+
+        bool DPIScaleIsNotZero() const
+        {
+            return _mainWindow.GetDPIScale() > 0.0f;
+        }
+
+        bool DefaultSizeIsNotZero() const
+        {
+            const auto size = _mainWindow.GetSize();
+            return size.x > 0 && size.y > 0;
+        }
+
+        bool DefaultWindowedSizeIsNotZero() const
+        {
+            const auto windowedSize = _mainWindow.GetWindowedSize();
+            return windowedSize.x > 0 && windowedSize.y > 0;
+        }
+
     protected:
         void OnEvent(Event& event)
         {
@@ -219,15 +364,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent&) { _keyReleaseEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { _keyCharEventInvoked = true; return true; }
 
-        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent& evt)
-        {
-            _mouseMoveEventInvoked = true;
-            _mouseX = static_cast<int>(evt.GetX());
-            _mouseY = static_cast<int>(evt.GetY());
-
-            return true;
-        }
-
+        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent&) { _mouseMoveEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { _mouseScrollEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt)
         {
@@ -326,9 +463,6 @@ namespace Kmplete
         bool _windowApplicationWindowIconifyEventInvoked = false;
         bool _windowApplicationWindowFramebufferRefreshEventInvoked = false;
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
-
-        int _mouseX = 0;
-        int _mouseY = 0;
     };
 }
 
@@ -370,6 +504,9 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
+    REQUIRE(application->DefaultSizeIsNotZero());
+    REQUIRE(application->DefaultWindowedSizeIsNotZero());
+
     application->Run();
 
     REQUIRE(application->IsKeyPressEventInvoked());
@@ -402,6 +539,10 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application->IsWindowApplicationWindowIconifyEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
+
+    REQUIRE(application->MousePositionIsNotZero());
+    REQUIRE(application->DPIIsNotZero());
+    REQUIRE(application->DPIScaleIsNotZero());
 
     application.reset();
 
