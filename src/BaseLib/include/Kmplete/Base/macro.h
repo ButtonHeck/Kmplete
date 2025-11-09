@@ -31,9 +31,9 @@
 #endif
 
 #if defined (KMP_COMPILER_MSVC)
-    #define KMP_COMPILER_DIAGNOSTIC_PUSH
-    #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)
-    #define KMP_COMPILER_DIAGNOSTIC_POP
+    #define KMP_COMPILER_DIAGNOSTIC_PUSH            _Pragma("warning(push)")
+    #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(warning(disable: value)))
+    #define KMP_COMPILER_DIAGNOSTIC_POP             _Pragma("warning(pop)")
 #elif defined (KMP_COMPILER_MINGW) || defined (KMP_COMPILER_GCC)
     #define KMP_COMPILER_DIAGNOSTIC_PUSH            _Pragma("GCC diagnostic push")
     #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(GCC diagnostic ignored value))

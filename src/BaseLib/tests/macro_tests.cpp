@@ -88,3 +88,48 @@ TEST_CASE("Dispatch VA_ARGS macro", "[core][macro]")
     REQUIRE(macroResult == 999);
 }
 //--------------------------------------------------------------------------
+
+TEST_CASE("Funcsig macro", "[core][macro]")
+{
+    const auto functionString = std::string(KMP_FUNC_SIG);
+    REQUIRE(!functionString.empty());
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Compiler diagnostics macros", "[core][macro]")
+{
+    KMP_COMPILER_DIAGNOSTIC_PUSH
+#if defined (KMP_COMPILER_MSVC)
+    KMP_COMPILER_DIAGNOSTIC_IGNORE(4189)
+#else
+    KMP_COMPILER_DIAGNOSTIC_IGNORE("-Wunused-variable")
+#endif
+    int unusedValueThatShouldEmitError = 23;
+    KMP_COMPILER_DIAGNOSTIC_POP
+    SUCCEED();
+}
+//--------------------------------------------------------------------------
+
+TEST_CASE("Packed structs", "[core][macro]")
+{
+    struct NonPackedStruct
+    {
+        bool a;
+        int b;
+        bool c;
+        int d;
+    };
+
+    KMP_BEGIN_PACKED_STRUCT(PackedStruct)
+    {
+        bool a;
+        int b;
+        bool c;
+        int d;
+    };
+    KMP_END_PACKED_STRUCT
+
+    REQUIRE((sizeof(NonPackedStruct) != sizeof(PackedStruct)));
+    REQUIRE(sizeof(PackedStruct) == 10UL);
+}
+//--------------------------------------------------------------------------
