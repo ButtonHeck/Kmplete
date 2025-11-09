@@ -491,14 +491,14 @@ TEST_CASE("Test window application", "[window_application][application][window][
 
     REQUIRE_FALSE(application->IsWindowCloseEventInvoked());
     REQUIRE_FALSE(application->IsWindowMoveEventInvoked());
-    //REQUIRE_FALSE(application->IsWindowResizeEventInvoked()); // TODO: window size callback not implemented
+    REQUIRE_FALSE(application->IsWindowResizeEventInvoked());
     REQUIRE_FALSE(application->IsWindowFocusEventInvoked());
     REQUIRE_FALSE(application->IsWindowIconifyEventInvoked());
     REQUIRE_FALSE(application->IsWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->IsWindowFramebufferResizeEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowCloseEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowMoveEventInvoked());
-    //REQUIRE_FALSE(application->IsWindowApplicationWindowResizeEventInvoked()); // TODO: window size callback not implemented
+    REQUIRE_FALSE(application->IsWindowApplicationWindowResizeEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowFocusEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowIconifyEventInvoked());
     REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
@@ -527,14 +527,14 @@ TEST_CASE("Test window application", "[window_application][application][window][
 
     REQUIRE(application->IsWindowCloseEventInvoked());
     REQUIRE(application->IsWindowMoveEventInvoked());
-    //REQUIRE(application->IsWindowResizeEventInvoked()); // TODO: window size callback not implemented
+    REQUIRE(application->IsWindowResizeEventInvoked());
     REQUIRE(application->IsWindowFocusEventInvoked());
     REQUIRE(application->IsWindowIconifyEventInvoked());
     REQUIRE(application->IsWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->IsWindowFramebufferResizeEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowCloseEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowMoveEventInvoked());
-    //REQUIRE(application->IsWindowApplicationWindowResizeEventInvoked()); // TODO: window size callback not implemented
+    REQUIRE(application->IsWindowApplicationWindowResizeEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFocusEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowIconifyEventInvoked());
     REQUIRE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());

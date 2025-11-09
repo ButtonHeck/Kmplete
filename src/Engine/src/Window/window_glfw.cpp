@@ -605,6 +605,15 @@ namespace Kmplete
             }
         );
 
+        glfwSetWindowSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
+            const NonNull<UserData*> userData = GetUserPointer(window);
+            if (userData->eventCallback)
+            {
+                WindowResizeEvent event(width, height);
+                userData->eventCallback(event);
+            }
+        });
+
         glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
             const NonNull<UserData*> userData = GetUserPointer(window);
             userData->size.x = width;
