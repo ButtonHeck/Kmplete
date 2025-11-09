@@ -28,6 +28,8 @@ namespace Kmplete
 
             void Stylize(float dpiScale) const;
 
+            virtual void CreateFontsTexture() = 0;
+
         protected:
             ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
 

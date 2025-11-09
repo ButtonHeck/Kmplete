@@ -21,6 +21,8 @@ namespace Kmplete
             ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
             virtual ~ImGuiImplementationGlfwOpenGL();
 
+            void CreateFontsTexture() override;
+
         private:
             void Initialize(NonNull<GLFWwindow*> window) const;
             void Finalize() const;

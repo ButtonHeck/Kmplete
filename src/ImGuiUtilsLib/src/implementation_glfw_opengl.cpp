@@ -28,6 +28,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void ImGuiImplementationGlfwOpenGL::CreateFontsTexture()
+        {
+            ImGui_ImplOpenGL3_CreateFontsTexture();
+        }
+        //--------------------------------------------------------------------------
+
         void ImGuiImplementationGlfwOpenGL::Initialize(NonNull<GLFWwindow*> window) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
