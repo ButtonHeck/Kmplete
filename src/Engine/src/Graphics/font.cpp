@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/font.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 
 #include <ft2build.h>
@@ -28,6 +29,11 @@ namespace Kmplete
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
+    //--------------------------------------------------------------------------
+
+    Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath)
+        : Font(sid, freetypeLib, Filesystem::ReadFileAsBinary(filepath))
+    {}
     //--------------------------------------------------------------------------
 
     Font::~Font()

@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/font_manager.h"
 #include "Kmplete/Base/platform.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -44,6 +45,12 @@ namespace Kmplete
         }
 
         return AddFontToStorage(fontSid, std::move(fontData));
+    }
+    //--------------------------------------------------------------------------
+
+    bool FontManager::CreateFontTTF(Utils::StringID fontSid, const Filepath& filepath)
+    {
+        return CreateFontTTF(fontSid, Filesystem::ReadFileAsBinary(filepath));
     }
     //--------------------------------------------------------------------------
 

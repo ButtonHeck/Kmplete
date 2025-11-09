@@ -21,6 +21,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(Font)
 
         KMP_API Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
+        KMP_API Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath);
         KMP_API ~Font();
 
         KMP_NODISCARD KMP_API const BinaryBuffer& GetBuffer() const noexcept;

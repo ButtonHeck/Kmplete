@@ -25,6 +25,7 @@ namespace Kmplete
         KMP_API ~FontManager();
 
         KMP_API bool CreateFontTTF(Utils::StringID fontSid, BinaryBuffer&& fontData);
+        KMP_API bool CreateFontTTF(Utils::StringID fontSid, const Filepath& filepath);
 
         KMP_NODISCARD KMP_API const Font& GetFont(Utils::StringID fontSid) const;
 
