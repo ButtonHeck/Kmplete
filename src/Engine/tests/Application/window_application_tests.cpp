@@ -48,6 +48,28 @@ namespace Kmplete
         {
             while (!_mainWindow.ShouldClose())
             {
+                if (_switchFontRequested)
+                {
+                    ImGuiIO& io = ImGui::GetIO();
+                    io.Fonts->Clear();
+
+                    if (_useDefaultFont)
+                    {
+                        const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
+                        _imguiImpl->AddFont(defaultFont.GetBuffer(), _mainWindow.GetDPIScale());
+                    }
+                    else
+                    {
+                        const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
+                        _imguiImpl->AddFont(fontPath, _mainWindow.GetDPIScale());
+                    }
+
+                    io.Fonts->Build();
+                    _imguiImpl->CreateFontsTexture();
+                    
+                    _switchFontRequested = false;
+                }
+
                 Render();
 
                 _mainWindow.ProcessEvents();
@@ -80,6 +102,12 @@ namespace Kmplete
             {
                 _mainWindow.SetCursor(*cursor);
             }
+        }
+
+        void SwitchFonts()
+        {
+            _switchFontRequested = true;
+            _useDefaultFont = !_useDefaultFont;
         }
 
         void Render()
@@ -214,6 +242,11 @@ namespace Kmplete
                 if (ImGui::Button("Set custom cursor"))
                 {
                     SetCustomCursor();
+                }
+
+                if (ImGui::Button("Switch fonts"))
+                {
+                    SwitchFonts();
                 }
             }
             ImGui::End(); //Id_ControlsWindow
@@ -432,6 +465,8 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
+        bool _switchFontRequested = false;
+        bool _useDefaultFont = true;
 
         bool _keyPressEventInvoked = false;
         bool _keyReleaseEventInvoked = false;
