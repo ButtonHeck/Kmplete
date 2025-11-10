@@ -13,10 +13,14 @@ namespace Kmplete
 
             if (ImGui::IsItemHovered(flags))
             {
+#if !defined (KMP_COMPILER_MSVC)
                 KMP_COMPILER_DIAGNOSTIC_PUSH
                 KMP_COMPILER_DIAGNOSTIC_IGNORE("-Wformat-security")
                 ImGui::SetTooltip(text);
                 KMP_COMPILER_DIAGNOSTIC_POP
+#else
+                ImGui::SetTooltip(text);
+#endif
             }
         }
         //--------------------------------------------------------------------------
