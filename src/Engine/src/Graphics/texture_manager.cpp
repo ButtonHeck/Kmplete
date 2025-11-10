@@ -137,6 +137,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    UInt64 TextureManager::TexturesCount() const noexcept
+    {
+        return _textures.size();
+    }
+    //--------------------------------------------------------------------------
+
     bool TextureManager::CreateErrorTexture()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);

@@ -30,6 +30,8 @@ namespace Kmplete
         KMP_API void RemoveTextures(const Vector<Utils::StringID>& sids);
         KMP_NODISCARD KMP_API bool RemoveTexture(Utils::StringID sid);
 
+        KMP_NODISCARD KMP_API UInt64 TexturesCount() const noexcept;
+
     private:
         KMP_NODISCARD bool CreateErrorTexture();
         KMP_NODISCARD bool TextureSidIsValid(Utils::StringID textureSid);

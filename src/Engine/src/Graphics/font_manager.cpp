@@ -105,6 +105,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    UInt64 FontManager::FontsCount() const noexcept
+    {
+        return _fonts.size();
+    }
+    //--------------------------------------------------------------------------
+
     void FontManager::Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);

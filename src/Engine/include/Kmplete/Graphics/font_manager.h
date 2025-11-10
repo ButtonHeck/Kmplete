@@ -32,6 +32,8 @@ namespace Kmplete
         KMP_API void RemoveFonts(const Vector<Utils::StringID>& sids);
         KMP_NODISCARD KMP_API bool RemoveFont(Utils::StringID sid);
 
+        KMP_NODISCARD KMP_API UInt64 FontsCount() const noexcept;
+
     private:
         void Initialize();
         void Finalize();
