@@ -68,6 +68,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    Font& FontManager::GetFont(Utils::StringID fontSid)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+        if (!_fonts.contains(fontSid))
+        {
+            KMP_LOG_ERROR("font '{}' not found", fontSid);
+            return *_fonts.at(DefaultFontSID);
+        }
+
+        return *_fonts.at(fontSid);
+    }
+    //--------------------------------------------------------------------------
+
     void FontManager::RemoveFonts(const Vector<Utils::StringID>& sids)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
