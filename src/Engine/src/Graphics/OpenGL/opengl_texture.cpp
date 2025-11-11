@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Math/math.h"
 
 #include <glad/glad.h>
 
@@ -57,7 +58,7 @@ namespace Kmplete
             dataFormat = GL_RED;
         }
 
-        const auto mipLevels = static_cast<GLsizei>(Texture::GetMipLevelsCount(width, height));
+        const auto mipLevels = static_cast<GLsizei>(Math::Log2(Math::Max(width, height)) + 1);
         glTextureStorage2D(handle, mipLevels, internalFormat, width, height);
         glTextureSubImage2D(handle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateTextureMipmap(handle);
