@@ -29,6 +29,4 @@ namespace Kmplete
     static constexpr auto UnknownStr = "Unknown";
     static constexpr auto DefaultAPIStr = OpenGLStr;
     //--------------------------------------------------------------------------
-
-    KMP_NODISCARD unsigned int GetMipLevelsCount(int width, int height) noexcept;
 }

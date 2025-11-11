@@ -57,7 +57,7 @@ namespace Kmplete
             dataFormat = GL_RED;
         }
 
-        const auto mipLevels = static_cast<GLsizei>(GetMipLevelsCount(width, height));
+        const auto mipLevels = static_cast<GLsizei>(Texture::GetMipLevelsCount(width, height));
         glTextureStorage2D(handle, mipLevels, internalFormat, width, height);
         glTextureSubImage2D(handle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateTextureMipmap(handle);

@@ -11,6 +11,9 @@ namespace Kmplete
     class Texture : public Assets::Asset
     {
     public:
+        KMP_NODISCARD KMP_API static unsigned int GetMipLevelsCount(int width, int height) noexcept;
+
+    public:
         KMP_API explicit Texture(Utils::StringID sid) noexcept;
         virtual ~Texture() = default;
 
