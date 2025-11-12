@@ -26,7 +26,9 @@ TEST_CASE("FontManager default font usage", "[graphics][font_manager][font]")
     REQUIRE_NOTHROW(fontManager.reset(new FontManager()));
     REQUIRE(fontManager);
 
-    REQUIRE_FALSE(fontManager->RemoveFont(FontManager::DefaultFontSID));
+    bool ok = false;
+    REQUIRE_NOTHROW(ok = fontManager->RemoveFont(FontManager::DefaultFontSID));
+    REQUIRE_FALSE(ok);
 
     Vector<Utils::StringID> sids;
     sids.push_back(FontManager::DefaultFontSID);
@@ -43,7 +45,6 @@ TEST_CASE("FontManager default font usage", "[graphics][font_manager][font]")
     REQUIRE(defaultFont->GetStringID() == FontManager::DefaultFontSID); // still default font
 
     BinaryBuffer garbageBuffer;
-    bool ok = false;
     REQUIRE_NOTHROW(ok = fontManager->CreateFontTTF(FontManager::DefaultFontSID, std::move(garbageBuffer)));
     REQUIRE_FALSE(ok);
 
