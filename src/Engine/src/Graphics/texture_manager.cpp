@@ -11,8 +11,6 @@
 
 namespace Kmplete
 {
-    static constexpr Utils::StringID ErrorTextureSID = 0;
-
     TextureManager::TextureManager(GraphicsBackendType backendType)
         : _backendType(backendType)
     {
@@ -87,6 +85,20 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     const Texture& TextureManager::GetTexture(Utils::StringID textureSid) const
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        if (!_textures.contains(textureSid))
+        {
+            KMP_LOG_WARN("texture '{}' not found", textureSid);
+            return *_textures.at(ErrorTextureSID);
+        }
+
+        return *_textures.at(textureSid);
+    }
+    //--------------------------------------------------------------------------
+
+    Texture& TextureManager::GetTexture(Utils::StringID textureSid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

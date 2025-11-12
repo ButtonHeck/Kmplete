@@ -18,6 +18,8 @@ namespace Kmplete
         KMP_LOG_CLASSNAME(TextureManager)
 
     public:
+        static constexpr Utils::StringID ErrorTextureSID = 0;
+
         KMP_DISABLE_COPY_MOVE(TextureManager)
 
         KMP_API explicit TextureManager(GraphicsBackendType backendType);
@@ -26,6 +28,7 @@ namespace Kmplete
         KMP_API bool CreateTexture(Utils::StringID textureSid, const Image& image);
 
         KMP_NODISCARD KMP_API const Texture& GetTexture(Utils::StringID textureSid) const;
+        KMP_NODISCARD KMP_API Texture& GetTexture(Utils::StringID textureSid);
 
         KMP_API void RemoveTextures(const Vector<Utils::StringID>& sids);
         KMP_NODISCARD KMP_API bool RemoveTexture(Utils::StringID sid);
