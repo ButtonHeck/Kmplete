@@ -6,6 +6,7 @@
 #if defined (KMP_WINDOW_BACKEND_GLFW)
     #include <GLFW/glfw3.h>
 #endif
+#include <stdexcept>
 
 
 namespace Kmplete
@@ -30,7 +31,7 @@ namespace Kmplete
         if (!ok)
         {
             KMP_LOG_ERROR("failed to initialize");
-            return;
+            throw std::runtime_error("OpenGLGraphicsBackend: failed to initialize");
         }
 
         KMP_LOG_INFO("vendor - {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
