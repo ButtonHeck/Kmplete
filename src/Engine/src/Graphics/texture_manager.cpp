@@ -33,14 +33,23 @@ namespace Kmplete
         }
 
         UPtr<Texture> texture = nullptr;
-        switch (_backendType)
-        {
-        case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(textureSid, filepath, flipVertically));
-            break;
 
-        default:
-            break;
+        try
+        {
+            switch (_backendType)
+            {
+            case GraphicsBackendType::OpenGL:
+                texture.reset(new OpenGLTexture(textureSid, filepath, flipVertically));
+                break;
+
+            default:
+                break;
+            }
+        }
+        catch (const std::exception&)
+        {
+            KMP_LOG_ERROR("failed to create texture '{}'", filepath);
+            return false;
         }
 
         if (!texture)
@@ -65,23 +74,14 @@ namespace Kmplete
         }
 
         UPtr<Texture> texture = nullptr;
-
-        try
+        switch (_backendType)
         {
-            switch (_backendType)
-            {
-            case GraphicsBackendType::OpenGL:
-                texture.reset(new OpenGLTexture(textureSid, image));
-                break;
+        case GraphicsBackendType::OpenGL:
+            texture.reset(new OpenGLTexture(textureSid, image));
+            break;
 
-            default:
-                break;
-            }
-        }
-        catch (const std::exception&)
-        {
-            KMP_LOG_ERROR("failed to create texture from image");
-            return false;
+        default:
+            break;
         }
 
         if (!texture)

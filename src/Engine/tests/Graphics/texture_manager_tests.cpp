@@ -142,5 +142,12 @@ TEST_CASE("TextureManager texture functions", "[graphics][texture_manager][textu
     REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, Filepath(KMP_TEST_ICON_PATH)));
     REQUIRE(ok);
     REQUIRE(textureManager->TexturesCount() == 2UL);
+
+    // adding texture from non-image filepath (removing first)
+    REQUIRE_NOTHROW(ok = textureManager->RemoveTexture(imageSid));
+    REQUIRE(ok);
+    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf")));
+    REQUIRE_FALSE(ok);
+    REQUIRE(textureManager->TexturesCount() == 1UL);
 }
 //--------------------------------------------------------------------------
