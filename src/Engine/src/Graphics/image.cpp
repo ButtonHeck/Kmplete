@@ -51,22 +51,22 @@ namespace Kmplete
 
     Image::Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels)
         : _loadedFromFile(false)
-        , _width(size.x)
-        , _height(size.y)
-        , _channels(channels)
+        , _width(0)
+        , _height(0)
+        , _channels(ImageChannels::Unknown)
         , _pixels(nullptr)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         if (pixelBuffer == nullptr)
         {
-            KMP_LOG_ERROR("given buffer is nullptr");
+            KMP_LOG_ERROR("given pixel buffer is nullptr");
             return;
         }
 
-        if (size.x <= 0 || size.y <= 0)
+        if (size.x <= 0 || size.y <= 0 || bufferSize <= 0)
         {
-            KMP_LOG_ERROR("size dimensions should not be negative, {}x{}", size.x, size.y);
+            KMP_LOG_ERROR("image size dimensions or buffer size should not be negative, {}x{}", size.x, size.y);
             return;
         }
 
@@ -76,6 +76,9 @@ namespace Kmplete
             return;
         }
 
+        _width = size.x;
+        _height = size.y;
+        _channels = channels;
         _pixels = new UByte[bufferSize];
         std::memcpy(_pixels, pixelBuffer, bufferSize);
 
@@ -87,10 +90,18 @@ namespace Kmplete
         : _loadedFromFile(true)
         , _width(0)
         , _height(0)
-        , _channels(desiredChannels)
+        , _channels(ImageChannels::Unknown)
         , _pixels(nullptr)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        if (fileBuffer == nullptr)
+        {
+            KMP_LOG_ERROR("given file buffer is nullptr");
+            return;
+        }
+
+        _channels = desiredChannels;
 
         stbi_set_flip_vertically_on_load(flipVertically);
 

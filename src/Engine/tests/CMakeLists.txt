@@ -79,6 +79,7 @@ set(Kmplete_WindowApplicationTests_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/Graphics/graphics_backend_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Graphics/font_manager_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Graphics/texture_manager_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/Graphics/image_tests.cpp
 )
 source_group("Graphics" FILES ${Kmplete_WindowApplicationTests_GRAPHICS})
 
