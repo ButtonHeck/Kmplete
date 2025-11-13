@@ -5,6 +5,7 @@
 
 #include <stb_image.h>
 #include <cstring>
+#include <stdexcept>
 
 
 namespace Kmplete
@@ -28,32 +29,23 @@ namespace Kmplete
         auto channelsInFile = 0;
         _pixels = stbi_load(Filesystem::ToGenericString(filepath).c_str(), &_width, &_height, &channelsInFile, desiredChannels);
 
-        if (channelsInFile != _channels)
-        {
-            if (desiredChannels != ImageChannels::Unknown)
-            {
-                KMP_LOG_WARN("'{}' channels mismatch (desired: {}, actual: {})", filepath, static_cast<int>(_channels), channelsInFile);
-            }
-
-            _channels = static_cast<ImageChannels>(channelsInFile);
-        }
-
         if (!_pixels)
         {
             KMP_LOG_ERROR("'{}' loading error", filepath);
+            throw std::runtime_error("Image: failed to load from file");
         }
-        else
-        {
-            KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
-        }
+
+        FixChannels(desiredChannels, channelsInFile);
+
+        KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
     }
     //--------------------------------------------------------------------------
 
     Image::Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels)
         : _loadedFromFile(false)
-        , _width(0)
-        , _height(0)
-        , _channels(ImageChannels::Unknown)
+        , _width(size.x)
+        , _height(size.y)
+        , _channels(channels)
         , _pixels(nullptr)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -61,24 +53,21 @@ namespace Kmplete
         if (pixelBuffer == nullptr)
         {
             KMP_LOG_ERROR("given pixel buffer is nullptr");
-            return;
+            throw std::runtime_error("Image: given pixel buffer is nullptr");
         }
 
         if (size.x <= 0 || size.y <= 0 || bufferSize <= 0)
         {
             KMP_LOG_ERROR("image size dimensions or buffer size should not be negative, {}x{}", size.x, size.y);
-            return;
+            throw std::runtime_error("Image: size dimensions or buffer size should not be negative");
         }
 
         if (bufferSize != size.x * size.y * channels)
         {
             KMP_LOG_ERROR("buffer size {} mismatch with other parameters, {}x{} ({} channels)", bufferSize, size.x, size.y, static_cast<int>(_channels));
-            return;
+            throw std::runtime_error("Image: buffer size mismatch with other parameters");
         }
 
-        _width = size.x;
-        _height = size.y;
-        _channels = channels;
         _pixels = new UByte[bufferSize];
         std::memcpy(_pixels, pixelBuffer, bufferSize);
 
@@ -90,7 +79,7 @@ namespace Kmplete
         : _loadedFromFile(true)
         , _width(0)
         , _height(0)
-        , _channels(ImageChannels::Unknown)
+        , _channels(desiredChannels)
         , _pixels(nullptr)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -98,34 +87,23 @@ namespace Kmplete
         if (fileBuffer == nullptr)
         {
             KMP_LOG_ERROR("given file buffer is nullptr");
-            return;
+            throw std::runtime_error("Image: given file buffer is nullptr");
         }
-
-        _channels = desiredChannels;
 
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
         _pixels = stbi_load_from_memory(fileBuffer, bufferSize, &_width, &_height, &channelsInFile, desiredChannels);
 
-        if (channelsInFile != _channels)
-        {
-            if (desiredChannels != ImageChannels::Unknown)
-            {
-                KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
-            }
-
-            _channels = static_cast<ImageChannels>(channelsInFile);
-        }
-
         if (!_pixels)
         {
             KMP_LOG_ERROR("file buffer loading error");
+            throw std::runtime_error("Image: failed to load from file buffer");
         }
-        else
-        {
-            KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
-        }
+
+        FixChannels(desiredChannels, channelsInFile);
+
+        KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
     }
     //--------------------------------------------------------------------------
 
@@ -202,6 +180,20 @@ namespace Kmplete
             {
                 delete[] _pixels;
             }
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void Image::FixChannels(ImageChannels desiredChannels, int channelsInFile)
+    {
+        if (channelsInFile != _channels)
+        {
+            if (desiredChannels != ImageChannels::Unknown)
+            {
+                KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
+            }
+
+            _channels = static_cast<ImageChannels>(channelsInFile);
         }
     }
     //--------------------------------------------------------------------------

@@ -32,6 +32,7 @@ namespace Kmplete
 
     private:
         void DeleteData();
+        void FixChannels(ImageChannels desiredChannels, int channelsInFile);
 
     private:
         bool _loadedFromFile;
