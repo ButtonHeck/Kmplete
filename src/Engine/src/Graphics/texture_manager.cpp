@@ -5,6 +5,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Core/assertion.h"
 
 #include <stdexcept>
 
@@ -56,6 +57,7 @@ namespace Kmplete
     bool TextureManager::CreateTexture(Utils::StringID textureSid, const Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+        KMP_ASSERT(image.GetPixels());
 
         if (!TextureSidIsValid(textureSid))
         {
@@ -63,14 +65,23 @@ namespace Kmplete
         }
 
         UPtr<Texture> texture = nullptr;
-        switch (_backendType)
-        {
-        case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(textureSid, image));
-            break;
 
-        default:
-            break;
+        try
+        {
+            switch (_backendType)
+            {
+            case GraphicsBackendType::OpenGL:
+                texture.reset(new OpenGLTexture(textureSid, image));
+                break;
+
+            default:
+                break;
+            }
+        }
+        catch (const std::exception&)
+        {
+            KMP_LOG_ERROR("failed to create texture from image");
+            return false;
         }
 
         if (!texture)
@@ -165,14 +176,22 @@ namespace Kmplete
             return false;
         }
 
-        switch (_backendType)
+        try
         {
-        case GraphicsBackendType::OpenGL:
-            _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(ErrorTextureSID, Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
-            break;
+            switch (_backendType)
+            {
+            case GraphicsBackendType::OpenGL:
+                _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(ErrorTextureSID, Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
+        }
+        catch (const std::exception&)
+        {
+            KMP_LOG_ERROR("error texture failed to load");
+            return false;
         }
 
         if (!_textures.contains(ErrorTextureSID))

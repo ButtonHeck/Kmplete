@@ -13,17 +13,25 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Image img(filepath, ImageChannels::RGBAlpha);
-        GLFWimage cursorImg{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
+        try
+        {
+            Image img(filepath, ImageChannels::RGBAlpha);
+            GLFWimage cursorImg{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
 
-        if (cursorImg.pixels)
-        {
-            _cursor = glfwCreateCursor(&cursorImg, hotspot.x, hotspot.y);
+            if (cursorImg.pixels)
+            {
+                _cursor = glfwCreateCursor(&cursorImg, hotspot.x, hotspot.y);
+            }
+            else
+            {
+                KMP_LOG_WARN("cannot create cursor object from '{}'", filepath);
+                throw std::runtime_error("WindowCursorGlfw object creation failed");
+            }
         }
-        else
+        catch (const std::exception&)
         {
-            KMP_LOG_WARN("cannot create cursor from '{}'", filepath);
-            throw std::runtime_error("WindowCursorGlfw creation failed");
+            KMP_LOG_WARN("cannot create cursor image from '{}'", filepath);
+            throw std::runtime_error("WindowCursorGlfw image creation failed");
         }
     }
     //--------------------------------------------------------------------------

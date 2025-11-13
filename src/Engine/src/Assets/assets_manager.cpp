@@ -250,8 +250,15 @@ namespace Kmplete
 
             if (assetHeader.type == AssetType::Texture)
             {
-                const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                _textureManager->CreateTexture(assetHeader.sid, assetImage);
+                try
+                {
+                    const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
+                    _textureManager->CreateTexture(assetHeader.sid, assetImage);
+                }
+                catch (const std::exception& e)
+                {
+                    KMP_LOG_ERROR("failed to create texture: {}", e.what());
+                }
             }
             else if (assetHeader.type == AssetType::FontTTF)
             {

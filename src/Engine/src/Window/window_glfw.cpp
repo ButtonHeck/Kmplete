@@ -255,6 +255,7 @@ namespace Kmplete
     void WindowGlfw::SetIcon(const Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_ASSERT(image.GetPixels());
 
         GLFWimage icon{ image.GetWidth(), image.GetHeight(), image.GetPixels() };
 

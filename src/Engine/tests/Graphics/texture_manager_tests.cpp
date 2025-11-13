@@ -70,11 +70,6 @@ TEST_CASE("TextureManager default texture usage", "[graphics][texture_manager][t
     REQUIRE_NOTHROW(errorTexture = &(textureManager->GetTexture(garbageSid)));
     REQUIRE(errorTexture->GetStringID() == TextureManager::ErrorTextureSID); // still error texture
 
-    BinaryBuffer garbageBuffer;
-    Image garbageImage(garbageBuffer.data(), 0, ImageChannels::RGB);
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(TextureManager::ErrorTextureSID, garbageImage));
-    REQUIRE_FALSE(ok);
-
     Filepath garbagePath;
     REQUIRE_NOTHROW(ok = textureManager->CreateTexture(TextureManager::ErrorTextureSID, garbagePath));
     REQUIRE_FALSE(ok);

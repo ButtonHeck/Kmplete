@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Math/math.h"
+#include "Kmplete/Core/assertion.h"
 
 #include <glad/glad.h>
 
@@ -13,8 +14,15 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Image image(filepath, flipVertically);
-        LoadFromImage(image);
+        try
+        {
+            Image image(filepath, flipVertically);
+            LoadFromImage(image);
+        }
+        catch (const std::exception&)
+        {
+            throw;
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -22,6 +30,7 @@ namespace Kmplete
         : Texture(sid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+        KMP_ASSERT(image.GetPixels());
 
         LoadFromImage(image);
     }
@@ -30,11 +39,7 @@ namespace Kmplete
     void OpenGLTexture::LoadFromImage(const Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-        GLuint handle;
-        glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
-        glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO abstraction
-        glTextureParameteri(handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // TODO abstraction
+        KMP_ASSERT(image.GetPixels());
 
         GLenum internalFormat = GL_RGBA8;
         GLenum dataFormat = GL_RGBA;
@@ -42,6 +47,7 @@ namespace Kmplete
         const auto width = image.GetWidth();
         const auto height = image.GetHeight();
         const auto data = image.GetPixels();
+
         if (imageChannels == ImageChannels::RGBAlpha)
         {
             internalFormat = GL_RGBA8;
@@ -59,6 +65,11 @@ namespace Kmplete
         }
 
         const auto mipLevels = static_cast<GLsizei>(Math::Log2(Math::Max(width, height)) + 1);
+
+        GLuint handle;
+        glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
+        glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO abstraction
+        glTextureParameteri(handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // TODO abstraction
         glTextureStorage2D(handle, mipLevels, internalFormat, width, height);
         glTextureSubImage2D(handle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateTextureMipmap(handle);
