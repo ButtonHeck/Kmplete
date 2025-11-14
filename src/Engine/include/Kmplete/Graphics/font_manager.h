@@ -24,22 +24,22 @@ namespace Kmplete
         KMP_API FontManager();
         KMP_API ~FontManager();
 
-        KMP_API bool CreateFontTTF(Utils::StringID fontSid, BinaryBuffer&& fontData);
-        KMP_API bool CreateFontTTF(Utils::StringID fontSid, const Filepath& filepath);
+        KMP_API bool CreateFontAsset(Utils::StringID fontSid, BinaryBuffer&& fontData);
+        KMP_API bool CreateFontAsset(Utils::StringID fontSid, const Filepath& filepath);
 
-        KMP_NODISCARD KMP_API const Assets::FontAsset& GetFont(Utils::StringID fontSid) const;
-        KMP_NODISCARD KMP_API Assets::FontAsset& GetFont(Utils::StringID fontSid);
+        KMP_NODISCARD KMP_API const Assets::FontAsset& GetFontAsset(Utils::StringID fontSid) const;
+        KMP_NODISCARD KMP_API Assets::FontAsset& GetFontAsset(Utils::StringID fontSid);
 
-        KMP_API void RemoveFonts(const Vector<Utils::StringID>& sids);
-        KMP_NODISCARD KMP_API bool RemoveFont(Utils::StringID sid);
+        KMP_API void RemoveFontsAssets(const Vector<Utils::StringID>& sids);
+        KMP_NODISCARD KMP_API bool RemoveFontAsset(Utils::StringID sid);
 
-        KMP_NODISCARD KMP_API UInt64 FontsCount() const noexcept;
+        KMP_NODISCARD KMP_API UInt64 FontsAssetsCount() const noexcept;
 
     private:
         void Initialize();
         void Finalize();
 
-        KMP_NODISCARD bool CreateDefaultFont();
+        KMP_NODISCARD bool CreateDefaultFontAsset();
         KMP_NODISCARD bool AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData);
 
     private:

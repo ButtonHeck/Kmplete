@@ -53,25 +53,25 @@ TEST_CASE("TextureManager default texture usage", "[graphics][texture_manager][t
     REQUIRE(textureManager);
 
     bool ok = false;
-    REQUIRE_NOTHROW(ok = textureManager->RemoveTexture(TextureManager::ErrorTextureSID));
+    REQUIRE_NOTHROW(ok = textureManager->RemoveTextureAsset(TextureManager::ErrorTextureSID));
     REQUIRE_FALSE(ok);
 
     Vector<Utils::StringID> sids;
     sids.push_back(TextureManager::ErrorTextureSID);
-    REQUIRE_NOTHROW(textureManager->RemoveTextures(sids));
-    const auto texturesCount = textureManager->TexturesCount();
+    REQUIRE_NOTHROW(textureManager->RemoveTexturesAssets(sids));
+    const auto texturesCount = textureManager->TexturesAssetsCount();
     REQUIRE(texturesCount == 1UL); // error texture not deleted
 
-    const Texture* errorTexture = nullptr;
-    REQUIRE_NOTHROW(errorTexture = &(textureManager->GetTexture(TextureManager::ErrorTextureSID)));
-    REQUIRE(errorTexture->GetStringID() == TextureManager::ErrorTextureSID);
+    const Assets::TextureAsset* errorTextureAsset = nullptr;
+    REQUIRE_NOTHROW(errorTextureAsset = &(textureManager->GetTextureAsset(TextureManager::ErrorTextureSID)));
+    REQUIRE(errorTextureAsset->GetStringID() == TextureManager::ErrorTextureSID);
 
     const Utils::StringID garbageSid = 1234;
-    REQUIRE_NOTHROW(errorTexture = &(textureManager->GetTexture(garbageSid)));
-    REQUIRE(errorTexture->GetStringID() == TextureManager::ErrorTextureSID); // still error texture
+    REQUIRE_NOTHROW(errorTextureAsset = &(textureManager->GetTextureAsset(garbageSid)));
+    REQUIRE(errorTextureAsset->GetStringID() == TextureManager::ErrorTextureSID); // still error texture
 
     Filepath garbagePath;
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(TextureManager::ErrorTextureSID, garbagePath));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(TextureManager::ErrorTextureSID, garbagePath));
     REQUIRE_FALSE(ok);
 }
 //--------------------------------------------------------------------------
@@ -88,66 +88,66 @@ TEST_CASE("TextureManager texture functions", "[graphics][texture_manager][textu
     const auto image = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
     const Utils::StringID imageSid = 12345UL;
     bool ok = false;
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, image));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(imageSid, image));
     REQUIRE(ok);
-    REQUIRE(textureManager->TexturesCount() == 2UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL);
 
     // checking texture properties
     UInt64 textureHandle = 0UL;
-    Texture* texture = nullptr;
-    REQUIRE_NOTHROW(texture = &(textureManager->GetTexture(imageSid)));
-    REQUIRE(texture);
-    REQUIRE(texture->GetStringID() == imageSid);
+    Assets::TextureAsset* textureAsset = nullptr;
+    REQUIRE_NOTHROW(textureAsset = &(textureManager->GetTextureAsset(imageSid)));
+    REQUIRE(textureAsset);
+    REQUIRE(textureAsset->GetStringID() == imageSid);
     void* textureRawHandlePtr = nullptr;
-    REQUIRE_NOTHROW(textureRawHandlePtr = texture->GetHandle());
+    REQUIRE_NOTHROW(textureRawHandlePtr = textureAsset->GetTexture().GetHandle());
     textureHandle = (reinterpret_cast<UInt64>(textureRawHandlePtr));
     REQUIRE(textureHandle != 0UL);
 
     // try adding same texture from image
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, image));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(imageSid, image));
     REQUIRE_FALSE(ok);
-    REQUIRE(textureManager->TexturesCount() == 2UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL);
 
     // try adding same texture from filepath
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, Filepath(KMP_TEST_ICON_PATH)));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(imageSid, Filepath(KMP_TEST_ICON_PATH)));
     REQUIRE_FALSE(ok);
-    REQUIRE(textureManager->TexturesCount() == 2UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL);
 
     // try remove texture (single sid)
-    REQUIRE_NOTHROW(ok = textureManager->RemoveTexture(imageSid));
+    REQUIRE_NOTHROW(ok = textureManager->RemoveTextureAsset(imageSid));
     REQUIRE(ok);
-    REQUIRE(textureManager->TexturesCount() == 1UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 1UL);
 
     // add texture again
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, image));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(imageSid, image));
     REQUIRE(ok);
-    REQUIRE(textureManager->TexturesCount() == 2UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL);
 
     // try remove texture (invalid sid)
-    REQUIRE_NOTHROW(ok = textureManager->RemoveTexture(8888));
+    REQUIRE_NOTHROW(ok = textureManager->RemoveTextureAsset(8888));
     REQUIRE_FALSE(ok);
-    REQUIRE(textureManager->TexturesCount() == 2UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL);
 
     // try remove texture (vector of sids)
     Vector<Utils::StringID> sids;
     sids.push_back(8888);
-    REQUIRE_NOTHROW(textureManager->RemoveTextures(sids));
-    REQUIRE(textureManager->TexturesCount() == 2UL); // not deleted
+    REQUIRE_NOTHROW(textureManager->RemoveTexturesAssets(sids));
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL); // not deleted
 
     sids.push_back(imageSid);
-    REQUIRE_NOTHROW(textureManager->RemoveTextures(sids));
-    REQUIRE(textureManager->TexturesCount() == 1UL); // deleted
+    REQUIRE_NOTHROW(textureManager->RemoveTexturesAssets(sids));
+    REQUIRE(textureManager->TexturesAssetsCount() == 1UL); // deleted
 
     // adding texture from filepath
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, Filepath(KMP_TEST_ICON_PATH)));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(imageSid, Filepath(KMP_TEST_ICON_PATH)));
     REQUIRE(ok);
-    REQUIRE(textureManager->TexturesCount() == 2UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 2UL);
 
     // adding texture from non-image filepath (removing first)
-    REQUIRE_NOTHROW(ok = textureManager->RemoveTexture(imageSid));
+    REQUIRE_NOTHROW(ok = textureManager->RemoveTextureAsset(imageSid));
     REQUIRE(ok);
-    REQUIRE_NOTHROW(ok = textureManager->CreateTexture(imageSid, Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf")));
+    REQUIRE_NOTHROW(ok = textureManager->CreateTextureAsset(imageSid, Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf")));
     REQUIRE_FALSE(ok);
-    REQUIRE(textureManager->TexturesCount() == 1UL);
+    REQUIRE(textureManager->TexturesAssetsCount() == 1UL);
 }
 //--------------------------------------------------------------------------

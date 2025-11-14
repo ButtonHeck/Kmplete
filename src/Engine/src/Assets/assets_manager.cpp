@@ -116,12 +116,12 @@ namespace Kmplete
 
             if (!textureSidsToRemove.empty())
             {
-                _textureManager->RemoveTextures(textureSidsToRemove);
+                _textureManager->RemoveTexturesAssets(textureSidsToRemove);
             }
 
             if (!fontsSidsToRemove.empty())
             {
-                _fontManager->RemoveFonts(fontsSidsToRemove);
+                _fontManager->RemoveFontsAssets(fontsSidsToRemove);
             }
 
             return true;
@@ -253,7 +253,7 @@ namespace Kmplete
                 try
                 {
                     const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                    _textureManager->CreateTexture(assetHeader.sid, assetImage);
+                    _textureManager->CreateTextureAsset(assetHeader.sid, assetImage);
                 }
                 catch (const std::exception& e)
                 {
@@ -262,7 +262,7 @@ namespace Kmplete
             }
             else if (assetHeader.type == AssetType::FontTTF)
             {
-                _fontManager->CreateFontTTF(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
+                _fontManager->CreateFontAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
             }
 
             return true;

@@ -3,15 +3,14 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/nullability.h"
-#include "Kmplete/Assets/asset.h"
 
 
 namespace Kmplete
 {
-    class Texture : public Assets::Asset
+    class Texture
     {
     public:
-        KMP_API explicit Texture(Utils::StringID sid) noexcept;
+        KMP_API Texture() noexcept;
         virtual ~Texture() = default;
 
         KMP_NODISCARD KMP_API Nullable<void*> GetHandle() const;

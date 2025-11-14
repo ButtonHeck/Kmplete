@@ -39,7 +39,7 @@ namespace Kmplete
             const auto scale = _mainWindow.GetDPIScale();
 
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
-            const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
+            const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFontAsset(FontManager::DefaultFontSID);
             _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
             _imguiImpl->Stylize(scale);
         }
@@ -55,8 +55,8 @@ namespace Kmplete
 
                     if (_useDefaultFont)
                     {
-                        const auto& defaultFont = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
-                        _imguiImpl->AddFont(defaultFont.GetFont().GetBuffer(), _mainWindow.GetDPIScale());
+                        const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFontAsset(FontManager::DefaultFontSID);
+                        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale());
                     }
                     else
                     {
@@ -447,7 +447,7 @@ namespace Kmplete
             _imguiImpl.reset();
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
 
-            const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFont(FontManager::DefaultFontSID);
+            const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFontAsset(FontManager::DefaultFontSID);
             _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
             _imguiImpl->Stylize(scale);
 

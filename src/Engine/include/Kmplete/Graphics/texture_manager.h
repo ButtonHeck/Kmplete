@@ -4,7 +4,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Utils/string_id.h"
-#include "Kmplete/Graphics/texture.h"
+#include "Kmplete/Assets/texture_asset.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -24,24 +24,24 @@ namespace Kmplete
 
         KMP_API explicit TextureManager(GraphicsBackendType backendType);
 
-        KMP_API bool CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically = false);
-        KMP_API bool CreateTexture(Utils::StringID textureSid, const Image& image);
+        KMP_API bool CreateTextureAsset(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically = false);
+        KMP_API bool CreateTextureAsset(Utils::StringID textureSid, const Image& image);
 
-        KMP_NODISCARD KMP_API const Texture& GetTexture(Utils::StringID textureSid) const;
-        KMP_NODISCARD KMP_API Texture& GetTexture(Utils::StringID textureSid);
+        KMP_NODISCARD KMP_API const Assets::TextureAsset& GetTextureAsset(Utils::StringID textureSid) const;
+        KMP_NODISCARD KMP_API Assets::TextureAsset& GetTextureAsset(Utils::StringID textureSid);
 
-        KMP_API void RemoveTextures(const Vector<Utils::StringID>& sids);
-        KMP_NODISCARD KMP_API bool RemoveTexture(Utils::StringID sid);
+        KMP_API void RemoveTexturesAssets(const Vector<Utils::StringID>& sids);
+        KMP_NODISCARD KMP_API bool RemoveTextureAsset(Utils::StringID sid);
 
-        KMP_NODISCARD KMP_API UInt64 TexturesCount() const noexcept;
+        KMP_NODISCARD KMP_API UInt64 TexturesAssetsCount() const noexcept;
 
     private:
-        KMP_NODISCARD bool CreateErrorTexture();
+        KMP_NODISCARD bool CreateErrorTextureAsset();
         KMP_NODISCARD bool TextureSidIsValid(Utils::StringID textureSid);
 
     private:
         const GraphicsBackendType _backendType;
-        HashMap<Utils::StringID, UPtr<Texture>> _textures;
+        HashMap<Utils::StringID, UPtr<Assets::TextureAsset>> _textures;
     };
     //--------------------------------------------------------------------------
 }

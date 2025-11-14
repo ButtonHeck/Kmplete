@@ -3,9 +3,8 @@
 
 namespace Kmplete
 {
-    Texture::Texture(Utils::StringID sid) noexcept
-        : Assets::Asset(Assets::AssetType::Texture, sid)
-        , _handle(0ULL)
+    Texture::Texture() noexcept
+        : _handle(0ULL)
     {}
     //--------------------------------------------------------------------------
 

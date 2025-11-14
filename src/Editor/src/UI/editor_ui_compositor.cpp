@@ -87,8 +87,8 @@ namespace Kmplete
         const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
 
         static const ImTextureID languageIcons[] = {
-            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTexture("_flag_usa"_sid).GetHandle()),
-            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTexture("_flag_russian"_sid).GetHandle())
+            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTextureAsset("_flag_usa"_sid).GetTexture().GetHandle()),
+            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTextureAsset("_flag_russian"_sid).GetTexture().GetHandle())
         };
 
         int languageIndex = 0;

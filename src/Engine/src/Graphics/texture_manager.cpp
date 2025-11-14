@@ -1,6 +1,6 @@
 #include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Graphics/texture_factory.h"
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Internal/error_texture_data.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
@@ -15,7 +15,7 @@ namespace Kmplete
     TextureManager::TextureManager(GraphicsBackendType backendType)
         : _backendType(backendType)
     {
-        if (!CreateErrorTexture())
+        if (!CreateErrorTextureAsset())
         {
             KMP_LOG_CRITICAL("error texture loading failed");
             throw std::runtime_error("TextureManager: error texture loading failed");
@@ -23,7 +23,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
+    bool TextureManager::CreateTextureAsset(Utils::StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -32,38 +32,19 @@ namespace Kmplete
             return false;
         }
 
-        UPtr<Texture> texture = nullptr;
-
-        try
-        {
-            switch (_backendType)
-            {
-            case GraphicsBackendType::OpenGL:
-                texture.reset(new OpenGLTexture(textureSid, filepath, flipVertically));
-                break;
-
-            default:
-                break;
-            }
-        }
-        catch (const std::exception&)
+        auto* texture = TextureFactory::CreateTexture(_backendType, filepath, flipVertically);
+        if (texture == nullptr)
         {
             KMP_LOG_ERROR("failed to create texture '{}'", filepath);
             return false;
         }
 
-        if (!texture)
-        {
-            KMP_LOG_ERROR("failed to create texture '{}'", filepath);
-            return false;
-        }
-
-        _textures[textureSid] = std::move(texture);
-        return true;
+        const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture));
+        return hasEmplaced;
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateTexture(Utils::StringID textureSid, const Image& image)
+    bool TextureManager::CreateTextureAsset(Utils::StringID textureSid, const Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
         KMP_ASSERT(image.GetPixels());
@@ -73,29 +54,19 @@ namespace Kmplete
             return false;
         }
 
-        UPtr<Texture> texture = nullptr;
-        switch (_backendType)
-        {
-        case GraphicsBackendType::OpenGL:
-            texture.reset(new OpenGLTexture(textureSid, image));
-            break;
-
-        default:
-            break;
-        }
-
-        if (!texture)
+        auto* texture = TextureFactory::CreateTexture(_backendType, image);
+        if (texture == nullptr)
         {
             KMP_LOG_ERROR("failed to create texture from image");
             return false;
         }
 
-        _textures[textureSid] = std::move(texture);
-        return true;
+        const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture));
+        return hasEmplaced;
     }
     //--------------------------------------------------------------------------
 
-    const Texture& TextureManager::GetTexture(Utils::StringID textureSid) const
+    const Assets::TextureAsset& TextureManager::GetTextureAsset(Utils::StringID textureSid) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -109,7 +80,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Texture& TextureManager::GetTexture(Utils::StringID textureSid)
+    Assets::TextureAsset& TextureManager::GetTextureAsset(Utils::StringID textureSid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -123,14 +94,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void TextureManager::RemoveTextures(const Vector<Utils::StringID>& sids)
+    void TextureManager::RemoveTexturesAssets(const Vector<Utils::StringID>& sids)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         auto ok = true;
         for (const auto& sid : sids)
         {
-            ok &= RemoveTexture(sid);
+            ok &= RemoveTextureAsset(sid);
         }
 
         if (!ok)
@@ -140,7 +111,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::RemoveTexture(Utils::StringID sid)
+    bool TextureManager::RemoveTextureAsset(Utils::StringID sid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -160,13 +131,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    UInt64 TextureManager::TexturesCount() const noexcept
+    UInt64 TextureManager::TexturesAssetsCount() const noexcept
     {
         return _textures.size();
     }
     //--------------------------------------------------------------------------
 
-    bool TextureManager::CreateErrorTexture()
+    bool TextureManager::CreateErrorTextureAsset()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -176,31 +147,15 @@ namespace Kmplete
             return false;
         }
 
-        try
-        {
-            switch (_backendType)
-            {
-            case GraphicsBackendType::OpenGL:
-                _textures[ErrorTextureSID] = CreateUPtr<OpenGLTexture>(ErrorTextureSID, Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
-                break;
-
-            default:
-                break;
-            }
-        }
-        catch (const std::exception&)
+        auto* texture = TextureFactory::CreateTexture(_backendType, Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
+        if (texture == nullptr)
         {
             KMP_LOG_ERROR("error texture failed to load");
             return false;
         }
 
-        if (!_textures.contains(ErrorTextureSID))
-        {
-            KMP_LOG_ERROR("error texture failed to load");
-            return false;
-        }
-
-        return true;
+        const auto [iterator, hasEmplaced] = _textures.emplace(ErrorTextureSID, CreateUPtr<Assets::TextureAsset>(ErrorTextureSID, texture));
+        return hasEmplaced;
     }
     //--------------------------------------------------------------------------
 

@@ -70,6 +70,7 @@ set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_factory.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
@@ -77,6 +78,7 @@ set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font_manager.cpp
 )
@@ -108,9 +110,11 @@ set(Kmplete_ASSETS
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/asset.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/font_asset.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/texture_asset.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Assets/assets_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Assets/asset.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Assets/font_asset.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Assets/texture_asset.cpp
 )
 source_group("Assets" FILES ${Kmplete_ASSETS})
 
