@@ -21,7 +21,7 @@ namespace Kmplete
 
         KMP_API Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
         KMP_API Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath);
-        KMP_API virtual ~Font();
+        KMP_API ~Font();
 
         KMP_NODISCARD KMP_API const BinaryBuffer& GetBuffer() const noexcept;
 

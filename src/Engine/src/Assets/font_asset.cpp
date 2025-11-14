@@ -6,15 +6,27 @@ namespace Kmplete
     namespace Assets
     {
         FontAsset::FontAsset(Utils::StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
-            : Font(freetypeLib, std::move(fontBuffer))
-            , Asset(AssetType::FontTTF, sid)
+            : Asset(AssetType::FontTTF, sid)
+            , _font(freetypeLib, std::move(fontBuffer))
         {}
         //--------------------------------------------------------------------------
 
         FontAsset::FontAsset(Utils::StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath)
-            : Font(freetypeLib, filepath)
-            , Asset(AssetType::FontTTF, sid)
+            : Asset(AssetType::FontTTF, sid)
+            , _font(freetypeLib, filepath)
         {}
+        //--------------------------------------------------------------------------
+
+        const Font& FontAsset::GetFont() const noexcept
+        {
+            return _font;
+        }
+        //--------------------------------------------------------------------------
+
+        Font& FontAsset::GetFont() noexcept
+        {
+            return _font;
+        }
         //--------------------------------------------------------------------------
     }
 }

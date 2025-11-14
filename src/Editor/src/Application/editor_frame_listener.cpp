@@ -166,11 +166,11 @@ namespace Kmplete
 
     void EditorFrameListener::AddImGuiFonts(float scale)
     {
-        const auto& defaultFont = _assetsManager.GetFontManager().GetFont("OpenSans-Regular.ttf"_sid);
-        _imguiImpl->AddFont(defaultFont.GetBuffer(), scale);
+        const auto& defaultFontAsset = _assetsManager.GetFontManager().GetFont("OpenSans-Regular.ttf"_sid);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
 
-        const auto& iconsFont = _assetsManager.GetFontManager().GetFont("forkawesome-webfont.ttf"_sid);
-        _imguiImpl->AddIconsFont(iconsFont.GetBuffer(), scale);
+        const auto& iconsFontAsset = _assetsManager.GetFontManager().GetFont("forkawesome-webfont.ttf"_sid);
+        _imguiImpl->AddIconsFont(iconsFontAsset.GetFont().GetBuffer(), scale);
     }
     //--------------------------------------------------------------------------
 

@@ -74,11 +74,11 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
     REQUIRE(font);
     REQUIRE(font->GetStringID() == fontSid);
     
-    BinaryBuffer fontBuffer = font->GetBuffer();
+    BinaryBuffer fontBuffer = font->GetFont().GetBuffer();
     REQUIRE(!fontBuffer.empty());
 
     {
-        auto& fontParams = font->GetParameters();
+        auto& fontParams = font->GetFont().GetParameters();
         REQUIRE(!fontParams.familyName.empty());
         REQUIRE(fontParams.numGlyphs > 0);
         REQUIRE(fontParams.unitsPerEM > 0);
@@ -101,7 +101,7 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
     REQUIRE_FALSE(ok);
     REQUIRE(fontManager->FontsCount() == 2UL);
 
-    fontBuffer = font->GetBuffer();
+    fontBuffer = font->GetFont().GetBuffer();
 
     // try remove font (single sid)
     REQUIRE_NOTHROW(ok = fontManager->RemoveFont(fontSid));
@@ -139,11 +139,11 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
     REQUIRE(font);
     REQUIRE(font->GetStringID() == fontSid);
 
-    fontBuffer = font->GetBuffer();
+    fontBuffer = font->GetFont().GetBuffer();
     REQUIRE(!fontBuffer.empty());
 
     {
-        auto& fontParams = font->GetParameters();
+        auto& fontParams = font->GetFont().GetParameters();
         REQUIRE(!fontParams.familyName.empty());
         REQUIRE(fontParams.numGlyphs > 0);
         REQUIRE(fontParams.unitsPerEM > 0);
@@ -156,18 +156,18 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
         REQUIRE(fontParams.sizeMetrics.height != 0);
 
         // set font pixel size
-        REQUIRE_NOTHROW(ok = font->SetPixelSize(20));
+        REQUIRE_NOTHROW(ok = font->GetFont().SetPixelSize(20));
         REQUIRE(ok);
         REQUIRE(fontParams.sizeMetrics.xPixelsPerEM == 20);
         REQUIRE(fontParams.sizeMetrics.yPixelsPerEM == 20);
 
-        REQUIRE_NOTHROW(ok = font->SetPixelSize(0));
+        REQUIRE_NOTHROW(ok = font->GetFont().SetPixelSize(0));
         REQUIRE(ok);
         REQUIRE(fontParams.sizeMetrics.xPixelsPerEM != 20);
         REQUIRE(fontParams.sizeMetrics.yPixelsPerEM != 20);
 
         // set font point size (default dpi)
-        REQUIRE_NOTHROW(ok = font->SetPointSize(20));
+        REQUIRE_NOTHROW(ok = font->GetFont().SetPointSize(20));
         REQUIRE(ok);
         const auto defaultDpiXPixelsPerEM = fontParams.sizeMetrics.xPixelsPerEM;
         const auto defaultDpiYPixelsPerEM = fontParams.sizeMetrics.yPixelsPerEM;
@@ -175,7 +175,7 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
         REQUIRE(fontParams.sizeMetrics.yPixelsPerEM > 0);
 
         // set font point size (custom dpi)
-        REQUIRE_NOTHROW(ok = font->SetPointSize(20, 108));
+        REQUIRE_NOTHROW(ok = font->GetFont().SetPointSize(20, 108));
         REQUIRE(ok);
         REQUIRE(fontParams.sizeMetrics.xPixelsPerEM > 0);
         REQUIRE(fontParams.sizeMetrics.xPixelsPerEM != defaultDpiXPixelsPerEM);
