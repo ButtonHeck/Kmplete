@@ -54,7 +54,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const Font& FontManager::GetFont(Utils::StringID fontSid) const
+    const Assets::FontAsset& FontManager::GetFont(Utils::StringID fontSid) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -68,7 +68,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Font& FontManager::GetFont(Utils::StringID fontSid)
+    Assets::FontAsset& FontManager::GetFont(Utils::StringID fontSid)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -208,7 +208,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Font>(sid, *_freetypeLibInstance, std::move(fontData)));
+        const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Assets::FontAsset>(sid, *_freetypeLibInstance, std::move(fontData)));
         return hasEmplaced;
     }
     //--------------------------------------------------------------------------

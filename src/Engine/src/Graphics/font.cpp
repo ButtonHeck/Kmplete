@@ -11,10 +11,9 @@ namespace Kmplete
 {
     static constexpr auto DefaultFontPixelSize = 18;
 
-    Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
-        : Assets::Asset(Assets::AssetType::FontTTF, sid)
-          KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
-        , _freetypeFace(nullptr)
+    Font::Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
+        : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+          _freetypeFace(nullptr)
         , _fontBuffer(std::move(fontBuffer))
     {
         const auto freetypeFontInitError = FT_New_Memory_Face(&freetypeLib, _fontBuffer.data(), static_cast<FT_Long>(_fontBuffer.size()), 0, &_freetypeFace);
@@ -31,8 +30,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Font::Font(Utils::StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath)
-        : Font(sid, freetypeLib, Filesystem::ReadFileAsBinary(filepath))
+    Font::Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath)
+        : Font(freetypeLib, Filesystem::ReadFileAsBinary(filepath))
     {}
     //--------------------------------------------------------------------------
 

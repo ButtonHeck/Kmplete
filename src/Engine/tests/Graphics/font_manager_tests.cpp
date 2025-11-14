@@ -36,7 +36,7 @@ TEST_CASE("FontManager default font usage", "[graphics][font_manager][font]")
     const auto fontsCount = fontManager->FontsCount();
     REQUIRE(fontsCount == 1UL); // Default font not deleted
 
-    const Font* defaultFont = nullptr;
+    const Assets::FontAsset* defaultFont = nullptr;
     REQUIRE_NOTHROW(defaultFont = &(fontManager->GetFont(FontManager::DefaultFontSID)));
     REQUIRE(defaultFont->GetStringID() == FontManager::DefaultFontSID);
 
@@ -69,7 +69,7 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
     REQUIRE(fontManager->FontsCount() == 2UL);
 
     // checking font properties
-    Font* font = nullptr;
+    Assets::FontAsset* font = nullptr;
     REQUIRE_NOTHROW(font = &(fontManager->GetFont(fontSid)));
     REQUIRE(font);
     REQUIRE(font->GetStringID() == fontSid);

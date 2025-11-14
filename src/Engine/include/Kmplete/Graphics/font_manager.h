@@ -3,7 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Graphics/font.h"
+#include "Kmplete/Assets/font_asset.h"
 #include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -27,8 +27,8 @@ namespace Kmplete
         KMP_API bool CreateFontTTF(Utils::StringID fontSid, BinaryBuffer&& fontData);
         KMP_API bool CreateFontTTF(Utils::StringID fontSid, const Filepath& filepath);
 
-        KMP_NODISCARD KMP_API const Font& GetFont(Utils::StringID fontSid) const;
-        KMP_NODISCARD KMP_API Font& GetFont(Utils::StringID fontSid);
+        KMP_NODISCARD KMP_API const Assets::FontAsset& GetFont(Utils::StringID fontSid) const;
+        KMP_NODISCARD KMP_API Assets::FontAsset& GetFont(Utils::StringID fontSid);
 
         KMP_API void RemoveFonts(const Vector<Utils::StringID>& sids);
         KMP_NODISCARD KMP_API bool RemoveFont(Utils::StringID sid);
@@ -44,7 +44,7 @@ namespace Kmplete
 
     private:
         FT_LibraryRec_* _freetypeLibInstance;
-        HashMap<Utils::StringID, UPtr<Font>> _fonts;
+        HashMap<Utils::StringID, UPtr<Assets::FontAsset>> _fonts;
     };
     //--------------------------------------------------------------------------
 }
