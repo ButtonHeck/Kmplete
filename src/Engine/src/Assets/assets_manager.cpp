@@ -269,7 +269,7 @@ namespace Kmplete
                     const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
                     _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
                 }
-                catch (const std::exception& e)
+                catch (KMP_MB_UNUSED const std::exception& e)
                 {
                     KMP_LOG_ERROR("failed to create texture: {}", e.what());
                 }
