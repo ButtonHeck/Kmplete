@@ -9,7 +9,7 @@
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
-#include "Kmplete/Graphics/texture_manager.h"
+#include "Kmplete/Assets/texture_asset_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
@@ -87,8 +87,8 @@ namespace Kmplete
         const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
 
         static const ImTextureID languageIcons[] = {
-            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTextureAsset("_flag_usa"_sid).GetTexture().GetHandle()),
-            static_cast<ImTextureID>(_assetsManager.GetTextureManager().GetTextureAsset("_flag_russian"_sid).GetTexture().GetHandle())
+            static_cast<ImTextureID>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_usa"_sid).GetTexture().GetHandle()),
+            static_cast<ImTextureID>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_russian"_sid).GetTexture().GetHandle())
         };
 
         int languageIndex = 0;

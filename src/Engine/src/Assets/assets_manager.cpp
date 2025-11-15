@@ -15,8 +15,8 @@ namespace Kmplete
         AssetsManager::AssetsManager(const Filepath& applicationPath, GraphicsBackendType type)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _dataPath(applicationPath / AssetsFolder)
-            , _textureManager(nullptr)
-            , _fontManager(nullptr)
+            , _textureAssetManager(nullptr)
+            , _fontAssetManager(nullptr)
         {
             Initialize(type);
 
@@ -32,17 +32,31 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        TextureManager& AssetsManager::GetTextureManager() noexcept
+        const TextureAssetManager& AssetsManager::GetTextureAssetManager() const noexcept
         {
-            KMP_ASSERT(_textureManager);
-            return *_textureManager;
+            KMP_ASSERT(_textureAssetManager);
+            return *_textureAssetManager;
         }
         //--------------------------------------------------------------------------
 
-        FontManager& AssetsManager::GetFontManager() noexcept
+        TextureAssetManager& AssetsManager::GetTextureAssetManager() noexcept
         {
-            KMP_ASSERT(_fontManager);
-            return *_fontManager;
+            KMP_ASSERT(_textureAssetManager);
+            return *_textureAssetManager;
+        }
+        //--------------------------------------------------------------------------
+
+        const FontAssetManager& AssetsManager::GetFontAssetManager() const noexcept
+        {
+            KMP_ASSERT(_fontAssetManager);
+            return *_fontAssetManager;
+        }
+        //--------------------------------------------------------------------------
+
+        FontAssetManager& AssetsManager::GetFontAssetManager() noexcept
+        {
+            KMP_ASSERT(_fontAssetManager);
+            return *_fontAssetManager;
         }
         //--------------------------------------------------------------------------
 
@@ -116,12 +130,12 @@ namespace Kmplete
 
             if (!textureSidsToRemove.empty())
             {
-                _textureManager->RemoveTexturesAssets(textureSidsToRemove);
+                _textureAssetManager->RemoveAssets(textureSidsToRemove);
             }
 
             if (!fontsSidsToRemove.empty())
             {
-                _fontManager->RemoveFontsAssets(fontsSidsToRemove);
+                _fontAssetManager->RemoveAssets(fontsSidsToRemove);
             }
 
             return true;
@@ -138,8 +152,8 @@ namespace Kmplete
                 throw std::runtime_error("AssetsManager: cannot create due to data path does not exist");
             }
 
-            _textureManager.reset(new TextureManager(type));
-            _fontManager.reset(new FontManager());
+            _textureAssetManager.reset(new TextureAssetManager(type));
+            _fontAssetManager.reset(new FontAssetManager());
         }
         //--------------------------------------------------------------------------
 
@@ -147,8 +161,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _fontManager.reset();
-            _textureManager.reset();
+            _fontAssetManager.reset();
+            _textureAssetManager.reset();
         }
         //--------------------------------------------------------------------------
 
@@ -253,7 +267,7 @@ namespace Kmplete
                 try
                 {
                     const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                    _textureManager->CreateTextureAsset(assetHeader.sid, assetImage);
+                    _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
                 }
                 catch (const std::exception& e)
                 {
@@ -262,7 +276,7 @@ namespace Kmplete
             }
             else if (assetHeader.type == AssetType::FontTTF)
             {
-                _fontManager->CreateFontAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
+                _fontAssetManager->CreateAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
             }
 
             return true;

@@ -1,4 +1,4 @@
-#include "Kmplete/Graphics/font_manager.h"
+#include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Graphics/font.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Utils/string_id.h"
@@ -8,69 +8,70 @@
 
 
 using namespace Kmplete;
+using namespace Kmplete::Assets;
 
-TEST_CASE("FontManager creation", "[graphics][font_manager][font]")
+TEST_CASE("FontAssetManager creation", "[graphics][font_asset_manager][asset][font]")
 {
-    UPtr<FontManager> fontManager;
-    REQUIRE_NOTHROW(fontManager.reset(new FontManager()));
-    REQUIRE(fontManager);
+    UPtr<FontAssetManager> fontAssetManager;
+    REQUIRE_NOTHROW(fontAssetManager.reset(new FontAssetManager()));
+    REQUIRE(fontAssetManager);
 
-    const auto fontsCount = fontManager->FontsAssetsCount();
+    const auto fontsCount = fontAssetManager->GetAssetsCount();
     REQUIRE(fontsCount == 1UL); // Default font only
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("FontManager default font usage", "[graphics][font_manager][font]")
+TEST_CASE("FontAssetManager default font usage", "[graphics][font_asset_manager][asset][font]")
 {
-    UPtr<FontManager> fontManager;
-    REQUIRE_NOTHROW(fontManager.reset(new FontManager()));
-    REQUIRE(fontManager);
+    UPtr<FontAssetManager> fontAssetManager;
+    REQUIRE_NOTHROW(fontAssetManager.reset(new FontAssetManager()));
+    REQUIRE(fontAssetManager);
 
     bool ok = false;
-    REQUIRE_NOTHROW(ok = fontManager->RemoveFontAsset(FontManager::DefaultFontSID));
+    REQUIRE_NOTHROW(ok = fontAssetManager->RemoveAsset(FontAssetManager::DefaultFontSID));
     REQUIRE_FALSE(ok);
 
     Vector<Utils::StringID> sids;
-    sids.push_back(FontManager::DefaultFontSID);
-    REQUIRE_NOTHROW(fontManager->RemoveFontsAssets(sids));
-    const auto fontsCount = fontManager->FontsAssetsCount();
+    sids.push_back(FontAssetManager::DefaultFontSID);
+    REQUIRE_NOTHROW(fontAssetManager->RemoveAssets(sids));
+    const auto fontsCount = fontAssetManager->GetAssetsCount();
     REQUIRE(fontsCount == 1UL); // Default font not deleted
 
     const Assets::FontAsset* defaultFontAsset = nullptr;
-    REQUIRE_NOTHROW(defaultFontAsset = &(fontManager->GetFontAsset(FontManager::DefaultFontSID)));
-    REQUIRE(defaultFontAsset->GetStringID() == FontManager::DefaultFontSID);
+    REQUIRE_NOTHROW(defaultFontAsset = &(fontAssetManager->GetAsset(FontAssetManager::DefaultFontSID)));
+    REQUIRE(defaultFontAsset->GetStringID() == FontAssetManager::DefaultFontSID);
 
     const Utils::StringID garbageSid = 1234;
-    REQUIRE_NOTHROW(defaultFontAsset = &(fontManager->GetFontAsset(garbageSid)));
-    REQUIRE(defaultFontAsset->GetStringID() == FontManager::DefaultFontSID); // still default font
+    REQUIRE_NOTHROW(defaultFontAsset = &(fontAssetManager->GetAsset(garbageSid)));
+    REQUIRE(defaultFontAsset->GetStringID() == FontAssetManager::DefaultFontSID); // still default font
 
     BinaryBuffer garbageBuffer;
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(FontManager::DefaultFontSID, std::move(garbageBuffer)));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(FontAssetManager::DefaultFontSID, std::move(garbageBuffer)));
     REQUIRE_FALSE(ok);
 
     Filepath garbagePath;
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(FontManager::DefaultFontSID, garbagePath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(FontAssetManager::DefaultFontSID, garbagePath));
     REQUIRE_FALSE(ok);
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
+TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][asset][font]")
 {
-    UPtr<FontManager> fontManager;
-    REQUIRE_NOTHROW(fontManager.reset(new FontManager()));
-    REQUIRE(fontManager);
+    UPtr<FontAssetManager> fontAssetManager;
+    REQUIRE_NOTHROW(fontAssetManager.reset(new FontAssetManager()));
+    REQUIRE(fontAssetManager);
 
     // loading from filepath
     const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
     const auto fontSid = "OpenSans-Regular.ttf"_sid;
     bool ok = false;
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(fontSid, fontPath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath));
     REQUIRE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // checking font properties
     Assets::FontAsset* fontAsset = nullptr;
-    REQUIRE_NOTHROW(fontAsset = &(fontManager->GetFontAsset(fontSid)));
+    REQUIRE_NOTHROW(fontAsset = &(fontAssetManager->GetAsset(fontSid)));
     REQUIRE(fontAsset);
     REQUIRE(fontAsset->GetStringID() == fontSid);
     
@@ -92,50 +93,50 @@ TEST_CASE("FontManager font functions", "[graphics][font_manager][font]")
     }
 
     // try adding same font from filepath
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(fontSid, fontPath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath));
     REQUIRE_FALSE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // try adding same font from binary buffer
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(fontSid, std::move(fontBuffer)));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, std::move(fontBuffer)));
     REQUIRE_FALSE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     fontBuffer = fontAsset->GetFont().GetBuffer();
 
     // try remove font (single sid)
-    REQUIRE_NOTHROW(ok = fontManager->RemoveFontAsset(fontSid));
+    REQUIRE_NOTHROW(ok = fontAssetManager->RemoveAsset(fontSid));
     REQUIRE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 1UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 1UL);
 
     // adding font again
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(fontSid, fontPath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath));
     REQUIRE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // try remove font (non-existing sid)
-    REQUIRE_NOTHROW(ok = fontManager->RemoveFontAsset(1234));
+    REQUIRE_NOTHROW(ok = fontAssetManager->RemoveAsset(1234));
     REQUIRE_FALSE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // try remove font (vector of sids)
     Vector<Utils::StringID> sids;
     sids.push_back(1234);
-    REQUIRE_NOTHROW(fontManager->RemoveFontsAssets(sids));
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL); // not deleted
+    REQUIRE_NOTHROW(fontAssetManager->RemoveAssets(sids));
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL); // not deleted
 
     sids.push_back(fontSid);
-    REQUIRE_NOTHROW(fontManager->RemoveFontsAssets(sids));
-    REQUIRE(fontManager->FontsAssetsCount() == 1UL); // deleted
+    REQUIRE_NOTHROW(fontAssetManager->RemoveAssets(sids));
+    REQUIRE(fontAssetManager->GetAssetsCount() == 1UL); // deleted
 
     // adding font from binary buffer
-    REQUIRE_NOTHROW(ok = fontManager->CreateFontAsset(fontSid, std::move(fontBuffer)));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, std::move(fontBuffer)));
     REQUIRE(ok);
-    REQUIRE(fontManager->FontsAssetsCount() == 2UL);
+    REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // checking font properties
     fontAsset = nullptr;
-    REQUIRE_NOTHROW(fontAsset = &(fontManager->GetFontAsset(fontSid)));
+    REQUIRE_NOTHROW(fontAsset = &(fontAssetManager->GetAsset(fontSid)));
     REQUIRE(fontAsset);
     REQUIRE(fontAsset->GetStringID() == fontSid);
 

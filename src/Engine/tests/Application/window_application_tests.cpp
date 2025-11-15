@@ -7,7 +7,7 @@
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Graphics/font_manager.h"
+#include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/ImGui/scope_guards.h"
@@ -39,7 +39,7 @@ namespace Kmplete
             const auto scale = _mainWindow.GetDPIScale();
 
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
-            const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFontAsset(FontManager::DefaultFontSID);
+            const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
             _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
             _imguiImpl->Stylize(scale);
         }
@@ -55,7 +55,7 @@ namespace Kmplete
 
                     if (_useDefaultFont)
                     {
-                        const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFontAsset(FontManager::DefaultFontSID);
+                        const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
                         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale());
                     }
                     else
@@ -447,7 +447,7 @@ namespace Kmplete
             _imguiImpl.reset();
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
 
-            const auto& defaultFontAsset = _assetsManager->GetFontManager().GetFontAsset(FontManager::DefaultFontSID);
+            const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
             _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
             _imguiImpl->Stylize(scale);
 
