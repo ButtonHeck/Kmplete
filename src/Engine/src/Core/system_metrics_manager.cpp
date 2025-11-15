@@ -75,6 +75,14 @@ namespace Kmplete
             }
         }
 
+        if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::StackUsed)
+        {
+            if (!UpdateCurrentThreadStackUsed())
+            {
+                return false;
+            }
+        }
+
         return true;
     }
     //--------------------------------------------------------------------------
@@ -373,6 +381,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
+        if (_systemMetrics.numProcessors == 0)
+        {
+            return false;
+        }
+
         double cpuPercent = 0.0;
         
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -382,6 +395,11 @@ namespace Kmplete
 
         GetSystemTimeAsFileTime(&fTime);
         memcpy(&now, &fTime, filetimeSize);
+
+        if (now.QuadPart - _lastCPUTimestamp == 0)
+        {
+            return false;
+        }
 
         if (!static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
         {
@@ -402,6 +420,12 @@ namespace Kmplete
 #else
         struct tms timeSample;
         const clock_t now = times(&timeSample);
+
+        if (now - static_cast<clock_t>(_lastCPUTimestamp) == 0)
+        {
+            return false;
+        }
+
         if (now <= static_cast<clock_t>(_lastCPUTimestamp) || 
             timeSample.tms_stime < static_cast<clock_t>(_lastSysCPUTimestamp) ||
             timeSample.tms_utime < static_cast<clock_t>(_lastUserCPUTimestamp))
@@ -422,6 +446,37 @@ namespace Kmplete
 #endif
 
         _systemMetrics.cpuUsagePercent = static_cast<float>(cpuPercent);
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool SystemMetricsManager::UpdateCurrentThreadStackUsed()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+#if defined (KMP_PLATFORM_WINDOWS)
+        static constexpr auto KibDivisor = 1024.0f;
+
+        NT_TIB* threadInformationBlockPtr = (NT_TIB*)NtCurrentTeb();
+        void* stackBase = threadInformationBlockPtr->StackBase;
+        void* stackLimit = threadInformationBlockPtr->StackLimit;
+        void* currentStackPtr = _AddressOfReturnAddress();
+
+        const SIZE_T used = SIZE_T(stackBase) - SIZE_T(currentStackPtr);
+        const SIZE_T total = SIZE_T(stackBase) - SIZE_T(stackLimit);
+
+        if (total == 0)
+        {
+            return false;
+        }
+
+        _systemMetrics.currentThreadStackTotal = static_cast<float>(total) / KibDivisor;
+        _systemMetrics.currentThreadStackUsed = static_cast<float>(used) / KibDivisor;
+        _systemMetrics.currentThreadStackUsagePercent = _systemMetrics.currentThreadStackUsed / _systemMetrics.currentThreadStackTotal * 100;
+#else
+        // TODO: calculate on Linux
+#endif
+
         return true;
     }
     //--------------------------------------------------------------------------

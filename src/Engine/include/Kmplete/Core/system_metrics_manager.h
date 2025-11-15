@@ -23,15 +23,20 @@ namespace Kmplete
             float virtualMemoryUsedMib = 0.0f;
             float physicalMemoryUsedMib = 0.0f;
             float cpuUsagePercent = 0.0f;
+            float currentThreadStackTotal = 0.0f;
+            float currentThreadStackUsed = 0.0f;
+            float currentThreadStackUsagePercent = 0.0f;
         };
 
         enum SystemMetricsUpdateMode
         {
-            MemoryUsed      = 1 << 0,
-            CPUUsed         = 1 << 1,
-            NumThreads      = 1 << 2,
-            MemoryAndCPU    = MemoryUsed | CPUUsed,
-            Everything      = MemoryUsed | CPUUsed | NumThreads
+            MemoryUsed          = 1 << 0,
+            CPUUsed             = 1 << 1,
+            NumThreads          = 1 << 2,
+            StackUsed           = 1 << 3,
+            MemoryAndCPU        = MemoryUsed | CPUUsed,
+            MemoryCPUAndStack   = MemoryUsed | CPUUsed | StackUsed,
+            Everything          = MemoryUsed | CPUUsed | NumThreads | StackUsed
         };
 
     public:
@@ -54,6 +59,7 @@ namespace Kmplete
         KMP_NODISCARD bool UpdateNumThreads();
         KMP_NODISCARD bool UpdateMemoryUsed();
         KMP_NODISCARD bool UpdateCPUUsed();
+        KMP_NODISCARD bool UpdateCurrentThreadStackUsed();
 
     private:
         SystemMetrics _systemMetrics;

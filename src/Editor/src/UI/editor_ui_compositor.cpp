@@ -295,7 +295,10 @@ namespace Kmplete
         const auto metricsString = Utils::ToSStream(oss,
             "CPU: ", currentMetrics.cpuUsagePercent, "%, ",
             "PMem: ", currentMetrics.physicalMemoryUsedMib, "MiB, ",
-            "VMem: ", currentMetrics.virtualMemoryUsedMib, "MiB").str();
+            "VMem: ", currentMetrics.virtualMemoryUsedMib, "MiB, ",
+            "Stack usage: ", currentMetrics.currentThreadStackUsed, "KiB / ",
+            currentMetrics.currentThreadStackTotal, "KiB (",
+            currentMetrics.currentThreadStackUsagePercent, "%)").str();
 
         ImGui::TextUnformatted(metricsString.c_str());
     }
