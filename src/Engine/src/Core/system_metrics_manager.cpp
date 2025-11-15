@@ -460,17 +460,13 @@ namespace Kmplete
         NT_TIB* threadInformationBlockPtr = (NT_TIB*)NtCurrentTeb();
         void* stackBase = threadInformationBlockPtr->StackBase;
         void* stackLimit = threadInformationBlockPtr->StackLimit;
-        void* currentStackPtr = _AddressOfReturnAddress();
+        const SIZE_T used = SIZE_T(stackBase) - SIZE_T(stackLimit);
 
-        const SIZE_T used = SIZE_T(stackBase) - SIZE_T(currentStackPtr);
-        const SIZE_T total = SIZE_T(stackBase) - SIZE_T(stackLimit);
+        ULONG_PTR threadStackLowLimit = 0ULL;
+        ULONG_PTR threadStackHighLimit = 0ULL;
+        GetCurrentThreadStackLimits(&threadStackLowLimit, &threadStackHighLimit);
 
-        if (total == 0)
-        {
-            return false;
-        }
-
-        _systemMetrics.currentThreadStackTotal = static_cast<float>(total) / KibDivisor;
+        _systemMetrics.currentThreadStackTotal = static_cast<float>(threadStackHighLimit - threadStackLowLimit) / KibDivisor;
         _systemMetrics.currentThreadStackUsed = static_cast<float>(used) / KibDivisor;
         _systemMetrics.currentThreadStackUsagePercent = _systemMetrics.currentThreadStackUsed / _systemMetrics.currentThreadStackTotal * 100;
 #else
