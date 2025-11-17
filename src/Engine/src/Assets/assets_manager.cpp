@@ -18,7 +18,7 @@ namespace Kmplete
             , _textureAssetManager(nullptr)
             , _fontAssetManager(nullptr)
         {
-            Initialize(type);
+            _Initialize(type);
 
             KMP_PROFILE_CONSTRUCTOR_END();
         }
@@ -28,7 +28,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            Finalize();
+            _Finalize();
         }
         //--------------------------------------------------------------------------
 
@@ -75,12 +75,12 @@ namespace Kmplete
             const auto assetCount = *reinterpret_cast<const AssetCount*>(fileBuffer.data());
 
             KMP_LOG_INFO("start loading {} assets headers from '{}'", assetCount, filepath);
-            LoadAssetFileHeaders(fileBuffer, assetCount, filepath);
+            _LoadAssetFileHeaders(fileBuffer, assetCount, filepath);
 
             if (loadBinaries)
             {
                 KMP_LOG_INFO("start loading {} assets binaries from '{}'", assetCount, filepath);
-                return LoadAssetFileBinaries(fileBuffer, assetCount);
+                return _LoadAssetFileBinaries(fileBuffer, assetCount);
             }
 
             return true;
@@ -91,14 +91,14 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            const auto lookupVector = GetSortedByFileAssetsInfos(assetsSids);
+            const auto lookupVector = _GetSortedByFileAssetsInfos(assetsSids);
             if (lookupVector.empty())
             {
                 KMP_LOG_ERROR("failed to load assets - nothing to load");
                 return false;
             }
 
-            return LoadAssetsEntriesBinaries(lookupVector);
+            return _LoadAssetsEntriesBinaries(lookupVector);
         }
         //--------------------------------------------------------------------------
 
@@ -118,11 +118,11 @@ namespace Kmplete
                 }
 
                 const auto assetType = _lookupMap[sid].header.type;
-                if (assetType == AssetType::Texture)
+                if (assetType == static_cast<UByte>(AssetType::Texture))
                 {
                     textureSidsToRemove.push_back(sid);
                 }
-                else if (assetType == AssetType::FontTTF)
+                else if (assetType == static_cast<UByte>(AssetType::Font))
                 {
                     fontsSidsToRemove.push_back(sid);
                 }
@@ -142,7 +142,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::Initialize(GraphicsBackendType type)
+        void AssetsManager::_Initialize(GraphicsBackendType type)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -157,7 +157,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::Finalize()
+        void AssetsManager::_Finalize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -166,7 +166,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
+        void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -188,7 +188,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
+        bool AssetsManager::_LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -198,14 +198,14 @@ namespace Kmplete
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetEntryHeaderStructSize;
                 const auto assetHeader = *reinterpret_cast<const AssetEntryHeader*>(fileBuffer.data() + headerStructBufferOffset);
 
-                loadedOk &= LoadAssetEntryBinary(fileBuffer, assetHeader);
+                loadedOk &= _LoadAssetEntryBinary(fileBuffer, assetHeader);
             }
 
             return loadedOk;
         }
         //--------------------------------------------------------------------------
 
-        Vector<AssetLookupInfo> AssetsManager::GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const
+        Vector<AssetLookupInfo> AssetsManager::_GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -229,7 +229,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector)
+        bool AssetsManager::_LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -251,18 +251,18 @@ namespace Kmplete
                     }
                 }
 
-                loadedOk &= LoadAssetEntryBinary(fileBuffer, info.header);
+                loadedOk &= _LoadAssetEntryBinary(fileBuffer, info.header);
             }
 
             return loadedOk;
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
+        bool AssetsManager::_LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-            if (assetHeader.type == AssetType::Texture)
+            if (assetHeader.type == static_cast<UByte>(AssetType::Texture))
             {
                 try
                 {
@@ -274,7 +274,7 @@ namespace Kmplete
                     KMP_LOG_ERROR("failed to create texture: {}", e.what());
                 }
             }
-            else if (assetHeader.type == AssetType::FontTTF)
+            else if (assetHeader.type == static_cast<UByte>(AssetType::Font))
             {
                 _fontAssetManager->CreateAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
             }

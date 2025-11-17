@@ -12,6 +12,7 @@ namespace Kmplete
 {
     class Image;
 
+
     class TextureFactory
     {
         KMP_LOG_CLASSNAME(TextureFactory)

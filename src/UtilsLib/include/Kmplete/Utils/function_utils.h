@@ -11,6 +11,7 @@
 #define KMP_BIND(func) [this](auto&& ... args) { return this->func(std::forward<decltype(args)>(args)...); }
 #define KMP_BIND_FREE_FN(func) [](auto&& ... args) { return func(std::forward<decltype(args)>(args)...); }
 
+
 namespace Kmplete
 {
     namespace Utils

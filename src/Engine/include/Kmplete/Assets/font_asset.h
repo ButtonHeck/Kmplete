@@ -9,6 +9,7 @@
 
 struct FT_LibraryRec_;
 
+
 namespace Kmplete
 {
     namespace Assets

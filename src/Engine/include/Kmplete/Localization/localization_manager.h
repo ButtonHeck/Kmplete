@@ -16,6 +16,7 @@ namespace Kmplete
 {
     class SettingsDocument;
 
+
     class LocalizationManager
     {
         KMP_LOG_CLASSNAME(LocalizationManager)
@@ -70,8 +71,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString);
 
     private:
-        void ImbueLocale() const;
-        void NotifyLocaleListeners() const;
+        void _ImbueLocale() const;
+        void _NotifyLocaleListeners() const;
 
     private:
         boost::locale::generator _localeGenerator;

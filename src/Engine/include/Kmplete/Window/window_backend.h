@@ -13,6 +13,7 @@ namespace Kmplete
     class SettingsDocument;
     class WindowCursor;
 
+
     class WindowBackend
     {
     protected:

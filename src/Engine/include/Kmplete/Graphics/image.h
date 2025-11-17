@@ -31,8 +31,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Nullable<UByte*> GetPixels() const noexcept;
 
     private:
-        void DeleteData();
-        void FixChannels(ImageChannels desiredChannels, int channelsInFile);
+        void _DeleteData();
+        void _FixChannels(ImageChannels desiredChannels, int channelsInFile);
 
     private:
         bool _loadedFromFile;

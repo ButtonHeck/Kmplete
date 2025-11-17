@@ -36,15 +36,15 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool UnloadAssets(const Vector<Utils::StringID>& assetsSids);
 
         private:
-            void Initialize(GraphicsBackendType type);
-            void Finalize();
+            void _Initialize(GraphicsBackendType type);
+            void _Finalize();
 
-            void LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
-            KMP_NODISCARD bool LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount);
+            void _LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
+            KMP_NODISCARD bool _LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount);
 
-            Vector<AssetLookupInfo> GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const;
-            KMP_NODISCARD bool LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector);
-            KMP_NODISCARD bool LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader);
+            Vector<AssetLookupInfo> _GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const;
+            KMP_NODISCARD bool _LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector);
+            KMP_NODISCARD bool _LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader);
 
         private:
             const Filepath _dataPath;

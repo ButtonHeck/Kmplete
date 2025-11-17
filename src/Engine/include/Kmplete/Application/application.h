@@ -21,6 +21,7 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+
     class Application
     {
         KMP_LOG_CLASSNAME(Application)
@@ -37,13 +38,13 @@ namespace Kmplete
         KMP_API virtual void Run() = 0;
 
     private:
-        void Initialize(const ApplicationParameters& parameters);
-        void Finalize();
+        void _Initialize(const ApplicationParameters& parameters);
+        void _Finalize();
 
-        void SaveSettings() const;
-        void LoadSettings();
+        void _SaveSettings() const;
+        void _LoadSettings();
 
-        void FillDictionary();
+        void _FillDictionary();
 
     protected:
         const String _applicationName;
@@ -55,6 +56,7 @@ namespace Kmplete
         UPtr<SettingsManager> _settingsManager;
     };
     //--------------------------------------------------------------------------
+
 
     KMP_NODISCARD extern UPtr<Application> CreateApplication(const ProgramOptions& programOptions);
 }

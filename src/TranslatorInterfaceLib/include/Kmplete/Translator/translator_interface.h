@@ -23,6 +23,7 @@ namespace Kmplete
         static constexpr auto ProcessorArgumentOutputFileName = "output_file_name";
         static constexpr auto ProcessorArgumentOutputFileNameShort = "F";
 
+
         enum ReturnCode
         {
             Ok = 0,
@@ -47,4 +48,5 @@ namespace Kmplete
             ProcessorMsgfmtError = -104,
         };
     }
+    //--------------------------------------------------------------------------
 }

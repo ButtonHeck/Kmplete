@@ -60,6 +60,7 @@ TEST_CASE("Window backend monitor functions", "[core][window_backend][monitor]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Window backend primary monitor DPI scale", "[core][window_backend][monitor]")
 {
     const auto windowBackend = Kmplete::WindowBackend::Create();

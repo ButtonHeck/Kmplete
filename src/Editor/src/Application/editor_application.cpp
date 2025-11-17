@@ -8,13 +8,14 @@ namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "EditorApplication";
 
+
     EditorApplication::EditorApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _mainWindow(_windowBackend->GetMainWindow())
         , _uiFrameListener(nullptr)
     {
-        Initialize();
+        _Initialize();
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -24,11 +25,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Finalize();
+        _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::Initialize()
+    void EditorApplication::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -44,21 +45,21 @@ namespace Kmplete
         _uiFrameListener.reset(new EditorFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager));
         AddFrameListener(_uiFrameListener.get());
 
-        LoadSettings();
+        _LoadSettings();
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::Finalize()
+    void EditorApplication::_Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        SaveSettings();
+        _SaveSettings();
 
         _uiFrameListener.reset();
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::SaveSettings() const
+    void EditorApplication::_SaveSettings() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -73,7 +74,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::LoadSettings()
+    void EditorApplication::_LoadSettings()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

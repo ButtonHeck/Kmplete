@@ -11,6 +11,7 @@
 struct GLFWwindow;
 struct GLFWmonitor;
 
+
 namespace Kmplete
 {
     class WindowGlfw : public Window
@@ -72,9 +73,9 @@ namespace Kmplete
         KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const noexcept override;
 
     private:
-        struct UserData
+        struct _UserData
         {
-            explicit UserData(WindowSettings& settings);
+            explicit _UserData(WindowSettings& settings);
 
             ScreenMode& screenMode;
             Math::Point2I& position;
@@ -87,26 +88,26 @@ namespace Kmplete
             bool iconified;
         };
 
-        KMP_NODISCARD static NonNull<UserData*> GetUserPointer(const NonNull<GLFWwindow*> window);
-        KMP_NODISCARD static std::pair<bool, NonNull<GLFWmonitor*>> GetSuitableMonitor(const Math::Rect2I& windowRectangle);
-        KMP_NODISCARD static Math::Rect2I GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor);
-        static void UpdateDPI(const NonNull<GLFWwindow*> window);
-        static void UpdateDPIScale(const NonNull<GLFWwindow*> window);
+        KMP_NODISCARD static NonNull<_UserData*> _GetUserPointer(const NonNull<GLFWwindow*> window);
+        KMP_NODISCARD static std::pair<bool, NonNull<GLFWmonitor*>> _GetSuitableMonitor(const Math::Rect2I& windowRectangle);
+        KMP_NODISCARD static Math::Rect2I _GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor);
+        static void _UpdateDPI(const NonNull<GLFWwindow*> window);
+        static void _UpdateDPIScale(const NonNull<GLFWwindow*> window);
 
     private:
-        KMP_NODISCARD Nullable<GLFWwindow*> CreateGLFWwindow();
+        KMP_NODISCARD Nullable<GLFWwindow*> _CreateGLFWwindow();
 
-        void Initialize();
-        void InitializeWindowHints() const;
+        void _Initialize();
+        void _InitializeWindowHints() const;
 
-        void InitializeUserPointer() const;
-        void InitializeCallbacks() const;
-        void InitializeWindowCallbacks() const;
-        void InitializeKeyboardCallbacks() const;
-        void InitializeMouseCallbacks() const;
-        void InitializeGeometry();
+        void _InitializeUserPointer() const;
+        void _InitializeCallbacks() const;
+        void _InitializeWindowCallbacks() const;
+        void _InitializeKeyboardCallbacks() const;
+        void _InitializeMouseCallbacks() const;
+        void _InitializeGeometry();
 
-        void Finalize();
+        void _Finalize();
 
     private:
         GLFWwindow* _window;

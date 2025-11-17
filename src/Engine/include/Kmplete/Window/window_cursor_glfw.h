@@ -8,6 +8,7 @@
 
 struct GLFWcursor;
 
+
 namespace Kmplete
 {
     class WindowCursorGlfw : public WindowCursor

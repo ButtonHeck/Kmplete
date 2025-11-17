@@ -28,13 +28,13 @@ namespace Kmplete
 
             void Stylize(float dpiScale) const;
 
-            virtual void CreateFontsTexture() = 0;
+            virtual void CreateFontsTexture() const = 0;
 
         protected:
             ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
 
-            virtual void NewFrameImpl() const = 0;
-            virtual void RenderImpl() const = 0;
+            virtual void _NewFrameImpl() const = 0;
+            virtual void _RenderImpl() const = 0;
         };
         //--------------------------------------------------------------------------
     }

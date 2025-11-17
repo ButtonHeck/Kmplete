@@ -16,11 +16,13 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+
     enum class GraphicsBackendType
     {
         OpenGL,
         Unknown
     };
+    //--------------------------------------------------------------------------
 
     KMP_NODISCARD KMP_API String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
     KMP_NODISCARD KMP_API GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;

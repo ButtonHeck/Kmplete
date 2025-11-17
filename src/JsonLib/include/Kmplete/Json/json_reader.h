@@ -46,7 +46,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API String GetString(const char* name, const String& defaultValue = "");
 
     private:
-        KMP_NODISCARD bool ValidToGetFromArray(int index) const;
+        KMP_NODISCARD bool _ValidToGetFromArray(int index) const;
 
     private:
         rapidjson::Document& _document;

@@ -25,6 +25,7 @@ namespace Kmplete
         class AssetsManager;
     }
 
+
     class EditorFrameListener : public FrameListener
     {
         KMP_LOG_CLASSNAME(EditorFrameListener)
@@ -44,26 +45,26 @@ namespace Kmplete
         void LoadSettings(SettingsDocument& settings);
 
     private:
-        void Initialize();
-        void Finalize();
+        void _Initialize();
+        void _Finalize();
 
-        void NewFrame();
-        void BeginApplicationArea() const;
-        void BeginMainWorkingArea() const;
-        void ComposeMainArea();
-        void EndMainWorkingArea() const;
-        void BeginStatusBarArea() const;
-        void ComposeStatusBar();
-        void EndStatusBarArea() const;
-        void EndApplicationArea() const;
-        void EndFrame() const;
+        void _NewFrame();
+        void _BeginApplicationArea() const;
+        void _BeginMainWorkingArea() const;
+        void _ComposeMainArea();
+        void _EndMainWorkingArea() const;
+        void _BeginStatusBarArea() const;
+        void _ComposeStatusBar();
+        void _EndStatusBarArea() const;
+        void _EndApplicationArea() const;
+        void _EndFrame() const;
 
-        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
-        KMP_NODISCARD bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
-        KMP_NODISCARD bool OnWindowContentScaleEvent(WindowContentScaleEvent& event);
-        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
+        KMP_NODISCARD bool _OnWindowCloseEvent(WindowCloseEvent& event);
+        KMP_NODISCARD bool _OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
+        KMP_NODISCARD bool _OnWindowContentScaleEvent(WindowContentScaleEvent& event);
+        KMP_NODISCARD bool _OnKeyPressEvent(KeyPressEvent& event);
 
-        void AddImGuiFonts(float scale);
+        void _AddImGuiFonts(float scale);
 
     private:
         SystemMetricsManager& _systemMetricsManager;

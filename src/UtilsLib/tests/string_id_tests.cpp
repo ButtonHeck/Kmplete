@@ -44,6 +44,7 @@ TEST_CASE("StringID of c-string via named variable", "[utils][string_id]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("StringID of empty String is 0", "[utils][string_id]")
 {
     const auto str = Kmplete::String("");
@@ -71,6 +72,7 @@ TEST_CASE("StringID of different Strings are different", "[utils][string_id]")
     REQUIRE(Kmplete::Utils::ToStringID(KMP_SID_PARAM(str1)) != Kmplete::Utils::ToStringID(KMP_SID_PARAM(str2)));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("_sid literal compilation check", "[utils][string_id]")
 {
@@ -103,6 +105,7 @@ TEST_CASE("_sid of different c-strings are different", "[utils][string_id]")
     REQUIRE("one"_sid != "two"_sid);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("_sid and function of a c-string return same results", "[utils][string_id]")
 {

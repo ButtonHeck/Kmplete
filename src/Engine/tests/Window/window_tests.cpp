@@ -42,6 +42,7 @@ struct WindowCallbackUserSingleCondition
 };
 //--------------------------------------------------------------------------
 
+
 struct TestStartResult
 {
     Kmplete::UPtr<Kmplete::WindowBackend> windowBackend = nullptr;
@@ -93,6 +94,7 @@ TEST_CASE("Multiple windows test", "[core][window_backend][window]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Window create via existing valid WindowSettings", "[core][window_backend][window]")
 {
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("Window with premade settings",
@@ -124,6 +126,7 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
     REQUIRE(windowCb.conditionOk);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_backend][window]")
 {

@@ -25,7 +25,6 @@ TEST_CASE("RNG uint32_t unbounded", "[core][rng]")
     REQUIRE(set.find(4074212915) != set.begin());
     REQUIRE(notRepeated);
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("RNG uint32_t bounded", "[core][rng]")
 {
@@ -48,6 +47,7 @@ TEST_CASE("RNG uint32_t bounded", "[core][rng]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("RNG float unbounded", "[core][rng]")
 {
     Kmplete::RNGFloat rng;
@@ -63,7 +63,6 @@ TEST_CASE("RNG float unbounded", "[core][rng]")
     const auto notRepeated = set.size() == iterations;
     REQUIRE(notRepeated);
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("RNG float bounded", "[core][rng]")
 {

@@ -26,6 +26,7 @@ namespace Kmplete
     static constexpr auto SidTrLocaleRuName = Utils::ToStringID(LocaleRuName);
     static constexpr auto SidTrDomainEngine = Utils::ToStringID(KMP_TR_DOMAIN_ENGINE);
 
+
     using LocaleStr = String;
     using DomainStr = String;
     using ContextStr = String;
@@ -37,6 +38,7 @@ namespace Kmplete
     using ContextStrSID = Utils::StringID;
     using SourceStrSID = Utils::StringID;
     using TranslationStrSID = Utils::StringID;
+
 
     enum PluralityForm
     {
@@ -71,6 +73,7 @@ namespace Kmplete
     static constexpr PluralityFormDispatcherEn pluralFormIndexGeneratorEn;
     static constexpr PluralityFormDispatcherRu pluralFormIndexGeneratorRu;
 
+
     struct ContextedSource
     {
         SourceStrSID sourceSid;
@@ -96,6 +99,7 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+
     struct PluralSource
     {
         SourceStrSID sourceSidSingular;
@@ -120,6 +124,7 @@ namespace Kmplete
         }
     };
     //--------------------------------------------------------------------------
+
 
     struct ContextedPluralSource
     {

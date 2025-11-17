@@ -15,6 +15,7 @@ namespace Kmplete
     static constexpr auto SettingsEntryName = "EditorFrameListener";
     static constexpr auto MetricsTimeoutStr = "MetricsTimeout";
 
+
     EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
         : FrameListener(frameListenerManager, "EditorFrameListener"_sid)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
@@ -26,7 +27,7 @@ namespace Kmplete
         , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
     {
-        Initialize();
+        _Initialize();
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -36,11 +37,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Finalize();
+        _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::Initialize()
+    void EditorFrameListener::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -48,7 +49,7 @@ namespace Kmplete
 
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
 
-        AddImGuiFonts(dpiScale);
+        _AddImGuiFonts(dpiScale);
 
         _imguiImpl->Stylize(dpiScale);
 
@@ -56,7 +57,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::Finalize()
+    void EditorFrameListener::_Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -80,31 +81,31 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        NewFrame();
+        _NewFrame();
         {
-            BeginApplicationArea();
+            _BeginApplicationArea();
             {
-                BeginMainWorkingArea();
+                _BeginMainWorkingArea();
                 {
-                    ComposeMainArea();
+                    _ComposeMainArea();
 
                     ImGuiUtils::StyleVarGuard styleVarGuard({
                         {ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f)}
                     });
-                    EndMainWorkingArea();
+                    _EndMainWorkingArea();
                 }
 
-                BeginStatusBarArea();
+                _BeginStatusBarArea();
                 {
-                    ComposeStatusBar();
+                    _ComposeStatusBar();
                 }
-                EndStatusBarArea();
+                _EndStatusBarArea();
             }
-            EndApplicationArea();
+            _EndApplicationArea();
         }
 
         _imguiImpl->Render();
-        EndFrame();
+        _EndFrame();
     }
     //--------------------------------------------------------------------------
 
@@ -114,15 +115,15 @@ namespace Kmplete
 
         EventDispatcher dispatcher(event);
 
-        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorFrameListener::OnWindowCloseEvent));
-        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorFrameListener::OnWindowFramebufferRefreshEvent));
-        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorFrameListener::OnWindowContentScaleEvent));
+        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorFrameListener::_OnWindowCloseEvent));
+        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent));
+        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent));
 
-        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorFrameListener::OnKeyPressEvent));
+        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorFrameListener::_OnKeyPressEvent));
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::OnWindowCloseEvent(WindowCloseEvent& event)
+    bool EditorFrameListener::_OnWindowCloseEvent(WindowCloseEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -130,7 +131,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+    bool EditorFrameListener::_OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -139,7 +140,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::OnWindowContentScaleEvent(WindowContentScaleEvent& event)
+    bool EditorFrameListener::_OnWindowContentScaleEvent(WindowContentScaleEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -148,7 +149,7 @@ namespace Kmplete
         _imguiImpl.reset();
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
 
-        AddImGuiFonts(scale);
+        _AddImGuiFonts(scale);
 
         _imguiImpl->Stylize(scale);
 
@@ -156,7 +157,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::OnKeyPressEvent(KeyPressEvent& event)
+    bool EditorFrameListener::_OnKeyPressEvent(KeyPressEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -164,7 +165,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::AddImGuiFonts(float scale)
+    void EditorFrameListener::_AddImGuiFonts(float scale)
     {
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset("OpenSans-Regular.ttf"_sid);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
@@ -196,7 +197,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::NewFrame()
+    void EditorFrameListener::_NewFrame()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -204,7 +205,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::BeginApplicationArea() const
+    void EditorFrameListener::_BeginApplicationArea() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -228,7 +229,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::BeginMainWorkingArea() const
+    void EditorFrameListener::_BeginMainWorkingArea() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -261,7 +262,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::ComposeMainArea()
+    void EditorFrameListener::_ComposeMainArea()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -269,7 +270,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::EndMainWorkingArea() const
+    void EditorFrameListener::_EndMainWorkingArea() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -277,7 +278,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::BeginStatusBarArea() const
+    void EditorFrameListener::_BeginStatusBarArea() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -294,7 +295,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::ComposeStatusBar()
+    void EditorFrameListener::_ComposeStatusBar()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -302,7 +303,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::EndStatusBarArea() const
+    void EditorFrameListener::_EndStatusBarArea() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -310,7 +311,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::EndApplicationArea() const
+    void EditorFrameListener::_EndApplicationArea() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -318,7 +319,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::EndFrame() const
+    void EditorFrameListener::_EndFrame() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 

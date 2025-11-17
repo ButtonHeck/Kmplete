@@ -13,6 +13,7 @@ namespace Kmplete
     static constexpr auto SettingsEntryName = "LocalizationManager";
     static constexpr auto SettingsLocaleStr = "Locale";
 
+
     LocalizationManager::LocalizationManager() noexcept
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _localeGenerator()
@@ -43,8 +44,8 @@ namespace Kmplete
 
             _library->SetLocale(_currentLocale);
 
-            ImbueLocale();
-            NotifyLocaleListeners();
+            _ImbueLocale();
+            _NotifyLocaleListeners();
 
             KMP_LOG_INFO("set locale '{}'", _currentLocale);
             return true;
@@ -76,7 +77,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         _localeGenerator.add_messages_domain(domain);
-        ImbueLocale();
+        _ImbueLocale();
 
         return _library->AddDictionary(domain);
     }
@@ -287,7 +288,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::ImbueLocale() const
+    void LocalizationManager::_ImbueLocale() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -299,7 +300,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationManager::NotifyLocaleListeners() const
+    void LocalizationManager::_NotifyLocaleListeners() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 

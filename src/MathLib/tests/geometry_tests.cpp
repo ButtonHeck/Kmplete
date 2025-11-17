@@ -56,7 +56,6 @@ TEST_CASE("Geometry GetCenter 2D tests", "[math][geometry]")
     centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == 9.0f && centerFloat.y == 9.0f));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Geometry GetCenter 3D tests", "[math][geometry]")
 {
@@ -112,6 +111,7 @@ TEST_CASE("Geometry GetCenter 3D tests", "[math][geometry]")
     REQUIRE((centerFloat.x == 9.0f && centerFloat.y == 9.0f && centerFloat.z == 9.0f));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
 {
@@ -210,7 +210,6 @@ TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
     pointF = Point2F(0.0f, -1.0f);
     REQUIRE_FALSE(rectFloat.ContainsPoint(pointF));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Geometry ContainsPoint 3D tests", "[math][geometry]")
 {

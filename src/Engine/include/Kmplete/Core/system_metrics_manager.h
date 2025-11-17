@@ -49,17 +49,17 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const SystemMetrics& GetMetrics() const noexcept;
 
     private:
-        void Initialize();
-        KMP_NODISCARD bool InitializeProcessId();
-        KMP_NODISCARD bool InitializeTotalMemory();
-        KMP_NODISCARD bool InitializeNumProcessors();
-        KMP_NODISCARD bool InitializeWindowsProcessHandle();
-        KMP_NODISCARD bool InitializeCPUTimestamps();
+        void _Initialize();
+        KMP_NODISCARD bool _InitializeProcessId();
+        KMP_NODISCARD bool _InitializeTotalMemory();
+        KMP_NODISCARD bool _InitializeNumProcessors();
+        KMP_NODISCARD bool _InitializeWindowsProcessHandle();
+        KMP_NODISCARD bool _InitializeCPUTimestamps();
 
-        KMP_NODISCARD bool UpdateNumThreads();
-        KMP_NODISCARD bool UpdateMemoryUsed();
-        KMP_NODISCARD bool UpdateCPUUsed();
-        KMP_NODISCARD bool UpdateCurrentThreadStackUsed();
+        KMP_NODISCARD bool _UpdateNumThreads();
+        KMP_NODISCARD bool _UpdateMemoryUsed();
+        KMP_NODISCARD bool _UpdateCPUUsed();
+        KMP_NODISCARD bool _UpdateCurrentThreadStackUsed();
 
     private:
         SystemMetrics _systemMetrics;

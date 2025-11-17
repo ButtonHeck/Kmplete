@@ -8,11 +8,6 @@ namespace Kmplete
 {
     namespace FileDialogs
     {
-        KMP_NODISCARD KMP_API Filepath OpenFile(const String& title, const Filepath& startFilepath, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API FilepathVector OpenFiles(const String& title, const Filepath& startFilepath, const StringVector& filters = { "Any Files", "*.*" });
-        KMP_NODISCARD KMP_API Filepath OpenDirectory(const String& title, const Filepath& startFilepath);
-        KMP_NODISCARD KMP_API Filepath SaveFile(const String& title, const Filepath& startFilepath, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
-
         enum class MessageButton
         {
             Cancel = -1,
@@ -23,6 +18,8 @@ namespace Kmplete
             Retry,
             Ignore
         };
+        //--------------------------------------------------------------------------
+
 
         enum class MessageChoice
         {
@@ -33,6 +30,8 @@ namespace Kmplete
             RetryCancel,
             AbortRetryIgnore
         };
+        //--------------------------------------------------------------------------
+
 
         enum class MessageIcon
         {
@@ -41,7 +40,13 @@ namespace Kmplete
             Error,
             Question
         };
+        //--------------------------------------------------------------------------
 
+
+        KMP_NODISCARD KMP_API Filepath OpenFile(const String& title, const Filepath& startFilepath, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API FilepathVector OpenFiles(const String& title, const Filepath& startFilepath, const StringVector& filters = { "Any Files", "*.*" });
+        KMP_NODISCARD KMP_API Filepath OpenDirectory(const String& title, const Filepath& startFilepath);
+        KMP_NODISCARD KMP_API Filepath SaveFile(const String& title, const Filepath& startFilepath, const StringVector& filters = { "Any Files", "*.*" }, bool forceOverwrite = false);
         KMP_NODISCARD KMP_API MessageButton OpenMessage(const String& title, const String& message, 
                                                         MessageChoice choice = MessageChoice::OkCancel, MessageIcon icon = MessageIcon::Info);
     };

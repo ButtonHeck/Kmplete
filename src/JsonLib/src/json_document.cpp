@@ -152,7 +152,7 @@ namespace Kmplete
             rapidjson::PrettyWriter<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
-                return SaveToFile(buffer);
+                return _SaveToFile(buffer);
             }
         }
         else
@@ -160,7 +160,7 @@ namespace Kmplete
             rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
             if (_document.Accept(writer))
             {
-                return SaveToFile(buffer);
+                return _SaveToFile(buffer);
             }
         }
 
@@ -511,7 +511,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::SaveToFile(const rapidjson::StringBuffer& buffer)
+    bool JsonDocument::_SaveToFile(const rapidjson::StringBuffer& buffer)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 

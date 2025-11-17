@@ -10,6 +10,7 @@ namespace Kmplete
     static constexpr auto StringToFilepathConverterFn = Utils::Utf8ToNarrow;
     static constexpr auto FilepathToStringConverterFn = Filesystem::ToGenericString;
 
+
     namespace FileDialogs
     {
         Filepath OpenFile(const String& title, const Filepath& startFilepath, const StringVector& filters /*= { "Any Files", "*.*" }*/)

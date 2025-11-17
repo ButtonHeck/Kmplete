@@ -7,6 +7,7 @@ namespace Kmplete
 {
     static const auto NoTranslation = TranslationStr("");
 
+
     LocalizationLibrary::LocalizationLibrary() noexcept
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _currentLocaleSid(SidTrInvalidLocale)

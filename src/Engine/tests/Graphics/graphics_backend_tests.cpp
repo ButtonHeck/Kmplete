@@ -8,6 +8,7 @@
 
 using namespace Kmplete;
 
+
 TEST_CASE("Graphics backend initialization error type", "[graphics]")
 {
     UPtr<GraphicsBackend> backend;
@@ -15,6 +16,7 @@ TEST_CASE("Graphics backend initialization error type", "[graphics]")
     REQUIRE(backend == nullptr);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Graphics backend initialization opengl", "[graphics]")
 {

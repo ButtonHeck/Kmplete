@@ -30,6 +30,7 @@ TEST_CASE("Filesystem Current path", "[core][filesystem]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Filesystem string conversions", "[core][filesystem]")
 {
     SECTION("Current path ToGenericU8String is not empty")
@@ -61,6 +62,7 @@ TEST_CASE("Filesystem string conversions", "[core][filesystem]")
     }
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Filesystem directories functions", "[core][filesystem]")
 {
@@ -163,6 +165,7 @@ TEST_CASE("Filesystem directories functions", "[core][filesystem]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Filesystem files functions", "[core][filesystem]")
 {
     SECTION("CreateFile/RemoveFile in existing directory")
@@ -249,6 +252,7 @@ TEST_CASE("Filesystem files functions", "[core][filesystem]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Filesystem read text files functions", "[core][filesystem]")
 {
     SECTION("ReadFileAsText non-existing file")
@@ -295,6 +299,7 @@ TEST_CASE("Filesystem read text files functions", "[core][filesystem]")
     }
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Filesystem read binary files functions", "[core][filesystem]")
 {

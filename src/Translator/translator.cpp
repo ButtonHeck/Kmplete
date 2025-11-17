@@ -39,20 +39,20 @@ namespace Kmplete
             ReturnCode returnCode = ReturnCode::Ok;
             if (_parameters.workMode == ProcessorWorkModeUpdate)
             {
-                returnCode = Update();
+                returnCode = _Update();
             }
             else if (_parameters.workMode == ProcessorWorkModeCompile)
             {
-                returnCode = Compile();
+                returnCode = _Compile();
             }
 
             return returnCode;
         }
         //--------------------------------------------------------------------------
 
-        ReturnCode TranslatorProcessor::Update() const
+        ReturnCode TranslatorProcessor::_Update() const
         {
-            const auto filesToProcess = GatherFilesToUpdate(_parameters);
+            const auto filesToProcess = _GatherFilesToUpdate(_parameters);
             if (filesToProcess.empty())
             {
                 KMP_LOG_ERROR("Update: Appropriate files not found");
@@ -68,7 +68,7 @@ namespace Kmplete
             for (const auto& locale : Locales)
             {
                 // 1. Create .po template file
-                const auto poTemplateFile = CreatePoTemplateFile(_parameters, locale);
+                const auto poTemplateFile = _CreatePoTemplateFile(_parameters, locale);
                 if (poTemplateFile.empty())
                 {
                     KMP_LOG_ERROR("Update: cannot create .pot file '{}'", poTemplateFile);
@@ -200,7 +200,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        ReturnCode TranslatorProcessor::Compile() const
+        ReturnCode TranslatorProcessor::_Compile() const
         {
             for (const auto& locale : Locales)
             {
@@ -247,7 +247,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        FilepathVector TranslatorProcessor::GatherFilesToUpdate(const TranslatorParameters& parameters) const
+        FilepathVector TranslatorProcessor::_GatherFilesToUpdate(const TranslatorParameters& parameters) const
         {
             FilepathVector filesToProcess;
             for (const auto& sourceDirectory : parameters.sourceDirectories)
@@ -256,7 +256,7 @@ namespace Kmplete
                 {
                     for (const auto& directoryEntry : std::filesystem::recursive_directory_iterator(sourceDirectory))
                     {
-                        if (IsDirectoryEntryAcceptable(directoryEntry, parameters.filesExtensions))
+                        if (_IsDirectoryEntryAcceptable(directoryEntry, parameters.filesExtensions))
                         {
                             filesToProcess.push_back(directoryEntry.path());
                         }
@@ -266,7 +266,7 @@ namespace Kmplete
                 {
                     for (const auto& directoryEntry : std::filesystem::directory_iterator(sourceDirectory))
                     {
-                        if (IsDirectoryEntryAcceptable(directoryEntry, parameters.filesExtensions))
+                        if (_IsDirectoryEntryAcceptable(directoryEntry, parameters.filesExtensions))
                         {
                             filesToProcess.push_back(directoryEntry.path());
                         }
@@ -278,7 +278,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TranslatorProcessor::IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const
+        bool TranslatorProcessor::_IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const
         {
             if (directoryEntry.is_directory() || !directoryEntry.is_regular_file() || !directoryEntry.path().has_extension())
             {
@@ -293,7 +293,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        String TranslatorProcessor::CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const
+        String TranslatorProcessor::_CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const
         {
             auto poTemplateFilePath = parameters.outputDirectory;
             poTemplateFilePath /= locale;

@@ -68,6 +68,7 @@ TEST_CASE("File dialog open single file - OPEN manual name existing non-match fi
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("File dialog open multiple files - OPEN", "[file_dialogs][open]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -168,6 +169,7 @@ TEST_CASE("File dialog open multiple files - OPEN manual names existent", "[file
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("File dialog save file - SAVE new", "[file_dialogs][save]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -223,6 +225,7 @@ TEST_CASE("File dialog save file - Cyrillic characters", "[file_dialogs][open]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("File dialog open folder - OPEN", "[file_dialogs][folder]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -239,6 +242,7 @@ TEST_CASE("File dialog open folder - CANCEL", "[file_dialogs][folder]")
     REQUIRE(folder.empty());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Message dialog OK button", "[file_dialogs][message]")
 {
@@ -316,6 +320,7 @@ TEST_CASE("Message dialog IGNORE button", "[file_dialogs][message]")
     REQUIRE(messageResult == Kmplete::FileDialogs::MessageButton::Ignore);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Message dialog icon INFO", "[file_dialogs][message]")
 {

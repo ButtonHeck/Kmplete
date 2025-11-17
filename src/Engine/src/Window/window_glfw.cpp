@@ -15,16 +15,16 @@
 
 namespace Kmplete
 {
-    NonNull<WindowGlfw::UserData*> WindowGlfw::GetUserPointer(const NonNull<GLFWwindow*> window)
+    NonNull<WindowGlfw::_UserData*> WindowGlfw::_GetUserPointer(const NonNull<GLFWwindow*> window)
     {
         auto userData = glfwGetWindowUserPointer(window);
         KMP_ASSERT(userData);
 
-        return reinterpret_cast<UserData*>(userData);
+        return reinterpret_cast<_UserData*>(userData);
     }
     //--------------------------------------------------------------------------
 
-    std::pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::GetSuitableMonitor(const Math::Rect2I& windowRectangle)
+    std::pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::_GetSuitableMonitor(const Math::Rect2I& windowRectangle)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -40,7 +40,7 @@ namespace Kmplete
                 const auto monitor = monitors[i];
                 if (monitor)
                 {
-                    const auto monitorRectangle = GetMonitorRectangle(monitor);
+                    const auto monitorRectangle = _GetMonitorRectangle(monitor);
                     if (monitorRectangle.ContainsPoint(windowCenter))
                     {
                         return { true, monitor };
@@ -55,7 +55,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Math::Rect2I WindowGlfw::GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor)
+    Math::Rect2I WindowGlfw::_GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -72,13 +72,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::UpdateDPI(const NonNull<GLFWwindow*> window)
+    void WindowGlfw::_UpdateDPI(const NonNull<GLFWwindow*> window)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-        const NonNull<UserData*> userData = GetUserPointer(window);
+        const NonNull<_UserData*> userData = _GetUserPointer(window);
 
-        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(userData->position, userData->size));
+        const auto [isFound, monitor] = _GetSuitableMonitor(Math::Rect2I(userData->position, userData->size));
         const auto videoMode = glfwGetVideoMode(monitor);
         auto monitorWidthMm = 0;
         auto monitorHeightMm = 0;
@@ -91,11 +91,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::UpdateDPIScale(const NonNull<GLFWwindow*> window)
+    void WindowGlfw::_UpdateDPIScale(const NonNull<GLFWwindow*> window)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-        const NonNull<UserData*> userData = GetUserPointer(window);
+        const NonNull<_UserData*> userData = _GetUserPointer(window);
 
         auto scale = 1.0f;
         glfwGetWindowContentScale(window, &scale, &scale);
@@ -104,7 +104,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    WindowGlfw::UserData::UserData(WindowSettings& settings)
+    WindowGlfw::_UserData::_UserData(WindowSettings& settings)
         : screenMode(settings.screenMode)
         , position(settings.position)
         , size(settings.size)
@@ -116,12 +116,13 @@ namespace Kmplete
     {}
     //--------------------------------------------------------------------------
 
+
     WindowGlfw::WindowGlfw(WindowSettings& settings)
         : Window(settings)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _window(nullptr)
     {
-        Initialize();
+        _Initialize();
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -131,15 +132,15 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Finalize();
+        _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    Nullable<GLFWwindow*> WindowGlfw::CreateGLFWwindow()
+    Nullable<GLFWwindow*> WindowGlfw::_CreateGLFWwindow()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
+        const auto [isFound, monitor] = _GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
         const auto videoMode = glfwGetVideoMode(monitor);
 
         GLFWwindow* window = nullptr;
@@ -165,13 +166,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::Initialize()
+    void WindowGlfw::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        InitializeWindowHints();
+        _InitializeWindowHints();
 
-        _window = CreateGLFWwindow();
+        _window = _CreateGLFWwindow();
 
         if (!_window)
         {
@@ -181,12 +182,12 @@ namespace Kmplete
 
         MakeContextCurrent();
 
-        InitializeUserPointer();
-        InitializeGeometry();
-        InitializeCallbacks();
+        _InitializeUserPointer();
+        _InitializeGeometry();
+        _InitializeCallbacks();
 
-        UpdateDPIScale(_window);
-        UpdateDPI(_window);
+        _UpdateDPIScale(_window);
+        _UpdateDPI(_window);
 
         SetVSync(_settings.vSync);
 
@@ -194,11 +195,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::Finalize()
+    void WindowGlfw::_Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        NonNull<UserData*> userData = GetUserPointer(_window);
+        NonNull<_UserData*> userData = _GetUserPointer(_window);
         delete userData;
 
         glfwDestroyWindow(_window);
@@ -220,14 +221,14 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-        const NonNull<UserData*> userData = GetUserPointer(_window);
+        const NonNull<_UserData*> userData = _GetUserPointer(_window);
         return Math::Size2I(userData->windowedSize.x, userData->windowedSize.y);
     }
     //--------------------------------------------------------------------------
 
     bool WindowGlfw::IsIconified() const
     {
-        const NonNull<UserData*> userData = GetUserPointer(_window);
+        const NonNull<_UserData*> userData = _GetUserPointer(_window);
         return userData->iconified;
     }
     //--------------------------------------------------------------------------
@@ -299,12 +300,12 @@ namespace Kmplete
             return;
         }
 
-        const auto [isFound, currentMonitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
-        const auto monitorRectangle = GetMonitorRectangle(currentMonitor);
+        const auto [isFound, currentMonitor] = _GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
+        const auto monitorRectangle = _GetMonitorRectangle(currentMonitor);
         const auto monitorCenter = monitorRectangle.GetCenter();
 
         const auto windowedSize = GetWindowedSize();
-        const NonNull<UserData*> userData = GetUserPointer(_window);
+        const NonNull<_UserData*> userData = _GetUserPointer(_window);
 
         glfwSetWindowMonitor(_window, nullptr,
             monitorCenter.x - windowedSize.x / 2,
@@ -333,7 +334,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-        const NonNull<UserData*> userData = GetUserPointer(_window);
+        const NonNull<_UserData*> userData = _GetUserPointer(_window);
         if (userData->screenMode == screenMode)
         {
             return;
@@ -341,9 +342,9 @@ namespace Kmplete
 
         userData->screenMode = screenMode;
 
-        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
+        const auto [isFound, monitor] = _GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
         const auto videoMode = glfwGetVideoMode(monitor);
-        const auto monitorRectangle = GetMonitorRectangle(monitor);
+        const auto monitorRectangle = _GetMonitorRectangle(monitor);
 
         if (screenMode == ScreenMode::Fullscreen)
         {
@@ -366,7 +367,7 @@ namespace Kmplete
 
     Window::ScreenMode WindowGlfw::GetScreenMode() const
     {
-        const NonNull<UserData*> userData = GetUserPointer(_window);
+        const NonNull<_UserData*> userData = _GetUserPointer(_window);
         return userData->screenMode;
     }
     //--------------------------------------------------------------------------
@@ -516,12 +517,12 @@ namespace Kmplete
 
     void WindowGlfw::SetEventCallback(const EventCallbackFn& callback)
     {
-        const NonNull<UserData*> userData = GetUserPointer(_window);
+        const NonNull<_UserData*> userData = _GetUserPointer(_window);
         userData->eventCallback = callback;
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeWindowHints() const
+    void WindowGlfw::_InitializeWindowHints() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -535,31 +536,31 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeUserPointer() const
+    void WindowGlfw::_InitializeUserPointer() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        glfwSetWindowUserPointer(_window, new UserData(_settings));
-        KMP_ASSERT(GetUserPointer(_window));
+        glfwSetWindowUserPointer(_window, new _UserData(_settings));
+        KMP_ASSERT(_GetUserPointer(_window));
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeCallbacks() const
+    void WindowGlfw::_InitializeCallbacks() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        InitializeWindowCallbacks();
-        InitializeKeyboardCallbacks();
-        InitializeMouseCallbacks();
+        _InitializeWindowCallbacks();
+        _InitializeKeyboardCallbacks();
+        _InitializeMouseCallbacks();
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeWindowCallbacks() const
+    void WindowGlfw::_InitializeWindowCallbacks() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             userData->position.x = x;
             userData->position.y = y;
 
@@ -572,10 +573,10 @@ namespace Kmplete
         );
 
         glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             
-            UpdateDPIScale(window);
-            UpdateDPI(window);
+            _UpdateDPIScale(window);
+            _UpdateDPI(window);
 
             if (userData->eventCallback)
             {
@@ -586,7 +587,7 @@ namespace Kmplete
         );
 
         glfwSetWindowFocusCallback(_window, [](GLFWwindow* window, int focused) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 WindowFocusEvent event(focused);
@@ -596,7 +597,7 @@ namespace Kmplete
         );
 
         glfwSetWindowIconifyCallback(_window, [](GLFWwindow* window, int iconified) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             userData->iconified = (iconified == GLFW_TRUE);
             if (userData->eventCallback)
             {
@@ -607,7 +608,7 @@ namespace Kmplete
         );
 
         glfwSetWindowSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 WindowResizeEvent event(width, height);
@@ -616,7 +617,7 @@ namespace Kmplete
         });
 
         glfwSetFramebufferSizeCallback(_window, [](GLFWwindow* window, int width, int height) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             userData->size.x = width;
             userData->size.y = height;
 
@@ -635,7 +636,7 @@ namespace Kmplete
         );
 
         glfwSetWindowRefreshCallback(_window, [](GLFWwindow* window) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 WindowFramebufferRefreshEvent event;
@@ -647,7 +648,7 @@ namespace Kmplete
         );
 
         glfwSetWindowCloseCallback(_window, [](GLFWwindow* window) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 WindowCloseEvent event;
@@ -658,12 +659,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeKeyboardCallbacks() const
+    void WindowGlfw::_InitializeKeyboardCallbacks() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         glfwSetKeyCallback(_window, [](GLFWwindow* window, int key, KMP_MB_UNUSED int scancode, int action, int mods) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 switch (action)
@@ -694,7 +695,7 @@ namespace Kmplete
         );
 
         glfwSetCharCallback(_window, [](GLFWwindow* window, unsigned int codepoint) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 KeyCharEvent event(codepoint);
@@ -705,12 +706,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeMouseCallbacks() const
+    void WindowGlfw::_InitializeMouseCallbacks() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         glfwSetMouseButtonCallback(_window, [](GLFWwindow* window, int button, int action, int mods) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 switch (action)
@@ -735,7 +736,7 @@ namespace Kmplete
         );
 
         glfwSetScrollCallback(_window, [](GLFWwindow* window, double xOffset, double yOffset) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
                 MouseScrollEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
@@ -745,7 +746,7 @@ namespace Kmplete
         );
 
         glfwSetCursorPosCallback(_window, [](GLFWwindow* window, double xPos, double yPos) {
-            const NonNull<UserData*> userData = GetUserPointer(window);
+            const NonNull<_UserData*> userData = _GetUserPointer(window);
             userData->cursorPosition.x = int(xPos);
             userData->cursorPosition.y = int(yPos);
 
@@ -759,15 +760,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::InitializeGeometry()
+    void WindowGlfw::_InitializeGeometry()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto [isFound, monitor] = GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
+        const auto [isFound, monitor] = _GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
 
         if (IsWindowedFullscreen())
         {
-            const auto monitorRectangle = GetMonitorRectangle(monitor);
+            const auto monitorRectangle = _GetMonitorRectangle(monitor);
 
             SetDecorated(false);
             glfwSetWindowMonitor(_window, nullptr, monitorRectangle.position.x, monitorRectangle.position.y, _settings.size.x, _settings.size.y, GLFW_DONT_CARE);

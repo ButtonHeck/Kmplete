@@ -29,7 +29,7 @@ namespace Kmplete
         , _windowsProcessHandle(nullptr)
 #endif
     {
-        Initialize();
+        _Initialize();
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -53,7 +53,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::NumThreads)
         {
-            if (!UpdateNumThreads())
+            if (!_UpdateNumThreads())
             {
                 return false;
             }
@@ -61,7 +61,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::MemoryUsed)
         {
-            if (!UpdateMemoryUsed())
+            if (!_UpdateMemoryUsed())
             {
                 return false;
             }
@@ -69,7 +69,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::CPUUsed)
         {
-            if (!UpdateCPUUsed())
+            if (!_UpdateCPUUsed())
             {
                 return false;
             }
@@ -77,7 +77,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::StackUsed)
         {
-            if (!UpdateCurrentThreadStackUsed())
+            if (!_UpdateCurrentThreadStackUsed())
             {
                 return false;
             }
@@ -93,7 +93,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SystemMetricsManager::Initialize()
+    void SystemMetricsManager::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -101,27 +101,27 @@ namespace Kmplete
         static_assert(sizeof(ULARGE_INTEGER) == sizeof(decltype(_lastCPUTimestamp)));
 #endif
 
-        if (!InitializeProcessId())
+        if (!_InitializeProcessId())
         {
             return;
         }
 
-        if (!InitializeTotalMemory())
+        if (!_InitializeTotalMemory())
         {
             return;
         }
 
-        if (!InitializeNumProcessors())
+        if (!_InitializeNumProcessors())
         {
             return;
         }
 
-        if (!InitializeWindowsProcessHandle())
+        if (!_InitializeWindowsProcessHandle())
         {
             return;
         }
 
-        if (!InitializeCPUTimestamps())
+        if (!_InitializeCPUTimestamps())
         {
             return;
         }
@@ -132,7 +132,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::InitializeProcessId()
+    bool SystemMetricsManager::_InitializeProcessId()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -146,7 +146,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::InitializeTotalMemory()
+    bool SystemMetricsManager::_InitializeTotalMemory()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -187,7 +187,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::InitializeNumProcessors()
+    bool SystemMetricsManager::_InitializeNumProcessors()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -204,7 +204,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::InitializeWindowsProcessHandle()
+    bool SystemMetricsManager::_InitializeWindowsProcessHandle()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -222,7 +222,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::InitializeCPUTimestamps()
+    bool SystemMetricsManager::_InitializeCPUTimestamps()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -252,7 +252,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::UpdateNumThreads()
+    bool SystemMetricsManager::_UpdateNumThreads()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -321,7 +321,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::UpdateMemoryUsed()
+    bool SystemMetricsManager::_UpdateMemoryUsed()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -377,7 +377,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::UpdateCPUUsed()
+    bool SystemMetricsManager::_UpdateCPUUsed()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -450,7 +450,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::UpdateCurrentThreadStackUsed()
+    bool SystemMetricsManager::_UpdateCurrentThreadStackUsed()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 

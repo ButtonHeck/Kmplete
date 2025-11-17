@@ -29,13 +29,13 @@ namespace Kmplete
     private:
 #if defined (KMP_PLATFORM_WINDOWS)
         // WinMain entryPoint
-        KMP_NODISCARD boost::program_options::command_line_parser CreateCmdParser(char* lpCmdLine) const;
+        KMP_NODISCARD boost::program_options::command_line_parser _CreateCmdParser(char* lpCmdLine) const;
 #endif
 
         // main entryPoint
-        KMP_NODISCARD boost::program_options::command_line_parser CreateCmdParser(int argc, char** argv) const;
+        KMP_NODISCARD boost::program_options::command_line_parser _CreateCmdParser(int argc, char** argv) const;
 
-        void ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser);
+        void _ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser);
 
     private:
         Filepath _settingsFilepath;

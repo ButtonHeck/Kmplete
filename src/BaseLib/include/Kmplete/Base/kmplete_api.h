@@ -20,6 +20,7 @@
     #endif    
 #endif
 
+
 #if defined (KMP_PLATFORM_WINDOWS)
     #define KMP_DEPRECATED __declspec(deprecated)
 #else
@@ -29,9 +30,11 @@
 #define KMP_DEPRECATED_EXPORT KMP_API KMP_DEPRECATED
 #define KMP_DEPRECATED_NO_EXPORT KMP_NO_EXPORT KMP_DEPRECATED
 
+
 #define KMP_NORETURN [[noreturn]]
 #define KMP_NODISCARD [[nodiscard]]
 #define KMP_MB_UNUSED [[maybe_unused]]
+
 
 #define KMP_DISABLE_COPY(ClassName)\
     ClassName(const ClassName&) = delete;\

@@ -8,6 +8,7 @@ namespace Kmplete
 {
     class Image;
 
+
     class OpenGLTexture : public Texture
     {
     public:
@@ -15,7 +16,7 @@ namespace Kmplete
         KMP_API explicit OpenGLTexture(const Image& image);
 
     private:
-        void LoadFromImage(const Image& image);
+        void _LoadFromImage(const Image& image);
     };
     //--------------------------------------------------------------------------
 }

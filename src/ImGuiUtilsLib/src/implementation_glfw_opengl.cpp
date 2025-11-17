@@ -14,7 +14,7 @@ namespace Kmplete
             : ImGuiImplementation(dockingEnabled, viewportsEnabled, configName)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         {
-            Initialize(window);
+            _Initialize(window);
 
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -24,17 +24,17 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            Finalize();
+            _Finalize();
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::CreateFontsTexture()
+        void ImGuiImplementationGlfwOpenGL::CreateFontsTexture() const
         {
             ImGui_ImplOpenGL3_CreateFontsTexture();
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::Initialize(NonNull<GLFWwindow*> window) const
+        void ImGuiImplementationGlfwOpenGL::_Initialize(NonNull<GLFWwindow*> window) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -43,7 +43,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::Finalize() const
+        void ImGuiImplementationGlfwOpenGL::_Finalize() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -52,7 +52,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::NewFrameImpl() const
+        void ImGuiImplementationGlfwOpenGL::_NewFrameImpl() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -61,7 +61,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::RenderImpl() const
+        void ImGuiImplementationGlfwOpenGL::_RenderImpl() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 

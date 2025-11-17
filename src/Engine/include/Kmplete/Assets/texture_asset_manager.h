@@ -13,6 +13,7 @@ namespace Kmplete
 {
     class Image;
 
+
     namespace Assets
     {
         class TextureAssetManager
@@ -38,8 +39,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API UInt64 GetAssetsCount() const noexcept;
 
         private:
-            KMP_NODISCARD bool CreateErrorTextureAsset();
-            KMP_NODISCARD bool TextureSidIsValid(Utils::StringID textureSid);
+            KMP_NODISCARD bool _CreateErrorTextureAsset();
+            KMP_NODISCARD bool _TextureSidIsValid(Utils::StringID textureSid);
 
         private:
             const GraphicsBackendType _backendType;

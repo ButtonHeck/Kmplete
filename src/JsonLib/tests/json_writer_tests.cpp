@@ -69,6 +69,7 @@ TEST_CASE("Json writer positive", "[json][writer]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json writer negative", "[json][writer]")
 {
     rapidjson::Document document;

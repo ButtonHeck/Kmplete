@@ -24,8 +24,6 @@ namespace Kmplete
 
 namespace std
 {
-    template <typename T> struct hash;
-
     template<>
     struct hash<Kmplete::UUID>
     {

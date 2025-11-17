@@ -13,6 +13,7 @@
 using namespace Kmplete;
 using namespace Kmplete::Assets;
 
+
 static UPtr<GraphicsBackend> prepareOpenGLBackend()
 {
     glfwInit();
@@ -35,6 +36,7 @@ TEST_CASE("TextureAssetManager initialization error type", "[graphics][texture_a
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("TextureAssetManager initialization opengl", "[graphics][texture_asset_manager][asset]")
 {
     prepareOpenGLBackend();
@@ -44,6 +46,7 @@ TEST_CASE("TextureAssetManager initialization opengl", "[graphics][texture_asset
     REQUIRE(textureAssetManager);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset_manager][texture][asset]")
 {
@@ -76,6 +79,7 @@ TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset
     REQUIRE_FALSE(ok);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_manager][texture][asset]")
 {

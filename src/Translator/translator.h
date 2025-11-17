@@ -22,6 +22,7 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
+
         class TranslatorProcessor
         {
             KMP_LOG_CLASSNAME(TranslatorProcessor)
@@ -32,12 +33,12 @@ namespace Kmplete
             KMP_NODISCARD ReturnCode Run() const;
 
         private:
-            KMP_NODISCARD ReturnCode Update() const;
-            KMP_NODISCARD ReturnCode Compile() const;
+            KMP_NODISCARD ReturnCode _Update() const;
+            KMP_NODISCARD ReturnCode _Compile() const;
 
-            KMP_NODISCARD FilepathVector GatherFilesToUpdate(const TranslatorParameters& parameters) const;
-            KMP_NODISCARD bool IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const;
-            KMP_NODISCARD String CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const;
+            KMP_NODISCARD FilepathVector _GatherFilesToUpdate(const TranslatorParameters& parameters) const;
+            KMP_NODISCARD bool _IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const;
+            KMP_NODISCARD String _CreatePoTemplateFile(const TranslatorParameters& parameters, const char* locale) const;
 
         private:
             const TranslatorParameters _parameters;

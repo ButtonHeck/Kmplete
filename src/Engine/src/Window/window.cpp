@@ -18,6 +18,7 @@ namespace Kmplete
     static constexpr auto UpdateContinuouslyStr = "UpdateContinuously";
     static constexpr auto AlwaysOnTopStr = "AlwaysOnTop";
 
+
     Window::Window(WindowSettings& settings)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _settings(settings)

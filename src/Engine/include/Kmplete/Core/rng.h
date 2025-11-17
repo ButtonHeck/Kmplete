@@ -14,14 +14,13 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    template<typename T, RNGBitWidth>
-    requires std::integral<T>
+
+    template<typename T, RNGBitWidth> requires std::integral<T>
     class RNGIntegral
     {};
     //--------------------------------------------------------------------------
 
-    template<typename T>
-    requires (sizeof(T) <= 4)
+    template<typename T> requires (sizeof(T) <= 4)
     class RNGIntegral<T, RNGBitWidth::RNGBitWidth32>
     {
     public:
@@ -73,14 +72,13 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
-    template<typename T, RNGBitWidth>
-    requires std::floating_point<T>
+
+    template<typename T, RNGBitWidth> requires std::floating_point<T>
     class RNGReal
     {};
     //--------------------------------------------------------------------------
 
-    template<typename T>
-    requires (sizeof(T) <= 4)
+    template<typename T> requires (sizeof(T) <= 4)
     class RNGReal<T, RNGBitWidth::RNGBitWidth32>
     {
     public:
@@ -131,6 +129,7 @@ namespace Kmplete
         std::uniform_real_distribution<T> _uniformDistribution;
     };
     //--------------------------------------------------------------------------
+
 
     using RNGInt32 = RNGIntegral<Int32, RNGBitWidth::RNGBitWidth32>;
     using RNGUInt32 = RNGIntegral<UInt32, RNGBitWidth::RNGBitWidth32>;

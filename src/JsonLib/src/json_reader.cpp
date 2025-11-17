@@ -55,7 +55,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return false;
         }
@@ -126,7 +126,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return 0;
         }
@@ -168,7 +168,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -207,7 +207,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -246,7 +246,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -285,7 +285,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -324,7 +324,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -363,7 +363,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -402,7 +402,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
-        if (!ValidToGetFromArray(index))
+        if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
         }
@@ -437,7 +437,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::ValidToGetFromArray(int index) const
+    bool JsonReader::_ValidToGetFromArray(int index) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 

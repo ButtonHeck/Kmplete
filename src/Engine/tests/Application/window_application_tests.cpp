@@ -23,6 +23,7 @@ namespace Kmplete
     static constexpr auto Id_ControlsWindow = "ControlsWindow";
     static constexpr auto Id_InfoWindow = "InfoWindow";
 
+
     class TestWindowApplication : public WindowApplication
     {
     public:
@@ -500,6 +501,8 @@ namespace Kmplete
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
     };
 }
+//--------------------------------------------------------------------------
+
 
 TEST_CASE("Test window application", "[window_application][application][window][event]")
 {
@@ -585,3 +588,4 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(settingsFilepath));
     REQUIRE(Kmplete::Filesystem::FilepathExists(settingsFilepath));
 }
+//--------------------------------------------------------------------------

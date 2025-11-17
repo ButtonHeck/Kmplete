@@ -19,6 +19,7 @@ namespace Kmplete
             static constexpr auto CompilerArgumentOutputFileName = "output_file_name";
             static constexpr auto CompilerArgumentOutputFileNameShort = "O";
 
+
             enum ReturnCode
             {
                 Ok = 0,

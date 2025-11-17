@@ -5,6 +5,7 @@ namespace Kmplete
 {
     using MouseCode = int;
 
+
     namespace Mouse
     {
         enum : MouseCode // from glfw3.h
@@ -24,4 +25,5 @@ namespace Kmplete
             ButtonMiddle = Button2
         };
     }
+    //--------------------------------------------------------------------------
 }

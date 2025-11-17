@@ -10,16 +10,11 @@
 #include "Kmplete/Event/key_event.h"
 
 
-#if defined (CreateWindow)
-    #pragma push_macro("CreateWindow")
-    #undef CreateWindow
-    #define KMP_UNDEF_CreateWindow
-#endif
-
 namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "WindowApplication";
     static constexpr auto GraphicsBackendTypeStr = "GraphicsBackendType";
+
 
     WindowApplication::WindowApplication(const WindowApplicationParameters& parameters)
         : Application(parameters.applicationParameters)
@@ -31,7 +26,7 @@ namespace Kmplete
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _frameTimer(0)
     {
-        Initialize(parameters);
+        _Initialize(parameters);
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -41,7 +36,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Finalize();
+        _Finalize();
     }
     //--------------------------------------------------------------------------
 
@@ -55,7 +50,7 @@ namespace Kmplete
 
         while (_running)
         {
-            if (!RunFrameIteration(mainWindow))
+            if (!_RunFrameIteration(mainWindow))
             {
                 break;
             }
@@ -67,7 +62,7 @@ namespace Kmplete
 
     void WindowApplication::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
-        _frameListenerManager->AddFrameListener(frameListener);
+        _frameListenerManager->_AddFrameListener(frameListener);
     }
     //--------------------------------------------------------------------------
 
@@ -80,21 +75,21 @@ namespace Kmplete
     void WindowApplication::OnEvent(Event& event)
     {
 #if defined KMP_PROFILE
-        SwitchProfilerActivation(event);
+        _SwitchProfilerActivation(event);
 #endif
 
-        _frameListenerManager->ProcessEventsFrameListeners(event);
+        _frameListenerManager->_ProcessEventsFrameListeners(event);
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::Initialize(const WindowApplicationParameters& parameters)
+    void WindowApplication::_Initialize(const WindowApplicationParameters& parameters)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
 
-        LoadSettings();
+        _LoadSettings();
 
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(defaultWindowIcon);
@@ -114,11 +109,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::Finalize()
+    void WindowApplication::_Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        SaveSettings();
+        _SaveSettings();
 
         _frameListenerManager.reset();
         _assetsManager.reset();
@@ -127,7 +122,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool WindowApplication::RunFrameIteration(Window& window)
+    bool WindowApplication::_RunFrameIteration(Window& window)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -150,14 +145,14 @@ namespace Kmplete
 
         const auto mainWindowIsIconified = window.IsIconified();
 
-        _frameListenerManager->UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
+        _frameListenerManager->_UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
 
         if (!mainWindowIsIconified)
         {
-            _frameListenerManager->RenderFrameListeners();
+            _frameListenerManager->_RenderFrameListeners();
         }
 
-        _frameListenerManager->ProcessFrameListenersCommands();
+        _frameListenerManager->_ProcessFrameListenersCommands();
 
         window.SwapBuffers();
 
@@ -165,7 +160,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::SaveSettings() const
+    void WindowApplication::_SaveSettings() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -181,7 +176,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::LoadSettings()
+    void WindowApplication::_LoadSettings()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -198,7 +193,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 #if defined KMP_PROFILE
-    void WindowApplication::SwitchProfilerActivation(Event& event)
+    void WindowApplication::_SwitchProfilerActivation(Event& event)
     {
         if (event.GetType() == EventType::KeyPressEventType)
         {
@@ -217,8 +212,3 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 #endif
 }
-
-#if defined (KMP_UNDEF_CreateWindow)
-    #pragma pop_macro("CreateWindow")
-    #undef KMP_UNDEF_CreateWindow
-#endif

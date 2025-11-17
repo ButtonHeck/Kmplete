@@ -10,6 +10,7 @@
 
 struct FT_LibraryRec_;
 
+
 namespace Kmplete
 {
     namespace Assets
@@ -38,11 +39,11 @@ namespace Kmplete
             KMP_NODISCARD KMP_API UInt64 GetAssetsCount() const noexcept;
 
         private:
-            void Initialize();
-            void Finalize();
+            void _Initialize();
+            void _Finalize();
 
-            KMP_NODISCARD bool CreateDefaultFontAsset();
-            KMP_NODISCARD bool AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData);
+            KMP_NODISCARD bool _CreateDefaultFontAsset();
+            KMP_NODISCARD bool _AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData);
 
         private:
             FT_LibraryRec_* _freetypeLibInstance;

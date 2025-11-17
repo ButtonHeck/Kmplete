@@ -4,12 +4,14 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+
 #include <stdexcept>
 
 
 namespace Kmplete
 {
     static constexpr auto DefaultFontPixelSize = 18;
+
 
     Font::Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
@@ -23,7 +25,7 @@ namespace Kmplete
             throw std::runtime_error("Font: failed to load FreeType font from buffer");
         }
 
-        UpdateParameters();
+        _UpdateParameters();
         SetPixelSize(DefaultFontPixelSize);
 
         KMP_PROFILE_CONSTRUCTOR_END()
@@ -64,7 +66,7 @@ namespace Kmplete
             return false;
         }
 
-        UpdateSizeMetrics();
+        _UpdateSizeMetrics();
         return true;
     }
     //--------------------------------------------------------------------------
@@ -80,7 +82,7 @@ namespace Kmplete
             return false;
         }
 
-        UpdateSizeMetrics();
+        _UpdateSizeMetrics();
         return true;
     }
     //--------------------------------------------------------------------------
@@ -91,7 +93,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Font::UpdateParameters() noexcept
+    void Font::_UpdateParameters() noexcept
     {
         _parameters.familyName = _freetypeFace->family_name;
 
@@ -121,7 +123,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Font::UpdateSizeMetrics() noexcept
+    void Font::_UpdateSizeMetrics() noexcept
     {
         _parameters.sizeMetrics.xPixelsPerEM = _freetypeFace->size->metrics.x_ppem;
         _parameters.sizeMetrics.yPixelsPerEM = _freetypeFace->size->metrics.y_ppem;

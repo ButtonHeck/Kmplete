@@ -12,6 +12,7 @@ namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "Application";
 
+
     Application::Application(const ApplicationParameters& parameters)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _applicationName(parameters.applicationName)
@@ -21,7 +22,7 @@ namespace Kmplete
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
     {
-        Initialize(parameters);
+        _Initialize(parameters);
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -31,7 +32,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Finalize();
+        _Finalize();
     }
     //--------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::Initialize(const ApplicationParameters& parameters)
+    void Application::_Initialize(const ApplicationParameters& parameters)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -73,7 +74,7 @@ namespace Kmplete
             : parameters.settingsFilepath);
         KMP_ASSERT(_settingsManager);
 
-        LoadSettings();
+        _LoadSettings();
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
@@ -82,16 +83,16 @@ namespace Kmplete
         }
 #endif
 
-        FillDictionary();
-        _localizationManager->AddLocaleChangedCallback(KMP_BIND(Application::FillDictionary));
+        _FillDictionary();
+        _localizationManager->AddLocaleChangedCallback(KMP_BIND(Application::_FillDictionary));
     }
     //--------------------------------------------------------------------------
 
-    void Application::Finalize()
+    void Application::_Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        SaveSettings();
+        _SaveSettings();
 
         _settingsManager.reset();
         _localizationManager.reset();
@@ -106,7 +107,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::SaveSettings() const
+    void Application::_SaveSettings() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -137,7 +138,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::LoadSettings()
+    void Application::_LoadSettings()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -171,7 +172,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::FillDictionary()
+    void Application::_FillDictionary()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 

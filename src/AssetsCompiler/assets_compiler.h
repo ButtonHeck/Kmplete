@@ -12,6 +12,7 @@ namespace Kmplete
 {
     class JsonDocument;
 
+
     namespace Assets
     {
         namespace Compiler
@@ -23,6 +24,7 @@ namespace Kmplete
                 bool logging = false;
             };
             //--------------------------------------------------------------------------
+
 
             class AssetsCompiler
             {
@@ -42,10 +44,10 @@ namespace Kmplete
                 };
 
             private:
-                KMP_NODISCARD ReturnCode WriteHeaders(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
-                KMP_NODISCARD ReturnCode WriteHeader(UInt32 assetIndex, JsonDocument& sourceJson, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
-                KMP_NODISCARD ReturnCode WriteBinaries(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
-                KMP_NODISCARD ReturnCode WriteBinary(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, const String& assetTypeName) const;
+                KMP_NODISCARD ReturnCode _WriteHeaders(JsonDocument& sourceJson, AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode _WriteHeader(UInt32 assetIndex, JsonDocument& sourceJson, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode _WriteBinaries(AssetCount assetCount, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const;
+                KMP_NODISCARD ReturnCode _WriteBinary(std::ofstream& outputFile, const Filepath& filepath, WriteBufferState& writeState, const String& assetTypeName) const;
 
             private:
                 const CompilerParameters _parameters;

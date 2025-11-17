@@ -19,6 +19,7 @@ TEST_CASE("Plurality form english", "[localization][locale]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Plurality form russian", "[localization][locale]")
 {
     using namespace Kmplete;

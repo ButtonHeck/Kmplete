@@ -19,6 +19,7 @@
     #endif
 #endif
 
+
 namespace Kmplete
 {
     class Assertion

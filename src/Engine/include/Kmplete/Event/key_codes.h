@@ -6,6 +6,7 @@ namespace Kmplete
     using KeyCode = int;
     using KeyMode = int;
 
+
     namespace Mode
     {
         enum : KeyMode
@@ -19,6 +20,8 @@ namespace Kmplete
             NumLock = 0x0020
         };
     }
+    //--------------------------------------------------------------------------
+
 
     namespace Key
     {
@@ -154,4 +157,5 @@ namespace Kmplete
             Menu = 348
         };
     }
+    //--------------------------------------------------------------------------
 }

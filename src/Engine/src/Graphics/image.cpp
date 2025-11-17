@@ -4,6 +4,7 @@
 #include "Kmplete/Profile/profiler.h"
 
 #include <stb_image.h>
+
 #include <cstring>
 #include <stdexcept>
 
@@ -35,7 +36,7 @@ namespace Kmplete
             throw std::runtime_error("Image: failed to load from file");
         }
 
-        FixChannels(desiredChannels, channelsInFile);
+        _FixChannels(desiredChannels, channelsInFile);
 
         KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
     }
@@ -101,7 +102,7 @@ namespace Kmplete
             throw std::runtime_error("Image: failed to load from file buffer");
         }
 
-        FixChannels(desiredChannels, channelsInFile);
+        _FixChannels(desiredChannels, channelsInFile);
 
         KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
     }
@@ -111,7 +112,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        DeleteData();
+        _DeleteData();
     }
     //--------------------------------------------------------------------------
 
@@ -130,7 +131,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        DeleteData();
+        _DeleteData();
 
         _loadedFromFile = rhs._loadedFromFile;
         _width = rhs._width;
@@ -168,7 +169,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Image::DeleteData()
+    void Image::_DeleteData()
     {
         if (_pixels)
         {
@@ -184,7 +185,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Image::FixChannels(ImageChannels desiredChannels, int channelsInFile)
+    void Image::_FixChannels(ImageChannels desiredChannels, int channelsInFile)
     {
         if (channelsInFile != _channels)
         {

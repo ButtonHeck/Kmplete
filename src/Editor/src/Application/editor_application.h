@@ -22,11 +22,11 @@ namespace Kmplete
         virtual ~EditorApplication();
 
     private:
-        void Initialize();
-        void Finalize();
+        void _Initialize();
+        void _Finalize();
 
-        void SaveSettings() const;
-        void LoadSettings();
+        void _SaveSettings() const;
+        void _LoadSettings();
 
     private:
         Window& _mainWindow;

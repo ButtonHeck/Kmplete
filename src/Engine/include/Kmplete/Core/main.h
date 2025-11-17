@@ -41,6 +41,7 @@ void TerminationHandler()
 }
 //--------------------------------------------------------------------------
 
+
 int Main(const Kmplete::ProgramOptions& programOptions);
 
 #if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN) 

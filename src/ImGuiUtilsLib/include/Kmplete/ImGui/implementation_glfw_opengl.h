@@ -7,6 +7,7 @@
 
 struct GLFWwindow;
 
+
 namespace Kmplete
 {
     namespace ImGuiUtils
@@ -21,14 +22,14 @@ namespace Kmplete
             ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
             virtual ~ImGuiImplementationGlfwOpenGL();
 
-            void CreateFontsTexture() override;
+            void CreateFontsTexture() const override;
 
         private:
-            void Initialize(NonNull<GLFWwindow*> window) const;
-            void Finalize() const;
+            void _Initialize(NonNull<GLFWwindow*> window) const;
+            void _Finalize() const;
 
-            void NewFrameImpl() const override;
-            void RenderImpl() const override;
+            void _NewFrameImpl() const override;
+            void _RenderImpl() const override;
         };
         //--------------------------------------------------------------------------
     }

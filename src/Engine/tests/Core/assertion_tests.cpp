@@ -18,6 +18,7 @@ TEST_CASE("Assertion exception", "[core][assertion]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Assertion nothrows", "[core][assertion]")
 {
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
@@ -28,6 +29,7 @@ TEST_CASE("Assertion nothrows", "[core][assertion]")
 #endif
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Assertion chain watch", "[core][assertion]")
 {

@@ -9,6 +9,7 @@
 struct FT_LibraryRec_;
 struct FT_FaceRec_;
 
+
 namespace Kmplete
 {
     class Font
@@ -63,8 +64,8 @@ namespace Kmplete
         KMP_NODISCARD KMP_API const Parameters& GetParameters() const noexcept;
 
     private:
-        void UpdateParameters() noexcept;
-        void UpdateSizeMetrics() noexcept;
+        void _UpdateParameters() noexcept;
+        void _UpdateSizeMetrics() noexcept;
 
     private:
         FT_FaceRec_* _freetypeFace;

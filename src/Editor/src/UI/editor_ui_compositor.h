@@ -19,6 +19,7 @@ namespace Kmplete
         class AssetsManager;
     }
 
+
     class EditorUICompositor
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -38,31 +39,31 @@ namespace Kmplete
         void LoadSettings(SettingsDocument& settings);
 
     private:
-        void ComposeDefaultLayout();
+        void _ComposeDefaultLayout();
 
-        void ComposeMenu();
-        void ComposeMenuLanguage();
-        void ComposeMenuFile();
-        void ComposeMenuView();
-        void ComposeMenuFileQuit();
-        void ComposeMenuViewFullscreen();
-        void ComposeMenuViewAlwaysOnTop();
+        void _ComposeMenu();
+        void _ComposeMenuLanguage();
+        void _ComposeMenuFile();
+        void _ComposeMenuView();
+        void _ComposeMenuFileQuit();
+        void _ComposeMenuViewFullscreen();
+        void _ComposeMenuViewAlwaysOnTop();
 
-        void ComposePopups();
-        void PopupQuit();
+        void _ComposePopups();
+        void _PopupQuit();
 
-        void SwitchFullscreen();
-        void SwitchAlwaysOnTop();
+        void _SwitchFullscreen();
+        void _SwitchAlwaysOnTop();
 
-        void FillDictionary();
+        void _FillDictionary();
 
     private:
-        struct UIComponentsState
+        struct _UIComponentsState
         {
             bool metricsFractional = true;
         };
 
-        struct UIPopupsState
+        struct _UIPopupsState
         {
             bool quit = false;
         };
@@ -72,8 +73,8 @@ namespace Kmplete
         Assets::AssetsManager& _assetsManager;
         LocalizationManager& _localizationManager;
         const SystemMetricsManager& _systemMetricsManager;
-        UIComponentsState _state;
-        UIPopupsState _popups;
+        _UIComponentsState _state;
+        _UIPopupsState _popups;
         bool _needCheckImguiIniFile;
     };
     //--------------------------------------------------------------------------

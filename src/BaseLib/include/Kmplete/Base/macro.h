@@ -8,9 +8,11 @@
 #define KMP_M_STRINGIFY_(x) #x
 #define KMP_M_STRINGIFY(x) KMP_M_STRINGIFY_(x)
 
+
 #define KMP_M_NUM_ARGS_(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, TOTAL, ...) TOTAL
 #define KMP_M_NUM_ARGS(...) KMP_M_NUM_ARGS_(__VA_ARGS__, 12_, 11_, 10_, 9_, 8_, 7_, 6_, 5_, 4_, 3_, 2_, 1_)
 #define KMP_M_DISPATCH_VA(macro, ...) KMP_M_CONCAT(macro, KMP_M_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
+
 
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
     #define KMP_FUNC_SIG __PRETTY_FUNCTION__
@@ -30,6 +32,7 @@
     #error "KMP_FUNC_SIG unknown!"
 #endif
 
+
 #if defined (KMP_COMPILER_MSVC)
     #define KMP_COMPILER_DIAGNOSTIC_PUSH            _Pragma("warning(push)")
     #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(warning(disable: value)))
@@ -43,6 +46,7 @@
     #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(clang diagnostic ignored value))
     #define KMP_COMPILER_DIAGNOSTIC_POP             _Pragma("clang diagnostic pop")
 #endif
+
 
 #if defined (KMP_COMPILER_MSVC)
     #define KMP_BEGIN_PACKED_STRUCT(name)   _Pragma("pack(push, 1)") struct name

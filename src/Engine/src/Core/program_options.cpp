@@ -6,18 +6,19 @@ namespace Kmplete
     ProgramOptions::ProgramOptions() noexcept
         : _settingsFilepath(Filepath())
         , _profilingLevel(0)
+        , _profilingOnDemand(false)
     {}
     //--------------------------------------------------------------------------
 
 #if defined (KMP_PLATFORM_WINDOWS)
     void ProgramOptions::ProcessCommandLine(char* lpCmdLine)
     {
-        auto cmdParser = CreateCmdParser(lpCmdLine);
-        ProcessCommandLineArgs(cmdParser);
+        auto cmdParser = _CreateCmdParser(lpCmdLine);
+        _ProcessCommandLineArgs(cmdParser);
     }
     //--------------------------------------------------------------------------
 
-    boost::program_options::command_line_parser ProgramOptions::CreateCmdParser(char* lpCmdLine) const
+    boost::program_options::command_line_parser ProgramOptions::_CreateCmdParser(char* lpCmdLine) const
     {
         const auto args = boost::program_options::split_winmain(lpCmdLine);
         return boost::program_options::command_line_parser(args);
@@ -27,12 +28,12 @@ namespace Kmplete
 
     void ProgramOptions::ProcessCommandLine(int argc, char** argv)
     {
-        auto cmdParser = CreateCmdParser(argc, argv);
-        ProcessCommandLineArgs(cmdParser);
+        auto cmdParser = _CreateCmdParser(argc, argv);
+        _ProcessCommandLineArgs(cmdParser);
     }
     //--------------------------------------------------------------------------
 
-    boost::program_options::command_line_parser ProgramOptions::CreateCmdParser(int argc, char** argv) const
+    boost::program_options::command_line_parser ProgramOptions::_CreateCmdParser(int argc, char** argv) const
     {
         return boost::program_options::command_line_parser(argc, argv);
     }
@@ -56,7 +57,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void ProgramOptions::ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser)
+    void ProgramOptions::_ProcessCommandLineArgs(boost::program_options::command_line_parser& cmdParser)
     {
         boost::program_options::options_description optDescription("Kmplete options");
         optDescription.add_options()

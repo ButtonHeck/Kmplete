@@ -11,6 +11,7 @@ namespace Kmplete
 {
     class FrameListenerManager;
 
+
     class FrameListener
     {
         KMP_DISABLE_COPY_MOVE(FrameListener)

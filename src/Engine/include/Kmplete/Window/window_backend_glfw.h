@@ -39,19 +39,19 @@ namespace Kmplete
         KMP_API void LoadSettings(SettingsDocument& settings) override;
 
     private:
-        void Initialize();
-        void InitializeCallbacks() const;
-        void InitializeErrorCallback() const;
+        void _Initialize();
+        void _InitializeCallbacks() const;
+        void _InitializeErrorCallback() const;
 
-        void Finalize();
+        void _Finalize();
 
-        void SaveMainWindowSettings(SettingsDocument& settings) const;
-        void SaveAuxWindowsSettings(SettingsDocument& settings) const;
+        void _SaveMainWindowSettings(SettingsDocument& settings) const;
+        void _SaveAuxWindowsSettings(SettingsDocument& settings) const;
 
-        void LoadMainWindowSettings(SettingsDocument& settings);
-        void LoadAuxWindowsSettings(SettingsDocument& settings);
+        void _LoadMainWindowSettings(SettingsDocument& settings);
+        void _LoadAuxWindowsSettings(SettingsDocument& settings);
 
-        KMP_NODISCARD bool IsAuxWindowNameAcceptable(const String& name) const noexcept;
+        KMP_NODISCARD bool _IsAuxWindowNameAcceptable(const String& name) const noexcept;
 
     private:
         UPtr<Window::WindowSettings> _mainWindowSettings;

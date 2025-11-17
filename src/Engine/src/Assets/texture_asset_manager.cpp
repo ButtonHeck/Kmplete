@@ -17,7 +17,7 @@ namespace Kmplete
         TextureAssetManager::TextureAssetManager(GraphicsBackendType backendType)
             : _backendType(backendType)
         {
-            if (!CreateErrorTextureAsset())
+            if (!_CreateErrorTextureAsset())
             {
                 KMP_LOG_CRITICAL("error texture loading failed");
                 throw std::runtime_error("TextureAssetManager: error texture loading failed");
@@ -29,7 +29,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            if (!TextureSidIsValid(textureSid))
+            if (!_TextureSidIsValid(textureSid))
             {
                 return false;
             }
@@ -51,7 +51,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
             KMP_ASSERT(image.GetPixels());
 
-            if (!TextureSidIsValid(textureSid))
+            if (!_TextureSidIsValid(textureSid))
             {
                 return false;
             }
@@ -139,7 +139,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::CreateErrorTextureAsset()
+        bool TextureAssetManager::_CreateErrorTextureAsset()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -161,7 +161,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::TextureSidIsValid(Utils::StringID textureSid)
+        bool TextureAssetManager::_TextureSidIsValid(Utils::StringID textureSid)
         {
             if (textureSid == ErrorTextureSID)
             {

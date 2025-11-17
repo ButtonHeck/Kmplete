@@ -29,12 +29,14 @@ namespace Kmplete
     static_assert(std::is_move_constructible_v<ProfileResult> == true);
     //--------------------------------------------------------------------------
 
+
     struct ProfilingSession
     {
         String name;
         int profilesCount;
     };
     //--------------------------------------------------------------------------
+
 
     class Profiler
     {
@@ -58,16 +60,16 @@ namespace Kmplete
         Profiler() noexcept;
         ~Profiler();
 
-        void BeginSessionInternal(const String& name, const Filepath& filepath, int storageSize);
-        void EndSessionInternal();
+        void _BeginSessionInternal(const String& name, const Filepath& filepath, int storageSize);
+        void _EndSessionInternal();
 
-        void WriteProfileHeader(std::ofstream& outputFileStream) const;
-        void WriteProfileResults(std::ofstream& outputFileStream) const;
-        void WriteProfileResultsToIntermediate() const;
-        void WriteProfileResultsFromIntermediate(std::ofstream& outputFileStream) const;
-        void WriteProfileFooter(std::ofstream& outputFileStream) const;
-        Filepath CreateIntermediateFilepath(int intermediateCount) const;
-        void BeginNewCycle();
+        void _WriteProfileHeader(std::ofstream& outputFileStream) const;
+        void _WriteProfileResults(std::ofstream& outputFileStream) const;
+        void _WriteProfileResultsToIntermediate() const;
+        void _WriteProfileResultsFromIntermediate(std::ofstream& outputFileStream) const;
+        void _WriteProfileFooter(std::ofstream& outputFileStream) const;
+        Filepath _CreateIntermediateFilepath(int intermediateCount) const;
+        void _BeginNewCycle();
 
     private:
         friend class ProfilerTimer;
@@ -83,6 +85,7 @@ namespace Kmplete
         int _storeCycles;
     };
     //--------------------------------------------------------------------------
+
 
     class ProfilerTimer
     {
@@ -100,6 +103,7 @@ namespace Kmplete
         std::chrono::high_resolution_clock::time_point _start;
     };
     //--------------------------------------------------------------------------
+
 
     namespace ProfilerUtils
     {

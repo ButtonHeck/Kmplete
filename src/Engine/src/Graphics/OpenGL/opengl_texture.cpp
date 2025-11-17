@@ -17,7 +17,7 @@ namespace Kmplete
         try
         {
             Image image(filepath, flipVertically);
-            LoadFromImage(image);
+            _LoadFromImage(image);
         }
         catch (const std::exception&)
         {
@@ -32,11 +32,11 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
         KMP_ASSERT(image.GetPixels());
 
-        LoadFromImage(image);
+        _LoadFromImage(image);
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLTexture::LoadFromImage(const Image& image)
+    void OpenGLTexture::_LoadFromImage(const Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
         KMP_ASSERT(image.GetPixels());

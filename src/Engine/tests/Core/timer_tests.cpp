@@ -5,6 +5,7 @@
 
 #include <thread>
 
+
 static constexpr auto timerTimeMs = 200;
 
 
@@ -14,6 +15,7 @@ TEST_CASE("Timer creation nothrow", "[core][timer]")
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Timer ReachedTimeout is correct", "[core][timer]")
 {
@@ -30,6 +32,7 @@ TEST_CASE("Timer ReachedTimeout is correct", "[core][timer]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Timer GetTimeout is correct", "[core][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
@@ -37,6 +40,7 @@ TEST_CASE("Timer GetTimeout is correct", "[core][timer]")
     REQUIRE(timer->GetTimeout() == timerTimeMs);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Timer SetTimeout is correct", "[core][timer]")
 {
@@ -56,6 +60,7 @@ TEST_CASE("Timer SetTimeout is correct", "[core][timer]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Timer Peek is correct", "[core][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
@@ -70,6 +75,7 @@ TEST_CASE("Timer Peek is correct", "[core][timer]")
     REQUIRE(timer->Peek() > timerTimeMs);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Timer Mark is correct", "[core][timer]")
 {

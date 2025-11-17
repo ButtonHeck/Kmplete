@@ -16,12 +16,14 @@ namespace Kmplete
 {
     class Window;
 
+
     struct WindowApplicationParameters
     {
         const ApplicationParameters applicationParameters;
         const bool resizable;
     };
     //--------------------------------------------------------------------------
+
 
     class WindowApplication : public Application
     {
@@ -43,16 +45,16 @@ namespace Kmplete
         void OnEvent(Event& event);
 
     private:
-        void Initialize(const WindowApplicationParameters& parameters);
-        void Finalize();
+        void _Initialize(const WindowApplicationParameters& parameters);
+        void _Finalize();
 
-        KMP_NODISCARD bool RunFrameIteration(Window& window);
+        KMP_NODISCARD bool _RunFrameIteration(Window& window);
 
-        void SaveSettings() const;
-        void LoadSettings();
+        void _SaveSettings() const;
+        void _LoadSettings();
 
 #if defined KMP_PROFILE
-        void SwitchProfilerActivation(Event& event);
+        void _SwitchProfilerActivation(Event& event);
 #endif
 
     protected:

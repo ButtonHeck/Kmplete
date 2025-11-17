@@ -21,7 +21,9 @@ namespace Kmplete
     static Log::LogSettings logSettings;
     static std::stringstream stringStream;
 
+
     Ptr<spdlog::logger> Log::_logger;
+
 
     namespace
     {
@@ -39,6 +41,7 @@ namespace Kmplete
         static Vector<BootMessage> bootMessages;
     }
     //--------------------------------------------------------------------------
+    
 
     void Log::Boot(const String& programName)
     {

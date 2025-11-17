@@ -34,15 +34,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
+    void FrameListenerManager::_AddFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        _listeners.emplace_back(FrameListenerWrapper(frameListener, true));
+        _listeners.emplace_back(_FrameListenerWrapper(frameListener, true));
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
+    void FrameListenerManager::_UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -56,7 +56,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::RenderFrameListeners()
+    void FrameListenerManager::_RenderFrameListeners()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -70,7 +70,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::ProcessEventsFrameListeners(Event& event)
+    void FrameListenerManager::_ProcessEventsFrameListeners(Event& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -90,7 +90,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::ProcessFrameListenersCommands()
+    void FrameListenerManager::_ProcessFrameListenersCommands()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

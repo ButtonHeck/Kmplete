@@ -1,6 +1,7 @@
 #include "Kmplete/Math/math.h"
 
 #include <catch2/catch_test_macros.hpp>
+
 #include <limits>
 
 
@@ -48,6 +49,7 @@ TEST_CASE("Math Clamp range reversed", "[math]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Math Min", "[math]")
 {
     using namespace Kmplete::Math;
@@ -80,6 +82,7 @@ TEST_CASE("Math Min", "[math]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Math Max", "[math]")
 {
     using namespace Kmplete::Math;
@@ -105,6 +108,7 @@ TEST_CASE("Math Max", "[math]")
     REQUIRE(maxValueFloat == -10.0f);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Math Log2", "[math]")
 {

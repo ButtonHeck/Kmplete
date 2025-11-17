@@ -32,21 +32,21 @@ namespace Kmplete
     private:
         friend class WindowApplication;
 
-        struct FrameListenerWrapper
+        struct _FrameListenerWrapper
         {
             Nullable<FrameListener*> frameListener;
             bool isActive;
         };
         
-        void AddFrameListener(NonNull<FrameListener*> frameListener);
+        void _AddFrameListener(NonNull<FrameListener*> frameListener);
 
-        void UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
-        void RenderFrameListeners();
-        void ProcessEventsFrameListeners(Event& event);
-        void ProcessFrameListenersCommands();
+        void _UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
+        void _RenderFrameListeners();
+        void _ProcessEventsFrameListeners(Event& event);
+        void _ProcessFrameListenersCommands();
 
     private:
-        Vector<FrameListenerWrapper> _listeners;
+        Vector<_FrameListenerWrapper> _listeners;
         FrameListenerCommandBuffer _commandBuffer;
         FrameListenerCommandBufferHandler _commandBufferHandler;
     };

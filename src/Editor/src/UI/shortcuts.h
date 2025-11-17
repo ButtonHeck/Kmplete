@@ -13,7 +13,7 @@ namespace Kmplete
             KeyMode mode;
             KeyCode key;
 
-            inline bool Accept(KeyMode modeArg, KeyCode keyArg) const
+            inline bool Accept(KeyMode modeArg, KeyCode keyArg) const noexcept
             {
                 return (this->mode == modeArg && this->key == keyArg);
             }

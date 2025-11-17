@@ -8,6 +8,7 @@
 
 using namespace Kmplete;
 
+
 TEST_CASE("Image from valid filepath", "[graphics][image]")
 {
     UPtr<Image> image = nullptr;
@@ -40,6 +41,7 @@ TEST_CASE("Image from valid filepath", "[graphics][image]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Image from invalid filepath", "[graphics][image]")
 {
     UPtr<Image> image = nullptr;
@@ -49,6 +51,7 @@ TEST_CASE("Image from invalid filepath", "[graphics][image]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Image from valid filepath but not an image", "[graphics][image]")
 {
     UPtr<Image> image = nullptr;
@@ -57,6 +60,7 @@ TEST_CASE("Image from valid filepath but not an image", "[graphics][image]")
     REQUIRE_THROWS(image = CreateUPtr<Image>(filepath));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Image from valid pixel buffer", "[graphics][image]")
 {
@@ -84,6 +88,7 @@ TEST_CASE("Image from valid pixel buffer", "[graphics][image]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Image from valid pixel buffer invalid parameters", "[graphics][image]")
 {
     const auto iconBufferSize = 4 * 2 * 4;
@@ -104,6 +109,7 @@ TEST_CASE("Image from valid pixel buffer invalid parameters", "[graphics][image]
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Image from nullptr pixel buffer", "[graphics][image]")
 {
     UPtr<Image> image = nullptr;
@@ -111,6 +117,7 @@ TEST_CASE("Image from nullptr pixel buffer", "[graphics][image]")
     REQUIRE_THROWS(image = CreateUPtr<Image>(nullptr, 32, Math::Size2I(4, 2), ImageChannels::RGBAlpha));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Image from valid image file buffer", "[graphics][image]")
 {
@@ -136,6 +143,7 @@ TEST_CASE("Image from valid image file buffer", "[graphics][image]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Image from valid file buffer not an image", "[graphics][image]")
 {
     UPtr<Image> image = nullptr;
@@ -147,6 +155,7 @@ TEST_CASE("Image from valid file buffer not an image", "[graphics][image]")
     REQUIRE_THROWS(image = CreateUPtr<Image>(iconFileBinaryBuffer.data(), int(iconFileBinaryBuffer.size()), ImageChannels::RGB));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Image from nullptr file buffer", "[graphics][image]")
 {

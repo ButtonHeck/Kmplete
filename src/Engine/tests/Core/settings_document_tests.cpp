@@ -13,7 +13,6 @@ TEST_CASE("SettingsDocument minimal saving", "[core][settings_document]")
     REQUIRE_FALSE(settings.StartSaveObject(""));
     REQUIRE_FALSE(settings.StartSaveArray(""));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("SettingsDocument normal saving", "[core][settings_document]")
 {
@@ -78,6 +77,7 @@ TEST_CASE("SettingsDocument normal saving", "[core][settings_document]")
     REQUIRE(settings.EndSaveObject()); // Group3
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("SettingsDocument normal loading", "[core][settings_document]")
 {
@@ -174,6 +174,7 @@ TEST_CASE("SettingsDocument normal loading", "[core][settings_document]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("SettingsDocument loading malformed json", "[core][settings_document]")
 {
     const char* MalformedJsonStr = R"rjs(
@@ -199,6 +200,7 @@ TEST_CASE("SettingsDocument loading malformed json", "[core][settings_document]"
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("SettingsDocument loading document with null value", "[core][settings_document]")
 {
     const char* BasicJsonStr = R"rjs(
@@ -223,6 +225,7 @@ TEST_CASE("SettingsDocument loading document with null value", "[core][settings_
     REQUIRE(settings.GetInt("Ptr", 99) == 99);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("SettingsDocument loading duplicate values", "[core][settings_document]")
 {

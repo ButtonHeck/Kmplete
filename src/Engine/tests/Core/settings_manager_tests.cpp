@@ -34,6 +34,7 @@ TEST_CASE("SettingsManager basic test", "[core][settings_document][manager]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("SettingsManager read/write and back", "[core][settings_document][manager]")
 {
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");

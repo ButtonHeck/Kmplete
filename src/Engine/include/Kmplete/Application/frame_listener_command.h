@@ -19,6 +19,7 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+
     struct FrameListenerCommand
     {
         const FrameListenerCommandCode command;

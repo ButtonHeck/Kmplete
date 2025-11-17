@@ -11,12 +11,6 @@
 #include <stdexcept>
 
 
-#if defined (CreateWindow)
-    #pragma push_macro("CreateWindow")
-    #undef CreateWindow
-    #define KMP_UNDEF_CreateWindow
-#endif
-
 namespace Kmplete
 {
     namespace
@@ -49,6 +43,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
     }
 
+
     static constexpr auto MainWindowName = "Main";
 
 
@@ -56,7 +51,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Initialize();
+        _Initialize();
     }
     //--------------------------------------------------------------------------
 
@@ -64,7 +59,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        Finalize();
+        _Finalize();
     }
     //--------------------------------------------------------------------------
 
@@ -98,7 +93,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::Initialize()
+    void WindowBackendGlfw::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -116,19 +111,19 @@ namespace Kmplete
             throw std::runtime_error("WindowBackendGlfw initialization failed");
         }
 
-        InitializeCallbacks();
+        _InitializeCallbacks();
 
         _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::InitializeCallbacks() const
+    void WindowBackendGlfw::_InitializeCallbacks() const
     {
-        InitializeErrorCallback();
+        _InitializeErrorCallback();
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::InitializeErrorCallback() const
+    void WindowBackendGlfw::_InitializeErrorCallback() const
     {
         glfwSetErrorCallback([](KMP_MB_UNUSED int code, KMP_MB_UNUSED const char* description) {
             KMP_LOG_ERROR("GLFW internal error '{}': {}", code, description);
@@ -137,7 +132,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::Finalize()
+    void WindowBackendGlfw::_Finalize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -165,7 +160,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        if (!IsAuxWindowNameAcceptable(windowName))
+        if (!_IsAuxWindowNameAcceptable(windowName))
         {
             return nullptr;
         }
@@ -198,7 +193,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         const auto& windowName = windowSettings.name;
-        if (!IsAuxWindowNameAcceptable(windowName))
+        if (!_IsAuxWindowNameAcceptable(windowName))
         {
             return nullptr;
         }
@@ -375,14 +370,14 @@ namespace Kmplete
 
         settings.StartSaveObject(SettingsEntryName);
 
-        SaveMainWindowSettings(settings);
-        SaveAuxWindowsSettings(settings);
+        _SaveMainWindowSettings(settings);
+        _SaveAuxWindowsSettings(settings);
 
         settings.EndSaveObject();
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveMainWindowSettings(SettingsDocument& settings) const
+    void WindowBackendGlfw::_SaveMainWindowSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -392,7 +387,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveAuxWindowsSettings(SettingsDocument& settings) const
+    void WindowBackendGlfw::_SaveAuxWindowsSettings(SettingsDocument& settings) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -420,14 +415,14 @@ namespace Kmplete
 
         settings.StartLoadObject(SettingsEntryName);
 
-        LoadMainWindowSettings(settings);
-        LoadAuxWindowsSettings(settings);
+        _LoadMainWindowSettings(settings);
+        _LoadAuxWindowsSettings(settings);
 
         settings.EndLoadObject();
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadMainWindowSettings(SettingsDocument& settings)
+    void WindowBackendGlfw::_LoadMainWindowSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -446,7 +441,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadAuxWindowsSettings(SettingsDocument& settings)
+    void WindowBackendGlfw::_LoadAuxWindowsSettings(SettingsDocument& settings)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -472,7 +467,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool WindowBackendGlfw::IsAuxWindowNameAcceptable(const String& name) const noexcept
+    bool WindowBackendGlfw::_IsAuxWindowNameAcceptable(const String& name) const noexcept
     {
         if (name.empty())
         {
@@ -489,8 +484,3 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 }
-
-#if defined (KMP_UNDEF_CreateWindow)
-    #pragma pop_macro("CreateWindow")
-    #undef KMP_UNDEF_CreateWindow
-#endif

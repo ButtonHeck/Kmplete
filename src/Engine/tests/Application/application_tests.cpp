@@ -13,13 +13,11 @@ namespace Kmplete
     class TestApplication : public Application
     {
     public:
-        TestApplication(const ApplicationParameters& parameters)
+        explicit TestApplication(const ApplicationParameters& parameters)
             : Application(parameters)
         {}
 
         void Run() override {}
-
-    private:
     };
 
     class MetricsTestApplication : public Application
@@ -43,6 +41,7 @@ namespace Kmplete
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Test application initialize", "[application]")
 {
     {
@@ -58,6 +57,7 @@ TEST_CASE("Test application initialize", "[application]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Test application name", "[application]")
 {
     const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("MetricsTestApplication", "", "Kmplete_unit_tests_settings.json"));
@@ -67,6 +67,7 @@ TEST_CASE("Test application name", "[application]")
     REQUIRE(!appName.empty());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Test application metrics update", "[application][metrics]")
 {

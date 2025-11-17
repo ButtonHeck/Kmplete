@@ -21,6 +21,7 @@ TEST_CASE("Json document from empty rapidjson document", "[json][reader][writer]
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json document from minimal rapidjson document", "[json][reader][writer][document]")
 {
     const char* EmptyJsonStr = "{}";
@@ -38,6 +39,7 @@ TEST_CASE("Json document from minimal rapidjson document", "[json][reader][write
     REQUIRE(childrenDocuments.empty());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer][document]")
 {
@@ -119,6 +121,7 @@ TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json document from invalid rapidjson document", "[json][reader][writer][document]")
 {
     const char* MalformedJsonStr = R"rjs(
@@ -137,6 +140,7 @@ TEST_CASE("Json document from invalid rapidjson document", "[json][reader][write
     REQUIRE(jsonDocument.HasError());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json document add children documents positive", "[json][reader][writer][document]")
 {
@@ -191,6 +195,7 @@ TEST_CASE("Json document add children documents positive", "[json][reader][write
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json document add children - default constructed", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
@@ -204,6 +209,7 @@ TEST_CASE("Json document add children - default constructed", "[json][reader][wr
     REQUIRE(childrenDocuments.size() == size_t(1));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json document add children - invalid child", "[json][reader][writer][document]")
 {
@@ -233,6 +239,7 @@ TEST_CASE("Json document add children - invalid child", "[json][reader][writer][
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json document add children - empty name", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
@@ -258,6 +265,7 @@ TEST_CASE("Json document add children - empty name", "[json][reader][writer][doc
     REQUIRE_FALSE(rootDoc.AddChildDocument("", childDoc));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json document add children - overwrite existing object", "[json][reader][writer][document]")
 {
@@ -302,6 +310,7 @@ TEST_CASE("Json document add children - overwrite existing object", "[json][read
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json document add children during filling another object", "[json][reader][writer][document]")
 {
     Kmplete::JsonDocument rootDoc;
@@ -331,6 +340,7 @@ TEST_CASE("Json document add children during filling another object", "[json][re
     REQUIRE(childrenDocuments.size() == size_t(2));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json document save to file and read from file", "[json][reader][writer][document]")
 {
@@ -379,6 +389,7 @@ TEST_CASE("Json document save to file and read from file", "[json][reader][write
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][document]")
 {
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("json_document_test_temp_unescaped.json");
@@ -395,6 +406,7 @@ TEST_CASE("Json document save with unescaped quotes", "[json][reader][writer][do
     REQUIRE_FALSE(loadedDoc.HasError());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json document save/load with cyrillic path", "[json][reader][writer][document]")
 {

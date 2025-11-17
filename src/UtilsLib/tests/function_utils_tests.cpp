@@ -9,7 +9,6 @@ TEST_CASE("GetArgsCount 0", "[utils][function]")
 {
     REQUIRE(Kmplete::Utils::GetArgsCount() == size_t(0));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 1", "[utils][function]")
 {
@@ -18,7 +17,6 @@ TEST_CASE("GetArgsCount 1", "[utils][function]")
     REQUIRE(Kmplete::Utils::GetArgsCount(nullptr) == size_t(1));
     REQUIRE(Kmplete::Utils::GetArgsCount((arg1 ? arg1 : 42)) == size_t(1));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 2", "[utils][function]")
 {
@@ -27,7 +25,6 @@ TEST_CASE("GetArgsCount 2", "[utils][function]")
     REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2) == size_t(2));
     REQUIRE(Kmplete::Utils::GetArgsCount(nullptr, nullptr) == size_t(2));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 3", "[utils][function]")
 {
@@ -36,7 +33,6 @@ TEST_CASE("GetArgsCount 3", "[utils][function]")
     const auto arg3 = 'c';
     REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3) == size_t(3));
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("GetArgsCount 4", "[utils][function]")
 {
@@ -48,6 +44,7 @@ TEST_CASE("GetArgsCount 4", "[utils][function]")
     REQUIRE(Kmplete::Utils::GetArgsCount(arg1, arg2, arg3, arg4) == size_t(4));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("KMP_BIND", "[utils][function]")
 {
@@ -99,7 +96,6 @@ TEST_CASE("KMP_BIND", "[utils][function]")
     REQUIRE(t.callbackIntNoParams() == 142);
     REQUIRE(t.callbackIntParam(69) == (69 * 2));
 }
-//--------------------------------------------------------------------------
 
 static int Return555() { return 555; }
 static int ReturnParamX2(int param) { return param * 2; }

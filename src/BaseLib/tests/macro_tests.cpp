@@ -34,6 +34,7 @@ TEST_CASE("Stringify macro itself", "[core][macro]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Concat macro integers", "[core][macro]")
 {
     auto macroResult = KMP_M_CONCAT(10, 4);
@@ -57,6 +58,7 @@ TEST_CASE("Concat macro variables", "[core][macro]")
     REQUIRE(macroResult2 == ab11);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Dispatch VA_ARGS macro", "[core][macro]")
 {
@@ -89,12 +91,14 @@ TEST_CASE("Dispatch VA_ARGS macro", "[core][macro]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Funcsig macro", "[core][macro]")
 {
     const auto functionString = std::string(KMP_FUNC_SIG);
     REQUIRE(!functionString.empty());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Compiler diagnostics macros", "[core][macro]")
 {
@@ -109,6 +113,7 @@ TEST_CASE("Compiler diagnostics macros", "[core][macro]")
     SUCCEED();
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Packed structs", "[core][macro]")
 {

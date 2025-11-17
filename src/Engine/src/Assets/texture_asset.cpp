@@ -5,7 +5,7 @@ namespace Kmplete
 {
     namespace Assets
     {
-        TextureAsset::TextureAsset(Utils::StringID sid, NonNull<Kmplete::Texture*> texture)
+        TextureAsset::TextureAsset(Utils::StringID sid, NonNull<Kmplete::Texture*> texture) noexcept
             : Asset(AssetType::Texture, sid)
             , _texture(texture)
         {}

@@ -18,6 +18,7 @@ namespace Kmplete
     class SettingsDocument;
     class Image;
 
+
     class Window
     {
         KMP_LOG_CLASSNAME(Window)

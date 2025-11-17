@@ -60,7 +60,7 @@ namespace Kmplete
 
         void ImGuiImplementation::NewFrame() const
         {
-            NewFrameImpl();
+            _NewFrameImpl();
             ImGui::NewFrame();
         }
         //--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ namespace Kmplete
         void ImGuiImplementation::Render() const
         {
             ImGui::Render();
-            RenderImpl();
+            _RenderImpl();
         }
         //--------------------------------------------------------------------------
 

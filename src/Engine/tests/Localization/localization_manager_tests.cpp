@@ -7,6 +7,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
+
 using namespace Kmplete; // for _sid literal and Utils
 static constexpr auto SidTrDomainTests = Utils::ToStringID(KMP_TR_DOMAIN_TESTS);
 
@@ -146,6 +147,7 @@ TEST_CASE("Locale tests", "[localization][locale]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Localization manager set/get locale", "[localization][locale]")
 {
     LocalizationManager localizationManager;
@@ -178,6 +180,7 @@ TEST_CASE("Localization manager set/get locale", "[localization][locale]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Localization manager callbacks", "[localization][locale]")
 {
     int testValue = 0;
@@ -203,6 +206,7 @@ TEST_CASE("Localization manager callbacks", "[localization][locale]")
     REQUIRE(anotherTestValue == 101);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization manager add/remove domain", "[localization][locale]")
 {
@@ -232,6 +236,7 @@ TEST_CASE("Localization manager add/remove domain", "[localization][locale]")
     REQUIRE_FALSE(domainOperationTrue);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization translator without context singular", "[localization][locale]")
 {
@@ -282,6 +287,7 @@ TEST_CASE("Localization translator without context singular", "[localization][lo
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Localization translator with context singular", "[localization][locale]")
 {
     LocalizationManager localizationManager;
@@ -329,6 +335,7 @@ TEST_CASE("Localization translator with context singular", "[localization][local
     REQUIRE(untranslatedStr == "Untranslated");
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization manager Translation functions without context singular", "[localization][locale]")
 {
@@ -397,6 +404,7 @@ TEST_CASE("Localization manager Translation functions without context singular",
     REQUIRE(unknownStr == "FALLBACK");
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization manager Translation functions with context singular", "[localization][locale]")
 {
@@ -502,6 +510,7 @@ TEST_CASE("Localization manager Translation functions with context singular", "[
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Localization manager dictionaries without context singular", "[localization][locale]")
 {
     TranslationStr yesStr;
@@ -566,6 +575,7 @@ TEST_CASE("Localization manager dictionaries without context singular", "[locali
     REQUIRE(noStr.empty());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization manager dictionaries with context singular", "[localization][locale]")
 {
@@ -649,6 +659,7 @@ TEST_CASE("Localization manager dictionaries with context singular", "[localizat
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Localization translator without context plural", "[localization][locale]")
 {
     LocalizationManager localizationManager;
@@ -712,6 +723,7 @@ TEST_CASE("Localization translator without context plural", "[localization][loca
     REQUIRE(appleStr21 == "21 apples");
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization manager dictionaries without context plural", "[localization][locale]")
 {
@@ -817,6 +829,7 @@ TEST_CASE("Localization manager dictionaries without context plural", "[localiza
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Localization manager dictionaries with context plural", "[localization][locale]")
 {
     LocalizationManager localizationManager;
@@ -901,6 +914,7 @@ TEST_CASE("Localization manager dictionaries with context plural", "[localizatio
     REQUIRE(Utils::Utf8ToNarrow(contextStr21) == "21 контекст");
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Localization manager translate from other locale", "[localization][locale]")
 {

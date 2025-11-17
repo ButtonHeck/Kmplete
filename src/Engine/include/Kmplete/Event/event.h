@@ -32,6 +32,7 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+
     enum EventTrait
     {
         None = 0,
@@ -43,10 +44,12 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+
 #define EVENT_CLASS_TYPE(eventType) \
     KMP_NODISCARD static EventType GetStaticType() noexcept { return EventType::eventType; } \
     KMP_NODISCARD virtual EventType GetType() const noexcept override { return GetStaticType(); } \
     KMP_NODISCARD virtual const char* GetName() const noexcept override { return #eventType; }
+
 
     struct Event
     {

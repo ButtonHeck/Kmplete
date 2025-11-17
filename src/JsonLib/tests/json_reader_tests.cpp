@@ -14,7 +14,6 @@ TEST_CASE("Rapidjson empty string", "[json][reader]")
 
     REQUIRE(error == rapidjson::kParseErrorDocumentEmpty);
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson empty json", "[json][reader]")
 {
@@ -29,6 +28,7 @@ TEST_CASE("Rapidjson empty json", "[json][reader]")
     REQUIRE_FALSE(document.HasMember("Hello"));
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Rapidjson basic json", "[json][reader]")
 {
@@ -66,6 +66,7 @@ TEST_CASE("Rapidjson basic json", "[json][reader]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Rapidjson duplicate keys - same type", "[json][reader]")
 {
     const char* JsonStr = R"rjs(
@@ -86,7 +87,6 @@ TEST_CASE("Rapidjson duplicate keys - same type", "[json][reader]")
     REQUIRE(document["Node1"].IsBool());
     REQUIRE(document["Node1"] == true);
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson duplicate keys - different types", "[json][reader]")
 {
@@ -109,6 +109,7 @@ TEST_CASE("Rapidjson duplicate keys - different types", "[json][reader]")
     REQUIRE(document["Node1"] == 94);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Rapidjson arrays", "[json][reader]")
 {
@@ -151,6 +152,7 @@ TEST_CASE("Rapidjson arrays", "[json][reader]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Rapidjson escaped quotes", "[json][reader]")
 {
     const char* JsonString = R"rjs(
@@ -177,6 +179,7 @@ TEST_CASE("Rapidjson escaped quotes", "[json][reader]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Rapidjson cyrillic use", "[json][reader]")
 {
     auto localizationManager = Kmplete::LocalizationManager();
@@ -201,6 +204,7 @@ TEST_CASE("Rapidjson cyrillic use", "[json][reader]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Rapidjson malformed json - not closing tag", "[json][reader]")
 {
     const char* MalformedJsonStr = R"rjs(
@@ -217,7 +221,6 @@ TEST_CASE("Rapidjson malformed json - not closing tag", "[json][reader]")
 
     REQUIRE(error == rapidjson::kParseErrorObjectMissCommaOrCurlyBracket);
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json - missing colon", "[json][reader]")
 {
@@ -234,7 +237,6 @@ TEST_CASE("Rapidjson malformed json - missing colon", "[json][reader]")
     REQUIRE(error == rapidjson::kParseErrorObjectMissColon);
     REQUIRE_FALSE(document.IsObject());
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json - type error", "[json][reader]")
 {
@@ -251,7 +253,6 @@ TEST_CASE("Rapidjson malformed json - type error", "[json][reader]")
     REQUIRE(error == rapidjson::kParseErrorValueInvalid);
     REQUIRE_FALSE(document.IsObject());
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json - non-singular root", "[json][reader]")
 {
@@ -271,7 +272,6 @@ TEST_CASE("Rapidjson malformed json - non-singular root", "[json][reader]")
     REQUIRE(error == rapidjson::kParseErrorDocumentRootNotSingular);
     REQUIRE_FALSE(document.IsObject());
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json - array with different objects", "[json][reader]")
 {
@@ -288,7 +288,6 @@ TEST_CASE("Rapidjson malformed json - array with different objects", "[json][rea
     REQUIRE(error == rapidjson::kParseErrorValueInvalid);
     REQUIRE_FALSE(document.IsObject());
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json - root with name", "[json][reader]")
 {
@@ -305,7 +304,6 @@ TEST_CASE("Rapidjson malformed json - root with name", "[json][reader]")
     REQUIRE(error == rapidjson::kParseErrorDocumentRootNotSingular);
     REQUIRE_FALSE(document.IsObject());
 }
-//--------------------------------------------------------------------------
 
 TEST_CASE("Rapidjson malformed json - unnamed subnode", "[json][reader]")
 {
@@ -323,6 +321,7 @@ TEST_CASE("Rapidjson malformed json - unnamed subnode", "[json][reader]")
     REQUIRE_FALSE(document.IsObject());
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json reader positive", "[json][reader]")
 {
@@ -421,6 +420,7 @@ TEST_CASE("Json reader positive", "[json][reader]")
     REQUIRE(reader.EndObject()); // Group3
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("Json reader negative", "[json][reader]")
 {

@@ -6,6 +6,7 @@
 #if defined (KMP_WINDOW_BACKEND_GLFW)
     #include <GLFW/glfw3.h>
 #endif
+
 #include <stdexcept>
 
 

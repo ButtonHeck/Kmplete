@@ -20,13 +20,13 @@ namespace Kmplete
         FontAssetManager::FontAssetManager()
             : _freetypeLibInstance(nullptr)
         {
-            Initialize();
+            _Initialize();
         }
         //--------------------------------------------------------------------------
 
         FontAssetManager::~FontAssetManager()
         {
-            Finalize();
+            _Finalize();
         }
         //--------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ namespace Kmplete
                 return false;
             }
 
-            return AddFontToStorage(fontSid, std::move(fontData));
+            return _AddFontToStorage(fontSid, std::move(fontData));
         }
         //--------------------------------------------------------------------------
 
@@ -127,7 +127,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::Initialize()
+        void FontAssetManager::_Initialize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -138,7 +138,7 @@ namespace Kmplete
                 throw std::runtime_error("FontAssetManager: failed to initialize FreeType library instance");
             }
 
-            if (!CreateDefaultFontAsset())
+            if (!_CreateDefaultFontAsset())
             {
                 KMP_LOG_CRITICAL("default font loading failed");
                 throw std::runtime_error("FontAssetManager: default font loading failed");
@@ -154,7 +154,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::Finalize()
+        void FontAssetManager::_Finalize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -168,7 +168,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::CreateDefaultFontAsset()
+        bool FontAssetManager::_CreateDefaultFontAsset()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -198,7 +198,7 @@ namespace Kmplete
             DeleteObject(fontDescriptor);
             ReleaseDC(NULL, hdc);
 
-            return AddFontToStorage(DefaultFontSID, std::move(fontData));
+            return _AddFontToStorage(DefaultFontSID, std::move(fontData));
 #else
             //TODO: make similar in Linux (at least)
             return true;
@@ -206,7 +206,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData)
+        bool FontAssetManager::_AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

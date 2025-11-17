@@ -13,6 +13,7 @@ TEST_CASE("Platform compiler definition", "[core][platform][compiler]")
 }
 //--------------------------------------------------------------------------
 
+
 TEST_CASE("Platform OS definition", "[core][platform][OS]")
 {
 #if defined (KMP_PLATFORM_OTHER)

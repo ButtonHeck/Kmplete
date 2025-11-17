@@ -92,7 +92,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API String GetString(const char* name, const String& defaultValue = "");
 
     private:
-        KMP_NODISCARD bool SaveToFile(const rapidjson::StringBuffer& buffer);
+        KMP_NODISCARD bool _SaveToFile(const rapidjson::StringBuffer& buffer);
 
     private:
         Filepath _filepath;

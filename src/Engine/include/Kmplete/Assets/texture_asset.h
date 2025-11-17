@@ -15,13 +15,13 @@ namespace Kmplete
         class TextureAsset : public Asset
         {
         public:
-            KMP_API TextureAsset(Utils::StringID sid, NonNull<Kmplete::Texture*> texture);
+            KMP_API TextureAsset(Utils::StringID sid, NonNull<Texture*> texture) noexcept;
 
-            KMP_NODISCARD KMP_API const Kmplete::Texture& GetTexture() const noexcept;
-            KMP_NODISCARD KMP_API Kmplete::Texture& GetTexture() noexcept;
+            KMP_NODISCARD KMP_API const Texture& GetTexture() const noexcept;
+            KMP_NODISCARD KMP_API Texture& GetTexture() noexcept;
 
         private:
-            UPtr<Kmplete::Texture> _texture;
+            UPtr<Texture> _texture;
         };
         //--------------------------------------------------------------------------
     }

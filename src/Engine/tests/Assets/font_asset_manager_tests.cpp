@@ -10,6 +10,7 @@
 using namespace Kmplete;
 using namespace Kmplete::Assets;
 
+
 TEST_CASE("FontAssetManager creation", "[graphics][font_asset_manager][asset][font]")
 {
     UPtr<FontAssetManager> fontAssetManager;
@@ -20,6 +21,7 @@ TEST_CASE("FontAssetManager creation", "[graphics][font_asset_manager][asset][fo
     REQUIRE(fontsCount == 1UL); // Default font only
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("FontAssetManager default font usage", "[graphics][font_asset_manager][asset][font]")
 {
@@ -54,6 +56,7 @@ TEST_CASE("FontAssetManager default font usage", "[graphics][font_asset_manager]
     REQUIRE_FALSE(ok);
 }
 //--------------------------------------------------------------------------
+
 
 TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][asset][font]")
 {

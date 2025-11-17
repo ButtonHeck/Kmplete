@@ -13,6 +13,7 @@
     #define KMP_COMPILER_OTHER 
 #endif
 
+
 #if defined (_WIN32) || defined (_WIN64)
     #define KMP_PLATFORM_WINDOWS
 #elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)

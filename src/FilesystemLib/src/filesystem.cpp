@@ -248,7 +248,7 @@ namespace Kmplete
         std::ifstream fileStream(filepath);
         if (!fileStream.is_open() || !fileStream.good())
         {
-            KMP_LOG_ERROR_FN("Update: cannot read file '{}' - failed to open", filepath);
+            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
             return String();
         }
 
@@ -269,7 +269,7 @@ namespace Kmplete
         std::ifstream fileStream(filepath, std::ios::binary);
         if (!fileStream.is_open() || !fileStream.good())
         {
-            KMP_LOG_ERROR_FN("Update: cannot read file '{}' - failed to open", filepath);
+            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
             return BinaryBuffer();
         }
 
