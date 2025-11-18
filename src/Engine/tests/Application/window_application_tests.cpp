@@ -1,5 +1,6 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Application/window_application.h"
+#include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/FileDialogs/file_dialogs.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -24,57 +25,49 @@ namespace Kmplete
     static constexpr auto Id_InfoWindow = "InfoWindow";
 
 
-    class TestWindowApplication : public WindowApplication
+    class TestFrameListener : public FrameListener
     {
     public:
-        TestWindowApplication(const WindowApplicationParameters& parameters)
-            : WindowApplication(parameters)
-            , _mainWindow(_windowBackend->GetMainWindow())
+        TestFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend)
+            : FrameListener(frameListenerManager, "TestFrameListener"_sid)
+            , _mainWindow(mainWindow)
+            , _assetsManager(assetsManager)
+            , _graphicsBackend(graphicsBackend)
+            , _windowBackend(windowBackend)
         {
             Initialize();
         }
 
         void Initialize()
         {
-            _mainWindow.SetEventCallback(KMP_BIND(TestWindowApplication::OnEvent));
-            const auto scale = _mainWindow.GetDPIScale();
-
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
             const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-            _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
-            _imguiImpl->Stylize(scale);
+            _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale());
+            _imguiImpl->Stylize(_mainWindow.GetDPIScale());
         }
 
-        void Run() override
+        void Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
         {
-            while (!_mainWindow.ShouldClose())
+            if (_switchFontRequested)
             {
-                if (_switchFontRequested)
+                ImGuiIO& io = ImGui::GetIO();
+                io.Fonts->Clear();
+
+                if (_useDefaultFont)
                 {
-                    ImGuiIO& io = ImGui::GetIO();
-                    io.Fonts->Clear();
-
-                    if (_useDefaultFont)
-                    {
-                        const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-                        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale());
-                    }
-                    else
-                    {
-                        const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
-                        _imguiImpl->AddFont(fontPath, _mainWindow.GetDPIScale());
-                    }
-
-                    io.Fonts->Build();
-                    _imguiImpl->CreateFontsTexture();
-                    
-                    _switchFontRequested = false;
+                    const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
+                    _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale());
+                }
+                else
+                {
+                    const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
+                    _imguiImpl->AddFont(fontPath, _mainWindow.GetDPIScale());
                 }
 
-                Render();
+                io.Fonts->Build();
+                _imguiImpl->CreateFontsTexture();
 
-                _mainWindow.ProcessEvents();
-                _mainWindow.SwapBuffers();
+                _switchFontRequested = false;
             }
         }
 
@@ -282,7 +275,7 @@ namespace Kmplete
 
                 const auto screenModeStr = Window::ScreenModeToString(_mainWindow.GetScreenMode());
                 ImGui::Text("Screen mode: %s", screenModeStr.c_str());
-                
+
 
                 const auto cursorPosition = _mainWindow.GetCursorPosition();
                 ImGui::Text("Mouse position: [%d:%d]", cursorPosition.x, cursorPosition.y);
@@ -374,24 +367,24 @@ namespace Kmplete
         {
             EventDispatcher dispatcher(event);
 
-            _windowApplicationKeyPressEventInvoked |= dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestWindowApplication::OnKeyPressEvent));
-            _windowApplicationKeyReleaseEventInvoked |= dispatcher.Dispatch<KeyReleaseEvent>(KMP_BIND(TestWindowApplication::OnKeyReleaseEvent));
-            _windowApplicationKeyCharEventInvoked |= dispatcher.Dispatch<KeyCharEvent>(KMP_BIND(TestWindowApplication::OnKeyCharEvent));
+            _windowApplicationKeyPressEventInvoked |= dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestFrameListener::OnKeyPressEvent));
+            _windowApplicationKeyReleaseEventInvoked |= dispatcher.Dispatch<KeyReleaseEvent>(KMP_BIND(TestFrameListener::OnKeyReleaseEvent));
+            _windowApplicationKeyCharEventInvoked |= dispatcher.Dispatch<KeyCharEvent>(KMP_BIND(TestFrameListener::OnKeyCharEvent));
 
-            _windowApplicationMouseMoveEventInvoked |= dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(TestWindowApplication::OnMouseMoveEvent));
-            _windowApplicationMouseScrollEventInvoked |= dispatcher.Dispatch<MouseScrollEvent>(KMP_BIND(TestWindowApplication::OnMouseScrollEvent));
-            _windowApplicationMouseButtonPressEventInvoked |= dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestWindowApplication::OnMouseButtonPressEvent));
-            _windowApplicationMouseButtonReleaseEventInvoked |= dispatcher.Dispatch<MouseButtonReleaseEvent>(KMP_BIND(TestWindowApplication::OnMouseButtonReleaseEvent));
+            _windowApplicationMouseMoveEventInvoked |= dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(TestFrameListener::OnMouseMoveEvent));
+            _windowApplicationMouseScrollEventInvoked |= dispatcher.Dispatch<MouseScrollEvent>(KMP_BIND(TestFrameListener::OnMouseScrollEvent));
+            _windowApplicationMouseButtonPressEventInvoked |= dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestFrameListener::OnMouseButtonPressEvent));
+            _windowApplicationMouseButtonReleaseEventInvoked |= dispatcher.Dispatch<MouseButtonReleaseEvent>(KMP_BIND(TestFrameListener::OnMouseButtonReleaseEvent));
 
-            _windowApplicationWindowCloseEventInvoked |= dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(TestWindowApplication::OnWindowCloseEvent));
-            _windowApplicationWindowMoveEventInvoked |= dispatcher.Dispatch<WindowMoveEvent>(KMP_BIND(TestWindowApplication::OnWindowMoveEvent));
-            _windowApplicationWindowResizeEventInvoked |= dispatcher.Dispatch<WindowResizeEvent>(KMP_BIND(TestWindowApplication::OnWindowResizeEvent));
-            _windowApplicationWindowFocusEventInvoked |= dispatcher.Dispatch<WindowFocusEvent>(KMP_BIND(TestWindowApplication::OnWindowFocusEvent));
-            _windowApplicationWindowIconifyEventInvoked |= dispatcher.Dispatch<WindowIconifyEvent>(KMP_BIND(TestWindowApplication::OnWindowIconifyEvent));
-            _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestWindowApplication::OnWindowFramebufferRefreshEvent));
-            _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestWindowApplication::OnWindowFramebufferResizeEvent));
+            _windowApplicationWindowCloseEventInvoked |= dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(TestFrameListener::OnWindowCloseEvent));
+            _windowApplicationWindowMoveEventInvoked |= dispatcher.Dispatch<WindowMoveEvent>(KMP_BIND(TestFrameListener::OnWindowMoveEvent));
+            _windowApplicationWindowResizeEventInvoked |= dispatcher.Dispatch<WindowResizeEvent>(KMP_BIND(TestFrameListener::OnWindowResizeEvent));
+            _windowApplicationWindowFocusEventInvoked |= dispatcher.Dispatch<WindowFocusEvent>(KMP_BIND(TestFrameListener::OnWindowFocusEvent));
+            _windowApplicationWindowIconifyEventInvoked |= dispatcher.Dispatch<WindowIconifyEvent>(KMP_BIND(TestFrameListener::OnWindowIconifyEvent));
+            _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestFrameListener::OnWindowFramebufferRefreshEvent));
+            _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestFrameListener::OnWindowFramebufferResizeEvent));
 
-            dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestWindowApplication::OnWindowContentScaleEvent));
+            dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestFrameListener::OnWindowContentScaleEvent));
         }
 
         KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { _keyPressEventInvoked = true; return true; }
@@ -402,7 +395,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { _mouseScrollEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt)
         {
-            _mouseButtonPressEventInvoked = true; 
+            _mouseButtonPressEventInvoked = true;
             if (evt.GetMouseButton() == Mouse::ButtonLeft && evt.GetMods() & Mode::Ctrl)
             {
                 if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
@@ -466,6 +459,10 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
+        Assets::AssetsManager* _assetsManager;
+        GraphicsBackend* _graphicsBackend;
+        WindowBackend* _windowBackend;
+
         bool _switchFontRequested = false;
         bool _useDefaultFont = true;
 
@@ -500,6 +497,32 @@ namespace Kmplete
         bool _windowApplicationWindowFramebufferRefreshEventInvoked = false;
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
     };
+
+
+    class TestWindowApplication : public WindowApplication
+    {
+    public:
+        TestWindowApplication(const WindowApplicationParameters& parameters)
+            : WindowApplication(parameters)
+            , _mainWindow(_windowBackend->GetMainWindow())
+            , mainFrameListener(nullptr)
+        {
+            Initialize();
+        }
+
+        void Initialize()
+        {
+            mainFrameListener.reset(new TestFrameListener(*_frameListenerManager.get(), _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
+            AddFrameListener(mainFrameListener.get());
+        }
+
+    // public for simplicity
+    public:
+        UPtr<TestFrameListener> mainFrameListener;
+
+    private:
+        Window& _mainWindow;
+    };
 }
 //--------------------------------------------------------------------------
 
@@ -511,76 +534,76 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
 
-    REQUIRE_FALSE(application->IsKeyPressEventInvoked());
-    REQUIRE_FALSE(application->IsKeyReleaseEventInvoked());
-    REQUIRE_FALSE(application->IsKeyCharEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationKeyPressEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationKeyReleaseEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationKeyCharEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsKeyPressEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsKeyReleaseEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsKeyCharEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationKeyPressEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationKeyReleaseEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationKeyCharEventInvoked());
 
-    REQUIRE_FALSE(application->IsMouseMoveEventInvoked());
-    REQUIRE_FALSE(application->IsMouseScrollEventInvoked());
-    REQUIRE_FALSE(application->IsMouseButtonPressEventInvoked());
-    REQUIRE_FALSE(application->IsMouseButtonReleaseEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationMouseMoveEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationMouseButtonPressEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsMouseMoveEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsMouseScrollEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsMouseButtonPressEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsMouseButtonReleaseEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseMoveEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseScrollEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseButtonPressEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
-    REQUIRE_FALSE(application->IsWindowCloseEventInvoked());
-    REQUIRE_FALSE(application->IsWindowMoveEventInvoked());
-    REQUIRE_FALSE(application->IsWindowResizeEventInvoked());
-    REQUIRE_FALSE(application->IsWindowFocusEventInvoked());
-    REQUIRE_FALSE(application->IsWindowIconifyEventInvoked());
-    REQUIRE_FALSE(application->IsWindowFramebufferRefreshEventInvoked());
-    REQUIRE_FALSE(application->IsWindowFramebufferResizeEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowCloseEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowMoveEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowResizeEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowFocusEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowIconifyEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
-    REQUIRE_FALSE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowCloseEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowMoveEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowResizeEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowFocusEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowIconifyEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowFramebufferRefreshEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowFramebufferResizeEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowCloseEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowMoveEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowResizeEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowFocusEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowIconifyEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
+    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
-    REQUIRE(application->DefaultSizeIsNotZero());
-    REQUIRE(application->DefaultWindowedSizeIsNotZero());
+    REQUIRE(application->mainFrameListener->DefaultSizeIsNotZero());
+    REQUIRE(application->mainFrameListener->DefaultWindowedSizeIsNotZero());
 
     application->Run();
 
-    REQUIRE(application->IsKeyPressEventInvoked());
-    REQUIRE(application->IsKeyReleaseEventInvoked());
-    REQUIRE(application->IsKeyCharEventInvoked());
-    REQUIRE(application->IsWindowApplicationKeyPressEventInvoked());
-    REQUIRE(application->IsWindowApplicationKeyReleaseEventInvoked());
-    REQUIRE(application->IsWindowApplicationKeyCharEventInvoked());
+    REQUIRE(application->mainFrameListener->IsKeyPressEventInvoked());
+    REQUIRE(application->mainFrameListener->IsKeyReleaseEventInvoked());
+    REQUIRE(application->mainFrameListener->IsKeyCharEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationKeyPressEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationKeyReleaseEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationKeyCharEventInvoked());
 
-    REQUIRE(application->IsMouseMoveEventInvoked());
-    REQUIRE(application->IsMouseScrollEventInvoked());
-    REQUIRE(application->IsMouseButtonPressEventInvoked());
-    REQUIRE(application->IsMouseButtonReleaseEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseMoveEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseButtonPressEventInvoked());
-    REQUIRE(application->IsWindowApplicationMouseButtonReleaseEventInvoked());
+    REQUIRE(application->mainFrameListener->IsMouseMoveEventInvoked());
+    REQUIRE(application->mainFrameListener->IsMouseScrollEventInvoked());
+    REQUIRE(application->mainFrameListener->IsMouseButtonPressEventInvoked());
+    REQUIRE(application->mainFrameListener->IsMouseButtonReleaseEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseMoveEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseScrollEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseButtonPressEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
-    REQUIRE(application->IsWindowCloseEventInvoked());
-    REQUIRE(application->IsWindowMoveEventInvoked());
-    REQUIRE(application->IsWindowResizeEventInvoked());
-    REQUIRE(application->IsWindowFocusEventInvoked());
-    REQUIRE(application->IsWindowIconifyEventInvoked());
-    REQUIRE(application->IsWindowFramebufferRefreshEventInvoked());
-    REQUIRE(application->IsWindowFramebufferResizeEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowCloseEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowMoveEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowResizeEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowFocusEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowIconifyEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
-    REQUIRE(application->IsWindowApplicationWindowFramebufferResizeEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowCloseEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowMoveEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowResizeEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowFocusEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowIconifyEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowFramebufferRefreshEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowFramebufferResizeEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowCloseEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowMoveEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowResizeEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowFocusEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowIconifyEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
+    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
-    REQUIRE(application->MousePositionIsNotZero());
-    REQUIRE(application->DPIIsNotZero());
-    REQUIRE(application->DPIScaleIsNotZero());
+    REQUIRE(application->mainFrameListener->MousePositionIsNotZero());
+    REQUIRE(application->mainFrameListener->DPIIsNotZero());
+    REQUIRE(application->mainFrameListener->DPIScaleIsNotZero());
 
     application.reset();
 
