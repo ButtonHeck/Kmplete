@@ -38,6 +38,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
+        //TODO: check for double adding
         _listeners.emplace_back(_FrameListenerWrapper(frameListener, true));
     }
     //--------------------------------------------------------------------------

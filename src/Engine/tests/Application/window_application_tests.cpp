@@ -23,13 +23,55 @@ namespace Kmplete
     static constexpr auto Id_EventsWindow = "EventsWindow";
     static constexpr auto Id_ControlsWindow = "ControlsWindow";
     static constexpr auto Id_InfoWindow = "InfoWindow";
+    static constexpr auto Id_FrameListenersWindow = "FrameListenersInfoWindow";
 
 
-    class TestFrameListener : public FrameListener
+    class TestFrameListener1 : public FrameListener
     {
     public:
-        TestFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend)
-            : FrameListener(frameListenerManager, "TestFrameListener"_sid)
+        TestFrameListener1(FrameListenerManager& frameListenerManager)
+            : FrameListener(frameListenerManager, 1ULL)
+        {}
+
+        const String name = "TestFrameListener1";
+    };
+
+    class TestFrameListener2 : public FrameListener
+    {
+    public:
+        TestFrameListener2(FrameListenerManager& frameListenerManager)
+            : FrameListener(frameListenerManager, 2ULL)
+        {}
+
+        const String name = "TestFrameListener2";
+    };
+
+    class TestFrameListener3 : public FrameListener
+    {
+    public:
+        TestFrameListener3(FrameListenerManager& frameListenerManager)
+            : FrameListener(frameListenerManager, 3ULL)
+        {}
+
+        const String name = "TestFrameListener3";
+    };
+
+    class TestFrameListener4 : public FrameListener
+    {
+    public:
+        TestFrameListener4(FrameListenerManager& frameListenerManager)
+            : FrameListener(frameListenerManager, 4ULL)
+        {}
+
+        const String name = "TestFrameListener4";
+    };
+
+
+    class TestMainFrameListener : public FrameListener
+    {
+    public:
+        TestMainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend)
+            : FrameListener(frameListenerManager, "TestMainFrameListener"_sid)
             , _mainWindow(mainWindow)
             , _assetsManager(assetsManager)
             , _graphicsBackend(graphicsBackend)
@@ -297,10 +339,18 @@ namespace Kmplete
             }
             ImGui::End(); //Id_InfoWindow
 
+            ImGui::Begin(Id_FrameListenersWindow, nullptr, applicationWindowFlags);
+            {
+                ImGui::Text(frameListenersExistenceString.c_str());
+            }
+            ImGui::End(); //Id_FrameListenersWindow
+
             ImGui::End(); //Id_Dockspace
 
             _imguiImpl->Render();
             ImGui::EndFrame();
+
+            frameListenersExistenceString = "";
         }
 
         bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
@@ -367,24 +417,24 @@ namespace Kmplete
         {
             EventDispatcher dispatcher(event);
 
-            _windowApplicationKeyPressEventInvoked |= dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestFrameListener::OnKeyPressEvent));
-            _windowApplicationKeyReleaseEventInvoked |= dispatcher.Dispatch<KeyReleaseEvent>(KMP_BIND(TestFrameListener::OnKeyReleaseEvent));
-            _windowApplicationKeyCharEventInvoked |= dispatcher.Dispatch<KeyCharEvent>(KMP_BIND(TestFrameListener::OnKeyCharEvent));
+            _windowApplicationKeyPressEventInvoked |= dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestMainFrameListener::OnKeyPressEvent));
+            _windowApplicationKeyReleaseEventInvoked |= dispatcher.Dispatch<KeyReleaseEvent>(KMP_BIND(TestMainFrameListener::OnKeyReleaseEvent));
+            _windowApplicationKeyCharEventInvoked |= dispatcher.Dispatch<KeyCharEvent>(KMP_BIND(TestMainFrameListener::OnKeyCharEvent));
 
-            _windowApplicationMouseMoveEventInvoked |= dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(TestFrameListener::OnMouseMoveEvent));
-            _windowApplicationMouseScrollEventInvoked |= dispatcher.Dispatch<MouseScrollEvent>(KMP_BIND(TestFrameListener::OnMouseScrollEvent));
-            _windowApplicationMouseButtonPressEventInvoked |= dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestFrameListener::OnMouseButtonPressEvent));
-            _windowApplicationMouseButtonReleaseEventInvoked |= dispatcher.Dispatch<MouseButtonReleaseEvent>(KMP_BIND(TestFrameListener::OnMouseButtonReleaseEvent));
+            _windowApplicationMouseMoveEventInvoked |= dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(TestMainFrameListener::OnMouseMoveEvent));
+            _windowApplicationMouseScrollEventInvoked |= dispatcher.Dispatch<MouseScrollEvent>(KMP_BIND(TestMainFrameListener::OnMouseScrollEvent));
+            _windowApplicationMouseButtonPressEventInvoked |= dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonPressEvent));
+            _windowApplicationMouseButtonReleaseEventInvoked |= dispatcher.Dispatch<MouseButtonReleaseEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonReleaseEvent));
 
-            _windowApplicationWindowCloseEventInvoked |= dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(TestFrameListener::OnWindowCloseEvent));
-            _windowApplicationWindowMoveEventInvoked |= dispatcher.Dispatch<WindowMoveEvent>(KMP_BIND(TestFrameListener::OnWindowMoveEvent));
-            _windowApplicationWindowResizeEventInvoked |= dispatcher.Dispatch<WindowResizeEvent>(KMP_BIND(TestFrameListener::OnWindowResizeEvent));
-            _windowApplicationWindowFocusEventInvoked |= dispatcher.Dispatch<WindowFocusEvent>(KMP_BIND(TestFrameListener::OnWindowFocusEvent));
-            _windowApplicationWindowIconifyEventInvoked |= dispatcher.Dispatch<WindowIconifyEvent>(KMP_BIND(TestFrameListener::OnWindowIconifyEvent));
-            _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestFrameListener::OnWindowFramebufferRefreshEvent));
-            _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestFrameListener::OnWindowFramebufferResizeEvent));
+            _windowApplicationWindowCloseEventInvoked |= dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(TestMainFrameListener::OnWindowCloseEvent));
+            _windowApplicationWindowMoveEventInvoked |= dispatcher.Dispatch<WindowMoveEvent>(KMP_BIND(TestMainFrameListener::OnWindowMoveEvent));
+            _windowApplicationWindowResizeEventInvoked |= dispatcher.Dispatch<WindowResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowResizeEvent));
+            _windowApplicationWindowFocusEventInvoked |= dispatcher.Dispatch<WindowFocusEvent>(KMP_BIND(TestMainFrameListener::OnWindowFocusEvent));
+            _windowApplicationWindowIconifyEventInvoked |= dispatcher.Dispatch<WindowIconifyEvent>(KMP_BIND(TestMainFrameListener::OnWindowIconifyEvent));
+            _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferRefreshEvent));
+            _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferResizeEvent));
 
-            dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestFrameListener::OnWindowContentScaleEvent));
+            dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestMainFrameListener::OnWindowContentScaleEvent));
         }
 
         KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { _keyPressEventInvoked = true; return true; }
@@ -496,6 +546,8 @@ namespace Kmplete
         bool _windowApplicationWindowIconifyEventInvoked = false;
         bool _windowApplicationWindowFramebufferRefreshEventInvoked = false;
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
+
+        String frameListenersExistenceString = "";
     };
 
 
@@ -506,19 +558,43 @@ namespace Kmplete
             : WindowApplication(parameters)
             , _mainWindow(_windowBackend->GetMainWindow())
             , mainFrameListener(nullptr)
+            , frameListener1(nullptr)
+            , frameListener2(nullptr)
+            , frameListener3(nullptr)
+            , frameListener4(nullptr)
         {
             Initialize();
         }
 
         void Initialize()
         {
-            mainFrameListener.reset(new TestFrameListener(*_frameListenerManager.get(), _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
+            frameListener1.reset(new TestFrameListener1(*_frameListenerManager.get()));
+            frameListener2.reset(new TestFrameListener2(*_frameListenerManager.get()));
+            frameListener3.reset(new TestFrameListener3(*_frameListenerManager.get()));
+            frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get()));
+
+            AddFrameListener(frameListener1.get());
+            AddFrameListener(frameListener2.get());
+            AddFrameListener(frameListener3.get());
+            AddFrameListener(frameListener4.get());
+
+            mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
             AddFrameListener(mainFrameListener.get());
+
+            _frameListenerManager->SetCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));
+        }
+
+        void FrameListenerCommandBufferHandlerFunction(KMP_MB_UNUSED const FrameListenerCommandBuffer& commandBuffer)
+        {
         }
 
     // public for simplicity
     public:
-        UPtr<TestFrameListener> mainFrameListener;
+        UPtr<TestMainFrameListener> mainFrameListener;
+        UPtr<TestFrameListener1> frameListener1;
+        UPtr<TestFrameListener2> frameListener2;
+        UPtr<TestFrameListener3> frameListener3;
+        UPtr<TestFrameListener4> frameListener4;
 
     private:
         Window& _mainWindow;
