@@ -66,6 +66,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowApplication::RemoveFrameListener(NonNull<FrameListener*> frameListener)
+    {
+        _frameListenerManager->_RemoveFrameListener(frameListener);
+    }
+    //--------------------------------------------------------------------------
+
     bool WindowApplication::ConfirmExit()
     {
         return true;

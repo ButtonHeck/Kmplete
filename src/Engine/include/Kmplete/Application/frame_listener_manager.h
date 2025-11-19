@@ -39,6 +39,7 @@ namespace Kmplete
         };
         
         void _AddFrameListener(NonNull<FrameListener*> frameListener);
+        void _RemoveFrameListener(NonNull<FrameListener*> frameListener);
 
         void _UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
         void _RenderFrameListeners();

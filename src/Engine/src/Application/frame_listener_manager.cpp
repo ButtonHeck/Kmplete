@@ -43,6 +43,21 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void FrameListenerManager::_RemoveFrameListener(NonNull<FrameListener*> frameListener)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
+        {
+            if (iter->frameListener->GetSID() == frameListener->GetSID())
+            {
+                _listeners.erase(iter);
+                return;
+            }
+        }
+    }
+    //--------------------------------------------------------------------------
+
     void FrameListenerManager::_UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
