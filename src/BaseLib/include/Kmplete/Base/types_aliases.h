@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <unordered_map>
 #include <unordered_set>
+#include <set>
 
 
 namespace Kmplete
@@ -18,6 +19,9 @@ namespace Kmplete
 
     template<typename Value, typename Hasher = std::hash<Value>>
     using HashSet = std::unordered_set<Value, Hasher>;
+
+    template<typename Value, typename Comparator = std::less<Value>>
+    using Set = std::set<Value, Comparator>;
 
     using String = std::string;
     using WString = std::wstring;

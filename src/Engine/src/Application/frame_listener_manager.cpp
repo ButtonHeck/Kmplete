@@ -34,16 +34,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_AddFrameListener(NonNull<FrameListener*> frameListener)
+    void FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        //TODO: check for double adding
-        _listeners.emplace_back(_FrameListenerWrapper(frameListener, true));
+        _listeners.emplace(FrameListenerWrapper(frameListener, true));
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_RemoveFrameListener(NonNull<FrameListener*> frameListener)
+    void FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -116,6 +115,16 @@ namespace Kmplete
         }
 
         _commandBuffer.clear();
+    }
+    //--------------------------------------------------------------------------
+}
+
+
+namespace std
+{
+    bool operator>(const Kmplete::FrameListenerManager::FrameListenerWrapper& lhs, const Kmplete::FrameListenerManager::FrameListenerWrapper& rhs)
+    {
+        return lhs.frameListener > rhs.frameListener;
     }
     //--------------------------------------------------------------------------
 }

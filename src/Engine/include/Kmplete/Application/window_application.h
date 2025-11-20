@@ -37,8 +37,6 @@ namespace Kmplete
         KMP_API virtual ~WindowApplication();
 
         KMP_API void Run() override;
-        KMP_API void AddFrameListener(NonNull<FrameListener*> frameListener);
-        KMP_API void RemoveFrameListener(NonNull<FrameListener*> frameListener);
 
         KMP_NODISCARD KMP_API virtual bool ConfirmExit();
 

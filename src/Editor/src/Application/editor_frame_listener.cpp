@@ -17,7 +17,7 @@ namespace Kmplete
 
 
     EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
-        : FrameListener(frameListenerManager, "EditorFrameListener"_sid)
+        : FrameListener(frameListenerManager, "EditorFrameListener"_sid, 0)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _systemMetricsManager(systemMetricsManager)
         , _mainWindow(mainWindow)

@@ -17,8 +17,8 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(FrameListener)
 
     public:
-        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid) noexcept;
-        virtual ~FrameListener() = default;
+        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid, UInt8 priority) noexcept;
+        KMP_API ~FrameListener();
 
         KMP_NODISCARD KMP_API Utils::StringID GetSID() const noexcept;
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
@@ -27,8 +27,11 @@ namespace Kmplete
 
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
+        KMP_API bool operator>(const FrameListener& other) const;
+
     protected:
         const Utils::StringID _sid;
+        const UInt8 _priority;
 
     private:
         FrameListenerManager& _frameListenerManager;

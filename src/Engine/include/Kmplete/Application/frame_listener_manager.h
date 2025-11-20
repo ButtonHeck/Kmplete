@@ -20,6 +20,12 @@ namespace Kmplete
     public:
         using FrameListenerCommandBufferHandler = std::function<void(const FrameListenerCommandBuffer&)>;
 
+        struct FrameListenerWrapper
+        {
+            Nullable<FrameListener*> frameListener;
+            bool isActive;
+        };
+
     public:
         KMP_DISABLE_COPY_MOVE(FrameListenerManager)
 
@@ -29,17 +35,11 @@ namespace Kmplete
         KMP_API void SetCommandBufferHandler(const FrameListenerCommandBufferHandler& commandBufferHandler);
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
+        KMP_API void AddFrameListener(NonNull<FrameListener*> frameListener);
+        KMP_API void RemoveFrameListener(NonNull<FrameListener*> frameListener);
+
     private:
         friend class WindowApplication;
-
-        struct _FrameListenerWrapper
-        {
-            Nullable<FrameListener*> frameListener;
-            bool isActive;
-        };
-        
-        void _AddFrameListener(NonNull<FrameListener*> frameListener);
-        void _RemoveFrameListener(NonNull<FrameListener*> frameListener);
 
         void _UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
         void _RenderFrameListeners();
@@ -47,9 +47,15 @@ namespace Kmplete
         void _ProcessFrameListenersCommands();
 
     private:
-        Vector<_FrameListenerWrapper> _listeners;
+        Set<FrameListenerWrapper, std::greater<FrameListenerWrapper>> _listeners;
         FrameListenerCommandBuffer _commandBuffer;
         FrameListenerCommandBufferHandler _commandBufferHandler;
     };
     //--------------------------------------------------------------------------
+}
+
+
+namespace std
+{
+    bool operator>(const Kmplete::FrameListenerManager::FrameListenerWrapper& lhs, const Kmplete::FrameListenerManager::FrameListenerWrapper& rhs);
 }

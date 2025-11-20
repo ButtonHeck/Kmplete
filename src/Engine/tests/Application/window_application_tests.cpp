@@ -42,7 +42,7 @@ namespace Kmplete
     {
     public:
         TestFrameListener1(FrameListenerManager& frameListenerManager, SharedState& sharedState)
-            : FrameListener(frameListenerManager, 1ULL)
+            : FrameListener(frameListenerManager, 1ULL, 1)
             , sharedState(sharedState)
         {
             sharedState.existenceMask |= frame1Mask;
@@ -61,7 +61,7 @@ namespace Kmplete
     {
     public:
         TestFrameListener2(FrameListenerManager& frameListenerManager, SharedState& sharedState)
-            : FrameListener(frameListenerManager, 2ULL)
+            : FrameListener(frameListenerManager, 2ULL, 2)
             , sharedState(sharedState)
         {
             sharedState.existenceMask |= frame2Mask;
@@ -80,7 +80,7 @@ namespace Kmplete
     {
     public:
         TestFrameListener3(FrameListenerManager& frameListenerManager, SharedState& sharedState)
-            : FrameListener(frameListenerManager, 3ULL)
+            : FrameListener(frameListenerManager, 3ULL, 3)
             , sharedState(sharedState)
         {
             sharedState.existenceMask |= frame3Mask;
@@ -99,7 +99,7 @@ namespace Kmplete
     {
     public:
         TestFrameListener4(FrameListenerManager& frameListenerManager, SharedState& sharedState)
-            : FrameListener(frameListenerManager, 4ULL)
+            : FrameListener(frameListenerManager, 4ULL, 4)
             , sharedState(sharedState)
         {
             sharedState.existenceMask |= frame4Mask;
@@ -256,7 +256,7 @@ namespace Kmplete
 
 
     TestMainFrameListener::TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend)
-        : FrameListener(frameListenerManager, "TestMainFrameListener"_sid)
+        : FrameListener(frameListenerManager, "TestMainFrameListener"_sid, 10)
         , _sharedState(sharedState)
         , _mainWindow(mainWindow)
         , _assetsManager(assetsManager)
@@ -685,14 +685,7 @@ namespace Kmplete
         frameListener2.reset(new TestFrameListener2(*_frameListenerManager.get(), _sharedState));
         frameListener3.reset(new TestFrameListener3(*_frameListenerManager.get(), _sharedState));
         frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
-
-        AddFrameListener(frameListener1.get());
-        AddFrameListener(frameListener2.get());
-        AddFrameListener(frameListener3.get());
-        AddFrameListener(frameListener4.get());
-
         mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
-        AddFrameListener(mainFrameListener.get());
 
         _frameListenerManager->SetCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));
     }
@@ -703,7 +696,6 @@ namespace Kmplete
         {
             if (command.command == FrameListenerCommandCode::Delete && command.frameListenerSidDestination == 1ULL)
             {
-                RemoveFrameListener(frameListener1.get());
                 frameListener1.reset(nullptr);
             }
         }
