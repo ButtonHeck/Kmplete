@@ -36,6 +36,7 @@ namespace Kmplete
         int existenceMask = 0;
         int updateMask = 0;
         String updateMaskString = "";
+        String eventProcessingString = "";
     };
 
 
@@ -58,6 +59,11 @@ namespace Kmplete
         {
             sharedState.updateMask |= frame1Mask;
             sharedState.updateMaskString += "1";
+        }
+
+        void OnEvent(Event&) override
+        {
+            sharedState.eventProcessingString += "1";
         }
 
         SharedState& sharedState;
@@ -85,6 +91,11 @@ namespace Kmplete
             sharedState.updateMaskString += "2";
         }
 
+        void OnEvent(Event&) override
+        {
+            sharedState.eventProcessingString += "2";
+        }
+
         SharedState& sharedState;
         const String name = "TestFrameListener2";
     };
@@ -110,6 +121,11 @@ namespace Kmplete
             sharedState.updateMaskString += "3";
         }
 
+        void OnEvent(Event&) override
+        {
+            sharedState.eventProcessingString += "3";
+        }
+
         SharedState& sharedState;
         const String name = "TestFrameListener3";
     };
@@ -133,6 +149,11 @@ namespace Kmplete
         {
             sharedState.updateMask |= frame4Mask;
             sharedState.updateMaskString += "4";
+        }
+
+        void OnEvent(Event&) override
+        {
+            sharedState.eventProcessingString += "4";
         }
 
         SharedState& sharedState;
@@ -168,7 +189,6 @@ namespace Kmplete
         bool IsMouseButtonReleaseEventInvoked() const { return _mouseButtonReleaseEventInvoked; }
         bool IsWindowApplicationMouseMoveEventInvoked() const { return _windowApplicationMouseMoveEventInvoked; }
         bool IsWindowApplicationMouseScrollEventInvoked() const { return _windowApplicationMouseScrollEventInvoked; }
-        bool IsWindowApplicationMouseButtonPressEventInvoked() const { return _windowApplicationMouseButtonPressEventInvoked; }
         bool IsWindowApplicationMouseButtonReleaseEventInvoked() const { return _windowApplicationMouseButtonReleaseEventInvoked; }
 
         bool IsWindowCloseEventInvoked() const { return _windowCloseEventInvoked; }
@@ -238,7 +258,6 @@ namespace Kmplete
         bool _mouseButtonReleaseEventInvoked = false;
         bool _windowApplicationMouseMoveEventInvoked = false;
         bool _windowApplicationMouseScrollEventInvoked = false;
-        bool _windowApplicationMouseButtonPressEventInvoked = false;
         bool _windowApplicationMouseButtonReleaseEventInvoked = false;
 
         bool _windowCloseEventInvoked = false;
@@ -673,6 +692,7 @@ namespace Kmplete
             }
 
             ImGui::Text("Update order: %s", _sharedState.updateMaskString.c_str());
+            ImGui::Text("OnMouseClickEvent order: %s", _sharedState.eventProcessingString.c_str());
         }
         ImGui::End(); //Id_FrameListenersWindow
 
@@ -683,6 +703,7 @@ namespace Kmplete
 
         _sharedState.updateMask = 0;
         _sharedState.updateMaskString = "";
+        _sharedState.eventProcessingString = "";
     }
 
     bool TestMainFrameListener::MousePositionIsNotZero() const
@@ -723,7 +744,6 @@ namespace Kmplete
 
         _windowApplicationMouseMoveEventInvoked |= dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(TestMainFrameListener::OnMouseMoveEvent));
         _windowApplicationMouseScrollEventInvoked |= dispatcher.Dispatch<MouseScrollEvent>(KMP_BIND(TestMainFrameListener::OnMouseScrollEvent));
-        _windowApplicationMouseButtonPressEventInvoked |= dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonPressEvent));
         _windowApplicationMouseButtonReleaseEventInvoked |= dispatcher.Dispatch<MouseButtonReleaseEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonReleaseEvent));
 
         _windowApplicationWindowCloseEventInvoked |= dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(TestMainFrameListener::OnWindowCloseEvent));
@@ -734,6 +754,7 @@ namespace Kmplete
         _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferRefreshEvent));
         _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferResizeEvent));
 
+        dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonPressEvent));
         dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestMainFrameListener::OnWindowContentScaleEvent));
     }
 
@@ -762,7 +783,10 @@ namespace Kmplete
                 _mainWindow.SetCursorMode(Window::CursorMode::Default);
             }
         }
-        return true;
+
+        _sharedState.eventProcessingString += "M";
+
+        return false;
     }
 
     bool TestMainFrameListener::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
@@ -882,7 +906,6 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE_FALSE(application->mainFrameListener->IsMouseButtonReleaseEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseMoveEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseButtonPressEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
     REQUIRE_FALSE(application->mainFrameListener->IsWindowCloseEventInvoked());
@@ -918,7 +941,6 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application->mainFrameListener->IsMouseButtonReleaseEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowApplicationMouseMoveEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseButtonPressEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
     REQUIRE(application->mainFrameListener->IsWindowCloseEventInvoked());
