@@ -25,15 +25,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListener::PushCommand(FrameListenerCommand&& command) noexcept
+    UInt8 FrameListener::GetPriority() const noexcept
     {
-        _frameListenerManager.PushCommand(std::move(command));
+        return _priority;
     }
     //--------------------------------------------------------------------------
 
-    bool FrameListener::operator>(const FrameListener& other) const
+    void FrameListener::PushCommand(FrameListenerCommand&& command) noexcept
     {
-        return _priority > other._priority;
+        _frameListenerManager.PushCommand(std::move(command));
     }
     //--------------------------------------------------------------------------
 }

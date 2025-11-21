@@ -18,7 +18,7 @@ namespace Kmplete
         KMP_LOG_CLASSNAME(FrameListenerManager)
 
     public:
-        using FrameListenerCommandBufferHandler = std::function<void(const FrameListenerCommandBuffer&)>;
+        using FrameCreateDeleteListenerCommandBufferHandler = std::function<void(const FrameListenerCommandBuffer&)>;
 
         struct FrameListenerWrapper
         {
@@ -32,7 +32,7 @@ namespace Kmplete
         KMP_API FrameListenerManager() = default;
         KMP_API ~FrameListenerManager();
 
-        KMP_API void SetCommandBufferHandler(const FrameListenerCommandBufferHandler& commandBufferHandler);
+        KMP_API void SetCreateDeleteCommandBufferHandler(const FrameCreateDeleteListenerCommandBufferHandler& commandBufferHandler);
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
         KMP_API void AddFrameListener(NonNull<FrameListener*> frameListener);
@@ -46,16 +46,12 @@ namespace Kmplete
         void _ProcessEventsFrameListeners(Event& event);
         void _ProcessFrameListenersCommands();
 
+        Nullable<FrameListenerWrapper*> _FindBySid(Utils::StringID sid);
+
     private:
-        Set<FrameListenerWrapper, std::greater<FrameListenerWrapper>> _listeners;
+        Map<UInt8, FrameListenerWrapper, std::greater<UInt8>> _listeners;
         FrameListenerCommandBuffer _commandBuffer;
-        FrameListenerCommandBufferHandler _commandBufferHandler;
+        FrameCreateDeleteListenerCommandBufferHandler _commandBufferHandler;
     };
     //--------------------------------------------------------------------------
-}
-
-
-namespace std
-{
-    bool operator>(const Kmplete::FrameListenerManager::FrameListenerWrapper& lhs, const Kmplete::FrameListenerManager::FrameListenerWrapper& rhs);
 }

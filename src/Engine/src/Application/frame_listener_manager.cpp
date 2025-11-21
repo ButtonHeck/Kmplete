@@ -13,7 +13,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::SetCommandBufferHandler(const FrameListenerCommandBufferHandler& commandBufferHandler)
+    void FrameListenerManager::SetCreateDeleteCommandBufferHandler(const FrameCreateDeleteListenerCommandBufferHandler& commandBufferHandler)
     {
         if (_commandBufferHandler)
         {
@@ -38,7 +38,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        _listeners.emplace(FrameListenerWrapper(frameListener, true));
+        _listeners.emplace(frameListener->GetPriority(), FrameListenerWrapper(frameListener, true));
     }
     //--------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ namespace Kmplete
 
         for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
         {
-            if (iter->frameListener->GetSID() == frameListener->GetSID())
+            if (iter->second.frameListener->GetSID() == frameListener->GetSID())
             {
                 _listeners.erase(iter);
                 return;
@@ -61,7 +61,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (auto& listener : _listeners)
+        for (const auto& [priority, listener] : _listeners)
         {
             if (listener.isActive)
             {
@@ -75,7 +75,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (auto& listener : _listeners)
+        for (const auto& [priority, listener] : _listeners)
         {
             if (listener.isActive)
             {
@@ -91,7 +91,7 @@ namespace Kmplete
 
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
-            auto& listener = *iter;
+            auto& listener = iter->second;
             if (listener.isActive)
             {
                 if (event.handled)
@@ -109,6 +109,25 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
+        for (auto commandIter = _commandBuffer.begin(); commandIter != _commandBuffer.end();)
+        {
+            auto wrapper = _FindBySid(commandIter->sid);
+            if (wrapper == nullptr)
+            {
+                commandIter = _commandBuffer.erase(commandIter);
+                continue;
+            }
+
+            if (commandIter->command == FrameListenerCommandCode::Create || commandIter->command == FrameListenerCommandCode::Delete)
+            {
+                commandIter++;
+                continue;
+            }
+
+            wrapper->isActive = (commandIter->command == FrameListenerCommandCode::Activate);
+            commandIter++;
+        }
+
         if (_commandBufferHandler)
         {
             _commandBufferHandler(_commandBuffer);
@@ -117,14 +136,18 @@ namespace Kmplete
         _commandBuffer.clear();
     }
     //--------------------------------------------------------------------------
-}
 
-
-namespace std
-{
-    bool operator>(const Kmplete::FrameListenerManager::FrameListenerWrapper& lhs, const Kmplete::FrameListenerManager::FrameListenerWrapper& rhs)
+    Nullable<FrameListenerManager::FrameListenerWrapper*> FrameListenerManager::_FindBySid(Utils::StringID sid)
     {
-        return lhs.frameListener > rhs.frameListener;
+        for (auto& [priority, wrapper] : _listeners)
+        {
+            if (wrapper.frameListener->GetSID() == sid)
+            {
+                return &wrapper;
+            }
+        }
+
+        return nullptr;
     }
     //--------------------------------------------------------------------------
 }

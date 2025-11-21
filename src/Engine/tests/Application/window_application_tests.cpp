@@ -542,12 +542,12 @@ namespace Kmplete
 
             if (ImGui::Button("Delete FL1"))
             {
-                PushCommand(FrameListenerCommand{ .command = FrameListenerCommandCode::Delete, .frameListenerSidDestination = 1ULL });
+                PushCommand(FrameListenerCommand{ .command = FrameListenerCommandCode::Delete, .sid = 1ULL });
             }
             ImGui::SameLine();
             if (ImGui::Button("Create FL1"))
             {
-                PushCommand(FrameListenerCommand{ .command = FrameListenerCommandCode::AddAfter, .frameListenerSidDestination = 1ULL });
+                PushCommand(FrameListenerCommand{ .command = FrameListenerCommandCode::Create, .sid = 1ULL });
             }
         }
         ImGui::End(); //Id_FrameListenersWindow
@@ -687,14 +687,14 @@ namespace Kmplete
         frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
         mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
 
-        _frameListenerManager->SetCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));
+        _frameListenerManager->SetCreateDeleteCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));
     }
 
     void TestWindowApplication::FrameListenerCommandBufferHandlerFunction(const FrameListenerCommandBuffer& commandBuffer)
     {
         for (const auto& command : commandBuffer)
         {
-            if (command.command == FrameListenerCommandCode::Delete && command.frameListenerSidDestination == 1ULL)
+            if (command.command == FrameListenerCommandCode::Delete && command.sid == 1ULL)
             {
                 frameListener1.reset(nullptr);
             }

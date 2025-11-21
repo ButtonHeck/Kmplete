@@ -12,19 +12,16 @@ namespace Kmplete
     {
         Activate,
         Deactivate,
-        Replace,
-        Delete,
-        AddAfter,
-        AddBefore
+        Create,
+        Delete
     };
     //--------------------------------------------------------------------------
 
 
     struct FrameListenerCommand
     {
-        const FrameListenerCommandCode command;
-        const Utils::StringID frameListenerSidSource;
-        const Utils::StringID frameListenerSidDestination;
+        FrameListenerCommandCode command;
+        Utils::StringID sid;
     };
     static_assert(std::is_move_constructible_v<FrameListenerCommand> == true);
 
