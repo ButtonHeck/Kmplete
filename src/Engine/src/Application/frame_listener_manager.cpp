@@ -111,6 +111,12 @@ namespace Kmplete
 
         for (auto commandIter = _commandBuffer.begin(); commandIter != _commandBuffer.end();)
         {
+            if (commandIter->code == FrameListenerCommandCode::Create || commandIter->code == FrameListenerCommandCode::Delete)
+            {
+                commandIter++;
+                continue;
+            }
+
             auto wrapper = _FindBySid(commandIter->sid);
             if (wrapper == nullptr)
             {
@@ -118,13 +124,7 @@ namespace Kmplete
                 continue;
             }
 
-            if (commandIter->command == FrameListenerCommandCode::Create || commandIter->command == FrameListenerCommandCode::Delete)
-            {
-                commandIter++;
-                continue;
-            }
-
-            wrapper->isActive = (commandIter->command == FrameListenerCommandCode::Activate);
+            wrapper->isActive = (commandIter->code == FrameListenerCommandCode::Activate);
             commandIter++;
         }
 

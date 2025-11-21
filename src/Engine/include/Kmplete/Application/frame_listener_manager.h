@@ -49,7 +49,7 @@ namespace Kmplete
         Nullable<FrameListenerWrapper*> _FindBySid(Utils::StringID sid);
 
     private:
-        Map<UInt8, FrameListenerWrapper, std::greater<UInt8>> _listeners;
+        Map<UInt8, FrameListenerWrapper> _listeners;
         FrameListenerCommandBuffer _commandBuffer;
         FrameCreateDeleteListenerCommandBufferHandler _commandBufferHandler;
     };

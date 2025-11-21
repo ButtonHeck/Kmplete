@@ -35,6 +35,7 @@ namespace Kmplete
     {
         int existenceMask = 0;
         int updateMask = 0;
+        String updateMaskString = "";
     };
 
 
@@ -51,6 +52,12 @@ namespace Kmplete
         ~TestFrameListener1()
         {
             sharedState.existenceMask &= ~frame1Mask;
+        }
+
+        void Update(float, bool) override
+        {
+            sharedState.updateMask |= frame1Mask;
+            sharedState.updateMaskString += "1";
         }
 
         SharedState& sharedState;
@@ -72,6 +79,12 @@ namespace Kmplete
             sharedState.existenceMask &= ~frame2Mask;
         }
 
+        void Update(float, bool) override
+        {
+            sharedState.updateMask |= frame2Mask;
+            sharedState.updateMaskString += "2";
+        }
+
         SharedState& sharedState;
         const String name = "TestFrameListener2";
     };
@@ -91,6 +104,12 @@ namespace Kmplete
             sharedState.existenceMask &= ~frame3Mask;
         }
 
+        void Update(float, bool) override
+        {
+            sharedState.updateMask |= frame3Mask;
+            sharedState.updateMaskString += "3";
+        }
+
         SharedState& sharedState;
         const String name = "TestFrameListener3";
     };
@@ -108,6 +127,12 @@ namespace Kmplete
         ~TestFrameListener4()
         {
             sharedState.existenceMask &= ~frame4Mask;
+        }
+
+        void Update(float, bool) override
+        {
+            sharedState.updateMask |= frame4Mask;
+            sharedState.updateMaskString += "4";
         }
 
         SharedState& sharedState;
@@ -297,6 +322,8 @@ namespace Kmplete
 
             _switchFontRequested = false;
         }
+
+        _sharedState.updateMaskString += "M";
     }
 
     void TestMainFrameListener::SetCustomIconFromFilepath()
@@ -527,28 +554,125 @@ namespace Kmplete
 
         ImGui::Begin(Id_FrameListenersWindow, nullptr, applicationWindowFlags);
         {
+            auto frame1Exist = bool(_sharedState.existenceMask & frame1Mask);
+            auto frame2Exist = bool(_sharedState.existenceMask & frame2Mask);
+            auto frame3Exist = bool(_sharedState.existenceMask & frame3Mask);
+            auto frame4Exist = bool(_sharedState.existenceMask & frame4Mask);
+
+            auto frame1Active = bool(_sharedState.updateMask & frame1Mask);
+            auto frame2Active = bool(_sharedState.updateMask & frame2Mask);
+            auto frame3Active = bool(_sharedState.updateMask & frame3Mask);
+            auto frame4Active = bool(_sharedState.updateMask & frame4Mask);
+
             {
                 const auto disableGuard = ImGuiUtils::DisableGuard(true);
-                auto frame1Exist = bool(_sharedState.existenceMask & frame1Mask);
-                auto frame2Exist = bool(_sharedState.existenceMask & frame2Mask);
-                auto frame3Exist = bool(_sharedState.existenceMask & frame3Mask);
-                auto frame4Exist = bool(_sharedState.existenceMask & frame4Mask);
-
                 ImGui::Checkbox("FrameListener1 exist", &frame1Exist);
-                ImGui::Checkbox("FrameListener2 exist", &frame2Exist);
-                ImGui::Checkbox("FrameListener3 exist", &frame3Exist);
-                ImGui::Checkbox("FrameListener4 exist", &frame4Exist);
+                ImGui::SameLine();
+                ImGui::Checkbox("FrameListener1 active", &frame1Active);
             }
-
+            ImGui::SameLine();
             if (ImGui::Button("Delete FL1"))
             {
-                PushCommand(FrameListenerCommand{ .command = FrameListenerCommandCode::Delete, .sid = 1ULL });
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Delete, .sid = 1ULL });
             }
             ImGui::SameLine();
             if (ImGui::Button("Create FL1"))
             {
-                PushCommand(FrameListenerCommand{ .command = FrameListenerCommandCode::Create, .sid = 1ULL });
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Create, .sid = 1ULL });
             }
+            ImGui::SameLine();
+            if (ImGui::Button("Activate FL1"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Activate, .sid = 1ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Deactivate FL1"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 1ULL });
+            }
+
+            {
+                const auto disableGuard = ImGuiUtils::DisableGuard(true);
+                ImGui::Checkbox("FrameListener2 exist", &frame2Exist);
+                ImGui::SameLine();
+                ImGui::Checkbox("FrameListener2 active", &frame2Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Delete FL2"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Delete, .sid = 2ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Create FL2"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Create, .sid = 2ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Activate FL2"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Activate, .sid = 2ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Deactivate FL2"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 2ULL });
+            }
+
+            {
+                const auto disableGuard = ImGuiUtils::DisableGuard(true);
+                ImGui::Checkbox("FrameListener3 exist", &frame3Exist);
+                ImGui::SameLine();
+                ImGui::Checkbox("FrameListener3 active", &frame3Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Delete FL3"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Delete, .sid = 3ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Create FL3"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Create, .sid = 3ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Activate FL3"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Activate, .sid = 3ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Deactivate FL3"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 3ULL });
+            }
+
+            {
+                const auto disableGuard = ImGuiUtils::DisableGuard(true);
+                ImGui::Checkbox("FrameListener4 exist", &frame4Exist);
+                ImGui::SameLine();
+                ImGui::Checkbox("FrameListener4 active", &frame4Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Delete FL4"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Delete, .sid = 4ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Create FL4"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Create, .sid = 4ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Activate FL4"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Activate, .sid = 4ULL });
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Deactivate FL4"))
+            {
+                PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 4ULL });
+            }
+
+            ImGui::Text("Update order: %s", _sharedState.updateMaskString.c_str());
         }
         ImGui::End(); //Id_FrameListenersWindow
 
@@ -556,6 +680,9 @@ namespace Kmplete
 
         _imguiImpl->Render();
         ImGui::EndFrame();
+
+        _sharedState.updateMask = 0;
+        _sharedState.updateMaskString = "";
     }
 
     bool TestMainFrameListener::MousePositionIsNotZero() const
@@ -694,9 +821,40 @@ namespace Kmplete
     {
         for (const auto& command : commandBuffer)
         {
-            if (command.command == FrameListenerCommandCode::Delete && command.sid == 1ULL)
+            if (command.code == FrameListenerCommandCode::Delete && command.sid == 1ULL)
             {
                 frameListener1.reset(nullptr);
+            }
+            else if (command.code == FrameListenerCommandCode::Create && command.sid == 1ULL && !frameListener1)
+            {
+                frameListener1.reset(new TestFrameListener1(*_frameListenerManager.get(), _sharedState));
+            }
+
+            if (command.code == FrameListenerCommandCode::Delete && command.sid == 2ULL)
+            {
+                frameListener2.reset(nullptr);
+            }
+            else if (command.code == FrameListenerCommandCode::Create && command.sid == 2ULL && !frameListener2)
+            {
+                frameListener2.reset(new TestFrameListener2(*_frameListenerManager.get(), _sharedState));
+            }
+
+            if (command.code == FrameListenerCommandCode::Delete && command.sid == 3ULL)
+            {
+                frameListener3.reset(nullptr);
+            }
+            else if (command.code == FrameListenerCommandCode::Create && command.sid == 3ULL && !frameListener3)
+            {
+                frameListener3.reset(new TestFrameListener3(*_frameListenerManager.get(), _sharedState));
+            }
+
+            if (command.code == FrameListenerCommandCode::Delete && command.sid == 4ULL)
+            {
+                frameListener4.reset(nullptr);
+            }
+            else if (command.code == FrameListenerCommandCode::Create && command.sid == 4ULL && !frameListener4)
+            {
+                frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
             }
         }
     }

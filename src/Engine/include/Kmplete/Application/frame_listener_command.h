@@ -20,7 +20,7 @@ namespace Kmplete
 
     struct FrameListenerCommand
     {
-        FrameListenerCommandCode command;
+        FrameListenerCommandCode code;
         Utils::StringID sid;
     };
     static_assert(std::is_move_constructible_v<FrameListenerCommand> == true);
