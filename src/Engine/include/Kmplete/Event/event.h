@@ -86,7 +86,7 @@ namespace Kmplete
             : _event(event)
         {}
 
-        template<typename Evt, typename Fn>
+        template<typename Evt, typename Fn> requires (std::invocable<Fn, Evt&> && std::is_same<std::invoke_result_t<Fn, Evt&>, bool>::value)
         bool Dispatch(const Fn& func)
         {
             if (_event.GetType() == Evt::GetStaticType())
