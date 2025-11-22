@@ -35,7 +35,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
+    bool FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
         KMP_ASSERT(frameListener);
@@ -44,27 +44,29 @@ namespace Kmplete
         if (listenerWrapper != nullptr)
         {
             KMP_LOG_WARN("already contains frame listener with same sid '{}'", frameListener->GetSID());
-            return;
+            return false;
         }
         if (_listeners.contains(frameListener->GetPriority()))
         {
             KMP_LOG_WARN("already contains frame listener '{}' with same priority '{}'", frameListener->GetSID(), frameListener->GetPriority());
-            return;
+            return false;
         }
 
         const auto [iterator, hasEmplaced] = _listeners.emplace(frameListener->GetPriority(), FrameListenerWrapper(frameListener, true));
         if (hasEmplaced)
         {
             KMP_LOG_INFO("added frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
+            return true;
         }
         else
         {
             KMP_LOG_ERROR("failed to add frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
+            return false;
         }
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener)
+    bool FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
         KMP_ASSERT(frameListener);
@@ -75,11 +77,18 @@ namespace Kmplete
             {
                 _listeners.erase(iter);
                 KMP_LOG_INFO("removed frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
-                return;
+                return true;
             }
         }
 
         KMP_LOG_WARN("failed to remove listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
+        return false;
+    }
+    //--------------------------------------------------------------------------
+
+    size_t FrameListenerManager::FrameListenersCount() const noexcept
+    {
+        return _listeners.size();
     }
     //--------------------------------------------------------------------------
 

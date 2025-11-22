@@ -35,8 +35,10 @@ namespace Kmplete
         KMP_API void SetCreateDeleteCommandBufferHandler(const FrameCreateDeleteListenerCommandBufferHandler& commandBufferHandler);
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
-        KMP_API void AddFrameListener(NonNull<FrameListener*> frameListener);
-        KMP_API void RemoveFrameListener(NonNull<FrameListener*> frameListener);
+        KMP_API bool AddFrameListener(NonNull<FrameListener*> frameListener);
+        KMP_API bool RemoveFrameListener(NonNull<FrameListener*> frameListener);
+
+        KMP_NODISCARD KMP_API size_t FrameListenersCount() const noexcept;
 
     private:
         friend class WindowApplication;

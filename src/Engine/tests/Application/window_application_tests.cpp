@@ -38,6 +38,7 @@ namespace Kmplete
         String updateMaskString = "";
         String eventProcessingString = "";
     };
+    //--------------------------------------------------------------------------
 
 
     class TestFrameListener1 : public FrameListener
@@ -69,6 +70,7 @@ namespace Kmplete
         SharedState& sharedState;
         const String name = "TestFrameListener1";
     };
+    //--------------------------------------------------------------------------
 
     class TestFrameListener2 : public FrameListener
     {
@@ -99,6 +101,7 @@ namespace Kmplete
         SharedState& sharedState;
         const String name = "TestFrameListener2";
     };
+    //--------------------------------------------------------------------------
 
     class TestFrameListener3 : public FrameListener
     {
@@ -129,6 +132,7 @@ namespace Kmplete
         SharedState& sharedState;
         const String name = "TestFrameListener3";
     };
+    //--------------------------------------------------------------------------
 
     class TestFrameListener4 : public FrameListener
     {
@@ -159,6 +163,25 @@ namespace Kmplete
         SharedState& sharedState;
         const String name = "TestFrameListener4";
     };
+    //--------------------------------------------------------------------------
+
+    class TestDuplicateSidFrameListener : public FrameListener
+    {
+    public:
+        TestDuplicateSidFrameListener(FrameListenerManager& frameListenerManager)
+            : FrameListener(frameListenerManager, 10ULL, 100) // same sid with main frame listener
+        {}
+    };
+    //--------------------------------------------------------------------------
+
+    class TestDuplicatePriorityFrameListener : public FrameListener
+    {
+    public:
+        TestDuplicatePriorityFrameListener(FrameListenerManager& frameListenerManager)
+            : FrameListener(frameListenerManager, 100ULL, 10) // same priority with main frame listener
+        {}
+    };
+    //--------------------------------------------------------------------------
 
 
     class TestMainFrameListener : public FrameListener
@@ -212,6 +235,16 @@ namespace Kmplete
         bool DefaultSizeIsNotZero() const;
         bool DefaultWindowedSizeIsNotZero() const;
 
+        bool DuplicateSidFrameListenerCheck() const
+        {
+            return !_duplicateSidFrameListenerCheckActivated || _duplicateSidFrameListenerCheckSuccess;
+        }
+
+        bool DuplicatePriorityFrameListenerCheck() const
+        {
+            return !_duplicatePriorityFrameListenerCheckActivated || _duplicatePriorityFrameListenerCheckSuccess;
+        }
+
     protected:
         void OnEvent(Event& event) override;
 
@@ -237,6 +270,7 @@ namespace Kmplete
     private:
         SharedState& _sharedState;
         Window& _mainWindow;
+        FrameListenerManager& _frameListenerManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         Assets::AssetsManager* _assetsManager;
         GraphicsBackend* _graphicsBackend;
@@ -274,7 +308,13 @@ namespace Kmplete
         bool _windowApplicationWindowIconifyEventInvoked = false;
         bool _windowApplicationWindowFramebufferRefreshEventInvoked = false;
         bool _windowApplicationWindowFramebufferResizeEventInvoked = false;
+
+        bool _duplicateSidFrameListenerCheckActivated = false;
+        bool _duplicateSidFrameListenerCheckSuccess = false;
+        bool _duplicatePriorityFrameListenerCheckActivated = false;
+        bool _duplicatePriorityFrameListenerCheckSuccess = false;
     };
+    //--------------------------------------------------------------------------
     
 
     class TestWindowApplication : public WindowApplication
@@ -297,12 +337,14 @@ namespace Kmplete
         Window& _mainWindow;
         SharedState _sharedState;
     };
+    //--------------------------------------------------------------------------
 
 
     TestMainFrameListener::TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend)
-        : FrameListener(frameListenerManager, "TestMainFrameListener"_sid, 10)
+        : FrameListener(frameListenerManager, 10ULL, 10)
         , _sharedState(sharedState)
         , _mainWindow(mainWindow)
+        , _frameListenerManager(frameListenerManager)
         , _assetsManager(assetsManager)
         , _graphicsBackend(graphicsBackend)
         , _windowBackend(windowBackend)
@@ -692,7 +734,30 @@ namespace Kmplete
             }
 
             ImGui::Text("Update order: %s", _sharedState.updateMaskString.c_str());
+            ImGui::SameLine();
             ImGui::Text("OnMouseClickEvent order: %s", _sharedState.eventProcessingString.c_str());
+
+            if (ImGui::Button("Add frame listener with existing SID"))
+            {
+                _duplicateSidFrameListenerCheckActivated = true;
+                const auto listenersCountBeforeAdd = _frameListenerManager.FrameListenersCount();
+                auto newFrameListener = new TestDuplicateSidFrameListener(_frameListenerManager);
+                const auto listenersCountAfterAdd = _frameListenerManager.FrameListenersCount();
+                delete newFrameListener;
+
+                _duplicateSidFrameListenerCheckSuccess = listenersCountBeforeAdd == listenersCountAfterAdd;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Add frame listener with existing priority"))
+            {
+                _duplicatePriorityFrameListenerCheckActivated = true;
+                const auto listenersCountBeforeAdd = _frameListenerManager.FrameListenersCount();
+                auto newFrameListener = new TestDuplicatePriorityFrameListener(_frameListenerManager);
+                const auto listenersCountAfterAdd = _frameListenerManager.FrameListenersCount();
+                delete newFrameListener;
+
+                _duplicatePriorityFrameListenerCheckSuccess = listenersCountBeforeAdd == listenersCountAfterAdd;
+            }
         }
         ImGui::End(); //Id_FrameListenersWindow
 
@@ -925,6 +990,8 @@ TEST_CASE("Test window application", "[window_application][application][window][
 
     REQUIRE(application->mainFrameListener->DefaultSizeIsNotZero());
     REQUIRE(application->mainFrameListener->DefaultWindowedSizeIsNotZero());
+    REQUIRE(application->mainFrameListener->DuplicateSidFrameListenerCheck());
+    REQUIRE(application->mainFrameListener->DuplicatePriorityFrameListenerCheck());
 
     application->Run();
 

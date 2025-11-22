@@ -35,6 +35,7 @@ namespace Kmplete
 
     private:
         FrameListenerManager& _frameListenerManager;
+        bool _attached;
     };
     //--------------------------------------------------------------------------
 }

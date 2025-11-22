@@ -8,14 +8,18 @@ namespace Kmplete
         : _sid(sid)
         , _frameListenerManager(frameListenerManager)
         , _priority(priority)
+        , _attached(false)
     {
-        _frameListenerManager.AddFrameListener(this);
+        _attached = _frameListenerManager.AddFrameListener(this);
     }
     //--------------------------------------------------------------------------
 
     FrameListener::~FrameListener()
     {
-        _frameListenerManager.RemoveFrameListener(this);
+        if (_attached)
+        {
+            _frameListenerManager.RemoveFrameListener(this);
+        }
     }
     //--------------------------------------------------------------------------
 
