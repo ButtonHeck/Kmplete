@@ -40,6 +40,18 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
         KMP_ASSERT(frameListener);
 
+        const auto listenerWrapper = _FindBySid(frameListener->GetSID());
+        if (listenerWrapper != nullptr)
+        {
+            KMP_LOG_WARN("already contains frame listener with same sid '{}'", frameListener->GetSID());
+            return;
+        }
+        if (_listeners.contains(frameListener->GetPriority()))
+        {
+            KMP_LOG_WARN("already contains frame listener '{}' with same priority '{}'", frameListener->GetSID(), frameListener->GetPriority());
+            return;
+        }
+
         const auto [iterator, hasEmplaced] = _listeners.emplace(frameListener->GetPriority(), FrameListenerWrapper(frameListener, true));
         if (hasEmplaced)
         {
@@ -67,7 +79,7 @@ namespace Kmplete
             }
         }
 
-        KMP_LOG_ERROR("failed to remove listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
+        KMP_LOG_WARN("failed to remove listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
     }
     //--------------------------------------------------------------------------
 
