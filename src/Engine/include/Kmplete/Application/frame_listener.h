@@ -5,6 +5,7 @@
 #include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 
 namespace Kmplete
@@ -15,9 +16,10 @@ namespace Kmplete
     class FrameListener
     {
         KMP_DISABLE_COPY_MOVE(FrameListener)
+        KMP_LOG_CLASSNAME(FrameListener)
 
     public:
-        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid, UInt8 priority) noexcept;
+        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid, UInt8 priority);
         KMP_API ~FrameListener();
 
         KMP_NODISCARD KMP_API Utils::StringID GetSID() const noexcept;
@@ -40,7 +42,6 @@ namespace Kmplete
         friend class FrameListenerManager;
 
         FrameListenerManager& _frameListenerManager;
-        bool _attached;
         bool _active;
     };
     //--------------------------------------------------------------------------

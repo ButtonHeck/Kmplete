@@ -325,6 +325,11 @@ namespace Kmplete
         void Initialize();
         void FrameListenerCommandBufferHandlerFunction(const FrameListenerCommandBuffer& commandBuffer);
 
+        bool FrameListenersCountOk() const
+        {
+            return _frameListenersCountOk;
+        }
+
         // public for simplicity
     public:
         UPtr<TestMainFrameListener> mainFrameListener;
@@ -336,6 +341,7 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         SharedState _sharedState;
+        bool _frameListenersCountOk;
     };
     //--------------------------------------------------------------------------
 
@@ -740,23 +746,29 @@ namespace Kmplete
             if (ImGui::Button("Add frame listener with existing SID"))
             {
                 _duplicateSidFrameListenerCheckActivated = true;
-                const auto listenersCountBeforeAdd = _frameListenerManager.FrameListenersCount();
-                auto newFrameListener = new TestDuplicateSidFrameListener(_frameListenerManager);
-                const auto listenersCountAfterAdd = _frameListenerManager.FrameListenersCount();
-                delete newFrameListener;
-
-                _duplicateSidFrameListenerCheckSuccess = listenersCountBeforeAdd == listenersCountAfterAdd;
+                try
+                {
+                    auto newFrameListener = new TestDuplicateSidFrameListener(_frameListenerManager);
+                    delete newFrameListener;
+                }
+                catch (...)
+                {
+                    _duplicateSidFrameListenerCheckSuccess = true;
+                }
             }
             ImGui::SameLine();
             if (ImGui::Button("Add frame listener with existing priority"))
             {
                 _duplicatePriorityFrameListenerCheckActivated = true;
-                const auto listenersCountBeforeAdd = _frameListenerManager.FrameListenersCount();
-                auto newFrameListener = new TestDuplicatePriorityFrameListener(_frameListenerManager);
-                const auto listenersCountAfterAdd = _frameListenerManager.FrameListenersCount();
-                delete newFrameListener;
-
-                _duplicatePriorityFrameListenerCheckSuccess = listenersCountBeforeAdd == listenersCountAfterAdd;
+                try
+                {
+                    auto newFrameListener = new TestDuplicatePriorityFrameListener(_frameListenerManager);
+                    delete newFrameListener;
+                }
+                catch (...)
+                {
+                    _duplicatePriorityFrameListenerCheckSuccess = true;
+                }
             }
         }
         ImGui::End(); //Id_FrameListenersWindow
@@ -891,6 +903,7 @@ namespace Kmplete
         , frameListener2(nullptr)
         , frameListener3(nullptr)
         , frameListener4(nullptr)
+        , _frameListenersCountOk(false)
     {
         Initialize();
     }
@@ -903,6 +916,7 @@ namespace Kmplete
         frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
         mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
 
+        _frameListenersCountOk = _frameListenerManager->FrameListenersCount() == 5;
         _frameListenerManager->SetCreateDeleteCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));
     }
 
@@ -958,6 +972,7 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
 
+    REQUIRE(application->FrameListenersCountOk());
     REQUIRE_FALSE(application->mainFrameListener->IsKeyPressEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsKeyReleaseEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsKeyCharEventInvoked());
