@@ -20,12 +20,6 @@ namespace Kmplete
     public:
         using FrameCreateDeleteListenerCommandBufferHandler = std::function<void(const FrameListenerCommandBuffer&)>;
 
-        struct FrameListenerWrapper
-        {
-            Nullable<FrameListener*> frameListener;
-            bool isActive;
-        };
-
     public:
         KMP_DISABLE_COPY_MOVE(FrameListenerManager)
 
@@ -48,10 +42,10 @@ namespace Kmplete
         void _ProcessEventsFrameListeners(Event& event);
         void _ProcessFrameListenersCommands();
 
-        Nullable<FrameListenerWrapper*> _FindBySid(Utils::StringID sid);
+        Nullable<FrameListener*> _FindBySid(Utils::StringID sid);
 
     private:
-        Map<UInt8, FrameListenerWrapper> _listeners;
+        Map<UInt8, Nullable<FrameListener*>> _listeners;
         FrameListenerCommandBuffer _commandBuffer;
         FrameCreateDeleteListenerCommandBufferHandler _commandBufferHandler;
     };

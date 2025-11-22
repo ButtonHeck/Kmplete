@@ -23,6 +23,9 @@ namespace Kmplete
         KMP_NODISCARD KMP_API Utils::StringID GetSID() const noexcept;
         KMP_NODISCARD KMP_API UInt8 GetPriority() const noexcept;
 
+        KMP_NODISCARD KMP_API bool IsActive() const noexcept;
+        KMP_API void SetActive(bool active);
+
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}
         KMP_API virtual void OnEvent(Event&) {}
@@ -34,8 +37,11 @@ namespace Kmplete
         const UInt8 _priority;
 
     private:
+        friend class FrameListenerManager;
+
         FrameListenerManager& _frameListenerManager;
         bool _attached;
+        bool _active;
     };
     //--------------------------------------------------------------------------
 }

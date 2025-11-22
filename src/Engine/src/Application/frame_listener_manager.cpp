@@ -40,8 +40,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
         KMP_ASSERT(frameListener);
 
-        const auto listenerWrapper = _FindBySid(frameListener->GetSID());
-        if (listenerWrapper != nullptr)
+        if (_FindBySid(frameListener->GetSID()) != nullptr)
         {
             KMP_LOG_WARN("already contains frame listener with same sid '{}'", frameListener->GetSID());
             return false;
@@ -52,7 +51,7 @@ namespace Kmplete
             return false;
         }
 
-        const auto [iterator, hasEmplaced] = _listeners.emplace(frameListener->GetPriority(), FrameListenerWrapper(frameListener, true));
+        const auto [iterator, hasEmplaced] = _listeners.emplace(frameListener->GetPriority(), frameListener);
         if (hasEmplaced)
         {
             KMP_LOG_INFO("added frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
@@ -73,7 +72,7 @@ namespace Kmplete
 
         for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
         {
-            if (iter->second.frameListener->GetSID() == frameListener->GetSID())
+            if (iter->second->GetSID() == frameListener->GetSID())
             {
                 _listeners.erase(iter);
                 KMP_LOG_INFO("removed frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
@@ -96,11 +95,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (const auto& [priority, listenerWrapper] : _listeners)
+        for (const auto& [priority, listener] : _listeners)
         {
-            if (listenerWrapper.isActive)
+            if (listener->IsActive())
             {
-                listenerWrapper.frameListener->Update(frameTimestep, mainWindowIsIconified);
+                listener->Update(frameTimestep, mainWindowIsIconified);
             }
         }
     }
@@ -110,11 +109,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (const auto& [priority, listenerWrapper] : _listeners)
+        for (const auto& [priority, listener] : _listeners)
         {
-            if (listenerWrapper.isActive)
+            if (listener->IsActive())
             {
-                listenerWrapper.frameListener->Render();
+                listener->Render();
             }
         }
     }
@@ -126,15 +125,15 @@ namespace Kmplete
 
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
-            auto& listenerWrapper = iter->second;
-            if (listenerWrapper.isActive)
+            auto& listener = iter->second;
+            if (listener->IsActive())
             {
                 if (event.handled)
                 {
                     break;
                 }
 
-                listenerWrapper.frameListener->OnEvent(event);
+                listener->OnEvent(event);
             }
         }
     }
@@ -152,14 +151,14 @@ namespace Kmplete
                 continue;
             }
 
-            auto listenerWrapper = _FindBySid(commandIter->sid);
-            if (listenerWrapper == nullptr)
+            auto listener = _FindBySid(commandIter->sid);
+            if (listener == nullptr)
             {
                 commandIter = _commandBuffer.erase(commandIter);
                 continue;
             }
 
-            listenerWrapper->isActive = (commandIter->code == FrameListenerCommandCode::Activate);
+            listener->_active = (commandIter->code == FrameListenerCommandCode::Activate);
             commandIter++;
         }
 
@@ -172,13 +171,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<FrameListenerManager::FrameListenerWrapper*> FrameListenerManager::_FindBySid(Utils::StringID sid)
+    Nullable<FrameListener*> FrameListenerManager::_FindBySid(Utils::StringID sid)
     {
-        for (auto& [priority, listenerWrapper] : _listeners)
+        for (auto& [priority, listener] : _listeners)
         {
-            if (listenerWrapper.frameListener->GetSID() == sid)
+            if (listener->GetSID() == sid)
             {
-                return &listenerWrapper;
+                return listener;
             }
         }
 

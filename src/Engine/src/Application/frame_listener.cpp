@@ -9,6 +9,7 @@ namespace Kmplete
         , _frameListenerManager(frameListenerManager)
         , _priority(priority)
         , _attached(false)
+        , _active(true)
     {
         _attached = _frameListenerManager.AddFrameListener(this);
     }
@@ -32,6 +33,18 @@ namespace Kmplete
     UInt8 FrameListener::GetPriority() const noexcept
     {
         return _priority;
+    }
+    //--------------------------------------------------------------------------
+
+    bool FrameListener::IsActive() const noexcept
+    {
+        return _active;
+    }
+    //--------------------------------------------------------------------------
+
+    void FrameListener::SetActive(bool active)
+    {
+        PushCommand(FrameListenerCommand{ .code = active ? FrameListenerCommandCode::Activate : FrameListenerCommandCode::Deactivate, .sid = _sid });
     }
     //--------------------------------------------------------------------------
 
