@@ -45,6 +45,11 @@ namespace Kmplete
 
     void FrameListener::SetActive(bool active)
     {
+        if ((active && IsActive()) || (!active && !IsActive()))
+        {
+            return;
+        }
+
         PushCommand(FrameListenerCommand{ .code = active ? FrameListenerCommandCode::Activate : FrameListenerCommandCode::Deactivate, .sid = _sid });
     }
     //--------------------------------------------------------------------------
