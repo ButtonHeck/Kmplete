@@ -1,6 +1,7 @@
 #include "Kmplete/Application/frame_listener_manager.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Core/assertion.h"
 
 
 namespace Kmplete
@@ -37,23 +38,36 @@ namespace Kmplete
     void FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_ASSERT(frameListener);
 
-        _listeners.emplace(frameListener->GetPriority(), FrameListenerWrapper(frameListener, true));
+        const auto [iterator, hasEmplaced] = _listeners.emplace(frameListener->GetPriority(), FrameListenerWrapper(frameListener, true));
+        if (hasEmplaced)
+        {
+            KMP_LOG_INFO("added frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
+        }
+        else
+        {
+            KMP_LOG_ERROR("failed to add frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
+        }
     }
     //--------------------------------------------------------------------------
 
     void FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_ASSERT(frameListener);
 
         for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
         {
             if (iter->second.frameListener->GetSID() == frameListener->GetSID())
             {
                 _listeners.erase(iter);
+                KMP_LOG_INFO("removed frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
                 return;
             }
         }
+
+        KMP_LOG_ERROR("failed to remove listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
     }
     //--------------------------------------------------------------------------
 
@@ -61,11 +75,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (const auto& [priority, listener] : _listeners)
+        for (const auto& [priority, listenerWrapper] : _listeners)
         {
-            if (listener.isActive)
+            if (listenerWrapper.isActive)
             {
-                listener.frameListener->Update(frameTimestep, mainWindowIsIconified);
+                listenerWrapper.frameListener->Update(frameTimestep, mainWindowIsIconified);
             }
         }
     }
@@ -75,11 +89,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        for (const auto& [priority, listener] : _listeners)
+        for (const auto& [priority, listenerWrapper] : _listeners)
         {
-            if (listener.isActive)
+            if (listenerWrapper.isActive)
             {
-                listener.frameListener->Render();
+                listenerWrapper.frameListener->Render();
             }
         }
     }
@@ -91,15 +105,15 @@ namespace Kmplete
 
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
-            auto& listener = iter->second;
-            if (listener.isActive)
+            auto& listenerWrapper = iter->second;
+            if (listenerWrapper.isActive)
             {
                 if (event.handled)
                 {
                     break;
                 }
 
-                listener.frameListener->OnEvent(event);
+                listenerWrapper.frameListener->OnEvent(event);
             }
         }
     }
@@ -117,14 +131,14 @@ namespace Kmplete
                 continue;
             }
 
-            auto wrapper = _FindBySid(commandIter->sid);
-            if (wrapper == nullptr)
+            auto listenerWrapper = _FindBySid(commandIter->sid);
+            if (listenerWrapper == nullptr)
             {
                 commandIter = _commandBuffer.erase(commandIter);
                 continue;
             }
 
-            wrapper->isActive = (commandIter->code == FrameListenerCommandCode::Activate);
+            listenerWrapper->isActive = (commandIter->code == FrameListenerCommandCode::Activate);
             commandIter++;
         }
 
@@ -139,11 +153,11 @@ namespace Kmplete
 
     Nullable<FrameListenerManager::FrameListenerWrapper*> FrameListenerManager::_FindBySid(Utils::StringID sid)
     {
-        for (auto& [priority, wrapper] : _listeners)
+        for (auto& [priority, listenerWrapper] : _listeners)
         {
-            if (wrapper.frameListener->GetSID() == sid)
+            if (listenerWrapper.frameListener->GetSID() == sid)
             {
-                return &wrapper;
+                return &listenerWrapper;
             }
         }
 
