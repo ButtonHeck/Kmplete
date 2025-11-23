@@ -5,6 +5,7 @@
 #define KMP_PROFILE
 
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/macro.h"
@@ -14,7 +15,6 @@
 #include <chrono>
 #include <thread>
 #include <mutex>
-#include <type_traits>
 
 
 namespace Kmplete
@@ -26,7 +26,7 @@ namespace Kmplete
         std::chrono::high_resolution_clock::time_point end;
         std::thread::id threadId;
     };
-    static_assert(std::is_move_constructible_v<ProfileResult> == true);
+    static_assert(IsMoveConstructible<ProfileResult>::value);
     //--------------------------------------------------------------------------
 
 

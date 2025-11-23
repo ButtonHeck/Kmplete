@@ -1,8 +1,8 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 
 #include <random>
-#include <concepts>
 
 
 namespace Kmplete
@@ -15,7 +15,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    template<typename T, RNGBitWidth> requires std::integral<T>
+    template<typename T, RNGBitWidth> requires (IsIntegral<T>::value)
     class RNGIntegral
     {};
     //--------------------------------------------------------------------------
@@ -73,7 +73,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    template<typename T, RNGBitWidth> requires std::floating_point<T>
+    template<typename T, RNGBitWidth> requires (IsReal<T>::value)
     class RNGReal
     {};
     //--------------------------------------------------------------------------

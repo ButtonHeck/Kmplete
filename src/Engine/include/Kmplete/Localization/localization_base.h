@@ -2,9 +2,8 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Utils/string_id.h"
-
-#include <type_traits>
 
 
 namespace Kmplete
@@ -85,9 +84,9 @@ namespace Kmplete
                    contextSid == other.contextSid;
         }
     };
-    static_assert(std::is_trivially_copyable_v<ContextedSource> == true);
-    static_assert(std::is_trivially_move_constructible_v<ContextedSource> == true);
-    static_assert(std::is_trivially_move_assignable_v<ContextedSource> == true);
+    static_assert(IsTriviallyCopyable<ContextedSource>::value);
+    static_assert(IsTriviallyMoveConstructible<ContextedSource>::value);
+    static_assert(IsTriviallyMoveAssignable<ContextedSource>::value);
     //--------------------------------------------------------------------------
 
     struct ContextedSourceHash
@@ -111,9 +110,9 @@ namespace Kmplete
                    sourceSidPlural == other.sourceSidPlural;
         }
     };
-    static_assert(std::is_trivially_copyable_v<PluralSource> == true);
-    static_assert(std::is_trivially_move_constructible_v<PluralSource> == true);
-    static_assert(std::is_trivially_move_assignable_v<PluralSource> == true);
+    static_assert(IsTriviallyCopyable<PluralSource>::value);
+    static_assert(IsTriviallyMoveConstructible<PluralSource>::value);
+    static_assert(IsTriviallyMoveAssignable<PluralSource>::value);
     //--------------------------------------------------------------------------
 
     struct PluralSourceHash
@@ -139,9 +138,9 @@ namespace Kmplete
                    contextSid == other.contextSid;
         }
     };
-    static_assert(std::is_trivially_copyable_v<ContextedPluralSource> == true);
-    static_assert(std::is_trivially_move_constructible_v<ContextedPluralSource> == true);
-    static_assert(std::is_trivially_move_assignable_v<ContextedPluralSource> == true);
+    static_assert(IsTriviallyCopyable<ContextedPluralSource>::value);
+    static_assert(IsTriviallyMoveConstructible<ContextedPluralSource>::value);
+    static_assert(IsTriviallyMoveAssignable<ContextedPluralSource>::value);
     //--------------------------------------------------------------------------
 
     struct ContextedPluralSourceHash

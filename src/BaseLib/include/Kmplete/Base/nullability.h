@@ -1,3 +1,6 @@
+#pragma once
+
+
 namespace Kmplete
 {
     template <typename T>

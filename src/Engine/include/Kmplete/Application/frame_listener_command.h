@@ -1,9 +1,8 @@
 #pragma once
 
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Utils/string_id.h"
-
-#include <type_traits>
 
 
 namespace Kmplete
@@ -23,7 +22,7 @@ namespace Kmplete
         FrameListenerCommandCode code;
         Utils::StringID sid;
     };
-    static_assert(std::is_move_constructible_v<FrameListenerCommand> == true);
+    static_assert(IsMoveConstructible<FrameListenerCommand>::value);
 
     using FrameListenerCommandBuffer = Vector<FrameListenerCommand>;
     //--------------------------------------------------------------------------

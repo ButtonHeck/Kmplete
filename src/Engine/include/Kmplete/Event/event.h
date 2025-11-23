@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 
 #include <ostream>
 
@@ -86,7 +87,7 @@ namespace Kmplete
             : _event(event)
         {}
 
-        template<typename Evt, typename Fn> requires (std::invocable<Fn, Evt&> && std::is_same<std::invoke_result_t<Fn, Evt&>, bool>::value)
+        template<typename Evt, typename Fn> requires (Both<IsInvocable<Fn, Evt&>, Same<InvokeResult<Fn, Evt&>, bool>>::value)
         bool Dispatch(const Fn& func)
         {
             if (_event.GetType() == Evt::GetStaticType())

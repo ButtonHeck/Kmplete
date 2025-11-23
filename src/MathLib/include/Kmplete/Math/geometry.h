@@ -1,13 +1,13 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/type_traits.h"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 #include <glm/geometric.hpp>
 
-#include <type_traits>
 #include <algorithm>
 
 
@@ -29,17 +29,6 @@ namespace Kmplete
 
         using Size3I = glm::ivec3;
         using Size3F = glm::vec3;
-        //--------------------------------------------------------------------------
-
-
-        template<typename T1, typename T2>
-        using Same = std::is_same<T1, T2>;
-
-        template<typename T1, typename T2>
-        using Both = std::conjunction<T1, T2>;
-
-        template<typename T1, typename T2>
-        using Either = std::disjunction<T1, T2>;
         //--------------------------------------------------------------------------
 
     
