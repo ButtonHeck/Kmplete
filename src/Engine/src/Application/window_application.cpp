@@ -122,7 +122,7 @@ namespace Kmplete
 
         const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
 
-        window.ProcessEvents();
+        window.FetchEvents();
 
         if (window.ShouldClose())
         {

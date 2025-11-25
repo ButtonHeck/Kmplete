@@ -478,7 +478,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::ProcessEvents()
+    void WindowGlfw::FetchEvents()
     {
         if (_settings.updateContinuously)
         {

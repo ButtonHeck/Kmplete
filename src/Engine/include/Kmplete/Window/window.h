@@ -129,7 +129,7 @@ namespace Kmplete
         KMP_API virtual void SetAlwaysOnTop(bool alwaysOnTop) = 0;
         KMP_NODISCARD KMP_API virtual bool IsAlwaysOnTop() const = 0;
 
-        KMP_API virtual void ProcessEvents() = 0;
+        KMP_API virtual void FetchEvents() = 0;
         KMP_API virtual void SwapBuffers() const = 0;
         KMP_API virtual void MakeContextCurrent() = 0;
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;

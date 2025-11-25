@@ -75,12 +75,12 @@ TEST_CASE("Multiple windows test", "[core][window_backend][window]")
 
     while (!mainWindow.ShouldClose())
     {
-        mainWindow.ProcessEvents();
+        mainWindow.FetchEvents();
         mainWindow.SwapBuffers();
 
         if (auxWindow && !auxWindow->ShouldClose())
         {
-            auxWindow->ProcessEvents();
+            auxWindow->FetchEvents();
             auxWindow->SwapBuffers();
         }
         else
@@ -119,7 +119,7 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
 
     while (!window->ShouldClose())
     {
-        window->ProcessEvents();
+        window->FetchEvents();
         window->SwapBuffers();
     }
 
@@ -153,7 +153,7 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
 
     while (!window->ShouldClose())
     {
-        window->ProcessEvents();
+        window->FetchEvents();
         window->SwapBuffers();
     }
 
