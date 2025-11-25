@@ -72,58 +72,58 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale) const
+        void ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= 18*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             auto& io = ImGui::GetIO();
-            const auto fontSize = 18 * dpiScale;
+            const auto fontSizeScaled = fontSize * dpiScale;
             ImFontConfig fontConfig;
             fontConfig.FontDataOwnedByAtlas = false;
-            io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(reinterpret_cast<const void*>(fontDataBuffer.data())), static_cast<int>(fontDataBuffer.size()), fontSize, &fontConfig, io.Fonts->GetGlyphRangesCyrillic());
+            io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(reinterpret_cast<const void*>(fontDataBuffer.data())), static_cast<int>(fontDataBuffer.size()), fontSizeScaled, &fontConfig, io.Fonts->GetGlyphRangesCyrillic());
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale) const
+        void ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= 18*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             auto& io = ImGui::GetIO();
-            const auto fontSize = 18 * dpiScale;
-            io.Fonts->AddFontFromFileTTF(Filesystem::ToGenericString(fontFilepath).c_str(), fontSize, nullptr, io.Fonts->GetGlyphRangesCyrillic());
+            const auto fontSizeScaled = fontSize * dpiScale;
+            io.Fonts->AddFontFromFileTTF(Filesystem::ToGenericString(fontFilepath).c_str(), fontSizeScaled, nullptr, io.Fonts->GetGlyphRangesCyrillic());
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale) const
+        void ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= 18*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             auto& io = ImGui::GetIO();
-            const auto fontSize = 18 * dpiScale;
+            const auto fontSizeScaled = fontSize * dpiScale;
             ImFontConfig fontConfig;
             fontConfig.MergeMode = true;
-            fontConfig.GlyphMinAdvanceX = fontSize;
+            fontConfig.GlyphMinAdvanceX = fontSizeScaled;
             fontConfig.PixelSnapH = true;
             fontConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
             fontConfig.FontDataOwnedByAtlas = false;
             static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
-            io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(reinterpret_cast<const void*>(fontDataBuffer.data())), static_cast<int>(fontDataBuffer.size()), fontSize, &fontConfig, iconsRanges);
+            io.Fonts->AddFontFromMemoryTTF(const_cast<void*>(reinterpret_cast<const void*>(fontDataBuffer.data())), static_cast<int>(fontDataBuffer.size()), fontSizeScaled, &fontConfig, iconsRanges);
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale) const
+        void ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= 18*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             auto& io = ImGui::GetIO();
-            const auto fontSize = 18 * dpiScale;
+            const auto fontSizeScaled = fontSize * dpiScale;
             ImFontConfig fontConfig;
             fontConfig.MergeMode = true;
-            fontConfig.GlyphMinAdvanceX = fontSize;
+            fontConfig.GlyphMinAdvanceX = fontSizeScaled;
             fontConfig.PixelSnapH = true;
             fontConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
             static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
-            io.Fonts->AddFontFromFileTTF(Filesystem::ToGenericString(fontFilepath).c_str(), fontSize, &fontConfig, iconsRanges);
+            io.Fonts->AddFontFromFileTTF(Filesystem::ToGenericString(fontFilepath).c_str(), fontSizeScaled, &fontConfig, iconsRanges);
         }
         //--------------------------------------------------------------------------
 
