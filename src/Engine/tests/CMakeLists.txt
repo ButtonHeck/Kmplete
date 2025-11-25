@@ -65,7 +65,11 @@ SetupUnitTestsTargetProperties(
 # Test Window Application
 
 set(TestWindowApplication_APPLICATION
-    ${CMAKE_CURRENT_LIST_DIR}/Application/window_application_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/TestWindowApplication/window_application_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/TestWindowApplication/shared_state.h
+    ${CMAKE_CURRENT_LIST_DIR}/TestWindowApplication/test_frame_listeners.h
+    ${CMAKE_CURRENT_LIST_DIR}/TestWindowApplication/test_main_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/TestWindowApplication/test_main_frame_listener.cpp
 )
 source_group("Application" FILES ${TestWindowApplication_APPLICATION})
 
