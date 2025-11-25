@@ -37,6 +37,7 @@ namespace Kmplete
         int updateMask = 0;
         String updateMaskString = "";
         String eventProcessingString = "";
+        int eventAcceptMask = 0;
     };
     //--------------------------------------------------------------------------
 
@@ -62,9 +63,14 @@ namespace Kmplete
             sharedState.updateMaskString += "1";
         }
 
-        void OnEvent(Event&) override
+        void OnEvent(Event& event) override
         {
             sharedState.eventProcessingString += "1";
+
+            if (sharedState.eventAcceptMask & frame1Mask)
+            {
+                event.handled = true;
+            }
         }
 
         SharedState& sharedState;
@@ -93,9 +99,14 @@ namespace Kmplete
             sharedState.updateMaskString += "2";
         }
 
-        void OnEvent(Event&) override
+        void OnEvent(Event& event) override
         {
             sharedState.eventProcessingString += "2";
+
+            if (sharedState.eventAcceptMask & frame2Mask)
+            {
+                event.handled = true;
+            }
         }
 
         SharedState& sharedState;
@@ -124,9 +135,14 @@ namespace Kmplete
             sharedState.updateMaskString += "3";
         }
 
-        void OnEvent(Event&) override
+        void OnEvent(Event& event) override
         {
             sharedState.eventProcessingString += "3";
+
+            if (sharedState.eventAcceptMask & frame3Mask)
+            {
+                event.handled = true;
+            }
         }
 
         SharedState& sharedState;
@@ -155,9 +171,14 @@ namespace Kmplete
             sharedState.updateMaskString += "4";
         }
 
-        void OnEvent(Event&) override
+        void OnEvent(Event& event) override
         {
             sharedState.eventProcessingString += "4";
+
+            if (sharedState.eventAcceptMask & frame4Mask)
+            {
+                event.handled = true;
+            }
         }
 
         SharedState& sharedState;
@@ -631,11 +652,31 @@ namespace Kmplete
             auto frame3Active = bool(_sharedState.updateMask & frame3Mask);
             auto frame4Active = bool(_sharedState.updateMask & frame4Mask);
 
+            auto frame1AcceptEvent = bool(_sharedState.eventAcceptMask & frame1Mask);
+            auto frame2AcceptEvent = bool(_sharedState.eventAcceptMask & frame2Mask);
+            auto frame3AcceptEvent = bool(_sharedState.eventAcceptMask & frame3Mask);
+            auto frame4AcceptEvent = bool(_sharedState.eventAcceptMask & frame4Mask);
+
+
+            ImGui::Text("FrameListener 1");
+            ImGui::SameLine();
             {
                 const auto disableGuard = ImGuiUtils::DisableGuard(true);
-                ImGui::Checkbox("FrameListener1 exist", &frame1Exist);
+                ImGui::Checkbox("Exist1", &frame1Exist);
                 ImGui::SameLine();
-                ImGui::Checkbox("FrameListener1 active", &frame1Active);
+                ImGui::Checkbox("Active1", &frame1Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Accept event1", &frame1AcceptEvent))
+            {
+                if (frame1AcceptEvent)
+                {
+                    _sharedState.eventAcceptMask |= frame1Mask;
+                }
+                else
+                {
+                    _sharedState.eventAcceptMask &= ~frame1Mask;
+                }
             }
             ImGui::SameLine();
             if (ImGui::Button("Delete FL1"))
@@ -658,11 +699,26 @@ namespace Kmplete
                 PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 1ULL });
             }
 
+
+            ImGui::Text("FrameListener 2");
+            ImGui::SameLine();
             {
                 const auto disableGuard = ImGuiUtils::DisableGuard(true);
-                ImGui::Checkbox("FrameListener2 exist", &frame2Exist);
+                ImGui::Checkbox("Exist2", &frame2Exist);
                 ImGui::SameLine();
-                ImGui::Checkbox("FrameListener2 active", &frame2Active);
+                ImGui::Checkbox("Active2", &frame2Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Accept event2", &frame2AcceptEvent))
+            {
+                if (frame2AcceptEvent)
+                {
+                    _sharedState.eventAcceptMask |= frame2Mask;
+                }
+                else
+                {
+                    _sharedState.eventAcceptMask &= ~frame2Mask;
+                }
             }
             ImGui::SameLine();
             if (ImGui::Button("Delete FL2"))
@@ -685,11 +741,26 @@ namespace Kmplete
                 PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 2ULL });
             }
 
+
+            ImGui::Text("FrameListener 3");
+            ImGui::SameLine();
             {
                 const auto disableGuard = ImGuiUtils::DisableGuard(true);
-                ImGui::Checkbox("FrameListener3 exist", &frame3Exist);
+                ImGui::Checkbox("Exist3", &frame3Exist);
                 ImGui::SameLine();
-                ImGui::Checkbox("FrameListener3 active", &frame3Active);
+                ImGui::Checkbox("Active3", &frame3Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Accept event3", &frame3AcceptEvent))
+            {
+                if (frame3AcceptEvent)
+                {
+                    _sharedState.eventAcceptMask |= frame3Mask;
+                }
+                else
+                {
+                    _sharedState.eventAcceptMask &= ~frame3Mask;
+                }
             }
             ImGui::SameLine();
             if (ImGui::Button("Delete FL3"))
@@ -712,11 +783,26 @@ namespace Kmplete
                 PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 3ULL });
             }
 
+
+            ImGui::Text("FrameListener 4");
+            ImGui::SameLine();
             {
                 const auto disableGuard = ImGuiUtils::DisableGuard(true);
-                ImGui::Checkbox("FrameListener4 exist", &frame4Exist);
+                ImGui::Checkbox("Exist4", &frame4Exist);
                 ImGui::SameLine();
-                ImGui::Checkbox("FrameListener4 active", &frame4Active);
+                ImGui::Checkbox("Active4", &frame4Active);
+            }
+            ImGui::SameLine();
+            if (ImGui::Checkbox("Accept event4", &frame4AcceptEvent))
+            {
+                if (frame4AcceptEvent)
+                {
+                    _sharedState.eventAcceptMask |= frame4Mask;
+                }
+                else
+                {
+                    _sharedState.eventAcceptMask &= ~frame4Mask;
+                }
             }
             ImGui::SameLine();
             if (ImGui::Button("Delete FL4"))
@@ -738,6 +824,7 @@ namespace Kmplete
             {
                 PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 4ULL });
             }
+
 
             ImGui::Text("Update order: %s", _sharedState.updateMaskString.c_str());
             ImGui::SameLine();
