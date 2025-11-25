@@ -40,6 +40,7 @@ if(${KMPLETE_BUILD_TESTS})
         Kmplete_UnitTests
         Kmplete_WindowApplicationTests
         Kmplete_LocaleTests
+        TestWindowApplication
     )
     set_target_properties(_BuildAllTests PROPERTIES
         FOLDER Kmplete/Tests

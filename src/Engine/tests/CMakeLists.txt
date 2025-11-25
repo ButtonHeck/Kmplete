@@ -62,6 +62,59 @@ SetupUnitTestsTargetProperties(
 )
 
 
+# Test Window Application
+
+set(TestWindowApplication_APPLICATION
+    ${CMAKE_CURRENT_LIST_DIR}/Application/window_application_tests.cpp
+)
+source_group("Application" FILES ${TestWindowApplication_APPLICATION})
+
+add_executable(TestWindowApplication
+    ${TestWindowApplication_APPLICATION}
+)
+
+target_include_directories(TestWindowApplication
+    PUBLIC "${CMAKE_CURRENT_LIST_DIR}/../include"
+    
+    PUBLIC "${spdlog_SOURCE_DIR}/include"
+    PUBLIC "${RapidJSON_SOURCE_DIR}/include"
+    PRIVATE "${GLFW_SOURCE_DIR}/include"
+)
+
+set(TestWindowApplicationSettingsFile "Kmplete_window_application_tests_settings.json")
+target_compile_definitions(TestWindowApplication
+    PRIVATE KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
+    PRIVATE KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
+    PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
+    PRIVATE KMP_TEST_SETTINGS_JSON=\"${TestWindowApplicationSettingsFile}\"
+)
+
+set(TestWindowApplicationCopySettingsScriptName "CopyWindowTestsSettings$<CONFIG>.cmake")
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${TestWindowApplicationCopySettingsScriptName}"
+    CONTENT
+    [=[
+    if (NOT EXISTS "$<TARGET_FILE_DIR:TestWindowApplication>/${TestWindowApplicationSettingsFile}")
+    execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
+        "${resources_folder}/json/Kmplete_settings_example.json"
+        "$<TARGET_FILE_DIR:TestWindowApplication>/${TestWindowApplicationSettingsFile}")
+    endif() 
+    ]=]
+)
+
+add_custom_command(
+    TARGET TestWindowApplication
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "${TestWindowApplicationCopySettingsScriptName}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+SetupUnitTestsTargetProperties(
+    TestWindowApplication 
+    Kmplete/Tests
+    Catch2::Catch2WithMain Kmplete FileDialogsLib ImGuiUtilsLib
+)
+
+
 # Window Application Tests
 
 set(Kmplete_WindowApplicationTests_WINDOW
@@ -69,11 +122,6 @@ set(Kmplete_WindowApplicationTests_WINDOW
     ${CMAKE_CURRENT_LIST_DIR}/Window/window_tests.cpp
 )
 source_group("Window" FILES ${Kmplete_WindowApplicationTests_WINDOW})
-
-set(Kmplete_WindowApplicationTests_APPLICATION
-    ${CMAKE_CURRENT_LIST_DIR}/Application/window_application_tests.cpp
-)
-source_group("Application" FILES ${Kmplete_WindowApplicationTests_APPLICATION})
 
 set(Kmplete_WindowApplicationTests_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/Graphics/graphics_backend_tests.cpp
@@ -89,7 +137,6 @@ source_group("Assets" FILES ${Kmplete_WindowApplicationTests_ASSETS})
 
 add_executable(Kmplete_WindowApplicationTests
     ${Kmplete_WindowApplicationTests_WINDOW}
-    ${Kmplete_WindowApplicationTests_APPLICATION}
     ${Kmplete_WindowApplicationTests_GRAPHICS}
     ${Kmplete_WindowApplicationTests_ASSETS}
 )
@@ -103,31 +150,10 @@ target_include_directories(Kmplete_WindowApplicationTests
     PRIVATE "${GLFW_SOURCE_DIR}/include"
 )
 
-set(KmpleteWindowApplicationTestsSettingsFile "Kmplete_window_application_tests_settings.json")
 target_compile_definitions(Kmplete_WindowApplicationTests
     PRIVATE KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
     PRIVATE KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"
     PRIVATE KMP_TEST_ICON_PATH=\"${KmpleteResourcesFolder}/icons/test_icon64.png\"
-    PRIVATE KMP_TEST_SETTINGS_JSON=\"${KmpleteWindowApplicationTestsSettingsFile}\"
-)
-
-set(KmpleteWindowAppTestsCopySettingsScriptName "CopyWindowTestsSettings$<CONFIG>.cmake")
-file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${KmpleteWindowAppTestsCopySettingsScriptName}"
-    CONTENT
-    [=[
-    if (NOT EXISTS "$<TARGET_FILE_DIR:Kmplete_WindowApplicationTests>/${KmpleteWindowApplicationTestsSettingsFile}")
-    execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
-        "${resources_folder}/json/Kmplete_settings_example.json"
-        "$<TARGET_FILE_DIR:Kmplete_WindowApplicationTests>/${KmpleteWindowApplicationTestsSettingsFile}")
-    endif() 
-    ]=]
-)
-
-add_custom_command(
-    TARGET Kmplete_WindowApplicationTests
-    POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P "${KmpleteWindowAppTestsCopySettingsScriptName}"
-    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
 )
 
 SetupUnitTestsTargetProperties(
