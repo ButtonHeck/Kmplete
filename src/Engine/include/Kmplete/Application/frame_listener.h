@@ -31,6 +31,8 @@ namespace Kmplete
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}
         KMP_API virtual void OnEvent(Event&) {}
+        KMP_API virtual void OnActivated() {}
+        KMP_API virtual void OnDeactivated() {}
 
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
@@ -41,6 +43,9 @@ namespace Kmplete
     private:
         friend class FrameListenerManager;
 
+        void _SetActive(bool active);
+
+    private:
         FrameListenerManager& _frameListenerManager;
         bool _active;
     };

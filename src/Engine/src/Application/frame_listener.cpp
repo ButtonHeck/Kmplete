@@ -59,4 +59,17 @@ namespace Kmplete
         _frameListenerManager.PushCommand(std::move(command));
     }
     //--------------------------------------------------------------------------
+
+    void FrameListener::_SetActive(bool active)
+    {
+        if ((active && IsActive()) || (!active && !IsActive()))
+        {
+            return;
+        }
+
+        _active = active;
+
+        _active ? OnActivated() : OnDeactivated();
+    }
+    //--------------------------------------------------------------------------
 }

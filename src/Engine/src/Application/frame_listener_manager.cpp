@@ -158,7 +158,7 @@ namespace Kmplete
                 continue;
             }
 
-            listener->_active = (commandIter->code == FrameListenerCommandCode::Activate);
+            listener->_SetActive(commandIter->code == FrameListenerCommandCode::Activate);
             commandIter++;
         }
 
