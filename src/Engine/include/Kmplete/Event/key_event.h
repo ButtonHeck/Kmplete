@@ -7,6 +7,15 @@
 
 namespace Kmplete
 {
+    static constexpr auto KeyPressEventTypeStr = "KeyPressEvent";
+    static constexpr auto KeyReleaseEventTypeStr = "KeyReleaseEvent";
+    static constexpr auto KeyCharEventTypeStr = "KeyCharEvent";
+
+    static constexpr auto KeyPressEventTypeID = "KeyPressEvent"_sid;
+    static constexpr auto KeyReleaseEventTypeID = "KeyReleaseEvent"_sid;
+    static constexpr auto KeyCharEventTypeID = "KeyCharEvent"_sid;
+
+
     struct KeyEvent : public Event
     {
         KMP_NODISCARD int GetTraits() const noexcept override
@@ -32,7 +41,7 @@ namespace Kmplete
 
     struct KeyPressEvent : public KeyEvent
     {
-        EVENT_CLASS_TYPE("KeyPressEvent")
+        EVENT_CLASS_TYPE(KeyPressEventTypeStr)
 
         KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false) noexcept
             : KeyEvent(keyCode)
@@ -64,7 +73,7 @@ namespace Kmplete
 
     struct KeyReleaseEvent : public KeyEvent
     {
-        EVENT_CLASS_TYPE("KeyReleaseEvent")
+        EVENT_CLASS_TYPE(KeyReleaseEventTypeStr)
 
         explicit KeyReleaseEvent(const KeyCode keyCode) noexcept
             : KeyEvent(keyCode)
@@ -80,7 +89,7 @@ namespace Kmplete
 
     struct KeyCharEvent : public KeyEvent
     {
-        EVENT_CLASS_TYPE("KeyCharEvent")
+        EVENT_CLASS_TYPE(KeyCharEventTypeStr)
 
         explicit KeyCharEvent(const KeyCode keyCode) noexcept
             : KeyEvent(keyCode)

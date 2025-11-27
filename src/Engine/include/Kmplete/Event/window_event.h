@@ -6,6 +6,25 @@
 
 namespace Kmplete
 {
+    static constexpr auto WindowResizeEventTypeStr = "WindowResizeEvent";
+    static constexpr auto WindowMoveEventTypeStr = "WindowMoveEvent";
+    static constexpr auto WindowCloseEventTypeStr = "WindowCloseEvent";
+    static constexpr auto WindowFocusEventTypeStr = "WindowFocusEvent";
+    static constexpr auto WindowIconifyEventTypeStr = "WindowIconifyEvent";
+    static constexpr auto WindowFramebufferResizeEventTypeStr = "WindowFramebufferResizeEvent";
+    static constexpr auto WindowFramebufferRefreshEventTypeStr = "WindowFramebufferRefreshEvent";
+    static constexpr auto WindowContentScaleEventTypeStr = "WindowContentScaleEvent";
+
+    static constexpr auto WindowResizeEventTypeID = "WindowResizeEvent"_sid;
+    static constexpr auto WindowMoveEventTypeID = "WindowMoveEvent"_sid;
+    static constexpr auto WindowCloseEventTypeID = "WindowCloseEvent"_sid;
+    static constexpr auto WindowFocusEventTypeID = "WindowFocusEvent"_sid;
+    static constexpr auto WindowIconifyEventTypeID = "WindowIconifyEvent"_sid;
+    static constexpr auto WindowFramebufferResizeEventTypeID = "WindowFramebufferResizeEvent"_sid;
+    static constexpr auto WindowFramebufferRefreshEventTypeID = "WindowFramebufferRefreshEvent"_sid;
+    static constexpr auto WindowContentScaleEventTypeID = "WindowContentScaleEvent"_sid;
+
+
     struct WindowEvent : public Event
     {
         KMP_NODISCARD int GetTraits() const noexcept override
@@ -21,7 +40,7 @@ namespace Kmplete
 
     struct WindowResizeEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowResizeEvent")
+        EVENT_CLASS_TYPE(WindowResizeEventTypeStr)
 
         WindowResizeEvent(unsigned int width, unsigned int height) noexcept
             : _width(width)
@@ -52,7 +71,7 @@ namespace Kmplete
 
     struct WindowMoveEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowMoveEvent")
+        EVENT_CLASS_TYPE(WindowMoveEventTypeStr)
 
         WindowMoveEvent(unsigned int x, unsigned int y) noexcept
             : _x(x)
@@ -83,7 +102,7 @@ namespace Kmplete
 
     struct WindowCloseEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowCloseEvent")
+        EVENT_CLASS_TYPE(WindowCloseEventTypeStr)
 
         WindowCloseEvent() = default;
     };
@@ -92,7 +111,7 @@ namespace Kmplete
 
     struct WindowFocusEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowFocusEvent")
+        EVENT_CLASS_TYPE(WindowFocusEventTypeStr)
 
         explicit WindowFocusEvent(int focused) noexcept
             : _focused(focused)
@@ -116,7 +135,7 @@ namespace Kmplete
 
     struct WindowIconifyEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowIconifyEvent")
+        EVENT_CLASS_TYPE(WindowIconifyEventTypeStr)
 
         explicit WindowIconifyEvent(int iconified) noexcept
             : _iconified(iconified)
@@ -140,7 +159,7 @@ namespace Kmplete
 
     struct WindowFramebufferResizeEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowFramebufferResizeEvent")
+        EVENT_CLASS_TYPE(WindowFramebufferResizeEventTypeStr)
 
         WindowFramebufferResizeEvent(unsigned int width, unsigned int height) noexcept
             : _width(width)
@@ -171,7 +190,7 @@ namespace Kmplete
 
     struct WindowFramebufferRefreshEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowFramebufferRefreshEvent")
+        EVENT_CLASS_TYPE(WindowFramebufferRefreshEventTypeStr)
 
         WindowFramebufferRefreshEvent() = default;
     };
@@ -180,7 +199,7 @@ namespace Kmplete
 
     struct WindowContentScaleEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE("WindowContentScaleEvent")
+        EVENT_CLASS_TYPE(WindowContentScaleEventTypeStr)
 
         WindowContentScaleEvent(float scale) noexcept
             : _scale(scale)

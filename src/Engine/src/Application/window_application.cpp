@@ -189,7 +189,7 @@ namespace Kmplete
 #if defined KMP_PROFILE
     void WindowApplication::_SwitchProfilerActivation(Event& event)
     {
-        if (event.GetTypeID() == "KeyPressEvent"_sid)
+        if (event.GetTypeID() == KeyPressEventTypeID)
         {
             const auto& keyPressedEvent = dynamic_cast<KeyPressEvent&>(event);
             const auto code = keyPressedEvent.GetKeyCode();

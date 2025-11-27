@@ -7,9 +7,20 @@
 
 namespace Kmplete
 {
+    static constexpr auto MouseMoveEventTypeStr = "MouseMoveEvent";
+    static constexpr auto MouseScrollEventTypeStr = "MouseScrollEvent";
+    static constexpr auto MouseButtonPressEventTypeStr = "MouseButtonPressEvent";
+    static constexpr auto MouseButtonReleaseEventTypeStr = "MouseButtonReleaseEvent";
+
+    static constexpr auto MouseMoveEventTypeID = "MouseMoveEvent"_sid;
+    static constexpr auto MouseScrollEventTypeID = "MouseScrollEvent"_sid;
+    static constexpr auto MouseButtonPressEventTypeID = "MouseButtonPressEvent"_sid;
+    static constexpr auto MouseButtonReleaseEventTypeID = "MouseButtonReleaseEvent"_sid;
+
+
     struct MouseMoveEvent : public Event
     {
-        EVENT_CLASS_TYPE("MouseMoveEvent")
+        EVENT_CLASS_TYPE(MouseMoveEventTypeStr)
 
         KMP_NODISCARD int GetTraits() const noexcept override
         {
@@ -45,7 +56,7 @@ namespace Kmplete
 
     struct MouseScrollEvent : public Event
     {
-        EVENT_CLASS_TYPE("MouseScrollEvent")
+        EVENT_CLASS_TYPE(MouseScrollEventTypeStr)
 
         KMP_NODISCARD int GetTraits() const noexcept override
         {
@@ -111,7 +122,7 @@ namespace Kmplete
 
     struct MouseButtonPressEvent : public MouseButtonEvent
     {
-        EVENT_CLASS_TYPE("MouseButtonPressEvent")
+        EVENT_CLASS_TYPE(MouseButtonPressEventTypeStr)
 
         MouseButtonPressEvent(const MouseCode button, int mods) noexcept
             : MouseButtonEvent(button, mods)
@@ -127,7 +138,7 @@ namespace Kmplete
 
     struct MouseButtonReleaseEvent : public MouseButtonEvent
     {
-        EVENT_CLASS_TYPE("MouseButtonReleaseEvent")
+        EVENT_CLASS_TYPE(MouseButtonReleaseEventTypeStr)
 
         MouseButtonReleaseEvent(const MouseCode button, int mods) noexcept
             : MouseButtonEvent(button, mods)
