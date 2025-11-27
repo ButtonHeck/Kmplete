@@ -21,7 +21,7 @@ namespace Kmplete
 
     struct WindowResizeEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowResizeEventType)
+        EVENT_CLASS_TYPE("WindowResizeEvent")
 
         WindowResizeEvent(unsigned int width, unsigned int height) noexcept
             : _width(width)
@@ -52,7 +52,7 @@ namespace Kmplete
 
     struct WindowMoveEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowMoveEventType)
+        EVENT_CLASS_TYPE("WindowMoveEvent")
 
         WindowMoveEvent(unsigned int x, unsigned int y) noexcept
             : _x(x)
@@ -83,7 +83,7 @@ namespace Kmplete
 
     struct WindowCloseEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowCloseEventType)
+        EVENT_CLASS_TYPE("WindowCloseEvent")
 
         WindowCloseEvent() = default;
     };
@@ -92,7 +92,7 @@ namespace Kmplete
 
     struct WindowFocusEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowFocusEventType)
+        EVENT_CLASS_TYPE("WindowFocusEvent")
 
         explicit WindowFocusEvent(int focused) noexcept
             : _focused(focused)
@@ -116,7 +116,7 @@ namespace Kmplete
 
     struct WindowIconifyEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowIconifyEventType)
+        EVENT_CLASS_TYPE("WindowIconifyEvent")
 
         explicit WindowIconifyEvent(int iconified) noexcept
             : _iconified(iconified)
@@ -140,7 +140,7 @@ namespace Kmplete
 
     struct WindowFramebufferResizeEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowFramebufferResizeEventType)
+        EVENT_CLASS_TYPE("WindowFramebufferResizeEvent")
 
         WindowFramebufferResizeEvent(unsigned int width, unsigned int height) noexcept
             : _width(width)
@@ -171,7 +171,7 @@ namespace Kmplete
 
     struct WindowFramebufferRefreshEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowFramebufferRefreshEventType)
+        EVENT_CLASS_TYPE("WindowFramebufferRefreshEvent")
 
         WindowFramebufferRefreshEvent() = default;
     };
@@ -180,7 +180,7 @@ namespace Kmplete
 
     struct WindowContentScaleEvent : public WindowEvent
     {
-        EVENT_CLASS_TYPE(WindowContentScaleEventType)
+        EVENT_CLASS_TYPE("WindowContentScaleEvent")
 
         WindowContentScaleEvent(float scale) noexcept
             : _scale(scale)

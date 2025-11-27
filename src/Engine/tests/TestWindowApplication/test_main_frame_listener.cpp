@@ -543,7 +543,7 @@ namespace Kmplete
     bool TestMainFrameListener::MousePositionIsNotZero() const
     {
         const auto cursorPosition = _mainWindow.GetCursorPosition();
-        return cursorPosition.x != 0 && cursorPosition.y != 0;
+        return cursorPosition.x != 0 || cursorPosition.y != 0;
     }
 
     bool TestMainFrameListener::DPIIsNotZero() const

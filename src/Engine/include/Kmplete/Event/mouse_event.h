@@ -9,7 +9,7 @@ namespace Kmplete
 {
     struct MouseMoveEvent : public Event
     {
-        EVENT_CLASS_TYPE(MouseMoveEventType)
+        EVENT_CLASS_TYPE("MouseMoveEvent")
 
         KMP_NODISCARD int GetTraits() const noexcept override
         {
@@ -45,7 +45,7 @@ namespace Kmplete
 
     struct MouseScrollEvent : public Event
     {
-        EVENT_CLASS_TYPE(MouseScrollEventType)
+        EVENT_CLASS_TYPE("MouseScrollEvent")
 
         KMP_NODISCARD int GetTraits() const noexcept override
         {
@@ -111,7 +111,7 @@ namespace Kmplete
 
     struct MouseButtonPressEvent : public MouseButtonEvent
     {
-        EVENT_CLASS_TYPE(MouseButtonPressEventType)
+        EVENT_CLASS_TYPE("MouseButtonPressEvent")
 
         MouseButtonPressEvent(const MouseCode button, int mods) noexcept
             : MouseButtonEvent(button, mods)
@@ -127,7 +127,7 @@ namespace Kmplete
 
     struct MouseButtonReleaseEvent : public MouseButtonEvent
     {
-        EVENT_CLASS_TYPE(MouseButtonReleaseEventType)
+        EVENT_CLASS_TYPE("MouseButtonReleaseEvent")
 
         MouseButtonReleaseEvent(const MouseCode button, int mods) noexcept
             : MouseButtonEvent(button, mods)

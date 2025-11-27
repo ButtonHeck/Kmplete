@@ -18,22 +18,22 @@ namespace Kmplete
         void AddHandler(const EventHandlerFunction<EventClass>& handler)
         {
             // TODO: check double addition
-            _handlers.emplace(EventClass::GetStaticType(), CreateUPtr<EventHandlerImpl<EventClass>>(handler));
+            _handlers.emplace(EventClass::GetStaticTypeID(), CreateUPtr<EventHandlerImpl<EventClass>>(handler));
         }
 
         bool Dispatch(Event& event)
         {
-            if (!_handlers.contains(event.GetType()) || event.handled)
+            if (!_handlers.contains(event.GetTypeID()) || event.handled)
             {
                 return false;
             }
 
-            event.handled |= _handlers[event.GetType()]->ProcessEvent(event);
+            event.handled |= _handlers[event.GetTypeID()]->ProcessEvent(event);
             return true;
         }
 
     private:
-        HashMap<EventType, UPtr<EventHandler>> _handlers;
+        HashMap<EventTypeID, UPtr<EventHandler>> _handlers;
     };
     //--------------------------------------------------------------------------
 }

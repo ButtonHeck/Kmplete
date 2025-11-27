@@ -4,11 +4,13 @@
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
+#include "Kmplete/Event/event_dispatcher.h"
 #include "Kmplete/Utils/function_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
 
 
+using namespace Kmplete;
 struct WindowCallbackUserSingleCondition
 {
     WindowCallbackUserSingleCondition(Kmplete::Window& window)
@@ -19,22 +21,19 @@ struct WindowCallbackUserSingleCondition
 
     void Callback(Kmplete::Event& evt)
     {
-        Kmplete::EventDispatcher dispatcher(evt);
-
-        dispatcher.Dispatch<Kmplete::WindowCloseEvent>([this](Kmplete::WindowCloseEvent&)
+        if (evt.GetTypeID() == "WindowCloseEvent"_sid)
+        {
+            window.SetShouldClose(true);
+        }
+        else if (evt.GetTypeID() == "KeyPressEvent"_sid)
+        {
+            auto keyEvent = static_cast<KeyPressEvent&>(evt);
+            if (keyEvent.GetKeyCode() == Kmplete::Key::Y)
             {
-                window.SetShouldClose(true);
-                return true;
-            });
-        dispatcher.Dispatch<Kmplete::KeyPressEvent>([this](Kmplete::KeyPressEvent& evt)
-            {
-                if (evt.GetKeyCode() == Kmplete::Key::Y)
-                {
-                    conditionOk = true;
-                }
-                window.SetShouldClose(true);
-                return true;
-            });
+                conditionOk = true;
+            }
+            window.SetShouldClose(true);
+        }
     }
 
     Kmplete::Window& window;

@@ -2,35 +2,14 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Utils/string_id.h"
 
 #include <ostream>
 
 
 namespace Kmplete
 {
-    enum class EventType
-    {
-        None = 0,
-
-        WindowCloseEventType,
-        WindowResizeEventType,
-        WindowMoveEventType,
-        WindowFocusEventType,
-        WindowIconifyEventType,
-        WindowFramebufferResizeEventType,
-        WindowFramebufferRefreshEventType,
-        WindowContentScaleEventType,
-
-        KeyPressEventType,
-        KeyReleaseEventType,
-        KeyCharEventType,
-
-        MouseButtonPressEventType,
-        MouseButtonReleaseEventType,
-        MouseMoveEventType,
-        MouseScrollEventType
-    };
-    //--------------------------------------------------------------------------
+    using EventTypeID = Utils::StringID;
 
 
     enum EventTrait
@@ -46,16 +25,16 @@ namespace Kmplete
 
 
 #define EVENT_CLASS_TYPE(eventType) \
-    KMP_NODISCARD static EventType GetStaticType() noexcept { return EventType::eventType; } \
-    KMP_NODISCARD virtual EventType GetType() const noexcept override { return GetStaticType(); } \
-    KMP_NODISCARD virtual const char* GetName() const noexcept override { return #eventType; }
+    KMP_NODISCARD static EventTypeID GetStaticTypeID() noexcept { return Utils::ToStringID(eventType); } \
+    KMP_NODISCARD virtual EventTypeID GetTypeID() const noexcept override { return GetStaticTypeID(); } \
+    KMP_NODISCARD virtual const char* GetName() const noexcept override { return eventType; }
 
 
     struct Event
     {
         virtual ~Event() = default;
 
-        KMP_NODISCARD virtual EventType GetType() const noexcept = 0;
+        KMP_NODISCARD virtual EventTypeID GetTypeID() const noexcept = 0;
         KMP_NODISCARD virtual const char* GetName() const noexcept = 0;
         KMP_NODISCARD virtual int GetTraits() const noexcept = 0;
         KMP_NODISCARD virtual String ToString() const

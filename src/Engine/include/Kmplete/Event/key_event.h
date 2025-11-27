@@ -32,7 +32,7 @@ namespace Kmplete
 
     struct KeyPressEvent : public KeyEvent
     {
-        EVENT_CLASS_TYPE(KeyPressEventType)
+        EVENT_CLASS_TYPE("KeyPressEvent")
 
         KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false) noexcept
             : KeyEvent(keyCode)
@@ -64,7 +64,7 @@ namespace Kmplete
 
     struct KeyReleaseEvent : public KeyEvent
     {
-        EVENT_CLASS_TYPE(KeyReleaseEventType)
+        EVENT_CLASS_TYPE("KeyReleaseEvent")
 
         explicit KeyReleaseEvent(const KeyCode keyCode) noexcept
             : KeyEvent(keyCode)
@@ -80,7 +80,7 @@ namespace Kmplete
 
     struct KeyCharEvent : public KeyEvent
     {
-        EVENT_CLASS_TYPE(KeyCharEventType)
+        EVENT_CLASS_TYPE("KeyCharEvent")
 
         explicit KeyCharEvent(const KeyCode keyCode) noexcept
             : KeyEvent(keyCode)

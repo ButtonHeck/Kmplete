@@ -40,7 +40,7 @@ namespace Kmplete
     private:
         bool _ProcessEvent(Event& event) const override
         {
-            if (event.GetType() == EventClass::GetStaticType())
+            if (event.GetTypeID() == EventClass::GetStaticTypeID())
             {
                 return _handlerFunction(static_cast<EventClass&>(event));
             }
