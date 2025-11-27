@@ -2,7 +2,6 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Base/type_traits.h"
 
 #include <ostream>
 
@@ -77,30 +76,5 @@ namespace Kmplete
     {
         return os << event.ToString();
     }
-    //--------------------------------------------------------------------------
-
-
-    class EventDispatcher
-    {
-    public:
-        explicit EventDispatcher(Event& event) noexcept
-            : _event(event)
-        {}
-
-        template<typename Evt, typename Fn> requires (Both<IsInvocable<Fn, Evt&>, Same<InvokeResult<Fn, Evt&>, bool>>::value)
-        bool Dispatch(const Fn& func)
-        {
-            if (_event.GetType() == Evt::GetStaticType())
-            {
-                _event.handled |= func(static_cast<Evt&>(_event));
-                return true;
-            }
-
-            return false;
-        }
-
-    private:
-        Event& _event;
-    };
     //--------------------------------------------------------------------------
 }

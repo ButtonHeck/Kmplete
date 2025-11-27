@@ -118,17 +118,11 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE_FALSE(application->mainFrameListener->IsKeyPressEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsKeyReleaseEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsKeyCharEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationKeyPressEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationKeyReleaseEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationKeyCharEventInvoked());
 
     REQUIRE_FALSE(application->mainFrameListener->IsMouseMoveEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsMouseScrollEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsMouseButtonPressEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsMouseButtonReleaseEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseMoveEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
     REQUIRE_FALSE(application->mainFrameListener->IsWindowCloseEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowMoveEventInvoked());
@@ -137,13 +131,6 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE_FALSE(application->mainFrameListener->IsWindowIconifyEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowFramebufferResizeEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowCloseEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowMoveEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowResizeEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowFocusEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowIconifyEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
-    REQUIRE_FALSE(application->mainFrameListener->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
     REQUIRE(application->mainFrameListener->DefaultSizeIsNotZero());
     REQUIRE(application->mainFrameListener->DefaultWindowedSizeIsNotZero());
@@ -155,17 +142,11 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application->mainFrameListener->IsKeyPressEventInvoked());
     REQUIRE(application->mainFrameListener->IsKeyReleaseEventInvoked());
     REQUIRE(application->mainFrameListener->IsKeyCharEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationKeyPressEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationKeyReleaseEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationKeyCharEventInvoked());
 
     REQUIRE(application->mainFrameListener->IsMouseMoveEventInvoked());
     REQUIRE(application->mainFrameListener->IsMouseScrollEventInvoked());
     REQUIRE(application->mainFrameListener->IsMouseButtonPressEventInvoked());
     REQUIRE(application->mainFrameListener->IsMouseButtonReleaseEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseMoveEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseScrollEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationMouseButtonReleaseEventInvoked());
 
     REQUIRE(application->mainFrameListener->IsWindowCloseEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowMoveEventInvoked());
@@ -174,13 +155,6 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application->mainFrameListener->IsWindowIconifyEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowFramebufferResizeEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowCloseEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowMoveEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowResizeEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowFocusEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowIconifyEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowFramebufferRefreshEventInvoked());
-    REQUIRE(application->mainFrameListener->IsWindowApplicationWindowFramebufferResizeEventInvoked());
 
     REQUIRE(application->mainFrameListener->MousePositionIsNotZero());
     REQUIRE(application->mainFrameListener->DPIIsNotZero());

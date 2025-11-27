@@ -5,6 +5,7 @@
 #include "Kmplete/Utils/string_id.h"
 #include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
+#include "Kmplete/Event/event_dispatcher.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -30,7 +31,7 @@ namespace Kmplete
 
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}
-        KMP_API virtual void OnEvent(Event&) {}
+        KMP_API virtual void OnEvent(Event& event);
         KMP_API virtual void OnActivated() {}
         KMP_API virtual void OnDeactivated() {}
 
@@ -39,6 +40,7 @@ namespace Kmplete
     protected:
         const Utils::StringID _sid;
         const UInt8 _priority;
+        EventDispatcher _eventDispatcher;
 
     private:
         friend class FrameListenerManager;

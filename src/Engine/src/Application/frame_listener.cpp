@@ -54,6 +54,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void FrameListener::OnEvent(Event& event)
+    {
+        _eventDispatcher.Dispatch(event);
+    }
+    //--------------------------------------------------------------------------
+
     void FrameListener::PushCommand(FrameListenerCommand&& command) noexcept
     {
         _frameListenerManager.PushCommand(std::move(command));

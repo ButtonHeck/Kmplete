@@ -46,4 +46,8 @@ namespace Kmplete
 
     template<typename Fn, typename... Params>
     using InvokeResult = std::invoke_result_t<Fn, Params...>;
+
+
+    template<typename BaseClass, typename DerivedClass>
+    using IsBaseClass = std::is_base_of<BaseClass, DerivedClass>;
 }

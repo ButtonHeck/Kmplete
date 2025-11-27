@@ -61,6 +61,8 @@ set(Kmplete_EVENT
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_codes.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/window_event.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_dispatcher.h
 )
 source_group("Event" FILES ${Kmplete_EVENT})
 

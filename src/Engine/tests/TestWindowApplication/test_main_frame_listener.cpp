@@ -33,6 +33,24 @@ namespace Kmplete
 
     void TestMainFrameListener::Initialize()
     {
+        _eventDispatcher.AddHandler<KeyPressEvent>(KMP_BIND(TestMainFrameListener::OnKeyPressEvent));
+        _eventDispatcher.AddHandler<KeyReleaseEvent>(KMP_BIND(TestMainFrameListener::OnKeyReleaseEvent));
+        _eventDispatcher.AddHandler<KeyCharEvent>(KMP_BIND(TestMainFrameListener::OnKeyCharEvent));
+
+        _eventDispatcher.AddHandler<MouseMoveEvent>(KMP_BIND(TestMainFrameListener::OnMouseMoveEvent));
+        _eventDispatcher.AddHandler<MouseScrollEvent>(KMP_BIND(TestMainFrameListener::OnMouseScrollEvent));
+        _eventDispatcher.AddHandler<MouseButtonPressEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonPressEvent));
+        _eventDispatcher.AddHandler<MouseButtonReleaseEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonReleaseEvent));
+
+        _eventDispatcher.AddHandler<WindowCloseEvent>(KMP_BIND(TestMainFrameListener::OnWindowCloseEvent));
+        _eventDispatcher.AddHandler<WindowMoveEvent>(KMP_BIND(TestMainFrameListener::OnWindowMoveEvent));
+        _eventDispatcher.AddHandler<WindowResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowResizeEvent));
+        _eventDispatcher.AddHandler<WindowFocusEvent>(KMP_BIND(TestMainFrameListener::OnWindowFocusEvent));
+        _eventDispatcher.AddHandler<WindowIconifyEvent>(KMP_BIND(TestMainFrameListener::OnWindowIconifyEvent));
+        _eventDispatcher.AddHandler<WindowFramebufferRefreshEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferRefreshEvent));
+        _eventDispatcher.AddHandler<WindowFramebufferResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferResizeEvent));
+        _eventDispatcher.AddHandler<WindowContentScaleEvent>(KMP_BIND(TestMainFrameListener::OnWindowContentScaleEvent));
+
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
@@ -548,30 +566,6 @@ namespace Kmplete
     {
         const auto windowedSize = _mainWindow.GetWindowedSize();
         return windowedSize.x > 0 && windowedSize.y > 0;
-    }
-
-    void TestMainFrameListener::OnEvent(Event& event)
-    {
-        EventDispatcher dispatcher(event);
-
-        _windowApplicationKeyPressEventInvoked |= dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(TestMainFrameListener::OnKeyPressEvent));
-        _windowApplicationKeyReleaseEventInvoked |= dispatcher.Dispatch<KeyReleaseEvent>(KMP_BIND(TestMainFrameListener::OnKeyReleaseEvent));
-        _windowApplicationKeyCharEventInvoked |= dispatcher.Dispatch<KeyCharEvent>(KMP_BIND(TestMainFrameListener::OnKeyCharEvent));
-
-        _windowApplicationMouseMoveEventInvoked |= dispatcher.Dispatch<MouseMoveEvent>(KMP_BIND(TestMainFrameListener::OnMouseMoveEvent));
-        _windowApplicationMouseScrollEventInvoked |= dispatcher.Dispatch<MouseScrollEvent>(KMP_BIND(TestMainFrameListener::OnMouseScrollEvent));
-        _windowApplicationMouseButtonReleaseEventInvoked |= dispatcher.Dispatch<MouseButtonReleaseEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonReleaseEvent));
-
-        _windowApplicationWindowCloseEventInvoked |= dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(TestMainFrameListener::OnWindowCloseEvent));
-        _windowApplicationWindowMoveEventInvoked |= dispatcher.Dispatch<WindowMoveEvent>(KMP_BIND(TestMainFrameListener::OnWindowMoveEvent));
-        _windowApplicationWindowResizeEventInvoked |= dispatcher.Dispatch<WindowResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowResizeEvent));
-        _windowApplicationWindowFocusEventInvoked |= dispatcher.Dispatch<WindowFocusEvent>(KMP_BIND(TestMainFrameListener::OnWindowFocusEvent));
-        _windowApplicationWindowIconifyEventInvoked |= dispatcher.Dispatch<WindowIconifyEvent>(KMP_BIND(TestMainFrameListener::OnWindowIconifyEvent));
-        _windowApplicationWindowFramebufferRefreshEventInvoked |= dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferRefreshEvent));
-        _windowApplicationWindowFramebufferResizeEventInvoked |= dispatcher.Dispatch<WindowFramebufferResizeEvent>(KMP_BIND(TestMainFrameListener::OnWindowFramebufferResizeEvent));
-
-        dispatcher.Dispatch<MouseButtonPressEvent>(KMP_BIND(TestMainFrameListener::OnMouseButtonPressEvent));
-        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(TestMainFrameListener::OnWindowContentScaleEvent));
     }
 
     bool TestMainFrameListener::OnMouseButtonPressEvent(MouseButtonPressEvent& evt)

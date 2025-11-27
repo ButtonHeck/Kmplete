@@ -45,6 +45,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+        _eventDispatcher.AddHandler<WindowCloseEvent>(KMP_BIND(EditorFrameListener::_OnWindowCloseEvent));
+        _eventDispatcher.AddHandler<WindowFramebufferRefreshEvent>(KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent));
+        _eventDispatcher.AddHandler<WindowContentScaleEvent>(KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent));
+        _eventDispatcher.AddHandler<KeyPressEvent>(KMP_BIND(EditorFrameListener::_OnKeyPressEvent));
+
         const auto dpiScale = _mainWindow.GetDPIScale();
 
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
@@ -106,20 +111,6 @@ namespace Kmplete
 
         _imguiImpl->Render();
         _EndFrame();
-    }
-    //--------------------------------------------------------------------------
-
-    void EditorFrameListener::OnEvent(Event& event)
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-        EventDispatcher dispatcher(event);
-
-        dispatcher.Dispatch<WindowCloseEvent>(KMP_BIND(EditorFrameListener::_OnWindowCloseEvent));
-        dispatcher.Dispatch<WindowFramebufferRefreshEvent>(KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent));
-        dispatcher.Dispatch<WindowContentScaleEvent>(KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent));
-
-        dispatcher.Dispatch<KeyPressEvent>(KMP_BIND(EditorFrameListener::_OnKeyPressEvent));
     }
     //--------------------------------------------------------------------------
 
