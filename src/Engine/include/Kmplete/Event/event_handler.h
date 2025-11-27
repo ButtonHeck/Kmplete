@@ -18,13 +18,7 @@ namespace Kmplete
     public:
         virtual ~EventHandler() = default;
 
-        bool ProcessEvent(Event& event) const
-        {
-            return _ProcessEvent(event);
-        }
-
-    private:
-        virtual bool _ProcessEvent(Event&) const = 0;
+        virtual bool ProcessEvent(Event& event) const = 0;
     };
     //--------------------------------------------------------------------------
 
@@ -37,8 +31,7 @@ namespace Kmplete
             : _handlerFunction(handler)
         {}
 
-    private:
-        bool _ProcessEvent(Event& event) const override
+        bool ProcessEvent(Event& event) const override
         {
             if (event.GetTypeID() == EventClass::staticTypeID)
             {
