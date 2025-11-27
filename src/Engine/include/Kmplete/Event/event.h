@@ -25,8 +25,8 @@ namespace Kmplete
 
 
 #define EVENT_CLASS_TYPE(eventType) \
-    KMP_NODISCARD static EventTypeID GetStaticTypeID() noexcept { return Utils::ToStringID(eventType); } \
-    KMP_NODISCARD virtual EventTypeID GetTypeID() const noexcept override { return GetStaticTypeID(); } \
+    static constexpr EventTypeID staticTypeID = Utils::ToStringID(eventType); \
+    KMP_NODISCARD virtual EventTypeID GetTypeID() const noexcept override { return staticTypeID; } \
     KMP_NODISCARD virtual const char* GetName() const noexcept override { return eventType; }
 
 

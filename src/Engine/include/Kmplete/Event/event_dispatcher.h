@@ -18,7 +18,7 @@ namespace Kmplete
         void AddHandler(const EventHandlerFunction<EventClass>& handler)
         {
             // TODO: check double addition
-            _handlers.emplace(EventClass::GetStaticTypeID(), CreateUPtr<EventHandlerImpl<EventClass>>(handler));
+            _handlers.emplace(EventClass::staticTypeID, CreateUPtr<EventHandlerImpl<EventClass>>(handler));
         }
 
         bool Dispatch(Event& event)
