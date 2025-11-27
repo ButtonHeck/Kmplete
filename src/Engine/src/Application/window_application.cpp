@@ -189,18 +189,20 @@ namespace Kmplete
 #if defined KMP_PROFILE
     void WindowApplication::_SwitchProfilerActivation(Event& event)
     {
-        if (event.GetTypeID() == KeyPressEventTypeID)
+        if (event.GetTypeID() != KeyPressEventTypeID)
         {
-            const auto& keyPressedEvent = dynamic_cast<KeyPressEvent&>(event);
-            const auto code = keyPressedEvent.GetKeyCode();
-            const auto mods = keyPressedEvent.GetMods();
-            if (code == Key::F11 && mods & Mode::Alt)
-            {
-                const auto isProfilerActive = Profiler::Get().IsActive();
-                Profiler::Get().SetActive(!isProfilerActive);
+            return;
+        }
 
-                KMP_LOG_INFO("profiling activated: {}", !isProfilerActive);
-            }
+        const auto& keyPressedEvent = dynamic_cast<KeyPressEvent&>(event);
+        const auto code = keyPressedEvent.GetKeyCode();
+        const auto mods = keyPressedEvent.GetMods();
+        if (code == Key::F11 && mods & Mode::Alt)
+        {
+            const auto isProfilerActive = Profiler::Get().IsActive();
+            Profiler::Get().SetActive(!isProfilerActive);
+
+            KMP_LOG_INFO("profiling activated: {}", !isProfilerActive);
         }
     }
     //--------------------------------------------------------------------------
