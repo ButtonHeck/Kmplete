@@ -3,18 +3,58 @@
 #include "shared_state.h"
 
 #include "Kmplete/Application/frame_listener.h"
+#include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Event/key_codes.h"
 
 
 namespace Kmplete
 {
+    class TestFrameListener1Delegate
+    {
+    public:
+        explicit TestFrameListener1Delegate(EventDispatcher& eventDispatcher)
+            : eventDispatcher(eventDispatcher)
+            , str("")
+            , mbcHandler(KMP_BIND(TestFrameListener1Delegate::OnMouseButtonPressed))
+        {
+            eventDispatcher.AddHandler<MouseButtonPressEvent>(mbcHandler);
+        }
+
+        ~TestFrameListener1Delegate()
+        {
+            eventDispatcher.RemoveHandler<MouseButtonPressEvent>(mbcHandler);
+        }
+
+        bool OnMouseButtonPressed(MouseButtonPressEvent&)
+        {
+            str += "E";
+            return true;
+        }
+
+        String GetValue() const
+        {
+            return str;
+        }
+
+        EventDispatcher& eventDispatcher;
+        String str;
+        EventHandlerFunction<MouseButtonPressEvent> mbcHandler;
+    };
+    //--------------------------------------------------------------------------
+
     class TestFrameListener1 : public FrameListener
     {
     public:
         TestFrameListener1(FrameListenerManager& frameListenerManager, SharedState& sharedState)
             : FrameListener(frameListenerManager, 1ULL, 1)
             , sharedState(sharedState)
+            , delegate(nullptr)
         {
             sharedState.existenceMask |= frame1Mask;
+
+            _eventDispatcher.AddHandler<MouseButtonPressEvent>(KMP_BIND(TestFrameListener1::OnMouseButtonPressed));
+            delegate = CreateUPtr<TestFrameListener1Delegate>(_eventDispatcher);
         }
 
         ~TestFrameListener1()
@@ -28,18 +68,40 @@ namespace Kmplete
             sharedState.updateMaskString += "1";
         }
 
-        void OnEvent(Event& event) override
+        bool OnMouseButtonPressed(MouseButtonPressEvent& event)
         {
-            sharedState.eventProcessingString += "1";
+            sharedState.eventProcessingString += "1_";
+            if (delegate)
+            {
+                sharedState.eventProcessingString += delegate->GetValue();
+            }
+
+            if (event.GetMods() & Mode::Alt)
+            {
+                if (delegate)
+                {
+                    delegate.reset(nullptr);
+                }
+            }
+            else
+            {
+                if (delegate == nullptr)
+                {
+                    delegate.reset(new TestFrameListener1Delegate(_eventDispatcher));
+                }
+            }
 
             if (sharedState.eventAcceptMask & frame1Mask)
             {
                 event.handled = true;
             }
+
+            return true;
         }
 
         SharedState& sharedState;
         const String name = "TestFrameListener1";
+        UPtr<TestFrameListener1Delegate> delegate;
     };
     //--------------------------------------------------------------------------
 
