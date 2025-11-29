@@ -19,6 +19,7 @@ namespace Kmplete
         virtual ~EventHandler() = default;
 
         virtual bool ProcessEvent(Event& event) const = 0;
+        virtual const String& GetTypeName() const = 0;
     };
     //--------------------------------------------------------------------------
 
@@ -29,6 +30,7 @@ namespace Kmplete
     public:
         explicit EventHandlerImpl(const EventHandlerFunction<EventClass>& handler) noexcept
             : _handlerFunction(handler)
+            , _typeName(_handlerFunction.target_type().name())
         {}
 
         bool ProcessEvent(Event& event) const override
@@ -41,8 +43,14 @@ namespace Kmplete
             return false;
         }
 
+        const String& GetTypeName() const noexcept override
+        {
+            return _typeName;
+        }
+
     private:
         EventHandlerFunction<EventClass> _handlerFunction;
+        const String _typeName;
     };
     //--------------------------------------------------------------------------
 }
