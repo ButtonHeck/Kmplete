@@ -21,23 +21,23 @@ namespace Kmplete
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
         void AddHandler(const EventHandlerFunction<EventClass>& handler)
         {
-            if (!_handlersMap.contains(EventClass::staticTypeID))
+            if (!_handlersMap.contains(EventClass::TypeID))
             {
-                _handlersMap.emplace(EventClass::staticTypeID, Vector<UPtr<EventHandler>>());
+                _handlersMap.emplace(EventClass::TypeID, Vector<UPtr<EventHandler>>());
             }
 
-            const auto& handlers = _handlersMap[EventClass::staticTypeID];
+            const auto& handlers = _handlersMap[EventClass::TypeID];
             auto newHandler = CreateUPtr<EventHandlerImpl<EventClass>>(handler);
             for (auto& registeredHandler : handlers)
             {
                 if (registeredHandler->GetTypeName() == newHandler->GetTypeName())
                 {
-                    KMP_LOG_ERROR("already contains exactly same handler for '{}'", EventClass::staticTypeID);
+                    KMP_LOG_ERROR("already contains exactly same handler for '{}'", EventClass::TypeName);
                     return;
                 }
             }
 
-            _handlersMap[EventClass::staticTypeID].emplace_back(std::move(newHandler));
+            _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandler));
         }
 
         bool Dispatch(Event& event)
