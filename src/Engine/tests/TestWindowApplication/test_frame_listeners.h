@@ -42,10 +42,10 @@ namespace Kmplete
             : FrameListener(frameListenerManager, 1ULL, 1)
             , sharedState(sharedState)
             , delegate(nullptr)
+            , mbcHandlerGuard(_eventDispatcher, KMP_BIND(TestFrameListener1::OnMouseButtonPressed))
         {
             sharedState.existenceMask |= frame1Mask;
 
-            _eventDispatcher.AddHandler<MouseButtonPressEvent>(KMP_BIND(TestFrameListener1::OnMouseButtonPressed));
             delegate = CreateUPtr<TestFrameListener1Delegate>(_eventDispatcher);
         }
 
@@ -94,6 +94,7 @@ namespace Kmplete
         SharedState& sharedState;
         const String name = "TestFrameListener1";
         UPtr<TestFrameListener1Delegate> delegate;
+        EventHandlerGuard<MouseButtonPressEvent> mbcHandlerGuard;
     };
     //--------------------------------------------------------------------------
 

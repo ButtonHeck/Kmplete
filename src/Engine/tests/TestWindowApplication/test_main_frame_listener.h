@@ -7,6 +7,7 @@
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Window/window.h"
@@ -92,6 +93,24 @@ namespace Kmplete
         Assets::AssetsManager* _assetsManager;
         GraphicsBackend* _graphicsBackend;
         WindowBackend* _windowBackend;
+
+        EventHandlerGuard<KeyPressEvent> _keyPressHandler;
+        EventHandlerGuard<KeyReleaseEvent> _keyReleaseHandler;
+        EventHandlerGuard<KeyCharEvent> _keyCharHandler;
+
+        EventHandlerGuard<MouseMoveEvent> _mouseMoveHandler;
+        EventHandlerGuard<MouseScrollEvent> _mouseScrollHandler;
+        EventHandlerGuard<MouseButtonPressEvent> _mouseButtonPressedHandler;
+        EventHandlerGuard<MouseButtonReleaseEvent> _mouseButtonReleasedHandler;
+
+        EventHandlerGuard<WindowCloseEvent> _windowCloseHandler;
+        EventHandlerGuard<WindowMoveEvent> _windowMoveHandler;
+        EventHandlerGuard<WindowResizeEvent> _windowResizeHandler;
+        EventHandlerGuard<WindowFocusEvent> _windowFocusHandler;
+        EventHandlerGuard<WindowIconifyEvent> _windowIconifyHandler;
+        EventHandlerGuard<WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
+        EventHandlerGuard<WindowFramebufferResizeEvent> _windowFramebufferResizeHandler;
+        EventHandlerGuard<WindowContentScaleEvent> _windowContentScaleHandler;
 
         bool _switchFontRequested = false;
         bool _useDefaultFont = true;

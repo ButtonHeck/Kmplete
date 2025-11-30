@@ -14,14 +14,27 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(EventHandlerGuard<EventClass>)
 
     public:
-        EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler)
+        EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler, bool attachOnCreate = true) noexcept
             : _eventDispatcher(eventDispatcher)
             , _handler(handler)
+        {
+            if (attachOnCreate)
+            {
+                Attach();
+            }
+        }
+
+        ~EventHandlerGuard()
+        {
+            Detach();
+        }
+
+        void Attach()
         {
             _eventDispatcher.AddHandler(_handler);
         }
 
-        ~EventHandlerGuard()
+        void Detach()
         {
             _eventDispatcher.RemoveHandler(_handler);
         }
