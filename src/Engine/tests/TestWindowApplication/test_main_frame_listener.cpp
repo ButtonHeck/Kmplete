@@ -524,6 +524,17 @@ namespace Kmplete
                     _duplicatePriorityFrameListenerCheckSuccess = true;
                 }
             }
+            ImGui::SameLine();
+            if (ImGui::Button("Activate mouse button click handler"))
+            {
+                SetMouseClickHandlerActive(true);
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Deactivate mouse button click handler"))
+            {
+                SetMouseClickHandlerActive(false);
+            }
+
         }
         ImGui::End(); //Id_FrameListenersWindow
 
@@ -563,6 +574,18 @@ namespace Kmplete
     {
         const auto windowedSize = _mainWindow.GetWindowedSize();
         return windowedSize.x > 0 && windowedSize.y > 0;
+    }
+
+    void TestMainFrameListener::SetMouseClickHandlerActive(bool active)
+    {
+        if (active)
+        {
+            _mouseButtonPressedHandler.Attach();
+        }
+        else
+        {
+            _mouseButtonPressedHandler.Detach();
+        }
     }
 
     bool TestMainFrameListener::OnMouseButtonPressEvent(MouseButtonPressEvent& evt)
