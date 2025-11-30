@@ -26,6 +26,10 @@ namespace Kmplete
         , _imguiImpl(nullptr)
         , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager))
         , _metricsTimer(1000)
+        , _windowCloseHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowCloseEvent))
+        , _windowFramebufferRefreshHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent))
+        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent))
+        , _keyPressHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnKeyPressEvent))
     {
         _Initialize();
 
@@ -44,11 +48,6 @@ namespace Kmplete
     void EditorFrameListener::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-        _eventDispatcher.AddHandler<WindowCloseEvent>(KMP_BIND(EditorFrameListener::_OnWindowCloseEvent));
-        _eventDispatcher.AddHandler<WindowFramebufferRefreshEvent>(KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent));
-        _eventDispatcher.AddHandler<WindowContentScaleEvent>(KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent));
-        _eventDispatcher.AddHandler<KeyPressEvent>(KMP_BIND(EditorFrameListener::_OnKeyPressEvent));
 
         const auto dpiScale = _mainWindow.GetDPIScale();
 

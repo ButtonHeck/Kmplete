@@ -9,6 +9,7 @@
 #include "Kmplete/Core/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
+#include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -73,6 +74,11 @@ namespace Kmplete
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         UPtr<EditorUICompositor> _uiCompositor;
         Timer _metricsTimer;
+
+        EventHandlerGuard<WindowCloseEvent> _windowCloseHandler;
+        EventHandlerGuard<WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
+        EventHandlerGuard<WindowContentScaleEvent> _windowContentScaleHandler;
+        EventHandlerGuard<KeyPressEvent> _keyPressHandler;
     };
     //--------------------------------------------------------------------------
 }
