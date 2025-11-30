@@ -54,7 +54,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListener::OnEvent(Event& event)
+    void FrameListener::OnEvent(Events::Event& event)
     {
         _eventDispatcher.Dispatch(event);
     }

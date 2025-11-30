@@ -25,7 +25,7 @@ namespace Kmplete
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
-        using EventCallbackFn = std::function<void(Event&)>;
+        using EventCallbackFn = std::function<void(Events::Event&)>;
 
     public:
         enum class ScreenMode

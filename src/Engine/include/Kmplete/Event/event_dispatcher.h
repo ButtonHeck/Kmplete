@@ -11,79 +11,82 @@
 
 namespace Kmplete
 {
-    class EventDispatcher
+    namespace Events
     {
-        KMP_LOG_CLASSNAME(EventDispatcher)
-        KMP_DISABLE_COPY_MOVE(EventDispatcher)
-
-    public:
-        EventDispatcher() = default;
-
-        template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-        void AddHandler(const EventHandler<EventClass>& newHandler)
+        class EventDispatcher
         {
-            if (!_handlersMap.contains(EventClass::TypeID))
+            KMP_LOG_CLASSNAME(EventDispatcher)
+            KMP_DISABLE_COPY_MOVE(EventDispatcher)
+
+        public:
+            EventDispatcher() = default;
+
+            template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
+            void AddHandler(const EventHandler<EventClass>& newHandler)
             {
-                _handlersMap.emplace(EventClass::TypeID, Vector<UPtr<EventHandlerWrapper>>());
+                if (!_handlersMap.contains(EventClass::TypeID))
+                {
+                    _handlersMap.emplace(EventClass::TypeID, Vector<UPtr<EventHandlerWrapper>>());
+                }
+
+                const auto& handlers = _handlersMap[EventClass::TypeID];
+                auto newHandlerWrapper = CreateUPtr<EventHandlerWrapperImpl<EventClass>>(newHandler);
+                for (auto& handler : handlers)
+                {
+                    if (handler->GetTypeName() == newHandlerWrapper->GetTypeName())
+                    {
+                        KMP_LOG_ERROR("already contains exactly same handler for '{}'", EventClass::TypeName);
+                        return;
+                    }
+                }
+
+                KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, newHandlerWrapper->GetTypeName());
+                _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandlerWrapper));
             }
 
-            const auto& handlers = _handlersMap[EventClass::TypeID];
-            auto newHandlerWrapper = CreateUPtr<EventHandlerWrapperImpl<EventClass>>(newHandler);
-            for (auto& handler : handlers)
+            template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
+            void RemoveHandler(const EventHandler<EventClass>& handler)
             {
-                if (handler->GetTypeName() == newHandlerWrapper->GetTypeName())
+                if (!_handlersMap.contains(EventClass::TypeID))
                 {
-                    KMP_LOG_ERROR("already contains exactly same handler for '{}'", EventClass::TypeName);
+                    KMP_LOG_WARN("cannot removed handler because its event TypeName '{}' has not been registered", EventClass::TypeName);
                     return;
+                }
+
+                auto& handlers = _handlersMap[EventClass::TypeID];
+                const auto handlerTypeName = handler.target_type().name();
+                for (auto handlerIter = handlers.begin(); handlerIter != handlers.end(); handlerIter++)
+                {
+                    if (handlerIter->get()->GetTypeName() == handlerTypeName)
+                    {
+                        KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, handlerTypeName);
+                        handlers.erase(handlerIter);
+                        return;
+                    }
                 }
             }
 
-            KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, newHandlerWrapper->GetTypeName());
-            _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandlerWrapper));
-        }
-
-        template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-        void RemoveHandler(const EventHandler<EventClass>& handler)
-        {
-            if (!_handlersMap.contains(EventClass::TypeID))
+            bool Dispatch(Event& event)
             {
-                KMP_LOG_WARN("cannot removed handler because its event TypeName '{}' has not been registered", EventClass::TypeName);
-                return;
-            }
-
-            auto& handlers = _handlersMap[EventClass::TypeID];
-            const auto handlerTypeName = handler.target_type().name();
-            for (auto handlerIter = handlers.begin(); handlerIter != handlers.end(); handlerIter++)
-            {
-                if (handlerIter->get()->GetTypeName() == handlerTypeName)
+                const auto eventTypeID = event.GetTypeID();
+                if (!_handlersMap.contains(eventTypeID) || event.handled)
                 {
-                    KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, handlerTypeName);
-                    handlers.erase(handlerIter);
-                    return;
+                    return false;
                 }
-            }
-        }
 
-        bool Dispatch(Event& event)
-        {
-            const auto eventTypeID = event.GetTypeID();
-            if (!_handlersMap.contains(eventTypeID) || event.handled)
-            {
-                return false;
-            }
+                auto& handlers = _handlersMap[eventTypeID];
+                for (size_t handlerIndex = 0; handlerIndex < handlers.size(); handlerIndex++)
+                {
+                    const auto& handler = handlers[handlerIndex];
+                    event.handled |= handler->ProcessEvent(event);
+                }
 
-            auto& handlers = _handlersMap[eventTypeID];
-            for (size_t handlerIndex = 0; handlerIndex < handlers.size(); handlerIndex++)
-            {
-                const auto& handler = handlers[handlerIndex];
-                event.handled |= handler->ProcessEvent(event);
+                return true;
             }
 
-            return true;
-        }
-
-    private:
-        HashMap<EventTypeID, Vector<UPtr<EventHandlerWrapper>>> _handlersMap;
-    };
-    //--------------------------------------------------------------------------
+        private:
+            HashMap<EventTypeID, Vector<UPtr<EventHandlerWrapper>>> _handlersMap;
+        };
+        //--------------------------------------------------------------------------
+    }
 }

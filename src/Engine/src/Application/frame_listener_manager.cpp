@@ -119,7 +119,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_ProcessEventsFrameListeners(Event& event)
+    void FrameListenerManager::_ProcessEventsFrameListeners(Events::Event& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

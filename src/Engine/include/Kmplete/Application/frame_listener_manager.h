@@ -39,7 +39,7 @@ namespace Kmplete
 
         void _UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified);
         void _RenderFrameListeners();
-        void _ProcessEventsFrameListeners(Event& event);
+        void _ProcessEventsFrameListeners(Events::Event& event);
         void _ProcessFrameListenersCommands();
 
         Nullable<FrameListener*> _FindBySid(Utils::StringID sid);

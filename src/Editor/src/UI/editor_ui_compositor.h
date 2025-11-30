@@ -32,8 +32,8 @@ namespace Kmplete
         void ComposeMainArea();
         void ComposeStatusBar(Timer& metricsTimer);
 
-        KMP_NODISCARD bool OnWindowCloseEvent(WindowCloseEvent& event);
-        KMP_NODISCARD bool OnKeyPressEvent(KeyPressEvent& event);
+        KMP_NODISCARD bool OnWindowCloseEvent(Events::WindowCloseEvent& event);
+        KMP_NODISCARD bool OnKeyPressEvent(Events::KeyPressEvent& event);
 
         void SaveSettings(SettingsDocument& settings) const;
         void LoadSettings(SettingsDocument& settings);

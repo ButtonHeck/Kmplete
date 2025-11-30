@@ -566,7 +566,7 @@ namespace Kmplete
 
             if (userData->eventCallback)
             {
-                WindowMoveEvent event(x, y);
+                Events::WindowMoveEvent event(x, y);
                 userData->eventCallback(event);
             }
             }
@@ -580,7 +580,7 @@ namespace Kmplete
 
             if (userData->eventCallback)
             {
-                WindowContentScaleEvent event(xScale);
+                Events::WindowContentScaleEvent event(xScale);
                 userData->eventCallback(event);
             }
             }
@@ -590,7 +590,7 @@ namespace Kmplete
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
-                WindowFocusEvent event(focused);
+                Events::WindowFocusEvent event(focused);
                 userData->eventCallback(event);
             }
             }
@@ -601,7 +601,7 @@ namespace Kmplete
             userData->iconified = (iconified == GLFW_TRUE);
             if (userData->eventCallback)
             {
-                WindowIconifyEvent event(iconified);
+                Events::WindowIconifyEvent event(iconified);
                 userData->eventCallback(event);
             }
             }
@@ -611,7 +611,7 @@ namespace Kmplete
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
-                WindowResizeEvent event(width, height);
+                Events::WindowResizeEvent event(width, height);
                 userData->eventCallback(event);
             }
         });
@@ -629,7 +629,7 @@ namespace Kmplete
 
             if (userData->eventCallback)
             {
-                WindowFramebufferResizeEvent event(width, height);
+                Events::WindowFramebufferResizeEvent event(width, height);
                 userData->eventCallback(event);
             }
             }
@@ -639,7 +639,7 @@ namespace Kmplete
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
-                WindowFramebufferRefreshEvent event;
+                Events::WindowFramebufferRefreshEvent event;
                 userData->eventCallback(event);
             }
 
@@ -651,7 +651,7 @@ namespace Kmplete
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
-                WindowCloseEvent event;
+                Events::WindowCloseEvent event;
                 userData->eventCallback(event);
             }
             }
@@ -671,19 +671,19 @@ namespace Kmplete
                 {
                 case GLFW_PRESS:
                 {
-                    KeyPressEvent event(key, mods, false);
+                    Events::KeyPressEvent event(key, mods, false);
                     userData->eventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE:
                 {
-                    KeyReleaseEvent event(key);
+                    Events::KeyReleaseEvent event(key);
                     userData->eventCallback(event);
                     break;
                 }
                 case GLFW_REPEAT:
                 {
-                    KeyPressEvent event(key, mods, true);
+                    Events::KeyPressEvent event(key, mods, true);
                     userData->eventCallback(event);
                     break;
                 }
@@ -698,7 +698,7 @@ namespace Kmplete
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
-                KeyCharEvent event(codepoint);
+                Events::KeyCharEvent event(codepoint);
                 userData->eventCallback(event);
             }
             }
@@ -718,13 +718,13 @@ namespace Kmplete
                 {
                 case GLFW_PRESS:
                 {
-                    MouseButtonPressEvent event(button, mods);
+                    Events::MouseButtonPressEvent event(button, mods);
                     userData->eventCallback(event);
                     break;
                 }
                 case GLFW_RELEASE:
                 {
-                    MouseButtonReleaseEvent event(button, mods);
+                    Events::MouseButtonReleaseEvent event(button, mods);
                     userData->eventCallback(event);
                     break;
                 }
@@ -739,7 +739,7 @@ namespace Kmplete
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             if (userData->eventCallback)
             {
-                MouseScrollEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
+                Events::MouseScrollEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
                 userData->eventCallback(event);
             }
             }
@@ -752,7 +752,7 @@ namespace Kmplete
 
             if (userData->eventCallback)
             {
-                MouseMoveEvent event(static_cast<float>(xPos), static_cast<float>(yPos));
+                Events::MouseMoveEvent event(static_cast<float>(xPos), static_cast<float>(yPos));
                 userData->eventCallback(event);
             }
             }

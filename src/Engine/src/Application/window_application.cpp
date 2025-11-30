@@ -66,7 +66,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::OnEvent(Event& event)
+    void WindowApplication::OnEvent(Events::Event& event)
     {
 #if defined KMP_PROFILE
         _SwitchProfilerActivation(event);
@@ -187,14 +187,14 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 #if defined KMP_PROFILE
-    void WindowApplication::_SwitchProfilerActivation(Event& event)
+    void WindowApplication::_SwitchProfilerActivation(Events::Event& event)
     {
-        if (event.GetTypeID() != KeyPressEventTypeID)
+        if (event.GetTypeID() != Events::KeyPressEventTypeID)
         {
             return;
         }
 
-        const auto& keyPressedEvent = dynamic_cast<KeyPressEvent&>(event);
+        const auto& keyPressedEvent = dynamic_cast<Events::KeyPressEvent&>(event);
         const auto code = keyPressedEvent.GetKeyCode();
         const auto mods = keyPressedEvent.GetMods();
         if (code == Key::F11 && mods & Mode::Alt)

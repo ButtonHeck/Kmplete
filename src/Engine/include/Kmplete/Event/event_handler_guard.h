@@ -8,40 +8,43 @@
 
 namespace Kmplete
 {
-    template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-    class EventHandlerGuard
+    namespace Events
     {
-        KMP_DISABLE_COPY_MOVE(EventHandlerGuard<EventClass>)
-
-    public:
-        EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler, bool attachOnCreate = true) noexcept
-            : _eventDispatcher(eventDispatcher)
-            , _handler(handler)
+        template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
+        class EventHandlerGuard
         {
-            if (attachOnCreate)
+            KMP_DISABLE_COPY_MOVE(EventHandlerGuard<EventClass>)
+
+        public:
+            EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler, bool attachOnCreate = true) noexcept
+                : _eventDispatcher(eventDispatcher)
+                , _handler(handler)
             {
-                Attach();
+                if (attachOnCreate)
+                {
+                    Attach();
+                }
             }
-        }
 
-        ~EventHandlerGuard()
-        {
-            Detach();
-        }
+            ~EventHandlerGuard()
+            {
+                Detach();
+            }
 
-        void Attach()
-        {
-            _eventDispatcher.AddHandler(_handler);
-        }
+            void Attach()
+            {
+                _eventDispatcher.AddHandler(_handler);
+            }
 
-        void Detach()
-        {
-            _eventDispatcher.RemoveHandler(_handler);
-        }
+            void Detach()
+            {
+                _eventDispatcher.RemoveHandler(_handler);
+            }
 
-    private:
-        EventDispatcher& _eventDispatcher;
-        EventHandler<EventClass> _handler;
-    };
-    //--------------------------------------------------------------------------
+        private:
+            EventDispatcher& _eventDispatcher;
+            EventHandler<EventClass> _handler;
+        };
+        //--------------------------------------------------------------------------
+    }
 }

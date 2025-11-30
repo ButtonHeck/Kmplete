@@ -14,12 +14,12 @@ namespace Kmplete
     class TestFrameListener1Delegate
     {
     public:
-        explicit TestFrameListener1Delegate(EventDispatcher& eventDispatcher)
+        explicit TestFrameListener1Delegate(Events::EventDispatcher& eventDispatcher)
             : str("D")
             , mbcHandlerGuard(eventDispatcher, KMP_BIND(TestFrameListener1Delegate::OnMouseButtonPressed))
         {}
 
-        bool OnMouseButtonPressed(MouseButtonPressEvent&)
+        bool OnMouseButtonPressed(Events::MouseButtonPressEvent&)
         {
             str += "D";
             return true;
@@ -31,7 +31,7 @@ namespace Kmplete
         }
 
         String str;
-        EventHandlerGuard<MouseButtonPressEvent> mbcHandlerGuard;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> mbcHandlerGuard;
     };
     //--------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ namespace Kmplete
             sharedState.updateMaskString += "1";
         }
 
-        bool OnMouseButtonPressed(MouseButtonPressEvent& event)
+        bool OnMouseButtonPressed(Events::MouseButtonPressEvent& event)
         {
             sharedState.eventProcessingString += "1_";
             if (delegate)
@@ -94,7 +94,7 @@ namespace Kmplete
         SharedState& sharedState;
         const String name = "TestFrameListener1";
         UPtr<TestFrameListener1Delegate> delegate;
-        EventHandlerGuard<MouseButtonPressEvent> mbcHandlerGuard;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> mbcHandlerGuard;
     };
     //--------------------------------------------------------------------------
 
@@ -119,7 +119,7 @@ namespace Kmplete
             sharedState.updateMaskString += "2";
         }
 
-        void OnEvent(Event& event) override
+        void OnEvent(Events::Event& event) override
         {
             sharedState.eventProcessingString += "2";
 
@@ -155,7 +155,7 @@ namespace Kmplete
             sharedState.updateMaskString += "3";
         }
 
-        void OnEvent(Event& event) override
+        void OnEvent(Events::Event& event) override
         {
             sharedState.eventProcessingString += "3";
 
@@ -191,7 +191,7 @@ namespace Kmplete
             sharedState.updateMaskString += "4";
         }
 
-        void OnEvent(Event& event) override
+        void OnEvent(Events::Event& event) override
         {
             sharedState.eventProcessingString += "4";
 

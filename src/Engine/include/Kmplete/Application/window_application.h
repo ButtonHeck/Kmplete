@@ -41,7 +41,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual bool ConfirmExit();
 
     protected:
-        void OnEvent(Event& event);
+        void OnEvent(Events::Event& event);
 
     private:
         void _Initialize(const WindowApplicationParameters& parameters);
@@ -53,7 +53,7 @@ namespace Kmplete
         void _LoadSettings();
 
 #if defined KMP_PROFILE
-        void _SwitchProfilerActivation(Event& event);
+        void _SwitchProfilerActivation(Events::Event& event);
 #endif
 
     protected:

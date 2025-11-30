@@ -59,10 +59,10 @@ namespace Kmplete
         void _EndApplicationArea() const;
         void _EndFrame() const;
 
-        KMP_NODISCARD bool _OnWindowCloseEvent(WindowCloseEvent& event);
-        KMP_NODISCARD bool _OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent& event);
-        KMP_NODISCARD bool _OnWindowContentScaleEvent(WindowContentScaleEvent& event);
-        KMP_NODISCARD bool _OnKeyPressEvent(KeyPressEvent& event);
+        KMP_NODISCARD bool _OnWindowCloseEvent(Events::WindowCloseEvent& event);
+        KMP_NODISCARD bool _OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent& event);
+        KMP_NODISCARD bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
+        KMP_NODISCARD bool _OnKeyPressEvent(Events::KeyPressEvent& event);
 
         void _AddImGuiFonts(float scale);
 
@@ -75,10 +75,10 @@ namespace Kmplete
         UPtr<EditorUICompositor> _uiCompositor;
         Timer _metricsTimer;
 
-        EventHandlerGuard<WindowCloseEvent> _windowCloseHandler;
-        EventHandlerGuard<WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
-        EventHandlerGuard<WindowContentScaleEvent> _windowContentScaleHandler;
-        EventHandlerGuard<KeyPressEvent> _keyPressHandler;
+        Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
+        Events::EventHandlerGuard<Events::WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
+        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
+        Events::EventHandlerGuard<Events::KeyPressEvent> _keyPressHandler;
     };
     //--------------------------------------------------------------------------
 }

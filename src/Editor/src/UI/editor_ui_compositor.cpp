@@ -295,7 +295,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUICompositor::OnWindowCloseEvent(WindowCloseEvent&)
+    bool EditorUICompositor::OnWindowCloseEvent(Events::WindowCloseEvent&)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -304,7 +304,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorUICompositor::OnKeyPressEvent(KeyPressEvent& event)
+    bool EditorUICompositor::OnKeyPressEvent(Events::KeyPressEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 

@@ -6,217 +6,220 @@
 
 namespace Kmplete
 {
-    static constexpr auto WindowResizeEventTypeStr = "WindowResizeEvent";
-    static constexpr auto WindowMoveEventTypeStr = "WindowMoveEvent";
-    static constexpr auto WindowCloseEventTypeStr = "WindowCloseEvent";
-    static constexpr auto WindowFocusEventTypeStr = "WindowFocusEvent";
-    static constexpr auto WindowIconifyEventTypeStr = "WindowIconifyEvent";
-    static constexpr auto WindowFramebufferResizeEventTypeStr = "WindowFramebufferResizeEvent";
-    static constexpr auto WindowFramebufferRefreshEventTypeStr = "WindowFramebufferRefreshEvent";
-    static constexpr auto WindowContentScaleEventTypeStr = "WindowContentScaleEvent";
-
-    static constexpr auto WindowResizeEventTypeID = "WindowResizeEvent"_sid;
-    static constexpr auto WindowMoveEventTypeID = "WindowMoveEvent"_sid;
-    static constexpr auto WindowCloseEventTypeID = "WindowCloseEvent"_sid;
-    static constexpr auto WindowFocusEventTypeID = "WindowFocusEvent"_sid;
-    static constexpr auto WindowIconifyEventTypeID = "WindowIconifyEvent"_sid;
-    static constexpr auto WindowFramebufferResizeEventTypeID = "WindowFramebufferResizeEvent"_sid;
-    static constexpr auto WindowFramebufferRefreshEventTypeID = "WindowFramebufferRefreshEvent"_sid;
-    static constexpr auto WindowContentScaleEventTypeID = "WindowContentScaleEvent"_sid;
-
-
-    struct WindowEvent : public Event
+    namespace Events
     {
-        KMP_NODISCARD int GetTraits() const noexcept override
+        static constexpr auto WindowResizeEventTypeStr = "WindowResizeEvent";
+        static constexpr auto WindowMoveEventTypeStr = "WindowMoveEvent";
+        static constexpr auto WindowCloseEventTypeStr = "WindowCloseEvent";
+        static constexpr auto WindowFocusEventTypeStr = "WindowFocusEvent";
+        static constexpr auto WindowIconifyEventTypeStr = "WindowIconifyEvent";
+        static constexpr auto WindowFramebufferResizeEventTypeStr = "WindowFramebufferResizeEvent";
+        static constexpr auto WindowFramebufferRefreshEventTypeStr = "WindowFramebufferRefreshEvent";
+        static constexpr auto WindowContentScaleEventTypeStr = "WindowContentScaleEvent";
+
+        static constexpr auto WindowResizeEventTypeID = "WindowResizeEvent"_sid;
+        static constexpr auto WindowMoveEventTypeID = "WindowMoveEvent"_sid;
+        static constexpr auto WindowCloseEventTypeID = "WindowCloseEvent"_sid;
+        static constexpr auto WindowFocusEventTypeID = "WindowFocusEvent"_sid;
+        static constexpr auto WindowIconifyEventTypeID = "WindowIconifyEvent"_sid;
+        static constexpr auto WindowFramebufferResizeEventTypeID = "WindowFramebufferResizeEvent"_sid;
+        static constexpr auto WindowFramebufferRefreshEventTypeID = "WindowFramebufferRefreshEvent"_sid;
+        static constexpr auto WindowContentScaleEventTypeID = "WindowContentScaleEvent"_sid;
+
+
+        struct WindowEvent : public Event
         {
-            return WindowEventTrait;
-        }
+            KMP_NODISCARD int GetTraits() const noexcept override
+            {
+                return WindowEventTrait;
+            }
 
-    protected:
-        WindowEvent() = default;
-    };
-    //--------------------------------------------------------------------------
+        protected:
+            WindowEvent() = default;
+        };
+        //--------------------------------------------------------------------------
 
 
-    struct WindowResizeEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowResizeEventTypeStr)
-
-        WindowResizeEvent(unsigned int width, unsigned int height) noexcept
-            : _width(width)
-            , _height(height)
-        {}
-
-        KMP_NODISCARD unsigned int GetWidth() const noexcept
+        struct WindowResizeEvent : public WindowEvent
         {
-            return _width;
-        }
+            EVENT_CLASS_TYPE(WindowResizeEventTypeStr)
 
-        KMP_NODISCARD unsigned int GetHeight() const noexcept
+            WindowResizeEvent(unsigned int width, unsigned int height) noexcept
+                : _width(width)
+                , _height(height)
+            {}
+
+            KMP_NODISCARD unsigned int GetWidth() const noexcept
+            {
+                return _width;
+            }
+
+            KMP_NODISCARD unsigned int GetHeight() const noexcept
+            {
+                return _height;
+            }
+
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowResizeEvent: ", _width, ", ", _height);
+            }
+
+        private:
+            const unsigned int _width;
+            const unsigned int _height;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct WindowMoveEvent : public WindowEvent
         {
-            return _height;
-        }
+            EVENT_CLASS_TYPE(WindowMoveEventTypeStr)
 
-        KMP_NODISCARD String ToString() const override
+            WindowMoveEvent(unsigned int x, unsigned int y) noexcept
+                : _x(x)
+                , _y(y)
+            {}
+
+            KMP_NODISCARD unsigned int GetX() const noexcept
+            {
+                return _x;
+            }
+
+            KMP_NODISCARD unsigned int GetY() const noexcept
+            {
+                return _y;
+            }
+
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowMoveEvent: ", _x, ", ", _y);
+            }
+
+        private:
+            const unsigned int _x;
+            const unsigned int _y;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct WindowCloseEvent : public WindowEvent
         {
-            return Utils::Concatenate("WindowResizeEvent: ", _width, ", ", _height);
-        }
+            EVENT_CLASS_TYPE(WindowCloseEventTypeStr)
 
-    private:
-        const unsigned int _width;
-        const unsigned int _height;
-    };
-    //--------------------------------------------------------------------------
+            WindowCloseEvent() = default;
+        };
+        //--------------------------------------------------------------------------
 
 
-    struct WindowMoveEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowMoveEventTypeStr)
-
-        WindowMoveEvent(unsigned int x, unsigned int y) noexcept
-            : _x(x)
-            , _y(y)
-        {}
-
-        KMP_NODISCARD unsigned int GetX() const noexcept
+        struct WindowFocusEvent : public WindowEvent
         {
-            return _x;
-        }
+            EVENT_CLASS_TYPE(WindowFocusEventTypeStr)
 
-        KMP_NODISCARD unsigned int GetY() const noexcept
+            explicit WindowFocusEvent(int focused) noexcept
+                : _focused(focused)
+            {}
+
+            KMP_NODISCARD bool IsFocused() const noexcept
+            {
+                return bool(_focused);
+            }
+
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowFocusEvent: ", IsFocused());
+            }
+
+        private:
+            const int _focused;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct WindowIconifyEvent : public WindowEvent
         {
-            return _y;
-        }
+            EVENT_CLASS_TYPE(WindowIconifyEventTypeStr)
 
-        KMP_NODISCARD String ToString() const override
+            explicit WindowIconifyEvent(int iconified) noexcept
+                : _iconified(iconified)
+            {}
+
+            KMP_NODISCARD bool IsIconified() const noexcept
+            {
+                return bool(_iconified);
+            }
+
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowIconifyEvent: ", IsIconified());
+            }
+
+        private:
+            const int _iconified;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct WindowFramebufferResizeEvent : public WindowEvent
         {
-            return Utils::Concatenate("WindowMoveEvent: ", _x, ", ", _y);
-        }
+            EVENT_CLASS_TYPE(WindowFramebufferResizeEventTypeStr)
 
-    private:
-        const unsigned int _x;
-        const unsigned int _y;
-    };
-    //--------------------------------------------------------------------------
+            WindowFramebufferResizeEvent(unsigned int width, unsigned int height) noexcept
+                : _width(width)
+                , _height(height)
+            {}
+
+            KMP_NODISCARD unsigned int GetWidth() const noexcept
+            {
+                return _width;
+            }
+
+            KMP_NODISCARD unsigned int GetHeight() const noexcept
+            {
+                return _height;
+            }
+
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowFramebufferResizeEvent: ", _width, ", ", _height);
+            }
+
+        private:
+            const unsigned int _width;
+            const unsigned int _height;
+        };
+        //--------------------------------------------------------------------------
 
 
-    struct WindowCloseEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowCloseEventTypeStr)
-
-        WindowCloseEvent() = default;
-    };
-    //--------------------------------------------------------------------------
-
-
-    struct WindowFocusEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowFocusEventTypeStr)
-
-        explicit WindowFocusEvent(int focused) noexcept
-            : _focused(focused)
-        {}
-
-        KMP_NODISCARD bool IsFocused() const noexcept
+        struct WindowFramebufferRefreshEvent : public WindowEvent
         {
-            return bool(_focused);
-        }
+            EVENT_CLASS_TYPE(WindowFramebufferRefreshEventTypeStr)
 
-        KMP_NODISCARD String ToString() const override
+            WindowFramebufferRefreshEvent() = default;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct WindowContentScaleEvent : public WindowEvent
         {
-            return Utils::Concatenate("WindowFocusEvent: ", IsFocused());
-        }
+            EVENT_CLASS_TYPE(WindowContentScaleEventTypeStr)
 
-    private:
-        const int _focused;
-    };
-    //--------------------------------------------------------------------------
+            WindowContentScaleEvent(float scale) noexcept
+                : _scale(scale)
+            {}
 
+            KMP_NODISCARD float GetScale() const noexcept
+            {
+                return _scale;
+            }
 
-    struct WindowIconifyEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowIconifyEventTypeStr)
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowContentScaleEvent: ", _scale);
+            }
 
-        explicit WindowIconifyEvent(int iconified) noexcept
-            : _iconified(iconified)
-        {}
-
-        KMP_NODISCARD bool IsIconified() const noexcept
-        {
-            return bool(_iconified);
-        }
-
-        KMP_NODISCARD String ToString() const override
-        {
-            return Utils::Concatenate("WindowIconifyEvent: ", IsIconified());
-        }
-
-    private:
-        const int _iconified;
-    };
-    //--------------------------------------------------------------------------
-
-
-    struct WindowFramebufferResizeEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowFramebufferResizeEventTypeStr)
-
-        WindowFramebufferResizeEvent(unsigned int width, unsigned int height) noexcept
-            : _width(width)
-            , _height(height)
-        {}
-
-        KMP_NODISCARD unsigned int GetWidth() const noexcept
-        {
-            return _width;
-        }
-
-        KMP_NODISCARD unsigned int GetHeight() const noexcept
-        {
-            return _height;
-        }
-
-        KMP_NODISCARD String ToString() const override
-        {
-            return Utils::Concatenate("WindowFramebufferResizeEvent: ", _width, ", ", _height);
-        }
-
-    private:
-        const unsigned int _width;
-        const unsigned int _height;
-    };
-    //--------------------------------------------------------------------------
-
-
-    struct WindowFramebufferRefreshEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowFramebufferRefreshEventTypeStr)
-
-        WindowFramebufferRefreshEvent() = default;
-    };
-    //--------------------------------------------------------------------------
-
-
-    struct WindowContentScaleEvent : public WindowEvent
-    {
-        EVENT_CLASS_TYPE(WindowContentScaleEventTypeStr)
-
-        WindowContentScaleEvent(float scale) noexcept
-            : _scale(scale)
-        {}
-
-        KMP_NODISCARD float GetScale() const noexcept
-        {
-            return _scale;
-        }
-
-        KMP_NODISCARD String ToString() const override
-        {
-            return Utils::Concatenate("WindowContentScaleEvent: ", _scale);
-        }
-
-    private:
-        const float _scale;
-    };
-    //--------------------------------------------------------------------------
+        private:
+            const float _scale;
+        };
+        //--------------------------------------------------------------------------
+    }
 }

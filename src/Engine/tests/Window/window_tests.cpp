@@ -19,7 +19,7 @@ struct WindowCallbackUserSingleCondition
         window.SetEventCallback(KMP_BIND(WindowCallbackUserSingleCondition::Callback));
     }
 
-    void Callback(Kmplete::Event& evt)
+    void Callback(Kmplete::Events::Event& evt)
     {
         if (evt.GetTypeID() == "WindowCloseEvent"_sid)
         {
@@ -27,7 +27,7 @@ struct WindowCallbackUserSingleCondition
         }
         else if (evt.GetTypeID() == "KeyPressEvent"_sid)
         {
-            auto keyEvent = static_cast<KeyPressEvent&>(evt);
+            auto keyEvent = static_cast<Events::KeyPressEvent&>(evt);
             if (keyEvent.GetKeyCode() == Kmplete::Key::Y)
             {
                 conditionOk = true;

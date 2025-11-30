@@ -68,24 +68,24 @@ namespace Kmplete
         void SetMouseClickHandlerActive(bool active);
 
     protected:
-        KMP_NODISCARD virtual bool OnKeyPressEvent(KeyPressEvent&) { _keyPressEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnKeyReleaseEvent(KeyReleaseEvent&) { _keyReleaseEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnKeyCharEvent(KeyCharEvent&) { _keyCharEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnKeyPressEvent(Events::KeyPressEvent&) { _keyPressEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnKeyReleaseEvent(Events::KeyReleaseEvent&) { _keyReleaseEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnKeyCharEvent(Events::KeyCharEvent&) { _keyCharEventInvoked = true; return true; }
 
-        KMP_NODISCARD virtual bool OnMouseMoveEvent(MouseMoveEvent&) { _mouseMoveEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnMouseScrollEvent(MouseScrollEvent&) { _mouseScrollEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(MouseButtonPressEvent& evt);
+        KMP_NODISCARD virtual bool OnMouseMoveEvent(Events::MouseMoveEvent&) { _mouseMoveEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnMouseScrollEvent(Events::MouseScrollEvent&) { _mouseScrollEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt);
 
-        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(MouseButtonReleaseEvent&) { _mouseButtonReleaseEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&) { _mouseButtonReleaseEventInvoked = true; return true; }
 
-        KMP_NODISCARD virtual bool OnWindowMoveEvent(WindowMoveEvent&) { _windowMoveEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnWindowResizeEvent(WindowResizeEvent&) { _windowResizeEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnWindowFocusEvent(WindowFocusEvent&) { _windowFocusEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnWindowIconifyEvent(WindowIconifyEvent&) { _windowIconifyEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&);
-        KMP_NODISCARD virtual bool OnWindowContentScaleEvent(WindowContentScaleEvent& evt);
-        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; return true; }
-        KMP_NODISCARD virtual bool OnWindowCloseEvent(WindowCloseEvent&);
+        KMP_NODISCARD virtual bool OnWindowMoveEvent(Events::WindowMoveEvent&) { _windowMoveEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowResizeEvent(Events::WindowResizeEvent&) { _windowResizeEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowFocusEvent(Events::WindowFocusEvent&) { _windowFocusEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowIconifyEvent(Events::WindowIconifyEvent&) { _windowIconifyEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&);
+        KMP_NODISCARD virtual bool OnWindowContentScaleEvent(Events::WindowContentScaleEvent& evt);
+        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(Events::WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; return true; }
+        KMP_NODISCARD virtual bool OnWindowCloseEvent(Events::WindowCloseEvent&);
 
     private:
         SharedState& _sharedState;
@@ -96,23 +96,23 @@ namespace Kmplete
         GraphicsBackend* _graphicsBackend;
         WindowBackend* _windowBackend;
 
-        EventHandlerGuard<KeyPressEvent> _keyPressHandler;
-        EventHandlerGuard<KeyReleaseEvent> _keyReleaseHandler;
-        EventHandlerGuard<KeyCharEvent> _keyCharHandler;
+        Events::EventHandlerGuard<Events::KeyPressEvent> _keyPressHandler;
+        Events::EventHandlerGuard<Events::KeyReleaseEvent> _keyReleaseHandler;
+        Events::EventHandlerGuard<Events::KeyCharEvent> _keyCharHandler;
 
-        EventHandlerGuard<MouseMoveEvent> _mouseMoveHandler;
-        EventHandlerGuard<MouseScrollEvent> _mouseScrollHandler;
-        EventHandlerGuard<MouseButtonPressEvent> _mouseButtonPressedHandler;
-        EventHandlerGuard<MouseButtonReleaseEvent> _mouseButtonReleasedHandler;
+        Events::EventHandlerGuard<Events::MouseMoveEvent> _mouseMoveHandler;
+        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
+        Events::EventHandlerGuard<Events::MouseButtonReleaseEvent> _mouseButtonReleasedHandler;
 
-        EventHandlerGuard<WindowCloseEvent> _windowCloseHandler;
-        EventHandlerGuard<WindowMoveEvent> _windowMoveHandler;
-        EventHandlerGuard<WindowResizeEvent> _windowResizeHandler;
-        EventHandlerGuard<WindowFocusEvent> _windowFocusHandler;
-        EventHandlerGuard<WindowIconifyEvent> _windowIconifyHandler;
-        EventHandlerGuard<WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
-        EventHandlerGuard<WindowFramebufferResizeEvent> _windowFramebufferResizeHandler;
-        EventHandlerGuard<WindowContentScaleEvent> _windowContentScaleHandler;
+        Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
+        Events::EventHandlerGuard<Events::WindowMoveEvent> _windowMoveHandler;
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::WindowFocusEvent> _windowFocusHandler;
+        Events::EventHandlerGuard<Events::WindowIconifyEvent> _windowIconifyHandler;
+        Events::EventHandlerGuard<Events::WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
+        Events::EventHandlerGuard<Events::WindowFramebufferResizeEvent> _windowFramebufferResizeHandler;
+        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
 
         bool _switchFontRequested = false;
         bool _useDefaultFont = true;

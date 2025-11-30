@@ -588,7 +588,7 @@ namespace Kmplete
         }
     }
 
-    bool TestMainFrameListener::OnMouseButtonPressEvent(MouseButtonPressEvent& evt)
+    bool TestMainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)
     {
         _mouseButtonPressEventInvoked = true;
         if (evt.GetMouseButton() == Mouse::ButtonLeft && evt.GetMods() & Mode::Ctrl)
@@ -619,14 +619,14 @@ namespace Kmplete
         return false;
     }
 
-    bool TestMainFrameListener::OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+    bool TestMainFrameListener::OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
     {
         _windowFramebufferRefreshEventInvoked = true;
         Render();
         return true;
     }
 
-    bool TestMainFrameListener::OnWindowContentScaleEvent(WindowContentScaleEvent& evt)
+    bool TestMainFrameListener::OnWindowContentScaleEvent(Events::WindowContentScaleEvent& evt)
     {
         const auto scale = evt.GetScale();
 
@@ -640,7 +640,7 @@ namespace Kmplete
         return true;
     }
 
-    bool TestMainFrameListener::OnWindowCloseEvent(WindowCloseEvent&)
+    bool TestMainFrameListener::OnWindowCloseEvent(Events::WindowCloseEvent&)
     {
         _mainWindow.SetShouldClose(true);
         _windowCloseEventInvoked = true;

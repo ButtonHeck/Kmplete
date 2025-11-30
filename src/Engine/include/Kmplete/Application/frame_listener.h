@@ -31,7 +31,7 @@ namespace Kmplete
 
         KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
         KMP_API virtual void Render() {}
-        KMP_API virtual void OnEvent(Event& event);
+        KMP_API virtual void OnEvent(Events::Event& event);
         KMP_API virtual void OnActivated() {}
         KMP_API virtual void OnDeactivated() {}
 
@@ -40,7 +40,7 @@ namespace Kmplete
     protected:
         const Utils::StringID _sid;
         const UInt8 _priority;
-        EventDispatcher _eventDispatcher;
+        Events::EventDispatcher _eventDispatcher;
 
     private:
         friend class FrameListenerManager;

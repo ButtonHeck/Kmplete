@@ -113,7 +113,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::_OnWindowCloseEvent(WindowCloseEvent& event)
+    bool EditorFrameListener::_OnWindowCloseEvent(Events::WindowCloseEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -121,7 +121,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::_OnWindowFramebufferRefreshEvent(WindowFramebufferRefreshEvent&)
+    bool EditorFrameListener::_OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -130,7 +130,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::_OnWindowContentScaleEvent(WindowContentScaleEvent& event)
+    bool EditorFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -147,7 +147,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::_OnKeyPressEvent(KeyPressEvent& event)
+    bool EditorFrameListener::_OnKeyPressEvent(Events::KeyPressEvent& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
