@@ -31,7 +31,7 @@ namespace Kmplete
         }
 
         String str;
-        EventHandlerFunctionGuard<MouseButtonPressEvent> mbcHandlerGuard;
+        EventHandlerGuard<MouseButtonPressEvent> mbcHandlerGuard;
     };
     //--------------------------------------------------------------------------
 

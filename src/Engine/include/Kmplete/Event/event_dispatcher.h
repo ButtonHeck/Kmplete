@@ -14,35 +14,36 @@ namespace Kmplete
     class EventDispatcher
     {
         KMP_LOG_CLASSNAME(EventDispatcher)
+        KMP_DISABLE_COPY_MOVE(EventDispatcher)
 
     public:
         EventDispatcher() = default;
 
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-        void AddHandler(const EventHandlerFunction<EventClass>& handler)
+        void AddHandler(const EventHandler<EventClass>& newHandler)
         {
             if (!_handlersMap.contains(EventClass::TypeID))
             {
-                _handlersMap.emplace(EventClass::TypeID, Vector<UPtr<EventHandler>>());
+                _handlersMap.emplace(EventClass::TypeID, Vector<UPtr<EventHandlerWrapper>>());
             }
 
-            const auto& registeredHandlers = _handlersMap[EventClass::TypeID];
-            auto newHandler = CreateUPtr<EventHandlerImpl<EventClass>>(handler);
-            for (auto& registeredHandler : registeredHandlers)
+            const auto& handlers = _handlersMap[EventClass::TypeID];
+            auto newHandlerWrapper = CreateUPtr<EventHandlerWrapperImpl<EventClass>>(newHandler);
+            for (auto& handler : handlers)
             {
-                if (registeredHandler->GetTypeName() == newHandler->GetTypeName())
+                if (handler->GetTypeName() == newHandlerWrapper->GetTypeName())
                 {
                     KMP_LOG_ERROR("already contains exactly same handler for '{}'", EventClass::TypeName);
                     return;
                 }
             }
 
-            KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, newHandler->GetTypeName());
-            _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandler));
+            KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, newHandlerWrapper->GetTypeName());
+            _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandlerWrapper));
         }
 
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-        void RemoveHandler(const EventHandlerFunction<EventClass>& handler)
+        void RemoveHandler(const EventHandler<EventClass>& handler)
         {
             if (!_handlersMap.contains(EventClass::TypeID))
             {
@@ -50,14 +51,14 @@ namespace Kmplete
                 return;
             }
 
-            auto& registeredHandlers = _handlersMap[EventClass::TypeID];
+            auto& handlers = _handlersMap[EventClass::TypeID];
             const auto handlerTypeName = handler.target_type().name();
-            for (auto it = registeredHandlers.begin(); it != registeredHandlers.end(); it++)
+            for (auto handlerIter = handlers.begin(); handlerIter != handlers.end(); handlerIter++)
             {
-                if (it->get()->GetTypeName() == handlerTypeName)
+                if (handlerIter->get()->GetTypeName() == handlerTypeName)
                 {
                     KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, handlerTypeName);
-                    registeredHandlers.erase(it);
+                    handlers.erase(handlerIter);
                     return;
                 }
             }
@@ -82,7 +83,7 @@ namespace Kmplete
         }
 
     private:
-        HashMap<EventTypeID, Vector<UPtr<EventHandler>>> _handlersMap;
+        HashMap<EventTypeID, Vector<UPtr<EventHandlerWrapper>>> _handlersMap;
     };
     //--------------------------------------------------------------------------
 }

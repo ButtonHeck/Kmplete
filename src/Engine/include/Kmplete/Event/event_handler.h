@@ -10,46 +10,48 @@
 namespace Kmplete
 {
     template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-    using EventHandlerFunction = std::function<bool(EventClass&)>;
+    using EventHandler = std::function<bool(EventClass&)>;
 
 
-    class EventHandler
+    class EventHandlerWrapper
     {
     public:
-        virtual ~EventHandler() = default;
+        virtual ~EventHandlerWrapper() = default;
 
         virtual bool ProcessEvent(Event& event) const = 0;
-        virtual const String& GetTypeName() const = 0;
+        KMP_NODISCARD virtual const String& GetTypeName() const = 0;
     };
     //--------------------------------------------------------------------------
 
 
     template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-    class EventHandlerImpl : public EventHandler
+    class EventHandlerWrapperImpl : public EventHandlerWrapper
     {
+        KMP_DISABLE_COPY_MOVE(EventHandlerWrapperImpl<EventClass>)
+
     public:
-        explicit EventHandlerImpl(const EventHandlerFunction<EventClass>& handler) noexcept
-            : _handlerFunction(handler)
-            , _typeName(_handlerFunction.target_type().name())
+        explicit EventHandlerWrapperImpl(const EventHandler<EventClass>& handler) noexcept
+            : _handler(handler)
+            , _typeName(_handler.target_type().name())
         {}
 
         bool ProcessEvent(Event& event) const override
         {
             if (event.GetTypeID() == EventClass::TypeID)
             {
-                return _handlerFunction(static_cast<EventClass&>(event));
+                return _handler(static_cast<EventClass&>(event));
             }
 
             return false;
         }
 
-        const String& GetTypeName() const noexcept override
+        KMP_NODISCARD const String& GetTypeName() const noexcept override
         {
             return _typeName;
         }
 
     private:
-        EventHandlerFunction<EventClass> _handlerFunction;
+        EventHandler<EventClass> _handler;
         const String _typeName;
     };
     //--------------------------------------------------------------------------

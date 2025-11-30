@@ -9,26 +9,26 @@
 namespace Kmplete
 {
     template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-    class EventHandlerFunctionGuard
+    class EventHandlerGuard
     {
-        KMP_DISABLE_COPY_MOVE(EventHandlerFunctionGuard<EventClass>)
+        KMP_DISABLE_COPY_MOVE(EventHandlerGuard<EventClass>)
 
     public:
-        EventHandlerFunctionGuard(EventDispatcher& eventDispatcher, const EventHandlerFunction<EventClass>& handlerFunction)
+        EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler)
             : _eventDispatcher(eventDispatcher)
-            , _handlerFunction(handlerFunction)
+            , _handler(handler)
         {
-            _eventDispatcher.AddHandler(_handlerFunction);
+            _eventDispatcher.AddHandler(_handler);
         }
 
-        ~EventHandlerFunctionGuard()
+        ~EventHandlerGuard()
         {
-            _eventDispatcher.RemoveHandler(_handlerFunction);
+            _eventDispatcher.RemoveHandler(_handler);
         }
 
     private:
         EventDispatcher& _eventDispatcher;
-        EventHandlerFunction<EventClass> _handlerFunction;
+        EventHandler<EventClass> _handler;
     };
     //--------------------------------------------------------------------------
 }
