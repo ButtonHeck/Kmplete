@@ -6,6 +6,7 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Event/mouse_event.h"
 #include "Kmplete/Event/key_codes.h"
+#include "Kmplete/Event/event_handler_guard.h"
 
 
 namespace Kmplete
@@ -14,21 +15,13 @@ namespace Kmplete
     {
     public:
         explicit TestFrameListener1Delegate(EventDispatcher& eventDispatcher)
-            : eventDispatcher(eventDispatcher)
-            , str("")
-            , mbcHandler(KMP_BIND(TestFrameListener1Delegate::OnMouseButtonPressed))
-        {
-            eventDispatcher.AddHandler<MouseButtonPressEvent>(mbcHandler);
-        }
-
-        ~TestFrameListener1Delegate()
-        {
-            eventDispatcher.RemoveHandler<MouseButtonPressEvent>(mbcHandler);
-        }
+            : str("D")
+            , mbcHandlerGuard(eventDispatcher, KMP_BIND(TestFrameListener1Delegate::OnMouseButtonPressed))
+        {}
 
         bool OnMouseButtonPressed(MouseButtonPressEvent&)
         {
-            str += "E";
+            str += "D";
             return true;
         }
 
@@ -37,9 +30,8 @@ namespace Kmplete
             return str;
         }
 
-        EventDispatcher& eventDispatcher;
         String str;
-        EventHandlerFunction<MouseButtonPressEvent> mbcHandler;
+        EventHandlerFunctionGuard<MouseButtonPressEvent> mbcHandlerGuard;
     };
     //--------------------------------------------------------------------------
 
