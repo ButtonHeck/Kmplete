@@ -87,7 +87,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssets(const Vector<Utils::StringID>& assetsSids)
+        bool AssetsManager::LoadAssets(const Vector<StringID>& assetsSids)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -102,12 +102,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::UnloadAssets(const Vector<Utils::StringID>& assetsSids)
+        bool AssetsManager::UnloadAssets(const Vector<StringID>& assetsSids)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            Vector<Utils::StringID> textureSidsToRemove;
-            Vector<Utils::StringID> fontsSidsToRemove;
+            Vector<StringID> textureSidsToRemove;
+            Vector<StringID> fontsSidsToRemove;
 
             for (const auto& sid : assetsSids)
             {
@@ -205,7 +205,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Vector<AssetLookupInfo> AssetsManager::_GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const
+        Vector<AssetLookupInfo> AssetsManager::_GetSortedByFileAssetsInfos(const Vector<StringID>& assetsSids) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 

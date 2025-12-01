@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 
 #include <ostream>
 
@@ -11,7 +11,7 @@ namespace Kmplete
 {
     namespace Events
     {
-        using EventTypeID = Utils::StringID;
+        using EventTypeID = StringID;
 
 
         enum EventTrait
@@ -27,7 +27,7 @@ namespace Kmplete
 
 
     #define EVENT_CLASS_TYPE(eventTypeStr) \
-        static constexpr EventTypeID TypeID = Utils::ToStringID(eventTypeStr); \
+        static constexpr EventTypeID TypeID = ToStringID(eventTypeStr); \
         static constexpr const char* TypeName = eventTypeStr; \
         KMP_NODISCARD virtual EventTypeID GetTypeID() const noexcept override { return TypeID; } \
         KMP_NODISCARD virtual const char* GetName() const noexcept override { return TypeName; }

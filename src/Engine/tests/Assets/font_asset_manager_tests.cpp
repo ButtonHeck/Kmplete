@@ -1,7 +1,7 @@
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Graphics/font.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -33,7 +33,7 @@ TEST_CASE("FontAssetManager default font usage", "[graphics][font_asset_manager]
     REQUIRE_NOTHROW(ok = fontAssetManager->RemoveAsset(FontAssetManager::DefaultFontSID));
     REQUIRE_FALSE(ok);
 
-    Vector<Utils::StringID> sids;
+    Vector<StringID> sids;
     sids.push_back(FontAssetManager::DefaultFontSID);
     REQUIRE_NOTHROW(fontAssetManager->RemoveAssets(sids));
     const auto fontsCount = fontAssetManager->GetAssetsCount();
@@ -43,7 +43,7 @@ TEST_CASE("FontAssetManager default font usage", "[graphics][font_asset_manager]
     REQUIRE_NOTHROW(defaultFontAsset = &(fontAssetManager->GetAsset(FontAssetManager::DefaultFontSID)));
     REQUIRE(defaultFontAsset->GetStringID() == FontAssetManager::DefaultFontSID);
 
-    const Utils::StringID garbageSid = 1234;
+    const StringID garbageSid = 1234;
     REQUIRE_NOTHROW(defaultFontAsset = &(fontAssetManager->GetAsset(garbageSid)));
     REQUIRE(defaultFontAsset->GetStringID() == FontAssetManager::DefaultFontSID); // still default font
 
@@ -123,7 +123,7 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // try remove font (vector of sids)
-    Vector<Utils::StringID> sids;
+    Vector<StringID> sids;
     sids.push_back(1234);
     REQUIRE_NOTHROW(fontAssetManager->RemoveAssets(sids));
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL); // not deleted

@@ -13,6 +13,7 @@ set(BaseLib_BASE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/types_aliases.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/optional.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/type_traits.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/string_id.h
 )
 source_group("Base" FILES ${BaseLib_BASE})
 

@@ -3,7 +3,7 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Base/pointers.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -60,7 +60,7 @@ TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset
     REQUIRE_NOTHROW(ok = textureAssetManager->RemoveAsset(TextureAssetManager::ErrorTextureSID));
     REQUIRE_FALSE(ok);
 
-    Vector<Utils::StringID> sids;
+    Vector<StringID> sids;
     sids.push_back(TextureAssetManager::ErrorTextureSID);
     REQUIRE_NOTHROW(textureAssetManager->RemoveAssets(sids));
     const auto texturesCount = textureAssetManager->GetAssetsCount();
@@ -70,7 +70,7 @@ TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset
     REQUIRE_NOTHROW(errorTextureAsset = &(textureAssetManager->GetAsset(TextureAssetManager::ErrorTextureSID)));
     REQUIRE(errorTextureAsset->GetStringID() == TextureAssetManager::ErrorTextureSID);
 
-    const Utils::StringID garbageSid = 1234;
+    const StringID garbageSid = 1234;
     REQUIRE_NOTHROW(errorTextureAsset = &(textureAssetManager->GetAsset(garbageSid)));
     REQUIRE(errorTextureAsset->GetStringID() == TextureAssetManager::ErrorTextureSID); // still error texture
 
@@ -91,7 +91,7 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
 
     // loading from image
     const auto image = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
-    const Utils::StringID imageSid = 12345UL;
+    const StringID imageSid = 12345UL;
     bool ok = false;
     REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image));
     REQUIRE(ok);
@@ -134,7 +134,7 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
     // try remove texture (vector of sids)
-    Vector<Utils::StringID> sids;
+    Vector<StringID> sids;
     sids.push_back(8888);
     REQUIRE_NOTHROW(textureAssetManager->RemoveAssets(sids));
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL); // not deleted

@@ -35,7 +35,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        SetLocale(Utils::ToStringID(KMP_SID_PARAM(locale)));
+        SetLocale(ToStringID(KMP_SID_PARAM(locale)));
     }
     //--------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        const auto domainSid = Utils::ToStringID(KMP_SID_PARAM(domain));
+        const auto domainSid = ToStringID(KMP_SID_PARAM(domain));
         if (_dictionaryMap.contains(domainSid))
         {
             KMP_LOG_WARN("already contains domain '{}'", domain);
@@ -87,7 +87,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        return RemoveDictionary(Utils::ToStringID(KMP_SID_PARAM(domain)));
+        return RemoveDictionary(ToStringID(KMP_SID_PARAM(domain)));
     }
     //--------------------------------------------------------------------------
 

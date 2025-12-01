@@ -171,7 +171,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<FrameListener*> FrameListenerManager::_FindBySid(Utils::StringID sid)
+    Nullable<FrameListener*> FrameListenerManager::_FindBySid(StringID sid)
     {
         for (auto& [priority, listener] : _listeners)
         {

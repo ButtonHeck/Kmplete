@@ -5,7 +5,7 @@
 
 namespace Kmplete
 {
-    FrameListener::FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid, UInt8 priority)
+    FrameListener::FrameListener(FrameListenerManager& frameListenerManager, const StringID& sid, UInt8 priority)
         : _sid(sid)
         , _frameListenerManager(frameListenerManager)
         , _priority(priority)
@@ -25,7 +25,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Utils::StringID FrameListener::GetSID() const noexcept
+    StringID FrameListener::GetSID() const noexcept
     {
         return _sid;
     }

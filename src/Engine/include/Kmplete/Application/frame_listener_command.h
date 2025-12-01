@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 
 
 namespace Kmplete
@@ -20,7 +20,7 @@ namespace Kmplete
     struct FrameListenerCommand
     {
         FrameListenerCommandCode code;
-        Utils::StringID sid;
+        StringID sid;
     };
     static_assert(IsMoveConstructible<FrameListenerCommand>::value);
 

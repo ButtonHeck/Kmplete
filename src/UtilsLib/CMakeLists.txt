@@ -7,7 +7,6 @@ project(UtilsLib LANGUAGES CXX)
 set(UtilsLib_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_utils.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_id.h
     ${CMAKE_CURRENT_LIST_DIR}/src/string_utils.cpp
 )
 source_group("Utils" FILES ${UtilsLib_SOURCES})

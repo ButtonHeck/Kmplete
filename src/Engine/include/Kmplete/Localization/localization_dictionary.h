@@ -2,7 +2,7 @@
 
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 

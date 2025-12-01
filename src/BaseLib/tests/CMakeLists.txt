@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.20)
 set(BaseLib_UnitTests_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/platform_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/macro_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/string_id_tests.cpp
 )
 
 add_executable(BaseLib_UnitTests

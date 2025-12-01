@@ -30,7 +30,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::CreateAsset(Utils::StringID fontSid, BinaryBuffer&& fontData)
+        bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -50,13 +50,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::CreateAsset(Utils::StringID fontSid, const Filepath& filepath)
+        bool FontAssetManager::CreateAsset(StringID fontSid, const Filepath& filepath)
         {
             return CreateAsset(fontSid, Filesystem::ReadFileAsBinary(filepath));
         }
         //--------------------------------------------------------------------------
 
-        const Assets::FontAsset& FontAssetManager::GetAsset(Utils::StringID fontSid) const
+        const Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -70,7 +70,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Assets::FontAsset& FontAssetManager::GetAsset(Utils::StringID fontSid)
+        Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -84,7 +84,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::RemoveAssets(const Vector<Utils::StringID>& sids)
+        void FontAssetManager::RemoveAssets(const Vector<StringID>& sids)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -101,7 +101,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::RemoveAsset(Utils::StringID sid)
+        bool FontAssetManager::RemoveAsset(StringID sid)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -206,7 +206,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::_AddFontToStorage(Utils::StringID sid, BinaryBuffer&& fontData)
+        bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

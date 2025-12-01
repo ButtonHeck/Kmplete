@@ -3,7 +3,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/macro.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 
 
 namespace Kmplete
@@ -26,7 +26,7 @@ namespace Kmplete
         KMP_BEGIN_PACKED_STRUCT(AssetEntryHeader)
         {
             UByte type;
-            Utils::StringID sid;
+            StringID sid;
             UInt64 bufferSize;
             UInt64 bufferOffset;
         };

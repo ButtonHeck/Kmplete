@@ -42,7 +42,7 @@ namespace Kmplete
         void _ProcessEventsFrameListeners(Events::Event& event);
         void _ProcessFrameListenersCommands();
 
-        Nullable<FrameListener*> _FindBySid(Utils::StringID sid);
+        Nullable<FrameListener*> _FindBySid(StringID sid);
 
     private:
         Map<UInt8, Nullable<FrameListener*>> _listeners;

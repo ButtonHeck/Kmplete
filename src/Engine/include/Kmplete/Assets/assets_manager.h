@@ -32,8 +32,8 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
 
-            KMP_NODISCARD KMP_API bool LoadAssets(const Vector<Utils::StringID>& assetsSids);
-            KMP_NODISCARD KMP_API bool UnloadAssets(const Vector<Utils::StringID>& assetsSids);
+            KMP_NODISCARD KMP_API bool LoadAssets(const Vector<StringID>& assetsSids);
+            KMP_NODISCARD KMP_API bool UnloadAssets(const Vector<StringID>& assetsSids);
 
         private:
             void _Initialize(GraphicsBackendType type);
@@ -42,7 +42,7 @@ namespace Kmplete
             void _LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
             KMP_NODISCARD bool _LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount);
 
-            Vector<AssetLookupInfo> _GetSortedByFileAssetsInfos(const Vector<Utils::StringID>& assetsSids) const;
+            Vector<AssetLookupInfo> _GetSortedByFileAssetsInfos(const Vector<StringID>& assetsSids) const;
             KMP_NODISCARD bool _LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector);
             KMP_NODISCARD bool _LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader);
 
@@ -50,7 +50,7 @@ namespace Kmplete
             const Filepath _dataPath;
             UPtr<TextureAssetManager> _textureAssetManager;
             UPtr<FontAssetManager> _fontAssetManager;
-            HashMap<Utils::StringID, AssetLookupInfo> _lookupMap;
+            HashMap<StringID, AssetLookupInfo> _lookupMap;
         };
         //--------------------------------------------------------------------------
     }

@@ -3,7 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 
 
 namespace Kmplete
@@ -20,10 +20,10 @@ namespace Kmplete
     static constexpr auto LocaleRuUTF8Keyword = "ru_RU.UTF-8";
     static constexpr auto LocaleRuName = "Russian";
 
-    static constexpr auto SidTrInvalidLocale = static_cast<Utils::StringID>(0);
-    static constexpr auto SidTrLocaleEnName = Utils::ToStringID(LocaleEnName);
-    static constexpr auto SidTrLocaleRuName = Utils::ToStringID(LocaleRuName);
-    static constexpr auto SidTrDomainEngine = Utils::ToStringID(KMP_TR_DOMAIN_ENGINE);
+    static constexpr auto SidTrInvalidLocale = static_cast<StringID>(0);
+    static constexpr auto SidTrLocaleEnName = ToStringID(LocaleEnName);
+    static constexpr auto SidTrLocaleRuName = ToStringID(LocaleRuName);
+    static constexpr auto SidTrDomainEngine = ToStringID(KMP_TR_DOMAIN_ENGINE);
 
 
     using LocaleStr = String;
@@ -32,11 +32,11 @@ namespace Kmplete
     using SourceStr = String;
     using TranslationStr = String;
 
-    using LocaleStrSID = Utils::StringID;
-    using DomainStrSID = Utils::StringID;
-    using ContextStrSID = Utils::StringID;
-    using SourceStrSID = Utils::StringID;
-    using TranslationStrSID = Utils::StringID;
+    using LocaleStrSID = StringID;
+    using DomainStrSID = StringID;
+    using ContextStrSID = StringID;
+    using SourceStrSID = StringID;
+    using TranslationStrSID = StringID;
 
 
     enum PluralityForm

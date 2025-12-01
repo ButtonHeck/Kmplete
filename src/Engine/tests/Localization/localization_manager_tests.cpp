@@ -1,6 +1,6 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Utils/string_utils.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Localization/localization_translator.h"
@@ -9,7 +9,7 @@
 
 
 using namespace Kmplete; // for _sid literal and Utils
-static constexpr auto SidTrDomainTests = Utils::ToStringID(KMP_TR_DOMAIN_TESTS);
+static constexpr auto SidTrDomainTests = ToStringID(KMP_TR_DOMAIN_TESTS);
 
 
 TEST_CASE("Locale tests", "[localization][locale]")

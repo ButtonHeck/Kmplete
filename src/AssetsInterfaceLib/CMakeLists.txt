@@ -19,7 +19,6 @@ target_include_directories(AssetsInterfaceLib
 
 target_link_libraries(AssetsInterfaceLib
     INTERFACE BaseLib
-    INTERFACE UtilsLib
 )
 
 set_target_properties(AssetsInterfaceLib PROPERTIES 

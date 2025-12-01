@@ -5,7 +5,7 @@ namespace Kmplete
 {
     namespace Assets
     {
-        Asset::Asset(AssetType type, Utils::StringID sid) noexcept
+        Asset::Asset(AssetType type, StringID sid) noexcept
             : _type(type)
             , _sid(sid)
         {}
@@ -17,7 +17,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Utils::StringID Asset::GetStringID() const noexcept
+        StringID Asset::GetStringID() const noexcept
         {
             return _sid;
         }

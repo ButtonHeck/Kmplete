@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Utils/string_id.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/event_dispatcher.h"
@@ -20,10 +20,10 @@ namespace Kmplete
         KMP_LOG_CLASSNAME(FrameListener)
 
     public:
-        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const Utils::StringID& sid, UInt8 priority);
+        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const StringID& sid, UInt8 priority);
         KMP_API ~FrameListener();
 
-        KMP_NODISCARD KMP_API Utils::StringID GetSID() const noexcept;
+        KMP_NODISCARD KMP_API StringID GetSID() const noexcept;
         KMP_NODISCARD KMP_API UInt8 GetPriority() const noexcept;
 
         KMP_NODISCARD KMP_API bool IsActive() const noexcept;
@@ -38,7 +38,7 @@ namespace Kmplete
         KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
 
     protected:
-        const Utils::StringID _sid;
+        const StringID _sid;
         const UInt8 _priority;
         Events::EventDispatcher _eventDispatcher;
 
