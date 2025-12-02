@@ -8,7 +8,7 @@
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
-#include "Kmplete/Time/timer.h"
+#include "Kmplete/Time/clock.h"
 #include "Kmplete/Base/nullability.h"
 
 
@@ -64,7 +64,7 @@ namespace Kmplete
 
     private:
         GraphicsBackendType _graphicsBackendType;
-        Time::Timer _frameTimer;
+        Time::Clock _frameClock;
     };
     //--------------------------------------------------------------------------
 }

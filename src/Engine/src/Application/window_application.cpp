@@ -24,7 +24,7 @@ namespace Kmplete
         , _assetsManager(nullptr)
         , _frameListenerManager(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
-        , _frameTimer(0)
+        , _frameClock()
     {
         _Initialize(parameters);
 
@@ -99,7 +99,7 @@ namespace Kmplete
         _frameListenerManager = CreateUPtr<FrameListenerManager>();
         KMP_ASSERT(_frameListenerManager);
 
-        _frameTimer.Mark();
+        _frameClock.Mark();
     }
     //--------------------------------------------------------------------------
 
@@ -120,7 +120,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
+        const auto frameTimestep = Math::Clamp(_frameClock.Mark(), 0.0f, 100.0f);
 
         window.FetchEvents();
         _frameListenerManager->_DispatchQueuedEventsToFrameListeners();
