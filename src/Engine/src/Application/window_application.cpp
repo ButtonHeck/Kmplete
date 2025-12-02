@@ -72,7 +72,7 @@ namespace Kmplete
         _SwitchProfilerActivation(event);
 #endif
 
-        _frameListenerManager->_ProcessEventsFrameListeners(event);
+        _frameListenerManager->_DispatchEventToFrameListeners(event);
     }
     //--------------------------------------------------------------------------
 
@@ -123,6 +123,7 @@ namespace Kmplete
         const auto frameTimestep = Math::Clamp(_frameTimer.Mark(), 0.0f, 100.0f);
 
         window.FetchEvents();
+        _frameListenerManager->_DispatchQueuedEventsToFrameListeners();
 
         if (window.ShouldClose())
         {

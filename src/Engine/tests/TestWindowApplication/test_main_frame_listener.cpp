@@ -6,6 +6,7 @@
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Event/event_queue.h"
 
 #include <imgui.h>
 
@@ -42,6 +43,7 @@ namespace Kmplete
         , _windowFramebufferRefreshHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowFramebufferRefreshEvent))
         , _windowFramebufferResizeHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowFramebufferResizeEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowContentScaleEvent))
+        , _customEventHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnCustomEvent))
     {
         Initialize();
     }
@@ -162,6 +164,9 @@ namespace Kmplete
             ImGui::Checkbox("WindowIconify", &_windowIconifyEventInvoked);
             ImGui::Checkbox("FramebufferRefresh", &_windowFramebufferRefreshEventInvoked);
             ImGui::Checkbox("FramebufferResize", &_windowFramebufferResizeEventInvoked);
+
+            ImGui::Separator();
+            ImGui::Checkbox("CustomEvent", &_customEventInvoked);
         }
         ImGui::End(); //Id_EventsWindow
 
@@ -535,6 +540,10 @@ namespace Kmplete
                 SetMouseClickHandlerActive(false);
             }
 
+            if (ImGui::Button("Trigger custom event"))
+            {
+                Events::QueueEvent(CreateUPtr<Events::CustomEvent>());
+            }
         }
         ImGui::End(); //Id_FrameListenersWindow
 

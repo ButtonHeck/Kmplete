@@ -64,6 +64,8 @@ set(Kmplete_EVENT
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler_guard.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_dispatcher.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_queue.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Event/event_queue.cpp
 )
 source_group("Event" FILES ${Kmplete_EVENT})
 

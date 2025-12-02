@@ -17,6 +17,20 @@
 
 namespace Kmplete
 {
+    namespace Events
+    {
+        struct CustomEvent : public Event
+        {
+            EVENT_CLASS_TYPE("CustomEvent")
+
+            CustomEvent() = default;
+
+            int GetTraits() const noexcept override { return 0; }
+        };
+        //--------------------------------------------------------------------------
+    }
+
+
     class TestMainFrameListener : public FrameListener
     {
     public:
@@ -48,6 +62,8 @@ namespace Kmplete
         bool IsWindowIconifyEventInvoked() const { return _windowIconifyEventInvoked; }
         bool IsWindowFramebufferRefreshEventInvoked() const { return _windowFramebufferRefreshEventInvoked; }
         bool IsWindowFramebufferResizeEventInvoked() const { return _windowFramebufferResizeEventInvoked; }
+
+        bool IsCustomEventInvoked() const { return _customEventInvoked; }
 
         bool MousePositionIsNotZero() const;
         bool DPIIsNotZero() const;
@@ -87,6 +103,8 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(Events::WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; return true; }
         KMP_NODISCARD virtual bool OnWindowCloseEvent(Events::WindowCloseEvent&);
 
+        KMP_NODISCARD virtual bool OnCustomEvent(Events::CustomEvent&) { _customEventInvoked = true; return true; }
+
     private:
         SharedState& _sharedState;
         Window& _mainWindow;
@@ -114,6 +132,8 @@ namespace Kmplete
         Events::EventHandlerGuard<Events::WindowFramebufferResizeEvent> _windowFramebufferResizeHandler;
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
 
+        Events::EventHandlerGuard<Events::CustomEvent> _customEventHandler;
+
         bool _switchFontRequested = false;
         bool _useDefaultFont = true;
 
@@ -133,6 +153,8 @@ namespace Kmplete
         bool _windowIconifyEventInvoked = false;
         bool _windowFramebufferRefreshEventInvoked = false;
         bool _windowFramebufferResizeEventInvoked = false;
+
+        bool _customEventInvoked = false;
 
         bool _duplicateSidFrameListenerCheckActivated = false;
         bool _duplicateSidFrameListenerCheckSuccess = false;

@@ -1,4 +1,5 @@
 #include "Kmplete/Application/frame_listener_manager.h"
+#include "Kmplete/Event/event_queue.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Core/assertion.h"
@@ -119,7 +120,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_ProcessEventsFrameListeners(Events::Event& event)
+    void FrameListenerManager::_DispatchEventToFrameListeners(Events::Event& event)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -135,6 +136,20 @@ namespace Kmplete
 
                 listener->OnEvent(event);
             }
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void FrameListenerManager::_DispatchQueuedEventsToFrameListeners()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        auto& eventQueue = Events::EventQueue::Get().GetEvents();
+        for (auto eventIter = eventQueue.begin(); eventIter != eventQueue.end();)
+        {
+            Events::Event& event = *eventIter->get();
+            _DispatchEventToFrameListeners(event);
+            eventIter = eventQueue.erase(eventIter);
         }
     }
     //--------------------------------------------------------------------------

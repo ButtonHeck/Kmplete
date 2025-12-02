@@ -132,6 +132,8 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE_FALSE(application->mainFrameListener->IsWindowFramebufferRefreshEventInvoked());
     REQUIRE_FALSE(application->mainFrameListener->IsWindowFramebufferResizeEventInvoked());
 
+    REQUIRE_FALSE(application->mainFrameListener->IsCustomEventInvoked());
+
     REQUIRE(application->mainFrameListener->DefaultSizeIsNotZero());
     REQUIRE(application->mainFrameListener->DefaultWindowedSizeIsNotZero());
     REQUIRE(application->mainFrameListener->DuplicateSidFrameListenerCheck());
@@ -155,6 +157,8 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application->mainFrameListener->IsWindowIconifyEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowFramebufferRefreshEventInvoked());
     REQUIRE(application->mainFrameListener->IsWindowFramebufferResizeEventInvoked());
+
+    REQUIRE(application->mainFrameListener->IsCustomEventInvoked());
 
     REQUIRE(application->mainFrameListener->MousePositionIsNotZero());
     REQUIRE(application->mainFrameListener->DPIIsNotZero());
