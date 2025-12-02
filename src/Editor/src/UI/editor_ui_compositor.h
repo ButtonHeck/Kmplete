@@ -11,12 +11,16 @@ namespace Kmplete
 {
     class LocalizationManager;
     class SystemMetricsManager;
-    class Timer;
     class SettingsDocument;
 
     namespace Assets
     {
         class AssetsManager;
+    }
+
+    namespace Time
+    {
+        class Timer;
     }
 
 
@@ -30,7 +34,7 @@ namespace Kmplete
         EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
 
         void ComposeMainArea();
-        void ComposeStatusBar(Timer& metricsTimer);
+        void ComposeStatusBar(Time::Timer& metricsTimer);
 
         KMP_NODISCARD bool OnWindowCloseEvent(Events::WindowCloseEvent& event);
         KMP_NODISCARD bool OnKeyPressEvent(Events::KeyPressEvent& event);

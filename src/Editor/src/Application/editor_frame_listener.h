@@ -73,7 +73,7 @@ namespace Kmplete
         Assets::AssetsManager& _assetsManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         UPtr<EditorUICompositor> _uiCompositor;
-        Timer _metricsTimer;
+        Time::Timer _metricsTimer;
 
         Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
         Events::EventHandlerGuard<Events::WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;

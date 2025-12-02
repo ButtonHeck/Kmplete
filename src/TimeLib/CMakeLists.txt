@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 3.20)
 project(TimeLib LANGUAGES CXX)
 
 set(TimeLib_TIME
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Time/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Time/timer.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/clock.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/timer.cpp
 )
 source_group("Time" FILES ${TimeLib_TIME})

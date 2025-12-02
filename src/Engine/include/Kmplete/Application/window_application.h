@@ -64,7 +64,7 @@ namespace Kmplete
 
     private:
         GraphicsBackendType _graphicsBackendType;
-        Timer _frameTimer;
+        Time::Timer _frameTimer;
     };
     //--------------------------------------------------------------------------
 }

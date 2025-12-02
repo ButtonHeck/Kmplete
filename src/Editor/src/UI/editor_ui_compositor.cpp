@@ -237,7 +237,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::ComposeStatusBar(Timer& metricsTimer)
+    void EditorUICompositor::ComposeStatusBar(Time::Timer& metricsTimer)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
