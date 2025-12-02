@@ -24,8 +24,6 @@ namespace Kmplete
             EVENT_CLASS_TYPE("CustomEvent")
 
             CustomEvent() = default;
-
-            int GetTraits() const noexcept override { return 0; }
         };
         //--------------------------------------------------------------------------
     }

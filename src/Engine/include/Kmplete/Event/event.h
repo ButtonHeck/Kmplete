@@ -14,18 +14,6 @@ namespace Kmplete
         using EventTypeID = StringID;
 
 
-        enum EventTrait
-        {
-            None = 0,
-            WindowEventTrait        = 1 << 0,
-            InputEventTrait         = 1 << 1,
-            KeyboardEventTrait      = 1 << 2,
-            MouseEventTrait         = 1 << 3,
-            MouseButtonEventTrait   = 1 << 4
-        };
-        //--------------------------------------------------------------------------
-
-
     #define EVENT_CLASS_TYPE(eventTypeStr) \
         static constexpr EventTypeID TypeID = ToStringID(eventTypeStr); \
         static constexpr const char* TypeName = eventTypeStr; \
@@ -39,15 +27,9 @@ namespace Kmplete
 
             KMP_NODISCARD virtual EventTypeID GetTypeID() const noexcept = 0;
             KMP_NODISCARD virtual const char* GetName() const noexcept = 0;
-            KMP_NODISCARD virtual int GetTraits() const noexcept = 0;
             KMP_NODISCARD virtual String ToString() const
             {
                 return GetName();
-            }
-
-            KMP_NODISCARD bool HasTrait(EventTrait trait) const noexcept
-            {
-                return GetTraits() & trait;
             }
 
             bool handled = false;

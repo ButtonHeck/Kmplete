@@ -29,11 +29,6 @@ namespace Kmplete
 
         struct WindowEvent : public Event
         {
-            KMP_NODISCARD int GetTraits() const noexcept override
-            {
-                return WindowEventTrait;
-            }
-
         protected:
             WindowEvent() = default;
         };

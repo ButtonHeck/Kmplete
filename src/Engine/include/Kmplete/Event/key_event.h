@@ -20,11 +20,6 @@ namespace Kmplete
 
         struct KeyEvent : public Event
         {
-            KMP_NODISCARD int GetTraits() const noexcept override
-            {
-                return KeyboardEventTrait | InputEventTrait;
-            }
-
             KMP_NODISCARD KeyCode GetKeyCode() const noexcept
             {
                 return _keyCode;

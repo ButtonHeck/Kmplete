@@ -24,11 +24,6 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(MouseMoveEventTypeStr)
 
-            KMP_NODISCARD int GetTraits() const noexcept override
-            {
-                return MouseEventTrait | InputEventTrait;
-            }
-
             MouseMoveEvent(float x, float y) noexcept
                 : _x(x)
                 , _y(y)
@@ -60,11 +55,6 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(MouseScrollEventTypeStr)
 
-            KMP_NODISCARD int GetTraits() const noexcept override
-            {
-                return MouseEventTrait | InputEventTrait;
-            }
-
             MouseScrollEvent(float xOffset, float yOffset) noexcept
                 : _xOffset(xOffset)
                 , _yOffset(yOffset)
@@ -94,11 +84,6 @@ namespace Kmplete
 
         struct MouseButtonEvent : public Event
         {
-            KMP_NODISCARD int GetTraits() const noexcept override
-            {
-                return MouseEventTrait | InputEventTrait | MouseButtonEventTrait;
-            }
-
             KMP_NODISCARD MouseCode GetMouseButton() const noexcept
             {
                 return _button;
