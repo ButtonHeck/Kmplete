@@ -1,4 +1,4 @@
-#include "Kmplete/Core/timer.h"
+#include "Kmplete/Time/timer.h"
 #include "Kmplete/Base/pointers.h"
 
 #include <catch2/catch_test_macros.hpp>
@@ -9,7 +9,7 @@
 static constexpr auto timerTimeMs = 200;
 
 
-TEST_CASE("Timer creation nothrow", "[core][timer]")
+TEST_CASE("Timer creation nothrow", "[time][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));
@@ -17,7 +17,7 @@ TEST_CASE("Timer creation nothrow", "[core][timer]")
 //--------------------------------------------------------------------------
 
 
-TEST_CASE("Timer ReachedTimeout is correct", "[core][timer]")
+TEST_CASE("Timer ReachedTimeout is correct", "[time][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));
@@ -33,7 +33,7 @@ TEST_CASE("Timer ReachedTimeout is correct", "[core][timer]")
 //--------------------------------------------------------------------------
 
 
-TEST_CASE("Timer GetTimeout is correct", "[core][timer]")
+TEST_CASE("Timer GetTimeout is correct", "[time][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));
@@ -42,7 +42,7 @@ TEST_CASE("Timer GetTimeout is correct", "[core][timer]")
 //--------------------------------------------------------------------------
 
 
-TEST_CASE("Timer SetTimeout is correct", "[core][timer]")
+TEST_CASE("Timer SetTimeout is correct", "[time][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));
@@ -61,7 +61,7 @@ TEST_CASE("Timer SetTimeout is correct", "[core][timer]")
 //--------------------------------------------------------------------------
 
 
-TEST_CASE("Timer Peek is correct", "[core][timer]")
+TEST_CASE("Timer Peek is correct", "[time][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));
@@ -77,7 +77,7 @@ TEST_CASE("Timer Peek is correct", "[core][timer]")
 //--------------------------------------------------------------------------
 
 
-TEST_CASE("Timer Mark is correct", "[core][timer]")
+TEST_CASE("Timer Mark is correct", "[time][timer]")
 {
     Kmplete::Ptr<Kmplete::Timer> timer = nullptr;
     REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Timer>(timerTimeMs));

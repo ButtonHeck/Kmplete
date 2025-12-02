@@ -8,7 +8,7 @@
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
-#include "Kmplete/Core/timer.h"
+#include "Kmplete/Time/timer.h"
 #include "Kmplete/Base/nullability.h"
 
 

@@ -11,7 +11,6 @@ set(Kmplete_UnitTests_CORE
     ${CMAKE_CURRENT_LIST_DIR}/Core/settings_manager_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/assertion_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/Core/rng_tests.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/Core/timer_tests.cpp
 )
 source_group("Core" FILES ${Kmplete_UnitTests_CORE})
 

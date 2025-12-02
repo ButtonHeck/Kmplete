@@ -26,6 +26,7 @@ add_subdirectory(TranslatorInterfaceLib)
 add_subdirectory(AssetsCompiler)
 add_subdirectory(AssetsInterfaceLib)
 add_subdirectory(AssetsCompilerInterfaceLib)
+add_subdirectory(TimeLib)
 
 if(${KMPLETE_BUILD_TESTS})
     add_custom_target(_BuildAllTests)
@@ -36,6 +37,7 @@ if(${KMPLETE_BUILD_TESTS})
         JsonLib_UnitTests
         UtilsLib_UnitTests
         MathLib_UnitTests
+        TimeLib_UnitTests
 
         Kmplete_UnitTests
         Kmplete_WindowApplicationTests

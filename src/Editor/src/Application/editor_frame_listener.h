@@ -6,7 +6,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Core/settings_document.h"
-#include "Kmplete/Core/timer.h"
+#include "Kmplete/Time/timer.h"
 #include "Kmplete/Event/window_event.h"
 #include "Kmplete/Event/key_event.h"
 #include "Kmplete/Event/event_handler_guard.h"

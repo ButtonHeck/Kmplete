@@ -5,8 +5,8 @@
 
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
-#include "Kmplete/Core/timer.h"
 #include "Kmplete/Core/settings_document.h"
+#include "Kmplete/Time/timer.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Assets/texture_asset_manager.h"
