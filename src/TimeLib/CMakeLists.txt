@@ -7,8 +7,10 @@ project(TimeLib LANGUAGES CXX)
 set(TimeLib_TIME
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Time/clock.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Time/timer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Time/helper_functions.h
     ${CMAKE_CURRENT_LIST_DIR}/src/clock.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/timer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
 )
 source_group("Time" FILES ${TimeLib_TIME})
 

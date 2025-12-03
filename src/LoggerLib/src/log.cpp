@@ -1,6 +1,7 @@
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
 
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Time/helper_functions.h"
 
 #include "spdlog/async.h"
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -9,11 +10,6 @@
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/callback_sink.h>
 #include <spdlog/details/log_msg.h>
-
-#include <chrono>
-#if defined (KMP_PLATFORM_LINUX) || defined (KMP_COMPILER_MINGW)
-    #include <iomanip>
-#endif
 
 
 namespace Kmplete
@@ -65,18 +61,7 @@ namespace Kmplete
 
         spdlog::register_logger(_logger);
 
-        const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-        std::stringstream timeStream;
-
-#if defined (KMP_COMPILER_MSVC)
-        struct tm buf{};
-        localtime_s(&buf, &now);
-        timeStream << std::put_time(&buf, "%F %T");
-#else
-        timeStream << std::put_time(localtime(&now), "%F %T");
-#endif
-
-        Log::Info("---------------------{}---------------------", timeStream.str());
+        Log::Info("---------------------{}---------------------", Time::GetCurrentTimeString());
     }
     //--------------------------------------------------------------------------
 
