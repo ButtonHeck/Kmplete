@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 3.20)
 
 project(Kmplete LANGUAGES CXX)
 
-set(Kmplete_CORE
+add_library(Kmplete)
+
+AddTargetSourcesGroup(Kmplete "Core"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/main.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/uuid.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Core/program_options.h
@@ -22,9 +24,7 @@ set(Kmplete_CORE
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/settings_manager.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Core/system_metrics_manager.cpp
 )
-source_group("Core" FILES ${Kmplete_CORE})
-
-set(Kmplete_APPLICATION
+AddTargetSourcesGroup(Kmplete "Application"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/frame_listener.h
@@ -35,9 +35,7 @@ set(Kmplete_APPLICATION
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/frame_listener.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/frame_listener_manager.cpp
 )
-source_group("Application" FILES ${Kmplete_APPLICATION})
-
-set(Kmplete_WINDOW
+AddTargetSourcesGroup(Kmplete "Window"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Window/window.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Window/window_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Window/window_backend_glfw.h
@@ -50,9 +48,7 @@ set(Kmplete_WINDOW
     ${CMAKE_CURRENT_LIST_DIR}/src/Window/window_glfw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Window/window_cursor_glfw.cpp
 )
-source_group("Window" FILES ${Kmplete_WINDOW})
-
-set(Kmplete_EVENT
+AddTargetSourcesGroup(Kmplete "Event"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_codes.h
@@ -65,9 +61,7 @@ set(Kmplete_EVENT
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_queue.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Event/event_queue.cpp
 )
-source_group("Event" FILES ${Kmplete_EVENT})
-
-set(Kmplete_GRAPHICS
+AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
@@ -81,17 +75,13 @@ set(Kmplete_GRAPHICS
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
 )
-source_group("Graphics" FILES ${Kmplete_GRAPHICS})
-
-set(Kmplete_GRAPHICS_OPENGL
+AddTargetSourcesGroup(Kmplete "Graphics/OpenGL"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_texture.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
 )
-source_group("Graphics/OpenGL" FILES ${Kmplete_GRAPHICS_OPENGL})
-
-set(Kmplete_LOCALIZATION
+AddTargetSourcesGroup(Kmplete "Localization"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_translator.h
@@ -103,9 +93,7 @@ set(Kmplete_LOCALIZATION
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_library.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Localization/localization_dictionary.cpp
 )
-source_group("Localization" FILES ${Kmplete_LOCALIZATION})
-
-set(Kmplete_ASSETS
+AddTargetSourcesGroup(Kmplete "Assets"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/asset.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/font_asset.h
@@ -119,24 +107,9 @@ set(Kmplete_ASSETS
     ${CMAKE_CURRENT_LIST_DIR}/src/Assets/texture_asset.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Assets/texture_asset_manager.cpp
 )
-source_group("Assets" FILES ${Kmplete_ASSETS})
-
-set(Kmplete_INTERNAL
+AddTargetSourcesGroup(Kmplete "Internal"
     ${CMAKE_CURRENT_LIST_DIR}/internal/Kmplete/Internal/default_window_icon_data.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/Kmplete/Internal/error_texture_data.h
-)
-source_group("Internal" FILES ${Kmplete_INTERNAL})
-
-add_library(Kmplete
-    ${Kmplete_CORE}
-    ${Kmplete_APPLICATION}
-    ${Kmplete_WINDOW}
-    ${Kmplete_EVENT}
-    ${Kmplete_GRAPHICS}
-    ${Kmplete_GRAPHICS_OPENGL}
-    ${Kmplete_LOCALIZATION}
-    ${Kmplete_ASSETS}
-    ${Kmplete_INTERNAL}
 )
 
 

@@ -4,14 +4,11 @@ cmake_minimum_required(VERSION 3.20)
 
 project(MathLib LANGUAGES CXX)
 
-set(MathLib_MATH
+add_library(MathLib INTERFACE)
+
+AddTargetSourcesGroup(MathLib "Math"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Math/math.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Math/geometry.h
-)
-source_group("Math" FILES ${MathLib_MATH})
-
-add_library(MathLib INTERFACE
-    ${MathLib_MATH}
 )
 
 #TODO: uncomment after MathLib becomes non header-only and change INTERFACE to PUBLIC/PRIVATE

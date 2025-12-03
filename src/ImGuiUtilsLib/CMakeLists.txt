@@ -4,18 +4,6 @@ cmake_minimum_required(VERSION 3.20)
 
 project(ImGuiUtilsLib LANGUAGES CXX)
 
-set(ImGuiUtilsLib_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/helper_functions.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/scope_guards.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation_glfw_opengl.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/scope_guards.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/implementation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/implementation_glfw_opengl.cpp
-)
-source_group("Utils" FILES ${ImGuiUtilsLib_SOURCES})
-
 aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
 source_group("Imgui" FILES
     ${IMGUI_SOURCES}
@@ -25,11 +13,21 @@ source_group("Imgui" FILES
 )
 
 add_library(ImGuiUtilsLib STATIC
-    ${ImGuiUtilsLib_SOURCES}
     ${IMGUI_SOURCES}
     ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
     ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
+)
+
+AddTargetSourcesGroup(ImGuiUtilsLib "Utils"
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/helper_functions.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/scope_guards.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation_glfw_opengl.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/scope_guards.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/implementation.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/implementation_glfw_opengl.cpp
 )
 
 SetupCompilerOptions(ImGuiUtilsLib)

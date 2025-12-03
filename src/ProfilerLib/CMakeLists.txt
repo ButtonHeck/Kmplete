@@ -7,14 +7,11 @@ project(ProfilerLib LANGUAGES CXX)
 
 # Profiler library for anything but "Production" build
 
-set(ProfilerLib_PROFILE
+add_library(ProfilerLib)
+
+AddTargetSourcesGroup(ProfilerLib "Profile"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler.h
     ${CMAKE_CURRENT_LIST_DIR}/src/profiler.cpp
-)
-source_group("Profile" FILES ${ProfilerLib_PROFILE})
-
-add_library(ProfilerLib
-    ${ProfilerLib_PROFILE}
 )
 
 SetupCompilerOptions(ProfilerLib)
@@ -39,13 +36,10 @@ set_target_properties(ProfilerLib PROPERTIES
 
 # Profiler library for "Production" build
 
-set(ProfilerInterfaceLib_PROFILE
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler.h
-)
-source_group("Profile" FILES ${ProfilerInterfaceLib_PROFILE})
+add_library(ProfilerInterfaceLib INTERFACE)
 
-add_library(ProfilerInterfaceLib INTERFACE
-    ${ProfilerInterfaceLib_PROFILE}
+AddTargetSourcesGroup(ProfilerInterfaceLib "Profile"
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler.h
 )
 
 target_compile_definitions(ProfilerInterfaceLib

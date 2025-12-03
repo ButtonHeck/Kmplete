@@ -7,16 +7,13 @@ project(LoggerLib LANGUAGES CXX)
 
 # Logger library for anything but "Production" build
 
-set(LoggerLib_SOURCES
+add_library(LoggerLib)
+
+AddTargetSourcesGroup(LoggerLib "Log"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log_api.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log_class_macro.h
     ${CMAKE_CURRENT_LIST_DIR}/src/log.cpp
-)
-source_group("Log" FILES ${LoggerLib_SOURCES})
-
-add_library(LoggerLib
-    ${LoggerLib_SOURCES}
 )
 
 SetupCompilerOptions(LoggerLib)
@@ -43,14 +40,11 @@ set_target_properties(LoggerLib PROPERTIES
 
 # Logger library for "Production" build
 
-set(LoggerInterfaceLib_SOURCES
+add_library(LoggerInterfaceLib INTERFACE)
+
+AddTargetSourcesGroup(LoggerInterfaceLib "Log"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Log/log_class_macro.h
-)
-source_group("Log" FILES ${LoggerInterfaceLib_SOURCES})
-
-add_library(LoggerInterfaceLib INTERFACE
-    ${LoggerInterfaceLib_SOURCES}
 )
 
 target_compile_definitions(LoggerInterfaceLib

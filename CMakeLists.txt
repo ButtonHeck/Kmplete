@@ -32,6 +32,7 @@ include(CompilerOptions)
 include(Boost)
 include(Localization)
 include(UnitTestsTargetsSetup)
+include(TargetUtils)
 
 # Dependencies
 add_subdirectory(dependencies)

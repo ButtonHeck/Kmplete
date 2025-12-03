@@ -4,24 +4,6 @@ cmake_minimum_required(VERSION 3.20)
 
 project(Editor LANGUAGES CXX)
 
-set(Editor_APPLICATION
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/localization_base.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.cpp
-)
-source_group("Application" FILES ${Editor_APPLICATION})
-
-set(Editor_UI
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/shortcuts.h
-)
-source_group("UI" FILES ${Editor_UI})
-
 if(WIN32)
     set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
     configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
@@ -34,9 +16,22 @@ if(WIN32)
 endif()
 
 add_executable(Editor
-    ${Editor_APPLICATION}
-    ${Editor_UI}
     ${Editor_WINRC}
+)
+
+AddTargetSourcesGroup(Editor "Application"
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/localization_base.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.cpp
+)
+AddTargetSourcesGroup(Editor "UI"
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/shortcuts.h
 )
 
 SetupCompilerOptions(Editor)

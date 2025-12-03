@@ -4,13 +4,10 @@ cmake_minimum_required(VERSION 3.20)
 
 project(AssetsCompilerInterfaceLib LANGUAGES CXX)
 
-set(AssetsCompilerInterfaceLib_SOURCES
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_compiler_interface.h
-)
-source_group("Assets" FILES ${AssetsInterfaceLib_SOURCES})
+add_library(AssetsCompilerInterfaceLib INTERFACE)
 
-add_library(AssetsCompilerInterfaceLib INTERFACE
-    ${AssetsCompilerInterfaceLib_SOURCES}
+AddTargetSourcesGroup(AssetsCompilerInterfaceLib "Assets"
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Assets/assets_compiler_interface.h
 )
 
 target_include_directories(AssetsCompilerInterfaceLib

@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 3.20)
 
 project(BaseLib LANGUAGES CXX)
 
-set(BaseLib_BASE
+add_library(BaseLib INTERFACE)
+
+AddTargetSourcesGroup(BaseLib "Base"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/kmplete_api.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/platform.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/macro.h
@@ -14,11 +16,6 @@ set(BaseLib_BASE
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/optional.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/type_traits.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/string_id.h
-)
-source_group("Base" FILES ${BaseLib_BASE})
-
-add_library(BaseLib INTERFACE
-    ${BaseLib_BASE}
 )
 
 target_include_directories(BaseLib

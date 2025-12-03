@@ -4,14 +4,11 @@ cmake_minimum_required(VERSION 3.20)
 
 project(FileDialogsLib LANGUAGES CXX)
 
-set(FileDialogsLib_SOURCES
+add_library(FileDialogsLib)
+
+AddTargetSourcesGroup(FileDialogsLib "File Dialogs"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/FileDialogs/file_dialogs.h
     ${CMAKE_CURRENT_LIST_DIR}/src/file_dialogs.cpp
-)
-source_group("File Dialogs" FILES ${FileDialogsLib_SOURCES})
-
-add_library(FileDialogsLib
-    ${FileDialogsLib_SOURCES}
 )
 
 SetupCompilerOptions(FileDialogsLib)

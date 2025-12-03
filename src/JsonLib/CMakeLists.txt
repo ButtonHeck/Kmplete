@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 3.20)
 
 project(JsonLib LANGUAGES CXX)
 
-set(JsonLib_JSON
+add_library(JsonLib)
+
+AddTargetSourcesGroup(JsonLib "Json"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_document.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_reader.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Json/json_writer.h
@@ -13,11 +15,6 @@ set(JsonLib_JSON
     ${CMAKE_CURRENT_LIST_DIR}/src/json_reader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/json_writer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/json_scope.cpp
-)
-source_group("Json" FILES ${JsonLib_JSON})
-
-add_library(JsonLib
-    ${JsonLib_JSON}
 )
 
 SetupCompilerOptions(JsonLib)
