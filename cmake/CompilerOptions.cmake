@@ -1,19 +1,19 @@
 ## ~/cmake/CompilerOptions.cmake
 
 function(SetupCompilerOptions target)
-    target_compile_options(${target} PUBLIC
+    target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
         $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>
         $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX /we4388 $<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
     )
     
     target_compile_definitions(${target}
-        PUBLIC $<$<CONFIG:Debug>:KMP_CONFIG_TYPE_DEBUG>
-        PUBLIC $<$<CONFIG:Release>:KMP_CONFIG_TYPE_RELEASE>
-        PUBLIC $<$<CONFIG:RelWithDebInfo>:KMP_CONFIG_TYPE_RELWITHDEBINFO>
-        PUBLIC $<$<CONFIG:Production>:KMP_CONFIG_TYPE_PRODUCTION>
+        PRIVATE $<$<CONFIG:Debug>:KMP_CONFIG_TYPE_DEBUG>
+        PRIVATE $<$<CONFIG:Release>:KMP_CONFIG_TYPE_RELEASE>
+        PRIVATE $<$<CONFIG:RelWithDebInfo>:KMP_CONFIG_TYPE_RELWITHDEBINFO>
+        PRIVATE $<$<CONFIG:Production>:KMP_CONFIG_TYPE_PRODUCTION>
         
-        PUBLIC $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_BUILD_STATIC>
+        PRIVATE $<$<NOT:$<BOOL:${BUILD_SHARED_LIBS}>>:KMP_BUILD_STATIC>
     )
     
     get_target_property(target_type ${target} TYPE)
