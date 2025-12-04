@@ -21,7 +21,7 @@ namespace Kmplete
 
     public:
         KMP_API FrameListener(FrameListenerManager& frameListenerManager, const StringID& sid, UInt8 priority);
-        KMP_API ~FrameListener();
+        KMP_API virtual ~FrameListener();
 
         KMP_NODISCARD KMP_API StringID GetSID() const noexcept;
         KMP_NODISCARD KMP_API UInt8 GetPriority() const noexcept;

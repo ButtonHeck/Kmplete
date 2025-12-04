@@ -13,7 +13,7 @@ namespace Kmplete
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
         class EventHandlerGuard
         {
-            KMP_DISABLE_COPY_MOVE(EventHandlerGuard<EventClass>)
+            KMP_DISABLE_COPY_MOVE(EventHandlerGuard)
 
         public:
             EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler, bool attachOnCreate = true) noexcept

@@ -29,7 +29,7 @@ namespace Kmplete
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
         class EventHandlerWrapperImpl : public EventHandlerWrapper
         {
-            KMP_DISABLE_COPY_MOVE(EventHandlerWrapperImpl<EventClass>)
+            KMP_DISABLE_COPY_MOVE(EventHandlerWrapperImpl)
 
         public:
             explicit EventHandlerWrapperImpl(const EventHandler<EventClass>& handler) noexcept

@@ -8,6 +8,9 @@
 
 namespace Kmplete
 {
+    class FrameListenerManager;
+
+
     namespace Events
     {
         class EventQueue
@@ -24,7 +27,7 @@ namespace Kmplete
             EventQueue() = default;
             ~EventQueue() = default;
 
-            friend class FrameListenerManager;
+            friend class ::Kmplete::FrameListenerManager;
 
             KMP_NODISCARD Vector<UPtr<Event>>& GetEvents();
 

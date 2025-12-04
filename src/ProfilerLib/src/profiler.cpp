@@ -224,7 +224,7 @@ namespace Kmplete
     ProfilerTimer::ProfilerTimer(const char* name, unsigned int level /*= 0*/)
         : _name(name)
         , _skip(Profiler::Get().GetLevel() < level || !Profiler::Get().IsActive())
-        , _start(_skip ? std::chrono::steady_clock::time_point() : std::chrono::high_resolution_clock::now())
+        , _start(_skip ? std::chrono::high_resolution_clock::time_point() : std::chrono::high_resolution_clock::now())
     {}
     //--------------------------------------------------------------------------
 

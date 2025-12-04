@@ -7,8 +7,8 @@ namespace Kmplete
 {
     FrameListener::FrameListener(FrameListenerManager& frameListenerManager, const StringID& sid, UInt8 priority)
         : _sid(sid)
-        , _frameListenerManager(frameListenerManager)
         , _priority(priority)
+        , _frameListenerManager(frameListenerManager)
         , _active(true)
     {
         if (!_frameListenerManager.AddFrameListener(this))
