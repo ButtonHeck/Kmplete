@@ -4,7 +4,9 @@ cmake_minimum_required(VERSION 3.20)
 
 
 set(TimeLib_UnitTests_TIME
+    ${CMAKE_CURRENT_LIST_DIR}/clock_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timer_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/helper_functions_tests.cpp
 )
 
 add_executable(TimeLib_UnitTests

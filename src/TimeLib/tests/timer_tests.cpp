@@ -59,36 +59,3 @@ TEST_CASE("Timer SetTimeout is correct", "[time][timer]")
     REQUIRE(timer->ReachedTimeout());
 }
 //--------------------------------------------------------------------------
-
-
-TEST_CASE("Timer Peek is correct", "[time][timer]")
-{
-    Kmplete::Ptr<Kmplete::Time::Timer> timer = nullptr;
-    REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Time::Timer>(timerTimeMs));
-
-    REQUIRE((timer->Peek() < timerTimeMs && timer->Peek() > 0));
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(timerTimeMs / 2));
-    REQUIRE((timer->Peek() < timerTimeMs && timer->Peek() > timerTimeMs / 2));
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(timerTimeMs / 2));
-    REQUIRE(timer->Peek() > timerTimeMs);
-}
-//--------------------------------------------------------------------------
-
-
-TEST_CASE("Timer Mark is correct", "[time][timer]")
-{
-    Kmplete::Ptr<Kmplete::Time::Timer> timer = nullptr;
-    REQUIRE_NOTHROW(timer = Kmplete::CreatePtr<Kmplete::Time::Timer>(timerTimeMs));
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(timerTimeMs * 2));
-    auto elapsed = 0.0f;
-    REQUIRE_NOTHROW(elapsed = timer->Mark());
-    REQUIRE(elapsed >= timerTimeMs * 2);
-    REQUIRE_FALSE(timer->ReachedTimeout());
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(timerTimeMs));
-    REQUIRE(timer->ReachedTimeout());
-}
-//--------------------------------------------------------------------------
