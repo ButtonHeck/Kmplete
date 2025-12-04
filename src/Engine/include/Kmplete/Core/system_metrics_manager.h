@@ -24,6 +24,8 @@ namespace Kmplete
             float physicalMemoryUsedMib = 0.0f;
             float cpuUsagePercent = 0.0f;
             float currentThreadStackTotal = 0.0f;
+            float currentThreadStackOverallUsed = 0.0f;
+            float currentThreadStackOverallUsagePercent = 0.0f;
             float currentThreadStackUsed = 0.0f;
             float currentThreadStackUsagePercent = 0.0f;
         };

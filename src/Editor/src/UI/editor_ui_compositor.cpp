@@ -287,9 +287,12 @@ namespace Kmplete
             "CPU: ", currentMetrics.cpuUsagePercent, "%, ",
             "PMem: ", currentMetrics.physicalMemoryUsedMib, "MiB, ",
             "VMem: ", currentMetrics.virtualMemoryUsedMib, "MiB, ",
-            "Stack usage: ", currentMetrics.currentThreadStackUsed, "KiB / ",
+            "Stack usage: [overall: ", currentMetrics.currentThreadStackOverallUsed, "KiB / ",
             currentMetrics.currentThreadStackTotal, "KiB (",
-            currentMetrics.currentThreadStackUsagePercent, "%)").str();
+            currentMetrics.currentThreadStackOverallUsagePercent, "%), ",
+            "current (approx.): ", currentMetrics.currentThreadStackUsed, "KiB / ",
+            currentMetrics.currentThreadStackTotal, "KiB (", 
+            currentMetrics.currentThreadStackUsagePercent, "%)]").str();
 
         ImGui::TextUnformatted(metricsString.c_str());
     }

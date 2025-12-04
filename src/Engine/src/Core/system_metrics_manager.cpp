@@ -457,17 +457,24 @@ namespace Kmplete
 #if defined (KMP_PLATFORM_WINDOWS)
         static constexpr auto KibDivisor = 1024.0f;
 
+        int localVariable = 0;
+        auto* currentEspRegisterValueApproximate = &localVariable;
+
         NT_TIB* threadInformationBlockPtr = (NT_TIB*)NtCurrentTeb();
         void* stackBase = threadInformationBlockPtr->StackBase;
         void* stackLimit = threadInformationBlockPtr->StackLimit;
-        const SIZE_T used = SIZE_T(stackBase) - SIZE_T(stackLimit);
+
+        const SIZE_T overallUsed = SIZE_T(stackBase) - SIZE_T(stackLimit);
+        const SIZE_T currentlyApproximatelyUsed = SIZE_T(stackBase) - SIZE_T(currentEspRegisterValueApproximate);
 
         ULONG_PTR threadStackLowLimit = 0ULL;
         ULONG_PTR threadStackHighLimit = 0ULL;
         GetCurrentThreadStackLimits(&threadStackLowLimit, &threadStackHighLimit);
 
         _systemMetrics.currentThreadStackTotal = static_cast<float>(threadStackHighLimit - threadStackLowLimit) / KibDivisor;
-        _systemMetrics.currentThreadStackUsed = static_cast<float>(used) / KibDivisor;
+        _systemMetrics.currentThreadStackOverallUsed = static_cast<float>(overallUsed) / KibDivisor;
+        _systemMetrics.currentThreadStackOverallUsagePercent = _systemMetrics.currentThreadStackOverallUsed / _systemMetrics.currentThreadStackTotal * 100;
+        _systemMetrics.currentThreadStackUsed = static_cast<float>(currentlyApproximatelyUsed) / KibDivisor;
         _systemMetrics.currentThreadStackUsagePercent = _systemMetrics.currentThreadStackUsed / _systemMetrics.currentThreadStackTotal * 100;
 #else
         // TODO: calculate on Linux
