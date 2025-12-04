@@ -5,10 +5,32 @@
 #include <catch2/catch_test_macros.hpp>
 
 
-TEST_CASE("GetCurrentTimeString default format return non-empty", "[time][clock]")
+TEST_CASE("GetCurrentTimeString default format", "[time][clock]")
 {
     Kmplete::String result;
     REQUIRE_NOTHROW(result = Kmplete::Time::GetCurrentTimeString());
     REQUIRE(!result.empty());
+}
+
+TEST_CASE("GetCurrentTimeString nullptr format", "[time][clock]")
+{
+    Kmplete::String result;
+    REQUIRE_NOTHROW(result = Kmplete::Time::GetCurrentTimeString(nullptr));
+    REQUIRE(result.empty());
+}
+
+TEST_CASE("GetCurrentTimeString empty format", "[time][clock]")
+{
+    Kmplete::String result;
+    REQUIRE_NOTHROW(result = Kmplete::Time::GetCurrentTimeString(""));
+    REQUIRE(result.empty());
+}
+
+TEST_CASE("GetCurrentTimeString invalid format", "[time][clock]")
+{
+    Kmplete::String result;
+    REQUIRE_NOTHROW(result = Kmplete::Time::GetCurrentTimeString("garbage"));
+    REQUIRE(!result.empty());
+    REQUIRE(result == "garbage");
 }
 //--------------------------------------------------------------------------

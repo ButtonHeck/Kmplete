@@ -3,6 +3,7 @@
 
 #include <chrono>
 #include <iomanip>
+#include <sstream>
 
 
 namespace Kmplete
@@ -11,6 +12,11 @@ namespace Kmplete
     {
         String GetCurrentTimeString(const char* format /*= "%F %T"*/)
         {
+            if (format == nullptr)
+            {
+                return String();
+            }
+
             const auto now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
             std::stringstream timeStream;
 
