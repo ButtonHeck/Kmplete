@@ -476,8 +476,6 @@ namespace Kmplete
         _systemMetrics.currentThreadStackOverallUsagePercent = _systemMetrics.currentThreadStackOverallUsed / _systemMetrics.currentThreadStackTotal * 100;
         _systemMetrics.currentThreadStackUsed = static_cast<float>(currentlyApproximatelyUsed) / KibDivisor;
         _systemMetrics.currentThreadStackUsagePercent = _systemMetrics.currentThreadStackUsed / _systemMetrics.currentThreadStackTotal * 100;
-#else
-        // TODO: calculate on Linux
 #endif
 
         return true;
