@@ -154,6 +154,11 @@ target_link_libraries(Kmplete
     PRIVATE freetype
 )
 
+if(UNIX)
+    #libfontconfig1-dev
+    target_link_libraries(Kmplete PRIVATE fontconfig)
+endif()
+
 set_target_properties(Kmplete PROPERTIES 
     FOLDER Kmplete/Libraries/Engine
 )

@@ -10,6 +10,8 @@
 
 #if defined (KMP_PLATFORM_WINDOWS)
     #include <windows.h>
+#elif defined (KMP_PLATFORM_LINUX)
+    #include <fontconfig/fontconfig.h>
 #endif
 
 
@@ -172,16 +174,18 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-#if defined (KMP_PLATFORM_WINDOWS)
+            static constexpr auto DefaultFontSize = 18;
+
             if (_fonts.contains(DefaultFontSID))
             {
                 KMP_LOG_WARN("default font already created");
                 return false;
             }
 
+#if defined (KMP_PLATFORM_WINDOWS)
             auto hdc = GetDC(NULL);
             const auto fontDescriptor = CreateFont(
-                18, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+                DefaultFontSize, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                 DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial");
 
@@ -200,8 +204,54 @@ namespace Kmplete
 
             return _AddFontToStorage(DefaultFontSID, std::move(fontData));
 #else
-            //TODO: make similar in Linux (at least)
-            return true;
+            if (!FcInit())
+            {
+                KMP_LOG_ERROR("failed to initialize Fontconfig library");
+                return false;
+            }
+
+            auto* pattern = FcPatternCreate();
+            FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)"ubuntu");
+            FcPatternAddInteger(pattern, FC_SIZE, DefaultFontSize);
+
+            auto* config = FcConfigGetCurrent();
+
+            FcResult result;
+            auto* match = FcFontMatch(config, pattern, &result);
+            if (!match)
+            {
+                KMP_LOG_ERROR("failed to find default 'ubuntu' font");
+                FcPatternDestroy(pattern);
+                FcFini();
+                return false;
+            }
+
+            FcChar8* fcFilepath;
+            if (FcPatternGetString(match, FC_FILE, 0, &fcFilepath) != FcResultMatch)
+            {
+                KMP_LOG_ERROR("failed to get default font path");
+                FcPatternDestroy(match);
+                FcPatternDestroy(pattern);
+                FcFini();
+                return false;
+            }
+
+            const auto filepath = String(reinterpret_cast<char*>(fcFilepath));
+            BinaryBuffer fontData = Filesystem::ReadFileAsBinary(filepath);
+            if (fontData.empty())
+            {
+                KMP_LOG_ERROR("failed to get font buffer");
+                FcPatternDestroy(match);
+                FcPatternDestroy(pattern);
+                FcFini();
+                return false;
+            }
+
+            FcPatternDestroy(match);
+            FcPatternDestroy(pattern);
+            FcFini();
+
+            return _AddFontToStorage(DefaultFontSID, std::move(fontData));
 #endif
         }
         //--------------------------------------------------------------------------
