@@ -28,7 +28,7 @@ struct WindowCallbackUserSingleCondition
         else if (evt.GetTypeID() == "KeyPressEvent"_sid)
         {
             auto keyEvent = static_cast<Events::KeyPressEvent&>(evt);
-            if (keyEvent.GetKeyCode() == Kmplete::Key::Y)
+            if (keyEvent.GetKeyCode() == Kmplete::Input::Key::Y)
             {
                 conditionOk = true;
             }

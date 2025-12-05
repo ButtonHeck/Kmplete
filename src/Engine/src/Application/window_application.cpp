@@ -198,7 +198,7 @@ namespace Kmplete
         const auto& keyPressedEvent = dynamic_cast<Events::KeyPressEvent&>(event);
         const auto code = keyPressedEvent.GetKeyCode();
         const auto mods = keyPressedEvent.GetMods();
-        if (code == Key::F11 && mods & Mode::Alt)
+        if (code == Input::Key::F11 && mods & Input::Mode::Alt)
         {
             const auto isProfilerActive = Profiler::Get().IsActive();
             Profiler::Get().SetActive(!isProfilerActive);

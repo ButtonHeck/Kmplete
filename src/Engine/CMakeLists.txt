@@ -51,15 +51,17 @@ AddTargetSourcesGroup(Kmplete "Window"
 AddTargetSourcesGroup(Kmplete "Event"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_event.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_codes.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_event.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_codes.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/window_event.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler_guard.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_dispatcher.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_queue.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Event/event_queue.cpp
+)
+AddTargetSourcesGroup(Kmplete "Input"
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/key_codes.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/mouse_codes.h
 )
 AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h

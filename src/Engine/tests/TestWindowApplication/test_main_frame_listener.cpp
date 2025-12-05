@@ -600,7 +600,7 @@ namespace Kmplete
     bool TestMainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)
     {
         _mouseButtonPressEventInvoked = true;
-        if (evt.GetMouseButton() == Mouse::ButtonLeft && evt.GetMods() & Mode::Ctrl)
+        if (evt.GetMouseButton() == Input::Mouse::ButtonLeft && evt.GetMods() & Input::Mode::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {
@@ -611,7 +611,7 @@ namespace Kmplete
                 _mainWindow.SetCursorMode(Window::CursorMode::Default);
             }
         }
-        else if (evt.GetMouseButton() == Mouse::ButtonRight && evt.GetMods() & Mode::Ctrl)
+        else if (evt.GetMouseButton() == Input::Mouse::ButtonRight && evt.GetMods() & Input::Mode::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {

@@ -5,8 +5,8 @@
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Event/mouse_event.h"
-#include "Kmplete/Event/key_codes.h"
 #include "Kmplete/Event/event_handler_guard.h"
+#include "Kmplete/Input/key_codes.h"
 
 
 namespace Kmplete
@@ -68,7 +68,7 @@ namespace Kmplete
                 sharedState.eventProcessingString += delegate->GetValue();
             }
 
-            if (event.GetMods() & Mode::Alt)
+            if (event.GetMods() & Input::Mode::Alt)
             {
                 if (delegate)
                 {

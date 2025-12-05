@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Event/event.h"
-#include "Kmplete/Event/key_codes.h"
+#include "Kmplete/Input/key_codes.h"
 #include "Kmplete/Utils/string_utils.h"
 
 
@@ -20,18 +20,18 @@ namespace Kmplete
 
         struct KeyEvent : public Event
         {
-            KMP_NODISCARD KeyCode GetKeyCode() const noexcept
+            KMP_NODISCARD Input::KeyCode GetKeyCode() const noexcept
             {
                 return _keyCode;
             }
 
         protected:
-            explicit KeyEvent(const KeyCode keyCode) noexcept
+            explicit KeyEvent(const Input::KeyCode keyCode) noexcept
                 : _keyCode(keyCode)
             {}
 
         protected:
-            const KeyCode _keyCode;
+            const Input::KeyCode _keyCode;
         };
         //--------------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(KeyPressEventTypeStr)
 
-            KeyPressEvent(const KeyCode keyCode, int mods, bool repeat = false) noexcept
+            KeyPressEvent(const Input::KeyCode keyCode, int mods, bool repeat = false) noexcept
                 : KeyEvent(keyCode)
                 , _mods(mods)
                 , _repeat(repeat)
@@ -72,7 +72,7 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(KeyReleaseEventTypeStr)
 
-            explicit KeyReleaseEvent(const KeyCode keyCode) noexcept
+            explicit KeyReleaseEvent(const Input::KeyCode keyCode) noexcept
                 : KeyEvent(keyCode)
             {}
 
@@ -88,7 +88,7 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(KeyCharEventTypeStr)
 
-            explicit KeyCharEvent(const KeyCode keyCode) noexcept
+            explicit KeyCharEvent(const Input::KeyCode keyCode) noexcept
                 : KeyEvent(keyCode)
             {}
 
