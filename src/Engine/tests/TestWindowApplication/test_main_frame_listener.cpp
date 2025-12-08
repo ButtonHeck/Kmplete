@@ -413,6 +413,18 @@ namespace Kmplete
                 mouseButtonsString = Utils::StringVectorToString(mouseButtonsPressed, '+', false);
             }
             ImGui::Text("Mouse buttons pressed: %s", mouseButtonsString.c_str());
+
+            StringVector keysPressedStringVector;
+            String keysPressedString = "";
+            for (const auto& key : _keysPressed)
+            {
+                keysPressedStringVector.push_back(Input::GetKeyCodeName(key));
+            }
+            if (!keysPressedStringVector.empty())
+            {
+                keysPressedString = Utils::StringVectorToString(keysPressedStringVector, ',', false);
+            }
+            ImGui::Text("Keys pressed: %s", keysPressedString.c_str());
         }
         ImGui::End(); //Id_InfoWindow
 
@@ -699,6 +711,22 @@ namespace Kmplete
         {
             _mouseButtonPressedHandler.Detach();
         }
+    }
+
+    bool TestMainFrameListener::OnKeyPressEvent(Events::KeyPressEvent& event)
+    {
+        _keyPressEventInvoked = true;
+        _keyPressEventInvokedCount++;
+        _keysPressed.insert(event.GetKeyCode());
+        return true;
+    }
+
+    bool TestMainFrameListener::OnKeyReleaseEvent(Events::KeyReleaseEvent& event)
+    {
+        _keyReleaseEventInvoked = true;
+        _keyReleaseEventInvokedCount++;
+        _keysPressed.erase(std::find(_keysPressed.begin(), _keysPressed.end(), event.GetKeyCode()));
+        return true;
     }
 
     bool TestMainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)

@@ -83,8 +83,8 @@ namespace Kmplete
         void SetMouseClickHandlerActive(bool active);
 
     protected:
-        KMP_NODISCARD virtual bool OnKeyPressEvent(Events::KeyPressEvent&) { _keyPressEventInvoked = true; _keyPressEventInvokedCount++; return true; }
-        KMP_NODISCARD virtual bool OnKeyReleaseEvent(Events::KeyReleaseEvent&) { _keyReleaseEventInvoked = true; _keyReleaseEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnKeyPressEvent(Events::KeyPressEvent&);
+        KMP_NODISCARD virtual bool OnKeyReleaseEvent(Events::KeyReleaseEvent&);
         KMP_NODISCARD virtual bool OnKeyCharEvent(Events::KeyCharEvent&) { _keyCharEventInvoked = true; _keyCharEventInvokedCount++; return true; }
 
         KMP_NODISCARD virtual bool OnMouseMoveEvent(Events::MouseMoveEvent&) { _mouseMoveEventInvoked = true; _mouseMoveEventInvokedCount++; return true; }
@@ -175,6 +175,8 @@ namespace Kmplete
         bool _duplicateSidFrameListenerCheckSuccess = false;
         bool _duplicatePriorityFrameListenerCheckActivated = false;
         bool _duplicatePriorityFrameListenerCheckSuccess = false;
+
+        HashSet<Input::KeyCode> _keysPressed;
     };
     //--------------------------------------------------------------------------
 }
