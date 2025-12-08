@@ -38,13 +38,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        String StringVectorToString(const StringVector& stringVector, char delimiter)
+        String StringVectorToString(const StringVector& stringVector, char delimiter, bool startWithDelimiter /*= true*/)
         {
-            return StringVectorToString(stringVector, String({delimiter}));
+            return StringVectorToString(stringVector, String({delimiter}), startWithDelimiter);
         }
         //--------------------------------------------------------------------------
 
-        String StringVectorToString(const StringVector& stringVector, const String& delimiter)
+        String StringVectorToString(const StringVector& stringVector, const String& delimiter, bool startWithDelimiter /*= true*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
 
@@ -54,10 +54,20 @@ namespace Kmplete
                 return "";
             }
 
-            return std::accumulate(stringVector.begin(), stringVector.end(), String(),
-                [&delimiter](const String& a, const String& b) {
-                    return b.empty() ? a : (a + delimiter + b);
-                });
+            if (startWithDelimiter)
+            {
+                return std::accumulate(stringVector.begin(), stringVector.end(), String(),
+                    [&delimiter](const String& a, const String& b) {
+                        return b.empty() ? a : (a + delimiter + b);
+                    });
+            }
+            else
+            {
+                return std::accumulate(std::next(stringVector.begin()), stringVector.end(), stringVector[0],
+                    [&delimiter](const String& a, const String& b) {
+                        return b.empty() ? a : (a + delimiter + b);
+                    });
+            }
         }
         //--------------------------------------------------------------------------
 
