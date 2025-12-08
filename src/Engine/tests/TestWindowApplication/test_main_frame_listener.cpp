@@ -348,6 +348,71 @@ namespace Kmplete
             {
                 ImGui::Text("Cursor mode: Disabled");
             }
+
+            const auto keyMods = _inputManager->GetKeyModes();
+            StringVector keyModsStringVector;
+            if (keyMods & Input::Mode::Alt)
+            {
+                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Alt));
+            }
+            if (keyMods & Input::Mode::Shift)
+            {
+                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Shift));
+            }
+            if (keyMods & Input::Mode::Ctrl)
+            {
+                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Ctrl));
+            }
+            if (keyMods & Input::Mode::Super)
+            {
+                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Super));
+            }
+            String keyModsString = "";
+            if (!keyModsStringVector.empty())
+            {
+                keyModsString = Utils::StringVectorToString(keyModsStringVector, '+', false);
+            }
+            ImGui::Text("Key mods: %s", keyModsString.c_str());
+
+            StringVector mouseButtonsPressed;
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button0))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button0));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button1))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button1));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button2))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button2));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button3))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button3));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button4))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button4));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button5))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button5));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button6))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button6));
+            }
+            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button7))
+            {
+                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button7));
+            }
+            String mouseButtonsString = "";
+            if (!mouseButtonsPressed.empty())
+            {
+                mouseButtonsString = Utils::StringVectorToString(mouseButtonsPressed, '+', false);
+            }
+            ImGui::Text("Mouse buttons pressed: %s", mouseButtonsString.c_str());
         }
         ImGui::End(); //Id_InfoWindow
 
