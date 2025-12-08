@@ -8,6 +8,7 @@
 #include <unordered_set>
 #include <map>
 #include <set>
+#include <array>
 
 
 namespace Kmplete
@@ -26,6 +27,9 @@ namespace Kmplete
 
     template<typename Value, typename Comparator = std::less<Value>>
     using Set = std::set<Value, Comparator>;
+
+    template<typename Value, size_t Size>
+    using Array = std::array<Value, Size>;
 
     using String = std::string;
     using WString = std::wstring;

@@ -10,6 +10,7 @@
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Time/clock.h"
 #include "Kmplete/Base/nullability.h"
+#include "Kmplete/Input/input_manager.h"
 
 
 namespace Kmplete
@@ -59,6 +60,7 @@ namespace Kmplete
     protected:
         UPtr<WindowBackend> _windowBackend;
         UPtr<GraphicsBackend> _graphicsBackend;
+        UPtr<Input::InputManager> _inputManager;
         UPtr<Assets::AssetsManager> _assetsManager;
         UPtr<FrameListenerManager> _frameListenerManager;
 

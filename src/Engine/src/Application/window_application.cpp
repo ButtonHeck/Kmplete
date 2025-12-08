@@ -21,6 +21,7 @@ namespace Kmplete
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _windowBackend(nullptr)
         , _graphicsBackend(nullptr)
+        , _inputManager(nullptr)
         , _assetsManager(nullptr)
         , _frameListenerManager(nullptr)
         , _graphicsBackendType(GraphicsBackendType::OpenGL)
@@ -72,6 +73,8 @@ namespace Kmplete
         _SwitchProfilerActivation(event);
 #endif
 
+        _inputManager->OnEvent(event);
+
         _frameListenerManager->_DispatchEventToFrameListeners(event);
     }
     //--------------------------------------------------------------------------
@@ -93,6 +96,9 @@ namespace Kmplete
         _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_graphicsBackend);
 
+        _inputManager = CreateUPtr<Input::InputManager>();
+        KMP_ASSERT(_inputManager);
+
         _assetsManager = CreateUPtr<Assets::AssetsManager>(_applicationPath, _graphicsBackend->GetType());
         KMP_ASSERT(_assetsManager);
 
@@ -111,6 +117,7 @@ namespace Kmplete
 
         _frameListenerManager.reset();
         _assetsManager.reset();
+        _inputManager.reset();
         _graphicsBackend.reset();
         _windowBackend.reset();
     }

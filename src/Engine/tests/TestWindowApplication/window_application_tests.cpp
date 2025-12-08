@@ -37,7 +37,7 @@ namespace Kmplete
             _frameListener2.reset(new TestFrameListener2(*_frameListenerManager.get(), _sharedState));
             _frameListener3.reset(new TestFrameListener3(*_frameListenerManager.get(), _sharedState));
             _frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
-            mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get()));
+            mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get(), _inputManager.get()));
 
             _frameListenersCountOk = _frameListenerManager->FrameListenersCount() == 5;
             _frameListenerManager->SetCreateDeleteCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));

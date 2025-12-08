@@ -20,7 +20,7 @@ namespace Kmplete
     static constexpr auto Id_FrameListenersWindow = "FrameListenersInfoWindow";
 
 
-    TestMainFrameListener::TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend)
+    TestMainFrameListener::TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, 10ULL, 10)
         , _sharedState(sharedState)
         , _mainWindow(mainWindow)
@@ -28,6 +28,7 @@ namespace Kmplete
         , _assetsManager(assetsManager)
         , _graphicsBackend(graphicsBackend)
         , _windowBackend(windowBackend)
+        , _inputManager(inputManager)
         , _keyPressHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnKeyPressEvent))
         , _keyReleaseHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnKeyReleaseEvent))
         , _keyCharHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnKeyCharEvent))

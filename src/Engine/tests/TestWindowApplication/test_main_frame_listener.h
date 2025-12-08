@@ -13,6 +13,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Window/window_backend.h"
 #include "Kmplete/ImGui/implementation.h"
+#include "Kmplete/Input/input_manager.h"
 
 
 namespace Kmplete
@@ -32,7 +33,7 @@ namespace Kmplete
     class TestMainFrameListener : public FrameListener
     {
     public:
-        TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend);
+        TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager);
 
         void Initialize();
 
@@ -111,6 +112,7 @@ namespace Kmplete
         Assets::AssetsManager* _assetsManager;
         GraphicsBackend* _graphicsBackend;
         WindowBackend* _windowBackend;
+        Input::InputManager* _inputManager;
 
         Events::EventHandlerGuard<Events::KeyPressEvent> _keyPressHandler;
         Events::EventHandlerGuard<Events::KeyReleaseEvent> _keyReleaseHandler;

@@ -20,6 +20,7 @@ namespace Kmplete
                 Button5 = 5,
                 Button6 = 6,
                 Button7 = 7,
+                NumButtons,
 
                 ButtonLast = Button7,
                 ButtonLeft = Button0,
