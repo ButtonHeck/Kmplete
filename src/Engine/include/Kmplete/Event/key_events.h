@@ -72,14 +72,23 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(KeyReleaseEventTypeStr)
 
-            explicit KeyReleaseEvent(const Input::KeyCode keyCode) noexcept
+            explicit KeyReleaseEvent(const Input::KeyCode keyCode, int mods) noexcept
                 : KeyEvent(keyCode)
+                , _mods(mods)
             {}
+
+            KMP_NODISCARD int GetMods() const noexcept
+            {
+                return _mods;
+            }
 
             KMP_NODISCARD String ToString() const override
             {
                 return Utils::Concatenate("KeyReleaseEvent: ", _keyCode);
             }
+
+        private:
+            const int _mods;
         };
         //--------------------------------------------------------------------------
 

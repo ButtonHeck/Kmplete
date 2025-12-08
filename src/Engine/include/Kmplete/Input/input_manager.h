@@ -30,10 +30,14 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(MouseCode mouseCode) const;
+            KMP_NODISCARD KMP_API KeyMode GetKeyModes() const noexcept;
+            KMP_NODISCARD KMP_API bool IsKeyButtonPressed(KeyCode keyCode) const;
 
         private:
             Math::Point2I _mousePosition;
             Array<bool, Mouse::NumButtons> _mouseButtonsStates;
+            Array<bool, Key::NumKeys> _keyButtonsStates;
+            KeyMode _keyModes;
         };
         //--------------------------------------------------------------------------
     }

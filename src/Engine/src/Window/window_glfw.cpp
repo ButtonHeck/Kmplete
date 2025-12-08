@@ -677,7 +677,7 @@ namespace Kmplete
                 }
                 case GLFW_RELEASE:
                 {
-                    Events::KeyReleaseEvent event(key);
+                    Events::KeyReleaseEvent event(key, mods);
                     userData->eventCallback(event);
                     break;
                 }
