@@ -149,25 +149,63 @@ namespace Kmplete
         {
             const auto disableGuard = ImGuiUtils::DisableGuard(true);
             ImGui::Checkbox("KeyPress", &_keyPressEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _keyPressEventInvokedCount);
+
             ImGui::Checkbox("KeyRelease", &_keyReleaseEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _keyReleaseEventInvokedCount);
+
             ImGui::Checkbox("KeyChar", &_keyCharEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _keyCharEventInvokedCount);
 
             ImGui::Separator();
             ImGui::Checkbox("MouseMove", &_mouseMoveEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _mouseMoveEventInvokedCount);
+
             ImGui::Checkbox("MouseScroll", &_mouseScrollEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _mouseScrollEventInvokedCount);
+
             ImGui::Checkbox("MousePress", &_mouseButtonPressEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _mouseButtonPressEventInvokedCount);
+
             ImGui::Checkbox("MouseRelease", &_mouseButtonReleaseEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _mouseButtonReleaseEventInvokedCount);
 
             ImGui::Separator();
             ImGui::Checkbox("WindowMove", &_windowMoveEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _windowMoveEventInvokedCount);
+
             ImGui::Checkbox("WindowResize", &_windowResizeEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _windowResizeEventInvokedCount);
+
             ImGui::Checkbox("WindowFocus", &_windowFocusEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _windowFocusEventInvokedCount);
+
             ImGui::Checkbox("WindowIconify", &_windowIconifyEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _windowIconifyEventInvokedCount);
+
             ImGui::Checkbox("FramebufferRefresh", &_windowFramebufferRefreshEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _windowFramebufferRefreshEventInvokedCount);
+
             ImGui::Checkbox("FramebufferResize", &_windowFramebufferResizeEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _windowFramebufferResizeEventInvokedCount);
 
             ImGui::Separator();
             ImGui::Checkbox("CustomEvent", &_customEventInvoked);
+            ImGui::SameLine();
+            ImGui::Text("%d", _customEventInvokedCount);
         }
         ImGui::End(); //Id_EventsWindow
 
@@ -601,6 +639,7 @@ namespace Kmplete
     bool TestMainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)
     {
         _mouseButtonPressEventInvoked = true;
+        _mouseButtonPressEventInvokedCount++;
         if (evt.GetMouseButton() == Input::Mouse::ButtonLeft && evt.GetMods() & Input::Mode::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
@@ -632,6 +671,7 @@ namespace Kmplete
     bool TestMainFrameListener::OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
     {
         _windowFramebufferRefreshEventInvoked = true;
+        _windowFramebufferRefreshEventInvokedCount++;
         Render();
         return true;
     }
