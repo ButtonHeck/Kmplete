@@ -1,7 +1,7 @@
 #include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Event/event.h"
-#include "Kmplete/Event/mouse_event.h"
-#include "Kmplete/Event/key_event.h"
+#include "Kmplete/Event/mouse_events.h"
+#include "Kmplete/Event/key_events.h"
 
 
 namespace Kmplete

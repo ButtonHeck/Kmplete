@@ -2,9 +2,9 @@
 #include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
-#include "Kmplete/Event/window_event.h"
-#include "Kmplete/Event/key_event.h"
-#include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Event/window_events.h"
+#include "Kmplete/Event/key_events.h"
+#include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Math/geometry.h"
 

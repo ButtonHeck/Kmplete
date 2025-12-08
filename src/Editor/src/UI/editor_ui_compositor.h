@@ -2,8 +2,8 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Window/window.h"
-#include "Kmplete/Event/window_event.h"
-#include "Kmplete/Event/key_event.h"
+#include "Kmplete/Event/window_events.h"
+#include "Kmplete/Event/key_events.h"
 #include "Kmplete/Profile/profiler.h"
 
 

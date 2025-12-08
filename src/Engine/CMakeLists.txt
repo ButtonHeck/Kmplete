@@ -50,9 +50,9 @@ AddTargetSourcesGroup(Kmplete "Window"
 )
 AddTargetSourcesGroup(Kmplete "Event"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_event.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_event.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/window_event.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/key_events.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/mouse_events.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/window_events.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_handler_guard.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Event/event_dispatcher.h

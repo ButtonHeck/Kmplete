@@ -2,8 +2,8 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/FileDialogs/file_dialogs.h"
 #include "Kmplete/Event/event.h"
-#include "Kmplete/Event/window_event.h"
-#include "Kmplete/Event/key_event.h"
+#include "Kmplete/Event/window_events.h"
+#include "Kmplete/Event/key_events.h"
 #include "Kmplete/Event/event_dispatcher.h"
 #include "Kmplete/Utils/function_utils.h"
 

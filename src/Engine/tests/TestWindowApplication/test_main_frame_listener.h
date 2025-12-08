@@ -4,9 +4,9 @@
 
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Event/event.h"
-#include "Kmplete/Event/window_event.h"
-#include "Kmplete/Event/key_event.h"
-#include "Kmplete/Event/mouse_event.h"
+#include "Kmplete/Event/window_events.h"
+#include "Kmplete/Event/key_events.h"
+#include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
