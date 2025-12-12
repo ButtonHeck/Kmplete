@@ -55,7 +55,7 @@ namespace Kmplete
         void _LoadSettings();
 
 #if defined KMP_PROFILE
-        void _SwitchProfilerActivation(Events::Event& event);
+        void _SwitchProfilerActivation();
 #endif
 
     protected:

@@ -69,12 +69,7 @@ namespace Kmplete
 
     void WindowApplication::OnEvent(Events::Event& event)
     {
-#if defined KMP_PROFILE
-        _SwitchProfilerActivation(event);
-#endif
-
         _inputManager->ProcessInputEvents(event);
-
         _frameListenerManager->_DispatchEventToFrameListeners(event);
     }
     //--------------------------------------------------------------------------
@@ -104,6 +99,20 @@ namespace Kmplete
 
         _frameListenerManager = CreateUPtr<FrameListenerManager>();
         KMP_ASSERT(_frameListenerManager);
+
+#if defined KMP_PROFILE
+        _inputManager->MapInputToAction(Input::Key::F11, "switch_profiler_activity"_sid);
+        _inputManager->AddActionCallback("switch_profiler_activity"_sid, Input::ActionCallbackWrapper{
+            .id = "WindowApplication"_sid,
+            .callback = [this](Input::InputControlValue value) {
+                if (value != 0.0f && _inputManager->GetKeyModifiersMask() & Input::Modifier::Alt)
+                {
+                    _SwitchProfilerActivation();
+                }
+                return true;
+            }
+            });
+#endif
 
         _frameClock.Mark();
     }
@@ -202,23 +211,12 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 #if defined KMP_PROFILE
-    void WindowApplication::_SwitchProfilerActivation(Events::Event& event)
+    void WindowApplication::_SwitchProfilerActivation()
     {
-        if (event.GetTypeID() != Events::KeyPressEventTypeID)
-        {
-            return;
-        }
+        const auto isProfilerActive = Profiler::Get().IsActive();
+        Profiler::Get().SetActive(!isProfilerActive);
 
-        const auto& keyPressedEvent = dynamic_cast<Events::KeyPressEvent&>(event);
-        const auto code = keyPressedEvent.GetKeyCode();
-        const auto mods = keyPressedEvent.GetMods();
-        if (code == Input::Key::F11 && mods & Input::Modifier::Alt)
-        {
-            const auto isProfilerActive = Profiler::Get().IsActive();
-            Profiler::Get().SetActive(!isProfilerActive);
-
-            KMP_LOG_INFO("profiling activated: {}", !isProfilerActive);
-        }
+        KMP_LOG_INFO("profiling activated: {}", !isProfilerActive);
     }
     //--------------------------------------------------------------------------
 #endif
