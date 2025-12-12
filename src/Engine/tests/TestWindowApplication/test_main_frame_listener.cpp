@@ -351,21 +351,21 @@ namespace Kmplete
 
             const auto keyMods = _inputManager->GetKeyModifiersMask();
             StringVector keyModsStringVector;
-            if (keyMods & Input::Mode::Alt)
+            if (keyMods & Input::Modifier::Alt)
             {
-                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Alt));
+                keyModsStringVector.push_back(Input::GetKeyModifierName(Input::Modifier::Alt));
             }
-            if (keyMods & Input::Mode::Shift)
+            if (keyMods & Input::Modifier::Shift)
             {
-                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Shift));
+                keyModsStringVector.push_back(Input::GetKeyModifierName(Input::Modifier::Shift));
             }
-            if (keyMods & Input::Mode::Ctrl)
+            if (keyMods & Input::Modifier::Ctrl)
             {
-                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Ctrl));
+                keyModsStringVector.push_back(Input::GetKeyModifierName(Input::Modifier::Ctrl));
             }
-            if (keyMods & Input::Mode::Super)
+            if (keyMods & Input::Modifier::Super)
             {
-                keyModsStringVector.push_back(Input::GetKeyModeName(Input::Mode::Super));
+                keyModsStringVector.push_back(Input::GetKeyModifierName(Input::Modifier::Super));
             }
             String keyModsString = "";
             if (!keyModsStringVector.empty())
@@ -743,7 +743,7 @@ namespace Kmplete
     {
         _mouseButtonPressEventInvoked = true;
         _mouseButtonPressEventInvokedCount++;
-        if (evt.GetMouseButton() == Input::Mouse::ButtonLeft && evt.GetMods() & Input::Mode::Ctrl)
+        if (evt.GetMouseButton() == Input::Mouse::ButtonLeft && evt.GetMods() & Input::Modifier::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {
@@ -754,7 +754,7 @@ namespace Kmplete
                 _mainWindow.SetCursorMode(Window::CursorMode::Default);
             }
         }
-        else if (evt.GetMouseButton() == Input::Mouse::ButtonRight && evt.GetMods() & Input::Mode::Ctrl)
+        else if (evt.GetMouseButton() == Input::Mouse::ButtonRight && evt.GetMods() & Input::Modifier::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {

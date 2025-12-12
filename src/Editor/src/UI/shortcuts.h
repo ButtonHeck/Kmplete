@@ -10,18 +10,18 @@ namespace Kmplete
         struct Shortcut
         {
             const char* text;
-            Input::KeyMode mode;
+            Input::KeyModifier mode;
             Input::KeyCode key;
 
-            inline bool Accept(Input::KeyMode modeArg, Input::KeyCode keyArg) const noexcept
+            inline bool Accept(Input::KeyModifier modeArg, Input::KeyCode keyArg) const noexcept
             {
                 return (this->mode == modeArg && this->key == keyArg);
             }
         };
         //--------------------------------------------------------------------------
 
-        static constexpr auto Quit =        Shortcut{"Ctrl+Q", Input::Mode::Ctrl, Input::Key::Q};
-        static constexpr auto Fullscreen =  Shortcut{"Alt+Enter", Input::Mode::Alt, Input::Key::Enter};
-        static constexpr auto AlwaysOnTop = Shortcut{"Ctrl+T", Input::Mode::Ctrl, Input::Key::T};
+        static constexpr auto Quit =        Shortcut{"Ctrl+Q", Input::Modifier::Ctrl, Input::Key::Q};
+        static constexpr auto Fullscreen =  Shortcut{"Alt+Enter", Input::Modifier::Alt, Input::Key::Enter};
+        static constexpr auto AlwaysOnTop = Shortcut{"Ctrl+T", Input::Modifier::Ctrl, Input::Key::T};
     }
 }

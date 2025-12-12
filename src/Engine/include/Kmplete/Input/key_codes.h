@@ -6,12 +6,12 @@ namespace Kmplete
     namespace Input
     {
         using KeyCode = int;
-        using KeyMode = int;
+        using KeyModifier = int;
 
 
-        namespace Mode
+        namespace Modifier
         {
-            enum : KeyMode
+            enum : KeyModifier
             {
                 None = 0,
                 Shift = 0x0001,
@@ -24,17 +24,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        constexpr const char* GetKeyModeName(KeyMode mode)
+        constexpr const char* GetKeyModifierName(KeyModifier mode)
         {
             switch (mode)
             {
-                case Mode::None:        return "";
-                case Mode::Shift:       return "Shift";
-                case Mode::Ctrl:        return "Ctrl";
-                case Mode::Alt:         return "Alt";
-                case Mode::Super:       return "Super";
-                case Mode::CapsLock:    return "CapsLock";
-                case Mode::NumLock:     return "NumLock";
+                case Modifier::None:        return "";
+                case Modifier::Shift:       return "Shift";
+                case Modifier::Ctrl:        return "Ctrl";
+                case Modifier::Alt:         return "Alt";
+                case Modifier::Super:       return "Super";
+                case Modifier::CapsLock:    return "CapsLock";
+                case Modifier::NumLock:     return "NumLock";
 
                 default: break;
             }

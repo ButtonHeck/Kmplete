@@ -64,7 +64,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(MouseCode mouseCode) const;
-            KMP_NODISCARD KMP_API KeyMode GetKeyModifiersMask() const noexcept;
+            KMP_NODISCARD KMP_API KeyModifier GetKeyModifiersMask() const noexcept;
             KMP_NODISCARD KMP_API bool IsKeyButtonPressed(KeyCode keyCode) const;
 
         private:
@@ -75,7 +75,7 @@ namespace Kmplete
             Math::Point2I _mousePosition;
             Array<InputControlValue, Mouse::NumButtons> _mouseButtonsStates;
             Array<InputControlValue, Key::NumKeys> _keyButtonsStates;
-            KeyMode _modifiersMask;
+            KeyModifier _modifiersMask;
 
             HashMap<InputCode, Vector<ActionIdentifier>> _inputCodeToActionsMap;
             HashMap<ActionIdentifier, Vector<InputCode>> _actionToInputCodesMap;

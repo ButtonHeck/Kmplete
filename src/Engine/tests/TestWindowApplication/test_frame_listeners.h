@@ -63,7 +63,7 @@ namespace Kmplete
         bool OnMouseButtonPressed(Events::MouseButtonPressEvent& event)
         {
             sharedState.eventProcessingString += "1";
-            if (event.GetMods() & Input::Mode::Alt)
+            if (event.GetMods() & Input::Modifier::Alt)
             {
                 if (delegate)
                 {

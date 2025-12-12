@@ -12,7 +12,7 @@ namespace Kmplete
             : _mousePosition(0, 0)
             , _mouseButtonsStates({false})
             , _keyButtonsStates({false})
-            , _modifiersMask(Mode::None)
+            , _modifiersMask(Modifier::None)
             , _inputCodeToActionsMap({})
             , _actionToInputCodesMap({})
             , _actionCallbacks({})
@@ -135,7 +135,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        KeyMode InputManager::GetKeyModifiersMask() const noexcept
+        KeyModifier InputManager::GetKeyModifiersMask() const noexcept
         {
             return _modifiersMask;
         }
