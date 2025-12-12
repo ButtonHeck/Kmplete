@@ -107,7 +107,8 @@ namespace Kmplete
             .callback = [this](Input::InputControlValue value) {
                 if (value != 0.0f && _inputManager->GetKeyModifiersMask() & Input::Modifier::Alt)
                 {
-                    _SwitchProfilerActivation();
+                    const auto isProfilerActive = Profiler::Get().IsActive();
+                    Profiler::Get().SetActive(!isProfilerActive);
                 }
                 return true;
             }
@@ -209,15 +210,4 @@ namespace Kmplete
         _windowBackend->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
-
-#if defined KMP_PROFILE
-    void WindowApplication::_SwitchProfilerActivation()
-    {
-        const auto isProfilerActive = Profiler::Get().IsActive();
-        Profiler::Get().SetActive(!isProfilerActive);
-
-        KMP_LOG_INFO("profiling activated: {}", !isProfilerActive);
-    }
-    //--------------------------------------------------------------------------
-#endif
 }

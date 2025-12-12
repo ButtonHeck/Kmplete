@@ -44,6 +44,7 @@ namespace Kmplete
     void Profiler::SetActive(bool active)
     {
         _active = active;
+        KMP_LOG_INFO("activated: {}", _active);
     }
     //--------------------------------------------------------------------------
 

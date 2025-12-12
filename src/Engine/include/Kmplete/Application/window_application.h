@@ -54,10 +54,6 @@ namespace Kmplete
         void _SaveSettings() const;
         void _LoadSettings();
 
-#if defined KMP_PROFILE
-        void _SwitchProfilerActivation();
-#endif
-
     protected:
         UPtr<WindowBackend> _windowBackend;
         UPtr<GraphicsBackend> _graphicsBackend;
