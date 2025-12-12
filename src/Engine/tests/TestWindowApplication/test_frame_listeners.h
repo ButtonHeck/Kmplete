@@ -47,6 +47,7 @@ namespace Kmplete
             sharedState.existenceMask |= frame1Mask;
 
             delegate = CreateUPtr<TestFrameListener1Delegate>(_eventDispatcher);
+            sharedState.frame1DelegateAlive = true;
         }
 
         ~TestFrameListener1()
@@ -68,6 +69,7 @@ namespace Kmplete
                 if (delegate)
                 {
                     delegate.reset(nullptr);
+                    sharedState.frame1DelegateAlive = false;
                 }
             }
             else
@@ -75,6 +77,7 @@ namespace Kmplete
                 if (delegate == nullptr)
                 {
                     delegate.reset(new TestFrameListener1Delegate(_eventDispatcher));
+                    sharedState.frame1DelegateAlive = true;
                 }
             }
 

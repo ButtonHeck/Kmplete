@@ -1,6 +1,7 @@
 #pragma once
 
 #include "shared_state.h"
+#include "events.h"
 
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Event/event.h"
@@ -18,22 +19,11 @@
 
 namespace Kmplete
 {
-    namespace Events
-    {
-        struct CustomEvent : public Event
-        {
-            EVENT_CLASS_TYPE("CustomEvent")
-
-            CustomEvent() = default;
-        };
-        //--------------------------------------------------------------------------
-    }
-
-
-    class TestMainFrameListener : public FrameListener
+    class MainFrameListener : public FrameListener
     {
     public:
-        TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager);
+        MainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, 
+                          GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager);
 
         void Initialize();
 
@@ -45,24 +35,24 @@ namespace Kmplete
         void SetCustomCursor();
         void SwitchFonts();
 
-        bool IsKeyPressEventInvoked() const { return _keyPressEventInvoked; }
-        bool IsKeyReleaseEventInvoked() const { return _keyReleaseEventInvoked; }
-        bool IsKeyCharEventInvoked() const { return _keyCharEventInvoked; }
+        bool IsKeyPressEventInvoked() const { return _keyPressEventInvokedCount > 0; }
+        bool IsKeyReleaseEventInvoked() const { return _keyReleaseEventInvokedCount > 0; }
+        bool IsKeyCharEventInvoked() const { return _keyCharEventInvokedCount > 0; }
 
-        bool IsMouseMoveEventInvoked() const { return _mouseMoveEventInvoked; }
-        bool IsMouseScrollEventInvoked() const { return _mouseScrollEventInvoked; }
-        bool IsMouseButtonPressEventInvoked() const { return _mouseButtonPressEventInvoked; }
-        bool IsMouseButtonReleaseEventInvoked() const { return _mouseButtonReleaseEventInvoked; }
+        bool IsMouseMoveEventInvoked() const { return _mouseMoveEventInvokedCount > 0; }
+        bool IsMouseScrollEventInvoked() const { return _mouseScrollEventInvokedCount > 0; }
+        bool IsMouseButtonPressEventInvoked() const { return _mouseButtonPressEventInvokedCount > 0; }
+        bool IsMouseButtonReleaseEventInvoked() const { return _mouseButtonReleaseEventInvokedCount > 0; }
 
-        bool IsWindowCloseEventInvoked() const { return _windowCloseEventInvoked; }
-        bool IsWindowMoveEventInvoked() const { return _windowMoveEventInvoked; }
-        bool IsWindowResizeEventInvoked() const { return _windowResizeEventInvoked; }
-        bool IsWindowFocusEventInvoked() const { return _windowFocusEventInvoked; }
-        bool IsWindowIconifyEventInvoked() const { return _windowIconifyEventInvoked; }
-        bool IsWindowFramebufferRefreshEventInvoked() const { return _windowFramebufferRefreshEventInvoked; }
-        bool IsWindowFramebufferResizeEventInvoked() const { return _windowFramebufferResizeEventInvoked; }
+        bool IsWindowCloseEventInvoked() const { return _windowCloseEventInvokedCount > 0; }
+        bool IsWindowMoveEventInvoked() const { return _windowMoveEventInvokedCount > 0; }
+        bool IsWindowResizeEventInvoked() const { return _windowResizeEventInvokedCount > 0; }
+        bool IsWindowFocusEventInvoked() const { return _windowFocusEventInvokedCount > 0; }
+        bool IsWindowIconifyEventInvoked() const { return _windowIconifyEventInvokedCount > 0; }
+        bool IsWindowFramebufferRefreshEventInvoked() const { return _windowFramebufferRefreshEventInvokedCount > 0; }
+        bool IsWindowFramebufferResizeEventInvoked() const { return _windowFramebufferResizeEventInvokedCount > 0; }
 
-        bool IsCustomEventInvoked() const { return _customEventInvoked; }
+        bool IsCustomEventInvoked() const { return _customEventInvokedCount > 0; }
 
         bool MousePositionIsNotZero() const;
         bool DPIIsNotZero() const;
@@ -85,23 +75,23 @@ namespace Kmplete
     protected:
         KMP_NODISCARD virtual bool OnKeyPressEvent(Events::KeyPressEvent&);
         KMP_NODISCARD virtual bool OnKeyReleaseEvent(Events::KeyReleaseEvent&);
-        KMP_NODISCARD virtual bool OnKeyCharEvent(Events::KeyCharEvent&) { _keyCharEventInvoked = true; _keyCharEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnKeyCharEvent(Events::KeyCharEvent&) { _keyCharEventInvokedCount++; return true; }
 
-        KMP_NODISCARD virtual bool OnMouseMoveEvent(Events::MouseMoveEvent&) { _mouseMoveEventInvoked = true; _mouseMoveEventInvokedCount++; return true; }
-        KMP_NODISCARD virtual bool OnMouseScrollEvent(Events::MouseScrollEvent&) { _mouseScrollEventInvoked = true; _mouseScrollEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnMouseMoveEvent(Events::MouseMoveEvent&) { _mouseMoveEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnMouseScrollEvent(Events::MouseScrollEvent&) { _mouseScrollEventInvokedCount++; return true; }
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt);
         KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&);
 
-        KMP_NODISCARD virtual bool OnWindowMoveEvent(Events::WindowMoveEvent&) { _windowMoveEventInvoked = true; _windowMoveEventInvokedCount++; return true; }
-        KMP_NODISCARD virtual bool OnWindowResizeEvent(Events::WindowResizeEvent&) { _windowResizeEventInvoked = true; _windowResizeEventInvokedCount++; return true; }
-        KMP_NODISCARD virtual bool OnWindowFocusEvent(Events::WindowFocusEvent&) { _windowFocusEventInvoked = true; _windowFocusEventInvokedCount++; return true; }
-        KMP_NODISCARD virtual bool OnWindowIconifyEvent(Events::WindowIconifyEvent&) { _windowIconifyEventInvoked = true; _windowIconifyEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnWindowMoveEvent(Events::WindowMoveEvent&) { _windowMoveEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnWindowResizeEvent(Events::WindowResizeEvent&) { _windowResizeEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnWindowFocusEvent(Events::WindowFocusEvent&) { _windowFocusEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnWindowIconifyEvent(Events::WindowIconifyEvent&) { _windowIconifyEventInvokedCount++; return true; }
         KMP_NODISCARD virtual bool OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&);
         KMP_NODISCARD virtual bool OnWindowContentScaleEvent(Events::WindowContentScaleEvent& evt);
-        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(Events::WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvoked = true; _windowFramebufferResizeEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnWindowFramebufferResizeEvent(Events::WindowFramebufferResizeEvent&) { _windowFramebufferResizeEventInvokedCount++; return true; }
         KMP_NODISCARD virtual bool OnWindowCloseEvent(Events::WindowCloseEvent&);
 
-        KMP_NODISCARD virtual bool OnCustomEvent(Events::CustomEvent&) { _customEventInvoked = true; _customEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnCustomEvent(Events::CustomEvent&) { _customEventInvokedCount++; return true; }
 
     private:
         SharedState& _sharedState;
@@ -136,38 +126,23 @@ namespace Kmplete
         bool _switchFontRequested = false;
         bool _useDefaultFont = true;
 
-        bool _keyPressEventInvoked = false;
         int _keyPressEventInvokedCount = 0;
-        bool _keyReleaseEventInvoked = false;
         int _keyReleaseEventInvokedCount = 0;
-        bool _keyCharEventInvoked = false;
         int _keyCharEventInvokedCount = 0;
 
-        bool _mouseMoveEventInvoked = false;
         int _mouseMoveEventInvokedCount = 0;
-        bool _mouseScrollEventInvoked = false;
         int _mouseScrollEventInvokedCount = 0;
-        bool _mouseButtonPressEventInvoked = false;
         int _mouseButtonPressEventInvokedCount = 0;
-        bool _mouseButtonReleaseEventInvoked = false;
         int _mouseButtonReleaseEventInvokedCount = 0;
 
-        bool _windowCloseEventInvoked = false;
         int _windowCloseEventInvokedCount = 0;
-        bool _windowMoveEventInvoked = false;
         int _windowMoveEventInvokedCount = 0;
-        bool _windowResizeEventInvoked = false;
         int _windowResizeEventInvokedCount = 0;
-        bool _windowFocusEventInvoked = false;
         int _windowFocusEventInvokedCount = 0;
-        bool _windowIconifyEventInvoked = false;
         int _windowIconifyEventInvokedCount = 0;
-        bool _windowFramebufferRefreshEventInvoked = false;
         int _windowFramebufferRefreshEventInvokedCount = 0;
-        bool _windowFramebufferResizeEventInvoked = false;
         int _windowFramebufferResizeEventInvokedCount = 0;
 
-        bool _customEventInvoked = false;
         int _customEventInvokedCount = 0;
 
         bool _duplicateSidFrameListenerCheckActivated = false;

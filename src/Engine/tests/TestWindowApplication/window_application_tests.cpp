@@ -1,6 +1,6 @@
 #include "shared_state.h"
+#include "main_frame_listener.h"
 #include "test_frame_listeners.h"
-#include "test_main_frame_listener.h"
 
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Application/window_application.h"
@@ -37,7 +37,7 @@ namespace Kmplete
             _frameListener2.reset(new TestFrameListener2(*_frameListenerManager.get(), _sharedState));
             _frameListener3.reset(new TestFrameListener3(*_frameListenerManager.get(), _sharedState));
             _frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
-            mainFrameListener.reset(new TestMainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get(), _inputManager.get()));
+            mainFrameListener.reset(new MainFrameListener(*_frameListenerManager.get(), _sharedState, _mainWindow, _assetsManager.get(), _graphicsBackend.get(), _windowBackend.get(), _inputManager.get()));
 
             _frameListenersCountOk = _frameListenerManager->FrameListenersCount() == 5;
             _frameListenerManager->SetCreateDeleteCommandBufferHandler(KMP_BIND(TestWindowApplication::FrameListenerCommandBufferHandlerFunction));
@@ -92,7 +92,7 @@ namespace Kmplete
 
         // public for simplicity
     public:
-        UPtr<TestMainFrameListener> mainFrameListener;
+        UPtr<MainFrameListener> mainFrameListener;
 
     private:
         Window& _mainWindow;

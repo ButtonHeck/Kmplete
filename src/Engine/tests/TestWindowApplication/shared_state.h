@@ -18,6 +18,7 @@ namespace Kmplete
         String updateMaskString = "";
         String eventProcessingString = "";
         int eventAcceptMask = 0;
+        bool frame1DelegateAlive = false;
     };
     //--------------------------------------------------------------------------
 }

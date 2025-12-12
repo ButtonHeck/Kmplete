@@ -1,4 +1,4 @@
-#include "test_main_frame_listener.h"
+#include "main_frame_listener.h"
 #include "test_frame_listeners.h"
 
 #include "Kmplete/ImGui/scope_guards.h"
@@ -20,7 +20,8 @@ namespace Kmplete
     static constexpr auto Id_FrameListenersWindow = "FrameListenersInfoWindow";
 
 
-    TestMainFrameListener::TestMainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager)
+    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, 
+                                         GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, 10ULL, 10)
         , _sharedState(sharedState)
         , _mainWindow(mainWindow)
@@ -29,27 +30,28 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _windowBackend(windowBackend)
         , _inputManager(inputManager)
-        , _keyPressHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnKeyPressEvent))
-        , _keyReleaseHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnKeyReleaseEvent))
-        , _keyCharHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnKeyCharEvent))
-        , _mouseMoveHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnMouseMoveEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnMouseScrollEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnMouseButtonPressEvent))
-        , _mouseButtonReleasedHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnMouseButtonReleaseEvent))
-        , _windowCloseHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowCloseEvent))
-        , _windowMoveHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowMoveEvent))
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowResizeEvent))
-        , _windowFocusHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowFocusEvent))
-        , _windowIconifyHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowIconifyEvent))
-        , _windowFramebufferRefreshHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowFramebufferRefreshEvent))
-        , _windowFramebufferResizeHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowFramebufferResizeEvent))
-        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnWindowContentScaleEvent))
-        , _customEventHandler(_eventDispatcher, KMP_BIND(TestMainFrameListener::OnCustomEvent))
+
+        , _keyPressHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnKeyPressEvent))
+        , _keyReleaseHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnKeyReleaseEvent))
+        , _keyCharHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnKeyCharEvent))
+        , _mouseMoveHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnMouseMoveEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnMouseScrollEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnMouseButtonPressEvent))
+        , _mouseButtonReleasedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnMouseButtonReleaseEvent))
+        , _windowCloseHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowCloseEvent))
+        , _windowMoveHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowMoveEvent))
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowResizeEvent))
+        , _windowFocusHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowFocusEvent))
+        , _windowIconifyHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowIconifyEvent))
+        , _windowFramebufferRefreshHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowFramebufferRefreshEvent))
+        , _windowFramebufferResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowFramebufferResizeEvent))
+        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowContentScaleEvent))
+        , _customEventHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnCustomEvent))
     {
         Initialize();
     }
 
-    void TestMainFrameListener::Initialize()
+    void MainFrameListener::Initialize()
     {
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
@@ -57,7 +59,7 @@ namespace Kmplete
         _imguiImpl->Stylize(_mainWindow.GetDPIScale());
     }
 
-    void TestMainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
+    void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
     {
         if (_switchFontRequested)
         {
@@ -84,13 +86,13 @@ namespace Kmplete
         _sharedState.updateMaskString += "M";
     }
 
-    void TestMainFrameListener::SetCustomIconFromFilepath()
+    void MainFrameListener::SetCustomIconFromFilepath()
     {
         const auto iconImage = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
         _mainWindow.SetIcon(iconImage);
     }
 
-    void TestMainFrameListener::SetCustomIconFromBuffer()
+    void MainFrameListener::SetCustomIconFromBuffer()
     {
         const auto iconBufferSize = 4 * 2 * 4;
         unsigned char iconBuffer[] = {
@@ -101,7 +103,7 @@ namespace Kmplete
         _mainWindow.SetIcon(iconFromBuffer);
     }
 
-    void TestMainFrameListener::SetCustomCursor()
+    void MainFrameListener::SetCustomCursor()
     {
         const auto cursor = _windowBackend->AddCursor("test cursor", Utils::Concatenate(KMP_ICONS_FOLDER, "test_cursor.png"));
 
@@ -111,13 +113,13 @@ namespace Kmplete
         }
     }
 
-    void TestMainFrameListener::SwitchFonts()
+    void MainFrameListener::SwitchFonts()
     {
         _switchFontRequested = true;
         _useDefaultFont = !_useDefaultFont;
     }
 
-    void TestMainFrameListener::Render()
+    void MainFrameListener::Render()
     {
         _imguiImpl->NewFrame();
 
@@ -148,62 +150,62 @@ namespace Kmplete
         ImGui::Begin(Id_EventsWindow, nullptr, applicationWindowFlags);
         {
             const auto disableGuard = ImGuiUtils::DisableGuard(true);
-            ImGui::Checkbox("KeyPress", &_keyPressEventInvoked);
+            ImGui::Checkbox("KeyPress", reinterpret_cast<bool*>(& _keyPressEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _keyPressEventInvokedCount);
 
-            ImGui::Checkbox("KeyRelease", &_keyReleaseEventInvoked);
+            ImGui::Checkbox("KeyRelease", reinterpret_cast<bool*>(&_keyReleaseEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _keyReleaseEventInvokedCount);
 
-            ImGui::Checkbox("KeyChar", &_keyCharEventInvoked);
+            ImGui::Checkbox("KeyChar", reinterpret_cast<bool*>(&_keyCharEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _keyCharEventInvokedCount);
 
             ImGui::Separator();
-            ImGui::Checkbox("MouseMove", &_mouseMoveEventInvoked);
+            ImGui::Checkbox("MouseMove", reinterpret_cast<bool*>(&_mouseMoveEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _mouseMoveEventInvokedCount);
 
-            ImGui::Checkbox("MouseScroll", &_mouseScrollEventInvoked);
+            ImGui::Checkbox("MouseScroll", reinterpret_cast<bool*>(&_mouseScrollEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _mouseScrollEventInvokedCount);
 
-            ImGui::Checkbox("MousePress", &_mouseButtonPressEventInvoked);
+            ImGui::Checkbox("MousePress", reinterpret_cast<bool*>(&_mouseButtonPressEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _mouseButtonPressEventInvokedCount);
 
-            ImGui::Checkbox("MouseRelease", &_mouseButtonReleaseEventInvoked);
+            ImGui::Checkbox("MouseRelease", reinterpret_cast<bool*>(&_mouseButtonReleaseEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _mouseButtonReleaseEventInvokedCount);
 
             ImGui::Separator();
-            ImGui::Checkbox("WindowMove", &_windowMoveEventInvoked);
+            ImGui::Checkbox("WindowMove", reinterpret_cast<bool*>(&_windowMoveEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _windowMoveEventInvokedCount);
 
-            ImGui::Checkbox("WindowResize", &_windowResizeEventInvoked);
+            ImGui::Checkbox("WindowResize", reinterpret_cast<bool*>(&_windowResizeEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _windowResizeEventInvokedCount);
 
-            ImGui::Checkbox("WindowFocus", &_windowFocusEventInvoked);
+            ImGui::Checkbox("WindowFocus", reinterpret_cast<bool*>(&_windowFocusEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _windowFocusEventInvokedCount);
 
-            ImGui::Checkbox("WindowIconify", &_windowIconifyEventInvoked);
+            ImGui::Checkbox("WindowIconify", reinterpret_cast<bool*>(&_windowIconifyEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _windowIconifyEventInvokedCount);
 
-            ImGui::Checkbox("FramebufferRefresh", &_windowFramebufferRefreshEventInvoked);
+            ImGui::Checkbox("FramebufferRefresh", reinterpret_cast<bool*>(&_windowFramebufferRefreshEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _windowFramebufferRefreshEventInvokedCount);
 
-            ImGui::Checkbox("FramebufferResize", &_windowFramebufferResizeEventInvoked);
+            ImGui::Checkbox("FramebufferResize", reinterpret_cast<bool*>(&_windowFramebufferResizeEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _windowFramebufferResizeEventInvokedCount);
 
             ImGui::Separator();
-            ImGui::Checkbox("CustomEvent", &_customEventInvoked);
+            ImGui::Checkbox("CustomEvent", reinterpret_cast<bool*>(&_customEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _customEventInvokedCount);
         }
@@ -486,6 +488,11 @@ namespace Kmplete
             {
                 PushCommand(FrameListenerCommand{ .code = FrameListenerCommandCode::Deactivate, .sid = 1ULL });
             }
+            ImGui::SameLine();
+            {
+                const auto disableGuard = ImGuiUtils::DisableGuard(true);
+                ImGui::Checkbox("Delegate alive", &_sharedState.frame1DelegateAlive);
+            }
 
 
             ImGui::Text("FrameListener 2");
@@ -683,35 +690,35 @@ namespace Kmplete
         _sharedState.updateMaskString = "";
     }
 
-    bool TestMainFrameListener::MousePositionIsNotZero() const
+    bool MainFrameListener::MousePositionIsNotZero() const
     {
         const auto cursorPosition = _mainWindow.GetCursorPosition();
         return cursorPosition.x != 0 || cursorPosition.y != 0;
     }
 
-    bool TestMainFrameListener::DPIIsNotZero() const
+    bool MainFrameListener::DPIIsNotZero() const
     {
         return _mainWindow.GetDPI() > 0;
     }
 
-    bool TestMainFrameListener::DPIScaleIsNotZero() const
+    bool MainFrameListener::DPIScaleIsNotZero() const
     {
         return _mainWindow.GetDPIScale() > 0.0f;
     }
 
-    bool TestMainFrameListener::DefaultSizeIsNotZero() const
+    bool MainFrameListener::DefaultSizeIsNotZero() const
     {
         const auto size = _mainWindow.GetSize();
         return size.x > 0 && size.y > 0;
     }
 
-    bool TestMainFrameListener::DefaultWindowedSizeIsNotZero() const
+    bool MainFrameListener::DefaultWindowedSizeIsNotZero() const
     {
         const auto windowedSize = _mainWindow.GetWindowedSize();
         return windowedSize.x > 0 && windowedSize.y > 0;
     }
 
-    void TestMainFrameListener::SetMouseClickHandlerActive(bool active)
+    void MainFrameListener::SetMouseClickHandlerActive(bool active)
     {
         if (active)
         {
@@ -723,25 +730,22 @@ namespace Kmplete
         }
     }
 
-    bool TestMainFrameListener::OnKeyPressEvent(Events::KeyPressEvent& event)
+    bool MainFrameListener::OnKeyPressEvent(Events::KeyPressEvent& event)
     {
-        _keyPressEventInvoked = true;
         _keyPressEventInvokedCount++;
         _keysPressed.insert(event.GetKeyCode());
         return true;
     }
 
-    bool TestMainFrameListener::OnKeyReleaseEvent(Events::KeyReleaseEvent& event)
+    bool MainFrameListener::OnKeyReleaseEvent(Events::KeyReleaseEvent& event)
     {
-        _keyReleaseEventInvoked = true;
         _keyReleaseEventInvokedCount++;
         _keysPressed.erase(std::find(_keysPressed.begin(), _keysPressed.end(), event.GetKeyCode()));
         return true;
     }
 
-    bool TestMainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)
+    bool MainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)
     {
-        _mouseButtonPressEventInvoked = true;
         _mouseButtonPressEventInvokedCount++;
         if (evt.GetMouseButton() == Input::Mouse::ButtonLeft && evt.GetMods() & Input::Modifier::Ctrl)
         {
@@ -772,23 +776,21 @@ namespace Kmplete
         return false;
     }
 
-    bool TestMainFrameListener::OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&)
+    bool MainFrameListener::OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&)
     {
-        _mouseButtonReleaseEventInvoked = true;
         _mouseButtonReleaseEventInvokedCount++;
         _mouseButtonHandlersColoring = false;
         return true;
     }
 
-    bool TestMainFrameListener::OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
+    bool MainFrameListener::OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
     {
-        _windowFramebufferRefreshEventInvoked = true;
         _windowFramebufferRefreshEventInvokedCount++;
         Render();
         return true;
     }
 
-    bool TestMainFrameListener::OnWindowContentScaleEvent(Events::WindowContentScaleEvent& evt)
+    bool MainFrameListener::OnWindowContentScaleEvent(Events::WindowContentScaleEvent& evt)
     {
         const auto scale = evt.GetScale();
 
@@ -802,10 +804,10 @@ namespace Kmplete
         return true;
     }
 
-    bool TestMainFrameListener::OnWindowCloseEvent(Events::WindowCloseEvent&)
+    bool MainFrameListener::OnWindowCloseEvent(Events::WindowCloseEvent&)
     {
         _mainWindow.SetShouldClose(true);
-        _windowCloseEventInvoked = true;
+        _windowCloseEventInvokedCount++;
         return true;
     }
 }
