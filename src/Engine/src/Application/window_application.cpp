@@ -73,7 +73,7 @@ namespace Kmplete
         _SwitchProfilerActivation(event);
 #endif
 
-        _inputManager->OnEvent(event);
+        _inputManager->ProcessInputEvents(event);
 
         _frameListenerManager->_DispatchEventToFrameListeners(event);
     }
@@ -129,8 +129,7 @@ namespace Kmplete
 
         const auto frameTimestep = Math::Clamp(_frameClock.Mark(), 0.0f, 100.0f);
 
-        window.FetchEvents();
-        _frameListenerManager->_DispatchQueuedEventsToFrameListeners();
+        _ProcessEvents(window);
 
         if (window.ShouldClose())
         {
@@ -159,6 +158,14 @@ namespace Kmplete
         window.SwapBuffers();
 
         return true;
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::_ProcessEvents(Window& window)
+    {
+        window.FetchEvents();
+        _inputManager->PropagateActionEvents();
+        _frameListenerManager->_DispatchQueuedEventsToFrameListeners();
     }
     //--------------------------------------------------------------------------
 

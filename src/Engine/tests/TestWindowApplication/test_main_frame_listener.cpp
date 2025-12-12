@@ -349,7 +349,7 @@ namespace Kmplete
                 ImGui::Text("Cursor mode: Disabled");
             }
 
-            const auto keyMods = _inputManager->GetKeyModes();
+            const auto keyMods = _inputManager->GetKeyModifiersMask();
             StringVector keyModsStringVector;
             if (keyMods & Input::Mode::Alt)
             {

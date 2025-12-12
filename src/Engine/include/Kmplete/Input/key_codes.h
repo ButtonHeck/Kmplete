@@ -48,7 +48,8 @@ namespace Kmplete
         {
             enum : KeyCode // from glfw3.h
             {
-                Space = 32,
+                First = 32,
+                Space = First,
                 Apostrophe = 39, // '
                 Comma = 44,      // ,
                 Minus = 45,      // -

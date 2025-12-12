@@ -2,10 +2,13 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Input/mouse_codes.h"
 #include "Kmplete/Input/key_codes.h"
 #include "Kmplete/Math/geometry.h"
+#include "Kmplete/Log/log_class_macro.h"
+
+#include <functional>
 
 
 namespace Kmplete
@@ -18,6 +21,29 @@ namespace Kmplete
 
     namespace Input
     {
+        using InputCode = int;
+        using InputControlValue = float;
+        using ActionIdentifier = StringID;
+        using ActionCallbackIdentifier = StringID;
+        using ActionCallback = std::function<bool(InputControlValue)>;
+
+
+        struct ActionCallbackWrapper
+        {
+            ActionCallbackIdentifier id;
+            ActionCallback callback;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct ActionEvent
+        {
+            ActionIdentifier id;
+            InputControlValue value;
+        };
+        //--------------------------------------------------------------------------
+
+
         class InputManager
         {
             KMP_DISABLE_COPY_MOVE(InputManager)
@@ -26,18 +52,36 @@ namespace Kmplete
         public:
             KMP_API InputManager() noexcept;
 
-            KMP_API void OnEvent(Events::Event& event);
+            KMP_API void ProcessInputEvents(Events::Event& event);
+            KMP_API void PropagateActionEvents();
+
+            KMP_API void AddActionCallback(ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper);
+            KMP_API void RemoveActionCallback(ActionIdentifier actionId, const ActionCallbackIdentifier& callbackId);
+
+            KMP_API void MapInputToAction(InputCode code, ActionIdentifier actionId);
+            KMP_API void UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
+            KMP_NODISCARD KMP_API InputControlValue GetActionValue(ActionIdentifier actionId);
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(MouseCode mouseCode) const;
-            KMP_NODISCARD KMP_API KeyMode GetKeyModes() const noexcept;
+            KMP_NODISCARD KMP_API KeyMode GetKeyModifiersMask() const noexcept;
             KMP_NODISCARD KMP_API bool IsKeyButtonPressed(KeyCode keyCode) const;
 
         private:
+            KMP_NODISCARD Vector<ActionEvent> _CreateActionEvents(InputCode code, InputControlValue value) const;
+            void _PropagateSingleActionEvent(const ActionEvent& actionEvent);
+
+        private:
             Math::Point2I _mousePosition;
-            Array<bool, Mouse::NumButtons> _mouseButtonsStates;
-            Array<bool, Key::NumKeys> _keyButtonsStates;
-            KeyMode _keyModes;
+            Array<InputControlValue, Mouse::NumButtons> _mouseButtonsStates;
+            Array<InputControlValue, Key::NumKeys> _keyButtonsStates;
+            KeyMode _modifiersMask;
+
+            HashMap<InputCode, Vector<ActionIdentifier>> _inputCodeToActionsMap;
+            HashMap<ActionIdentifier, Vector<InputCode>> _actionToInputCodesMap;
+            HashMap<ActionIdentifier, Vector<ActionCallbackWrapper>> _actionCallbacks;
+
+            Vector<ActionEvent> _actionEvents;
         };
         //--------------------------------------------------------------------------
     }
