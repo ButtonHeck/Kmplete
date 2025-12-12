@@ -147,10 +147,26 @@ namespace Kmplete
         static constexpr auto applicationWindowFlags =
             ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
-        ImGui::Begin(Id_EventsWindow, nullptr, applicationWindowFlags);
+        RenderEventsWindow(applicationWindowFlags);
+        RenderControlsWindow(applicationWindowFlags);
+        RenderInfoWindow(applicationWindowFlags);
+        RenderFrameListenersWindow(applicationWindowFlags);
+
+        ImGui::End(); //Id_Dockspace
+
+        _imguiImpl->Render();
+        ImGui::EndFrame();
+
+        _sharedState.updateMask = 0;
+        _sharedState.updateMaskString = "";
+    }
+
+    void MainFrameListener::RenderEventsWindow(int windowFlags)
+    {
+        ImGui::Begin(Id_EventsWindow, nullptr, windowFlags);
         {
             const auto disableGuard = ImGuiUtils::DisableGuard(true);
-            ImGui::Checkbox("KeyPress", reinterpret_cast<bool*>(& _keyPressEventInvokedCount));
+            ImGui::Checkbox("KeyPress", reinterpret_cast<bool*>(&_keyPressEventInvokedCount));
             ImGui::SameLine();
             ImGui::Text("%d", _keyPressEventInvokedCount);
 
@@ -210,8 +226,11 @@ namespace Kmplete
             ImGui::Text("%d", _customEventInvokedCount);
         }
         ImGui::End(); //Id_EventsWindow
+    }
 
-        ImGui::Begin(Id_ControlsWindow, nullptr, applicationWindowFlags);
+    void MainFrameListener::RenderControlsWindow(int windowFlags)
+    {
+        ImGui::Begin(Id_ControlsWindow, nullptr, windowFlags);
         {
             auto updateContinuously = _mainWindow.IsUpdatedContinuously();
             if (ImGui::Checkbox("Update continuously", &updateContinuously))
@@ -300,8 +319,11 @@ namespace Kmplete
             }
         }
         ImGui::End(); //Id_ControlsWindow
+    }
 
-        ImGui::Begin(Id_InfoWindow, nullptr, applicationWindowFlags);
+    void MainFrameListener::RenderInfoWindow(int windowFlags)
+    {
+        ImGui::Begin(Id_InfoWindow, nullptr, windowFlags);
         {
             ImGuiStyle& style = ImGui::GetStyle();
             const auto oldTextColor = style.Colors[ImGuiCol_Text];
@@ -310,6 +332,7 @@ namespace Kmplete
             style.Colors[ImGuiCol_Text] = oldTextColor;
 
 
+            const ImGuiIO& io = ImGui::GetIO();
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
 
@@ -429,8 +452,11 @@ namespace Kmplete
             ImGui::Text("Keys pressed: %s", keysPressedString.c_str());
         }
         ImGui::End(); //Id_InfoWindow
+    }
 
-        ImGui::Begin(Id_FrameListenersWindow, nullptr, applicationWindowFlags);
+    void MainFrameListener::RenderFrameListenersWindow(int windowFlags)
+    {
+        ImGui::Begin(Id_FrameListenersWindow, nullptr, windowFlags);
         {
             auto frame1Exist = bool(_sharedState.existenceMask & frame1Mask);
             auto frame2Exist = bool(_sharedState.existenceMask & frame2Mask);
@@ -663,7 +689,9 @@ namespace Kmplete
                     _duplicatePriorityFrameListenerCheckSuccess = true;
                 }
             }
-            ImGui::SameLine();
+            
+
+            ImGui::SeparatorText("Main frame listener functions");
             if (ImGui::Button("Activate mouse button click handler"))
             {
                 SetMouseClickHandlerActive(true);
@@ -680,14 +708,6 @@ namespace Kmplete
             }
         }
         ImGui::End(); //Id_FrameListenersWindow
-
-        ImGui::End(); //Id_Dockspace
-
-        _imguiImpl->Render();
-        ImGui::EndFrame();
-
-        _sharedState.updateMask = 0;
-        _sharedState.updateMaskString = "";
     }
 
     bool MainFrameListener::MousePositionIsNotZero() const

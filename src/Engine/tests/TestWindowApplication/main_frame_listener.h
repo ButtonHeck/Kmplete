@@ -28,7 +28,12 @@ namespace Kmplete
         void Initialize();
 
         void Update(float /*frameTimestep*/, bool /*applicationIsIconified*/) override;
+
         void Render() override;
+        void RenderEventsWindow(int windowFlags);
+        void RenderControlsWindow(int windowFlags);
+        void RenderInfoWindow(int windowFlags);
+        void RenderFrameListenersWindow(int windowFlags);
 
         void SetCustomIconFromFilepath();
         void SetCustomIconFromBuffer();
