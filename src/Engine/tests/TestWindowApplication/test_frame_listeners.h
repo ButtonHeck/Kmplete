@@ -15,22 +15,22 @@ namespace Kmplete
     {
     public:
         explicit TestFrameListener1Delegate(Events::EventDispatcher& eventDispatcher)
-            : str("D")
+            : counter(0)
             , mbcHandlerGuard(eventDispatcher, KMP_BIND(TestFrameListener1Delegate::OnMouseButtonPressed))
         {}
 
         bool OnMouseButtonPressed(Events::MouseButtonPressEvent&)
         {
-            str += "D";
+            counter++;
             return true;
         }
 
         String GetValue() const
         {
-            return str;
+            return String("(") + std::to_string(counter) + ")";
         }
 
-        String str;
+        int counter;
         Events::EventHandlerGuard<Events::MouseButtonPressEvent> mbcHandlerGuard;
     };
     //--------------------------------------------------------------------------
@@ -62,12 +62,7 @@ namespace Kmplete
 
         bool OnMouseButtonPressed(Events::MouseButtonPressEvent& event)
         {
-            sharedState.eventProcessingString += "1_";
-            if (delegate)
-            {
-                sharedState.eventProcessingString += delegate->GetValue();
-            }
-
+            sharedState.eventProcessingString += "1";
             if (event.GetMods() & Input::Mode::Alt)
             {
                 if (delegate)
@@ -81,6 +76,11 @@ namespace Kmplete
                 {
                     delegate.reset(new TestFrameListener1Delegate(_eventDispatcher));
                 }
+            }
+
+            if (delegate)
+            {
+                sharedState.eventProcessingString += delegate->GetValue();
             }
 
             if (sharedState.eventAcceptMask & frame1Mask)

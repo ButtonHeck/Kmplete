@@ -90,8 +90,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnMouseMoveEvent(Events::MouseMoveEvent&) { _mouseMoveEventInvoked = true; _mouseMoveEventInvokedCount++; return true; }
         KMP_NODISCARD virtual bool OnMouseScrollEvent(Events::MouseScrollEvent&) { _mouseScrollEventInvoked = true; _mouseScrollEventInvokedCount++; return true; }
         KMP_NODISCARD virtual bool OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt);
-
-        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&) { _mouseButtonReleaseEventInvoked = true; _mouseButtonReleaseEventInvokedCount++; return true; }
+        KMP_NODISCARD virtual bool OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&);
 
         KMP_NODISCARD virtual bool OnWindowMoveEvent(Events::WindowMoveEvent&) { _windowMoveEventInvoked = true; _windowMoveEventInvokedCount++; return true; }
         KMP_NODISCARD virtual bool OnWindowResizeEvent(Events::WindowResizeEvent&) { _windowResizeEventInvoked = true; _windowResizeEventInvokedCount++; return true; }
@@ -177,6 +176,8 @@ namespace Kmplete
         bool _duplicatePriorityFrameListenerCheckSuccess = false;
 
         HashSet<Input::KeyCode> _keysPressed;
+
+        bool _mouseButtonHandlersColoring = false;
     };
     //--------------------------------------------------------------------------
 }

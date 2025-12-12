@@ -616,7 +616,18 @@ namespace Kmplete
 
             ImGui::Text("Update order: %s", _sharedState.updateMaskString.c_str());
             ImGui::SameLine();
-            ImGui::Text("OnMouseClickEvent order: %s", _sharedState.eventProcessingString.c_str());
+            if (_mouseButtonHandlersColoring)
+            {
+                ImGuiStyle& style = ImGui::GetStyle();
+                const auto oldTextColor = style.Colors[ImGuiCol_Text];
+                style.Colors[ImGuiCol_Text] = ImVec4(1.0f, 0.0f, 1.0f, 1.0f);
+                ImGui::Text("OnMouseClickEvent order: %s", _sharedState.eventProcessingString.c_str());
+                style.Colors[ImGuiCol_Text] = oldTextColor;
+            }
+            else
+            {
+                ImGui::Text("OnMouseClickEvent order: %s", _sharedState.eventProcessingString.c_str());
+            }
 
             if (ImGui::Button("Add frame listener with existing SID"))
             {
@@ -670,7 +681,6 @@ namespace Kmplete
 
         _sharedState.updateMask = 0;
         _sharedState.updateMaskString = "";
-        _sharedState.eventProcessingString = "";
     }
 
     bool TestMainFrameListener::MousePositionIsNotZero() const
@@ -756,9 +766,18 @@ namespace Kmplete
             }
         }
 
-        _sharedState.eventProcessingString += "M";
+        _sharedState.eventProcessingString = "M";
+        _mouseButtonHandlersColoring = true;
 
         return false;
+    }
+
+    bool TestMainFrameListener::OnMouseButtonReleaseEvent(Events::MouseButtonReleaseEvent&)
+    {
+        _mouseButtonReleaseEventInvoked = true;
+        _mouseButtonReleaseEventInvokedCount++;
+        _mouseButtonHandlersColoring = false;
+        return true;
     }
 
     bool TestMainFrameListener::OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
