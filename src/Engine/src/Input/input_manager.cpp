@@ -110,11 +110,11 @@ namespace Kmplete
 
         void InputManager::_PropagateSingleActionEvent(const ActionEvent& actionEvent)
         {
-            const auto& callbackWrappers = _actionCallbacks[actionEvent.id];
-            for (size_t i = 0; callbackWrappers.size(); i++)
+            const auto& taggedCallbacks = _actionCallbacks[actionEvent.id];
+            for (size_t i = 0; taggedCallbacks.size(); i++)
             {
-                auto& wrapper = callbackWrappers[i];
-                const auto eventProcessed = wrapper.callback(actionEvent.value);
+                auto& taggedCallback = taggedCallbacks[i];
+                const auto eventProcessed = taggedCallback.callback(actionEvent.value);
                 if (eventProcessed)
                 {
                     return;
@@ -168,16 +168,27 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper)
+        void InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback)
         {
-            _actionCallbacks[actionId].emplace_back(callbackWrapper);
+            TaggedActionCallback taggedCallback{
+                .tag = DefaultActionCallbackTag,
+                .callback = callback
+            };
+
+            MapActionToCallback(actionId, taggedCallback);
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackIdentifier& callbackId)
+        void InputManager::MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
         {
-            std::erase_if(_actionCallbacks[actionId], [callbackId](const ActionCallbackWrapper& callbackWrapper) {
-                return callbackWrapper.id == callbackId;
+            _actionCallbacks[actionId].emplace_back(taggedCallback);
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag)
+        {
+            std::erase_if(_actionCallbacks[actionId], [callbackTag](const TaggedActionCallback& taggedCallback) {
+                return taggedCallback.tag == callbackTag;
             });
         }
         //--------------------------------------------------------------------------
@@ -234,10 +245,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper)
+        void InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
         {
             MapInputToAction(code, actionId);
-            MapActionToCallback(actionId, callbackWrapper);
+            MapActionToCallback(actionId, callback);
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        {
+            MapInputToAction(code, actionId);
+            MapActionToCallback(actionId, taggedCallback);
         }
         //--------------------------------------------------------------------------
     }

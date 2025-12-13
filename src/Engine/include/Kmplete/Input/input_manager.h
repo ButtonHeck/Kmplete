@@ -24,16 +24,18 @@ namespace Kmplete
         using InputCode = int;
         using InputControlValue = float;
         using ActionIdentifier = StringID;
-        using ActionCallbackIdentifier = StringID;
+        using ActionCallbackTag = StringID;
         using ActionCallback = std::function<bool(InputControlValue)>;
 
 
-        struct ActionCallbackWrapper
+        struct TaggedActionCallback
         {
-            ActionCallbackIdentifier id;
+            ActionCallbackTag tag;
             ActionCallback callback;
         };
         //--------------------------------------------------------------------------
+
+        static constexpr ActionCallbackTag DefaultActionCallbackTag = 0ULL;
 
 
         struct ActionEvent
@@ -55,14 +57,16 @@ namespace Kmplete
             KMP_API void ProcessInputEvents(Events::Event& event);
             KMP_API void PropagateActionEvents();
 
-            KMP_API void MapActionToCallback(ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper);
-            KMP_API void UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackIdentifier& callbackId);
+            KMP_API void MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback);
+            KMP_API void MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
+            KMP_API void UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag);
 
             KMP_API void MapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_API void UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
             KMP_NODISCARD KMP_API InputControlValue GetActionValue(ActionIdentifier actionId);
 
-            KMP_API void MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper);
+            KMP_API void MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
+            KMP_API void MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(MouseCode mouseCode) const;
@@ -81,7 +85,7 @@ namespace Kmplete
 
             HashMap<InputCode, Vector<ActionIdentifier>> _inputCodeToActionsMap;
             HashMap<ActionIdentifier, Vector<InputCode>> _actionToInputCodesMap;
-            HashMap<ActionIdentifier, Vector<ActionCallbackWrapper>> _actionCallbacks;
+            HashMap<ActionIdentifier, Vector<TaggedActionCallback>> _actionCallbacks;
 
             Vector<ActionEvent> _actionEvents;
         };

@@ -101,17 +101,14 @@ namespace Kmplete
         KMP_ASSERT(_frameListenerManager);
 
 #if defined KMP_PROFILE
-        _inputManager->MapInputToCallback(Input::Key::F11, "switch_profiler_activity"_sid, Input::ActionCallbackWrapper{
-            .id = "WindowApplication"_sid,
-            .callback = [this](Input::InputControlValue value) {
-                if (value != 0.0f && _inputManager->GetKeyModifiersMask() & Input::Modifier::Alt)
-                {
-                    const auto isProfilerActive = Profiler::Get().IsActive();
-                    Profiler::Get().SetActive(!isProfilerActive);
-                }
-                return true;
+        _inputManager->MapInputToCallback(Input::Key::F11, "switch_profiler_activity"_sid, [this](Input::InputControlValue value) {
+            if (value != 0.0f && _inputManager->GetKeyModifiersMask() & Input::Modifier::Alt)
+            {
+                const auto isProfilerActive = Profiler::Get().IsActive();
+                Profiler::Get().SetActive(!isProfilerActive);
             }
-            });
+            return true;
+        });
 #endif
 
         _frameClock.Mark();
