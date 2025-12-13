@@ -7,6 +7,7 @@
 #include "Kmplete/Event/event_handler.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Utils/string_utils.h"
 
 
 namespace Kmplete
@@ -40,9 +41,10 @@ namespace Kmplete
                     }
                 }
 
-                KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, newHandlerWrapper->GetTypeName());
+                KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, Utils::PrettifyFunctionName(newHandlerWrapper->GetTypeName()));
                 _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandlerWrapper));
             }
+            //--------------------------------------------------------------------------
 
             template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
             void RemoveHandler(const EventHandler<EventClass>& handler)
@@ -59,12 +61,13 @@ namespace Kmplete
                 {
                     if (handlerIter->get()->GetTypeName() == handlerTypeName)
                     {
-                        KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, handlerTypeName);
+                        KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, Utils::PrettifyFunctionName(handlerTypeName));
                         handlers.erase(handlerIter);
                         return;
                     }
                 }
             }
+            //--------------------------------------------------------------------------
 
             bool Dispatch(Event& event)
             {
@@ -83,6 +86,7 @@ namespace Kmplete
 
                 return true;
             }
+            //--------------------------------------------------------------------------
 
         private:
             HashMap<EventTypeID, Vector<UPtr<EventHandlerWrapper>>> _handlersMap;

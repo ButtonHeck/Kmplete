@@ -40,5 +40,6 @@ namespace Kmplete
         KMP_NODISCARD KMP_API String NarrowToUtf8(const String& str);
         KMP_NODISCARD KMP_API String Utf8ToNarrow(const String& str);
         KMP_NODISCARD KMP_API Filepath::string_type NarrowToFilepath(const String& str);
+        KMP_NODISCARD KMP_API String PrettifyFunctionName(const String& str);
     }
 }

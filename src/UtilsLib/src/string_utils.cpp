@@ -161,5 +161,22 @@ namespace Kmplete
 #endif
         }
         //--------------------------------------------------------------------------
+
+        String PrettifyFunctionName(const String& str)
+        {
+            String result = str;
+            result = Utils::RegexReplace(result, "__cdecl", "");
+            result = Utils::RegexReplace(result, "__ptr64", "");
+            result = Utils::RegexReplace(result, "class ", "");
+            result = Utils::RegexReplace(result, "struct ", "");
+            result = Utils::RegexReplace(result, "Kmplete::", "");
+            result = Utils::RegexReplace(result, " &", "&");
+            result = Utils::RegexReplace(result, " &&", "&&");
+            result = Utils::RegexReplace(result, " \\*", "*");
+            result = Utils::RegexReplace(result, "  ", " ");
+            result = Utils::RegexReplace(result, " ,", ", ");
+            return result;
+        }
+        //--------------------------------------------------------------------------
     }
 }
