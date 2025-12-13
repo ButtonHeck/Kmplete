@@ -168,13 +168,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::AddActionCallback(ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper)
+        void InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper)
         {
             _actionCallbacks[actionId].emplace_back(callbackWrapper);
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::RemoveActionCallback(ActionIdentifier actionId, const ActionCallbackIdentifier& callbackId)
+        void InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackIdentifier& callbackId)
         {
             std::erase_if(_actionCallbacks[actionId], [callbackId](const ActionCallbackWrapper& callbackWrapper) {
                 return callbackWrapper.id == callbackId;
@@ -231,6 +231,13 @@ namespace Kmplete
             }
 
             return resultValue;
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallbackWrapper& callbackWrapper)
+        {
+            MapInputToAction(code, actionId);
+            MapActionToCallback(actionId, callbackWrapper);
         }
         //--------------------------------------------------------------------------
     }
