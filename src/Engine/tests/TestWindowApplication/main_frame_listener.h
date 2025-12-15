@@ -34,6 +34,7 @@ namespace Kmplete
         void RenderControlsWindow(int windowFlags);
         void RenderInfoWindow(int windowFlags);
         void RenderFrameListenersWindow(int windowFlags);
+        void RenderActionEventsEmulatorWindow(int windowFlags);
 
         void SetCustomIconFromFilepath();
         void SetCustomIconFromBuffer();
@@ -158,6 +159,9 @@ namespace Kmplete
         HashSet<Input::KeyCode> _keysPressed;
 
         bool _mouseButtonHandlersColoring = false;
+
+        Math::Point2I _emulatorPlayerPos = Math::Point2I(0, 0);
+        int _emulatorMoveWASD = 1;
     };
     //--------------------------------------------------------------------------
 }

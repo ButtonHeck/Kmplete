@@ -18,6 +18,7 @@ namespace Kmplete
     static constexpr auto Id_ControlsWindow = "ControlsWindow";
     static constexpr auto Id_InfoWindow = "InfoWindow";
     static constexpr auto Id_FrameListenersWindow = "FrameListenersInfoWindow";
+    static constexpr auto Id_ActionEventsEmulatorWindow = "ActionEventsEmulatorWindow";
 
 
     MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, 
@@ -57,6 +58,11 @@ namespace Kmplete
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
         _imguiImpl->Stylize(_mainWindow.GetDPIScale());
+
+        _inputManager->MapInputToAction(Input::Key::W, "move_forward"_sid);
+        _inputManager->MapInputToAction(Input::Key::S, "move_backward"_sid);
+        _inputManager->MapInputToAction(Input::Key::A, "move_left"_sid);
+        _inputManager->MapInputToAction(Input::Key::D, "move_right"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
@@ -84,6 +90,27 @@ namespace Kmplete
         }
 
         _sharedState.updateMaskString += "M";
+
+        const auto moveForwardValue = _inputManager->GetActionValue("move_forward"_sid);
+        if (moveForwardValue != 0.0f)
+        {
+            _emulatorPlayerPos.y++;
+        }
+        const auto moveBackwardValue = _inputManager->GetActionValue("move_backward"_sid);
+        if (moveBackwardValue != 0.0f)
+        {
+            _emulatorPlayerPos.y--;
+        }
+        const auto moveLeftValue = _inputManager->GetActionValue("move_left"_sid);
+        if (moveLeftValue != 0.0f)
+        {
+            _emulatorPlayerPos.x--;
+        }
+        const auto moveRightValue = _inputManager->GetActionValue("move_right"_sid);
+        if (moveRightValue != 0.0f)
+        {
+            _emulatorPlayerPos.x++;
+        }
     }
 
     void MainFrameListener::SetCustomIconFromFilepath()
@@ -151,6 +178,7 @@ namespace Kmplete
         RenderControlsWindow(applicationWindowFlags);
         RenderInfoWindow(applicationWindowFlags);
         RenderFrameListenersWindow(applicationWindowFlags);
+        RenderActionEventsEmulatorWindow(applicationWindowFlags);
 
         ImGui::End(); //Id_Dockspace
 
@@ -708,6 +736,33 @@ namespace Kmplete
             }
         }
         ImGui::End(); //Id_FrameListenersWindow
+    }
+
+    void MainFrameListener::RenderActionEventsEmulatorWindow(int windowFlags)
+    {
+        ImGui::Begin(Id_ActionEventsEmulatorWindow, nullptr, windowFlags);
+        {
+            ImGui::Text("Player position: [%d : %d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
+
+            if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
+            {
+                _emulatorMoveWASD = 0;
+                _inputManager->RemapInputToAction(Input::Key::Up, "move_forward"_sid);
+                _inputManager->RemapInputToAction(Input::Key::Left, "move_left"_sid);
+                _inputManager->RemapInputToAction(Input::Key::Down, "move_backward"_sid);
+                _inputManager->RemapInputToAction(Input::Key::Right, "move_right"_sid);
+            }
+            ImGui::SameLine();
+            if (ImGui::RadioButton("WASD", _emulatorMoveWASD == 1))
+            {
+                _emulatorMoveWASD = 1;
+                _inputManager->RemapInputToAction(Input::Key::W, "move_forward"_sid);
+                _inputManager->RemapInputToAction(Input::Key::A, "move_left"_sid);
+                _inputManager->RemapInputToAction(Input::Key::S, "move_backward"_sid);
+                _inputManager->RemapInputToAction(Input::Key::D, "move_right"_sid);
+            }
+        }
+        ImGui::End(); //Id_ActionEventsEmulatorWindow
     }
 
     bool MainFrameListener::MousePositionIsNotZero() const

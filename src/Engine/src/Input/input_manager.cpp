@@ -2,6 +2,7 @@
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Event/key_events.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -209,6 +210,25 @@ namespace Kmplete
             std::erase_if(_actionToInputCodesMap[actionId], [code](const InputCode& codeInMap) {
                 return codeInMap == code;
             });
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::RemapInputToAction(InputCode code, ActionIdentifier actionId)
+        {
+            if (!_actionToInputCodesMap.contains(actionId))
+            {
+                KMP_LOG_WARN("action '{}' is not registered", actionId);
+                return;
+            }
+
+            if (_actionToInputCodesMap[actionId].size() != 1)
+            {
+                KMP_LOG_WARN("cannot remap to '{}' due to multiple input codes binding, use Unmap(old code)+Map(new code) directly", actionId);
+                return;
+            }
+
+            UnmapInputFromAction(_actionToInputCodesMap[actionId].front(), actionId);
+            MapInputToAction(code, actionId);
         }
         //--------------------------------------------------------------------------
 
