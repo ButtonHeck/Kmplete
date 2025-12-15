@@ -148,49 +148,43 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Vector<ActionEvent> InputManager::_CreateActionEvents(InputCode code, InputControlValue value) const
-        {
-            Vector<ActionEvent> actionEvents;
-            if (!_inputCodeToActionsMap.contains(code))
-            {
-                return actionEvents;
-            }
-
-            const auto& actionIds = _inputCodeToActionsMap.at(code);
-            for (const auto& actionId : actionIds)
-            {
-                actionEvents.emplace_back(ActionEvent{
-                    .id = actionId,
-                    .value = value
-                });
-            }
-
-            return actionEvents;
-        }
-        //--------------------------------------------------------------------------
-
-        void InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback)
+        bool InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback)
         {
             TaggedActionCallback taggedCallback{
                 .tag = DefaultActionCallbackTag,
                 .callback = callback
             };
 
-            MapActionToCallback(actionId, taggedCallback);
+            return MapActionToCallback(actionId, taggedCallback);
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        bool InputManager::MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
         {
+            if (_actionCallbacks.contains(actionId) && _ContainsTaggedCallback(_actionCallbacks[actionId], taggedCallback))
+            {
+                KMP_LOG_WARN("already contains callback with same action ID '{}' and callback tag '{}'", actionId, taggedCallback.tag);
+                return false;
+            }
+
             _actionCallbacks[actionId].emplace_back(taggedCallback);
+            return true;
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag)
+        bool InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag)
         {
-            std::erase_if(_actionCallbacks[actionId], [callbackTag](const TaggedActionCallback& taggedCallback) {
+            const auto erasedCount = std::erase_if(_actionCallbacks[actionId], [callbackTag](const TaggedActionCallback& taggedCallback) {
                 return taggedCallback.tag == callbackTag;
             });
+
+            if (erasedCount == 0)
+            {
+                KMP_LOG_WARN("failed to unmap callback with tag '{}' from action '{}'", callbackTag, actionId);
+                return false;
+            }
+
+            return true;
         }
         //--------------------------------------------------------------------------
 
@@ -276,6 +270,35 @@ namespace Kmplete
         {
             MapInputToAction(code, actionId);
             MapActionToCallback(actionId, taggedCallback);
+        }
+        //--------------------------------------------------------------------------
+
+        Vector<ActionEvent> InputManager::_CreateActionEvents(InputCode code, InputControlValue value) const
+        {
+            Vector<ActionEvent> actionEvents;
+            if (!_inputCodeToActionsMap.contains(code))
+            {
+                return actionEvents;
+            }
+
+            const auto& actionIds = _inputCodeToActionsMap.at(code);
+            for (const auto& actionId : actionIds)
+            {
+                actionEvents.emplace_back(ActionEvent{
+                    .id = actionId,
+                    .value = value
+                });
+            }
+
+            return actionEvents;
+        }
+        //--------------------------------------------------------------------------
+
+        bool InputManager::_ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const
+        {
+            return std::find_if(callbacks.cbegin(), callbacks.cend(), [taggedCallback](const TaggedActionCallback& callbackInVector) {
+                return callbackInVector.tag == taggedCallback.tag;
+            }) != callbacks.cend();
         }
         //--------------------------------------------------------------------------
     }

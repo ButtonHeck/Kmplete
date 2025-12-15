@@ -63,6 +63,13 @@ namespace Kmplete
         _inputManager->MapInputToAction(Input::Key::S, "move_backward"_sid);
         _inputManager->MapInputToAction(Input::Key::A, "move_left"_sid);
         _inputManager->MapInputToAction(Input::Key::D, "move_right"_sid);
+
+        _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
+        _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
+        _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
+        _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
+
+        _unmapUnregisteredActionCheck = _inputManager->UnmapActionFromCallback("unregistered_action"_sid, "bzz"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
@@ -729,7 +736,7 @@ namespace Kmplete
             {
                 SetMouseClickHandlerActive(false);
             }
-
+            ImGui::SameLine();
             if (ImGui::Button("Trigger custom event"))
             {
                 Events::QueueEvent(CreateUPtr<Events::CustomEvent>());

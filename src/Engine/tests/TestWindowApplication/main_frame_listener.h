@@ -76,6 +76,21 @@ namespace Kmplete
             return !_duplicatePriorityFrameListenerCheckActivated || _duplicatePriorityFrameListenerCheckSuccess;
         }
 
+        bool ActionDefaultTagCallbackDoubleRegistrationCheck() const
+        {
+            return _actionDefaultTagCallbackDoubleRegistrationCheck;
+        }
+
+        bool ActionNonDefaultTagCallbackDoubleRegistrationCheck() const
+        {
+            return _actionNonDefaultTagCallbackDoubleRegistrationCheck;
+        }
+
+        bool UnmapUnregisteredActionCheck() const
+        {
+            return _unmapUnregisteredActionCheck;
+        }
+
         void SetMouseClickHandlerActive(bool active);
 
     protected:
@@ -162,6 +177,9 @@ namespace Kmplete
 
         Math::Point2I _emulatorPlayerPos = Math::Point2I(0, 0);
         int _emulatorMoveWASD = 1;
+        bool _actionDefaultTagCallbackDoubleRegistrationCheck = true;
+        bool _actionNonDefaultTagCallbackDoubleRegistrationCheck = true;
+        bool _unmapUnregisteredActionCheck = true;
     };
     //--------------------------------------------------------------------------
 }
