@@ -68,8 +68,8 @@ namespace Kmplete
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
-
         _unmapUnregisteredActionCheck = _inputManager->UnmapActionFromCallback("unregistered_action"_sid, "bzz"_sid);
+        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction(Input::Key::W, "move_forward"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)

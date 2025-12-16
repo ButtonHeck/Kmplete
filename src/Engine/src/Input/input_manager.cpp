@@ -188,10 +188,18 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
+        bool InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
         {
+            if (_inputCodeToActionsMap.contains(code) && _ContainsActionIdentifier(_inputCodeToActionsMap[code], actionId))
+            {
+                KMP_LOG_WARN("input code '{}' already mapped to action ID '{}'", code, actionId);
+                return false;
+            }
+
             _inputCodeToActionsMap[code].emplace_back(actionId);
             _actionToInputCodesMap[actionId].emplace_back(code);
+
+            return true;
         }
         //--------------------------------------------------------------------------
 
@@ -299,6 +307,12 @@ namespace Kmplete
             return std::find_if(callbacks.cbegin(), callbacks.cend(), [taggedCallback](const TaggedActionCallback& callbackInVector) {
                 return callbackInVector.tag == taggedCallback.tag;
             }) != callbacks.cend();
+        }
+        //--------------------------------------------------------------------------
+
+        bool InputManager::_ContainsActionIdentifier(const Vector<ActionIdentifier>& actionsIdentifiers, ActionIdentifier actionId) const
+        {
+            return std::find(actionsIdentifiers.cbegin(), actionsIdentifiers.cend(), actionId) != actionsIdentifiers.cend();
         }
         //--------------------------------------------------------------------------
     }

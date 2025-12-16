@@ -61,7 +61,7 @@ namespace Kmplete
             KMP_API bool MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
             KMP_API bool UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag);
 
-            KMP_API void MapInputToAction(InputCode code, ActionIdentifier actionId);
+            KMP_API bool MapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_API void UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
             KMP_API void RemapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_NODISCARD KMP_API InputControlValue GetActionValue(ActionIdentifier actionId);
@@ -78,6 +78,7 @@ namespace Kmplete
             KMP_NODISCARD Vector<ActionEvent> _CreateActionEvents(InputCode code, InputControlValue value) const;
             void _PropagateSingleActionEvent(const ActionEvent& actionEvent);
             KMP_NODISCARD bool _ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const;
+            KMP_NODISCARD bool _ContainsActionIdentifier(const Vector<ActionIdentifier>& actionsIdentifiers, ActionIdentifier actionId) const;
 
         private:
             Math::Point2I _mousePosition;

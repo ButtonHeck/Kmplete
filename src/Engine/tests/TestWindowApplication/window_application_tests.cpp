@@ -166,6 +166,7 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE_FALSE(application->mainFrameListener->ActionDefaultTagCallbackDoubleRegistrationCheck());
     REQUIRE_FALSE(application->mainFrameListener->ActionNonDefaultTagCallbackDoubleRegistrationCheck());
     REQUIRE_FALSE(application->mainFrameListener->UnmapUnregisteredActionCheck());
+    REQUIRE_FALSE(application->mainFrameListener->InputToActionDoubleRegistrationCheck());
 
     application.reset();
 
