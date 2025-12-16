@@ -96,6 +96,11 @@ namespace Kmplete
             return _inputToActionDoubleRegistrationCheck;
         }
 
+        bool UnmapInputFromActionCheck() const
+        {
+            return _unmapInputFromActionCheck;
+        }
+
         void SetMouseClickHandlerActive(bool active);
 
     protected:
@@ -186,6 +191,7 @@ namespace Kmplete
         bool _actionNonDefaultTagCallbackDoubleRegistrationCheck = true;
         bool _unmapUnregisteredActionCheck = true;
         bool _inputToActionDoubleRegistrationCheck = true;
+        bool _unmapInputFromActionCheck = true;
     };
     //--------------------------------------------------------------------------
 }

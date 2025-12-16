@@ -203,15 +203,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::UnmapInputFromAction(InputCode code, ActionIdentifier actionId)
+        bool InputManager::UnmapInputFromAction(InputCode code, ActionIdentifier actionId)
         {
-            std::erase_if(_inputCodeToActionsMap[code], [actionId](const ActionIdentifier& actionInMap) {
+            const auto actionsErased = std::erase_if(_inputCodeToActionsMap[code], [actionId](const ActionIdentifier& actionInMap) {
                 return actionInMap == actionId;
             });
 
-            std::erase_if(_actionToInputCodesMap[actionId], [code](const InputCode& codeInMap) {
+            const auto inputsErased = std::erase_if(_actionToInputCodesMap[actionId], [code](const InputCode& codeInMap) {
                 return codeInMap == code;
             });
+
+            if (actionsErased == 0 || inputsErased == 0)
+            {
+                KMP_LOG_WARN("failed to unmap input code '{}' from action '{}'", code, actionId);
+                return false;
+            }
+
+            return true;
         }
         //--------------------------------------------------------------------------
 

@@ -163,10 +163,12 @@ TEST_CASE("Test window application", "[window_application][application][window][
     REQUIRE(application->mainFrameListener->MousePositionIsNotZero());
     REQUIRE(application->mainFrameListener->DPIIsNotZero());
     REQUIRE(application->mainFrameListener->DPIScaleIsNotZero());
+
     REQUIRE_FALSE(application->mainFrameListener->ActionDefaultTagCallbackDoubleRegistrationCheck());
     REQUIRE_FALSE(application->mainFrameListener->ActionNonDefaultTagCallbackDoubleRegistrationCheck());
     REQUIRE_FALSE(application->mainFrameListener->UnmapUnregisteredActionCheck());
     REQUIRE_FALSE(application->mainFrameListener->InputToActionDoubleRegistrationCheck());
+    REQUIRE_FALSE(application->mainFrameListener->UnmapInputFromActionCheck());
 
     application.reset();
 
