@@ -63,7 +63,7 @@ namespace Kmplete
 
             KMP_API bool MapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_API bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
-            KMP_API void RemapInputToAction(InputCode code, ActionIdentifier actionId);
+            KMP_API bool RemapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_NODISCARD KMP_API InputControlValue GetActionValue(ActionIdentifier actionId);
 
             KMP_API void MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);

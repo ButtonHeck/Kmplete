@@ -96,9 +96,14 @@ namespace Kmplete
             return _inputToActionDoubleRegistrationCheck;
         }
 
-        bool UnmapInputFromActionCheck() const
+        bool UnmapInvalidInputFromActionCheck() const
         {
-            return _unmapInputFromActionCheck;
+            return _unmapInvalidInputFromActionCheck;
+        }
+
+        bool RemapInvalidInputToActionCheck() const
+        {
+            return _remapInvalidInputToActionCheck;
         }
 
         void SetMouseClickHandlerActive(bool active);
@@ -187,11 +192,12 @@ namespace Kmplete
 
         Math::Point2I _emulatorPlayerPos = Math::Point2I(0, 0);
         int _emulatorMoveWASD = 1;
-        bool _actionDefaultTagCallbackDoubleRegistrationCheck = true;
-        bool _actionNonDefaultTagCallbackDoubleRegistrationCheck = true;
-        bool _unmapUnregisteredActionCheck = true;
-        bool _inputToActionDoubleRegistrationCheck = true;
-        bool _unmapInputFromActionCheck = true;
+        bool _actionDefaultTagCallbackDoubleRegistrationCheck = false;
+        bool _actionNonDefaultTagCallbackDoubleRegistrationCheck = false;
+        bool _unmapUnregisteredActionCheck = false;
+        bool _inputToActionDoubleRegistrationCheck = false;
+        bool _unmapInvalidInputFromActionCheck = false;
+        bool _remapInvalidInputToActionCheck = false;
     };
     //--------------------------------------------------------------------------
 }

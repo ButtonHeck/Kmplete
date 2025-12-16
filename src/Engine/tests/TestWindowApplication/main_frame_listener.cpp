@@ -70,7 +70,9 @@ namespace Kmplete
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _unmapUnregisteredActionCheck = _inputManager->UnmapActionFromCallback("unregistered_action"_sid, "bzz"_sid);
         _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction(Input::Key::W, "move_forward"_sid);
-        _unmapInputFromActionCheck = _inputManager->UnmapInputFromAction(Input::Key::M, "bzz"_sid);
+        _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Key::M, "bzz"_sid);
+        _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Key::M, "move_forward"_sid);
+        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction(Input::Key::W, "bzz"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)

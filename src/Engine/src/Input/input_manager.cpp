@@ -223,22 +223,22 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::RemapInputToAction(InputCode code, ActionIdentifier actionId)
+        bool InputManager::RemapInputToAction(InputCode code, ActionIdentifier actionId)
         {
             if (!_actionToInputCodesMap.contains(actionId))
             {
                 KMP_LOG_WARN("action '{}' is not registered", actionId);
-                return;
+                return false;
             }
 
             if (_actionToInputCodesMap[actionId].size() != 1)
             {
                 KMP_LOG_WARN("cannot remap to '{}' due to multiple input codes binding, use Unmap(old code)+Map(new code) directly", actionId);
-                return;
+                return false;
             }
 
             UnmapInputFromAction(_actionToInputCodesMap[actionId].front(), actionId);
-            MapInputToAction(code, actionId);
+            return MapInputToAction(code, actionId);
         }
         //--------------------------------------------------------------------------
 
