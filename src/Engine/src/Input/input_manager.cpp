@@ -275,17 +275,27 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
+        bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
         {
-            MapInputToAction(code, actionId);
-            MapActionToCallback(actionId, callback);
+            const auto inputMapped = MapInputToAction(code, actionId);
+            if (!inputMapped)
+            {
+                return false;
+            }
+
+            return MapActionToCallback(actionId, callback);
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
         {
-            MapInputToAction(code, actionId);
-            MapActionToCallback(actionId, taggedCallback);
+            const auto inputMapped = MapInputToAction(code, actionId);
+            if (!inputMapped)
+            {
+                return false;
+            }
+
+            return MapActionToCallback(actionId, taggedCallback);
         }
         //--------------------------------------------------------------------------
 

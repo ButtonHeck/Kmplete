@@ -66,8 +66,8 @@ namespace Kmplete
             KMP_API bool RemapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_NODISCARD KMP_API InputControlValue GetActionValue(ActionIdentifier actionId);
 
-            KMP_API void MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
-            KMP_API void MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
+            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
+            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(MouseCode mouseCode) const;
