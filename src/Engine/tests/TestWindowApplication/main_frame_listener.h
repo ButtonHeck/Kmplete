@@ -186,7 +186,7 @@ namespace Kmplete
         bool _duplicatePriorityFrameListenerCheckActivated = false;
         bool _duplicatePriorityFrameListenerCheckSuccess = false;
 
-        HashSet<Input::KeyCode> _keysPressed;
+        HashSet<Input::InputCode> _keysPressed;
 
         bool _mouseButtonHandlersColoring = false;
 

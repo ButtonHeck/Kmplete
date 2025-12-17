@@ -12,8 +12,7 @@ namespace Kmplete
         InputManager::InputManager() noexcept
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _mousePosition(0, 0)
-            , _mouseButtonsStates({false})
-            , _keyButtonsStates({false})
+            , _controlStates({false})
             , _modifiersMask(Modifier::None)
             , _inputCodeToActionsMap({})
             , _actionToInputCodesMap({})
@@ -38,7 +37,7 @@ namespace Kmplete
                 const auto& mouseButtonPressEvent = static_cast<Events::MouseButtonPressEvent&>(event);
                 const auto mouseButton = mouseButtonPressEvent.GetMouseButton();
 
-                _mouseButtonsStates[mouseButton] = 1.0f;
+                _controlStates[mouseButton] = 1.0f;
 
                 const auto newEvents = _CreateActionEvents(mouseButton, 1.0f);
                 if (!newEvents.empty())
@@ -51,7 +50,7 @@ namespace Kmplete
                 const auto& mouseButtonReleaseEvent = static_cast<Events::MouseButtonReleaseEvent&>(event);
                 const auto mouseButton = mouseButtonReleaseEvent.GetMouseButton();
 
-                _mouseButtonsStates[mouseButton] = 0.0f;
+                _controlStates[mouseButton] = 0.0f;
 
                 const auto newEvents = _CreateActionEvents(mouseButton, 0.0f);
                 if (!newEvents.empty())
@@ -66,7 +65,7 @@ namespace Kmplete
                 const auto keyCode = keyPressEvent.GetKeyCode();
                 const auto modifiers = keyPressEvent.GetMods();
 
-                _keyButtonsStates[keyCode] = 1.0f;
+                _controlStates[keyCode] = 1.0f;
                 _modifiersMask = modifiers;
 
                 if (!keyPressEvent.IsRepeat())
@@ -84,7 +83,7 @@ namespace Kmplete
                 const auto keyCode = keyReleaseEvent.GetKeyCode();
                 const auto modifiers = keyReleaseEvent.GetMods();
 
-                _keyButtonsStates[keyCode] = 0.0f;
+                _controlStates[keyCode] = 0.0f;
                 _modifiersMask = modifiers;
 
                 const auto newEvents = _CreateActionEvents(keyCode, 0.0f);
@@ -135,9 +134,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::IsMouseButtonPressed(MouseCode mouseCode) const
+        bool InputManager::IsMouseButtonPressed(InputCode mouseCode) const
         {
-            return _mouseButtonsStates[mouseCode];
+            return _controlStates[mouseCode];
         }
         //--------------------------------------------------------------------------
 
@@ -147,9 +146,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::IsKeyButtonPressed(KeyCode keyCode) const
+        bool InputManager::IsKeyButtonPressed(InputCode keyCode) const
         {
-            return _keyButtonsStates[keyCode];
+            return _controlStates[keyCode];
         }
         //--------------------------------------------------------------------------
 
@@ -270,17 +269,9 @@ namespace Kmplete
             InputControlValue resultValue = 0.0f;
             for (const auto& code : codes)
             {
-                if (code < Mouse::NumButtons)
+                if (code >= 0 && code < Code::NumCodes)
                 {
-                    const auto currentMouseValue = _mouseButtonsStates[code];
-                    if (std::abs(currentMouseValue) > std::abs(resultValue))
-                    {
-                        resultValue = currentMouseValue;
-                    }
-                }
-                else if (code >= Key::First && code < Key::NumKeys)
-                {
-                    const auto currentKeyboardValue = _keyButtonsStates[code];
+                    const auto currentKeyboardValue = _controlStates[code];
                     if (std::abs(currentKeyboardValue) > std::abs(resultValue))
                     {
                         resultValue = currentKeyboardValue;

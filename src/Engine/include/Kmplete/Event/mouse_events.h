@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Event/event.h"
-#include "Kmplete/Input/mouse_codes.h"
+#include "Kmplete/Input/input_codes.h"
 #include "Kmplete/Utils/string_utils.h"
 
 
@@ -84,7 +84,7 @@ namespace Kmplete
 
         struct MouseButtonEvent : public Event
         {
-            KMP_NODISCARD Input::MouseCode GetMouseButton() const noexcept
+            KMP_NODISCARD Input::InputCode GetMouseButton() const noexcept
             {
                 return _button;
             }
@@ -95,13 +95,13 @@ namespace Kmplete
             }
 
         protected:
-            MouseButtonEvent(const Input::MouseCode button, int mods) noexcept
+            MouseButtonEvent(const Input::InputCode button, int mods) noexcept
                 : _button(button)
                 , _mods(mods)
             {}
 
         protected:
-            const Input::MouseCode _button;
+            const Input::InputCode _button;
             const int _mods;
         };
         //--------------------------------------------------------------------------
@@ -111,7 +111,7 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(MouseButtonPressEventTypeStr)
 
-            MouseButtonPressEvent(const Input::MouseCode button, int mods) noexcept
+            MouseButtonPressEvent(const Input::InputCode button, int mods) noexcept
                 : MouseButtonEvent(button, mods)
             {}
 
@@ -127,7 +127,7 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(MouseButtonReleaseEventTypeStr)
 
-            MouseButtonReleaseEvent(const Input::MouseCode button, int mods) noexcept
+            MouseButtonReleaseEvent(const Input::InputCode button, int mods) noexcept
                 : MouseButtonEvent(button, mods)
             {}
 

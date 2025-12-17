@@ -101,7 +101,7 @@ namespace Kmplete
         KMP_ASSERT(_frameListenerManager);
 
 #if defined KMP_PROFILE
-        _inputManager->MapInputToCallback(Input::Key::F11, "switch_profiler_activity"_sid, [this](Input::InputControlValue value) {
+        _inputManager->MapInputToCallback(Input::Code::Key_F11, "switch_profiler_activity"_sid, [this](Input::InputControlValue value) {
             if (value != 0.0f && _inputManager->GetKeyModifiersMask() & Input::Modifier::Alt)
             {
                 const auto isProfilerActive = Profiler::Get().IsActive();

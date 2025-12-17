@@ -60,8 +60,7 @@ AddTargetSourcesGroup(Kmplete "Event"
     ${CMAKE_CURRENT_LIST_DIR}/src/Event/event_queue.cpp
 )
 AddTargetSourcesGroup(Kmplete "Input"
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/key_codes.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/mouse_codes.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/input_codes.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/input_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Input/input_manager.cpp
 )

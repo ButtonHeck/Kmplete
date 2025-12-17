@@ -4,8 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Base/functional.h"
-#include "Kmplete/Input/mouse_codes.h"
-#include "Kmplete/Input/key_codes.h"
+#include "Kmplete/Input/input_codes.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Profile/profiler.h"
@@ -21,7 +20,6 @@ namespace Kmplete
 
     namespace Input
     {
-        using InputCode = int;
         using InputControlValue = float;
         using ActionIdentifier = StringID;
         using ActionCallbackTag = StringID;
@@ -72,9 +70,9 @@ namespace Kmplete
             KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
-            KMP_NODISCARD KMP_API bool IsMouseButtonPressed(MouseCode mouseCode) const;
+            KMP_NODISCARD KMP_API bool IsMouseButtonPressed(InputCode mouseCode) const;
             KMP_NODISCARD KMP_API KeyModifier GetKeyModifiersMask() const noexcept;
-            KMP_NODISCARD KMP_API bool IsKeyButtonPressed(KeyCode keyCode) const;
+            KMP_NODISCARD KMP_API bool IsKeyButtonPressed(InputCode keyCode) const;
 
         private:
             KMP_NODISCARD Vector<ActionEvent> _CreateActionEvents(InputCode code, InputControlValue value) const;
@@ -84,8 +82,7 @@ namespace Kmplete
 
         private:
             Math::Point2I _mousePosition;
-            Array<InputControlValue, Mouse::NumButtons> _mouseButtonsStates;
-            Array<InputControlValue, Key::NumKeys> _keyButtonsStates;
+            Array<InputControlValue, Code::NumCodes> _controlStates;
             KeyModifier _modifiersMask;
 
             HashMap<InputCode, Vector<ActionIdentifier>> _inputCodeToActionsMap;

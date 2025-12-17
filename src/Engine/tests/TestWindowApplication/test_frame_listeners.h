@@ -6,7 +6,7 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Event/event_handler_guard.h"
-#include "Kmplete/Input/key_codes.h"
+#include "Kmplete/Input/input_codes.h"
 
 
 namespace Kmplete

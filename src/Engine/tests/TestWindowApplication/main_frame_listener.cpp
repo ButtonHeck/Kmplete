@@ -59,20 +59,20 @@ namespace Kmplete
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
         _imguiImpl->Stylize(_mainWindow.GetDPIScale());
 
-        _inputManager->MapInputToAction(Input::Key::W, "move_forward"_sid);
-        _inputManager->MapInputToAction(Input::Key::S, "move_backward"_sid);
-        _inputManager->MapInputToAction(Input::Key::A, "move_left"_sid);
-        _inputManager->MapInputToAction(Input::Key::D, "move_right"_sid);
+        _inputManager->MapInputToAction(Input::Code::Key_W, "move_forward"_sid);
+        _inputManager->MapInputToAction(Input::Code::Key_S, "move_backward"_sid);
+        _inputManager->MapInputToAction(Input::Code::Key_A, "move_left"_sid);
+        _inputManager->MapInputToAction(Input::Code::Key_D, "move_right"_sid);
 
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _unmapUnregisteredActionCheck = _inputManager->UnmapActionFromCallback("unregistered_action"_sid, "bzz"_sid);
-        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction(Input::Key::W, "move_forward"_sid);
-        _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Key::M, "bzz"_sid);
-        _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Key::M, "move_forward"_sid);
-        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction(Input::Key::W, "bzz"_sid);
+        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction(Input::Code::Key_W, "move_forward"_sid);
+        _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Code::Key_M, "bzz"_sid);
+        _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Code::Key_M, "move_forward"_sid);
+        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction(Input::Code::Key_W, "bzz"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
@@ -438,37 +438,37 @@ namespace Kmplete
             ImGui::Text("Key mods: %s", keyModsString.c_str());
 
             StringVector mouseButtonsPressed;
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button0))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button0))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button0));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button0));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button1))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button1))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button1));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button1));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button2))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button2))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button2));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button2));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button3))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button3))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button3));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button3));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button4))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button4))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button4));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button4));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button5))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button5))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button5));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button5));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button6))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button6))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button6));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button6));
             }
-            if (_inputManager->IsMouseButtonPressed(Input::Mouse::Button7))
+            if (_inputManager->IsMouseButtonPressed(Input::Code::Mouse_Button7))
             {
-                mouseButtonsPressed.push_back(Input::GetMouseCodeName(Input::Mouse::Button7));
+                mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button7));
             }
             String mouseButtonsString = "";
             if (!mouseButtonsPressed.empty())
@@ -481,7 +481,7 @@ namespace Kmplete
             String keysPressedString = "";
             for (const auto& key : _keysPressed)
             {
-                keysPressedStringVector.push_back(Input::GetKeyCodeName(key));
+                keysPressedStringVector.push_back(Input::GetCodeName(key));
             }
             if (!keysPressedStringVector.empty())
             {
@@ -757,19 +757,19 @@ namespace Kmplete
             if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
             {
                 _emulatorMoveWASD = 0;
-                _inputManager->RemapInputToAction(Input::Key::Up, "move_forward"_sid);
-                _inputManager->RemapInputToAction(Input::Key::Left, "move_left"_sid);
-                _inputManager->RemapInputToAction(Input::Key::Down, "move_backward"_sid);
-                _inputManager->RemapInputToAction(Input::Key::Right, "move_right"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_Up, "move_forward"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_Left, "move_left"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_Down, "move_backward"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_Right, "move_right"_sid);
             }
             ImGui::SameLine();
             if (ImGui::RadioButton("WASD", _emulatorMoveWASD == 1))
             {
                 _emulatorMoveWASD = 1;
-                _inputManager->RemapInputToAction(Input::Key::W, "move_forward"_sid);
-                _inputManager->RemapInputToAction(Input::Key::A, "move_left"_sid);
-                _inputManager->RemapInputToAction(Input::Key::S, "move_backward"_sid);
-                _inputManager->RemapInputToAction(Input::Key::D, "move_right"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_W, "move_forward"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_A, "move_left"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_S, "move_backward"_sid);
+                _inputManager->RemapInputToAction(Input::Code::Key_D, "move_right"_sid);
             }
         }
         ImGui::End(); //Id_ActionEventsEmulatorWindow
@@ -832,7 +832,7 @@ namespace Kmplete
     bool MainFrameListener::OnMouseButtonPressEvent(Events::MouseButtonPressEvent& evt)
     {
         _mouseButtonPressEventInvokedCount++;
-        if (evt.GetMouseButton() == Input::Mouse::ButtonLeft && evt.GetMods() & Input::Modifier::Ctrl)
+        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonLeft && evt.GetMods() & Input::Modifier::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {
@@ -843,7 +843,7 @@ namespace Kmplete
                 _mainWindow.SetCursorMode(Window::CursorMode::Default);
             }
         }
-        else if (evt.GetMouseButton() == Input::Mouse::ButtonRight && evt.GetMods() & Input::Modifier::Ctrl)
+        else if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight && evt.GetMods() & Input::Modifier::Ctrl)
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {
