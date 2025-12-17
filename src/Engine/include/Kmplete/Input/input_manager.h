@@ -7,6 +7,7 @@
 #include "Kmplete/Input/key_codes.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <functional>
 
@@ -48,10 +49,12 @@ namespace Kmplete
 
         class InputManager
         {
-            KMP_DISABLE_COPY_MOVE(InputManager)
             KMP_LOG_CLASSNAME(InputManager)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            KMP_DISABLE_COPY_MOVE(InputManager)
+
             KMP_API InputManager() noexcept;
 
             KMP_API void ProcessInputEvents(Events::Event& event);

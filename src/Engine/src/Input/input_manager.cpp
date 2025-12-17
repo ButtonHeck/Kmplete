@@ -10,7 +10,8 @@ namespace Kmplete
     namespace Input
     {
         InputManager::InputManager() noexcept
-            : _mousePosition(0, 0)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _mousePosition(0, 0)
             , _mouseButtonsStates({false})
             , _keyButtonsStates({false})
             , _modifiersMask(Modifier::None)
@@ -22,6 +23,8 @@ namespace Kmplete
 
         void InputManager::ProcessInputEvents(Events::Event& event)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             const auto eventTypeID = event.GetTypeID();
 
             if (eventTypeID == Events::MouseMoveEventTypeID)
@@ -95,6 +98,8 @@ namespace Kmplete
 
         void InputManager::PropagateActionEvents()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             for (const auto& actionEvent : _actionEvents)
             {
                 if (_actionCallbacks[actionEvent.id].empty())
@@ -161,6 +166,8 @@ namespace Kmplete
 
         bool InputManager::MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             if (_actionCallbacks.contains(actionId) && _ContainsTaggedCallback(_actionCallbacks[actionId], taggedCallback))
             {
                 KMP_LOG_WARN("already contains callback with same action ID '{}' and callback tag '{}'", actionId, taggedCallback.tag);
@@ -174,6 +181,8 @@ namespace Kmplete
 
         bool InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             const auto erasedCount = std::erase_if(_actionCallbacks[actionId], [callbackTag](const TaggedActionCallback& taggedCallback) {
                 return taggedCallback.tag == callbackTag;
             });
@@ -190,6 +199,8 @@ namespace Kmplete
 
         bool InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             if (_inputCodeToActionsMap.contains(code) && _ContainsActionIdentifier(_inputCodeToActionsMap[code], actionId))
             {
                 KMP_LOG_WARN("input code '{}' already mapped to action ID '{}'", code, actionId);
@@ -205,6 +216,8 @@ namespace Kmplete
 
         bool InputManager::UnmapInputFromAction(InputCode code, ActionIdentifier actionId)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             const auto actionsErased = std::erase_if(_inputCodeToActionsMap[code], [actionId](const ActionIdentifier& actionInMap) {
                 return actionInMap == actionId;
             });
@@ -225,6 +238,8 @@ namespace Kmplete
 
         bool InputManager::RemapInputToAction(InputCode code, ActionIdentifier actionId)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             if (!_actionToInputCodesMap.contains(actionId))
             {
                 KMP_LOG_WARN("action '{}' is not registered", actionId);
@@ -244,6 +259,8 @@ namespace Kmplete
 
         InputControlValue InputManager::GetActionValue(ActionIdentifier actionId)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             if (!_actionToInputCodesMap.contains(actionId))
             {
                 return 0.0f;
@@ -277,6 +294,8 @@ namespace Kmplete
 
         bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             const auto inputMapped = MapInputToAction(code, actionId);
             if (!inputMapped)
             {
@@ -289,6 +308,8 @@ namespace Kmplete
 
         bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             const auto inputMapped = MapInputToAction(code, actionId);
             if (!inputMapped)
             {
@@ -301,6 +322,8 @@ namespace Kmplete
 
         Vector<ActionEvent> InputManager::_CreateActionEvents(InputCode code, InputControlValue value) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             Vector<ActionEvent> actionEvents;
             if (!_inputCodeToActionsMap.contains(code))
             {
