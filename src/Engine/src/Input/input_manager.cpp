@@ -257,49 +257,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        InputControlValue InputManager::GetActionValue(ActionIdentifier actionId)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
-
-            if (!_actionToInputCodesMap.contains(actionId))
-            {
-                return InputControlValue();
-            }
-
-            const auto& codes = _actionToInputCodesMap[actionId];
-            InputControlValue resultValue = 0;
-            for (const auto& code : codes)
-            {
-                if (code < 0 || code >= Code::NumCodes)
-                {
-                    continue;
-                }
-
-                const auto& currentValue = _controlStates[code];
-
-                if (currentValue.index() == InputControlValueIntIndex)
-                {
-                    const auto currentUnderlyingValue = std::get<int>(currentValue);
-                    const auto resultUnderlyingValue = std::get<int>(resultValue);
-                    if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
-                    {
-                        resultValue = currentValue;
-                    }
-                }
-                else if (currentValue.index() == InputControlValueFloatIndex)
-                {
-                    //TODO
-                }
-                else if (currentValue.index() == InputControlValuePointIndex)
-                {
-                    //TODO
-                }
-            }
-
-            return resultValue;
-        }
-        //--------------------------------------------------------------------------
-
         bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);

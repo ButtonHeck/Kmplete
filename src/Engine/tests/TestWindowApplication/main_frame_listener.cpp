@@ -101,19 +101,19 @@ namespace Kmplete
 
         _sharedState.updateMaskString += "M";
 
-        if (_inputManager->GetActionValue("move_forward"_sid) == Input::ButtonPressed)
+        if (_inputManager->GetActionValue<int>("move_forward"_sid) == Input::ButtonPressed)
         {
             _emulatorPlayerPos.y++;
         }
-        if (_inputManager->GetActionValue("move_backward"_sid) == Input::ButtonPressed)
+        if (_inputManager->GetActionValue<int>("move_backward"_sid) == Input::ButtonPressed)
         {
             _emulatorPlayerPos.y--;
         }
-        if (_inputManager->GetActionValue("move_left"_sid) == Input::ButtonPressed)
+        if (_inputManager->GetActionValue<int>("move_left"_sid) == Input::ButtonPressed)
         {
             _emulatorPlayerPos.x--;
         }
-        if (_inputManager->GetActionValue("move_right"_sid) == Input::ButtonPressed)
+        if (_inputManager->GetActionValue<int>("move_right"_sid) == Input::ButtonPressed)
         {
             _emulatorPlayerPos.x++;
         }

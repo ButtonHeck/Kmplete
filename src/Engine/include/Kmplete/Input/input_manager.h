@@ -75,7 +75,6 @@ namespace Kmplete
             KMP_API bool MapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_API bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
             KMP_API bool RemapInputToAction(InputCode code, ActionIdentifier actionId);
-            KMP_NODISCARD KMP_API InputControlValue GetActionValue(ActionIdentifier actionId);
 
             KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
             KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
@@ -84,6 +83,49 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(InputCode mouseCode) const;
             KMP_NODISCARD KMP_API KeyModifier GetKeyModifiersMask() const noexcept;
             KMP_NODISCARD KMP_API bool IsKeyButtonPressed(InputCode keyCode) const;
+
+            template<typename ExpectedType> requires (IsAnyOfType<ExpectedType, int, float, Math::Point2I>)
+            KMP_NODISCARD InputControlValue GetActionValue(ActionIdentifier actionId)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+                if (!_actionToInputCodesMap.contains(actionId))
+                {
+                    return InputControlValue(ExpectedType());
+                }
+
+                const auto& codes = _actionToInputCodesMap[actionId];
+                InputControlValue resultValue = 0;
+                for (const auto& code : codes)
+                {
+                    if (code < 0 || code >= Code::NumCodes)
+                    {
+                        continue;
+                    }
+
+                    const auto& currentValue = _controlStates[code];
+
+                    if (currentValue.index() == InputControlValueIntIndex)
+                    {
+                        const auto currentUnderlyingValue = std::get<int>(currentValue);
+                        const auto resultUnderlyingValue = std::get<int>(resultValue);
+                        if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
+                        {
+                            resultValue = currentValue;
+                        }
+                    }
+                    else if (currentValue.index() == InputControlValueFloatIndex)
+                    {
+                        //TODO
+                    }
+                    else if (currentValue.index() == InputControlValuePointIndex)
+                    {
+                        //TODO
+                    }
+                }
+
+                return resultValue;
+            }
 
         private:
             KMP_NODISCARD Vector<ActionEvent> _CreateActionEvents(InputCode code, InputControlValue value) const;
