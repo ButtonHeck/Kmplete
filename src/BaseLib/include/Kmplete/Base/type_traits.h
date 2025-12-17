@@ -1,6 +1,7 @@
 #pragma once
 
 #include <type_traits>
+#include <concepts>
 
 
 namespace Kmplete
@@ -8,11 +9,14 @@ namespace Kmplete
     template<typename T1, typename T2>
     using Same = std::is_same<T1, T2>;
 
-    template<typename T1, typename T2>
-    using Both = std::conjunction<T1, T2>;
+    template<typename T1, typename... RestTypes>
+    using Both = std::conjunction<T1, RestTypes...>;
 
-    template<typename T1, typename T2>
-    using Either = std::disjunction<T1, T2>;
+    template<typename T1, typename... RestTypes>
+    using Either = std::disjunction<T1, RestTypes...>;
+
+    template<typename Type, typename... CandidateTypes>
+    concept IsAnyOfType = (Same<Type, CandidateTypes>::value || ...);
 
 
     template<typename T>
