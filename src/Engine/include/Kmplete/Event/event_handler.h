@@ -2,9 +2,8 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Base/functional.h"
 #include "Kmplete/Event/event.h"
-
-#include <functional>
 
 
 namespace Kmplete
@@ -12,7 +11,7 @@ namespace Kmplete
     namespace Events
     {
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-        using EventHandler = std::function<bool(EventClass&)>;
+        using EventHandler = Function<bool(EventClass&)>;
 
 
         class EventHandlerWrapper

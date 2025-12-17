@@ -3,12 +3,11 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/nullability.h"
+#include "Kmplete/Base/functional.h"
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Application/frame_listener_command.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Log/log_class_macro.h"
-
-#include <functional>
 
 
 namespace Kmplete
@@ -18,7 +17,7 @@ namespace Kmplete
         KMP_LOG_CLASSNAME(FrameListenerManager)
 
     public:
-        using FrameCreateDeleteListenerCommandBufferHandler = std::function<void(const FrameListenerCommandBuffer&)>;
+        using FrameCreateDeleteListenerCommandBufferHandler = Function<void(const FrameListenerCommandBuffer&)>;
 
     public:
         KMP_DISABLE_COPY_MOVE(FrameListenerManager)

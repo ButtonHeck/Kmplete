@@ -4,12 +4,11 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/functional.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
-
-#include <functional>
 
 
 namespace Kmplete
@@ -25,7 +24,7 @@ namespace Kmplete
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
     public:
-        using EventCallbackFn = std::function<void(Events::Event&)>;
+        using EventCallbackFn = Function<void(Events::Event&)>;
 
     public:
         enum class ScreenMode

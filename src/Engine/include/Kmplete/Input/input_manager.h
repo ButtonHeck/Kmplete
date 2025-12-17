@@ -3,13 +3,12 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/string_id.h"
+#include "Kmplete/Base/functional.h"
 #include "Kmplete/Input/mouse_codes.h"
 #include "Kmplete/Input/key_codes.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Profile/profiler.h"
-
-#include <functional>
 
 
 namespace Kmplete
@@ -26,7 +25,7 @@ namespace Kmplete
         using InputControlValue = float;
         using ActionIdentifier = StringID;
         using ActionCallbackTag = StringID;
-        using ActionCallback = std::function<bool(InputControlValue)>;
+        using ActionCallback = Function<bool(InputControlValue)>;
 
 
         struct TaggedActionCallback

@@ -1,8 +1,7 @@
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Base/functional.h"
 
 #include <catch2/catch_test_macros.hpp>
-
-#include <functional>
 
 
 TEST_CASE("GetArgsCount 0", "[utils][function]")
@@ -48,8 +47,8 @@ TEST_CASE("GetArgsCount 4", "[utils][function]")
 
 TEST_CASE("KMP_BIND", "[utils][function]")
 {
-    using CallbackIntNoParamsFn = std::function<int()>;
-    using CallbackIntParamsFn = std::function<int(int)>;
+    using CallbackIntNoParamsFn = Kmplete::Function<int()>;
+    using CallbackIntParamsFn = Kmplete::Function<int(int)>;
 
     struct CallbackTest
     {
@@ -101,8 +100,8 @@ static int Return555() { return 555; }
 static int ReturnParamX2(int param) { return param * 2; }
 TEST_CASE("KMP_BIND_FREE_FN", "[utils][function]")
 {
-    using CallbackIntNoParamsFn = std::function<int()>;
-    using CallbackIntParamsFn = std::function<int(int)>;
+    using CallbackIntNoParamsFn = Kmplete::Function<int()>;
+    using CallbackIntParamsFn = Kmplete::Function<int(int)>;
 
     struct CallbackTest
     {
