@@ -2,6 +2,7 @@
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Event/key_events.h"
+#include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -37,9 +38,9 @@ namespace Kmplete
                 const auto& mouseButtonPressEvent = static_cast<Events::MouseButtonPressEvent&>(event);
                 const auto mouseButton = mouseButtonPressEvent.GetMouseButton();
 
-                _controlStates[mouseButton] = 1.0f;
+                _controlStates[mouseButton] = ButtonPressed;
 
-                const auto newEvents = _CreateActionEvents(mouseButton, 1.0f);
+                const auto newEvents = _CreateActionEvents(mouseButton, ButtonPressed);
                 if (!newEvents.empty())
                 {
                     std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
@@ -50,9 +51,9 @@ namespace Kmplete
                 const auto& mouseButtonReleaseEvent = static_cast<Events::MouseButtonReleaseEvent&>(event);
                 const auto mouseButton = mouseButtonReleaseEvent.GetMouseButton();
 
-                _controlStates[mouseButton] = 0.0f;
+                _controlStates[mouseButton] = ButtonReleased;
 
-                const auto newEvents = _CreateActionEvents(mouseButton, 0.0f);
+                const auto newEvents = _CreateActionEvents(mouseButton, ButtonReleased);
                 if (!newEvents.empty())
                 {
                     std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
@@ -65,12 +66,12 @@ namespace Kmplete
                 const auto keyCode = keyPressEvent.GetKeyCode();
                 const auto modifiers = keyPressEvent.GetMods();
 
-                _controlStates[keyCode] = 1.0f;
+                _controlStates[keyCode] = ButtonPressed;
                 _modifiersMask = modifiers;
 
                 if (!keyPressEvent.IsRepeat())
                 {
-                    const auto newEvents = _CreateActionEvents(keyCode, 1.0f);
+                    const auto newEvents = _CreateActionEvents(keyCode, ButtonPressed);
                     if (!newEvents.empty())
                     {
                         std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
@@ -83,10 +84,10 @@ namespace Kmplete
                 const auto keyCode = keyReleaseEvent.GetKeyCode();
                 const auto modifiers = keyReleaseEvent.GetMods();
 
-                _controlStates[keyCode] = 0.0f;
+                _controlStates[keyCode] = ButtonReleased;
                 _modifiersMask = modifiers;
 
-                const auto newEvents = _CreateActionEvents(keyCode, 0.0f);
+                const auto newEvents = _CreateActionEvents(keyCode, ButtonReleased);
                 if (!newEvents.empty())
                 {
                     std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
@@ -136,7 +137,7 @@ namespace Kmplete
 
         bool InputManager::IsMouseButtonPressed(InputCode mouseCode) const
         {
-            return _controlStates[mouseCode];
+            return _controlStates[mouseCode] == ButtonPressed;
         }
         //--------------------------------------------------------------------------
 
@@ -148,7 +149,7 @@ namespace Kmplete
 
         bool InputManager::IsKeyButtonPressed(InputCode keyCode) const
         {
-            return _controlStates[keyCode];
+            return _controlStates[keyCode] == ButtonPressed;
         }
         //--------------------------------------------------------------------------
 
@@ -262,20 +263,36 @@ namespace Kmplete
 
             if (!_actionToInputCodesMap.contains(actionId))
             {
-                return 0.0f;
+                return InputControlValue();
             }
 
             const auto& codes = _actionToInputCodesMap[actionId];
-            InputControlValue resultValue = 0.0f;
+            InputControlValue resultValue = 0;
             for (const auto& code : codes)
             {
-                if (code >= 0 && code < Code::NumCodes)
+                if (code < 0 || code >= Code::NumCodes)
                 {
-                    const auto currentKeyboardValue = _controlStates[code];
-                    if (std::abs(currentKeyboardValue) > std::abs(resultValue))
+                    continue;
+                }
+
+                const auto& currentValue = _controlStates[code];
+
+                if (currentValue.index() == InputControlValueIntIndex)
+                {
+                    const auto currentUnderlyingValue = std::get<int>(currentValue);
+                    const auto resultUnderlyingValue = std::get<int>(resultValue);
+                    if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
                     {
-                        resultValue = currentKeyboardValue;
+                        resultValue = currentValue;
                     }
+                }
+                else if (currentValue.index() == InputControlValueFloatIndex)
+                {
+                    //TODO
+                }
+                else if (currentValue.index() == InputControlValuePointIndex)
+                {
+                    //TODO
                 }
             }
 

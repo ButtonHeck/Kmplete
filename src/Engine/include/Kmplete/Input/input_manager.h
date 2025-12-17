@@ -9,6 +9,8 @@
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Profile/profiler.h"
 
+#include <variant>
+
 
 namespace Kmplete
 {
@@ -20,7 +22,16 @@ namespace Kmplete
 
     namespace Input
     {
-        using InputControlValue = float;
+        using InputControlValue = std::variant<int, float, Math::Point2I>;
+
+        static constexpr InputControlValue ButtonPressed = InputControlValue{ 1 };
+        static constexpr InputControlValue ButtonReleased = InputControlValue{ 0 };
+
+        static constexpr auto InputControlValueIntIndex = 0;
+        static constexpr auto InputControlValueFloatIndex = 1;
+        static constexpr auto InputControlValuePointIndex = 2;
+
+
         using ActionIdentifier = StringID;
         using ActionCallbackTag = StringID;
         using ActionCallback = Function<bool(InputControlValue)>;
