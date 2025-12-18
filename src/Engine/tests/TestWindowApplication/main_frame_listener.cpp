@@ -63,6 +63,13 @@ namespace Kmplete
         _inputManager->MapInputToAction(Input::Code::Key_S, "move_backward"_sid);
         _inputManager->MapInputToAction(Input::Code::Key_A, "move_left"_sid);
         _inputManager->MapInputToAction(Input::Code::Key_D, "move_right"_sid);
+        _inputManager->MapInputToCallback(Input::Code::Key_LeftControl, "crouch"_sid, [this](Input::InputControlValue value){
+            if (value == Input::ButtonPressed)
+            {
+                _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
+            }
+            return true;
+        });
 
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
@@ -749,6 +756,8 @@ namespace Kmplete
         ImGui::Begin(Id_ActionEventsEmulatorWindow, nullptr, windowFlags);
         {
             ImGui::Text("Player position: [%d : %d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
+            ImGui::SameLine();
+            ImGui::Text("Crouching: %s", _emulatorPlayerCrouching ? "true" : "false");
 
             if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
             {
