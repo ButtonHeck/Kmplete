@@ -50,6 +50,7 @@ namespace Kmplete
 
                 _mousePosition = newMousePosition;
                 _controlStates[Code::Mouse_Position] = _mousePosition;
+                _controlStates[Code::Mouse_Move] = mouseMove;
             }
 
             else if (eventTypeID == Events::MouseButtonPressEventTypeID)
@@ -169,6 +170,12 @@ namespace Kmplete
         bool InputManager::IsKeyButtonPressed(InputCode keyCode) const
         {
             return _controlStates[keyCode] == ButtonPressed;
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::ResetMouseMove() noexcept
+        {
+            _controlStates[Code::Mouse_Move] = Math::Point2I();
         }
         //--------------------------------------------------------------------------
 

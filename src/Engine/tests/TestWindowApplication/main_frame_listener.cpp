@@ -63,7 +63,7 @@ namespace Kmplete
         _inputManager->MapInputToAction(Input::Code::Key_S, "move_backward"_sid);
         _inputManager->MapInputToAction(Input::Code::Key_A, "move_left"_sid);
         _inputManager->MapInputToAction(Input::Code::Key_D, "move_right"_sid);
-        _inputManager->MapInputToCallback(Input::Code::Key_LeftControl, "crouch"_sid, [this](Input::InputControlValue value){
+        _inputManager->MapInputToCallback(Input::Code::Key_LeftControl, "crouch"_sid, [this](Input::InputControlValue value) {
             if (value == Input::ButtonPressed)
             {
                 _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
@@ -71,6 +71,15 @@ namespace Kmplete
             return true;
         });
         _inputManager->MapInputToAction(Input::Code::Mouse_Position, "mouse_tracking"_sid);
+        _inputManager->MapInputToAction(Input::Code::Mouse_Move, "mouse_move_tracking"_sid);
+        _inputManager->MapActionToCallback("mouse_tracking"_sid, [this](Input::InputControlValue value) {
+            _emulatorMousePosCb = std::get<Math::Point2I>(value);
+            return true;
+        });
+        _inputManager->MapActionToCallback("mouse_move_tracking"_sid, [this](Input::InputControlValue value) {
+            _emulatorMouseMoveCb = std::get<Math::Point2I>(value);
+            return true;
+        });
 
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
@@ -126,7 +135,8 @@ namespace Kmplete
             _emulatorPlayerPos.x++;
         }
 
-        _emulatorMousePos = std::get<Math::Point2I>(_inputManager->GetActionValue<Math::Point2I>("mouse_tracking"_sid));
+        _emulatorMousePosGet = std::get<Math::Point2I>(_inputManager->GetActionValue<Math::Point2I>("mouse_tracking"_sid));
+        _emulatorMouseMoveGet = std::get<Math::Point2I>(_inputManager->GetActionValue<Math::Point2I>("mouse_move_tracking"_sid));
     }
 
     void MainFrameListener::SetCustomIconFromFilepath()
@@ -381,11 +391,11 @@ namespace Kmplete
 
 
             const auto windowPos = _mainWindow.GetPosition();
-            ImGui::Text("Window position: [%d:%d]", windowPos.x, windowPos.y);
+            ImGui::Text("Window position: [%4d : %4d]", windowPos.x, windowPos.y);
             ImGui::SameLine(0.0f, 32.0f);
 
             const auto windowSize = _mainWindow.GetSize();
-            ImGui::Text("Window size: [%dx%d]", windowSize.x, windowSize.y);
+            ImGui::Text("Window size: [%4d x %4d]", windowSize.x, windowSize.y);
 
 
             const auto dpi = _mainWindow.GetDPI();
@@ -401,7 +411,7 @@ namespace Kmplete
 
 
             const auto cursorPosition = _mainWindow.GetCursorPosition();
-            ImGui::Text("Mouse position: [%d:%d]", cursorPosition.x, cursorPosition.y);
+            ImGui::Text("Mouse position: [%4d : %4d]", cursorPosition.x, cursorPosition.y);
             ImGui::SameLine(0.0f, 32.0f);
 
             const auto cursorMode = _mainWindow.GetCursorMode();
@@ -758,12 +768,6 @@ namespace Kmplete
     {
         ImGui::Begin(Id_ActionEventsEmulatorWindow, nullptr, windowFlags);
         {
-            ImGui::Text("Player position: [%d : %d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
-            ImGui::SameLine();
-            ImGui::Text("Crouching: %s", _emulatorPlayerCrouching ? "true" : "false");
-            ImGui::SameLine();
-            ImGui::Text("Mouse position: [%d:%d]", _emulatorMousePos.x, _emulatorMousePos.y);
-
             if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
             {
                 _emulatorMoveWASD = 0;
@@ -781,6 +785,18 @@ namespace Kmplete
                 _inputManager->RemapInputToAction(Input::Code::Key_S, "move_backward"_sid);
                 _inputManager->RemapInputToAction(Input::Code::Key_D, "move_right"_sid);
             }
+            ImGui::SameLine();
+            ImGui::Text("Player position: [%3d : %3d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
+            ImGui::SameLine();
+            ImGui::Text("Crouching: %s", _emulatorPlayerCrouching ? "true" : "false");
+            
+            ImGui::Text("Mouse position (get): [%4d : %4d]", _emulatorMousePosGet.x, _emulatorMousePosGet.y);
+            ImGui::SameLine();
+            ImGui::Text("Mouse position (callback): [%4d : %4d]", _emulatorMousePosCb.x, _emulatorMousePosCb.y);
+
+            ImGui::Text("Mouse move (get): [%3d : %3d]", _emulatorMouseMoveGet.x, _emulatorMouseMoveGet.y);
+            ImGui::SameLine();
+            ImGui::Text("Mouse move (callback): [%3d : %3d]", _emulatorMouseMoveCb.x, _emulatorMouseMoveCb.y);
         }
         ImGui::End(); //Id_ActionEventsEmulatorWindow
     }

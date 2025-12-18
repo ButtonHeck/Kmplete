@@ -193,7 +193,10 @@ namespace Kmplete
         Math::Point2I _emulatorPlayerPos = Math::Point2I(0, 0);
         bool _emulatorPlayerCrouching = false;
         int _emulatorMoveWASD = 1;
-        Math::Point2I _emulatorMousePos = Math::Point2I(0, 0);
+        Math::Point2I _emulatorMousePosGet = Math::Point2I(0, 0);
+        Math::Point2I _emulatorMouseMoveGet = Math::Point2I(0, 0);
+        Math::Point2I _emulatorMousePosCb = Math::Point2I(0, 0);
+        Math::Point2I _emulatorMouseMoveCb = Math::Point2I(0, 0);
 
         bool _actionDefaultTagCallbackDoubleRegistrationCheck = false;
         bool _actionNonDefaultTagCallbackDoubleRegistrationCheck = false;

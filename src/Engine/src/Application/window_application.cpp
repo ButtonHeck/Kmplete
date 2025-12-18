@@ -169,6 +169,7 @@ namespace Kmplete
 
     void WindowApplication::_ProcessEvents(Window& window)
     {
+        _inputManager->ResetMouseMove();
         window.FetchEvents();
         _inputManager->PropagateActionEvents();
         _frameListenerManager->_DispatchQueuedEventsToFrameListeners();

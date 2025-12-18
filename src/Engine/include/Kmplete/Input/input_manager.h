@@ -83,6 +83,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(InputCode mouseCode) const;
             KMP_NODISCARD KMP_API KeyModifier GetKeyModifiersMask() const noexcept;
             KMP_NODISCARD KMP_API bool IsKeyButtonPressed(InputCode keyCode) const;
+            KMP_API void ResetMouseMove() noexcept;
 
             template<typename ExpectedType> requires (IsAnyOfType<ExpectedType, int, float, Math::Point2I>)
             KMP_NODISCARD InputControlValue GetActionValue(ActionIdentifier actionId)
@@ -115,6 +116,7 @@ namespace Kmplete
 
                 return resultValue;
             }
+            //--------------------------------------------------------------------------
 
             template<>
             KMP_NODISCARD InputControlValue GetActionValue<Math::Point2I>(ActionIdentifier actionId)
@@ -147,6 +149,7 @@ namespace Kmplete
 
                 return resultValue;
             }
+            //--------------------------------------------------------------------------
 
         private:
             KMP_NODISCARD Vector<ActionEvent> _CreateActionEvents(InputCode code, InputControlValue value) const;
