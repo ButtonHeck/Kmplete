@@ -18,7 +18,10 @@ namespace Kmplete
             , _inputCodeToActionsMap({})
             , _actionToInputCodesMap({})
             , _actionCallbacks({})
-        {}
+        {
+            _controlStates[Code::Mouse_Move] = Math::Point2I();
+            _controlStates[Code::Mouse_Position] = Math::Point2I();
+        }
         //--------------------------------------------------------------------------
 
         void InputManager::ProcessInputEvents(Events::Event& event)
@@ -30,7 +33,23 @@ namespace Kmplete
             if (eventTypeID == Events::MouseMoveEventTypeID)
             {
                 auto& mouseMoveEvent = static_cast<Events::MouseMoveEvent&>(event);
-                _mousePosition = Math::Point2I(mouseMoveEvent.GetX(), mouseMoveEvent.GetY());
+                const auto newMousePosition = Math::Point2I(mouseMoveEvent.GetX(), mouseMoveEvent.GetY());
+                const auto mouseMove = newMousePosition - _mousePosition;
+
+                const auto moveEvents = _CreateActionEvents(Input::Code::Mouse_Move, mouseMove);
+                if (!moveEvents.empty())
+                {
+                    std::move(moveEvents.begin(), moveEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
+                }
+
+                const auto positionEvents = _CreateActionEvents(Input::Code::Mouse_Position, newMousePosition);
+                if (!positionEvents.empty())
+                {
+                    std::move(positionEvents.begin(), positionEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
+                }
+
+                _mousePosition = newMousePosition;
+                _controlStates[Code::Mouse_Position] = _mousePosition;
             }
 
             else if (eventTypeID == Events::MouseButtonPressEventTypeID)

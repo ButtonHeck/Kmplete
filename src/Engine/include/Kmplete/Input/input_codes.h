@@ -27,6 +27,9 @@ namespace Kmplete
                 Mouse_ButtonRight = Mouse_Button1,
                 Mouse_ButtonMiddle = Mouse_Button2,
 
+                Mouse_Position = 8,
+                Mouse_Move = 9,
+
                 Key_Space = 32,
                 Key_Apostrophe = 39, // '
                 Key_Comma = 44,      // ,
@@ -165,14 +168,16 @@ namespace Kmplete
         {
             switch (code)
             {
-                case Code::Mouse_Button0: return "LMB";
-                case Code::Mouse_Button1: return "RMB";
-                case Code::Mouse_Button2: return "Wheel";
-                case Code::Mouse_Button3: return "Mouse 3";
-                case Code::Mouse_Button4: return "Mouse 4";
-                case Code::Mouse_Button5: return "Mouse 5";
-                case Code::Mouse_Button6: return "Mouse 6";
-                case Code::Mouse_Button7: return "Mouse 7";
+                case Code::Mouse_Button0:   return "LMB";
+                case Code::Mouse_Button1:   return "RMB";
+                case Code::Mouse_Button2:   return "Wheel";
+                case Code::Mouse_Button3:   return "Mouse 3";
+                case Code::Mouse_Button4:   return "Mouse 4";
+                case Code::Mouse_Button5:   return "Mouse 5";
+                case Code::Mouse_Button6:   return "Mouse 6";
+                case Code::Mouse_Button7:   return "Mouse 7";
+                case Code::Mouse_Position:  return "Mouse position";
+                case Code::Mouse_Move:      return "Mouse move";
 
                 case Code::Key_Space:        return "Space";
                 case Code::Key_Apostrophe:   return "'";

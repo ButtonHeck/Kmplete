@@ -107,20 +107,41 @@ namespace Kmplete
                     const auto currentUnderlyingValue = std::get<ExpectedType>(currentValue);
                     const auto resultUnderlyingValue = std::get<ExpectedType>(resultValue);
 
-                    if (currentValue.index() == InputControlValueIntIndex || currentValue.index() == InputControlValueFloatIndex)
+                    if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
                     {
-                        if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
-                        {
-                            resultValue = currentValue;
-                        }
+                        resultValue = currentValue;
                     }
-                    else if (currentValue.index() == InputControlValuePointIndex)
+                }
+
+                return resultValue;
+            }
+
+            template<>
+            KMP_NODISCARD InputControlValue GetActionValue<Math::Point2I>(ActionIdentifier actionId)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+                if (!_actionToInputCodesMap.contains(actionId))
+                {
+                    return InputControlValue(Math::Point2I());
+                }
+
+                const auto& codes = _actionToInputCodesMap[actionId];
+                InputControlValue resultValue = Math::Point2I();
+                for (const auto& code : codes)
+                {
+                    if (code < 0 || code >= Code::NumCodes)
                     {
-                        if (currentUnderlyingValue != ExpectedType())
-                        {
-                            resultValue = currentValue;
-                            break;
-                        }
+                        continue;
+                    }
+
+                    const auto& currentValue = _controlStates[code];
+                    const auto currentUnderlyingValue = std::get<Math::Point2I>(currentValue);
+
+                    if (currentUnderlyingValue != Math::Point2I())
+                    {
+                        resultValue = currentValue;
+                        break;
                     }
                 }
 

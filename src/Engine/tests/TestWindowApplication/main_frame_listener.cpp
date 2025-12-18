@@ -70,6 +70,7 @@ namespace Kmplete
             }
             return true;
         });
+        _inputManager->MapInputToAction(Input::Code::Mouse_Position, "mouse_tracking"_sid);
 
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
@@ -124,6 +125,8 @@ namespace Kmplete
         {
             _emulatorPlayerPos.x++;
         }
+
+        _emulatorMousePos = std::get<Math::Point2I>(_inputManager->GetActionValue<Math::Point2I>("mouse_tracking"_sid));
     }
 
     void MainFrameListener::SetCustomIconFromFilepath()
@@ -758,6 +761,8 @@ namespace Kmplete
             ImGui::Text("Player position: [%d : %d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
             ImGui::SameLine();
             ImGui::Text("Crouching: %s", _emulatorPlayerCrouching ? "true" : "false");
+            ImGui::SameLine();
+            ImGui::Text("Mouse position: [%d:%d]", _emulatorMousePos.x, _emulatorMousePos.y);
 
             if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
             {
