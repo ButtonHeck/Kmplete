@@ -64,7 +64,7 @@ namespace Kmplete
         _inputManager->MapInputToAction(Input::Code::Key_A, "move_left"_sid);
         _inputManager->MapInputToAction(Input::Code::Key_D, "move_right"_sid);
         _inputManager->MapInputToCallback(Input::Code::Key_LeftControl, "crouch"_sid, [this](Input::InputControlValue value) {
-            if (value == Input::ButtonPressed)
+            if (value == Input::ButtonPressedValue)
             {
                 _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
             }
@@ -135,8 +135,8 @@ namespace Kmplete
             _emulatorPlayerPos.x++;
         }
 
-        _emulatorMousePosGet = std::get<Math::Point2I>(_inputManager->GetActionValue<Math::Point2I>("mouse_tracking"_sid));
-        _emulatorMouseMoveGet = std::get<Math::Point2I>(_inputManager->GetActionValue<Math::Point2I>("mouse_move_tracking"_sid));
+        _emulatorMousePosGet = _inputManager->GetActionValue<Math::Point2I>("mouse_tracking"_sid);
+        _emulatorMouseMoveGet = _inputManager->GetActionValue<Math::Point2I>("mouse_move_tracking"_sid);
     }
 
     void MainFrameListener::SetCustomIconFromFilepath()

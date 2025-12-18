@@ -157,7 +157,7 @@ namespace Kmplete
 
         bool InputManager::IsMouseButtonPressed(InputCode mouseCode) const
         {
-            return _controlStates[mouseCode] == ButtonPressed;
+            return _controlStates[mouseCode] == ButtonPressedValue;
         }
         //--------------------------------------------------------------------------
 
@@ -169,7 +169,7 @@ namespace Kmplete
 
         bool InputManager::IsKeyButtonPressed(InputCode keyCode) const
         {
-            return _controlStates[keyCode] == ButtonPressed;
+            return _controlStates[keyCode] == ButtonPressedValue;
         }
         //--------------------------------------------------------------------------
 

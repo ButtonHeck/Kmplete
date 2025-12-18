@@ -24,8 +24,10 @@ namespace Kmplete
     {
         using InputControlValue = std::variant<int, float, Math::Point2I>;
 
-        static constexpr InputControlValue ButtonPressed = InputControlValue{ 1 };
-        static constexpr InputControlValue ButtonReleased = InputControlValue{ 0 };
+        static constexpr auto ButtonPressed = 1;
+        static constexpr auto ButtonReleased = 0;
+        static constexpr auto ButtonPressedValue = InputControlValue(ButtonPressed);
+        static constexpr auto ButtonReleasedValue = InputControlValue(ButtonReleased);
 
         static constexpr auto InputControlValueIntIndex = 0;
         static constexpr auto InputControlValueFloatIndex = 1;
@@ -85,18 +87,18 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool IsKeyButtonPressed(InputCode keyCode) const;
             KMP_API void ResetMouseMove() noexcept;
 
-            template<typename ExpectedType> requires (IsAnyOfType<ExpectedType, int, float, Math::Point2I>)
-            KMP_NODISCARD InputControlValue GetActionValue(ActionIdentifier actionId)
+            template<typename ValueType> requires (IsAnyOfType<ValueType, int, float, Math::Point2I>)
+            KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId)
             {
                 KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
                 if (!_actionToInputCodesMap.contains(actionId))
                 {
-                    return InputControlValue(ExpectedType());
+                    return ValueType();
                 }
 
                 const auto& codes = _actionToInputCodesMap[actionId];
-                InputControlValue resultValue = ExpectedType();
+                InputControlValue resultValue = ValueType();
                 for (const auto& code : codes)
                 {
                     if (code < 0 || code >= Code::NumCodes)
@@ -105,8 +107,8 @@ namespace Kmplete
                     }
 
                     const auto& currentValue = _controlStates[code];
-                    const auto currentUnderlyingValue = std::get<ExpectedType>(currentValue);
-                    const auto resultUnderlyingValue = std::get<ExpectedType>(resultValue);
+                    const auto& currentUnderlyingValue = std::get<ValueType>(currentValue);
+                    const auto& resultUnderlyingValue = std::get<ValueType>(resultValue);
 
                     if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
                     {
@@ -114,18 +116,18 @@ namespace Kmplete
                     }
                 }
 
-                return resultValue;
+                return std::get<ValueType>(resultValue);
             }
             //--------------------------------------------------------------------------
 
             template<>
-            KMP_NODISCARD InputControlValue GetActionValue<Math::Point2I>(ActionIdentifier actionId)
+            KMP_NODISCARD Math::Point2I GetActionValue<Math::Point2I>(ActionIdentifier actionId)
             {
                 KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
                 if (!_actionToInputCodesMap.contains(actionId))
                 {
-                    return InputControlValue(Math::Point2I());
+                    return Math::Point2I();
                 }
 
                 const auto& codes = _actionToInputCodesMap[actionId];
@@ -138,7 +140,7 @@ namespace Kmplete
                     }
 
                     const auto& currentValue = _controlStates[code];
-                    const auto currentUnderlyingValue = std::get<Math::Point2I>(currentValue);
+                    const auto& currentUnderlyingValue = std::get<Math::Point2I>(currentValue);
 
                     if (currentUnderlyingValue != Math::Point2I())
                     {
@@ -147,7 +149,7 @@ namespace Kmplete
                     }
                 }
 
-                return resultValue;
+                return std::get<Math::Point2I>(resultValue);
             }
             //--------------------------------------------------------------------------
 
