@@ -95,7 +95,7 @@ namespace Kmplete
                 }
 
                 const auto& codes = _actionToInputCodesMap[actionId];
-                InputControlValue resultValue = 0;
+                InputControlValue resultValue = ExpectedType();
                 for (const auto& code : codes)
                 {
                     if (code < 0 || code >= Code::NumCodes)
@@ -104,23 +104,23 @@ namespace Kmplete
                     }
 
                     const auto& currentValue = _controlStates[code];
+                    const auto currentUnderlyingValue = std::get<ExpectedType>(currentValue);
+                    const auto resultUnderlyingValue = std::get<ExpectedType>(resultValue);
 
-                    if (currentValue.index() == InputControlValueIntIndex)
+                    if (currentValue.index() == InputControlValueIntIndex || currentValue.index() == InputControlValueFloatIndex)
                     {
-                        const auto currentUnderlyingValue = std::get<int>(currentValue);
-                        const auto resultUnderlyingValue = std::get<int>(resultValue);
                         if (std::abs(currentUnderlyingValue) > std::abs(resultUnderlyingValue))
                         {
                             resultValue = currentValue;
                         }
                     }
-                    else if (currentValue.index() == InputControlValueFloatIndex)
-                    {
-                        //TODO
-                    }
                     else if (currentValue.index() == InputControlValuePointIndex)
                     {
-                        //TODO
+                        if (currentUnderlyingValue != ExpectedType())
+                        {
+                            resultValue = currentValue;
+                            break;
+                        }
                     }
                 }
 
