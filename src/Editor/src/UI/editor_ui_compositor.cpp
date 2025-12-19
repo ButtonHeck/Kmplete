@@ -37,25 +37,16 @@ namespace Kmplete
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::_FillDictionary));
 
-        inputManager.MapInputToCallback(Input::Code::Key_Q, "editor_quit"_sid, [&](Input::InputControlValue value) {
-            if (value == Input::ButtonPressedValue && inputManager.GetKeyModifiersMask() & Input::Modifier::Ctrl)
-            {
-                _popups.quit = true;
-            }
+        inputManager.MapInputToCallback({Input::Code::Key_Q, {Input::ButtonPressedValue, Input::Modifier::Ctrl}}, "editor_quit"_sid, [&](Input::InputControlValue) {
+            _popups.quit = true;
             return true;
         });
-        inputManager.MapInputToCallback(Input::Code::Key_Enter, "editor_screenmode"_sid, [&](Input::InputControlValue value) {
-            if (value == Input::ButtonPressedValue && inputManager.GetKeyModifiersMask() & Input::Modifier::Alt)
-            {
-                _SwitchFullscreen();
-            }
+        inputManager.MapInputToCallback({Input::Code::Key_Enter, {Input::ButtonPressedValue, Input::Modifier::Alt}}, "editor_screenmode"_sid, [&](Input::InputControlValue) {
+            _SwitchFullscreen();
             return true;
         });
-        inputManager.MapInputToCallback(Input::Code::Key_T, "editor_always_on_top"_sid, [&](Input::InputControlValue value) {
-            if (value == Input::ButtonPressedValue && inputManager.GetKeyModifiersMask() & Input::Modifier::Ctrl)
-            {
-                _SwitchAlwaysOnTop();
-            }
+        inputManager.MapInputToCallback({Input::Code::Key_T, {Input::ButtonPressedValue, Input::Modifier::Ctrl}}, "editor_always_on_top"_sid, [&](Input::InputControlValue) {
+            _SwitchAlwaysOnTop();
             return true;
         });
 

@@ -22,12 +22,14 @@ namespace Kmplete
 
     namespace Input
     {
-        using InputControlValue = std::variant<int, float, Math::Point2I>;
+        using InputControlValue = std::variant<int, float, Math::Point2I, std::monostate>;
 
         static constexpr auto ButtonPressed = 1;
         static constexpr auto ButtonReleased = 0;
+
         static constexpr auto ButtonPressedValue = InputControlValue(ButtonPressed);
         static constexpr auto ButtonReleasedValue = InputControlValue(ButtonReleased);
+        static constexpr auto EmptyValue = InputControlValue(std::monostate());
 
         static constexpr auto InputControlValueIntIndex = 0;
         static constexpr auto InputControlValueFloatIndex = 1;
@@ -57,6 +59,24 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        struct InputCondition
+        {
+            InputControlValue value = EmptyValue;
+            KeyModifier modifierMask = Input::Modifier::None;
+        };
+        //--------------------------------------------------------------------------
+
+        static constexpr InputCondition DefaultCondition = InputCondition{ .value = ButtonPressedValue, .modifierMask = Input::Modifier::None };
+        static constexpr InputCondition NoCondition = InputCondition{};
+
+        struct InputCodeWithCondition
+        {
+            InputCode code;
+            InputCondition condition;
+        };
+        //--------------------------------------------------------------------------
+
+
         class InputManager
         {
             KMP_LOG_CLASSNAME(InputManager)
@@ -74,12 +94,12 @@ namespace Kmplete
             KMP_API bool MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
             KMP_API bool UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag);
 
-            KMP_API bool MapInputToAction(InputCode code, ActionIdentifier actionId);
+            KMP_API bool MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
             KMP_API bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
-            KMP_API bool RemapInputToAction(InputCode code, ActionIdentifier actionId);
+            KMP_API bool RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
 
-            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
-            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
+            KMP_API bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback);
+            KMP_API bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(InputCode mouseCode) const;
@@ -99,8 +119,9 @@ namespace Kmplete
 
                 const auto& codes = _actionToInputCodesMap[actionId];
                 InputControlValue resultValue = ValueType();
-                for (const auto& code : codes)
+                for (const auto& codeWithCondition : codes)
                 {
+                    const auto& code = codeWithCondition.code;
                     if (code < 0 || code >= Code::NumCodes)
                     {
                         continue;
@@ -132,8 +153,9 @@ namespace Kmplete
 
                 const auto& codes = _actionToInputCodesMap[actionId];
                 InputControlValue resultValue = Math::Point2I();
-                for (const auto& code : codes)
+                for (const auto& codeWithCondition : codes)
                 {
+                    const auto code = codeWithCondition.code;
                     if (code < 0 || code >= Code::NumCodes)
                     {
                         continue;
@@ -165,7 +187,7 @@ namespace Kmplete
             KeyModifier _modifiersMask;
 
             HashMap<InputCode, Vector<ActionIdentifier>> _inputCodeToActionsMap;
-            HashMap<ActionIdentifier, Vector<InputCode>> _actionToInputCodesMap;
+            HashMap<ActionIdentifier, Vector<InputCodeWithCondition>> _actionToInputCodesMap;
             HashMap<ActionIdentifier, Vector<TaggedActionCallback>> _actionCallbacks;
 
             Vector<ActionEvent> _actionEvents;

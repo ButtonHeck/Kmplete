@@ -206,18 +206,19 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
+        bool InputManager::MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-            if (_inputCodeToActionsMap.contains(code) && _ContainsActionIdentifier(_inputCodeToActionsMap[code], actionId))
+            const auto inputCode = codeWithCondition.code;
+            if (_inputCodeToActionsMap.contains(inputCode) && _ContainsActionIdentifier(_inputCodeToActionsMap[inputCode], actionId))
             {
-                KMP_LOG_WARN("input code '{}' already mapped to action ID '{}'", code, actionId);
+                KMP_LOG_WARN("input code '{}' already mapped to action ID '{}'", inputCode, actionId);
                 return false;
             }
 
-            _inputCodeToActionsMap[code].emplace_back(actionId);
-            _actionToInputCodesMap[actionId].emplace_back(code);
+            _inputCodeToActionsMap[inputCode].emplace_back(actionId);
+            _actionToInputCodesMap[actionId].emplace_back(codeWithCondition);
 
             return true;
         }
@@ -231,8 +232,8 @@ namespace Kmplete
                 return actionInMap == actionId;
             });
 
-            const auto inputsErased = std::erase_if(_actionToInputCodesMap[actionId], [code](const InputCode& codeInMap) {
-                return codeInMap == code;
+            const auto inputsErased = std::erase_if(_actionToInputCodesMap[actionId], [code](const InputCodeWithCondition& codeWithCondition) {
+                return codeWithCondition.code == code;
             });
 
             if (actionsErased == 0 || inputsErased == 0)
@@ -245,7 +246,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::RemapInputToAction(InputCode code, ActionIdentifier actionId)
+        bool InputManager::RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -261,16 +262,16 @@ namespace Kmplete
                 return false;
             }
 
-            UnmapInputFromAction(_actionToInputCodesMap[actionId].front(), actionId);
-            return MapInputToAction(code, actionId);
+            UnmapInputFromAction(_actionToInputCodesMap[actionId].front().code, actionId);
+            return MapInputToAction(codeWithCondition, actionId);
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
+        bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-            const auto inputMapped = MapInputToAction(code, actionId);
+            const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
             if (!inputMapped)
             {
                 return false;
@@ -280,11 +281,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-            const auto inputMapped = MapInputToAction(code, actionId);
+            const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
             if (!inputMapped)
             {
                 return false;
@@ -307,9 +308,20 @@ namespace Kmplete
             const auto& actionIds = _inputCodeToActionsMap.at(code);
             for (const auto& actionId : actionIds)
             {
-                actionEvents.emplace_back(ActionEvent{
-                    .id = actionId,
-                    .value = value
+                const auto& conditions = _actionToInputCodesMap.at(actionId);
+                std::for_each(conditions.cbegin(), conditions.cend(), [&](const InputCodeWithCondition& codeWithCondition) {
+                    if (codeWithCondition.condition.value != EmptyValue && value != codeWithCondition.condition.value)
+                    {
+                        return;
+                    }
+
+                    if (codeWithCondition.condition.modifierMask == Input::Modifier::None || (_modifiersMask & codeWithCondition.condition.modifierMask) == codeWithCondition.condition.modifierMask)
+                    {
+                        actionEvents.emplace_back(ActionEvent{
+                            .id = actionId,
+                            .value = value
+                        });
+                    }
                 });
             }
 
