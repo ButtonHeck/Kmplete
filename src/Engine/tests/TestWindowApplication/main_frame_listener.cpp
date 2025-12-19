@@ -59,19 +59,19 @@ namespace Kmplete
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
         _imguiImpl->Stylize(_mainWindow.GetDPIScale());
 
-        _inputManager->MapInputToAction({Input::Code::Key_W, Input::DefaultCondition}, "move_forward"_sid);
-        _inputManager->MapInputToAction({Input::Code::Key_S, Input::DefaultCondition}, "move_backward"_sid);
-        _inputManager->MapInputToAction({Input::Code::Key_A, Input::DefaultCondition}, "move_left"_sid);
-        _inputManager->MapInputToAction({Input::Code::Key_D, Input::DefaultCondition}, "move_right"_sid);
-        _inputManager->MapInputToCallback({Input::Code::Key_LeftControl, Input::DefaultCondition}, "crouch"_sid, [this](Input::InputControlValue value) {
+        _inputManager->MapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
+        _inputManager->MapInputToAction({Input::Code::Key_S, Input::PressNoModsCondition}, "move_backward"_sid);
+        _inputManager->MapInputToAction({Input::Code::Key_A, Input::PressNoModsCondition}, "move_left"_sid);
+        _inputManager->MapInputToAction({Input::Code::Key_D, Input::PressNoModsCondition}, "move_right"_sid);
+        _inputManager->MapInputToCallback({Input::Code::Key_LeftControl, Input::PressNoModsCondition}, "crouch"_sid, [this](Input::InputControlValue value) {
             if (value == Input::ButtonPressedValue)
             {
                 _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
             }
             return true;
         });
-        _inputManager->MapInputToAction({Input::Code::Mouse_Position, Input::NoCondition}, "mouse_tracking"_sid);
-        _inputManager->MapInputToAction({Input::Code::Mouse_Move, Input::NoCondition}, "mouse_move_tracking"_sid);
+        _inputManager->MapInputToAction(Input::Code::Mouse_Position, "mouse_tracking"_sid);
+        _inputManager->MapInputToAction(Input::Code::Mouse_Move, "mouse_move_tracking"_sid);
         _inputManager->MapActionToCallback("mouse_tracking"_sid, [this](Input::InputControlValue value) {
             _emulatorMousePosCb = std::get<Math::Point2I>(value);
             return true;
@@ -86,10 +86,10 @@ namespace Kmplete
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _unmapUnregisteredActionCheck = _inputManager->UnmapActionFromCallback("unregistered_action"_sid, "bzz"_sid);
-        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction({Input::Code::Key_W, Input::DefaultCondition}, "move_forward"_sid);
+        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
         _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Code::Key_M, "bzz"_sid);
         _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Code::Key_M, "move_forward"_sid);
-        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction({Input::Code::Key_W, Input::DefaultCondition}, "bzz"_sid);
+        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "bzz"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
@@ -771,19 +771,19 @@ namespace Kmplete
             if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
             {
                 _emulatorMoveWASD = 0;
-                _inputManager->RemapInputToAction({Input::Code::Key_Up, Input::DefaultCondition}, "move_forward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_Left, Input::DefaultCondition}, "move_left"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_Down, Input::DefaultCondition}, "move_backward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_Right, Input::DefaultCondition}, "move_right"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_Up, Input::PressNoModsCondition}, "move_forward"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_Left, Input::PressNoModsCondition}, "move_left"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_Down, Input::PressNoModsCondition}, "move_backward"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_Right, Input::PressNoModsCondition}, "move_right"_sid);
             }
             ImGui::SameLine();
             if (ImGui::RadioButton("WASD", _emulatorMoveWASD == 1))
             {
                 _emulatorMoveWASD = 1;
-                _inputManager->RemapInputToAction({Input::Code::Key_W, Input::DefaultCondition}, "move_forward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_A, Input::DefaultCondition}, "move_left"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_S, Input::DefaultCondition}, "move_backward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_D, Input::DefaultCondition}, "move_right"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_A, Input::PressNoModsCondition}, "move_left"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_S, Input::PressNoModsCondition}, "move_backward"_sid);
+                _inputManager->RemapInputToAction({Input::Code::Key_D, Input::PressNoModsCondition}, "move_right"_sid);
             }
             ImGui::SameLine();
             ImGui::Text("Player position: [%3d : %3d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);

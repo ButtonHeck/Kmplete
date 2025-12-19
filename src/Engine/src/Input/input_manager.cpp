@@ -206,6 +206,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        bool InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
+        {
+            return MapInputToAction(InputCodeWithCondition{.code = code, .condition = NoCondition}, actionId);
+        }
+        //--------------------------------------------------------------------------
+
         bool InputManager::MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);

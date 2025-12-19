@@ -66,7 +66,7 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
-        static constexpr InputCondition DefaultCondition = InputCondition{ .value = ButtonPressedValue, .modifierMask = Input::Modifier::None };
+        static constexpr InputCondition PressNoModsCondition = InputCondition{ .value = ButtonPressedValue, .modifierMask = Input::Modifier::None };
         static constexpr InputCondition NoCondition = InputCondition{};
 
         struct InputCodeWithCondition
@@ -94,6 +94,7 @@ namespace Kmplete
             KMP_API bool MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
             KMP_API bool UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag);
 
+            KMP_API bool MapInputToAction(InputCode code, ActionIdentifier actionId);
             KMP_API bool MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
             KMP_API bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
             KMP_API bool RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
