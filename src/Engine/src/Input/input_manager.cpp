@@ -3,6 +3,7 @@
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Event/key_events.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -37,16 +38,10 @@ namespace Kmplete
                 const auto mouseMove = newMousePosition - _mousePosition;
 
                 const auto moveEvents = _CreateActionEvents(Input::Code::Mouse_Move, mouseMove);
-                if (!moveEvents.empty())
-                {
-                    std::move(moveEvents.begin(), moveEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
-                }
+                Utils::MergeVectors<ActionEvent>(moveEvents, _actionEvents);
 
                 const auto positionEvents = _CreateActionEvents(Input::Code::Mouse_Position, newMousePosition);
-                if (!positionEvents.empty())
-                {
-                    std::move(positionEvents.begin(), positionEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
-                }
+                Utils::MergeVectors<ActionEvent>(positionEvents, _actionEvents);
 
                 _mousePosition = newMousePosition;
                 _controlStates[Code::Mouse_Position] = _mousePosition;
@@ -61,10 +56,7 @@ namespace Kmplete
                 _controlStates[mouseButton] = ButtonPressed;
 
                 const auto newEvents = _CreateActionEvents(mouseButton, ButtonPressed);
-                if (!newEvents.empty())
-                {
-                    std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
-                }
+                Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
             }
             else if (eventTypeID == Events::MouseButtonReleaseEventTypeID)
             {
@@ -74,10 +66,7 @@ namespace Kmplete
                 _controlStates[mouseButton] = ButtonReleased;
 
                 const auto newEvents = _CreateActionEvents(mouseButton, ButtonReleased);
-                if (!newEvents.empty())
-                {
-                    std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
-                }
+                Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
             }
 
             else if (eventTypeID == Events::KeyPressEventTypeID)
@@ -92,10 +81,7 @@ namespace Kmplete
                 if (!keyPressEvent.IsRepeat())
                 {
                     const auto newEvents = _CreateActionEvents(keyCode, ButtonPressed);
-                    if (!newEvents.empty())
-                    {
-                        std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
-                    }
+                    Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
                 }
             }
             else if (eventTypeID == Events::KeyReleaseEventTypeID)
@@ -108,10 +94,7 @@ namespace Kmplete
                 _modifiersMask = modifiers;
 
                 const auto newEvents = _CreateActionEvents(keyCode, ButtonReleased);
-                if (!newEvents.empty())
-                {
-                    std::move(newEvents.begin(), newEvents.end(), std::inserter(_actionEvents, _actionEvents.end()));
-                }
+                Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
             }
         }
         //--------------------------------------------------------------------------

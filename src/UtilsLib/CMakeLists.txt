@@ -9,6 +9,7 @@ add_library(UtilsLib)
 AddTargetSourcesGroup(UtilsLib "Utils"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/function_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/string_utils.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Utils/vector_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/src/string_utils.cpp
 )
 
