@@ -1,5 +1,4 @@
 #include "UI/editor_ui_compositor.h"
-#include "UI/shortcuts.h"
 #include "UI/ui_identifiers.h"
 #include "Application/localization_base.h"
 
@@ -11,6 +10,7 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Assets/texture_asset_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
+#include "Kmplete/Input/input_manager.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
 
@@ -25,7 +25,8 @@ namespace Kmplete
     static constexpr auto MetricsFractionalStr = "MetricsFractional";
 
 
-    EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager)
+    EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
+                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _mainWindow(mainWindow)
         , _assetsManager(assetsManager)
@@ -35,6 +36,28 @@ namespace Kmplete
     {
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::_FillDictionary));
+
+        inputManager.MapInputToCallback(Input::Code::Key_Q, "editor_quit"_sid, [&](Input::InputControlValue value) {
+            if (value == Input::ButtonPressedValue && inputManager.GetKeyModifiersMask() & Input::Modifier::Ctrl)
+            {
+                _popups.quit = true;
+            }
+            return true;
+        });
+        inputManager.MapInputToCallback(Input::Code::Key_Enter, "editor_screenmode"_sid, [&](Input::InputControlValue value) {
+            if (value == Input::ButtonPressedValue && inputManager.GetKeyModifiersMask() & Input::Modifier::Alt)
+            {
+                _SwitchFullscreen();
+            }
+            return true;
+        });
+        inputManager.MapInputToCallback(Input::Code::Key_T, "editor_always_on_top"_sid, [&](Input::InputControlValue value) {
+            if (value == Input::ButtonPressedValue && inputManager.GetKeyModifiersMask() & Input::Modifier::Ctrl)
+            {
+                _SwitchAlwaysOnTop();
+            }
+            return true;
+        });
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -163,7 +186,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Quit"_sid).c_str(), Shortcuts::Quit.text))
+        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Quit"_sid).c_str(), "Ctrl+Q"))
         {
             _popups.quit = true;
         }
@@ -175,7 +198,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
         auto isWindowedFullscreen = _mainWindow.IsWindowedFullscreen();
-        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), Shortcuts::Fullscreen.text, &isWindowedFullscreen))
+        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), "Alt+Enter", &isWindowedFullscreen))
         {
             _mainWindow.SetScreenMode(isWindowedFullscreen ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
         }
@@ -188,7 +211,7 @@ namespace Kmplete
 
         const auto isWindowed = _mainWindow.IsWindowed();
         auto isAlwaysOnTop = _mainWindow.IsAlwaysOnTop();
-        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Always on top"_sid).c_str(), Shortcuts::AlwaysOnTop.text, &isAlwaysOnTop, isWindowed))
+        if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Always on top"_sid).c_str(), "Ctrl+T", &isAlwaysOnTop, isWindowed))
         {
             _mainWindow.SetAlwaysOnTop(isAlwaysOnTop);
         }
@@ -303,35 +326,6 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         _popups.quit = true;
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorUICompositor::OnKeyPressEvent(Events::KeyPressEvent& event)
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-        const auto keyCode = event.GetKeyCode();
-        const auto mods = event.GetMods();
-
-        if (event.IsRepeat())
-        {
-            return true;
-        }
-
-        if (Shortcuts::Quit.Accept(mods, keyCode))
-        {
-            _popups.quit = true;
-        }
-        else if (Shortcuts::Fullscreen.Accept(mods, keyCode))
-        {
-            _SwitchFullscreen();
-        }
-        else if (Shortcuts::AlwaysOnTop.Accept(mods, keyCode))
-        {
-            _SwitchAlwaysOnTop();
-        }
-
         return true;
     }
     //--------------------------------------------------------------------------

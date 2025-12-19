@@ -42,7 +42,7 @@ namespace Kmplete
 
         _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_EDITOR);
 
-        _uiFrameListener.reset(new EditorFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager));
+        _uiFrameListener.reset(new EditorFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager, *_inputManager));
 
         _LoadSettings();
     }

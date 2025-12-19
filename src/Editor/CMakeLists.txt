@@ -31,7 +31,6 @@ AddTargetSourcesGroup(Editor "UI"
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/UI/shortcuts.h
 )
 
 SetupCompilerOptions(Editor)

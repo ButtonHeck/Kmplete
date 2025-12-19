@@ -8,7 +8,6 @@
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Time/timer.h"
 #include "Kmplete/Event/window_events.h"
-#include "Kmplete/Event/key_events.h"
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/ImGui/implementation.h"
@@ -26,6 +25,11 @@ namespace Kmplete
         class AssetsManager;
     }
 
+    namespace Input
+    {
+        class InputManager;
+    }
+
 
     class EditorFrameListener : public FrameListener
     {
@@ -35,7 +39,8 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
-        EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager);
+        EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, 
+                            LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
         ~EditorFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified);
@@ -62,7 +67,6 @@ namespace Kmplete
         KMP_NODISCARD bool _OnWindowCloseEvent(Events::WindowCloseEvent& event);
         KMP_NODISCARD bool _OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent& event);
         KMP_NODISCARD bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
-        KMP_NODISCARD bool _OnKeyPressEvent(Events::KeyPressEvent& event);
 
         void _AddImGuiFonts(float scale);
 
@@ -78,7 +82,6 @@ namespace Kmplete
         Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
         Events::EventHandlerGuard<Events::WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
-        Events::EventHandlerGuard<Events::KeyPressEvent> _keyPressHandler;
     };
     //--------------------------------------------------------------------------
 }

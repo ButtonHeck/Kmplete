@@ -3,7 +3,6 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Event/window_events.h"
-#include "Kmplete/Event/key_events.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -23,6 +22,11 @@ namespace Kmplete
         class Timer;
     }
 
+    namespace Input
+    {
+        class InputManager;
+    }
+
 
     class EditorUICompositor
     {
@@ -31,13 +35,13 @@ namespace Kmplete
     public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
-        EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, const SystemMetricsManager& systemMetricsManager);
+        EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
+                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
 
         void ComposeMainArea();
         void ComposeStatusBar(Time::Timer& metricsTimer);
 
         KMP_NODISCARD bool OnWindowCloseEvent(Events::WindowCloseEvent& event);
-        KMP_NODISCARD bool OnKeyPressEvent(Events::KeyPressEvent& event);
 
         void SaveSettings(SettingsDocument& settings) const;
         void LoadSettings(SettingsDocument& settings);

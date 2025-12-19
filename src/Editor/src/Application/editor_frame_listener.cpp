@@ -4,6 +4,7 @@
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Assets/assets_manager.h"
+#include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
@@ -16,7 +17,8 @@ namespace Kmplete
     static constexpr auto MetricsTimeoutStr = "MetricsTimeout";
 
 
-    EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager)
+    EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, 
+                                             LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
         : FrameListener(frameListenerManager, "EditorFrameListener"_sid, 0)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _systemMetricsManager(systemMetricsManager)
@@ -24,12 +26,11 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _assetsManager(assetsManager)
         , _imguiImpl(nullptr)
-        , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager))
+        , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager))
         , _metricsTimer(1000)
         , _windowCloseHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowCloseEvent))
         , _windowFramebufferRefreshHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent))
-        , _keyPressHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnKeyPressEvent))
     {
         _Initialize();
 
@@ -144,14 +145,6 @@ namespace Kmplete
         _imguiImpl->Stylize(scale);
 
         return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorFrameListener::_OnKeyPressEvent(Events::KeyPressEvent& event)
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-        return _uiCompositor->OnKeyPressEvent(event);
     }
     //--------------------------------------------------------------------------
 
