@@ -61,6 +61,7 @@ AddTargetSourcesGroup(Kmplete "Event"
 )
 AddTargetSourcesGroup(Kmplete "Input"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/input_codes.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/input_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Input/input_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Input/input_manager.cpp
 )
