@@ -53,6 +53,7 @@ namespace Kmplete
         {
             InputControlValue value = EmptyValue;
             KeyModifier modifierMask = Input::Modifier::None;
+            float timerTriggerMs = 0.0f;
         };
         //--------------------------------------------------------------------------
 
@@ -64,6 +65,15 @@ namespace Kmplete
         {
             InputCode code;
             InputCondition condition;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct TimeCondition
+        {
+            bool active = false;
+            float currentMs = 0.0f;
+            float triggerMs = 0.0f;
         };
         //--------------------------------------------------------------------------
     }

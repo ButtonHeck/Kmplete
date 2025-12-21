@@ -132,7 +132,7 @@ namespace Kmplete
 
         const auto frameTimestep = Math::Clamp(_frameClock.Mark(), 0.0f, 100.0f);
 
-        _ProcessEvents(window);
+        _ProcessEvents(window, frameTimestep);
 
         if (window.ShouldClose())
         {
@@ -164,9 +164,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_ProcessEvents(Window& window)
+    void WindowApplication::_ProcessEvents(Window& window, float frameTimestep)
     {
         _inputManager->ResetMouseMove();
+        _inputManager->UpdateTimerActions(frameTimestep);
         window.FetchEvents();
         _inputManager->PropagateActionEvents();
         _frameListenerManager->_DispatchQueuedEventsToFrameListeners();

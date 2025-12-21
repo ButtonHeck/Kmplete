@@ -63,11 +63,14 @@ namespace Kmplete
         _inputManager->MapInputToAction({Input::Code::Key_S, Input::PressNoModsCondition}, "move_backward"_sid);
         _inputManager->MapInputToAction({Input::Code::Key_A, Input::PressNoModsCondition}, "move_left"_sid);
         _inputManager->MapInputToAction({Input::Code::Key_D, Input::PressNoModsCondition}, "move_right"_sid);
-        _inputManager->MapInputToCallback({Input::Code::Key_LeftControl, Input::PressNoModsCondition}, "crouch"_sid, [this](Input::InputControlValue value) {
-            if (value == Input::ButtonPressedValue)
-            {
-                _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
-            }
+        _inputManager->MapInputToCallback({Input::Code::Key_LeftControl, Input::PressNoModsCondition}, "crouch"_sid, [this](Input::InputControlValue) {
+            _emulatorPlayerCrawling = false;
+            _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_LeftControl, {Input::ButtonPressedValue, Input::Modifier::None, 1000.0f} }, "crawl"_sid, [this](Input::InputControlValue) {
+            _emulatorPlayerCrawling = true;
+            _emulatorPlayerCrouching = false;
             return true;
         });
         _inputManager->MapInputToAction(Input::Code::Mouse_Position, "mouse_tracking"_sid);
@@ -789,6 +792,8 @@ namespace Kmplete
             ImGui::Text("Player position: [%3d : %3d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
             ImGui::SameLine();
             ImGui::Text("Crouching: %s", _emulatorPlayerCrouching ? "true" : "false");
+            ImGui::SameLine();
+            ImGui::Text("Crawling: %s", _emulatorPlayerCrawling ? "true" : "false");
             
             ImGui::Text("Mouse position (get): [%4d : %4d]", _emulatorMousePosGet.x, _emulatorMousePosGet.y);
             ImGui::SameLine();

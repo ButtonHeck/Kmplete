@@ -57,6 +57,12 @@ namespace Kmplete
 
                 const auto newEvents = _CreateActionEvents(mouseButton, ButtonPressed);
                 Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
+
+                if (_inputCodeToTimedConditionsMap.contains(mouseButton))
+                {
+                    _inputCodeToTimedConditionsMap[mouseButton].active = true;
+                    _inputCodeToTimedConditionsMap[mouseButton].currentMs = 0.0f;
+                }
             }
             else if (eventTypeID == Events::MouseButtonReleaseEventTypeID)
             {
@@ -67,6 +73,12 @@ namespace Kmplete
 
                 const auto newEvents = _CreateActionEvents(mouseButton, ButtonReleased);
                 Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
+
+                if (_inputCodeToTimedConditionsMap.contains(mouseButton))
+                {
+                    _inputCodeToTimedConditionsMap[mouseButton].active = false;
+                    _inputCodeToTimedConditionsMap[mouseButton].currentMs = 0.0f;
+                }
             }
 
             else if (eventTypeID == Events::KeyPressEventTypeID)
@@ -82,6 +94,12 @@ namespace Kmplete
                 {
                     const auto newEvents = _CreateActionEvents(keyCode, ButtonPressed);
                     Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
+
+                    if (_inputCodeToTimedConditionsMap.contains(keyCode))
+                    {
+                        _inputCodeToTimedConditionsMap[keyCode].active = true;
+                        _inputCodeToTimedConditionsMap[keyCode].currentMs = 0.0f;
+                    }
                 }
             }
             else if (eventTypeID == Events::KeyReleaseEventTypeID)
@@ -95,6 +113,12 @@ namespace Kmplete
 
                 const auto newEvents = _CreateActionEvents(keyCode, ButtonReleased);
                 Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
+
+                if (_inputCodeToTimedConditionsMap.contains(keyCode))
+                {
+                    _inputCodeToTimedConditionsMap[keyCode].active = false;
+                    _inputCodeToTimedConditionsMap[keyCode].currentMs = 0.0f;
+                }
             }
         }
         //--------------------------------------------------------------------------
@@ -162,6 +186,29 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void InputManager::UpdateTimerActions(float frameTimestep)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            for (auto& [code, timerCondition] : _inputCodeToTimedConditionsMap)
+            {
+                if (timerCondition.active && _controlStates[code] == ButtonPressedValue)
+                {
+                    timerCondition.currentMs += frameTimestep;
+
+                    if (timerCondition.currentMs >= timerCondition.triggerMs)
+                    {
+                        const auto newEvents = _CreateActionEvents(code, ButtonPressed);
+                        Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
+
+                        timerCondition.active = false;
+                        timerCondition.currentMs = 0.0f;
+                    }
+                }
+            }
+        }
+        //--------------------------------------------------------------------------
+
         bool InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback)
         {
             TaggedActionCallback taggedCallback{
@@ -226,6 +273,11 @@ namespace Kmplete
             _inputCodeToActionsMap[inputCode].emplace_back(actionId);
             _actionToInputCodesMap[actionId].emplace_back(codeWithCondition);
 
+            if (codeWithCondition.condition.timerTriggerMs > 0.0f)
+            {
+                _inputCodeToTimedConditionsMap[inputCode] = TimeCondition{ .active = false, .currentMs = 0.0f, .triggerMs = codeWithCondition.condition.timerTriggerMs };
+            }
+
             return true;
         }
         //--------------------------------------------------------------------------
@@ -247,6 +299,8 @@ namespace Kmplete
                 KMP_LOG_WARN("failed to unmap input code '{}' from action '{}'", code, actionId);
                 return false;
             }
+
+            _inputCodeToTimedConditionsMap.erase(code);
 
             return true;
         }
@@ -316,18 +370,17 @@ namespace Kmplete
             {
                 const auto& conditions = _actionToInputCodesMap.at(actionId);
                 std::for_each(conditions.cbegin(), conditions.cend(), [&](const InputCodeWithCondition& codeWithCondition) {
-                    if (codeWithCondition.condition.value != EmptyValue && value != codeWithCondition.condition.value)
+                    if ((codeWithCondition.condition.value != EmptyValue && value != codeWithCondition.condition.value) ||
+                        (codeWithCondition.condition.modifierMask != Input::Modifier::None && (_modifiersMask & codeWithCondition.condition.modifierMask) != codeWithCondition.condition.modifierMask) ||
+                        (codeWithCondition.condition.timerTriggerMs > 0.0f && _inputCodeToTimedConditionsMap.contains(code) && _inputCodeToTimedConditionsMap.at(code).currentMs < codeWithCondition.condition.timerTriggerMs))
                     {
                         return;
                     }
 
-                    if (codeWithCondition.condition.modifierMask == Input::Modifier::None || (_modifiersMask & codeWithCondition.condition.modifierMask) == codeWithCondition.condition.modifierMask)
-                    {
-                        actionEvents.emplace_back(ActionEvent{
-                            .id = actionId,
-                            .value = value
-                        });
-                    }
+                    actionEvents.emplace_back(ActionEvent{
+                        .id = actionId,
+                        .value = value
+                    });
                 });
             }
 

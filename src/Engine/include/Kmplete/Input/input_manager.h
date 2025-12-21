@@ -48,7 +48,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool IsMouseButtonPressed(InputCode mouseCode) const;
             KMP_NODISCARD KMP_API KeyModifier GetKeyModifiersMask() const noexcept;
             KMP_NODISCARD KMP_API bool IsKeyButtonPressed(InputCode keyCode) const;
+
             KMP_API void ResetMouseMove() noexcept;
+            KMP_API void UpdateTimerActions(float frameTimestep);
 
             template<typename ValueType> requires (IsAnyOfType<ValueType, int, float, Math::Point2I>)
             KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId)
@@ -132,6 +134,7 @@ namespace Kmplete
             HashMap<InputCode, Vector<ActionIdentifier>> _inputCodeToActionsMap;
             HashMap<ActionIdentifier, Vector<InputCodeWithCondition>> _actionToInputCodesMap;
             HashMap<ActionIdentifier, Vector<TaggedActionCallback>> _actionCallbacks;
+            HashMap<InputCode, TimeCondition> _inputCodeToTimedConditionsMap;
 
             Vector<ActionEvent> _actionEvents;
         };

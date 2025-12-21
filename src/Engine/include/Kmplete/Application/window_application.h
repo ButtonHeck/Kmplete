@@ -49,7 +49,7 @@ namespace Kmplete
         void _Finalize();
 
         KMP_NODISCARD bool _RunFrameIteration(Window& window);
-        void _ProcessEvents(Window& window);
+        void _ProcessEvents(Window& window, float frameTimestep);
 
         void _SaveSettings() const;
         void _LoadSettings();
