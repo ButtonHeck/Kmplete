@@ -60,8 +60,7 @@ namespace Kmplete
 
                 if (_inputCodeToTimedConditionsMap.contains(mouseButton))
                 {
-                    _inputCodeToTimedConditionsMap[mouseButton].active = true;
-                    _inputCodeToTimedConditionsMap[mouseButton].currentMs = 0.0f;
+                    _inputCodeToTimedConditionsMap[mouseButton].Activate();
                 }
             }
             else if (eventTypeID == Events::MouseButtonReleaseEventTypeID)
@@ -76,8 +75,7 @@ namespace Kmplete
 
                 if (_inputCodeToTimedConditionsMap.contains(mouseButton))
                 {
-                    _inputCodeToTimedConditionsMap[mouseButton].active = false;
-                    _inputCodeToTimedConditionsMap[mouseButton].currentMs = 0.0f;
+                    _inputCodeToTimedConditionsMap[mouseButton].Deactivate();
                 }
             }
 
@@ -97,8 +95,7 @@ namespace Kmplete
 
                     if (_inputCodeToTimedConditionsMap.contains(keyCode))
                     {
-                        _inputCodeToTimedConditionsMap[keyCode].active = true;
-                        _inputCodeToTimedConditionsMap[keyCode].currentMs = 0.0f;
+                        _inputCodeToTimedConditionsMap[keyCode].Activate();
                     }
                 }
             }
@@ -116,8 +113,7 @@ namespace Kmplete
 
                 if (_inputCodeToTimedConditionsMap.contains(keyCode))
                 {
-                    _inputCodeToTimedConditionsMap[keyCode].active = false;
-                    _inputCodeToTimedConditionsMap[keyCode].currentMs = 0.0f;
+                    _inputCodeToTimedConditionsMap[keyCode].Deactivate();
                 }
             }
         }
@@ -201,8 +197,7 @@ namespace Kmplete
                         const auto newEvents = _CreateActionEvents(code, ButtonPressed);
                         Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
 
-                        timerCondition.active = false;
-                        timerCondition.currentMs = 0.0f;
+                        timerCondition.Deactivate();
                     }
                 }
             }

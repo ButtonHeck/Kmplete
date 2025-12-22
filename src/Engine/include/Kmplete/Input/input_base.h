@@ -74,6 +74,18 @@ namespace Kmplete
             bool active = false;
             float currentMs = 0.0f;
             float triggerMs = 0.0f;
+
+            inline void Activate()
+            {
+                active = true;
+                currentMs = 0.0f;
+            }
+
+            inline void Deactivate()
+            {
+                active = false;
+                currentMs = 0.0f;
+            }
         };
         //--------------------------------------------------------------------------
     }
