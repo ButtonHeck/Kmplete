@@ -1,5 +1,11 @@
 ## ~/cmake/CompilerOptions.cmake
 
+############################################################################
+# This module contains helper SetupCompilerOptions function, that universally
+# adds compiler options (c++ version, warning levels, other flags) 
+# and definitions (build type, static build flag, Win32 executable flag) to a given target
+############################################################################
+
 function(SetupCompilerOptions target)
     target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror>

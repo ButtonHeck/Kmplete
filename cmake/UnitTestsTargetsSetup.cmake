@@ -1,5 +1,11 @@
 ## ~/cmake/UnitTestsTargetsSetup.cmake
 
+############################################################################
+# Module with the setup function for test targets, it is responsible for
+# applying compiler options, folder, linking libraries (as additional arguments),
+# linking with Catch2 and (for MSVC only) setting debugger cwd to the test's executable path
+############################################################################
+
 function(SetupUnitTestsTargetProperties target folder)
     SetupCompilerOptions(${target})
     

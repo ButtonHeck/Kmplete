@@ -1,5 +1,11 @@
 ## ~/CMakeLists.txt
 
+############################################################################
+# Top-level CMakeLists file containing global variables, options, includes etc.
+# All CMake modules are included here, both Kmplete and vendor sources included
+# as subdirectories
+############################################################################
+
 # Preamble
 cmake_minimum_required(VERSION 3.20)
 enable_testing()
@@ -33,6 +39,8 @@ include(Boost)
 include(Localization)
 include(UnitTestsTargetsSetup)
 include(TargetUtils)
+include(ClangTidy)
+
 
 # Dependencies
 add_subdirectory(dependencies)

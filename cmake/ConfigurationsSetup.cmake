@@ -1,5 +1,11 @@
 ## ~/cmake/ConfigurationsSetup.cmake
 
+############################################################################
+# Removes MinSizeRel type and adds additional configuration type named Production, 
+# which effectively is a copy of Release, except that all
+# the logging and profiling is removed or replaced with noop stubs
+############################################################################
+
 if(CMAKE_CONFIGURATION_TYPES)
 	if("MinSizeRel" IN_LIST CMAKE_CONFIGURATION_TYPES)
 		list(REMOVE_ITEM CMAKE_CONFIGURATION_TYPES MinSizeRel)

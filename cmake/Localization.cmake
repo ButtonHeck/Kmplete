@@ -1,5 +1,24 @@
 ## ~/cmake/Localization.cmake
 
+############################################################################
+# Main module of a translation-related functions, it is responsible for:
+# 1) finding gettext executables
+# 2) creating additional targets for handling translation-related stuff of main targets
+# via CreateTranslationHelperTargets function
+#
+# CreateTranslationHelperTargets creates both update and compile additional targets
+# example usage:
+# CreateTranslationHelperTargets(
+#   someTarget targetFolder
+#   "--mode=Update gettext-program-params..."
+#   "--mode=Compile gettext-program-params..."
+# )
+#
+# after invocation these two targets will be placed in folder "targetFolder":
+# targetName_localization_update
+# targetName_localization_compile
+############################################################################
+
 set(Kmplete_Localization_OK TRUE)
 
 find_package(Gettext)

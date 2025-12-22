@@ -1,5 +1,11 @@
 ## ~/cmake/Boost.cmake
 
+############################################################################
+# CMake module for including Boost components e.g.:
+# "SetupBoost(someTarget)" - include and link boost libraries to someTarget.
+# Boost v1.83.0 is used during development
+############################################################################
+
 set(Boost_NO_SYSTEM_PATHS ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_LIBS ON)
@@ -9,7 +15,6 @@ find_package(Boost REQUIRED COMPONENTS
     locale 
     program_options 
     filesystem
-    REQUIRED
 )
 
 function(SetupBoost target)

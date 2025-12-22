@@ -1,5 +1,11 @@
 ## ~/cmake/CompilerChecks.cmake
 
+############################################################################
+# This module is a collection of compiler checks,
+# that should be supported for this project.
+# These checks includes the C++20 support, no char8 type, and UTF-8 support for MSVC compiler
+############################################################################
+
 include(CheckCXXCompilerFlag)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
