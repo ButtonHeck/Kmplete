@@ -23,6 +23,9 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! Exact representation of an asset metadata (or "header") stored in .kmpdata file
+        //! These metadata stored contiguously and located in the beginning of the
+        //! .kmpdata file right after the asset count field
         KMP_BEGIN_PACKED_STRUCT(AssetEntryHeader)
         {
             UByte type;
@@ -40,6 +43,10 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! Helper struct to keep mapping between which asset is stored in which file.
+        //! During assets loading multiple assets might be spread between
+        //! multiple files - sorting them by filepath gives an opportunity to check
+        //! every asset file only once as opposed to reopening same files back and forth
         struct AssetLookupInfo
         {
             Filepath filepath;
