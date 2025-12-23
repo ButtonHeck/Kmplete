@@ -1,5 +1,13 @@
 ## ~/src/CMakeLists.txt
 
+############################################################################
+# Main CMakeLists file for all Kmplete targets and its' tests. All main targets
+# are placed into "Kmplete/[Type]" folder, where [Type] is either "Libraries" or
+# "Tools" depending on the target purpose.
+# All test targets are placed into "Kmplete/Tests" folder and additional
+# "_BuildAllTests" target added to build all tests at once
+############################################################################
+
 cmake_minimum_required(VERSION 3.20)
 
 set(KmpleteResourcesFolder ${CMAKE_CURRENT_LIST_DIR}/Resources)

@@ -1,5 +1,11 @@
 ## ~/dependencies/CMakeLists.txt
 
+############################################################################
+# Main CMakeLists file for fetching dependencies both from pre-added subdirectories 
+# and from git via FetchContent functions. Every 3rd-party target is placed
+# into "Dependencies" folder
+############################################################################
+
 cmake_minimum_required(VERSION 3.20)
 
 ## Dependencies without FetchContent
