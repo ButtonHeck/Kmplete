@@ -6,6 +6,8 @@
 
 namespace Kmplete
 {
+    //! Codestyle-friendly aliases for commonly used type traits
+
     template<typename T1, typename T2>
     using Same = std::is_same<T1, T2>;
 

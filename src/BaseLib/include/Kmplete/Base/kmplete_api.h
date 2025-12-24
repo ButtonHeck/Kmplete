@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/platform.h"
 
-
+//! Platform abstraction helper macros for exporting symbols
 #if defined (KMP_BUILD_STATIC)
     #define KMP_API
     #define KMP_NO_EXPORT
@@ -21,6 +21,7 @@
 #endif
 
 
+//! Platform abstraction helper macros for deprecation marks
 #if defined (KMP_PLATFORM_WINDOWS)
     #define KMP_DEPRECATED __declspec(deprecated)
 #else
@@ -31,11 +32,14 @@
 #define KMP_DEPRECATED_NO_EXPORT KMP_NO_EXPORT KMP_DEPRECATED
 
 
+//! Codestyle-friendly aliases for ugly bracket-syntax attributes
 #define KMP_NORETURN [[noreturn]]
 #define KMP_NODISCARD [[nodiscard]]
 #define KMP_MB_UNUSED [[maybe_unused]]
 
 
+//! Shortcuts for deleting class special members
+//! Place them in public section
 #define KMP_DISABLE_COPY(ClassName)\
     ClassName(const ClassName&) = delete;\
     ClassName& operator=(const ClassName&) = delete;\

@@ -1,6 +1,7 @@
 #pragma once
 
 
+//! Compiler detection macros
 #if defined (_MSC_VER)
     #define KMP_COMPILER_MSVC
 #elif defined (__MINGW32__) || defined (__MINGW64__)
@@ -14,6 +15,7 @@
 #endif
 
 
+//! Platform detection macros
 #if defined (_WIN32) || defined (_WIN64)
     #define KMP_PLATFORM_WINDOWS
 #elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)

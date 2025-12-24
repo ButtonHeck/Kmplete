@@ -13,6 +13,8 @@
 
 namespace Kmplete
 {
+    //! Codestyle-friendly aliases for commonly used types
+
     template<typename T>
     using Vector = std::vector<T>;
 

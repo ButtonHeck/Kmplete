@@ -6,6 +6,8 @@
 
 namespace Kmplete
 {
+    //! Codestyle-friendly aliases
+
     template<typename T>
     using Optional = std::optional<T>;
 

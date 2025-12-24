@@ -3,17 +3,21 @@
 #include "Kmplete/Base/platform.h"
 
 
+//! Common macro aliases for concat/stringify
 #define KMP_M_CONCAT_(x, y) x ## y
 #define KMP_M_CONCAT(x, y) KMP_M_CONCAT_(x, y)
 #define KMP_M_STRINGIFY_(x) #x
 #define KMP_M_STRINGIFY(x) KMP_M_STRINGIFY_(x)
 
 
+//! Macro magic for unpacking __VA_ARGS__ in other macros (e.g. see Assertion class)
 #define KMP_M_NUM_ARGS_(_1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, TOTAL, ...) TOTAL
 #define KMP_M_NUM_ARGS(...) KMP_M_NUM_ARGS_(__VA_ARGS__, 12_, 11_, 10_, 9_, 8_, 7_, 6_, 5_, 4_, 3_, 2_, 1_)
 #define KMP_M_DISPATCH_VA(macro, ...) KMP_M_CONCAT(macro, KMP_M_NUM_ARGS(__VA_ARGS__))(__VA_ARGS__)
 
 
+//! Compiler absraction macro for function signature
+//! Mainly used in the Profiler
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
     #define KMP_FUNC_SIG __PRETTY_FUNCTION__
 #elif defined(__DMC__) && (__DMC__ >= 0x810)
@@ -33,6 +37,8 @@
 #endif
 
 
+//! Compiler abstraction macros for temporarily disabling compiler warnings
+//! The _IGNORE macro "value" is still compiler dependent (TODO: may be abstract some used warning codes into similar ifdef-s?)
 #if defined (KMP_COMPILER_MSVC)
     #define KMP_COMPILER_DIAGNOSTIC_PUSH            _Pragma("warning(push)")
     #define KMP_COMPILER_DIAGNOSTIC_IGNORE(value)   _Pragma(KMP_M_STRINGIFY(warning(disable: value)))
@@ -48,6 +54,8 @@
 #endif
 
 
+//! Compiler abstraction pair of macros for declaring tightly packed structs
+//! see AssetEntryHeader struct for example usage
 #if defined (KMP_COMPILER_MSVC)
     #define KMP_BEGIN_PACKED_STRUCT(name)   _Pragma("pack(push, 1)") struct name
     #define KMP_END_PACKED_STRUCT           _Pragma("pack(pop)")

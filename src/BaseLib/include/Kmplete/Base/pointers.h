@@ -7,6 +7,7 @@
 
 namespace Kmplete
 {
+    //! Shortcut for shared pointer
     template<typename T>
     using Ptr = std::shared_ptr<T>;
 
@@ -18,6 +19,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Shortcut for unique pointer
     template<typename T>
     using UPtr = std::unique_ptr<T>;
 
