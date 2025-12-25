@@ -7,6 +7,8 @@
 
 namespace Kmplete
 {
+    //! Base class/factory for graphics backend - an object that should do necessary API initialization
+    //! for graphics-related functions
     class GraphicsBackend
     {
     public:

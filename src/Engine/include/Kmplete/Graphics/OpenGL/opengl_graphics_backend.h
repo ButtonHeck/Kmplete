@@ -6,6 +6,10 @@
 
 namespace Kmplete
 {
+    //! OpenGL backend implementation, loading is delegated to GLAD init function.
+    //! Indirectly depends on the window backend, thus a window backend should be 
+    //! initialized before this
+    //! @see GraphicsBackend
     class OpenGLGraphicsBackend : public GraphicsBackend
     {
         KMP_LOG_CLASSNAME(OpenGLGraphicsBackend)

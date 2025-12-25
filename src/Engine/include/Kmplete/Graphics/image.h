@@ -10,6 +10,8 @@
 
 namespace Kmplete
 {
+    //! An image object that merely represents a pixel buffer with some common parameters, such as width,
+    //! height, channels count. Backed by stb_image
     class Image
     {
         KMP_LOG_CLASSNAME(Image)

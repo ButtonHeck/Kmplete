@@ -13,6 +13,9 @@ namespace Kmplete
     class Image;
 
 
+    //! Factory for creation API-specific textures from either a filepath or an Image object
+    //! @see Image
+    //! @see Assets::TextureAssetManager for example usage
     class TextureFactory
     {
         KMP_LOG_CLASSNAME(TextureFactory)

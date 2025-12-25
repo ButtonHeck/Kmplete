@@ -7,6 +7,7 @@
 
 namespace Kmplete
 {
+    //! Base class for texture objects backed by graphics API
     class Texture
     {
     public:

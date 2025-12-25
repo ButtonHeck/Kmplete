@@ -12,6 +12,8 @@ struct FT_FaceRec_;
 
 namespace Kmplete
 {
+    //! Font object class, wrapper for FreeType library "Face" type, can be created both from
+    //! a file or from a binary buffer.
     class Font
     {
         KMP_LOG_CLASSNAME(Font)
