@@ -11,7 +11,11 @@ namespace Kmplete
 
         namespace Code
         {
-            enum : InputCode // from glfw3.h
+            //! Enumeration of input codes supported by engine, both mouse and keyboard codes
+            //! merged here and matched with GLFW3 library codes + some additional codes like
+            //! Mouse_Position, Mouse_Move etc.
+            //! TODO: add joystick codes
+            enum : InputCode
             {
                 Mouse_Button0 = 0,
                 Mouse_Button1 = 1,
@@ -318,6 +322,7 @@ namespace Kmplete
 
         namespace Modifier
         {
+            //! Enumeration of keyboard modifiers matched with GLFW3 library codes
             enum : KeyModifier
             {
                 None = 0,

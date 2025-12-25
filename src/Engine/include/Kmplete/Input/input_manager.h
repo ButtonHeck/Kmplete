@@ -19,6 +19,13 @@ namespace Kmplete
 
     namespace Input
     {
+        //! Manager responsible for handling low-level input events, adding/removing bindings between
+        //! input combinations (optionally with conditions) and Actions, and bindings between Actions and
+        //! callback handlers. InputManager internally contains an event queue for ActionEvent objects
+        //! that trigger dedicated callbacks.
+        //! Also available for polling user input control states (both for a simple code or an action identifier).
+        //! @see input_base.h
+        //! @see Events::Events
         class InputManager
         {
             KMP_LOG_CLASSNAME(InputManager)
