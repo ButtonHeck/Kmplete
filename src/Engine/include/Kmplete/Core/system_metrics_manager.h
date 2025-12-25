@@ -8,6 +8,9 @@
 
 namespace Kmplete
 {
+    //! Manager of the system metrics such as CPU usage, RAM usage, threads and CPUs count, stack memory usage.
+    //! Responsible for updating/fetching different metrics values on demand, which metrics to fetch
+    //! are determined by mode flags
     class SystemMetricsManager
     {
         KMP_LOG_CLASSNAME(SystemMetricsManager)

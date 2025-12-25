@@ -22,6 +22,9 @@
 
 namespace Kmplete
 {
+    //! Wrapper for code assertions, may work as standard termination with logging (KMP_ASSERT) or
+    //! may just log an error without termination (KMP_CHECK). Additionally may log other variables
+    //! during condition check (_WATCH versions). Excluded from "Production" builds
     class Assertion
     {
         KMP_LOG_CLASSNAME(Assertion)

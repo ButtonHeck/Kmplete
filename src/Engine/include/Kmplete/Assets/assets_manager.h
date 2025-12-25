@@ -13,6 +13,10 @@ namespace Kmplete
 {
     namespace Assets
     {
+        //! Manager for application assets. Responsible for managing lifetime of asset submanagers, handling
+        //! assets loading and unloading, loading assets files. All asset files supposed to be placed in
+        //! the Data directory relative to the application executable directory
+        //! @see assets_interface.h
         class AssetsManager
         {
             KMP_LOG_CLASSNAME(AssetsManager)

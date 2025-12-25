@@ -47,6 +47,7 @@ namespace Kmplete
         //! During assets loading multiple assets might be spread between
         //! multiple files - sorting them by filepath gives an opportunity to check
         //! every asset file only once as opposed to reopening same files back and forth
+        //! @see Assets::AssetsManager
         struct AssetLookupInfo
         {
             Filepath filepath;

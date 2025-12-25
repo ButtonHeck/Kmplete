@@ -12,6 +12,9 @@ namespace Kmplete
 {
     namespace Assets
     {
+        //! Asset of a texture type containing single Texture object
+        //! @see Texture
+        //! @see Assets::Asset
         class TextureAsset : public Asset
         {
         public:

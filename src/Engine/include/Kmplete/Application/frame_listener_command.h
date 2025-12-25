@@ -17,6 +17,9 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Description of a single command used for intercommunication between frame listeners and application
+    //! @see FrameListener 
+    //! @see FrameListenerManager
     struct FrameListenerCommand
     {
         FrameListenerCommandCode code;

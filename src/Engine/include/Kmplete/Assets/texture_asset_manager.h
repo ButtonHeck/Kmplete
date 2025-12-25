@@ -16,6 +16,11 @@ namespace Kmplete
 
     namespace Assets
     {
+        //! Manager of texture assets, responsible for managing lifetime of contained asset objects,
+        //! adding/deleting texture assets.
+        //! If this manager has successfully been created - then there is the asset with StringID = 0 that holds
+        //! "Error" texture (little pink/black square)
+        //! @see Assets::TextureAsset
         class TextureAssetManager
         {
             KMP_LOG_CLASSNAME(TextureAssetManager)

@@ -15,6 +15,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Base template class for random integer number generators
+    //! parameterized with the type of integer and bit width of the backend generator
     template<typename T, RNGBitWidth> requires (IsIntegral<T>::value)
     class RNGIntegral
     {};
@@ -73,6 +75,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Base template class for random real number generators
+    //! parameterized with the type of real number and bit width of the backend generator
     template<typename T, RNGBitWidth> requires (IsReal<T>::value)
     class RNGReal
     {};

@@ -14,6 +14,18 @@ namespace Kmplete
     class FrameListenerManager;
 
 
+    //! Base class for objects that encapsulate logic flow for different stages of the main loop for dedicated parts of the appplication,
+    //! such stages include process events, update and render. Synonim for "ApplicationLayer" in other engines.
+    //! Each of these listeners has its own priority and identificator that is used in FrameListenerManager.
+    //! Interaction with other listeners and the application is indirect and is implemented by sending commands.
+    //! Although a listener can (de)activate and even delete itself, actual state changing is managed outside (from the derived classes pov), 
+    //! a listener just pushes appropriate commands. This is done to prevent listener self-destruction within its own update and enforce that
+    //! if the update stage had taken place than the rendering stage would also be processed during a frame.
+    //! Each frame listener contains its own EventDispatcher instance that by default just dispatches incoming events.
+    //! Derived classes may add its own logic for (de)activation.
+    //! @see FrameListenerManager
+    //! @see FrameListenerCommand
+    //! @see Events::EventDispatcher
     class FrameListener
     {
         KMP_DISABLE_COPY_MOVE(FrameListener)

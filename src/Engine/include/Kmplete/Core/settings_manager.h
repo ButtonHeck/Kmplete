@@ -12,6 +12,9 @@
 
 namespace Kmplete
 {
+    //! Manager of settings document objects, responsible for managing lifetime of contained documents,
+    //! creating/deleting document objects, merging, saving and loading documents from/to a file.
+    //! @see SettingsDocument
     class SettingsManager
     {
         KMP_LOG_CLASSNAME(SettingsManager)

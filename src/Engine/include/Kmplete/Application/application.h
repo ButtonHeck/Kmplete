@@ -13,6 +13,8 @@
 
 namespace Kmplete
 {
+    //! Parameters for Kmplete application creation
+    //! @see Application
     struct ApplicationParameters
     {
         const String applicationName;
@@ -22,6 +24,10 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Base class of the Kmplete application, which is responsible for
+    //! initialization, settings saving and loading of the subsystems
+    //! that do not require window creation, additionally it handles logging
+    //! initialization and its settings management
     class Application
     {
         KMP_LOG_CLASSNAME(Application)
@@ -58,5 +64,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Client application should define this function in its code, the function
+    //! itself is called from main.h header file
     KMP_NODISCARD extern UPtr<Application> CreateApplication(const ProgramOptions& programOptions);
 }

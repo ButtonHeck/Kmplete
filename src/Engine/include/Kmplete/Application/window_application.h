@@ -18,6 +18,9 @@ namespace Kmplete
     class Window;
 
 
+    //! Parameters for Kmplete window application creation, 
+    //! encapsulates base application parameters
+    //! @see WindowApplication
     struct WindowApplicationParameters
     {
         const ApplicationParameters applicationParameters;
@@ -26,6 +29,15 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Application class that supports window and all subsystems that somehow depends on
+    //! a window existence or subsystems that don't make sense without a window.
+    //! It encapsulates the high-level control flow of a main loop, actual logic steps
+    //! implementation are handled by frame listeners. 
+    //! Client code may redefine behaviour when the application is about to close by reimplementing
+    //! "ConfirmExit" function (e.g. some editor apps may show additional dialog window if
+    //! some data is not saved). This class is responsible for connecting low-level events (KeyPressed, WindowMoved etc.),
+    //! provided by the underlying window, to the subsystems responsible of delegating or/and furhter processing these events.
+    //! By default graphics API is set to OpenGL
     class WindowApplication : public Application
     {
         KMP_LOG_CLASSNAME(WindowApplication)

@@ -9,6 +9,10 @@
 
 namespace Kmplete
 {
+    //! Wrapper for a named setting document, currently used only with JSON format,
+    //! responsible for managing lifetime of the contained document object and
+    //! delegating read/write commands to it.
+    //! @see JsonDocument
     class SettingsDocument
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()

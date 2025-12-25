@@ -18,6 +18,7 @@
 
 //! Compiler absraction macro for function signature
 //! Mainly used in the Profiler
+//! @see Profiler
 #if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
     #define KMP_FUNC_SIG __PRETTY_FUNCTION__
 #elif defined(__DMC__) && (__DMC__ >= 0x810)
@@ -55,7 +56,7 @@
 
 
 //! Compiler abstraction pair of macros for declaring tightly packed structs
-//! see AssetEntryHeader struct for example usage
+//! @see AssetEntryHeader struct for example usage
 #if defined (KMP_COMPILER_MSVC)
     #define KMP_BEGIN_PACKED_STRUCT(name)   _Pragma("pack(push, 1)") struct name
     #define KMP_END_PACKED_STRUCT           _Pragma("pack(pop)")

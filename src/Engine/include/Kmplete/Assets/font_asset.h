@@ -14,6 +14,9 @@ namespace Kmplete
 {
     namespace Assets
     {
+        //! Asset of a font type containing single font object
+        //! @see Font
+        //! @see Assets::Asset
         class FontAsset : public Asset
         {
         public:

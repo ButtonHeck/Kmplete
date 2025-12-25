@@ -14,6 +14,8 @@
 #include <exception>
 
 
+//! Wrapper function that only tries to flush all the profiler data
+//! during program termination
 void TerminationHandler()
 {
     try

@@ -9,6 +9,9 @@
 
 namespace Kmplete
 {
+    //! Wrapper for program's arguments using Boost.program_options as the parser backend, responsible
+    //! for parsing incoming arguments both from main(...) and WinMain(...) entry points.
+    //! @see main.h for example usage
     class ProgramOptions
     {
     public:

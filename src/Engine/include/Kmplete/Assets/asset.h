@@ -9,6 +9,8 @@ namespace Kmplete
 {
     namespace Assets
     {
+        //! Base class for all the assets used by application. 
+        //! Just as simple as a pair of type enumerator and asset identifier
         class Asset
         {
         public:
