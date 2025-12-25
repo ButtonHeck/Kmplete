@@ -10,6 +10,10 @@ namespace Kmplete
 {
     namespace Events
     {
+        //! Utility helper class to automatically attach/detach its typed handler to/from an EventDispatcher object
+        //! during creation/deletion
+        //! @see Events::EventDispatcher
+        //! @see Events::EventHandler
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
         class EventHandlerGuard
         {

@@ -14,6 +14,12 @@ namespace Kmplete
 {
     namespace Events
     {
+        //! Storage object for managing lifetime of contained typeless event handler wrappers,
+        //! also responsible for adding/deleting unique typed event handlers, dispatching incoming
+        //! events to these handlers if any handler accepts given event.
+        //! Each FrameListener contains at least one of such dispatchers
+        //! @see Events::EventHandler
+        //! @see FrameListener
         class EventDispatcher
         {
             KMP_LOG_CLASSNAME(EventDispatcher)

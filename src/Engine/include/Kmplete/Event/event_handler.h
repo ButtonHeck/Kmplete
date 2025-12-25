@@ -10,10 +10,14 @@ namespace Kmplete
 {
     namespace Events
     {
+        //! Alias for event handler function signature
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
         using EventHandler = Function<bool(EventClass&)>;
 
 
+        //! Typeless wrapper of event handler for putting in some storage without
+        //! defining template parameters
+        //! @see Events::EventDispatcher
         class EventHandlerWrapper
         {
         public:
@@ -25,6 +29,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! Typed event handler wrapper that processes specific type of event
         template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
         class EventHandlerWrapperImpl : public EventHandlerWrapper
         {

@@ -14,6 +14,7 @@ namespace Kmplete
         using EventTypeID = StringID;
 
 
+    //! Helper macro wrapper for derived events info getters
     #define EVENT_CLASS_TYPE(eventTypeStr) \
         static constexpr EventTypeID TypeID = ToStringID(eventTypeStr); \
         static constexpr const char* TypeName = eventTypeStr; \
@@ -21,6 +22,7 @@ namespace Kmplete
         KMP_NODISCARD virtual const char* GetName() const noexcept override { return TypeName; }
 
 
+        //! Base class for all the events of the application
         struct Event
         {
             virtual ~Event() = default;

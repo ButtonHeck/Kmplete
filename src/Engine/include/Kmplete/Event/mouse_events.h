@@ -7,6 +7,8 @@
 
 namespace Kmplete
 {
+    //! Definitions of mouse events supported by engine
+
     namespace Events
     {
         static constexpr auto MouseMoveEventTypeStr = "MouseMoveEvent";

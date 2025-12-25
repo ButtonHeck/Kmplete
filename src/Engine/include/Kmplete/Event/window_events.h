@@ -6,6 +6,8 @@
 
 namespace Kmplete
 {
+    //! Definitions of window/framebuffer events supported by engine
+
     namespace Events
     {
         static constexpr auto WindowResizeEventTypeStr = "WindowResizeEvent";

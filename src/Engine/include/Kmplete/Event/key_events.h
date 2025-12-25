@@ -7,6 +7,8 @@
 
 namespace Kmplete
 {
+    //! Definitions of keyboard events supported by engine
+
     namespace Events
     {
         static constexpr auto KeyPressEventTypeStr = "KeyPressEvent";
