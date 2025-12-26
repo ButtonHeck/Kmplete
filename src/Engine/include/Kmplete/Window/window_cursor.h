@@ -6,6 +6,8 @@
 
 namespace Kmplete
 {
+    //! Simple wrapper of a window cursor object
+    //! @see Window
     class WindowCursor
     {
     public:

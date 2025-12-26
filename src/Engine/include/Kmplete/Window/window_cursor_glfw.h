@@ -11,6 +11,9 @@ struct GLFWcursor;
 
 namespace Kmplete
 {
+    //! GLFW implementation wrapper of a window cursor.
+    //! @see WindowCursor
+    //! @see Window
     class WindowCursorGlfw : public WindowCursor
     {
         KMP_LOG_CLASSNAME(WindowCursorGlfw)

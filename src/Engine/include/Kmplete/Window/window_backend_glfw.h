@@ -8,6 +8,8 @@
 
 namespace Kmplete
 {
+    //! GLFW implementation of the window backend
+    //! @see WindowBackend
     class WindowBackendGlfw : public WindowBackend
     {
         KMP_LOG_CLASSNAME(WindowBackendGlfw)

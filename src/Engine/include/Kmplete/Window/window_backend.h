@@ -14,6 +14,10 @@ namespace Kmplete
     class WindowCursor;
 
 
+    //! Base class for a window backend, responsible for initializing underlying implementation API, 
+    //! creating/deleting window objects (by their names or settings object), cursors (by their names), interacting with monitors. 
+    //! @see Window
+    //! @see WindowCursor
     class WindowBackend
     {
     protected:

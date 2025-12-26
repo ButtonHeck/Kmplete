@@ -14,6 +14,7 @@ struct GLFWmonitor;
 
 namespace Kmplete
 {
+    //! GLFW implementation of a window object
     class WindowGlfw : public Window
     {
         KMP_LOG_CLASSNAME(WindowGlfw)
@@ -73,6 +74,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const noexcept override;
 
     private:
+        //! Helper window storage struct, injected to GLFWwindow as a user pointer
         struct _UserData
         {
             explicit _UserData(WindowSettings& settings);

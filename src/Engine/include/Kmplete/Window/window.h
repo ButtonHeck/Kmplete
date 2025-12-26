@@ -18,6 +18,9 @@ namespace Kmplete
     class Image;
 
 
+    //! Base class for application window. Communication with the application is
+    //! done via callback mechanism. Each WindowApplication-derived class may assume
+    //! that it has an already created window named "Main".
     class Window
     {
         KMP_LOG_CLASSNAME(Window)

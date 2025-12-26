@@ -15,6 +15,7 @@ namespace Kmplete
 {
     namespace
     {
+        //! Utility function to fetch available monitor modes for a given monitor (if any)
         Vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
