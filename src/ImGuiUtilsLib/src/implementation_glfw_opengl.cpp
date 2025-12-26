@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= "imgui.ini"*/)
+        ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
             : ImGuiImplementation(dockingEnabled, viewportsEnabled, configName)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         {

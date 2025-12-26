@@ -12,6 +12,8 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
+        //! Implementation of ImGui that uses both GLFW as window backend and OpenGL as graphics API
+        //! @see ImGuiUtils::ImGuiImplementation
         class ImGuiImplementationGlfwOpenGL : public ImGuiImplementation
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -19,7 +21,7 @@ namespace Kmplete
         public:
             KMP_DISABLE_COPY_MOVE(ImGuiImplementationGlfwOpenGL)
 
-            ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = "imgui.ini");
+            ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = ConfigurationFileName);
             virtual ~ImGuiImplementationGlfwOpenGL();
 
             void CreateFontsTexture() const override;

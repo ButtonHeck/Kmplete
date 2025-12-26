@@ -8,6 +8,8 @@
 
 namespace Kmplete
 {
+    //! Syntactic sugar helper structs that merges some common ImGui paired calls 
+    //! like BeginSomething/EndSomething into a single object
     namespace ImGuiUtils
     {
         class DisableGuard

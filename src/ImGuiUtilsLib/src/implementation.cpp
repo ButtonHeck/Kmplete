@@ -12,7 +12,7 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementation* ImGuiImplementation::CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= "imgui.ini"*/)
+        ImGuiImplementation* ImGuiImplementation::CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -28,7 +28,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        ImGuiImplementation::ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName /*= "imgui.ini"*/)
+        ImGuiImplementation::ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -72,7 +72,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= 18*/) const
+        void ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -84,7 +84,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= 18*/) const
+        void ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -94,7 +94,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= 18*/) const
+        void ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -111,7 +111,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= 18*/) const
+        void ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
