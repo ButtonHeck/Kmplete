@@ -16,6 +16,18 @@ namespace Kmplete
     class SettingsDocument;
 
 
+    //! Manager for localization of the application, responsible for handling locale settings,
+    //! creating locales, adding/removing translations from files (domains). Uses Boost.Locale library as
+    //! the localization backend. Client application should add a callback(s) to this manager in order
+    //! to be notified when locale changes.
+    //! "Translate[...]" functions names SHOULD MATCH parameters of gettext utility
+    //! programs in order to successfully update and compile translations - thus if any renaming occurs, make sure
+    //! to rename those parameters as well.
+    //! Translations may either be fetched from pre-filled library object or can be "directly" translated using
+    //! free functions from localization_translator.h
+    //! @see localization_translator.h
+    //! @see localization_base.h
+    //! @see LocalizationLibrary
     class LocalizationManager
     {
         KMP_LOG_CLASSNAME(LocalizationManager)

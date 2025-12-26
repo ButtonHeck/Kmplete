@@ -2,15 +2,20 @@
 
 #include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
-#include <array>
-
 
 namespace Kmplete
 {
+    //! Localization storage class, responsible for storing all kind of translations for
+    //! a dedicated domain. Storage structures for translations are implemented as a 
+    //! map (locale identifier as key) of maps ([contexted|plural]source identifier as a key) of 
+    //! actual translations. Although it is not prohibited to use this class as is, dictionary is supposed
+    //! to be used as a delegate for LocalizationLibrary class
+    //! @see LocalizationLibrary
     class LocalizationDictionary
     {
         KMP_LOG_CLASSNAME(LocalizationDictionary)
@@ -41,7 +46,7 @@ namespace Kmplete
     private:
         using TranslationMap = HashMap<SourceStrSID, TranslationStr>;
         using ContextedTranslationMap = HashMap<ContextedSource, TranslationStr, ContextedSourceHash>;
-        using PluralTranslations = std::array<TranslationStr, PluralityFormCount>;
+        using PluralTranslations = Array<TranslationStr, PluralityFormCount>;
         using TranslationPluralMap = HashMap<PluralSource, PluralTranslations, PluralSourceHash>;
         using ContextedTranslationPluralMap = HashMap<ContextedPluralSource, PluralTranslations, ContextedPluralSourceHash>;
 

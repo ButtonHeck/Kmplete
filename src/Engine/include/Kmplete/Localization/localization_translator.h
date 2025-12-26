@@ -8,6 +8,10 @@
 
 namespace Kmplete
 {
+    //! Families of free functions that delegates direct translation routines to appropriate Boost.Locale function calls.
+    //! "Translate[...]" functions names SHOULD MATCH parameters of gettext utility
+    //! programs in order to successfully update and compile translations - thus if any renaming occurs, make sure
+    //! to rename those parameters as well.
     namespace Localization
     {
         KMP_NODISCARD KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale = std::locale());

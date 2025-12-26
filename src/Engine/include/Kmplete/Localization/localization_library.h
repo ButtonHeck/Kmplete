@@ -11,6 +11,13 @@
 
 namespace Kmplete
 {
+    //! A wrapper for multiple translation dictionaries, responsible for managing lifetime of
+    //! contained dictionary objects, delegating adding translations to them, adding or removing
+    //! dictionaries and universally updating dictionaries' locales.
+    //! As with LocalizationDictionary used as a delegate for this class, the LocalizationLibrary itself
+    //! supposed to be used as a delegate for LocalizationManager class.
+    //! @see LocalizationManager
+    //! @see LocalizationDictionary
     class LocalizationLibrary
     {
         KMP_LOG_CLASSNAME(LocalizationLibrary)

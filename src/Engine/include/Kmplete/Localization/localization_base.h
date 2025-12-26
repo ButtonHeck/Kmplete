@@ -39,6 +39,9 @@ namespace Kmplete
     using TranslationStrSID = StringID;
 
 
+    //! This defines what form of a word is used (plural or singular),
+    //! moreover some languages may have multiple plural form, thus the engine
+    //! includes at least two of them.
     enum PluralityForm
     {
         PluralityFormSingular,
@@ -48,18 +51,22 @@ namespace Kmplete
     };
     //--------------------------------------------------------------------------
 
+    //! Base class of plurality dispatcher that is responsible for checking what form a word should
+    //! have based on the numeral used for this word 
     struct PluralityFormDispatcher
     {
         KMP_NODISCARD KMP_API virtual PluralityForm GetPluralityForm(int count) const noexcept = 0;
     };
     //--------------------------------------------------------------------------
 
+    //! Dispatcher for English translations
     struct PluralityFormDispatcherEn : public PluralityFormDispatcher
     {
         KMP_NODISCARD KMP_API PluralityForm GetPluralityForm(int count) const noexcept override;
     };
     //--------------------------------------------------------------------------
 
+    //! Dispatcher for Russian translations
     struct PluralityFormDispatcherRu : public PluralityFormDispatcher
     {
         KMP_NODISCARD KMP_API PluralityForm GetPluralityForm(int count) const noexcept override;
@@ -67,12 +74,13 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     KMP_NODISCARD KMP_API const PluralityFormDispatcher& GetPluralityDispatcher(const LocaleStr& localeStr) noexcept;
-    //--------------------------------------------------------------------------
 
     static constexpr PluralityFormDispatcherEn pluralFormIndexGeneratorEn;
     static constexpr PluralityFormDispatcherRu pluralFormIndexGeneratorRu;
 
 
+    //! Source with a context, e.g. word "quit" translation depends on whether it is a noun or a verb,
+    //! or a word may have different translations based on what context it is used with
     struct ContextedSource
     {
         SourceStrSID sourceSid;
@@ -89,6 +97,7 @@ namespace Kmplete
     static_assert(IsTriviallyMoveAssignable<ContextedSource>::value);
     //--------------------------------------------------------------------------
 
+    //! Utility hasher struct to enable storing ContextedSource in a hash map
     struct ContextedSourceHash
     {
         std::size_t operator()(const ContextedSource& source) const
@@ -99,6 +108,11 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Source that is used with a numeral, all translations are initially created from English
+    //! strings that are distinguished by a simple rule "1 or many" - thus there is only a pair
+    //! of string for each form, but for other languages the actual translation form depends
+    //! on the what PluralityFormDispatcher returns.
+    //! @see PluralityFormDispatcher
     struct PluralSource
     {
         SourceStrSID sourceSidSingular;
@@ -115,6 +129,7 @@ namespace Kmplete
     static_assert(IsTriviallyMoveAssignable<PluralSource>::value);
     //--------------------------------------------------------------------------
 
+    //! Utility hasher struct to enable storing PluralSource in a hash map
     struct PluralSourceHash
     {
         std::size_t operator()(const PluralSource& source) const
@@ -125,6 +140,9 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Combination of ContextedSource and PluralSource structures
+    //! @see ContextedSource
+    //! @see PluralSource
     struct ContextedPluralSource
     {
         SourceStrSID sourceSidSingular;
@@ -143,6 +161,7 @@ namespace Kmplete
     static_assert(IsTriviallyMoveAssignable<ContextedPluralSource>::value);
     //--------------------------------------------------------------------------
 
+    //! Utility hasher struct to enable storing PluralSource in a hash map
     struct ContextedPluralSourceHash
     {
         std::size_t operator()(const ContextedPluralSource& source) const
