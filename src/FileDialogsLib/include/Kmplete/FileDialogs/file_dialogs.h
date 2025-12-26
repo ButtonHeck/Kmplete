@@ -6,6 +6,7 @@
 
 namespace Kmplete
 {
+    //! Wrapper of a portable-file-dialogs library (pfd) types and functions. 
     namespace FileDialogs
     {
         enum class MessageButton

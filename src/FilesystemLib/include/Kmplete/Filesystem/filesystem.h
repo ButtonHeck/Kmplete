@@ -6,6 +6,7 @@
 
 namespace Kmplete
 {
+    //! Wrapper of common filesystem-related functions that uses std::filesystem as actual backend
     namespace Filesystem
     {
         KMP_NODISCARD KMP_API Filepath GetCurrentFilepath() noexcept;
