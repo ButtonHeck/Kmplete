@@ -11,11 +11,14 @@
 #include <rapidjson/fwd.h>
 #include <rapidjson/document.h>
 
-#include <vector>
-
 
 namespace Kmplete
 {
+    //! Wrapper for a JSON document that uses RapidJSON as backend, responsible for storing state of
+    //! a document, reading/writing operations, merging several json nodes, saving/loading to/from a file.
+    //! Reading and writing operations are delegated to separate JsonReader/JsonWriter objects
+    //! @see JsonReader
+    //! @see JsonWriter
     class JsonDocument
     {
         KMP_LOG_CLASSNAME(JsonDocument)

@@ -11,6 +11,10 @@
 
 namespace Kmplete
 {
+    //! Json data writer, a node to which data is being written is controlled
+    //! by a value pointer whose "address" is stored in a scope variable. 
+    //! This class doesn't support indexing like: "document[object][child] = 123;"
+    //! @see JsonScope
     class JsonWriter
     {
         KMP_LOG_CLASSNAME(JsonWriter)

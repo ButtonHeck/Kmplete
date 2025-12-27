@@ -7,6 +7,8 @@
 
 namespace Kmplete
 {
+    //! Utility struct to keep track which node is currently used for
+    //! reading or writing
     struct JsonScope
     {
         KMP_LOG_CLASSNAME(JsonScope)

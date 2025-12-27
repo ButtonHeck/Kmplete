@@ -11,6 +11,10 @@
 
 namespace Kmplete
 {
+    //! Json data reader, a node from which data is being read is controlled
+    //! by a value pointer whose "address" is stored in a scope variable. 
+    //! This class doesn't support indexing like: "int a = document[object][child];"
+    //! @see JsonScope
     class JsonReader
     {
         KMP_LOG_CLASSNAME(JsonReader)
