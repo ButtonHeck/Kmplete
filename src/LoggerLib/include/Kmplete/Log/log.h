@@ -37,6 +37,13 @@
 
 namespace Kmplete
 {
+    //! Global logging controller backed by the spdlog library, available for logging
+    //! to a console, a file or a string stream. Initialization is split to two parts:
+    //! first by a "Boot" function that stores all messages in a temporary storage, then
+    //! when an application loads its settings (including logger settings) all messages
+    //! from that storage moved to sinks according to those settings.
+    //! Filtering of messages is done by a levels mechanism (from 0 to 5): level 0 keeps
+    //! all the messages while level 5 keeps only critical ones.
     class Log
     {
     public:
@@ -96,6 +103,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
+//! Utility struct that enables logging Filepath without explicitly converting it to a string
 template<>
 struct fmt::formatter<Kmplete::Filepath> : fmt::formatter<Kmplete::String>
 {
@@ -106,6 +114,11 @@ struct fmt::formatter<Kmplete::Filepath> : fmt::formatter<Kmplete::String>
     }
 };
 //--------------------------------------------------------------------------
+
+
+//! Two sets of logging macros for all levels: the first set is used for a class functions (with class name printed first),
+//! while the second one is used for any other parts of code
+//! @see log_class_macro.h
 
 #define KMP_LOG_TRACE(...)          ::Kmplete::Log::Trace("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
 #define KMP_LOG_DEBUG(...)          ::Kmplete::Log::Debug("{}: {}", GetLogClassName(), fmt::format(__VA_ARGS__))
