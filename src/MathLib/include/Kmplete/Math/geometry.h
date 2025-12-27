@@ -13,6 +13,7 @@
 
 namespace Kmplete
 {
+    //! Definitions of commonly used geometric primitives backed by the GLM library structs/functions
     namespace Math
     {
         using Point2I = glm::ivec2;
@@ -32,6 +33,8 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
     
+        //! Two-dimensional rectangle defined by a position vector and a size vector,
+        //! underlying primitive type (integral or float) should match for those vectors.
         template<class PositionType, class SizeType>
         requires (Either<
                     Both<
@@ -68,6 +71,8 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! Three-dimensional rectangle defined by a position vector and a size vector,
+        //! underlying primitive type (integral or float) should match for those vectors.
         template<class PositionType, class SizeType>
         requires (Either<
                     Both<

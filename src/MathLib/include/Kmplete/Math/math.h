@@ -9,6 +9,7 @@
 
 namespace Kmplete
 {
+    //! Definitions of common math functions backed by the GLM library functions
     namespace Math
     {
         template<typename ValueType> requires (IsArithmetic<ValueType>::value)
