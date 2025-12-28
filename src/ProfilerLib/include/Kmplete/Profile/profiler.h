@@ -1,6 +1,9 @@
 #pragma once
 
+//! Helper macro definition to manually turn on/off profiling in the code (static builds only)
+//! for Debug and Release builds
 #define KMP_PROFILE_MANUAL_SET true
+
 #if ((!defined KMP_BUILD_STATIC || KMP_PROFILE_MANUAL_SET) && !defined (KMP_CONFIG_TYPE_PRODUCTION)) || defined (KMP_CONFIG_TYPE_RELWITHDEBINFO)
 #define KMP_PROFILE
 
@@ -19,6 +22,7 @@
 
 namespace Kmplete
 {
+    //! Single profiling metrics unit
     struct ProfileResult
     {
         String name;
@@ -30,6 +34,9 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! A scope-like object for profiling sessions, each such object represents
+    //! some stage of the application (initialization, runtime, finalization)
+    //! @see main.h in Kmplete engine library - function named "Main"
     struct ProfilingSession
     {
         String name;
@@ -38,6 +45,21 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Global handler of profiling applications' and libraries' functions performance,
+    //! responsible for collecting profiling metrics results, writing them in files
+    //! according to the current session. All the profiling split to several levels
+    //! (similar to levels of Log class) from level 0 (always profile - most important) 
+    //! to level 4 (least important), level is defined in the "--profile_level" argument.
+    //! In order to mitigate number of accesses to a disk, profiling units are stored 
+    //! in a temporary storage (whose capacity is set when starting a session)
+    //! that flushes to a file when: 1) the number of profiling
+    //! units exceeds storage's capacity 2) the current session ends.
+    //! This profiler is capable of turning profiling on/off at runtime (by default with
+    //! an Alt+F11 shortcut). Initial activation flag is defined in the "--profile_on_demand" argument
+    //! (false by default - profiler is active from the beginning, otherwise - activate manually).
+    //! @see ProfilingSession
+    //! @see ProfileResult
+    //! @see ProfilerTimer
     class Profiler
     {
         KMP_LOG_CLASSNAME(Profiler)
@@ -87,6 +109,11 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! A timer for a single profiling metrics unit whose timing is defined
+    //! by the lifetime of this object. If the level is of this timer is higher
+    //! than the level set for profiling or the profiler is currently inactive,
+    //! this object's timing is skipped.
+    //! @see Profiler
     class ProfilerTimer
     {
     public:
@@ -107,12 +134,14 @@ namespace Kmplete
 
     namespace ProfilerUtils
     {
+        //! Compile-time friendly struct for storing postprocessed name of a metrics unit
         template<size_t length>
         struct ReplaceResult
         {
             char data[length];
         };
 
+        //! Helper function to prettify name of a metrics unit (like remove __cdecl, replace std:: with custom aliases etc.)
         template<size_t lengthSrc, size_t lengthRemove, size_t lengthReplace>
         consteval auto ReplaceString(const char(&src)[lengthSrc], const char(&remove)[lengthRemove], const char(&replace)[lengthReplace])
         {
@@ -151,9 +180,11 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
+//! Shortcut macros to begin/end profiling sessions
 #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize) ::Kmplete::Profiler::Get().BeginSession(name, filepath, storageSize)
 #define KMP_PROFILE_END_SESSION() ::Kmplete::Profiler::Get().EndSession()
 
+//! The "meat" macro that formats metrics unit name
 #define _KMP_PROFILE_SCOPE_LINE2(name, line, level) \
     constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(name, "__cdecl ", "");\
     constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
@@ -173,6 +204,8 @@ namespace Kmplete
 #define KMP_PROFILE_SCOPE(name, level) _KMP_PROFILE_SCOPE_LINE(name, __LINE__, level)
 #define KMP_PROFILE_FUNCTION(level) KMP_PROFILE_SCOPE(KMP_FUNC_SIG, level)
 
+
+//! Shortcut macros for profiling objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE() \
     private:\
     UPtr<ProfilerTimer> _constructorProfilerTimer;
@@ -186,6 +219,7 @@ namespace Kmplete
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS() \
     , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
 
+//! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for constructors
 #define KMP_PROFILE_CONSTRUCTOR_END() \
     constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(KMP_FUNC_SIG, "__cdecl ", "");\
     constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
@@ -220,6 +254,11 @@ namespace Kmplete
 
 namespace Kmplete
 {
+    //! Enumeration of the profiling levels from the most important (0) to the least (4).
+    //! There is no strict rule which level in which function should be used, but the common
+    //! rule in this project is to use ProfileLevelAlways in constructors/destructors and functions
+    //! like Initialize/Finalize, ProfileLevelImportantFunctions(Verbose) for somewhat "heavy" and
+    //! important functions, and ProfileLevelMinorFunctions(Verbose) for any other functions
     enum ProfileLevel : unsigned int
     {
         ProfileLevelAlways = 0,
