@@ -8,6 +8,8 @@ namespace Kmplete
 {
     namespace Time
     {
+        //! Wrapper for a clock with a timeout, doesn't do anything itself
+        //! when timeout is reached
         class Timer : public Clock
         {
         public:

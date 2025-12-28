@@ -6,6 +6,7 @@
 
 namespace Kmplete
 {
+    //! Utility functions related with the time
     namespace Time
     {
         KMP_NODISCARD KMP_API String GetCurrentTimeString(const char* format = "%F %T");

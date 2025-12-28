@@ -9,6 +9,8 @@ namespace Kmplete
 {
     namespace Time
     {
+        //! A simple clock object for calculating difference between timestamps
+        //! in milliseconds
         class Clock
         {
         public:
