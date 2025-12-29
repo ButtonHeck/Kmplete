@@ -162,9 +162,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        String PrettifyFunctionName(const String& str)
+        String PrettifyFunctionName(const String& rawName)
         {
-            String result = str;
+            String result = rawName;
             result = Utils::RegexReplace(result, "__cdecl", "");
             result = Utils::RegexReplace(result, "__ptr64", "");
             result = Utils::RegexReplace(result, "class ", "");

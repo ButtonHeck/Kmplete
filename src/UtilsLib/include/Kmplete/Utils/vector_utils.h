@@ -6,6 +6,7 @@
 
 namespace Kmplete
 {
+    //! Helper functions with common vectors operations
     namespace Utils
     {
         template<typename Value>

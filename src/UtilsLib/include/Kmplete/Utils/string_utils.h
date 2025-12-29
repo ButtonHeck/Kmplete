@@ -9,6 +9,7 @@
 
 namespace Kmplete
 {
+    //! Helper functions for common string operations
     namespace Utils
     {
         template<typename... Ts>
@@ -33,13 +34,16 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         KMP_NODISCARD KMP_API String RegexReplace(const String& source, const char* regexp, const char* replacement);
+
         KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, char delimiter, bool startWithDelimiter = true);
         KMP_NODISCARD KMP_API String StringVectorToString(const StringVector& stringVector, const String& delimiter, bool startWithDelimiter = true);
+
         KMP_NODISCARD KMP_API WString NarrowToWide(const String& str);
         KMP_NODISCARD KMP_API String WideToNarrow(const WString& wstr);
         KMP_NODISCARD KMP_API String NarrowToUtf8(const String& str);
         KMP_NODISCARD KMP_API String Utf8ToNarrow(const String& str);
         KMP_NODISCARD KMP_API Filepath::string_type NarrowToFilepath(const String& str);
-        KMP_NODISCARD KMP_API String PrettifyFunctionName(const String& str);
+
+        KMP_NODISCARD KMP_API String PrettifyFunctionName(const String& rawName);
     }
 }
