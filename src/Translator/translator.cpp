@@ -7,7 +7,6 @@
 #include <boost/process.hpp>
 
 #include <algorithm>
-#include <array>
 #include <fstream>
 #include <streambuf>
 #include <numeric>
@@ -23,9 +22,9 @@ namespace Kmplete
 {
     namespace Translator
     {
-        static constexpr std::array<const char*, 2> Locales = {
-                "en_US",
-                "ru_RU"
+        static constexpr Array<const char*, 2> Locales = {
+            "en_US",
+            "ru_RU"
         };
 
 

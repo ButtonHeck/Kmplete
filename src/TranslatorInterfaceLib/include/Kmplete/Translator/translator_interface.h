@@ -3,6 +3,7 @@
 
 namespace Kmplete
 {
+    //! Interface data for interaction with the Translator program
     namespace Translator
     {
         static constexpr auto ProcessorWorkModeUpdate = "Update";

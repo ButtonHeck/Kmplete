@@ -10,6 +10,14 @@ namespace Kmplete
 {
     namespace Translator
     {
+        //! Representation of the Translator program arguments
+        //! --mode
+        //! --input_directories
+        //! --extensions
+        //! --recursive
+        //! --output_directory
+        //! --output_file_name
+        //! --logging
         struct TranslatorParameters
         {
             String workMode;
@@ -23,6 +31,18 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! The proccessor that takes directories containing files with sources needed to translate
+        //! and updates/compiles translations to a single .mo file. Uses gettext family of programs
+        //! as backend (ran as sub-processses). This processor is capable of running in one of two modes:
+        //! 1) updating translations - recursively gathering all files (with suitable extensions) from source 
+        //! directories and creating .po template files and 2) compiling translations - using .po files to create .mo files 
+        //! with translations. Between those steps translations must be somehow added in text form.
+        //! Overall translation process looks like this:
+        //! 1) invoke Translator with --mode=Update --other_params=...
+        //! 2) add translations in files generated from previous step (via Notepad or any other editor)
+        //! 3) invoke Translator with --mode=Compile --other_params=...
+        //! 4*) Copy/move generated translation .mo files to an appropriate application folder (* This step should be
+        //! either done manually or automated by other means)
         class TranslatorProcessor
         {
             KMP_LOG_CLASSNAME(TranslatorProcessor)
