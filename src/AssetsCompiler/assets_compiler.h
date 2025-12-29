@@ -17,15 +17,25 @@ namespace Kmplete
     {
         namespace Compiler
         {
+            //! Representation of the AssetsCompiler program arguments:
+            //! --input_file_name
+            //! --output_file_name
+            //! --logging
             struct CompilerParameters
             {
-                Filepath sourceFile;
-                Filepath outputFile;
+                Filepath sourceJsonFile;
+                Filepath outputDataFile;
                 bool logging = false;
             };
             //--------------------------------------------------------------------------
 
 
+            //! The processor class for gathering assets from files and compiling them.
+            //! The compiler takes json file that contains information of assets to compile
+            //! such as filepath, StringID and type of a single asset. Then it processses all the
+            //! metadata and put both assets headers and its binaries to the output file.
+            //! At the moment this class only capable of parsing single input file and writing
+            //! single output file. Duplication of StringIDs leads to an error and stops further processing.
             class AssetsCompiler
             {
                 KMP_LOG_CLASSNAME(AssetsCompiler)

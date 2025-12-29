@@ -5,6 +5,7 @@ namespace Kmplete
 {
     namespace Assets
     {
+        //! Interface data for interaction with the AssetsCompiler program
         namespace Compiler
         {
             static constexpr auto JsonConfigurationTopLevelName = "Assets";

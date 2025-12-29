@@ -22,7 +22,7 @@ namespace Kmplete
             {
                 KMP_LOG_INFO("start processing...");
 
-                auto sourceJson = JsonDocument(_parameters.sourceFile);
+                auto sourceJson = JsonDocument(_parameters.sourceJsonFile);
                 if (sourceJson.HasError())
                 {
                     KMP_LOG_ERROR("assets description parsing failed");
@@ -36,10 +36,10 @@ namespace Kmplete
                     return ReturnCode::InputFileFormatError;
                 }
 
-                std::ofstream outputFile(_parameters.outputFile, std::ios::binary);
+                std::ofstream outputFile(_parameters.outputDataFile, std::ios::binary);
                 if (!outputFile.is_open())
                 {
-                    KMP_LOG_ERROR("failed to open output file '{}'", _parameters.outputFile);
+                    KMP_LOG_ERROR("failed to open output file '{}'", _parameters.outputDataFile);
                     return ReturnCode::OutputFileOpeningFailed;
                 }
 

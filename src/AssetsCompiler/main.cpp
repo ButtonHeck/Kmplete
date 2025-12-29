@@ -23,9 +23,15 @@ namespace Kmplete
 //--------------------------------------------------------------------------
 
 
+//! The entry point of AssetsCompiler program:
+//! Stage 1 - fetch and process command line arguments
+//! Stage 2 - parse those arguments to compiler-specific parameters
+//! Stage 3 - create and run the compiler with parameters from stage 2
 int main(int argc, char** argv)
 {
     using namespace Kmplete::Assets;
+
+    // Stage 1
 
     auto optionsDescription = CreateOptionsDescription();
 
@@ -40,6 +46,9 @@ int main(int argc, char** argv)
     bpo::variables_map vm;
     bpo::store(cmdParser.options(optionsDescription).run(), vm);
     bpo::notify(vm);
+
+
+    // Stage 2
 
     Compiler::CompilerParameters compilerParameters;
     const auto parseParametersResult = ParseParameters(optionsDescription, vm, compilerParameters);
@@ -56,6 +65,9 @@ int main(int argc, char** argv)
 
         return parseParametersResult;
     }
+
+
+    // Stage 3
 
     Compiler::AssetsCompiler compiler(std::move(compilerParameters));
     const auto compilerReturnCode = compiler.Run();
@@ -138,7 +150,7 @@ namespace Kmplete
                 return ReturnCode::InputFileIsNotValid;
             }
 
-            compilerParameters.sourceFile = inputFileNamePath;
+            compilerParameters.sourceJsonFile = inputFileNamePath;
 
             // output filename parsing
             const auto outputFileNameStr = vm.count(CompilerArgumentOutputFileName) ? vm[CompilerArgumentOutputFileName].as<String>() : String();
@@ -157,7 +169,7 @@ namespace Kmplete
                 return ReturnCode::OutputFileCreationFailed;
             }
 
-            compilerParameters.outputFile = outputFileNamePath;
+            compilerParameters.outputDataFile = outputFileNamePath;
 
             return ReturnCode::Ok;
         }
