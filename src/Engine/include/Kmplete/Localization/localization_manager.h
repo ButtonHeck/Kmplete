@@ -31,16 +31,13 @@ namespace Kmplete
     class LocalizationManager
     {
         KMP_LOG_CLASSNAME(LocalizationManager)
-
-    public:
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
+        KMP_DISABLE_COPY_MOVE(LocalizationManager)
 
     public:
         using LocaleChangeCallback = Function<void()>;
 
     public:
-        KMP_DISABLE_COPY_MOVE(LocalizationManager)
-
         KMP_API LocalizationManager() noexcept;
         ~LocalizationManager() = default;
 

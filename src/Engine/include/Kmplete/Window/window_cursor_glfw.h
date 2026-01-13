@@ -17,10 +17,9 @@ namespace Kmplete
     class WindowCursorGlfw : public WindowCursor
     {
         KMP_LOG_CLASSNAME(WindowCursorGlfw)
-
-    public:
         KMP_DISABLE_COPY_MOVE(WindowCursorGlfw)
 
+    public:
         KMP_API explicit WindowCursorGlfw(const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I());
         KMP_API ~WindowCursorGlfw();
 

@@ -14,10 +14,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(EditorApplication)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(EditorApplication)
 
+    public:
         explicit EditorApplication(const WindowApplicationParameters& parameters);
         virtual ~EditorApplication();
 

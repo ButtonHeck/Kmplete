@@ -47,10 +47,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(WindowApplication)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(WindowApplication)
 
+    public:
         KMP_API explicit WindowApplication(const WindowApplicationParameters& parameters);
         KMP_API virtual ~WindowApplication();
 

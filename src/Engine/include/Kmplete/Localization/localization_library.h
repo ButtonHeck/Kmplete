@@ -22,10 +22,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(LocalizationLibrary)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(LocalizationLibrary)
 
+    public:
         KMP_API LocalizationLibrary() noexcept;
         ~LocalizationLibrary() = default;
 

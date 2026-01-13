@@ -20,6 +20,8 @@ namespace Kmplete
     //! @see WindowCursor
     class WindowBackend
     {
+        KMP_DISABLE_COPY_MOVE(WindowBackend)
+
     protected:
         static constexpr auto SettingsEntryName = "WindowBackend";
         static constexpr auto MainWindowStr = "MainWindow";
@@ -37,8 +39,6 @@ namespace Kmplete
         KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create();
 
     public:
-        KMP_DISABLE_COPY_MOVE(WindowBackend)
-
         WindowBackend() = default;
         virtual ~WindowBackend() = default;
 

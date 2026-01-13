@@ -30,10 +30,9 @@ namespace Kmplete
         {
             KMP_LOG_CLASSNAME(InputManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-        public:
             KMP_DISABLE_COPY_MOVE(InputManager)
 
+        public:
             KMP_API InputManager() noexcept;
 
             KMP_API void ProcessInputEvents(Events::Event& event);

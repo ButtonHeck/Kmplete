@@ -13,10 +13,9 @@ namespace Kmplete
     class WindowBackendGlfw : public WindowBackend
     {
         KMP_LOG_CLASSNAME(WindowBackendGlfw)
-
-    public:
         KMP_DISABLE_COPY_MOVE(WindowBackendGlfw)
 
+    public:
         KMP_API WindowBackendGlfw();
         KMP_API ~WindowBackendGlfw();
 

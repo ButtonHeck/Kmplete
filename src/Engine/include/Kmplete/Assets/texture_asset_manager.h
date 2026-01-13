@@ -24,11 +24,10 @@ namespace Kmplete
         class TextureAssetManager
         {
             KMP_LOG_CLASSNAME(TextureAssetManager)
+            KMP_DISABLE_COPY_MOVE(TextureAssetManager)
 
         public:
             static constexpr StringID ErrorTextureSID = 0;
-
-            KMP_DISABLE_COPY_MOVE(TextureAssetManager)
 
             KMP_API explicit TextureAssetManager(GraphicsBackendType backendType);
 

@@ -17,10 +17,9 @@ namespace Kmplete
         class ImGuiImplementationGlfwOpenGL : public ImGuiImplementation
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-        public:
             KMP_DISABLE_COPY_MOVE(ImGuiImplementationGlfwOpenGL)
 
+        public:
             ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = ConfigurationFileName);
             virtual ~ImGuiImplementationGlfwOpenGL();
 

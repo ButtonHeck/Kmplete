@@ -23,10 +23,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(JsonDocument)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(JsonDocument)
 
+    public:
         KMP_API JsonDocument();
         KMP_API explicit JsonDocument(rapidjson::Document&& document);
         KMP_API explicit JsonDocument(const Filepath& filepath);

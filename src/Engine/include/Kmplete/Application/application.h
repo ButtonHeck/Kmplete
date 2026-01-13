@@ -32,10 +32,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(Application)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(Application)
 
+    public:
         KMP_API explicit Application(const ApplicationParameters& parameters);
         KMP_API virtual ~Application();
 

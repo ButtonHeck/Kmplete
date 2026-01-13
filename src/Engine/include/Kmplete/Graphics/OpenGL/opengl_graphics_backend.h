@@ -13,10 +13,9 @@ namespace Kmplete
     class OpenGLGraphicsBackend : public GraphicsBackend
     {
         KMP_LOG_CLASSNAME(OpenGLGraphicsBackend)
-
-    public:
         KMP_DISABLE_COPY_MOVE(OpenGLGraphicsBackend)
 
+    public:
         KMP_API OpenGLGraphicsBackend();
 
         KMP_API void Initialize() const override;

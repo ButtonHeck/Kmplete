@@ -35,10 +35,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(EditorFrameListener)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
+    public:
         EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, 
                             LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
         ~EditorFrameListener();

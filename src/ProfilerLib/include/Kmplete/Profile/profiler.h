@@ -63,10 +63,9 @@ namespace Kmplete
     class Profiler
     {
         KMP_LOG_CLASSNAME(Profiler)
-
-    public:
         KMP_DISABLE_COPY_MOVE(Profiler)
 
+    public:
         KMP_NODISCARD KMP_API static Profiler& Get();
 
         KMP_API void SetLevel(unsigned int level);
@@ -116,9 +115,9 @@ namespace Kmplete
     //! @see Profiler
     class ProfilerTimer
     {
-    public:
         KMP_DISABLE_COPY_MOVE(ProfilerTimer)
 
+    public:
         KMP_API explicit ProfilerTimer(const char* name, unsigned int level = 0);
         KMP_API ~ProfilerTimer();
 

@@ -25,6 +25,7 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(Window)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
+        KMP_DISABLE_COPY_MOVE(Window)
 
     public:
         using EventCallbackFn = Function<void(Events::Event&)>;
@@ -80,8 +81,6 @@ namespace Kmplete
         };
 
     public:
-        KMP_DISABLE_COPY_MOVE(Window)
-
         KMP_API explicit Window(WindowSettings& settings);
         virtual ~Window() = default;
 

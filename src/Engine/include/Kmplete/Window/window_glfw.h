@@ -19,10 +19,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(WindowGlfw)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
+    public:
         KMP_API explicit WindowGlfw(WindowSettings& settings);
         KMP_API ~WindowGlfw();
 

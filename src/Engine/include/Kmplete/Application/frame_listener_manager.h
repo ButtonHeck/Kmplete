@@ -25,13 +25,12 @@ namespace Kmplete
     class FrameListenerManager
     {
         KMP_LOG_CLASSNAME(FrameListenerManager)
+        KMP_DISABLE_COPY_MOVE(FrameListenerManager)
 
     public:
         using FrameCreateDeleteListenerCommandBufferHandler = Function<void(const FrameListenerCommandBuffer&)>;
 
     public:
-        KMP_DISABLE_COPY_MOVE(FrameListenerManager)
-
         KMP_API FrameListenerManager() = default;
         KMP_API ~FrameListenerManager();
 

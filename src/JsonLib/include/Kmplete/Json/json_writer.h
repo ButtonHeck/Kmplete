@@ -19,10 +19,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(JsonWriter)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(JsonWriter)
 
+    public:
         KMP_API explicit JsonWriter(rapidjson::Document& document);
         ~JsonWriter() = default;
 

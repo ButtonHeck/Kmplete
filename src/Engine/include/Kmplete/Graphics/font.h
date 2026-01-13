@@ -18,10 +18,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(Font)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(Font)
 
+    public:
         KMP_API Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
         KMP_API Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath);
         KMP_API ~Font();

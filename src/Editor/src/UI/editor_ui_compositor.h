@@ -31,10 +31,9 @@ namespace Kmplete
     class EditorUICompositor
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(EditorUICompositor)
 
+    public:
         EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
                            const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
 

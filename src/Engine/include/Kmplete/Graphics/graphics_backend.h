@@ -11,12 +11,12 @@ namespace Kmplete
     //! for graphics-related functions
     class GraphicsBackend
     {
+        KMP_DISABLE_COPY_MOVE(GraphicsBackend)
+
     public:
         KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(GraphicsBackendType type);
 
     public:
-        KMP_DISABLE_COPY_MOVE(GraphicsBackend)
-
         KMP_API explicit GraphicsBackend(GraphicsBackendType type);
         virtual ~GraphicsBackend() = default;
 

@@ -39,12 +39,13 @@
 
 
 //! Shortcuts for deleting class special members
-//! Place them in public section
 #define KMP_DISABLE_COPY(ClassName)\
+    public:\
     ClassName(const ClassName&) = delete;\
     ClassName& operator=(const ClassName&) = delete;\
 
 #define KMP_DISABLE_MOVE(ClassName)\
+    public:\
     ClassName(ClassName&&) = delete;\
     ClassName& operator=(ClassName&&) = delete;
 

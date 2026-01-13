@@ -23,11 +23,10 @@ namespace Kmplete
         class FontAssetManager
         {
             KMP_LOG_CLASSNAME(FontAssetManager)
+            KMP_DISABLE_COPY_MOVE(FontAssetManager)
 
         public:
             static constexpr StringID DefaultFontSID = 0;
-
-            KMP_DISABLE_COPY_MOVE(FontAssetManager)
 
             KMP_API FontAssetManager();
             KMP_API ~FontAssetManager();

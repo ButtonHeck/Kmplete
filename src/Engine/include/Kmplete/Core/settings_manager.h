@@ -19,10 +19,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(SettingsManager)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(SettingsManager)
 
+    public:
         KMP_API explicit SettingsManager(const Filepath& filepath);
         ~SettingsManager() = default;
 

@@ -21,10 +21,9 @@ namespace Kmplete
         {
             KMP_LOG_CLASSNAME(AssetsManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-        public:
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
+        public:
             KMP_API AssetsManager(const Filepath& applicationPath, GraphicsBackendType type);
             KMP_API ~AssetsManager();
 

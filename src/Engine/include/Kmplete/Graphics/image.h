@@ -15,10 +15,9 @@ namespace Kmplete
     class Image
     {
         KMP_LOG_CLASSNAME(Image)
-
-    public:
         KMP_DISABLE_COPY(Image)
 
+    public:
         KMP_API explicit Image(const Filepath& filepath, bool flipVertically = false);
         KMP_API Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically = false);
         KMP_API Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);

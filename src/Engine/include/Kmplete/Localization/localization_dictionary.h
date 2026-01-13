@@ -20,10 +20,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(LocalizationDictionary)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(LocalizationDictionary)
 
+    public:
         KMP_API explicit LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid = SidTrInvalidLocale) noexcept;
         ~LocalizationDictionary() = default;
 

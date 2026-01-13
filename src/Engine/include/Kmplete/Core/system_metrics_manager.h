@@ -15,6 +15,7 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(SystemMetricsManager)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
+        KMP_DISABLE_COPY_MOVE(SystemMetricsManager)
 
     public:
         struct SystemMetrics
@@ -45,8 +46,6 @@ namespace Kmplete
         };
 
     public:
-        KMP_DISABLE_COPY_MOVE(SystemMetricsManager)
-
         KMP_API SystemMetricsManager();
         ~SystemMetricsManager() = default;
 

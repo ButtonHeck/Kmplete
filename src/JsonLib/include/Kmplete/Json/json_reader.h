@@ -19,10 +19,9 @@ namespace Kmplete
     {
         KMP_LOG_CLASSNAME(JsonReader)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
-
-    public:
         KMP_DISABLE_COPY_MOVE(JsonReader)
 
+    public:
         KMP_API explicit JsonReader(rapidjson::Document& document);
         ~JsonReader() = default;
 
