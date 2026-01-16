@@ -33,88 +33,25 @@ namespace Kmplete
 
             if (eventTypeID == Events::MouseMoveEventTypeID)
             {
-                auto& mouseMoveEvent = static_cast<Events::MouseMoveEvent&>(event);
-                const auto newMousePosition = Math::Point2I(mouseMoveEvent.GetX(), mouseMoveEvent.GetY());
-                const auto mouseMove = newMousePosition - _mousePosition;
-
-                const auto moveEvents = _CreateActionEvents(Input::Code::Mouse_Move, mouseMove);
-                Utils::MergeVectors<ActionEvent>(moveEvents, _actionEvents);
-
-                const auto positionEvents = _CreateActionEvents(Input::Code::Mouse_Position, newMousePosition);
-                Utils::MergeVectors<ActionEvent>(positionEvents, _actionEvents);
-
-                _mousePosition = newMousePosition;
-                _controlStates[Code::Mouse_Position] = _mousePosition;
-                _controlStates[Code::Mouse_Move] = mouseMove;
+                _ProcessMouseMoveEvent(static_cast<Events::MouseMoveEvent&>(event));
             }
 
             else if (eventTypeID == Events::MouseButtonPressEventTypeID)
             {
-                const auto& mouseButtonPressEvent = static_cast<Events::MouseButtonPressEvent&>(event);
-                const auto mouseButton = mouseButtonPressEvent.GetMouseButton();
-
-                _controlStates[mouseButton] = ButtonPressed;
-
-                const auto newEvents = _CreateActionEvents(mouseButton, ButtonPressed);
-                Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
-
-                if (_inputCodeToTimedConditionsMap.contains(mouseButton))
-                {
-                    _inputCodeToTimedConditionsMap[mouseButton].Activate();
-                }
+                _ProcessMouseButtonPressEvent(static_cast<Events::MouseButtonPressEvent&>(event));
             }
             else if (eventTypeID == Events::MouseButtonReleaseEventTypeID)
             {
-                const auto& mouseButtonReleaseEvent = static_cast<Events::MouseButtonReleaseEvent&>(event);
-                const auto mouseButton = mouseButtonReleaseEvent.GetMouseButton();
-
-                _controlStates[mouseButton] = ButtonReleased;
-
-                const auto newEvents = _CreateActionEvents(mouseButton, ButtonReleased);
-                Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
-
-                if (_inputCodeToTimedConditionsMap.contains(mouseButton))
-                {
-                    _inputCodeToTimedConditionsMap[mouseButton].Deactivate();
-                }
+                _ProcessMouseButtonReleaseEvent(static_cast<Events::MouseButtonReleaseEvent&>(event));
             }
 
             else if (eventTypeID == Events::KeyPressEventTypeID)
             {
-                const auto& keyPressEvent = static_cast<Events::KeyPressEvent&>(event);
-                const auto keyCode = keyPressEvent.GetKeyCode();
-                const auto modifiers = keyPressEvent.GetMods();
-
-                _controlStates[keyCode] = ButtonPressed;
-                _modifiersMask = modifiers;
-
-                if (!keyPressEvent.IsRepeat())
-                {
-                    const auto newEvents = _CreateActionEvents(keyCode, ButtonPressed);
-                    Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
-
-                    if (_inputCodeToTimedConditionsMap.contains(keyCode))
-                    {
-                        _inputCodeToTimedConditionsMap[keyCode].Activate();
-                    }
-                }
+                _ProcessKeyPressEvent(static_cast<Events::KeyPressEvent&>(event));
             }
             else if (eventTypeID == Events::KeyReleaseEventTypeID)
             {
-                const auto& keyReleaseEvent = static_cast<Events::KeyReleaseEvent&>(event);
-                const auto keyCode = keyReleaseEvent.GetKeyCode();
-                const auto modifiers = keyReleaseEvent.GetMods();
-
-                _controlStates[keyCode] = ButtonReleased;
-                _modifiersMask = modifiers;
-
-                const auto newEvents = _CreateActionEvents(keyCode, ButtonReleased);
-                Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
-
-                if (_inputCodeToTimedConditionsMap.contains(keyCode))
-                {
-                    _inputCodeToTimedConditionsMap[keyCode].Deactivate();
-                }
+                _ProcessKeyReleaseEvent(static_cast<Events::KeyReleaseEvent&>(event));
             }
         }
         //--------------------------------------------------------------------------
@@ -347,6 +284,84 @@ namespace Kmplete
             }
 
             return MapActionToCallback(actionId, taggedCallback);
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::_ProcessMouseMoveEvent(const Events::MouseMoveEvent& mouseMoveEvent)
+        {
+            const auto newMousePosition = Math::Point2I(mouseMoveEvent.GetX(), mouseMoveEvent.GetY());
+            const auto mouseMove = newMousePosition - _mousePosition;
+
+            const auto moveEvents = _CreateActionEvents(Input::Code::Mouse_Move, mouseMove);
+            Utils::MergeVectors<ActionEvent>(moveEvents, _actionEvents);
+
+            const auto positionEvents = _CreateActionEvents(Input::Code::Mouse_Position, newMousePosition);
+            Utils::MergeVectors<ActionEvent>(positionEvents, _actionEvents);
+
+            _mousePosition = newMousePosition;
+            _controlStates[Code::Mouse_Position] = _mousePosition;
+            _controlStates[Code::Mouse_Move] = mouseMove;
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::_ProcessMouseButtonPressEvent(const Events::MouseButtonPressEvent& mouseButtonPressEvent)
+        {
+            const auto mouseButton = mouseButtonPressEvent.GetMouseButton();
+
+            _controlStates[mouseButton] = ButtonPressed;
+
+            _UpdateActionEvents(mouseButton, ButtonPressed, true);
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::_ProcessMouseButtonReleaseEvent(const Events::MouseButtonReleaseEvent& mouseButtonReleaseEvent)
+        {
+            const auto mouseButton = mouseButtonReleaseEvent.GetMouseButton();
+
+            _controlStates[mouseButton] = ButtonReleased;
+
+            _UpdateActionEvents(mouseButton, ButtonReleased, false);
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::_ProcessKeyPressEvent(const Events::KeyPressEvent& keyPressEvent)
+        {
+            const auto keyCode = keyPressEvent.GetKeyCode();
+            const auto modifiers = keyPressEvent.GetMods();
+
+            _controlStates[keyCode] = ButtonPressed;
+            _modifiersMask = modifiers;
+
+            if (!keyPressEvent.IsRepeat())
+            {
+                _UpdateActionEvents(keyCode, ButtonPressed, true);
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::_ProcessKeyReleaseEvent(const Events::KeyReleaseEvent& keyReleaseEvent)
+        {
+            const auto keyCode = keyReleaseEvent.GetKeyCode();
+            const auto modifiers = keyReleaseEvent.GetMods();
+
+            _controlStates[keyCode] = ButtonReleased;
+            _modifiersMask = modifiers;
+
+            _UpdateActionEvents(keyCode, ButtonReleased, false);
+        }
+        //--------------------------------------------------------------------------
+
+        void InputManager::_UpdateActionEvents(InputCode code, InputControlValue value, bool isActivation)
+        {
+            const auto newEvents = _CreateActionEvents(code, value);
+            Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
+
+            if (_inputCodeToTimedConditionsMap.contains(code))
+            {
+                isActivation
+                    ? _inputCodeToTimedConditionsMap[code].Activate()
+                    : _inputCodeToTimedConditionsMap[code].Deactivate();
+            }
         }
         //--------------------------------------------------------------------------
 

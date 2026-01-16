@@ -14,6 +14,11 @@ namespace Kmplete
     namespace Events
     {
         struct Event;
+        struct MouseMoveEvent;
+        struct MouseButtonPressEvent;
+        struct MouseButtonReleaseEvent;
+        struct KeyPressEvent;
+        struct KeyReleaseEvent;
     }
 
 
@@ -127,6 +132,13 @@ namespace Kmplete
             //--------------------------------------------------------------------------
 
         private:
+            void _ProcessMouseMoveEvent(const Events::MouseMoveEvent& mouseMoveEvent);
+            void _ProcessMouseButtonPressEvent(const Events::MouseButtonPressEvent& mouseButtonPressEvent);
+            void _ProcessMouseButtonReleaseEvent(const Events::MouseButtonReleaseEvent& mouseButtonReleaseEvent);
+            void _ProcessKeyPressEvent(const Events::KeyPressEvent& keyPressEvent);
+            void _ProcessKeyReleaseEvent(const Events::KeyReleaseEvent& keyReleaseEvent);
+
+            void _UpdateActionEvents(InputCode code, InputControlValue value, bool isActivation);
             KMP_NODISCARD Vector<ActionEvent> _CreateActionEvents(InputCode code, InputControlValue value) const;
             void _PropagateSingleActionEvent(const ActionEvent& actionEvent);
             KMP_NODISCARD bool _ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const;
