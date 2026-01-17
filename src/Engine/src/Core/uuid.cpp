@@ -4,7 +4,7 @@
 
 namespace Kmplete
 {
-    static RNGUint64 rng;
+    static RNGUInt64 rng;
 
     UUID UUID::InvalidUuid(0);
 

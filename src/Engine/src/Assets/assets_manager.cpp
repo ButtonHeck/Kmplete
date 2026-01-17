@@ -72,6 +72,12 @@ namespace Kmplete
             }
 
             const auto fileBuffer = Filesystem::ReadFileAsBinary(fullPath);
+            if (fileBuffer.size() < sizeof(AssetCount))
+            {
+                KMP_LOG_ERROR("asset file '{}' buffer is too small", filepath);
+                return false;
+            }
+
             const auto assetCount = *reinterpret_cast<const AssetCount*>(fileBuffer.data());
 
             KMP_LOG_INFO("start loading {} assets headers from '{}'", assetCount, filepath);
@@ -223,7 +229,7 @@ namespace Kmplete
                 lookupVector.push_back(_lookupMap.at(sid));
             }
 
-            std::sort(lookupVector.begin(), lookupVector.end(), [](const AssetLookupInfo& info1, const AssetLookupInfo& info2) { return info1.filepath > info2.filepath; });
+            std::sort(lookupVector.begin(), lookupVector.end(), [](const AssetLookupInfo& info1, const AssetLookupInfo& info2) { return info1.filepath < info2.filepath; });
 
             return lookupVector;
         }
@@ -262,24 +268,32 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
+            if (fileBuffer.size() < assetHeader.bufferOffset + assetHeader.bufferSize) {
+                KMP_LOG_ERROR("asset buffer overflow - file too small for asset data");
+                return false;
+            }
+
             if (assetHeader.type == static_cast<UByte>(AssetType::Texture))
             {
                 try
                 {
                     const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
-                    _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
+                    return _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
                 }
                 catch (KMP_MB_UNUSED const std::exception& e)
                 {
                     KMP_LOG_ERROR("failed to create texture: {}", e.what());
+                    return false;
                 }
             }
             else if (assetHeader.type == static_cast<UByte>(AssetType::Font))
             {
-                _fontAssetManager->CreateAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
+                return _fontAssetManager->CreateAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
             }
 
-            return true;
+            KMP_LOG_ERROR("unknown asset type '{}'", assetHeader.type);
+
+            return false;
         }
         //--------------------------------------------------------------------------
     }

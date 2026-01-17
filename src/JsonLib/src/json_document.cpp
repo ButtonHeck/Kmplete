@@ -208,6 +208,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    String JsonDocument::ErrorDescription() const noexcept
+    {
+        return rapidjson::GetParseError_En(_document.GetParseError());
+    }
+    //--------------------------------------------------------------------------
+
     bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite /*= true*/)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);

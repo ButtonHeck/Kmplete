@@ -17,7 +17,7 @@ namespace Kmplete
     {
         //! Manager of font assets, responsible for initializing FreeType for font-related routines,
         //! managing lifetime of contained asset objects, adding/deleting font assets. 
-        //! If this manager has successfully been created - then there is the asset with StringID = 0 that holds
+        //! If this manager has been successfully created - then there is the asset with StringID = 0 that holds
         //! the "default" font (which font is used depends on the platform - Arial or Ubuntu with size 18)
         //! @see Assets::FontAsset
         class FontAssetManager

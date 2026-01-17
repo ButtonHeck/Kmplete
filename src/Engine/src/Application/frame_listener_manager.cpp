@@ -41,7 +41,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
         KMP_ASSERT(frameListener);
 
-        if (_FindBySid(frameListener->GetSID()) != nullptr)
+        if (_FindFrameListener(frameListener->GetSID()) != nullptr)
         {
             KMP_LOG_WARN("already contains frame listener with same sid '{}'", frameListener->GetSID());
             return false;
@@ -158,6 +158,11 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
+        if (_commandBuffer.empty())
+        {
+            return;
+        }
+
         for (auto commandIter = _commandBuffer.begin(); commandIter != _commandBuffer.end();)
         {
             if (commandIter->code == FrameListenerCommandCode::Create || commandIter->code == FrameListenerCommandCode::Delete)
@@ -166,9 +171,10 @@ namespace Kmplete
                 continue;
             }
 
-            auto listener = _FindBySid(commandIter->sid);
+            auto listener = _FindFrameListener(commandIter->sid);
             if (listener == nullptr)
             {
+                KMP_LOG_WARN("failed to find frame listener '{}'", commandIter->sid);
                 commandIter = _commandBuffer.erase(commandIter);
                 continue;
             }
@@ -186,7 +192,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Nullable<FrameListener*> FrameListenerManager::_FindBySid(StringID sid)
+    Nullable<FrameListener*> FrameListenerManager::_FindFrameListener(StringID sid)
     {
         for (auto& [priority, listener] : _listeners)
         {

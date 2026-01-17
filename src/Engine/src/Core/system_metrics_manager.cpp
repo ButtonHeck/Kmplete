@@ -263,6 +263,8 @@ namespace Kmplete
         if (threadSnapHandle == INVALID_HANDLE_VALUE)
         {
             KMP_LOG_WARN("failed to take snapshot of all running threads");
+            _systemMetrics.numThreads = numThreads;
+            return false;
         }
         else
         {
@@ -290,31 +292,33 @@ namespace Kmplete
 
         _systemMetrics.numThreads = numThreads;
 #else
-        const auto parseLine = [](char* line) {
-            int i = strlen(line);
-            const char* p = line;
-            while (*p <'0' || *p > '9') p++;
-            line[i-3] = '\0';
-            i = atoi(p);
-            return i;
+        const auto parseThreadsStatusLine = [](char* lineBuffer) {
+            const int lineLength = strlen(lineBuffer);
+            if (lineLength < 3) return 0;
+
+            const char* ch = lineBuffer;
+            while (*ch < '0' || *ch > '9') ch++;
+            lineBuffer[lineLength - 3] = '\0';
+            const auto number = atoi(ch);
+            return number;
         };
         
         FILE* file = fopen("/proc/self/status", "r");
-        int resultThreads = -1;
-        char line[128] = {0};
+        int numThreads = 0;
+        char lineBuffer[128] = {0};
         
-        while (fgets(line, 128, file) != NULL)
+        while (fgets(lineBuffer, 128, file) != NULL)
         {
-            if (strncmp(line, "Threads:", 8) == 0)
+            if (strncmp(lineBuffer, "Threads:", 8) == 0)
             {
-                resultThreads = parseLine(line);
+                numThreads = parseThreadsStatusLine(lineBuffer);
                 break;
             }
         }
         
         fclose(file);
         
-        _systemMetrics.numThreads = resultThreads;
+        _systemMetrics.numThreads = numThreads;
 #endif
 
         return true;
@@ -337,13 +341,15 @@ namespace Kmplete
         _systemMetrics.virtualMemoryUsedMib = static_cast<float>(static_cast<double>(pmc.PrivateUsage) / MibDivisor);
         _systemMetrics.physicalMemoryUsedMib = static_cast<float>(static_cast<double>(pmc.WorkingSetSize) / MibDivisor);
 #else
-        const auto parseLine = [](char* line) {
-            int i = strlen(line);
-            const char* p = line;
-            while (*p <'0' || *p > '9') p++;
-            line[i-3] = '\0';
-            i = atoi(p);
-            return i;
+        const auto parseStatusLine = [](char* lineBuffer) {
+            const int lineLength = strlen(lineBuffer);
+            if (lineLength < 3) return 0;
+
+            const char* ch = lineBuffer;
+            while (*ch < '0' || *ch > '9') ch++;
+            lineBuffer[lineLength - 3] = '\0';
+            const auto number = atoi(ch);
+            return number;
         };
         
         FILE* file = fopen("/proc/self/status", "r");
@@ -355,11 +361,11 @@ namespace Kmplete
         {
             if (strncmp(line, "VmSize:", 7) == 0)
             {
-                resultVirtual = parseLine(line);
+                resultVirtual = parseStatusLine(line);
             }
             if (strncmp(line, "VmRSS:", 6) == 0)
             {
-                resultPhysical = parseLine(line);
+                resultPhysical = parseStatusLine(line);
             }
             if (resultVirtual != -1 && resultPhysical != -1)
             {

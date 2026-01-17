@@ -14,7 +14,7 @@ namespace Kmplete
     class FrameListenerManager;
 
 
-    //! Base class for objects that encapsulate logic flow for different stages of the main loop for dedicated parts of the appplication,
+    //! Base class for objects that encapsulate logic flow for different stages of the main loop for dedicated parts of the application,
     //! such stages include process events, update and render. Synonim for "ApplicationLayer" in other engines.
     //! Each of these listeners has its own priority and identificator that is used in FrameListenerManager.
     //! Interaction with other listeners and the application is indirect and is implemented by sending commands.

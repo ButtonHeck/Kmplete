@@ -48,7 +48,7 @@ namespace Kmplete
         JsonDocument document(_filepath);
         if (document.HasError())
         {
-            KMP_LOG_WARN("failed to load settings from '{}'", _filepath);
+            KMP_LOG_WARN("failed to load settings from '{}' - {}", _filepath, document.ErrorDescription());
             return false;
         }
 
@@ -62,6 +62,8 @@ namespace Kmplete
 
             _namedSettingsDocuments.emplace(name, CreateUPtr<SettingsDocument>(name, childDocument));
         }
+
+        KMP_LOG_INFO("settings successfully loaded from '{}'", _filepath);
 
         return true;
     }
@@ -78,7 +80,17 @@ namespace Kmplete
             summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
         }
 
-        return summaryDocument.Save(_filepath);
+        const auto ok = summaryDocument.Save(_filepath);
+        if (ok)
+        {
+            KMP_LOG_INFO("settings successfully saved to '{}'", _filepath);
+        }
+        else
+        {
+            KMP_LOG_ERROR("failed to save settings to '{}'", _filepath);
+        }
+
+        return ok;
     }
     //--------------------------------------------------------------------------
 

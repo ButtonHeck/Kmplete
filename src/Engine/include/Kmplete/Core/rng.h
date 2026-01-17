@@ -3,6 +3,7 @@
 #include "Kmplete/Base/type_traits.h"
 
 #include <random>
+#include <limits>
 
 
 namespace Kmplete
@@ -28,7 +29,7 @@ namespace Kmplete
     public:
         RNGIntegral()
             : _engine(_randomDevice())
-            , _uniformDistribution()
+            , _uniformDistribution(std::numeric_limits<T>::min(), std::numeric_limits<T>::max())
         {}
 
         RNGIntegral(T min, T max)
@@ -54,7 +55,7 @@ namespace Kmplete
     public:
         RNGIntegral()
             : _engine(_randomDevice())
-            , _uniformDistribution()
+            , _uniformDistribution(std::numeric_limits<T>::min(), std::numeric_limits<T>::max())
         {}
 
         RNGIntegral(T min, T max)
@@ -88,7 +89,7 @@ namespace Kmplete
     public:
         RNGReal()
             : _engine(_randomDevice())
-            , _uniformDistribution()
+            , _uniformDistribution(0.0, 1.0)
         {}
 
         RNGReal(T min, T max)
@@ -114,7 +115,7 @@ namespace Kmplete
     public:
         RNGReal()
             : _engine(_randomDevice())
-            , _uniformDistribution()
+            , _uniformDistribution(0.0, 1.0)
         {}
 
         RNGReal(T min, T max)
@@ -138,7 +139,7 @@ namespace Kmplete
     using RNGInt32 = RNGIntegral<Int32, RNGBitWidth::RNGBitWidth32>;
     using RNGUInt32 = RNGIntegral<UInt32, RNGBitWidth::RNGBitWidth32>;
     using RNGInt64 = RNGIntegral<Int64, RNGBitWidth::RNGBitWidth64>;
-    using RNGUint64 = RNGIntegral<UInt64, RNGBitWidth::RNGBitWidth64>;
+    using RNGUInt64 = RNGIntegral<UInt64, RNGBitWidth::RNGBitWidth64>;
     using RNGFloat = RNGReal<float, RNGBitWidth::RNGBitWidth32>;
     using RNGDouble = RNGReal<double, RNGBitWidth::RNGBitWidth64>;
 }

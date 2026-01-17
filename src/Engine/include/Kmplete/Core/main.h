@@ -14,8 +14,8 @@
 #include <exception>
 
 
-//! Wrapper function that only tries to flush all the profiler data
-//! during program termination
+//! Wrapper function that tries to flush all the profiler data
+//! during program termination and rethrows an exception (if any)
 void TerminationHandler()
 {
     try
@@ -39,7 +39,7 @@ void TerminationHandler()
         KMP_LOG_CRITICAL_FN("Uncaught exception");
     }
 
-    abort();
+    std::exit(2);
 }
 //--------------------------------------------------------------------------
 
@@ -81,7 +81,8 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     Kmplete::Profiler::Get().SetLevel(programOptions.GetProfilingLevel());
 #endif
 
-    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", 300);
+    KMP_MB_UNUSED const auto startupSessionCapacity = 300;
+    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", startupSessionCapacity);
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();
 
@@ -90,11 +91,13 @@ int Main(const Kmplete::ProgramOptions& programOptions)
         return 1;
     }
 
-    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json", 10'000);
+    KMP_MB_UNUSED const auto runtimeSessionCapacity = 10'000;
+    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json", runtimeSessionCapacity);
     app->Run();
     KMP_PROFILE_END_SESSION();
 
-    KMP_PROFILE_BEGIN_SESSION("Shutdown", "KmpleteProfile-Shutdown.json", 150);
+    KMP_MB_UNUSED const auto shutdownSessionCapacity = 150;
+    KMP_PROFILE_BEGIN_SESSION("Shutdown", "KmpleteProfile-Shutdown.json", shutdownSessionCapacity);
     app.reset();
     KMP_PROFILE_END_SESSION();
 

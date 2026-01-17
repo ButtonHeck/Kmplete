@@ -13,13 +13,13 @@
 namespace Kmplete
 {
     //! Manager for FrameListener objects, tightly coupled with WindowApplication, responsible for: storing/adding/removing frame listeners, 
-    //! handling their intercommuncations between each other and the application (via processing commands), ordering listeners' logic stages processing.
-    //! This manager does not responsible for controlling lifetime of contained listeners - this should be done in the client application code mainly because
+    //! handling their intercommunications between each other and the application (via processing commands), ordering listeners' logic stages processing.
+    //! This manager is not responsible for controlling lifetime of contained listeners - this should be done in the client application code mainly because
     //! client frame listeners are logically tied to their client application and when the client application destroys all its frame listeners should
     //! already be finalized and destroyed (additionally client frame listeners may contain some additional startup/shutdown behaviour).
     //! Command processing is split into two parts:
-    //! 1) (de)activation is done here just by setting listeners' active flag
-    //! 2) creation and deletion of frame listeners delegated to the outer handler function that should be set by the client application
+    //! 1) (de)activation is done here just by setting listeners' active flag (Activate/Deactivate command codes)
+    //! 2) creation and deletion of frame listeners delegated to the outer handler function that should be set by the client application (Create/Delete command codes)
     //! @see FrameListener
     //! @see WindowApplication
     class FrameListenerManager
@@ -51,7 +51,7 @@ namespace Kmplete
         void _DispatchQueuedEventsToFrameListeners();
         void _ProcessFrameListenersCommands();
 
-        Nullable<FrameListener*> _FindBySid(StringID sid);
+        Nullable<FrameListener*> _FindFrameListener(StringID sid);
 
     private:
         Map<UInt8, Nullable<FrameListener*>> _listeners;

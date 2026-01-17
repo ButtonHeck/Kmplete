@@ -6,7 +6,7 @@
 
 namespace Kmplete
 {
-    //! Classic unique identifier based on rng.
+    //! 64-bit unique identifier based on rng.
     //! An UUID with value 0 treated as invalid.
     //! @see rng.h
     class UUID

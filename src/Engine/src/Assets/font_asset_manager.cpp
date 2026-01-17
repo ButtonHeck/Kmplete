@@ -184,23 +184,48 @@ namespace Kmplete
 
 #if defined (KMP_PLATFORM_WINDOWS)
             auto hdc = GetDC(NULL);
+            if (!hdc)
+            {
+                KMP_LOG_ERROR("failed to get device context");
+                return false;
+            }
+
             const auto fontDescriptor = CreateFont(
                 DefaultFontSize, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                 DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial");
 
+            if (!fontDescriptor)
+            {
+                KMP_LOG_ERROR("failed to create default font descriptor");
+                ReleaseDC(NULL, hdc);
+                return false;
+            }
+
+            auto cleanupGDI = [&]() { 
+                DeleteObject(fontDescriptor); 
+                ReleaseDC(NULL, hdc);
+            };
+
             SelectObject(hdc, fontDescriptor);
             const auto fontDataSize = GetFontData(hdc, 0, 0, NULL, 0);
 
-            BinaryBuffer fontData;
-            if (fontDataSize != GDI_ERROR)
+            if (fontDataSize == GDI_ERROR)
             {
-                fontData = BinaryBuffer(fontDataSize);
-                GetFontData(hdc, 0, 0, fontData.data(), fontDataSize);
+                KMP_LOG_ERROR("failed to get default font data size");
+                cleanupGDI();
+                return false;
             }
 
-            DeleteObject(fontDescriptor);
-            ReleaseDC(NULL, hdc);
+            BinaryBuffer fontData(fontDataSize);
+            if (GetFontData(hdc, 0, 0, fontData.data(), fontDataSize) == GDI_ERROR)
+            {
+                KMP_LOG_ERROR("failed to get default font data from GDI");
+                cleanupGDI();
+                return false;
+            }
+
+            cleanupGDI();
 
             return _AddFontToStorage(DefaultFontSID, std::move(fontData));
 #else
@@ -218,11 +243,22 @@ namespace Kmplete
 
             FcResult result;
             auto* match = FcFontMatch(config, pattern, &result);
+            auto cleanupFc = [&]() { 
+                if (pattern)
+                {
+                    FcPatternDestroy(pattern);
+                }
+                if (match)
+                {
+                    FcPatternDestroy(match);
+                }
+                FcFini();
+            };
+
             if (!match)
             {
                 KMP_LOG_ERROR("failed to find default 'ubuntu' font");
-                FcPatternDestroy(pattern);
-                FcFini();
+                cleanupFc();
                 return false;
             }
 
@@ -230,9 +266,7 @@ namespace Kmplete
             if (FcPatternGetString(match, FC_FILE, 0, &fcFilepath) != FcResultMatch)
             {
                 KMP_LOG_ERROR("failed to get default font path");
-                FcPatternDestroy(match);
-                FcPatternDestroy(pattern);
-                FcFini();
+                cleanupFc();
                 return false;
             }
 
@@ -241,15 +275,11 @@ namespace Kmplete
             if (fontData.empty())
             {
                 KMP_LOG_ERROR("failed to get font buffer");
-                FcPatternDestroy(match);
-                FcPatternDestroy(pattern);
-                FcFini();
+                cleanupFc();
                 return false;
             }
 
-            FcPatternDestroy(match);
-            FcPatternDestroy(pattern);
-            FcFini();
+            cleanupFc();
 
             return _AddFontToStorage(DefaultFontSID, std::move(fontData));
 #endif

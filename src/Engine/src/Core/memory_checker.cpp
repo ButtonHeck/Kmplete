@@ -1,8 +1,8 @@
 #include "Kmplete/Core/memory_checker.h"
 
 #if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC)
-    #include <crtdbg.h>
     #define _CRTDBG_MAP_ALLOC
+    #include <crtdbg.h>
 #endif
 
 

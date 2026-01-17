@@ -197,7 +197,7 @@ namespace Kmplete
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)
         {
-            KMP_LOG_WARN("failed to get setting entry for loading");
+            KMP_LOG_WARN("failed to get settings entry for loading");
             return;
         }
 
