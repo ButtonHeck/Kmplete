@@ -15,11 +15,11 @@ namespace Kmplete
     OpenGLGraphicsBackend::OpenGLGraphicsBackend()
         : GraphicsBackend(GraphicsBackendType::OpenGL)
     {
-        Initialize();
+        _Initialize();
     }
     //--------------------------------------------------------------------------
 
-    void OpenGLGraphicsBackend::Initialize() const
+    void OpenGLGraphicsBackend::_Initialize()
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 

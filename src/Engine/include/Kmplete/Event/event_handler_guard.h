@@ -4,6 +4,7 @@
 #include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Event/event_dispatcher.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -18,6 +19,7 @@ namespace Kmplete
         class EventHandlerGuard
         {
             KMP_DISABLE_COPY_MOVE(EventHandlerGuard)
+            KMP_LOG_CLASSNAME(EventHandlerGuard)
 
         public:
             EventHandlerGuard(EventDispatcher& eventDispatcher, const EventHandler<EventClass>& handler, bool attachOnCreate = true) noexcept
@@ -32,17 +34,24 @@ namespace Kmplete
 
             ~EventHandlerGuard()
             {
-                Detach();
+                try
+                {
+                    Detach();
+                }
+                catch (...)
+                {
+                    KMP_LOG_ERROR("failed to detach event handler");
+                }
             }
 
-            void Attach()
+            bool Attach()
             {
-                _eventDispatcher.AddHandler(_handler);
+                return _eventDispatcher.AddHandler(_handler);
             }
 
-            void Detach()
+            bool Detach()
             {
-                _eventDispatcher.RemoveHandler(_handler);
+                return _eventDispatcher.RemoveHandler(_handler);
             }
 
         private:

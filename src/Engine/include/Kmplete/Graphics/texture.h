@@ -10,6 +10,8 @@ namespace Kmplete
     //! Base class for texture objects backed by graphics API
     class Texture
     {
+        KMP_DISABLE_COPY_MOVE(Texture)
+
     public:
         KMP_API Texture() noexcept;
         virtual ~Texture() = default;

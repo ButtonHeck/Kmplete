@@ -21,23 +21,14 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(Font)
 
     public:
-        KMP_API Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
-        KMP_API Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath);
-        KMP_API ~Font();
-
-        KMP_NODISCARD KMP_API const BinaryBuffer& GetBuffer() const noexcept;
-
-        KMP_API bool SetPointSize(UInt8 size, UInt32 dpi = 0);
-        KMP_API bool SetPixelSize(UInt8 size);
-
-    public:
         struct Parameters
         {
-            enum class Style
+            enum Style : UInt8
             {
                 Regular    = 0,
                 Italic     = 1 << 0,
-                Bold       = 1 << 1
+                Bold       = 1 << 1,
+                ItalicBold = Italic | Bold
             };
 
             struct SizeMetrics
@@ -50,7 +41,7 @@ namespace Kmplete
             };
 
             String familyName = "";
-            Style style = Style::Regular;
+            UInt8 style = Style::Regular;
             bool scalable = true;
             bool monospace = false;
             Int32 numGlyphs = 0;
@@ -62,7 +53,17 @@ namespace Kmplete
             SizeMetrics sizeMetrics = {};
         };
 
+    public:
+        KMP_API Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
+        KMP_API Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath);
+        KMP_API ~Font();
+
+        KMP_API bool SetPointSize(UInt8 size, UInt32 dpi = 0);
+        KMP_API bool SetPixelSize(UInt8 size);
+
+        KMP_NODISCARD KMP_API const BinaryBuffer& GetBuffer() const noexcept;
         KMP_NODISCARD KMP_API const Parameters& GetParameters() const noexcept;
+        KMP_NODISCARD KMP_API bool HasStyle(Parameters::Style flag) const noexcept;
 
     private:
         void _UpdateParameters() noexcept;

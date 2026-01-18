@@ -29,7 +29,7 @@ namespace Kmplete
             EventDispatcher() = default;
 
             template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-            void AddHandler(const EventHandler<EventClass>& newHandler)
+            bool AddHandler(const EventHandler<EventClass>& newHandler)
             {
                 if (!_handlersMap.contains(EventClass::TypeID))
                 {
@@ -43,22 +43,24 @@ namespace Kmplete
                     if (handler->GetTypeName() == newHandlerWrapper->GetTypeName())
                     {
                         KMP_LOG_ERROR("already contains exactly same handler for '{}'", EventClass::TypeName);
-                        return;
+                        return false;
                     }
                 }
 
                 KMP_LOG_DEBUG("added handler for '{}' - {}", EventClass::TypeName, Utils::PrettifyFunctionName(newHandlerWrapper->GetTypeName()));
                 _handlersMap[EventClass::TypeID].emplace_back(std::move(newHandlerWrapper));
+
+                return true;
             }
             //--------------------------------------------------------------------------
 
             template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
-            void RemoveHandler(const EventHandler<EventClass>& handler)
+            bool RemoveHandler(const EventHandler<EventClass>& handler)
             {
                 if (!_handlersMap.contains(EventClass::TypeID))
                 {
                     KMP_LOG_WARN("cannot removed handler because its event TypeName '{}' has not been registered", EventClass::TypeName);
-                    return;
+                    return false;
                 }
 
                 auto& handlers = _handlersMap[EventClass::TypeID];
@@ -69,9 +71,11 @@ namespace Kmplete
                     {
                         KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, Utils::PrettifyFunctionName(handlerTypeName));
                         handlers.erase(handlerIter);
-                        return;
+                        return true;
                     }
                 }
+
+                return false;
             }
             //--------------------------------------------------------------------------
 
@@ -88,6 +92,11 @@ namespace Kmplete
                 {
                     const auto& handler = handlers[handlerIndex];
                     event.handled |= handler->ProcessEvent(event);
+
+                    if (event.handled)
+                    {
+                        break;
+                    }
                 }
 
                 return true;

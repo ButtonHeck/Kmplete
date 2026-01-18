@@ -3,6 +3,7 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Log/log.h"
 
 #include <glad/glad.h>
 
@@ -19,9 +20,10 @@ namespace Kmplete
             Image image(filepath, flipVertically);
             _LoadFromImage(image);
         }
-        catch (const std::exception&)
+        catch (const std::exception& e)
         {
-            throw;
+            KMP_LOG_ERROR("failed to load texture from file '{}' - {}", filepath, e.what());
+            throw e;
         }
     }
     //--------------------------------------------------------------------------
@@ -33,6 +35,12 @@ namespace Kmplete
         KMP_ASSERT(image.GetPixels());
 
         _LoadFromImage(image);
+    }
+    //--------------------------------------------------------------------------
+
+    OpenGLTexture::~OpenGLTexture()
+    {
+        glDeleteTextures(1, reinterpret_cast<GLuint*>(&_handle));
     }
     //--------------------------------------------------------------------------
 
@@ -57,6 +65,11 @@ namespace Kmplete
         {
             internalFormat = GL_RGB8;
             dataFormat = GL_RGB;
+        }
+        else if (imageChannels == ImageChannels::GreyAlpha)
+        {
+            internalFormat = GL_RG8;
+            dataFormat = GL_RG;
         }
         else if (imageChannels == ImageChannels::Grey)
         {

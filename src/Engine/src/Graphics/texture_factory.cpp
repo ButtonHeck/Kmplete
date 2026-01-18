@@ -20,6 +20,7 @@ namespace Kmplete
                 return new OpenGLTexture(filepath, flipVertically);
 
             default:
+                KMP_LOG_ERROR("unknown graphics backend type");
                 break;
             }
         }
@@ -43,6 +44,7 @@ namespace Kmplete
             return new OpenGLTexture(image);
 
         default:
+            KMP_LOG_ERROR("unknown graphics backend type");
             break;
         }
 

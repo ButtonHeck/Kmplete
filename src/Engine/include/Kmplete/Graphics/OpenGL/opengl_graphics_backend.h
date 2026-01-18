@@ -18,7 +18,8 @@ namespace Kmplete
     public:
         KMP_API OpenGLGraphicsBackend();
 
-        KMP_API void Initialize() const override;
+    private:
+        void _Initialize();
     };
     //--------------------------------------------------------------------------
 }

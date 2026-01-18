@@ -5,6 +5,8 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Event/event.h"
 
+#include <mutex>
+
 
 namespace Kmplete
 {
@@ -40,6 +42,7 @@ namespace Kmplete
 
         private:
             Vector<UPtr<Event>> _events;
+            std::mutex _mutex;
         };
         //--------------------------------------------------------------------------
 

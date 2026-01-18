@@ -49,12 +49,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    const BinaryBuffer& Font::GetBuffer() const noexcept
-    {
-        return _fontBuffer;
-    }
-    //--------------------------------------------------------------------------
-
     bool Font::SetPointSize(UInt8 size, UInt32 dpi)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
@@ -87,9 +81,21 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    const BinaryBuffer& Font::GetBuffer() const noexcept
+    {
+        return _fontBuffer;
+    }
+    //--------------------------------------------------------------------------
+
     const Font::Parameters& Font::GetParameters() const noexcept
     {
         return _parameters;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Font::HasStyle(Parameters::Style flag) const noexcept
+    {
+        return (_parameters.style & static_cast<UInt8>(flag)) != 0;
     }
     //--------------------------------------------------------------------------
 
@@ -98,17 +104,14 @@ namespace Kmplete
         _parameters.familyName = _freetypeFace->family_name;
 
         const auto style = _freetypeFace->style_flags;
+        _parameters.style = Parameters::Style::Regular;
         if (style & FT_STYLE_FLAG_BOLD)
         {
-            _parameters.style = Parameters::Style::Bold;
+            _parameters.style |= Parameters::Style::Bold;
         }
-        else if (style & FT_STYLE_FLAG_ITALIC)
+        if (style & FT_STYLE_FLAG_ITALIC)
         {
-            _parameters.style = Parameters::Style::Italic;
-        }
-        else
-        {
-            _parameters.style = Parameters::Style::Regular;
+            _parameters.style |= Parameters::Style::Italic;
         }
 
         _parameters.scalable = _freetypeFace->face_flags & FT_FACE_FLAG_SCALABLE;

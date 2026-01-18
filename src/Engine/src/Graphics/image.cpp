@@ -91,6 +91,12 @@ namespace Kmplete
             throw std::runtime_error("Image: given file buffer is nullptr");
         }
 
+        if (bufferSize <= 0)
+        {
+            KMP_LOG_ERROR("file buffer size should not be negative");
+            throw std::runtime_error("Image: file buffer size should not be negative");
+        }
+
         stbi_set_flip_vertically_on_load(flipVertically);
 
         auto channelsInFile = 0;
@@ -130,6 +136,11 @@ namespace Kmplete
     Image& Image::operator=(Image&& rhs) noexcept
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        if (this == &rhs)
+        {
+            return *this;
+        }
 
         _DeleteData();
 
@@ -187,15 +198,12 @@ namespace Kmplete
 
     void Image::_FixChannels(ImageChannels desiredChannels, int channelsInFile)
     {
-        if (channelsInFile != _channels)
+        if (channelsInFile != _channels && desiredChannels != ImageChannels::Unknown)
         {
-            if (desiredChannels != ImageChannels::Unknown)
-            {
-                KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
-            }
-
-            _channels = static_cast<ImageChannels>(channelsInFile);
+            KMP_LOG_WARN("file buffer channels mismatch (desired: {}, actual: {})", static_cast<int>(_channels), channelsInFile);
         }
+
+        _channels = static_cast<ImageChannels>(channelsInFile);
     }
     //--------------------------------------------------------------------------
 }
