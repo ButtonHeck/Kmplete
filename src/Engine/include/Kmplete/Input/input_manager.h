@@ -78,7 +78,7 @@ namespace Kmplete
                 for (const auto& codeWithCondition : codes)
                 {
                     const auto& code = codeWithCondition.code;
-                    if (code < 0 || code >= Code::NumCodes)
+                    if (code < 0 || code >= static_cast<InputCode>(Code::NumCodes))
                     {
                         continue;
                     }
@@ -112,7 +112,7 @@ namespace Kmplete
                 for (const auto& codeWithCondition : codes)
                 {
                     const auto code = codeWithCondition.code;
-                    if (code < 0 || code >= Code::NumCodes)
+                    if (code < 0 || code >= static_cast<InputCode>(Code::NumCodes))
                     {
                         continue;
                     }

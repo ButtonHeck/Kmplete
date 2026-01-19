@@ -102,7 +102,9 @@ namespace Kmplete
     {
         std::size_t operator()(const ContextedSource& source) const
         {
-            return source.sourceSid ^ source.contextSid;
+            std::size_t hash = source.sourceSid;
+            hash ^= source.contextSid + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+            return hash;
         }
     };
     //--------------------------------------------------------------------------
@@ -134,7 +136,9 @@ namespace Kmplete
     {
         std::size_t operator()(const PluralSource& source) const
         {
-            return source.sourceSidSingular ^ source.sourceSidPlural;
+            std::size_t hash = source.sourceSidSingular;
+            hash ^= source.sourceSidPlural + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+            return hash;
         }
     };
     //--------------------------------------------------------------------------
@@ -166,7 +170,10 @@ namespace Kmplete
     {
         std::size_t operator()(const ContextedPluralSource& source) const
         {
-            return source.sourceSidSingular ^ source.sourceSidPlural ^ source.contextSid;
+            std::size_t hash = source.sourceSidSingular;
+            hash ^= source.sourceSidPlural + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+            hash ^= source.contextSid + 0x9e3779b9 + (hash << 6) + (hash >> 2);
+            return hash;
         }
     };
     //--------------------------------------------------------------------------

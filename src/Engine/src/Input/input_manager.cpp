@@ -77,7 +77,7 @@ namespace Kmplete
         void InputManager::_PropagateSingleActionEvent(const ActionEvent& actionEvent)
         {
             const auto& taggedCallbacks = _actionCallbacks[actionEvent.id];
-            for (size_t i = 0; taggedCallbacks.size(); i++)
+            for (size_t i = 0; i < taggedCallbacks.size(); i++)
             {
                 auto& taggedCallback = taggedCallbacks[i];
                 const auto eventProcessed = taggedCallback.callback(actionEvent.value);
@@ -131,7 +131,7 @@ namespace Kmplete
 
                     if (timerCondition.currentMs >= timerCondition.triggerMs)
                     {
-                        const auto newEvents = _CreateActionEvents(code, ButtonPressed);
+                        const auto newEvents = _CreateActionEvents(code, ButtonPressedValue);
                         Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
 
                         timerCondition.Deactivate();
@@ -308,9 +308,9 @@ namespace Kmplete
         {
             const auto mouseButton = mouseButtonPressEvent.GetMouseButton();
 
-            _controlStates[mouseButton] = ButtonPressed;
+            _controlStates[mouseButton] = ButtonPressedValue;
 
-            _UpdateActionEvents(mouseButton, ButtonPressed, true);
+            _UpdateActionEvents(mouseButton, ButtonPressedValue, true);
         }
         //--------------------------------------------------------------------------
 
@@ -318,9 +318,9 @@ namespace Kmplete
         {
             const auto mouseButton = mouseButtonReleaseEvent.GetMouseButton();
 
-            _controlStates[mouseButton] = ButtonReleased;
+            _controlStates[mouseButton] = ButtonReleasedValue;
 
-            _UpdateActionEvents(mouseButton, ButtonReleased, false);
+            _UpdateActionEvents(mouseButton, ButtonReleasedValue, false);
         }
         //--------------------------------------------------------------------------
 
@@ -329,12 +329,12 @@ namespace Kmplete
             const auto keyCode = keyPressEvent.GetKeyCode();
             const auto modifiers = keyPressEvent.GetMods();
 
-            _controlStates[keyCode] = ButtonPressed;
+            _controlStates[keyCode] = ButtonPressedValue;
             _modifiersMask = modifiers;
 
             if (!keyPressEvent.IsRepeat())
             {
-                _UpdateActionEvents(keyCode, ButtonPressed, true);
+                _UpdateActionEvents(keyCode, ButtonPressedValue, true);
             }
         }
         //--------------------------------------------------------------------------
@@ -344,10 +344,10 @@ namespace Kmplete
             const auto keyCode = keyReleaseEvent.GetKeyCode();
             const auto modifiers = keyReleaseEvent.GetMods();
 
-            _controlStates[keyCode] = ButtonReleased;
+            _controlStates[keyCode] = ButtonReleasedValue;
             _modifiersMask = modifiers;
 
-            _UpdateActionEvents(keyCode, ButtonReleased, false);
+            _UpdateActionEvents(keyCode, ButtonReleasedValue, false);
         }
         //--------------------------------------------------------------------------
 
