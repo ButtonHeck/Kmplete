@@ -31,16 +31,17 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
-        if (_translationMap[_currentLocaleSid].contains(sourceSid))
+        auto& currentLocaleTranslations = _translationMap[_currentLocaleSid];
+        if (currentLocaleTranslations.contains(sourceSid))
         {
-            if (_translationMap[_currentLocaleSid][sourceSid] != translation)
+            if (currentLocaleTranslations[sourceSid] != translation)
             {
                 KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"", _domain, sourceSid);
             }
         }
         else
         {
-            _translationMap[_currentLocaleSid].insert(std::make_pair(sourceSid, translation));
+            currentLocaleTranslations.insert(std::make_pair(sourceSid, translation));
         }
     }
     //--------------------------------------------------------------------------
@@ -51,24 +52,26 @@ namespace Kmplete
 
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const PluralSource&& pluralSource = PluralSource{ sourceSidSingular, sourceSidPlural };
-        if (_translationPluralMap[_currentLocaleSid].contains(pluralSource) && 
-            !_translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm].empty() && 
-            _translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm] != translation)
+        auto& currentLocaleTranslations = _translationPluralMap[_currentLocaleSid]; 
+        const auto isPluralSourceAdded = currentLocaleTranslations.contains(pluralSource);
+        if (isPluralSourceAdded && 
+            !currentLocaleTranslations[pluralSource][pluralityForm].empty() && 
+            currentLocaleTranslations[pluralSource][pluralityForm] != translation)
         {
             KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")",
                           _domain, sourceSidSingular, sourceSidPlural, static_cast<int>(pluralityForm));
             return;
         }
 
-        if (!_translationPluralMap[_currentLocaleSid].contains(pluralSource))
+        if (!isPluralSourceAdded)
         {
             PluralTranslations pluralTranslations;
             pluralTranslations[pluralityForm] = translation;
-            _translationPluralMap[_currentLocaleSid].insert(std::make_pair(pluralSource, pluralTranslations));
+            currentLocaleTranslations.insert(std::make_pair(pluralSource, pluralTranslations));
         }
         else
         {
-            _translationPluralMap[_currentLocaleSid][pluralSource][pluralityForm] = translation;
+            currentLocaleTranslations[pluralSource][pluralityForm] = translation;
         }
     }
     //--------------------------------------------------------------------------
@@ -79,16 +82,17 @@ namespace Kmplete
 
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedSource&& contextedSource = ContextedSource{ sourceSid, contextSid };
-        if (_translationCtxMap[_currentLocaleSid].contains(contextedSource))
+        auto& currentLocaleTranslations = _translationCtxMap[_currentLocaleSid]; 
+        if (currentLocaleTranslations.contains(contextedSource))
         {
-            if (_translationCtxMap[_currentLocaleSid][contextedSource] != translation)
+            if (currentLocaleTranslations[contextedSource] != translation)
             {
                 KMP_LOG_WARN("\"{}\" possible duplicate \"{}\" (context \"{}\")", _domain, sourceSid, contextSid);
             }
         }
         else
         {
-            _translationCtxMap[_currentLocaleSid].insert(std::make_pair(contextedSource, translation));
+            currentLocaleTranslations.insert(std::make_pair(contextedSource, translation));
         }
     }
     //--------------------------------------------------------------------------
@@ -100,24 +104,26 @@ namespace Kmplete
 
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedPluralSource&& contextedPluralSource = ContextedPluralSource{ sourceSidSingular, sourceSidPlural, contextSid };
-        if (_translationCtxPluralMap[_currentLocaleSid].contains(contextedPluralSource) &&
-            !_translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm].empty() &&
-            _translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm] != translation)
+        auto& currentLocaleTranslations = _translationCtxPluralMap[_currentLocaleSid];
+        const auto isContextedPluralSourceAdded = currentLocaleTranslations.contains(contextedPluralSource); 
+        if (isContextedPluralSourceAdded &&
+            !currentLocaleTranslations[contextedPluralSource][pluralityForm].empty() &&
+            currentLocaleTranslations[contextedPluralSource][pluralityForm] != translation)
         {
             KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")",
                           _domain, sourceSidSingular, sourceSidPlural, contextSid, static_cast<int>(pluralityForm));
             return;
         }
 
-        if (!_translationCtxPluralMap[_currentLocaleSid].contains(contextedPluralSource))
+        if (!isContextedPluralSourceAdded)
         {
             PluralTranslations pluralTranslations;
             pluralTranslations[pluralityForm] = translation;
-            _translationCtxPluralMap[_currentLocaleSid].insert(std::make_pair(contextedPluralSource, pluralTranslations));
+            currentLocaleTranslations.insert(std::make_pair(contextedPluralSource, pluralTranslations));
         }
         else
         {
-            _translationCtxPluralMap[_currentLocaleSid][contextedPluralSource][pluralityForm] = translation;
+            currentLocaleTranslations[contextedPluralSource][pluralityForm] = translation;
         }
     }
     //--------------------------------------------------------------------------
