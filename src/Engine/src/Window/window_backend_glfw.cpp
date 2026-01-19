@@ -295,7 +295,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(int index) const
+    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(unsigned int index) const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -306,7 +306,7 @@ namespace Kmplete
 
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
-        if (monitors && index < count)
+        if (monitors && index < static_cast<unsigned int>(count))
         {
             const auto monitor = monitors[index];
             return GetVideoModes(monitor);

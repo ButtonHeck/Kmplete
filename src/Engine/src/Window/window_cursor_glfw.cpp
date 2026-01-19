@@ -18,7 +18,7 @@ namespace Kmplete
             Image img(filepath, ImageChannels::RGBAlpha);
             GLFWimage cursorImg{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
 
-            if (cursorImg.pixels)
+            if (cursorImg.pixels && cursorImg.width > 0 && cursorImg.height > 0)
             {
                 _cursor = glfwCreateCursor(&cursorImg, hotspot.x, hotspot.y);
             }

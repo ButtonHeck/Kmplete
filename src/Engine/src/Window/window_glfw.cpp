@@ -85,9 +85,15 @@ namespace Kmplete
         glfwGetMonitorPhysicalSize(monitor, &monitorWidthMm, &monitorHeightMm);
         const auto monitorDiagonalInch = glm::length(Math::Size2F(float(monitorWidthMm), float(monitorHeightMm))) / 25.4f;
         const auto monitorDiagonalPixels = glm::length(Math::Size2F(float(videoMode->width), float(videoMode->height)));
+        if (monitorDiagonalInch == 0.0f)
+        {
+            KMP_LOG_WARN("failed to get monitor diagonal size");
+            return;
+        }
+
         userData->dpi = UInt32(monitorDiagonalPixels / monitorDiagonalInch);
 
-        KMP_LOG_INFO("Window DPI changed to {}", userData->dpi);
+        KMP_LOG_INFO("window DPI changed to {}", userData->dpi);
     }
     //--------------------------------------------------------------------------
 

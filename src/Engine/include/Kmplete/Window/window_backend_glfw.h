@@ -30,7 +30,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API int GetMonitorCount() const override;
         KMP_NODISCARD KMP_API StringVector GetMonitorNames() const override;
         KMP_NODISCARD KMP_API Vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const override;
-        KMP_NODISCARD KMP_API Vector<MonitorVideoMode> GetMonitorVideoModes(int index) const override;
+        KMP_NODISCARD KMP_API Vector<MonitorVideoMode> GetMonitorVideoModes(unsigned int index) const override;
         KMP_NODISCARD KMP_API float GetPrimaryMonitorDPIScale() const override;
 
         KMP_NODISCARD KMP_API OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I()) override;
