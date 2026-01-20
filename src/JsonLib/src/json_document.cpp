@@ -210,7 +210,12 @@ namespace Kmplete
 
     String JsonDocument::ErrorDescription() const noexcept
     {
-        return rapidjson::GetParseError_En(_document.GetParseError());
+        if (_document.HasParseError())
+        {
+            return rapidjson::GetParseError_En(_document.GetParseError());
+        }
+
+        return "";
     }
     //--------------------------------------------------------------------------
 

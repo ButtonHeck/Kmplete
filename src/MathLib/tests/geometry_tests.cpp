@@ -211,6 +211,45 @@ TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
     REQUIRE_FALSE(rectFloat.ContainsPoint(pointF));
 }
 
+TEST_CASE("Geometry ContainsPoint 2D with offset tests", "[math][geometry]")
+{
+    using namespace Kmplete::Math;
+
+    Rect2I rectInt({0, 0}, {10, 10});
+    Point2I point(11, 5);
+    REQUIRE(rectInt.ContainsPoint(point, 1));
+    
+    point = Point2I(12, 5);
+    REQUIRE_FALSE(rectInt.ContainsPoint(point, 1));
+    
+    point = Point2I(9, 5);
+    REQUIRE(rectInt.ContainsPoint(point, -1));
+    
+    point = Point2I(1, 5);
+    REQUIRE(rectInt.ContainsPoint(point, -1));
+    
+    point = Point2I(10, 10);
+    REQUIRE(rectInt.ContainsPoint(point, 0));
+    
+    point = Point2I(11, 10);
+    REQUIRE_FALSE(rectInt.ContainsPoint(point, 0));
+    
+
+    Rect2F rectFloat({0.0f, 0.0f}, {10.0f, 10.0f});
+    Point2F pointF(10.5f, 5.0f);
+    REQUIRE(rectFloat.ContainsPoint(pointF, 0.5f));
+    
+    pointF = Point2F(11.0f, 5.0f);
+    REQUIRE_FALSE(rectFloat.ContainsPoint(pointF, 0.5f));
+    
+    Rect2I rectNeg({10, 10}, {-10, -10});
+    point = Point2I(-1, 5);
+    REQUIRE(rectNeg.ContainsPoint(point, 2));
+    
+    point = Point2I(-3, 5);
+    REQUIRE_FALSE(rectNeg.ContainsPoint(point, 2));
+}
+
 TEST_CASE("Geometry ContainsPoint 3D tests", "[math][geometry]")
 {
     using namespace Kmplete::Math;
@@ -307,5 +346,43 @@ TEST_CASE("Geometry ContainsPoint 3D tests", "[math][geometry]")
 
     pointF = Point3F(0.0f, -1.0f, 5.0f);
     REQUIRE_FALSE(rectFloat.ContainsPoint(pointF));
+}
+
+TEST_CASE("Geometry ContainsPoint 3D with offset tests", "[math][geometry]")
+{
+    using namespace Kmplete::Math;
+
+    Rect3I rectInt({0, 0, 0}, {10, 10, 10});
+    Point3I point(11, 5, 5);
+    REQUIRE(rectInt.ContainsPoint(point, 1));
+    
+    point = Point3I(12, 5, 5);
+    REQUIRE_FALSE(rectInt.ContainsPoint(point, 1));
+    
+    point = Point3I(9, 5, 5);
+    REQUIRE(rectInt.ContainsPoint(point, -1));
+    
+    point = Point3I(1, 5, 5);
+    REQUIRE(rectInt.ContainsPoint(point, -1));
+    
+    point = Point3I(10, 10, 10);
+    REQUIRE(rectInt.ContainsPoint(point, 0));
+    
+    point = Point3I(11, 10, 10);
+    REQUIRE_FALSE(rectInt.ContainsPoint(point, 0));
+    
+
+    Rect3F rectFloat({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
+    Point3F pointF(10.5f, 5.0f, 5.0f);
+    REQUIRE(rectFloat.ContainsPoint(pointF, 0.5f));
+    
+    pointF = Point3F(11.0f, 5.0f, 5.0f);
+    REQUIRE_FALSE(rectFloat.ContainsPoint(pointF, 0.5f));
+    
+    pointF = Point3F(5.0f, 10.5f, 5.0f);
+    REQUIRE(rectFloat.ContainsPoint(pointF, 0.5f));
+    
+    pointF = Point3F(5.0f, 5.0f, 10.5f);
+    REQUIRE(rectFloat.ContainsPoint(pointF, 0.5f));
 }
 //--------------------------------------------------------------------------

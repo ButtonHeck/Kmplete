@@ -11,6 +11,8 @@
 #include <spdlog/sinks/callback_sink.h>
 #include <spdlog/details/log_msg.h>
 
+#include <iostream>
+
 
 namespace Kmplete
 {
@@ -59,7 +61,15 @@ namespace Kmplete
         _logger->set_level(spdlog::level::trace);
         _logger->flush_on(spdlog::level::trace);
 
-        spdlog::register_logger(_logger);
+        try
+        {
+            spdlog::register_logger(_logger);
+        }
+        catch (const spdlog::spdlog_ex& e)
+        {
+            std::cerr << "Log: failed to register logger: " << e.what() << std::endl;
+            throw e;
+        }
 
         Log::Info("---------------------{}---------------------", Time::GetCurrentTimeString());
     }
