@@ -16,7 +16,7 @@ namespace Kmplete
             KMP_API explicit Timer(unsigned int timeoutMs = 0) noexcept;
             ~Timer() = default;
 
-            KMP_API void SetTimeout(unsigned int timeoutMs) noexcept;
+            KMP_API void SetTimeout(unsigned int timeoutMs, bool restart = true) noexcept;
             KMP_NODISCARD KMP_API unsigned int GetTimeout() const noexcept;
 
             KMP_NODISCARD KMP_API bool ReachedTimeout() const noexcept;

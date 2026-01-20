@@ -116,15 +116,21 @@ TEST_CASE("StringVectorToString with all empty strings - string delimiter", "[ut
 TEST_CASE("StringVectorToString single element - char delimiter", "[utils][string]")
 {
     Kmplete::StringVector vec{"Alone"};
-    const auto result = Kmplete::Utils::StringVectorToString(vec, ".");
+    auto result = Kmplete::Utils::StringVectorToString(vec, ".");
     REQUIRE(result == ".Alone");
+
+    result = Kmplete::Utils::StringVectorToString(vec, ".", false);
+    REQUIRE(result == "Alone");
 }
 
 TEST_CASE("StringVectorToString single element - string delimiter", "[utils][string]")
 {
     Kmplete::StringVector vec{ "Alone" };
-    const auto result = Kmplete::Utils::StringVectorToString(vec, "Home ");
+    auto result = Kmplete::Utils::StringVectorToString(vec, "Home ");
     REQUIRE(result == "Home Alone");
+
+    result = Kmplete::Utils::StringVectorToString(vec, "Home ", false);
+    REQUIRE(result == "Alone");
 }
 
 TEST_CASE("StringVectorToString - empty delimiter", "[utils][string]")

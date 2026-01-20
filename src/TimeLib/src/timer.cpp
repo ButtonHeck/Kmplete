@@ -17,7 +17,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void Timer::SetTimeout(unsigned int timeoutMs) noexcept
+        void Timer::SetTimeout(unsigned int timeoutMs, bool restart /*= true*/) noexcept
         {
             if (_timeoutMs == timeoutMs)
             {
@@ -25,7 +25,11 @@ namespace Kmplete
             }
 
             _timeoutMs = timeoutMs;
-            Mark();
+
+            if (restart)
+            {
+                Mark();
+            }
         }
         //--------------------------------------------------------------------------
 
