@@ -92,7 +92,7 @@ namespace Kmplete
 
         if (!IsDirectory(from))
         {
-            KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}' is no a directory", from);
+            KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}' is not a directory", from);
             return false;
         }
 
@@ -102,7 +102,7 @@ namespace Kmplete
         }
         catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
         {
-            KMP_LOG_ERROR_FN("Filesystem: copy file failed: '{}'", fe.what());
+            KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}'", fe.what());
             return false;
         }
 

@@ -27,10 +27,10 @@ namespace Kmplete
             void NewFrame() const;
             void Render() const;
 
-            void AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize = DefaultFontSize) const;
-            void AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize = DefaultFontSize) const;
-            void AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize = DefaultFontSize) const;
-            void AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize = DefaultFontSize) const;
+            bool AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize = DefaultFontSize) const;
+            bool AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize = DefaultFontSize) const;
+            bool AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize = DefaultFontSize) const;
+            bool AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize = DefaultFontSize) const;
 
             void Stylize(float dpiScale) const;
 

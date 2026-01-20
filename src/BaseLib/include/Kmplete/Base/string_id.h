@@ -26,7 +26,7 @@ namespace Kmplete
         size_t index = 0;
         while (cstr[index] != 0)
         {
-            sid = 37 * sid + static_cast<StringID>(17) * static_cast<char>(cstr[index]);
+            sid = 37 * sid + static_cast<StringID>(17) * cstr[index];
             index++;
         }
 
