@@ -4,6 +4,8 @@
 
 #include "Kmplete/Log/log.h"
 
+#include <iomanip>
+
 
 namespace Kmplete
 {
@@ -56,14 +58,14 @@ namespace Kmplete
 
     void Profiler::BeginSession(const String& name, const Filepath& filepath, int storageSize)
     {
-        KMP_MB_UNUSED std::lock_guard lock(_mutex);
+        std::lock_guard lock(_mutex);
         _BeginSessionInternal(name, filepath, storageSize);
     }
     //--------------------------------------------------------------------------
 
     void Profiler::EndSession()
     {
-        KMP_MB_UNUSED std::lock_guard lock(_mutex);
+        std::lock_guard lock(_mutex);
         _EndSessionInternal();
     }
     //--------------------------------------------------------------------------
@@ -245,17 +247,19 @@ namespace Kmplete
             return;
         }
 
-        KMP_MB_UNUSED std::lock_guard lock(profiler._mutex);
-        ++profiler._currentSession->profilesCount;
-        profiler._profileResults.emplace_back(_name, _start, end, std::this_thread::get_id());
-
-        if (profiler._profileResults.size() < static_cast<size_t>(profiler._storageSize))
         {
-            return;
-        }
+            std::lock_guard lock(profiler._mutex);
+            ++profiler._currentSession->profilesCount;
+            profiler._profileResults.emplace_back(_name, _start, end, std::this_thread::get_id());
 
-        profiler._WriteProfileResultsToIntermediate();
-        profiler._BeginNewCycle();
+            if (profiler._profileResults.size() < static_cast<size_t>(profiler._storageSize))
+            {
+                return;
+            }
+
+            profiler._WriteProfileResultsToIntermediate();
+            profiler._BeginNewCycle();
+        }
     }
     //--------------------------------------------------------------------------
 
