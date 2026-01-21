@@ -115,23 +115,27 @@ TEST_CASE("Math Log2", "[math]")
     using namespace Kmplete::Math;
 
     int resultInt = 0;
-    REQUIRE_NOTHROW(resultInt = Log2(16));
+    REQUIRE_NOTHROW(resultInt = Log2(16).value());
     REQUIRE(resultInt == 4);
 
-    REQUIRE_NOTHROW(resultInt = Log2(-16));
-    REQUIRE(resultInt != 4);
+    bool hasValue = false;
+    REQUIRE_NOTHROW(hasValue = Log2(-16).has_value());
+    REQUIRE_FALSE(hasValue);
 
-    REQUIRE_NOTHROW(resultInt = Log2(1));
+    REQUIRE_NOTHROW(resultInt = Log2(1).value());
     REQUIRE(resultInt == 0);
 
-    REQUIRE_NOTHROW(resultInt = int(Log2(-0.25f)));
-    REQUIRE(resultInt < 0);
+    REQUIRE_NOTHROW(hasValue = Log2(-0.25f).has_value());
+    REQUIRE_FALSE(hasValue);
 
     float resultFloat = 0.0f;
-    REQUIRE_NOTHROW(resultFloat = Log2(35.0f));
+    REQUIRE_NOTHROW(resultFloat = Log2(35.0f).value());
     REQUIRE((resultFloat > 5.0f && resultFloat < 6.0f));
 
-    REQUIRE_NOTHROW(resultFloat = Log2(0.0002f));
+    REQUIRE_NOTHROW(resultFloat = Log2(0.0002f).value());
     REQUIRE(resultFloat < 0.0f);
+
+    REQUIRE_NOTHROW(hasValue = Log2(0.0f).has_value());
+    REQUIRE_FALSE(hasValue);
 }
 //--------------------------------------------------------------------------

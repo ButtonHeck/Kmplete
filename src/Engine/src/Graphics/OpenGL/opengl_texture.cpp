@@ -77,7 +77,7 @@ namespace Kmplete
             dataFormat = GL_RED;
         }
 
-        const auto mipLevels = static_cast<GLsizei>(Math::Log2(Math::Max(width, height)) + 1);
+        const auto mipLevels = static_cast<GLsizei>(Math::Log2(Math::Max(width, height)).value() + 1);
 
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction

@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Base/optional.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/integer.hpp>
@@ -34,8 +35,13 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         template<typename ValueType> requires (IsArithmetic<ValueType>::value)
-        KMP_NODISCARD ValueType Log2(ValueType value)
+        KMP_NODISCARD Optional<ValueType> Log2(ValueType value)
         {
+            if (value <= ValueType(0))
+            {
+                return Optional<ValueType>();
+            }
+
             return glm::log2(value);
         }
         //--------------------------------------------------------------------------
