@@ -25,7 +25,7 @@ namespace Kmplete
                 auto sourceJson = JsonDocument(_parameters.sourceJsonFile);
                 if (sourceJson.HasError())
                 {
-                    KMP_LOG_ERROR("assets description parsing failed");
+                    KMP_LOG_ERROR("assets description parsing failed - {}", sourceJson.ErrorDescription());
                     return ReturnCode::InputFileParsingError;
                 }
 
@@ -48,16 +48,26 @@ namespace Kmplete
                 assetsFilepaths.reserve(assetCount);
                 assetsTypes.reserve(assetCount);
 
+                auto cleanup = [&]() {
+                    outputFile.close();
+                    if (!Filesystem::RemoveFile(_parameters.outputDataFile))
+                    {
+                        KMP_LOG_ERROR("failed to remove output file '{}'", _parameters.outputDataFile);
+                    }
+                };
+
                 const auto writeHeadersResult = _WriteHeaders(sourceJson, assetCount, outputFile, assetsFilepaths, assetsTypes);
                 if (writeHeadersResult != ReturnCode::Ok)
                 {
                     KMP_LOG_ERROR("failed to write assets headers data");
+                    cleanup();
                     return writeHeadersResult;
                 }
 
                 if (!sourceJson.EndGetArray())
                 {
                     KMP_LOG_ERROR("failed to end assets array");
+                    cleanup();
                     return ReturnCode::InputFileFormatError;
                 }
 
@@ -65,6 +75,7 @@ namespace Kmplete
                 if (writeDataResult != ReturnCode::Ok)
                 {
                     KMP_LOG_ERROR("failed to write assets buffers data");
+                    cleanup();
                     return writeDataResult;
                 }
 
@@ -108,6 +119,13 @@ namespace Kmplete
                     return ReturnCode::InputFileFormatError;
                 }
 
+                const auto assetFilepath = Filepath(assetFilename);
+                if (!Filesystem::FilepathExists(assetFilepath))
+                {
+                    KMP_LOG_ERROR("asset's filepath '{}' does not exist", assetFilepath);
+                    return ReturnCode::InputFileFormatError;
+                }
+
                 const auto assetType = static_cast<UByte>(sourceJson.GetUInt(JsonConfigurationTypeStr, static_cast<UByte>(AssetType::Error)));
                 if (assetType == static_cast<UByte>(AssetType::Error))
                 {
@@ -143,7 +161,7 @@ namespace Kmplete
                 };
                 outputFile.write(reinterpret_cast<const char*>(&header), AssetEntryHeaderStructSize);
 
-                assetsFilepaths.push_back(Filepath(assetFilename));
+                assetsFilepaths.push_back(assetFilepath);
                 assetsTypes.push_back(assetType);
 
                 return ReturnCode::Ok;
@@ -199,24 +217,32 @@ namespace Kmplete
 
                 const auto binaryBufferSize = static_cast<UInt64>(binaryBuffer.size());
 
-                outputFile.write(reinterpret_cast<const char*>(binaryBuffer.data()), binaryBufferSize);
-                const auto fileEndPosition = outputFile.tellp();
-
-                outputFile.seekp(writeState.assetBufferSizeCurrentOffset);
-                outputFile.write(reinterpret_cast<const char*>(&binaryBufferSize), sizeof(binaryBufferSize));
-
-                outputFile.seekp(writeState.assetBufferOffsetCurrentOffset);
-                outputFile.write(reinterpret_cast<char*>(&writeState.assetDataBufferOffset), sizeof(writeState.assetDataBufferOffset));
-
-                KMP_LOG_INFO("write '{}' {}\tbytes at offset {}\t from '{}'", assetTypeName, binaryBufferSize, writeState.assetDataBufferOffset, filepath);
-
-                writeState.assetBufferSizeCurrentOffset += AssetEntryHeaderStructSize;
-                writeState.assetBufferOffsetCurrentOffset += AssetEntryHeaderStructSize;
-                writeState.assetDataBufferOffset += binaryBufferSize;
-
-                outputFile.seekp(fileEndPosition);
-
-                return ReturnCode::Ok;
+                try
+                {
+                    outputFile.write(reinterpret_cast<const char*>(binaryBuffer.data()), binaryBufferSize);
+                    const auto fileEndPosition = outputFile.tellp();
+    
+                    outputFile.seekp(writeState.assetBufferSizeCurrentOffset);
+                    outputFile.write(reinterpret_cast<const char*>(&binaryBufferSize), sizeof(binaryBufferSize));
+    
+                    outputFile.seekp(writeState.assetBufferOffsetCurrentOffset);
+                    outputFile.write(reinterpret_cast<char*>(&writeState.assetDataBufferOffset), sizeof(writeState.assetDataBufferOffset));
+    
+                    KMP_LOG_INFO("write '{}' {}\tbytes at offset {}\t from '{}'", assetTypeName, binaryBufferSize, writeState.assetDataBufferOffset, filepath);
+    
+                    writeState.assetBufferSizeCurrentOffset += AssetEntryHeaderStructSize;
+                    writeState.assetBufferOffsetCurrentOffset += AssetEntryHeaderStructSize;
+                    writeState.assetDataBufferOffset += binaryBufferSize;
+    
+                    outputFile.seekp(fileEndPosition);
+    
+                    return ReturnCode::Ok;
+                }
+                catch (KMP_MB_UNUSED const std::exception& e)
+                {
+                    KMP_LOG_ERROR("failed to write '{}' data from '{}': {}", assetTypeName, filepath, e.what());
+                    return ReturnCode::OutputFileWritingFailed;
+                }
             }
             //--------------------------------------------------------------------------
         }

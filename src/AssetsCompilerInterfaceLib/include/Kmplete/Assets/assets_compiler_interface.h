@@ -35,7 +35,8 @@ namespace Kmplete
 
                 OutputFileIsNotSet = -30,
                 OutputFileCreationFailed = -31,
-                OutputFileOpeningFailed = -32
+                OutputFileOpeningFailed = -32,
+                OutputFileWritingFailed = -33,
             };
         }
         //--------------------------------------------------------------------------
