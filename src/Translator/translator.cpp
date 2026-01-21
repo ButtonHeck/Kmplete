@@ -128,7 +128,7 @@ namespace Kmplete
                     const auto msginitExitCode = msginitProcess.exit_code();
                     if (msginitExitCode != 0)
                     {
-                        KMP_LOG_ERROR("Update: msginit error occured");
+                        KMP_LOG_ERROR("Update: msginit error occured during .po creation");
                         return ReturnCode::ProcessorMsginitError;
                     }
                 }
@@ -148,7 +148,7 @@ namespace Kmplete
                 const auto msgattribStep1ExitCode = msgattribProcessStep1.exit_code();
                 if (msgattribStep1ExitCode != 0)
                 {
-                    KMP_LOG_ERROR("Update: msgattrib error occured");
+                    KMP_LOG_ERROR("Update: msgattrib error occured during --set-obsolete step");
                     return ReturnCode::ProcessorMsgattribError;
                 }
 
@@ -165,7 +165,7 @@ namespace Kmplete
                 const auto msgattribStep2ExitCode = msgattribProcessStep2.exit_code();
                 if (msgattribStep2ExitCode != 0)
                 {
-                    KMP_LOG_ERROR("Update: msgattrib error occured");
+                    KMP_LOG_ERROR("Update: msgattrib error occured during --no-obsolete step");
                     return ReturnCode::ProcessorMsgattribError;
                 }
 
@@ -237,8 +237,8 @@ namespace Kmplete
                 const auto msgfmtExitCode = msgfmtProcess.exit_code();
                 if (msgfmtExitCode != 0)
                 {
-                    KMP_LOG_ERROR("Update: msgfmt error occured");
-                    return ReturnCode::ProcessorMsgmergeError;
+                    KMP_LOG_ERROR("Compile: msgfmt error occured");
+                    return ReturnCode::ProcessorMsgfmtError;
                 }
             }
 
