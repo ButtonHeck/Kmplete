@@ -44,6 +44,22 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void OpenGLTexture::_SetFilteringImpl()
+    {
+        const auto nativeHandle = static_cast<GLuint>(_handle);
+        glTextureParameteri(nativeHandle, GL_TEXTURE_MIN_FILTER, _filtering.ToOpenGL(_filtering.GetMinFilter()));
+
+        if (_filtering.IsMagFilterValid())
+        {
+            glTextureParameteri(nativeHandle, GL_TEXTURE_MAG_FILTER, _filtering.ToOpenGL(_filtering.GetMagFilter()));
+        }
+        else
+        {
+            KMP_LOG_WARN("invalid magnification filter for texture");
+        }
+    }
+    //--------------------------------------------------------------------------
+
     void OpenGLTexture::_LoadFromImage(const Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -81,13 +97,12 @@ namespace Kmplete
 
         GLuint handle;
         glCreateTextures(GL_TEXTURE_2D, 1, &handle); // TODO texture type abstraction
-        glTextureParameteri(handle, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); // TODO abstraction
-        glTextureParameteri(handle, GL_TEXTURE_MAG_FILTER, GL_LINEAR); // TODO abstraction
+        _handle = static_cast<UInt64>(handle);
+
+        _SetFilteringImpl();
         glTextureStorage2D(handle, mipLevels, internalFormat, width, height);
         glTextureSubImage2D(handle, 0, 0, 0, width, height, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateTextureMipmap(handle);
-
-        _handle = static_cast<UInt64>(handle);
     }
     //--------------------------------------------------------------------------
 }

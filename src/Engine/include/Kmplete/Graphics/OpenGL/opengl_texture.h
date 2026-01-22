@@ -25,6 +25,9 @@ namespace Kmplete
         KMP_API explicit OpenGLTexture(const Image& image);
         KMP_API ~OpenGLTexture();
 
+    protected:
+        void _SetFilteringImpl() override;
+
     private:
         void _LoadFromImage(const Image& image);
     };
