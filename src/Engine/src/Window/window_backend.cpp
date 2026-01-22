@@ -16,4 +16,15 @@ namespace Kmplete
 #endif
     }
     //--------------------------------------------------------------------------
+
+    WindowBackend::WindowBackend()
+        : _graphicsBackendType(GraphicsBackendType::OpenGL)
+    {}
+    //--------------------------------------------------------------------------
+
+    void WindowBackend::SetGraphicsBackendType(GraphicsBackendType graphicsBackendType)
+    {
+        _graphicsBackendType = graphicsBackendType;
+    }
+    //--------------------------------------------------------------------------
 }

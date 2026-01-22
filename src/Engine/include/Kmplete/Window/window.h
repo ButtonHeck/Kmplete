@@ -7,6 +7,7 @@
 #include "Kmplete/Base/functional.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Math/geometry.h"
+#include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -81,7 +82,7 @@ namespace Kmplete
         };
 
     public:
-        KMP_API explicit Window(WindowSettings& settings);
+        KMP_API Window(WindowSettings& settings, GraphicsBackendType graphicsBackendType);
         virtual ~Window() = default;
 
         KMP_NODISCARD KMP_API const String& GetName() const noexcept;
@@ -139,6 +140,7 @@ namespace Kmplete
 
     protected:
         WindowSettings& _settings;
+        GraphicsBackendType _graphicsBackendType;
     };
     //--------------------------------------------------------------------------
 }

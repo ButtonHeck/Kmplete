@@ -22,7 +22,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
     public:
-        KMP_API explicit WindowGlfw(WindowSettings& settings);
+        KMP_API explicit WindowGlfw(WindowSettings& settings, GraphicsBackendType graphicsBackendType);
         KMP_API ~WindowGlfw();
 
         KMP_NODISCARD KMP_API Math::Size2I GetSize() const override;

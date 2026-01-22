@@ -123,8 +123,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    WindowGlfw::WindowGlfw(WindowSettings& settings)
-        : Window(settings)
+    WindowGlfw::WindowGlfw(WindowSettings& settings, GraphicsBackendType graphicsBackendType)
+        : Window(settings, graphicsBackendType)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _window(nullptr)
     {
@@ -531,6 +531,15 @@ namespace Kmplete
     void WindowGlfw::_InitializeWindowHints() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+        if (_graphicsBackendType == GraphicsBackendType::OpenGL)
+        {
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
+        }
+        else if (_graphicsBackendType == GraphicsBackendType::Vulkan)
+        {
+            glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+        }
 
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);

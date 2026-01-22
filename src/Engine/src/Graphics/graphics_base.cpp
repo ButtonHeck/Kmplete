@@ -9,6 +9,8 @@ namespace Kmplete
         {
         case GraphicsBackendType::OpenGL:
             return OpenGLStr;
+        case GraphicsBackendType::Vulkan:
+            return VulkanStr;
         default:
             return UnknownStr;
         }
@@ -20,6 +22,10 @@ namespace Kmplete
         if (string == OpenGLStr)
         {
             return GraphicsBackendType::OpenGL;
+        }
+        else if (string == VulkanStr)
+        {
+            return GraphicsBackendType::Vulkan;
         }
 
         return GraphicsBackendType::Unknown;

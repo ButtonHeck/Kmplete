@@ -20,6 +20,7 @@ namespace Kmplete
     enum class GraphicsBackendType
     {
         OpenGL,
+        Vulkan,
         Unknown
     };
     //--------------------------------------------------------------------------
@@ -28,6 +29,7 @@ namespace Kmplete
     KMP_NODISCARD KMP_API GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
 
     static constexpr auto OpenGLStr = "OpenGL";
+    static constexpr auto VulkanStr = "Vulkan";
     static constexpr auto UnknownStr = "Unknown";
     static constexpr auto DefaultAPIStr = OpenGLStr;
     //--------------------------------------------------------------------------

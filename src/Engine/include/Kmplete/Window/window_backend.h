@@ -6,6 +6,7 @@
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/geometry.h"
+#include "Kmplete/Graphics/graphics_base.h"
 
 
 namespace Kmplete
@@ -39,7 +40,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create();
 
     public:
-        WindowBackend() = default;
+        KMP_API WindowBackend();
         virtual ~WindowBackend() = default;
 
         KMP_NODISCARD KMP_API virtual Window& CreateMainWindow() = 0;
@@ -61,6 +62,11 @@ namespace Kmplete
 
         KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
         KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
+
+        KMP_API void SetGraphicsBackendType(GraphicsBackendType graphicsBackendType);
+
+    protected:
+        GraphicsBackendType _graphicsBackendType;
     };
     //--------------------------------------------------------------------------
 }

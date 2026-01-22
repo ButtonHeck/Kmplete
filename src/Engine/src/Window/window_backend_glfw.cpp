@@ -80,7 +80,7 @@ namespace Kmplete
                 _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
             }
 
-            _mainWindow = CreateUPtr<WindowGlfw>(*_mainWindowSettings);
+            _mainWindow = CreateUPtr<WindowGlfw>(*_mainWindowSettings, _graphicsBackendType);
         }
 
         return *_mainWindow;
@@ -178,7 +178,7 @@ namespace Kmplete
                 _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowName));
             }
 
-            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
+            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType));
             return GetAuxWindow(windowName);
         }
         catch (KMP_MB_UNUSED const std::exception& e)
@@ -211,7 +211,7 @@ namespace Kmplete
                 _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowSettings));
             }
 
-            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName]));
+            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType));
             return GetAuxWindow(windowName);
         }
         catch (KMP_MB_UNUSED const std::exception& e)

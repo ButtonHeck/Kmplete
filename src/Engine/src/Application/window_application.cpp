@@ -203,6 +203,7 @@ namespace Kmplete
 
         _graphicsBackendType = StringToGraphicsBackendType(settings->get().GetString(GraphicsBackendTypeStr, DefaultAPIStr));
         _windowBackend->LoadSettings(*settings);
+        _windowBackend->SetGraphicsBackendType(_graphicsBackendType);
     }
     //--------------------------------------------------------------------------
 }
