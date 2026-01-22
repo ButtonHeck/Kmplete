@@ -1,0 +1,175 @@
+## ~/src/Tools/Editor/CMakeLists.txt
+
+cmake_minimum_required(VERSION 3.20)
+
+project(Editor LANGUAGES CXX)
+
+if(WIN32)
+    set(KMPLETE_WIN_ICO_PATH "${KmpleteResourcesFolder}/icons/Kmplete64.ico")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/kmplete_editor.rc_in" "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc")
+    configure_file("${CMAKE_CURRENT_SOURCE_DIR}/src/win/resource.h" "${CMAKE_CURRENT_BINARY_DIR}/resource.h" COPYONLY)
+    set(Editor_WINRC
+        "${CMAKE_CURRENT_BINARY_DIR}/resource.h"
+        "${CMAKE_CURRENT_BINARY_DIR}/kmplete_editor.rc"
+    )
+    source_group("Resources" FILES ${Editor_WINRC})
+endif()
+
+add_executable(Editor
+    ${Editor_WINRC}
+)
+
+AddTargetSourcesGroup(Editor "Application"
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/localization_base.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.cpp
+)
+AddTargetSourcesGroup(Editor "UI"
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/UI/ui_identifiers.h
+)
+
+SetupCompilerOptions(Editor)
+
+target_include_directories(Editor
+    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src
+)
+
+target_link_libraries(Editor
+    PRIVATE Kmplete
+    PRIVATE TranslatorInterfaceLib
+    PRIVATE AssetsCompilerInterfaceLib
+    PRIVATE ImGuiUtilsLib
+    PRIVATE icons_fonts
+)
+
+if(MSVC)
+    target_link_options(Editor 
+        PRIVATE $<$<CONFIG:RELWITHDEBINFO>:/PROFILE>
+    )
+    
+    set_property(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR} PROPERTY 
+        VS_STARTUP_PROJECT Editor
+    )
+    
+    set_property(DIRECTORY ${CMAKE_BINARY_DIR} PROPERTY 
+        VS_STARTUP_PROJECT Editor
+    )
+    
+    set_target_properties(Editor PROPERTIES
+        VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
+    )
+    
+endif()
+
+set_target_properties(Editor PROPERTIES 
+    FOLDER Kmplete/Tools/Editor
+)
+
+set(EditorCopySettingsScriptName "CopySettings$<CONFIG>.cmake")
+file(GENERATE OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/${EditorCopySettingsScriptName}"
+    CONTENT
+    [=[
+    if (NOT EXISTS "$<TARGET_FILE_DIR:Editor>/Kmplete_settings.json")
+    execute_process(COMMAND "${CMAKE_COMMAND}" -E copy
+        "${resources_folder}/json/Kmplete_settings_example.json"
+        "$<TARGET_FILE_DIR:Editor>/Kmplete_settings.json")
+    endif() 
+    ]=]
+)
+
+add_custom_command(
+    TARGET Editor
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -D resources_folder=${KmpleteResourcesFolder} -P ${EditorCopySettingsScriptName}
+    WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+)
+
+
+# Localization
+# --------------------------
+
+set(EditorDomain "Editor")
+target_compile_definitions(Editor
+    PRIVATE KMP_TR_DOMAIN_EDITOR=\"${EditorDomain}\"
+)
+
+get_target_property(exeDir Editor RUNTIME_OUTPUT_DIRECTORY)
+add_custom_target(Editor_copy_translations
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for Editor done"
+)
+add_custom_command(TARGET Editor_copy_translations PRE_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale;${CMAKE_CURRENT_LIST_DIR}/../Engine/locale" 
+    -P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
+    VERBATIM
+)
+set_target_properties(Editor_copy_translations PROPERTIES
+    FOLDER Kmplete/Tools/Editor
+)
+
+add_dependencies(Editor Editor_copy_translations)
+
+CreateTranslationHelperTargets(
+    Editor Kmplete/Tools/Editor
+    "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}/src\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${EditorDomain}"
+    "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${EditorDomain}"
+)
+
+
+# Assets compiler configuration file generation
+# --------------------------
+
+set(Editor_path_flag_russian 
+    ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_russia_128.png
+)
+set(Editor_path_flag_usa 
+    ${CMAKE_SOURCE_DIR}/src/Resources/icons/flag_usa_128.png
+)
+set(Editor_path_font_opensans_regular
+    ${CMAKE_SOURCE_DIR}/src/Resources/fonts/OpenSans-Regular.ttf
+)
+set(Editor_path_font_forkawesome_webfont
+    ${CMAKE_SOURCE_DIR}/src/Resources/fonts/forkawesome-webfont.ttf
+)
+configure_file(editor_assets.json.in editor_assets.json @ONLY)
+
+
+# Assets compiler invocation
+# --------------------------
+
+add_custom_target(Editor_compile_assets
+    COMMAND ${CMAKE_COMMAND} -E echo "Compiling assets for Editor done"
+)
+add_custom_command(TARGET Editor_compile_assets PRE_BUILD
+    COMMAND AssetsCompiler 
+    "--input_file_name=\"${CMAKE_CURRENT_BINARY_DIR}/editor_assets.json\"" 
+    "--output_file_name=\"${exeDir}/Data/editor_assets.kmpdata\""
+)
+set_target_properties(Editor_compile_assets PROPERTIES
+    FOLDER Kmplete/Tools/Editor
+)
+
+add_dependencies(Editor Editor_compile_assets)
+
+
+# Installation
+# --------------------------
+
+install(TARGETS Editor
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
+install(DIRECTORY locale
+    DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    COMPONENT ${KmpleteInstallEditorComponentName}
+    FILES_MATCHING PATTERN "*.mo"
+)
+install(DIRECTORY ${exeDir}/Data
+    DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    COMPONENT ${KmpleteInstallEditorComponentName}
+)
