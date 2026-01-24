@@ -32,9 +32,12 @@ add_subdirectory(Libraries/TranslatorInterfaceLib)
 add_subdirectory(Libraries/AssetsInterfaceLib)
 add_subdirectory(Libraries/AssetsCompilerInterfaceLib)
 add_subdirectory(Libraries/TimeLib)
+
 add_subdirectory(Tools/Editor)
 add_subdirectory(Tools/Translator)
 add_subdirectory(Tools/AssetsCompiler)
+
+add_subdirectory(Sandboxes/TriangleOpenGL)
 
 if(${KMPLETE_BUILD_TESTS})
     add_custom_target(_BuildAllTests)
