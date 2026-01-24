@@ -7,7 +7,7 @@
 ############################################################################
 
 # Preamble
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 enable_testing()
 project(Kmplete 
     VERSION 0.2.0
@@ -40,6 +40,7 @@ include(Localization)
 include(UnitTestsTargetsSetup)
 include(TargetUtils)
 include(ClangTidy)
+include(Vulkan)
 
 
 # Dependencies
