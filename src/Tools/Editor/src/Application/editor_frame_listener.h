@@ -42,7 +42,7 @@ namespace Kmplete
                             LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
         ~EditorFrameListener();
 
-        void Update(float frameTimestep, bool applicationIsIconified);
+        void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;
 
         void SaveSettings(SettingsDocument& settings) const;

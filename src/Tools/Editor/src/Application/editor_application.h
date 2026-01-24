@@ -18,7 +18,7 @@ namespace Kmplete
 
     public:
         explicit EditorApplication(const WindowApplicationParameters& parameters);
-        virtual ~EditorApplication();
+        ~EditorApplication();
 
     private:
         void _Initialize();
