@@ -138,6 +138,11 @@ namespace Kmplete
         spdlog::register_logger(_logger);
 
         bootMessages.clear();
+
+        if (logSettings.outputFile)
+        {
+            Info("logging to a file '{}'", logSettings.filename);
+        }
     }
     //--------------------------------------------------------------------------
 
