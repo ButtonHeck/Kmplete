@@ -1,4 +1,4 @@
-#include "triangle_application.h"
+#include "triangle_opengl_application.h"
 
 #include "Kmplete/Core/main.h"
 
@@ -15,12 +15,12 @@ namespace Kmplete
                 .applicationParameters =
                     {.applicationName = "Triangle OpenGL sandbox",
                      .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "Triangle_app_settings.json"
+                     .defaultSettingsFileName = "Triangle_opengl_app_settings.json"
                     },
                 .resizable = true
             };
 
-            return CreateUPtr<TriangleApplication>(parameters);
+            return CreateUPtr<TriangleOpenGLApplication>(parameters);
         }
         catch (const std::exception&)
         {

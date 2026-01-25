@@ -1,9 +1,9 @@
-#include "triangle_application.h"
+#include "triangle_opengl_application.h"
 
 
 namespace Kmplete
 {
-    TriangleApplication::TriangleApplication(const WindowApplicationParameters& parameters)
+    TriangleOpenGLApplication::TriangleOpenGLApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)
         , _mainWindow(_windowBackend->GetMainWindow())
         , _mainFrameListener(nullptr)
@@ -12,13 +12,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    TriangleApplication::~TriangleApplication()
+    TriangleOpenGLApplication::~TriangleOpenGLApplication()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void TriangleApplication::_Initialize()
+    void TriangleOpenGLApplication::_Initialize()
     {
         _mainWindow.SetTitle(_applicationName.c_str());
 
@@ -28,7 +28,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void TriangleApplication::_Finalize()
+    void TriangleOpenGLApplication::_Finalize()
     {
         _SaveSettings();
 
@@ -36,12 +36,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void TriangleApplication::_SaveSettings() const
+    void TriangleOpenGLApplication::_SaveSettings() const
     {
     }
     //--------------------------------------------------------------------------
 
-    void TriangleApplication::_LoadSettings()
+    void TriangleOpenGLApplication::_LoadSettings()
     {
     }
     //--------------------------------------------------------------------------

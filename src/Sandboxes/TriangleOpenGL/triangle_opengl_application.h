@@ -1,6 +1,6 @@
 #pragma once
 
-#include "main_frame_listener.h"
+#include "triangle_opengl_main_frame_listener.h"
 
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"
@@ -9,14 +9,14 @@
 
 namespace Kmplete
 {
-    class TriangleApplication : public WindowApplication
+    class TriangleOpenGLApplication : public WindowApplication
     {
-        KMP_LOG_CLASSNAME(TriangleApplication)
-        KMP_DISABLE_COPY_MOVE(TriangleApplication)
+        KMP_LOG_CLASSNAME(TriangleOpenGLApplication)
+        KMP_DISABLE_COPY_MOVE(TriangleOpenGLApplication)
 
     public:
-        explicit TriangleApplication(const WindowApplicationParameters& parameters);
-        ~TriangleApplication();
+        explicit TriangleOpenGLApplication(const WindowApplicationParameters& parameters);
+        ~TriangleOpenGLApplication();
 
     private:
         void _Initialize();
