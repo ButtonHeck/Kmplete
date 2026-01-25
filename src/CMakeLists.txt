@@ -38,6 +38,7 @@ add_subdirectory(Tools/Translator)
 add_subdirectory(Tools/AssetsCompiler)
 
 add_subdirectory(Sandboxes/TriangleOpenGL)
+add_subdirectory(Sandboxes/TriangleVulkan)
 
 if(${KMPLETE_BUILD_TESTS})
     add_custom_target(_BuildAllTests)
