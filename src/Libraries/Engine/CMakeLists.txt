@@ -87,6 +87,10 @@ AddTargetSourcesGroup(Kmplete "Graphics/OpenGL"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
 )
+AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_backend.cpp
+)
 AddTargetSourcesGroup(Kmplete "Localization"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_manager.h
@@ -158,6 +162,7 @@ target_link_libraries(Kmplete
     PRIVATE stb_image
     PRIVATE glad
     PRIVATE freetype
+    PRIVATE Vulkan::Vulkan
 )
 
 if(UNIX)
