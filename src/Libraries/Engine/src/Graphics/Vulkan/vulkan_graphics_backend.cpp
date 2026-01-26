@@ -16,6 +16,7 @@
     #define KMP_ENABLE_VULKAN_VALIDATION_LAYER true
 #endif
 static constexpr auto ValidationLayerName = "VK_LAYER_KHRONOS_validation";
+static const Kmplete::Vector<const char*> LayerNames = { ValidationLayerName };
 
 
 namespace Kmplete
@@ -73,7 +74,7 @@ namespace Kmplete
         auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
         if (func != nullptr)
         {
-            const auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
+            auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
             return func(instance, &debugMessengerCreateInfo, allocator, debugMessenger);
         }
         else
@@ -123,7 +124,9 @@ namespace Kmplete
         VkApplicationInfo applicationInfo = _CreateApplicationInfo();
         auto extensionsNames = _GetRequiredExtensionsNames();
         VkInstanceCreateInfo instanceCreateInfo = _CreateInstanceCreateInfo(applicationInfo, extensionsNames);
-        _AttachDebugMessenger(instanceCreateInfo);
+
+        auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
+        _AttachDebugMessengerInfo(instanceCreateInfo, debugMessengerCreateInfo);
 
         _PrintAvailableExtensions();
 
@@ -134,15 +137,7 @@ namespace Kmplete
             throw std::runtime_error("VulkanGraphicsBackend: failed to create VkInstance");
         }
 
-        if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
-        {
-            success = CreateDebugUtilsMessengerEXT(_instance, nullptr, &_debugMessenger);
-            if (success != VK_SUCCESS)
-            {
-                KMP_LOG_ERROR("failed to setup debug messenger");
-                throw std::runtime_error("VulkanGraphicsBackend: failed to setup debug messenger");
-            }
-        }
+        _InitializeDebugMessenger();
     }
     //--------------------------------------------------------------------------
 
@@ -215,15 +210,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void VulkanGraphicsBackend::_AttachDebugMessenger(VkInstanceCreateInfo& instanceCreateInfo) const
+    void VulkanGraphicsBackend::_AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const
     {
         if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
         {
-            auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
-
-            const Vector<const char*> layerNames = { ValidationLayerName };
-            instanceCreateInfo.enabledLayerCount = 1;
-            instanceCreateInfo.ppEnabledLayerNames = layerNames.data();
+            instanceCreateInfo.enabledLayerCount = UInt32(LayerNames.size());
+            instanceCreateInfo.ppEnabledLayerNames = LayerNames.data();
             instanceCreateInfo.pNext = reinterpret_cast<VkDebugUtilsMessengerCreateInfoEXT*>(&debugMessengerCreateInfo);
         }
         else
@@ -251,6 +243,20 @@ namespace Kmplete
             KMP_LOG_DEBUG("\t{}, Spec version: {}.{}.{}", extension.extensionName, extensionVersionMajor, extensionVersionMinor, extensionVersionPatch);
         }
 #endif
+    }
+    //--------------------------------------------------------------------------
+
+    void VulkanGraphicsBackend::_InitializeDebugMessenger()
+    {
+        if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
+        {
+            const auto success = CreateDebugUtilsMessengerEXT(_instance, nullptr, &_debugMessenger);
+            if (success != VK_SUCCESS)
+            {
+                KMP_LOG_ERROR("failed to setup debug messenger");
+                throw std::runtime_error("VulkanGraphicsBackend: failed to setup debug messenger");
+            }
+        }
     }
     //--------------------------------------------------------------------------
 

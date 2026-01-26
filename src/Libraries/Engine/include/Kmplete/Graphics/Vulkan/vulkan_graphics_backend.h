@@ -26,8 +26,9 @@ namespace Kmplete
         KMP_NODISCARD VkApplicationInfo _CreateApplicationInfo() const;
         KMP_NODISCARD Vector<const char*> _GetRequiredExtensionsNames() const;
         KMP_NODISCARD VkInstanceCreateInfo _CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const;
-        void _AttachDebugMessenger(VkInstanceCreateInfo& instanceCreateInfo) const;
+        void _AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const;
         void _PrintAvailableExtensions() const;
+        void _InitializeDebugMessenger();
 
     private:
         VkInstance _instance;
