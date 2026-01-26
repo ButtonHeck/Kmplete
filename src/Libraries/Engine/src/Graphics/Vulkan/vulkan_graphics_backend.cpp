@@ -23,27 +23,73 @@ namespace Kmplete
     static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
         VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
         KMP_MB_UNUSED VkDebugUtilsMessageTypeFlagsEXT messageType,
-        KMP_MB_UNUSED const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
-        KMP_MB_UNUSED void* pUserData)
+        KMP_MB_UNUSED const VkDebugUtilsMessengerCallbackDataEXT* callbackData,
+        KMP_MB_UNUSED void* userData)
     {
         if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT)
         {
-            KMP_LOG_DEBUG_FN("VulkanGraphicsBackend DebugCallback: {}", pCallbackData->pMessage);
+            KMP_LOG_DEBUG_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
         }
         else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
         {
-            KMP_LOG_INFO_FN("VulkanGraphicsBackend DebugCallback: {}", pCallbackData->pMessage);
+            KMP_LOG_INFO_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
         }
         else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
         {
-            KMP_LOG_WARN_FN("VulkanGraphicsBackend DebugCallback: {}", pCallbackData->pMessage);
+            KMP_LOG_WARN_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
         }
         else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
         {
-            KMP_LOG_ERROR_FN("VulkanGraphicsBackend DebugCallback: {}", pCallbackData->pMessage);
+            KMP_LOG_ERROR_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
         }
 
         return VK_FALSE;
+    }
+    //--------------------------------------------------------------------------
+
+    static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo()
+    {
+        VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{};
+        debugMessengerCreateInfo = {};
+        debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        debugMessengerCreateInfo.messageSeverity =
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        debugMessengerCreateInfo.messageType =
+            VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
+            VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        debugMessengerCreateInfo.pfnUserCallback = DebugCallback;
+        debugMessengerCreateInfo.pUserData = nullptr;
+
+        return debugMessengerCreateInfo;
+    }
+    //--------------------------------------------------------------------------
+
+    static VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkAllocationCallbacks* allocator, VkDebugUtilsMessengerEXT* debugMessenger)
+    {
+        auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+        if (func != nullptr)
+        {
+            const auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
+            return func(instance, &debugMessengerCreateInfo, allocator, debugMessenger);
+        }
+        else
+        {
+            return VK_ERROR_EXTENSION_NOT_PRESENT;
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    static void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* allocator)
+    {
+        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+        if (func != nullptr)
+        {
+            func(instance, debugMessenger, allocator);
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -81,17 +127,32 @@ namespace Kmplete
 
         _PrintAvailableExtensions();
 
-        const auto success = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
+        auto success = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
         if (success != VK_SUCCESS)
         {
             KMP_LOG_ERROR("failed to create VkInstance");
             throw std::runtime_error("VulkanGraphicsBackend: failed to create VkInstance");
+        }
+
+        if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
+        {
+            success = CreateDebugUtilsMessengerEXT(_instance, nullptr, &_debugMessenger);
+            if (success != VK_SUCCESS)
+            {
+                KMP_LOG_ERROR("failed to setup debug messenger");
+                throw std::runtime_error("VulkanGraphicsBackend: failed to setup debug messenger");
+            }
         }
     }
     //--------------------------------------------------------------------------
 
     void VulkanGraphicsBackend::_Finalize()
     {
+        if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
+        {
+            DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
+        }
+
         vkDestroyInstance(_instance, nullptr);
     }
     //--------------------------------------------------------------------------
@@ -158,20 +219,7 @@ namespace Kmplete
     {
         if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
         {
-            VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{};
-            debugMessengerCreateInfo = {};
-            debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-            debugMessengerCreateInfo.messageSeverity =
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
-            debugMessengerCreateInfo.messageType =
-                VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
-            debugMessengerCreateInfo.pfnUserCallback = DebugCallback;
-            debugMessengerCreateInfo.pUserData = nullptr;
+            auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
 
             const Vector<const char*> layerNames = { ValidationLayerName };
             instanceCreateInfo.enabledLayerCount = 1;
