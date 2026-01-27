@@ -186,22 +186,12 @@ namespace Kmplete
             throw std::runtime_error("WindowGlfw creation failed");
         }
 
-        if (_graphicsBackendType == GraphicsBackendType::OpenGL)
-        {
-            MakeContextCurrent();
-        }
-
         _InitializeUserPointer();
         _InitializeGeometry();
         _InitializeCallbacks();
 
         _UpdateDPIScale(_window);
         _UpdateDPI(_window);
-
-        if (_graphicsBackendType == GraphicsBackendType::OpenGL)
-        {
-            SetVSync(_settings.vSync);
-        }
 
         glfwShowWindow(_window);
     }

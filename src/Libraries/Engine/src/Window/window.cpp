@@ -40,6 +40,12 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    GraphicsBackendType Window::GetGraphicsBackendType() const noexcept
+    {
+        return _graphicsBackendType;
+    }
+    //--------------------------------------------------------------------------
+
     String Window::ScreenModeToString(ScreenMode screenMode) noexcept
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);

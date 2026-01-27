@@ -8,6 +8,9 @@
 
 namespace Kmplete
 {
+    class Window;
+
+
     //TODO: comments
     class VulkanGraphicsBackend : public GraphicsBackend
     {
@@ -15,7 +18,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(VulkanGraphicsBackend)
 
     public:
-        KMP_API VulkanGraphicsBackend();
+        KMP_API explicit VulkanGraphicsBackend(Window& window);
         KMP_API ~VulkanGraphicsBackend();
 
     private:

@@ -78,7 +78,7 @@ namespace Kmplete
         UPtr<FrameListenerManager> _frameListenerManager;
 
     private:
-        GraphicsBackendType _graphicsBackendType;
+        GraphicsBackendType _graphicsBackendType; //TODO: remove from here
         Time::Clock _frameClock;
     };
     //--------------------------------------------------------------------------

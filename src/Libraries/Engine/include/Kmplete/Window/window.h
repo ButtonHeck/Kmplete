@@ -86,6 +86,7 @@ namespace Kmplete
         virtual ~Window() = default;
 
         KMP_NODISCARD KMP_API const String& GetName() const noexcept;
+        KMP_NODISCARD KMP_API GraphicsBackendType GetGraphicsBackendType() const noexcept;
 
         KMP_NODISCARD KMP_API virtual Math::Size2I GetSize() const = 0;
         KMP_NODISCARD KMP_API virtual Math::Size2I GetWindowedSize() const = 0;

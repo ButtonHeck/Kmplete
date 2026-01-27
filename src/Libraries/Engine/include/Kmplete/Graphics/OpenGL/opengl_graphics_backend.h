@@ -6,6 +6,9 @@
 
 namespace Kmplete
 {
+    class Window;
+
+
     //! OpenGL backend implementation, loading is delegated to GLAD init function.
     //! Indirectly depends on the window backend, thus a window backend should be 
     //! initialized before this
@@ -16,7 +19,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(OpenGLGraphicsBackend)
 
     public:
-        KMP_API OpenGLGraphicsBackend();
+        KMP_API explicit OpenGLGraphicsBackend(Window& window);
 
     private:
         void _Initialize();

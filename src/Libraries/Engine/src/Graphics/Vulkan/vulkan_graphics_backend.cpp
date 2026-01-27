@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -95,8 +96,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    VulkanGraphicsBackend::VulkanGraphicsBackend()
-        : GraphicsBackend(GraphicsBackendType::Vulkan)
+    VulkanGraphicsBackend::VulkanGraphicsBackend(Window& window)
+        : GraphicsBackend(window)
     {
         _Initialize();
     }

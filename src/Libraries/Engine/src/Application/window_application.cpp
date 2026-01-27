@@ -88,7 +88,7 @@ namespace Kmplete
         mainWindow.SetResizable(parameters.resizable);
         mainWindow.SetEventCallback(KMP_BIND(WindowApplication::OnEvent));
 
-        _graphicsBackend = GraphicsBackend::Create(_graphicsBackendType);
+        _graphicsBackend = GraphicsBackend::Create(mainWindow);
         KMP_ASSERT(_graphicsBackend);
 
         _inputManager = CreateUPtr<Input::InputManager>();

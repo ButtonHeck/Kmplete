@@ -1,32 +1,35 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Window/window.h"
 
 
 namespace Kmplete
 {
-    UPtr<GraphicsBackend> GraphicsBackend::Create(GraphicsBackendType type)
+    UPtr<GraphicsBackend> GraphicsBackend::Create(Window& window)
     {
-        switch (type)
+        const auto graphicsBackendType = window.GetGraphicsBackendType();
+
+        switch (graphicsBackendType)
         {
         case GraphicsBackendType::OpenGL:
-            return CreateUPtr<OpenGLGraphicsBackend>();
+            return CreateUPtr<OpenGLGraphicsBackend>(window);
         case GraphicsBackendType::Vulkan:
-            return CreateUPtr<VulkanGraphicsBackend>();
+            return CreateUPtr<VulkanGraphicsBackend>(window);
         default:
             return nullptr;
         }
     }
     //--------------------------------------------------------------------------
 
-    GraphicsBackend::GraphicsBackend(GraphicsBackendType type)
-        : _type(type)
+    GraphicsBackend::GraphicsBackend(Window& window)
+        : _window(window)
     {}
     //--------------------------------------------------------------------------
 
     GraphicsBackendType GraphicsBackend::GetType() const noexcept
     {
-        return _type;
+        return _window.GetGraphicsBackendType();
     }
     //--------------------------------------------------------------------------
 }
