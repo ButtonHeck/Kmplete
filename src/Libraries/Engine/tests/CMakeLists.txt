@@ -85,7 +85,7 @@ target_include_directories(TestWindowApplication
     PRIVATE "${GLFW_SOURCE_DIR}/include"
 )
 
-set(TestWindowApplicationSettingsFile "Kmplete_window_application_tests_settings.json")
+set(TestWindowApplicationSettingsFile "TestWindowApplication_settings.json")
 target_compile_definitions(TestWindowApplication
     PRIVATE KMP_ICONS_FOLDER=\"${KmpleteResourcesFolder}/icons/\"
     PRIVATE KMP_FONTS_FOLDER=\"${KmpleteResourcesFolder}/fonts/\"

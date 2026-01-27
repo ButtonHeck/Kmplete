@@ -109,7 +109,7 @@ namespace Kmplete
 
 TEST_CASE("Test window application", "[window_application][application][window][event]")
 {
-    auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
+    auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestWindowApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
 
     REQUIRE(application);
     REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
