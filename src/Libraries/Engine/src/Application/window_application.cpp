@@ -13,7 +13,6 @@
 namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "WindowApplication";
-    static constexpr auto GraphicsBackendTypeStr = "GraphicsBackendType";
 
 
     WindowApplication::WindowApplication(const WindowApplicationParameters& parameters)
@@ -24,7 +23,6 @@ namespace Kmplete
         , _inputManager(nullptr)
         , _assetsManager(nullptr)
         , _frameListenerManager(nullptr)
-        , _graphicsBackendType(GraphicsBackendType::OpenGL)
         , _frameClock()
     {
         _Initialize(parameters);
@@ -185,7 +183,6 @@ namespace Kmplete
             return;
         }
         
-        settings->get().SaveString(GraphicsBackendTypeStr, GraphicsBackendTypeToString(_graphicsBackendType));
         _windowBackend->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
@@ -201,9 +198,7 @@ namespace Kmplete
             return;
         }
 
-        _graphicsBackendType = StringToGraphicsBackendType(settings->get().GetString(GraphicsBackendTypeStr, DefaultAPIStr));
         _windowBackend->LoadSettings(*settings);
-        _windowBackend->SetGraphicsBackendType(_graphicsBackendType);
     }
     //--------------------------------------------------------------------------
 }

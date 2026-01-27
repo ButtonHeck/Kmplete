@@ -15,8 +15,8 @@
         }
     },
     "WindowApplication": {
-        "GraphicsBackendType": "OpenGL",
         "WindowBackend": {
+            "GraphicsBackendType": "OpenGL",
             "MainWindow": {
                 "Name": "Main",
                 "X": 100,

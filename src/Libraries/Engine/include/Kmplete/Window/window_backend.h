@@ -25,6 +25,7 @@ namespace Kmplete
 
     protected:
         static constexpr auto SettingsEntryName = "WindowBackend";
+        static constexpr auto GraphicsBackendTypeStr = "GraphicsBackendType";
         static constexpr auto MainWindowStr = "MainWindow";
         static constexpr auto AuxWindowsStr = "AuxWindows";
 
@@ -62,8 +63,6 @@ namespace Kmplete
 
         KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
         KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
-
-        KMP_API void SetGraphicsBackendType(GraphicsBackendType graphicsBackendType);
 
     protected:
         GraphicsBackendType _graphicsBackendType;
