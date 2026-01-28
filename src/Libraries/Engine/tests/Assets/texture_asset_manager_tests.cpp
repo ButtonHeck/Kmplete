@@ -2,6 +2,8 @@
 #include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Window/window_backend.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Utils/string_utils.h"
@@ -15,24 +17,24 @@ using namespace Kmplete::Assets;
 using namespace Kmplete::Graphics;
 
 
-static UPtr<GraphicsBackend> prepareOpenGLBackend()
+static UPtr<GraphicsBackend> prepareOpenGLBackend(GraphicsBackendType type)
 {
-    glfwInit();
-    glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-    const auto window = glfwCreateWindow(100, 100, "", nullptr, nullptr);
-    glfwMakeContextCurrent(window);
+    auto windowBackend = Kmplete::WindowBackend::Create();
+    windowBackend->SetGraphicsBackendType(type);
+    auto& mainWindow = windowBackend->CreateMainWindow();
 
-    return GraphicsBackend::Create(GraphicsBackendType::OpenGL);
+    return GraphicsBackend::Create(mainWindow);
 }
 //--------------------------------------------------------------------------
 
 
 TEST_CASE("TextureAssetManager initialization error type", "[graphics][texture_asset_manager][asset]")
 {
-    prepareOpenGLBackend();
+    const auto graphicsBackendType = GraphicsBackendType::Unknown;
+    prepareOpenGLBackend(graphicsBackendType);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_THROWS(textureAssetManager = CreateUPtr<TextureAssetManager>(GraphicsBackendType::Unknown));
+    REQUIRE_THROWS(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
     REQUIRE(textureAssetManager == nullptr);
 }
 //--------------------------------------------------------------------------
@@ -40,10 +42,11 @@ TEST_CASE("TextureAssetManager initialization error type", "[graphics][texture_a
 
 TEST_CASE("TextureAssetManager initialization opengl", "[graphics][texture_asset_manager][asset]")
 {
-    prepareOpenGLBackend();
+    const auto graphicsBackendType = GraphicsBackendType::OpenGL;
+    prepareOpenGLBackend(graphicsBackendType);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(GraphicsBackendType::OpenGL));
+    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
     REQUIRE(textureAssetManager);
 }
 //--------------------------------------------------------------------------
@@ -51,10 +54,11 @@ TEST_CASE("TextureAssetManager initialization opengl", "[graphics][texture_asset
 
 TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset_manager][texture][asset]")
 {
-    prepareOpenGLBackend();
+    const auto graphicsBackendType = GraphicsBackendType::OpenGL;
+    prepareOpenGLBackend(graphicsBackendType);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(GraphicsBackendType::OpenGL));
+    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
     REQUIRE(textureAssetManager);
 
     bool ok = false;
@@ -84,10 +88,11 @@ TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset
 
 TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_manager][texture][asset]")
 {
-    prepareOpenGLBackend();
+    const auto graphicsBackendType = GraphicsBackendType::OpenGL;
+    prepareOpenGLBackend(graphicsBackendType);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(GraphicsBackendType::OpenGL));
+    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
     REQUIRE(textureAssetManager);
 
     // loading from image

@@ -64,6 +64,9 @@ namespace Kmplete
         KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
         KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
 
+        KMP_API void SetGraphicsBackendType(Graphics::GraphicsBackendType type) noexcept;
+        KMP_NODISCARD KMP_API Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
+
     protected:
         Graphics::GraphicsBackendType _graphicsBackendType;
     };

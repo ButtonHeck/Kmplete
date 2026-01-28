@@ -21,4 +21,16 @@ namespace Kmplete
         : _graphicsBackendType(Graphics::GraphicsBackendType::OpenGL)
     {}
     //--------------------------------------------------------------------------
+
+    void WindowBackend::SetGraphicsBackendType(Graphics::GraphicsBackendType type) noexcept
+    {
+        _graphicsBackendType = type;
+    }
+    //--------------------------------------------------------------------------
+
+    Graphics::GraphicsBackendType WindowBackend::GetGraphicsBackendType() const noexcept
+    {
+        return _graphicsBackendType;
+    }
+    //--------------------------------------------------------------------------
 }
