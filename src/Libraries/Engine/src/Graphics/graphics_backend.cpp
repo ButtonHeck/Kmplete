@@ -6,30 +6,33 @@
 
 namespace Kmplete
 {
-    UPtr<GraphicsBackend> GraphicsBackend::Create(Window& window)
+    namespace Graphics
     {
-        const auto graphicsBackendType = window.GetGraphicsBackendType();
-
-        switch (graphicsBackendType)
+        UPtr<GraphicsBackend> GraphicsBackend::Create(Window& window)
         {
-        case GraphicsBackendType::OpenGL:
-            return CreateUPtr<OpenGLGraphicsBackend>(window);
-        case GraphicsBackendType::Vulkan:
-            return CreateUPtr<VulkanGraphicsBackend>(window);
-        default:
-            return nullptr;
+            const auto graphicsBackendType = window.GetGraphicsBackendType();
+
+            switch (graphicsBackendType)
+            {
+            case GraphicsBackendType::OpenGL:
+                return CreateUPtr<OpenGLGraphicsBackend>(window);
+            case GraphicsBackendType::Vulkan:
+                return CreateUPtr<VulkanGraphicsBackend>(window);
+            default:
+                return nullptr;
+            }
         }
-    }
-    //--------------------------------------------------------------------------
+        //--------------------------------------------------------------------------
 
-    GraphicsBackend::GraphicsBackend(Window& window)
-        : _window(window)
-    {}
-    //--------------------------------------------------------------------------
+        GraphicsBackend::GraphicsBackend(Window& window)
+            : _window(window)
+        {}
+        //--------------------------------------------------------------------------
 
-    GraphicsBackendType GraphicsBackend::GetType() const noexcept
-    {
-        return _window.GetGraphicsBackendType();
+        GraphicsBackendType GraphicsBackend::GetType() const noexcept
+        {
+            return _window.GetGraphicsBackendType();
+        }
+        //--------------------------------------------------------------------------
     }
-    //--------------------------------------------------------------------------
 }

@@ -15,7 +15,7 @@ namespace Kmplete
 
         try
         {
-            Image img(filepath, ImageChannels::RGBAlpha);
+            Graphics::Image img(filepath, Graphics::ImageChannels::RGBAlpha);
             GLFWimage cursorImg{ img.GetWidth(), img.GetHeight(), img.GetPixels() };
 
             if (cursorImg.pixels && cursorImg.width > 0 && cursorImg.height > 0)

@@ -16,7 +16,11 @@ namespace Kmplete
 {
     class WindowCursor;
     class SettingsDocument;
-    class Image;
+
+    namespace Graphics
+    {
+        class Image;
+    }
 
 
     //! Base class for application window. Communication with the application is
@@ -82,11 +86,11 @@ namespace Kmplete
         };
 
     public:
-        KMP_API Window(WindowSettings& settings, GraphicsBackendType graphicsBackendType);
+        KMP_API Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
         virtual ~Window() = default;
 
         KMP_NODISCARD KMP_API const String& GetName() const noexcept;
-        KMP_NODISCARD KMP_API GraphicsBackendType GetGraphicsBackendType() const noexcept;
+        KMP_NODISCARD KMP_API Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
 
         KMP_NODISCARD KMP_API virtual Math::Size2I GetSize() const = 0;
         KMP_NODISCARD KMP_API virtual Math::Size2I GetWindowedSize() const = 0;
@@ -96,7 +100,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
 
         KMP_API virtual void SetTitle(const char* title) = 0;
-        KMP_API virtual void SetIcon(const Image& image) = 0;
+        KMP_API virtual void SetIcon(const Graphics::Image& image) = 0;
 
         KMP_API virtual void SetPosition(int x, int y) = 0;
         KMP_NODISCARD KMP_API virtual Math::Point2I GetPosition() const = 0;
@@ -141,7 +145,7 @@ namespace Kmplete
 
     protected:
         WindowSettings& _settings;
-        GraphicsBackendType _graphicsBackendType;
+        Graphics::GraphicsBackendType _graphicsBackendType;
     };
     //--------------------------------------------------------------------------
 }

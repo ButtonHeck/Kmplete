@@ -18,7 +18,11 @@ namespace Kmplete
 {
     class LocalizationManager;
     class SystemMetricsManager;
-    class GraphicsBackend;
+
+    namespace Graphics
+    {
+        class GraphicsBackend;
+    }
 
     namespace Assets
     {
@@ -38,7 +42,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(EditorFrameListener)
 
     public:
-        EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, 
+        EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager,
                             LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
         ~EditorFrameListener();
 
@@ -72,7 +76,7 @@ namespace Kmplete
     private:
         SystemMetricsManager& _systemMetricsManager;
         Window& _mainWindow;
-        GraphicsBackend& _graphicsBackend;
+        Graphics::GraphicsBackend& _graphicsBackend;
         Assets::AssetsManager& _assetsManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         UPtr<EditorUICompositor> _uiCompositor;

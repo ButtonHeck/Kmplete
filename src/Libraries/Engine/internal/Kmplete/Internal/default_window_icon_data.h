@@ -2062,5 +2062,5 @@ namespace Kmplete
         "\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000\000"
     };
 
-    static const Image defaultWindowIcon = Image(&pixelBuffer[0], 128 * 128 * 4, Math::Size2I(128, 128), ImageChannels::RGBAlpha);
+    static const Graphics::Image defaultWindowIcon = Graphics::Image(&pixelBuffer[0], 128 * 128 * 4, Math::Size2I(128, 128), Graphics::ImageChannels::RGBAlpha);
 }

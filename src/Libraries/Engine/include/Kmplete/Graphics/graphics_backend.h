@@ -10,23 +10,26 @@ namespace Kmplete
     class Window;
 
 
-    //! Base class/factory for graphics backend - an object that should do necessary API initialization
-    //! for graphics-related functions
-    class GraphicsBackend
+    namespace Graphics
     {
-        KMP_DISABLE_COPY_MOVE(GraphicsBackend)
+        //! Base class/factory for graphics backend - an object that should do necessary API initialization
+        //! for graphics-related functions
+        class GraphicsBackend
+        {
+            KMP_DISABLE_COPY_MOVE(GraphicsBackend)
 
-    public:
-        KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(Window& window);
+        public:
+            KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(Window& window);
 
-    public:
-        KMP_API explicit GraphicsBackend(Window& window);
-        virtual ~GraphicsBackend() = default;
+        public:
+            KMP_API explicit GraphicsBackend(Window& window);
+            virtual ~GraphicsBackend() = default;
 
-        KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
+            KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
 
-    protected:
-        Window& _window;
-    };
-    //--------------------------------------------------------------------------
+        protected:
+            Window& _window;
+        };
+        //--------------------------------------------------------------------------
+    }
 }

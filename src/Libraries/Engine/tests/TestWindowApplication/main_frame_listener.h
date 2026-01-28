@@ -23,7 +23,7 @@ namespace Kmplete
     {
     public:
         MainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, 
-                          GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager);
+                          Graphics::GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager);
 
         void Initialize();
 
@@ -135,7 +135,7 @@ namespace Kmplete
         FrameListenerManager& _frameListenerManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         Assets::AssetsManager* _assetsManager;
-        GraphicsBackend* _graphicsBackend;
+        Graphics::GraphicsBackend* _graphicsBackend;
         WindowBackend* _windowBackend;
         Input::InputManager* _inputManager;
 

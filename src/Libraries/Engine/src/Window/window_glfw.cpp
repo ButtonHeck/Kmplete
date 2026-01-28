@@ -123,7 +123,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    WindowGlfw::WindowGlfw(WindowSettings& settings, GraphicsBackendType graphicsBackendType)
+    WindowGlfw::WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType)
         : Window(settings, graphicsBackendType)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _window(nullptr)
@@ -255,7 +255,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetIcon(const Image& image)
+    void WindowGlfw::SetIcon(const Graphics::Image& image)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
         KMP_ASSERT(image.GetPixels());
@@ -528,14 +528,14 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        if (_graphicsBackendType == GraphicsBackendType::OpenGL)
+        if (_graphicsBackendType == Graphics::GraphicsBackendType::OpenGL)
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
             glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         }
-        else if (_graphicsBackendType == GraphicsBackendType::Vulkan)
+        else if (_graphicsBackendType == Graphics::GraphicsBackendType::Vulkan)
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         }

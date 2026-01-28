@@ -12,6 +12,7 @@
 
 using namespace Kmplete;
 using namespace Kmplete::Assets;
+using namespace Kmplete::Graphics;
 
 
 static UPtr<GraphicsBackend> prepareOpenGLBackend()

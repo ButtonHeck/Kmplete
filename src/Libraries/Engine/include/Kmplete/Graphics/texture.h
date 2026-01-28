@@ -8,26 +8,29 @@
 
 namespace Kmplete
 {
-    //! Base class for texture objects backed by graphics API
-    class Texture
+    namespace Graphics
     {
-        KMP_DISABLE_COPY_MOVE(Texture)
+        //! Base class for texture objects backed by graphics API
+        class Texture
+        {
+            KMP_DISABLE_COPY_MOVE(Texture)
 
-    public:
-        KMP_API Texture() noexcept;
-        virtual ~Texture() = default;
+        public:
+            KMP_API Texture() noexcept;
+            virtual ~Texture() = default;
 
-        KMP_NODISCARD KMP_API Nullable<void*> GetHandle() const;
+            KMP_NODISCARD KMP_API Nullable<void*> GetHandle() const;
 
-        KMP_NODISCARD KMP_API const TextureFiltering& GetFiltering() const;
-        KMP_API void SetFiltering(const TextureFiltering& filtering);
+            KMP_NODISCARD KMP_API const TextureFiltering& GetFiltering() const;
+            KMP_API void SetFiltering(const TextureFiltering& filtering);
 
-    protected:
-        virtual void _SetFilteringImpl() = 0;
+        protected:
+            virtual void _SetFilteringImpl() = 0;
 
-    protected:
-        UInt64 _handle;
-        TextureFiltering _filtering;
-    };
-    //--------------------------------------------------------------------------
+        protected:
+            UInt64 _handle;
+            TextureFiltering _filtering;
+        };
+        //--------------------------------------------------------------------------
+    }
 }

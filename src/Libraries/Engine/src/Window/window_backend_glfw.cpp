@@ -370,7 +370,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartSaveObject(SettingsEntryName);
-        settings.SaveString(GraphicsBackendTypeStr, GraphicsBackendTypeToString(_graphicsBackendType));
+        settings.SaveString(GraphicsBackendTypeStr, Graphics::GraphicsBackendTypeToString(_graphicsBackendType));
 
         _SaveMainWindowSettings(settings);
         _SaveAuxWindowsSettings(settings);
@@ -416,7 +416,7 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
         settings.StartLoadObject(SettingsEntryName);
-        _graphicsBackendType = StringToGraphicsBackendType(settings.GetString(GraphicsBackendTypeStr, DefaultAPIStr));
+        _graphicsBackendType = Graphics::StringToGraphicsBackendType(settings.GetString(GraphicsBackendTypeStr, Graphics::DefaultAPIStr));
 
         _LoadMainWindowSettings(settings);
         _LoadAuxWindowsSettings(settings);

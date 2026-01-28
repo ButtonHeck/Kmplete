@@ -3,27 +3,30 @@
 
 namespace Kmplete
 {
-    Texture::Texture() noexcept
-        : _handle(0ULL)
-    {}
-    //--------------------------------------------------------------------------
-
-    Nullable<void*> Texture::GetHandle() const
+    namespace Graphics
     {
-        return reinterpret_cast<void*>(_handle);
-    }
-    //--------------------------------------------------------------------------
+        Texture::Texture() noexcept
+            : _handle(0ULL)
+        {}
+        //--------------------------------------------------------------------------
 
-    const TextureFiltering& Texture::GetFiltering() const
-    {
-        return _filtering;
-    }
-    //--------------------------------------------------------------------------
+        Nullable<void*> Texture::GetHandle() const
+        {
+            return reinterpret_cast<void*>(_handle);
+        }
+        //--------------------------------------------------------------------------
 
-    void Texture::SetFiltering(const TextureFiltering& filtering)
-    {
-        _filtering = filtering;
-        _SetFilteringImpl();
+        const TextureFiltering& Texture::GetFiltering() const
+        {
+            return _filtering;
+        }
+        //--------------------------------------------------------------------------
+
+        void Texture::SetFiltering(const TextureFiltering& filtering)
+        {
+            _filtering = filtering;
+            _SetFilteringImpl();
+        }
+        //--------------------------------------------------------------------------
     }
-    //--------------------------------------------------------------------------
 }

@@ -11,7 +11,10 @@
 
 namespace Kmplete
 {
-    class Image;
+    namespace Graphics
+    {
+        class Image;
+    }
 
 
     namespace Assets
@@ -29,10 +32,10 @@ namespace Kmplete
         public:
             static constexpr StringID ErrorTextureSID = 0;
 
-            KMP_API explicit TextureAssetManager(GraphicsBackendType backendType);
+            KMP_API explicit TextureAssetManager(Graphics::GraphicsBackendType backendType);
 
             KMP_API bool CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically = false);
-            KMP_API bool CreateAsset(StringID textureSid, const Image& image);
+            KMP_API bool CreateAsset(StringID textureSid, const Graphics::Image& image);
 
             KMP_NODISCARD KMP_API const Assets::TextureAsset& GetAsset(StringID textureSid) const;
             KMP_NODISCARD KMP_API Assets::TextureAsset& GetAsset(StringID textureSid);
@@ -47,7 +50,7 @@ namespace Kmplete
             KMP_NODISCARD bool _TextureSidIsValid(StringID textureSid);
 
         private:
-            const GraphicsBackendType _backendType;
+            const Graphics::GraphicsBackendType _backendType;
             HashMap<StringID, UPtr<Assets::TextureAsset>> _textures;
         };
         //--------------------------------------------------------------------------

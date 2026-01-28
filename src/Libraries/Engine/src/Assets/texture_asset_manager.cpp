@@ -14,7 +14,7 @@ namespace Kmplete
 {
     namespace Assets
     {
-        TextureAssetManager::TextureAssetManager(GraphicsBackendType backendType)
+        TextureAssetManager::TextureAssetManager(Graphics::GraphicsBackendType backendType)
             : _backendType(backendType)
         {
             if (!_CreateErrorTextureAsset())
@@ -34,7 +34,7 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = TextureFactory::CreateTexture(_backendType, filepath, flipVertically);
+            auto* texture = Graphics::TextureFactory::CreateTexture(_backendType, filepath, flipVertically);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture '{}'", filepath);
@@ -46,7 +46,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::CreateAsset(StringID textureSid, const Image& image)
+        bool TextureAssetManager::CreateAsset(StringID textureSid, const Graphics::Image& image)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
             KMP_ASSERT(image.GetPixels());
@@ -56,7 +56,7 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = TextureFactory::CreateTexture(_backendType, image);
+            auto* texture = Graphics::TextureFactory::CreateTexture(_backendType, image);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture from image");
@@ -149,7 +149,7 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = TextureFactory::CreateTexture(_backendType, Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), ImageChannels::RGB));
+            auto* texture = Graphics::TextureFactory::CreateTexture(_backendType, Graphics::Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), Graphics::ImageChannels::RGB));
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("error texture failed to load");

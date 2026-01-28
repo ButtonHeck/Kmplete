@@ -24,7 +24,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
         public:
-            KMP_API AssetsManager(const Filepath& applicationPath, GraphicsBackendType type);
+            KMP_API AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackendType type);
             KMP_API ~AssetsManager();
 
             KMP_NODISCARD KMP_API const TextureAssetManager& GetTextureAssetManager() const noexcept;
@@ -39,7 +39,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool UnloadAssets(const Vector<StringID>& assetsSids);
 
         private:
-            void _Initialize(GraphicsBackendType type);
+            void _Initialize(Graphics::GraphicsBackendType type);
             void _Finalize();
 
             void _LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);

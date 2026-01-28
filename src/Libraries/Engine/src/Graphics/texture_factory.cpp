@@ -8,47 +8,50 @@
 
 namespace Kmplete
 {
-    Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Filepath& filepath, bool flipVertically /*= false*/)
+    namespace Graphics
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-        try
+        Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Filepath& filepath, bool flipVertically /*= false*/)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+            try
+            {
+                switch (backendType)
+                {
+                case GraphicsBackendType::OpenGL:
+                    return new OpenGLTexture(filepath, flipVertically);
+
+                default:
+                    KMP_LOG_ERROR("unknown graphics backend type");
+                    break;
+                }
+            }
+            catch (const std::exception&)
+            {
+                KMP_LOG_ERROR("failed to create texture '{}'", filepath);
+            }
+
+            return nullptr;
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Image& image)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+            KMP_ASSERT(image.GetPixels());
+
             switch (backendType)
             {
             case GraphicsBackendType::OpenGL:
-                return new OpenGLTexture(filepath, flipVertically);
+                return new OpenGLTexture(image);
 
             default:
                 KMP_LOG_ERROR("unknown graphics backend type");
                 break;
             }
-        }
-        catch (const std::exception&)
-        {
-            KMP_LOG_ERROR("failed to create texture '{}'", filepath);
-        }
 
-        return nullptr;
+            return nullptr;
+        }
+        //--------------------------------------------------------------------------
     }
-    //--------------------------------------------------------------------------
-
-    Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Image& image)
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-        KMP_ASSERT(image.GetPixels());
-
-        switch (backendType)
-        {
-        case GraphicsBackendType::OpenGL:
-            return new OpenGLTexture(image);
-
-        default:
-            KMP_LOG_ERROR("unknown graphics backend type");
-            break;
-        }
-
-        return nullptr;
-    }
-    //--------------------------------------------------------------------------
 }

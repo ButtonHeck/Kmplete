@@ -17,13 +17,13 @@ namespace Kmplete
         {}
         //--------------------------------------------------------------------------
 
-        const Font& FontAsset::GetFont() const noexcept
+        const Graphics::Font& FontAsset::GetFont() const noexcept
         {
             return _font;
         }
         //--------------------------------------------------------------------------
 
-        Font& FontAsset::GetFont() noexcept
+        Graphics::Font& FontAsset::GetFont() noexcept
         {
             return _font;
         }

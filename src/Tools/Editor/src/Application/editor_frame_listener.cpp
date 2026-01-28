@@ -17,7 +17,7 @@ namespace Kmplete
     static constexpr auto MetricsTimeoutStr = "MetricsTimeout";
 
 
-    EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, 
+    EditorFrameListener::EditorFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager,
                                              LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
         : FrameListener(frameListenerManager, "EditorFrameListener"_sid, 0)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
@@ -52,7 +52,7 @@ namespace Kmplete
 
         const auto dpiScale = _mainWindow.GetDPIScale();
 
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
 
         _AddImGuiFonts(dpiScale);
 
@@ -138,7 +138,7 @@ namespace Kmplete
         const auto scale = event.GetScale();
 
         _imguiImpl.reset();
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
 
         _AddImGuiFonts(scale);
 

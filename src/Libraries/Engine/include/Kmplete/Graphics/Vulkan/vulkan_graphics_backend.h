@@ -11,31 +11,34 @@ namespace Kmplete
     class Window;
 
 
-    //TODO: comments
-    class VulkanGraphicsBackend : public GraphicsBackend
+    namespace Graphics
     {
-        KMP_LOG_CLASSNAME(VulkanGraphicsBackend)
-        KMP_DISABLE_COPY_MOVE(VulkanGraphicsBackend)
+        //TODO: comments
+        class VulkanGraphicsBackend : public GraphicsBackend
+        {
+            KMP_LOG_CLASSNAME(VulkanGraphicsBackend)
+            KMP_DISABLE_COPY_MOVE(VulkanGraphicsBackend)
 
-    public:
-        KMP_API explicit VulkanGraphicsBackend(Window& window);
-        KMP_API ~VulkanGraphicsBackend();
+        public:
+            KMP_API explicit VulkanGraphicsBackend(Window& window);
+            KMP_API ~VulkanGraphicsBackend();
 
-    private:
-        void _Initialize();
-        void _Finalize();
+        private:
+            void _Initialize();
+            void _Finalize();
 
-        KMP_NODISCARD bool _CheckValidationLayerSupport() const;
-        KMP_NODISCARD VkApplicationInfo _CreateApplicationInfo() const;
-        KMP_NODISCARD Vector<const char*> _GetRequiredExtensionsNames() const;
-        KMP_NODISCARD VkInstanceCreateInfo _CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const;
-        void _AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const;
-        void _PrintAvailableExtensions() const;
-        void _InitializeDebugMessenger();
+            KMP_NODISCARD bool _CheckValidationLayerSupport() const;
+            KMP_NODISCARD VkApplicationInfo _CreateApplicationInfo() const;
+            KMP_NODISCARD Vector<const char*> _GetRequiredExtensionsNames() const;
+            KMP_NODISCARD VkInstanceCreateInfo _CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const;
+            void _AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const;
+            void _PrintAvailableExtensions() const;
+            void _InitializeDebugMessenger();
 
-    private:
-        VkInstance _instance;
-        VkDebugUtilsMessengerEXT _debugMessenger;
-    };
-    //--------------------------------------------------------------------------
+        private:
+            VkInstance _instance;
+            VkDebugUtilsMessengerEXT _debugMessenger;
+        };
+        //--------------------------------------------------------------------------
+    }
 }

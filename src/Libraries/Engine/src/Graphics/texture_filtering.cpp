@@ -6,68 +6,71 @@
 
 namespace Kmplete
 {
-    TextureFiltering::TextureFiltering() noexcept
-        : _minFilter(TextureFilter::LinearMipmapLinear)
-        , _magFilter(TextureFilter::Linear)
-    {}
-    //--------------------------------------------------------------------------
-
-    TextureFiltering::TextureFiltering(TextureFilter minFilter, TextureFilter magFilter) noexcept
-        : _minFilter(minFilter)
-        , _magFilter(magFilter)
-    {}
-    //--------------------------------------------------------------------------
-
-    TextureFilter TextureFiltering::GetMinFilter() const noexcept
+    namespace Graphics
     {
-        return _minFilter;
-    }
-    //--------------------------------------------------------------------------
+        TextureFiltering::TextureFiltering() noexcept
+            : _minFilter(TextureFilter::LinearMipmapLinear)
+            , _magFilter(TextureFilter::Linear)
+        {}
+        //--------------------------------------------------------------------------
 
-    TextureFilter TextureFiltering::GetMagFilter() const noexcept
-    {
-        return _magFilter;
-    }
-    //--------------------------------------------------------------------------
+        TextureFiltering::TextureFiltering(TextureFilter minFilter, TextureFilter magFilter) noexcept
+            : _minFilter(minFilter)
+            , _magFilter(magFilter)
+        {}
+        //--------------------------------------------------------------------------
 
-    void TextureFiltering::SetMinFilter(TextureFilter filter) noexcept
-    {
-        _minFilter = filter;
-    }
-    //--------------------------------------------------------------------------
-
-    void TextureFiltering::SetMagFilter(TextureFilter filter) noexcept
-    {
-        _magFilter = filter;
-    }
-    //--------------------------------------------------------------------------
-
-    int TextureFiltering::ToOpenGL(TextureFilter filter) const
-    {
-        switch (filter)
+        TextureFilter TextureFiltering::GetMinFilter() const noexcept
         {
-            case TextureFilter::Nearest:
-                return GL_NEAREST;
-            case TextureFilter::Linear:
-                return GL_LINEAR;
-            case TextureFilter::NearestMipmapNearest:
-                return GL_NEAREST_MIPMAP_NEAREST;
-            case TextureFilter::LinearMipmapNearest:
-                return GL_LINEAR_MIPMAP_NEAREST;
-            case TextureFilter::NearestMipmapLinear:
-                return GL_NEAREST_MIPMAP_LINEAR;
-            case TextureFilter::LinearMipmapLinear:
-                return GL_LINEAR_MIPMAP_LINEAR;
-            default:
-                KMP_ASSERT(false && "Invalid texture filter");
-                return GL_LINEAR;
+            return _minFilter;
         }
-    }
-    //--------------------------------------------------------------------------
+        //--------------------------------------------------------------------------
 
-    bool TextureFiltering::IsMagFilterValid() const noexcept
-    {
-        return _magFilter == TextureFilter::Nearest || _magFilter == TextureFilter::Linear;
+        TextureFilter TextureFiltering::GetMagFilter() const noexcept
+        {
+            return _magFilter;
+        }
+        //--------------------------------------------------------------------------
+
+        void TextureFiltering::SetMinFilter(TextureFilter filter) noexcept
+        {
+            _minFilter = filter;
+        }
+        //--------------------------------------------------------------------------
+
+        void TextureFiltering::SetMagFilter(TextureFilter filter) noexcept
+        {
+            _magFilter = filter;
+        }
+        //--------------------------------------------------------------------------
+
+        int TextureFiltering::ToOpenGL(TextureFilter filter) const
+        {
+            switch (filter)
+            {
+                case TextureFilter::Nearest:
+                    return GL_NEAREST;
+                case TextureFilter::Linear:
+                    return GL_LINEAR;
+                case TextureFilter::NearestMipmapNearest:
+                    return GL_NEAREST_MIPMAP_NEAREST;
+                case TextureFilter::LinearMipmapNearest:
+                    return GL_LINEAR_MIPMAP_NEAREST;
+                case TextureFilter::NearestMipmapLinear:
+                    return GL_NEAREST_MIPMAP_LINEAR;
+                case TextureFilter::LinearMipmapLinear:
+                    return GL_LINEAR_MIPMAP_LINEAR;
+                default:
+                    KMP_ASSERT(false && "Invalid texture filter");
+                    return GL_LINEAR;
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        bool TextureFiltering::IsMagFilterValid() const noexcept
+        {
+            return _magFilter == TextureFilter::Nearest || _magFilter == TextureFilter::Linear;
+        }
+        //--------------------------------------------------------------------------
     }
-    //--------------------------------------------------------------------------
 }

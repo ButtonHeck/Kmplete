@@ -6,31 +6,34 @@
 
 namespace Kmplete
 {
-    enum ImageChannels
+    namespace Graphics
     {
-        Unknown = 0,
-        Grey,
-        GreyAlpha,
-        RGB,
-        RGBAlpha
-    };
-    //--------------------------------------------------------------------------
+        enum ImageChannels
+        {
+            Unknown = 0,
+            Grey,
+            GreyAlpha,
+            RGB,
+            RGBAlpha
+        };
+        //--------------------------------------------------------------------------
 
 
-    enum class GraphicsBackendType
-    {
-        OpenGL,
-        Vulkan,
-        Unknown
-    };
-    //--------------------------------------------------------------------------
+        enum class GraphicsBackendType
+        {
+            OpenGL,
+            Vulkan,
+            Unknown
+        };
+        //--------------------------------------------------------------------------
 
-    KMP_NODISCARD KMP_API String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
-    KMP_NODISCARD KMP_API GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
+        KMP_NODISCARD KMP_API String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept;
+        KMP_NODISCARD KMP_API GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept;
 
-    static constexpr auto OpenGLStr = "OpenGL";
-    static constexpr auto VulkanStr = "Vulkan";
-    static constexpr auto UnknownStr = "Unknown";
-    static constexpr auto DefaultAPIStr = OpenGLStr;
-    //--------------------------------------------------------------------------
+        static constexpr auto OpenGLStr = "OpenGL";
+        static constexpr auto VulkanStr = "Vulkan";
+        static constexpr auto UnknownStr = "Unknown";
+        static constexpr auto DefaultAPIStr = OpenGLStr;
+        //--------------------------------------------------------------------------
+    }
 }

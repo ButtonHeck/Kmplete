@@ -72,7 +72,7 @@ namespace Kmplete
 
     protected:
         UPtr<WindowBackend> _windowBackend;
-        UPtr<GraphicsBackend> _graphicsBackend;
+        UPtr<Graphics::GraphicsBackend> _graphicsBackend;
         UPtr<Input::InputManager> _inputManager;
         UPtr<Assets::AssetsManager> _assetsManager;
         UPtr<FrameListenerManager> _frameListenerManager;

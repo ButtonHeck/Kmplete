@@ -3,32 +3,35 @@
 
 namespace Kmplete
 {
-    String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept
+    namespace Graphics
     {
-        switch (type)
+        String GraphicsBackendTypeToString(GraphicsBackendType type) noexcept
         {
-        case GraphicsBackendType::OpenGL:
-            return OpenGLStr;
-        case GraphicsBackendType::Vulkan:
-            return VulkanStr;
-        default:
-            return UnknownStr;
+            switch (type)
+            {
+            case GraphicsBackendType::OpenGL:
+                return OpenGLStr;
+            case GraphicsBackendType::Vulkan:
+                return VulkanStr;
+            default:
+                return UnknownStr;
+            }
         }
-    }
-    //--------------------------------------------------------------------------
+        //--------------------------------------------------------------------------
 
-    GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept
-    {
-        if (string == OpenGLStr)
+        GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept
         {
-            return GraphicsBackendType::OpenGL;
-        }
-        else if (string == VulkanStr)
-        {
-            return GraphicsBackendType::Vulkan;
-        }
+            if (string == OpenGLStr)
+            {
+                return GraphicsBackendType::OpenGL;
+            }
+            else if (string == VulkanStr)
+            {
+                return GraphicsBackendType::Vulkan;
+            }
 
-        return GraphicsBackendType::Unknown;
+            return GraphicsBackendType::Unknown;
+        }
+        //--------------------------------------------------------------------------
     }
-    //--------------------------------------------------------------------------
 }

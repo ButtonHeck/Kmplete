@@ -5,19 +5,19 @@ namespace Kmplete
 {
     namespace Assets
     {
-        TextureAsset::TextureAsset(StringID sid, NonNull<Texture*> texture) noexcept
+        TextureAsset::TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept
             : Asset(AssetType::Texture, sid)
             , _texture(texture)
         {}
         //--------------------------------------------------------------------------
 
-        const Texture& TextureAsset::GetTexture() const noexcept
+        const Graphics::Texture& TextureAsset::GetTexture() const noexcept
         {
             return *_texture;
         }
         //--------------------------------------------------------------------------
 
-        Texture& TextureAsset::GetTexture() noexcept
+        Graphics::Texture& TextureAsset::GetTexture() noexcept
         {
             return *_texture;
         }

@@ -22,7 +22,7 @@ namespace Kmplete
 
 
     MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, 
-                                         GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager)
+                                         Graphics::GraphicsBackend* graphicsBackend, WindowBackend* windowBackend, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, 10ULL, 10)
         , _sharedState(sharedState)
         , _mainWindow(mainWindow)
@@ -54,7 +54,7 @@ namespace Kmplete
 
     void MainFrameListener::Initialize()
     {
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
         _imguiImpl->Stylize(_mainWindow.GetDPIScale());
@@ -144,7 +144,7 @@ namespace Kmplete
 
     void MainFrameListener::SetCustomIconFromFilepath()
     {
-        const auto iconImage = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
+        const auto iconImage = Graphics::Image(Filepath(KMP_TEST_ICON_PATH), Graphics::ImageChannels::RGBAlpha);
         _mainWindow.SetIcon(iconImage);
     }
 
@@ -154,7 +154,7 @@ namespace Kmplete
         unsigned char iconBuffer[] = {
             /*blue*/ 0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,  0, 0, 255, 255,
             /*red */ 255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255,  255, 0, 0, 255 };
-        Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Math::Size2I(4, 2), ImageChannels::RGBAlpha);
+        Graphics::Image iconFromBuffer(&iconBuffer[0], iconBufferSize, Math::Size2I(4, 2), Graphics::ImageChannels::RGBAlpha);
 
         _mainWindow.SetIcon(iconFromBuffer);
     }

@@ -12,7 +12,7 @@ namespace Kmplete
 {
     namespace Assets
     {
-        AssetsManager::AssetsManager(const Filepath& applicationPath, GraphicsBackendType type)
+        AssetsManager::AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackendType type)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _dataPath(applicationPath / AssetsFolder)
             , _textureAssetManager(nullptr)
@@ -148,7 +148,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_Initialize(GraphicsBackendType type)
+        void AssetsManager::_Initialize(Graphics::GraphicsBackendType type)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -277,7 +277,7 @@ namespace Kmplete
             {
                 try
                 {
-                    const auto assetImage = Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), ImageChannels::Unknown);
+                    const auto assetImage = Graphics::Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), Graphics::ImageChannels::Unknown);
                     return _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
                 }
                 catch (KMP_MB_UNUSED const std::exception& e)

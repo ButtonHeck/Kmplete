@@ -65,7 +65,7 @@ namespace Kmplete
         KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
 
     protected:
-        GraphicsBackendType _graphicsBackendType;
+        Graphics::GraphicsBackendType _graphicsBackendType;
     };
     //--------------------------------------------------------------------------
 }

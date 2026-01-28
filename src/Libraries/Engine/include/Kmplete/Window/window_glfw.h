@@ -22,7 +22,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
     public:
-        KMP_API explicit WindowGlfw(WindowSettings& settings, GraphicsBackendType graphicsBackendType);
+        KMP_API explicit WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
         KMP_API ~WindowGlfw();
 
         KMP_NODISCARD KMP_API Math::Size2I GetSize() const override;
@@ -33,7 +33,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API float GetDPIScale() const override;
 
         KMP_API void SetTitle(const char* title) override;
-        KMP_API void SetIcon(const Image& image) override;
+        KMP_API void SetIcon(const Graphics::Image& image) override;
 
         KMP_API void SetPosition(int x, int y) override;
         KMP_NODISCARD KMP_API Math::Point2I GetPosition() const override;

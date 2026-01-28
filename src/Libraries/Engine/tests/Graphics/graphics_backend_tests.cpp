@@ -7,6 +7,7 @@
 
 
 using namespace Kmplete;
+using namespace Kmplete::Graphics;
 
 
 TEST_CASE("Graphics backend initialization error type", "[graphics]")
