@@ -67,15 +67,17 @@ AddTargetSourcesGroup(Kmplete "Input"
 )
 AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_base.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_surface.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_filtering.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture_factory.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_surface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_filtering.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_factory.cpp
@@ -83,13 +85,17 @@ AddTargetSourcesGroup(Kmplete "Graphics"
 )
 AddTargetSourcesGroup(Kmplete "Graphics/OpenGL"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_surface.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_texture.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_surface.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_backend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_surface.cpp
 )
 AddTargetSourcesGroup(Kmplete "Localization"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h

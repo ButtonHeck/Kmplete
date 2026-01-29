@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/graphics_base.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 
 namespace Kmplete
@@ -17,6 +18,7 @@ namespace Kmplete
         class GraphicsBackend
         {
             KMP_DISABLE_COPY_MOVE(GraphicsBackend)
+            KMP_LOG_CLASSNAME(GraphicsBackend)
 
         public:
             KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(Window& window);

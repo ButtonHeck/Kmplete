@@ -2,6 +2,8 @@
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Window/window.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -10,6 +12,8 @@ namespace Kmplete
     {
         UPtr<GraphicsBackend> GraphicsBackend::Create(Window& window)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             const auto graphicsBackendType = window.GetGraphicsBackendType();
 
             switch (graphicsBackendType)
@@ -19,6 +23,7 @@ namespace Kmplete
             case GraphicsBackendType::Vulkan:
                 return CreateUPtr<VulkanGraphicsBackend>(window);
             default:
+                KMP_LOG_ERROR("cannot create graphics backend instance for graphics backend '{}'", GraphicsBackendTypeToString(graphicsBackendType));
                 return nullptr;
             }
         }
