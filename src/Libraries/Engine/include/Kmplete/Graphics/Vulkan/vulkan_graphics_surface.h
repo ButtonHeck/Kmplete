@@ -17,11 +17,14 @@ namespace Kmplete
         //TODO: comments
         class VulkanGraphicsSurface : public GraphicsSurface
         {
+            KMP_DISABLE_COPY_MOVE(VulkanGraphicsSurface)
             KMP_LOG_CLASSNAME(VulkanGraphicsSurface)
 
         public:
             KMP_API VulkanGraphicsSurface(Window& window, const VkInstance& instance);
             KMP_API ~VulkanGraphicsSurface();
+
+            KMP_NODISCARD KMP_API const VkSurfaceKHR& GetImplSurface() const noexcept;
 
         private:
             const VkInstance& _instance;

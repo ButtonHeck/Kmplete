@@ -4,6 +4,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/graphics_surface.h"
+#include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -33,6 +34,7 @@ namespace Kmplete
         protected:
             Window& _window;
             UPtr<GraphicsSurface> _surface;
+            UPtr<PhysicalDevice> _physicalDevice;
         };
         //--------------------------------------------------------------------------
     }

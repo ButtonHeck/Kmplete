@@ -1,23 +1,21 @@
 #pragma once
 
+#include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Graphics/graphics_surface.h"
 
 
 namespace Kmplete
 {
-    class Window;
-
-
     namespace Graphics
     {
         //TODO: comments
-        class OpenGLGraphicsSurface : public GraphicsSurface
+        class OpenGLPhysicalDevice : public PhysicalDevice
         {
-            KMP_DISABLE_COPY_MOVE(OpenGLGraphicsSurface)
+            KMP_DISABLE_COPY_MOVE(OpenGLPhysicalDevice)
 
         public:
-            KMP_API explicit OpenGLGraphicsSurface(Window& window);
+            OpenGLPhysicalDevice() = default;
+            ~OpenGLPhysicalDevice() = default;
         };
         //--------------------------------------------------------------------------
     }

@@ -28,10 +28,13 @@ namespace Kmplete
 
         VulkanGraphicsSurface::~VulkanGraphicsSurface()
         {
-            if (_surface)
-            {
-                vkDestroySurfaceKHR(_instance, _surface, nullptr);
-            }
+            vkDestroySurfaceKHR(_instance, _surface, nullptr);
+        }
+        //--------------------------------------------------------------------------
+
+        const VkSurfaceKHR& VulkanGraphicsSurface::GetImplSurface() const noexcept
+        {
+            return _surface;
         }
         //--------------------------------------------------------------------------
     }

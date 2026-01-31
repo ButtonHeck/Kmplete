@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_surface.h"
+#include "Kmplete/Graphics/OpenGL/opengl_physical_device.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -55,15 +56,14 @@ namespace Kmplete
             KMP_LOG_INFO("version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 
             _surface.reset(new OpenGLGraphicsSurface(_window));
+            _physicalDevice.reset(new OpenGLPhysicalDevice());
         }
         //--------------------------------------------------------------------------
 
         void OpenGLGraphicsBackend::_Finalize()
         {
-            if (_surface)
-            {
-                _surface.reset();
-            }
+            _physicalDevice.reset();
+            _surface.reset();
         }
         //--------------------------------------------------------------------------
     }

@@ -32,6 +32,7 @@ namespace Kmplete
         GraphicsBackend::GraphicsBackend(Window& window)
             : _window(window)
             , _surface(nullptr)
+            , _physicalDevice(nullptr)
         {}
         //--------------------------------------------------------------------------
 

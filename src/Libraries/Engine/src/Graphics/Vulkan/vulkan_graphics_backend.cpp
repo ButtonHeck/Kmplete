@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
@@ -145,6 +146,7 @@ namespace Kmplete
             _InitializeDebugMessenger();
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
+            _physicalDevice.reset(new VulkanPhysicalDevice(_instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetImplSurface()));
         }
         //--------------------------------------------------------------------------
 
@@ -155,10 +157,8 @@ namespace Kmplete
                 DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
             }
 
-            if (_surface)
-            {
-                _surface.reset();
-            }
+            _physicalDevice.reset();
+            _surface.reset();
 
             vkDestroyInstance(_instance, nullptr);
         }
