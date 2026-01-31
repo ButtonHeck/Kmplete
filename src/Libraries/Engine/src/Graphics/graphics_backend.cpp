@@ -23,7 +23,7 @@ namespace Kmplete
             case GraphicsBackendType::Vulkan:
                 return CreateUPtr<VulkanGraphicsBackend>(window);
             default:
-                KMP_LOG_ERROR("cannot create graphics backend instance for graphics backend '{}'", GraphicsBackendTypeToString(graphicsBackendType));
+                KMP_LOG_CRITICAL("cannot create graphics backend instance for graphics backend '{}'", GraphicsBackendTypeToString(graphicsBackendType));
                 return nullptr;
             }
         }
@@ -31,6 +31,7 @@ namespace Kmplete
 
         GraphicsBackend::GraphicsBackend(Window& window)
             : _window(window)
+            , _surface(nullptr)
         {}
         //--------------------------------------------------------------------------
 

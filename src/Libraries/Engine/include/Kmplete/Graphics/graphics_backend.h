@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/graphics_base.h"
+#include "Kmplete/Graphics/graphics_surface.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -31,6 +32,7 @@ namespace Kmplete
 
         protected:
             Window& _window;
+            UPtr<GraphicsSurface> _surface;
         };
         //--------------------------------------------------------------------------
     }

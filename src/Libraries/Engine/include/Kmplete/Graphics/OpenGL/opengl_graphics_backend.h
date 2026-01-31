@@ -22,9 +22,11 @@ namespace Kmplete
 
         public:
             KMP_API explicit OpenGLGraphicsBackend(Window& window);
+            KMP_API ~OpenGLGraphicsBackend();
 
         private:
             void _Initialize();
+            void _Finalize();
         };
         //--------------------------------------------------------------------------
     }

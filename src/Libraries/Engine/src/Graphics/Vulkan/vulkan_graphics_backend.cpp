@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
@@ -120,7 +121,7 @@ namespace Kmplete
             {
                 if (!_CheckValidationLayerSupport())
                 {
-                    KMP_LOG_ERROR("{} layer requested but not found", ValidationLayerName);
+                    KMP_LOG_CRITICAL("{} layer requested but not found", ValidationLayerName);
                     throw std::runtime_error("VulkanGraphicsBackend: failed to initialize");
                 }
             }
@@ -137,11 +138,13 @@ namespace Kmplete
             auto success = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
             if (success != VK_SUCCESS)
             {
-                KMP_LOG_ERROR("failed to create VkInstance");
+                KMP_LOG_CRITICAL("failed to create VkInstance");
                 throw std::runtime_error("VulkanGraphicsBackend: failed to create VkInstance");
             }
 
             _InitializeDebugMessenger();
+
+            _surface.reset(new VulkanGraphicsSurface(_window, _instance));
         }
         //--------------------------------------------------------------------------
 
@@ -150,6 +153,11 @@ namespace Kmplete
             if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
             {
                 DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
+            }
+
+            if (_surface)
+            {
+                _surface.reset();
             }
 
             vkDestroyInstance(_instance, nullptr);
@@ -252,12 +260,14 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::_InitializeDebugMessenger()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
             {
                 const auto success = CreateDebugUtilsMessengerEXT(_instance, nullptr, &_debugMessenger);
                 if (success != VK_SUCCESS)
                 {
-                    KMP_LOG_ERROR("failed to setup debug messenger");
+                    KMP_LOG_CRITICAL("failed to setup debug messenger");
                     throw std::runtime_error("VulkanGraphicsBackend: failed to setup debug messenger");
                 }
             }
