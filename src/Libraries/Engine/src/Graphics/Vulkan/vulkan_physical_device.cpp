@@ -1,7 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
-#include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Base/optional.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -10,34 +9,71 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        static const Vector<const char*> DeviceExtensions = 
+        bool QueueFamilyIndices::IsValid() const noexcept
         {
-            VK_KHR_SWAPCHAIN_EXTENSION_NAME
-        };
+            return graphicsFamilyIndex.has_value() && presentFamilyIndex.has_value();
+        }
         //--------------------------------------------------------------------------
 
-        struct QueueFamilyIndices
-        {
-            Optional<UInt32> graphicsFamily;
-            Optional<UInt32> presentFamily;
 
-            bool IsComplete() const noexcept
+        const Vector<const char*>& VulkanPhysicalDevice::GetEnabledDeviceExtensions()
+        {
+            static const Vector<const char*> deviceExtensions =
             {
-                return graphicsFamily.has_value() && presentFamily.has_value();
+                VK_KHR_SWAPCHAIN_EXTENSION_NAME
+            };
+
+            return deviceExtensions;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanPhysicalDevice::VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface)
+            : PhysicalDevice()
+            , _instance(instance)
+            , _surface(surface)
+            , _physicalDevice(VK_NULL_HANDLE)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+            UInt32 deviceCount = 0;
+            vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
+            if (deviceCount == 0)
+            {
+                KMP_LOG_CRITICAL("failed to find GPUs with Vulkan support");
+                throw std::runtime_error("VulkanPhysicalDevice: failed to find GPUs with Vulkan support");
             }
-        };
+
+            Vector<VkPhysicalDevice> devices(deviceCount);
+            vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
+            for (const auto& device : devices)
+            {
+                const auto [deviceIsSuitable, deviceProperties] = _IsDeviceSuitable(device);
+                if (deviceIsSuitable)
+                {
+                    _physicalDevice = device;
+                    _properties = deviceProperties;
+                    break;
+                }
+            }
+
+            if (_physicalDevice == VK_NULL_HANDLE)
+            {
+                KMP_LOG_CRITICAL("failed to find a suitable GPU");
+                throw std::runtime_error("VulkanPhysicalDevice: failed to find a suitable GPU");
+            }
+        }
         //--------------------------------------------------------------------------
 
-        struct SwapChainSupportDetails
+        const PhysicalDeviceProperties& VulkanPhysicalDevice::GetProperties() const noexcept
         {
-            VkSurfaceCapabilitiesKHR capabilities;
-            Vector<VkSurfaceFormatKHR> formats;
-            Vector<VkPresentModeKHR> presentModes;
-        };
+            return _properties;
+        }
         //--------------------------------------------------------------------------
 
-        static QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device, const VkSurfaceKHR& surface)
+        QueueFamilyIndices VulkanPhysicalDevice::_FindQueueFamiliesIndices(VkPhysicalDevice device) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             QueueFamilyIndices indices;
 
             UInt32 queueFamilyCount = 0;
@@ -51,17 +87,17 @@ namespace Kmplete
             {
                 if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
                 {
-                    indices.graphicsFamily = index;
+                    indices.graphicsFamilyIndex = index;
                 }
 
                 VkBool32 presentFamilySupport = false;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surface, &presentFamilySupport);
+                vkGetPhysicalDeviceSurfaceSupportKHR(device, index, _surface, &presentFamilySupport);
                 if (presentFamilySupport)
                 {
-                    indices.presentFamily = index;
+                    indices.presentFamilyIndex = index;
                 }
 
-                if (indices.IsComplete())
+                if (indices.IsValid())
                 {
                     break;
                 }
@@ -73,15 +109,51 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        static bool CheckDeviceExtensionSupport(VkPhysicalDevice device)
+        std::pair<bool, PhysicalDeviceProperties> VulkanPhysicalDevice::_IsDeviceSuitable(VkPhysicalDevice device) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            const auto queueFamiliesIndices = _FindQueueFamiliesIndices(device);
+            if (!queueFamiliesIndices.IsValid())
+            {
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+            }
+
+            const auto extensionsSupported = _CheckDeviceExtensionSupport(device);
+            if (!extensionsSupported)
+            {
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+            }
+
+            const auto swapChainSupportDetails = _QuerySwapChainSupport(device);
+            if (swapChainSupportDetails.surfaceFormats.empty() || swapChainSupportDetails.presentModes.empty())
+            {
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+            }
+
+            VkPhysicalDeviceFeatures supportedFeatures;
+            vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+            if (!supportedFeatures.samplerAnisotropy)
+            {
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+            }
+
+            return { true, { queueFamiliesIndices, swapChainSupportDetails } };
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanPhysicalDevice::_CheckDeviceExtensionSupport(VkPhysicalDevice device) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             UInt32 extensionCount;
             vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
             Vector<VkExtensionProperties> availableExtensions(extensionCount);
             vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
-            Set<String> requiredExtensions(DeviceExtensions.begin(), DeviceExtensions.end());
+            const auto& enabledExtensions = GetEnabledDeviceExtensions();
+            Set<String> requiredExtensions(enabledExtensions.begin(), enabledExtensions.end());
 
             for (const auto& extension : availableExtensions)
             {
@@ -92,93 +164,30 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        static SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice device, const VkSurfaceKHR& surface)
+        SwapChainSupportDetails VulkanPhysicalDevice::_QuerySwapChainSupport(VkPhysicalDevice device) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             SwapChainSupportDetails details;
-            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &details.capabilities);
+            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, _surface, &details.surfaceCapabilities);
 
             UInt32 formatCount = 0;
-            vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(device, _surface, &formatCount, nullptr);
             if (formatCount != 0)
             {
-                details.formats.resize(formatCount);
-                vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, details.formats.data());
+                details.surfaceFormats.resize(formatCount);
+                vkGetPhysicalDeviceSurfaceFormatsKHR(device, _surface, &formatCount, details.surfaceFormats.data());
             }
 
             UInt32 presentModeCount = 0;
-            vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
+            vkGetPhysicalDeviceSurfacePresentModesKHR(device, _surface, &presentModeCount, nullptr);
             if (presentModeCount != 0)
             {
                 details.presentModes.resize(presentModeCount);
-                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, details.presentModes.data());
+                vkGetPhysicalDeviceSurfacePresentModesKHR(device, _surface, &presentModeCount, details.presentModes.data());
             }
 
             return details;
-        }
-        //--------------------------------------------------------------------------
-
-        static bool IsDeviceSuitable(VkPhysicalDevice device, const VkSurfaceKHR& surface)
-        {
-            const auto indices = FindQueueFamilies(device, surface);
-            if (!indices.IsComplete())
-            {
-                return false;
-            }
-
-            const auto extensionsSupported = CheckDeviceExtensionSupport(device);
-            if (!extensionsSupported)
-            {
-                return false;
-            }
-
-            const auto swapChainSupportDetails = QuerySwapChainSupport(device, surface);
-            if (swapChainSupportDetails.formats.empty() || swapChainSupportDetails.presentModes.empty())
-            {
-                return false;
-            }
-
-            VkPhysicalDeviceFeatures supportedFeatures;
-            vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-            if (!supportedFeatures.samplerAnisotropy)
-            {
-                return false;
-            }
-
-            return true;
-        }
-        //--------------------------------------------------------------------------
-
-
-        VulkanPhysicalDevice::VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface)
-            : PhysicalDevice()
-            , _instance(instance)
-            , _surface(surface)
-            , _physicalDevice(VK_NULL_HANDLE)
-        {
-            UInt32 deviceCount = 0;
-            vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
-            if (deviceCount == 0)
-            {
-                KMP_LOG_CRITICAL("failed to find GPUs with Vulkan support");
-                throw std::runtime_error("VulkanPhysicalDevice: failed to find GPUs with Vulkan support");
-            }
-
-            Vector<VkPhysicalDevice> devices(deviceCount);
-            vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
-            for (const auto& device : devices)
-            {
-                if (IsDeviceSuitable(device, _surface))
-                {
-                    _physicalDevice = device;
-                    break;
-                }
-            }
-
-            if (_physicalDevice == VK_NULL_HANDLE)
-            {
-                KMP_LOG_CRITICAL("failed to find a suitable GPU");
-                throw std::runtime_error("VulkanPhysicalDevice: failed to find a suitable GPU");
-            }
         }
         //--------------------------------------------------------------------------
     }
