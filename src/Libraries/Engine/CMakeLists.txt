@@ -78,6 +78,7 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_surface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_filtering.cpp
@@ -91,6 +92,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/OpenGL"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_texture.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_surface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"

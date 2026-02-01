@@ -51,10 +51,6 @@ namespace Kmplete
             //TODO: remove this call and move SetVSync and its settings to upper-level (e.g. Renderer)
             _window.SetVSync(true);
 
-            KMP_LOG_INFO("vendor - {}", reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
-            KMP_LOG_INFO("renderer - {}", reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
-            KMP_LOG_INFO("version - {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
-
             _surface.reset(new OpenGLGraphicsSurface(_window));
             _physicalDevice.reset(new OpenGLPhysicalDevice());
         }

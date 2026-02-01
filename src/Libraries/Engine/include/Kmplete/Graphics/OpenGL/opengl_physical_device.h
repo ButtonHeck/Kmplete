@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Graphics/physical_device.h"
 
 
 namespace Kmplete
@@ -14,7 +14,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(OpenGLPhysicalDevice)
 
         public:
-            OpenGLPhysicalDevice() = default;
+            KMP_API OpenGLPhysicalDevice();
             ~OpenGLPhysicalDevice() = default;
         };
         //--------------------------------------------------------------------------

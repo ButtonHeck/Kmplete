@@ -41,5 +41,11 @@ namespace Kmplete
             return _window.GetGraphicsBackendType();
         }
         //--------------------------------------------------------------------------
+
+        const PhysicalDevice& GraphicsBackend::GetPhysicalDevice() const noexcept
+        {
+            return *_physicalDevice.get();
+        }
+        //--------------------------------------------------------------------------
     }
 }

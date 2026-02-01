@@ -61,6 +61,9 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("failed to find a suitable GPU");
                 throw std::runtime_error("VulkanPhysicalDevice: failed to find a suitable GPU");
             }
+
+            _QueryInfo();
+            PrintInfo();
         }
         //--------------------------------------------------------------------------
 
@@ -188,6 +191,27 @@ namespace Kmplete
             }
 
             return details;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_QueryInfo()
+        {
+            VkPhysicalDeviceVulkan12Properties propertiesVersion12{};
+            propertiesVersion12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
+            propertiesVersion12.pNext = nullptr;
+
+            VkPhysicalDeviceVulkan11Properties propertiesVersion11{};
+            propertiesVersion11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
+            propertiesVersion11.pNext = &propertiesVersion12;
+
+            VkPhysicalDeviceProperties2 properties{};
+            properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+            properties.pNext = &propertiesVersion11;
+            vkGetPhysicalDeviceProperties2(_physicalDevice, &properties);
+
+            _info.vendor = propertiesVersion12.driverName;
+            _info.name = properties.properties.deviceName;
+            _info.driverVersion = propertiesVersion12.driverInfo;
         }
         //--------------------------------------------------------------------------
     }

@@ -65,6 +65,7 @@ namespace Kmplete
             KMP_NODISCARD std::pair<bool, PhysicalDeviceProperties> _IsDeviceSuitable(VkPhysicalDevice device) const;
             KMP_NODISCARD bool _CheckDeviceExtensionSupport(VkPhysicalDevice device) const;
             KMP_NODISCARD SwapChainSupportDetails _QuerySwapChainSupport(VkPhysicalDevice device) const;
+            void _QueryInfo();
 
         private:
             const VkInstance& _instance;

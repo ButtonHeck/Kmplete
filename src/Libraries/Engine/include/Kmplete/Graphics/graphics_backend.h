@@ -30,6 +30,7 @@ namespace Kmplete
             virtual ~GraphicsBackend() = default;
 
             KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
+            KMP_NODISCARD KMP_API const PhysicalDevice& GetPhysicalDevice() const noexcept;
 
         protected:
             Window& _window;
