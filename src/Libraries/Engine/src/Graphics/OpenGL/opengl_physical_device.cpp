@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/OpenGL/opengl_physical_device.h"
+#include "Kmplete/Graphics/OpenGL/opengl_logical_device.h"
 
 #include <glad/glad.h>
 
@@ -19,6 +20,14 @@ namespace Kmplete
             _info.msaaSamples = samples;
 
             PrintInfo();
+
+            _logicalDevice.reset(new OpenGLLogicalDevice());
+        }
+        //--------------------------------------------------------------------------
+
+        OpenGLPhysicalDevice::~OpenGLPhysicalDevice()
+        {
+            _logicalDevice.reset();
         }
         //--------------------------------------------------------------------------
     }

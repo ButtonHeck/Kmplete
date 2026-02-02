@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_properties.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -16,36 +17,6 @@ namespace Kmplete
     namespace Graphics
     {
         //TODO: comments
-        struct QueueFamilyIndices
-        {
-            Optional<UInt32> graphicsFamilyIndex;
-            Optional<UInt32> presentFamilyIndex;
-
-            bool IsValid() const noexcept;
-        };
-        //--------------------------------------------------------------------------
-
-
-        //TODO: comments
-        struct SwapChainSupportDetails
-        {
-            VkSurfaceCapabilitiesKHR surfaceCapabilities;
-            Vector<VkSurfaceFormatKHR> surfaceFormats;
-            Vector<VkPresentModeKHR> presentModes;
-        };
-        //--------------------------------------------------------------------------
-
-
-        //TODO: comments
-        struct PhysicalDeviceProperties
-        {
-            QueueFamilyIndices queueFamiliesIndices;
-            SwapChainSupportDetails swapChainSupportDetails;
-        };
-        //--------------------------------------------------------------------------
-
-
-        //TODO: comments
         class VulkanPhysicalDevice : public PhysicalDevice
         {
             KMP_DISABLE_COPY_MOVE(VulkanPhysicalDevice)
@@ -56,7 +27,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface);
-            ~VulkanPhysicalDevice() = default;
+            KMP_API ~VulkanPhysicalDevice();
 
             KMP_NODISCARD KMP_API const PhysicalDeviceProperties& GetProperties() const noexcept;
 

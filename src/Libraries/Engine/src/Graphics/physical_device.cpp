@@ -7,6 +7,7 @@ namespace Kmplete
     namespace Graphics
     {
         PhysicalDevice::PhysicalDevice() noexcept
+            : _logicalDevice(nullptr)
         {
             _info.vendor = "Unknown";
             _info.name = "Unknown";

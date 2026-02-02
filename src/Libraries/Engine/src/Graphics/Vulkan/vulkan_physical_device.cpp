@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -9,13 +10,6 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        bool QueueFamilyIndices::IsValid() const noexcept
-        {
-            return graphicsFamilyIndex.has_value() && presentFamilyIndex.has_value();
-        }
-        //--------------------------------------------------------------------------
-
-
         const Vector<const char*>& VulkanPhysicalDevice::GetEnabledDeviceExtensions()
         {
             static const Vector<const char*> deviceExtensions =
@@ -64,6 +58,14 @@ namespace Kmplete
 
             _QueryInfo();
             PrintInfo();
+
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _properties));
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanPhysicalDevice::~VulkanPhysicalDevice()
+        {
+            _logicalDevice.reset();
         }
         //--------------------------------------------------------------------------
 
