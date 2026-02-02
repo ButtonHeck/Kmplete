@@ -21,10 +21,12 @@ namespace Kmplete
                 String vendor;
                 String name;
                 String driverVersion;
+
+                UInt32 msaaSamples;
             };
 
         public:
-            PhysicalDevice() = default;
+            PhysicalDevice() noexcept;
             virtual ~PhysicalDevice() = default;
 
             KMP_NODISCARD KMP_API const Info& GetInfo() const noexcept;

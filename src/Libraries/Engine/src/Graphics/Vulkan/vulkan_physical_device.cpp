@@ -204,14 +204,33 @@ namespace Kmplete
             propertiesVersion11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
             propertiesVersion11.pNext = &propertiesVersion12;
 
-            VkPhysicalDeviceProperties2 properties{};
-            properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-            properties.pNext = &propertiesVersion11;
-            vkGetPhysicalDeviceProperties2(_physicalDevice, &properties);
+            VkPhysicalDeviceProperties2 properties2{};
+            properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+            properties2.pNext = &propertiesVersion11;
+            vkGetPhysicalDeviceProperties2(_physicalDevice, &properties2);
 
             _info.vendor = propertiesVersion12.driverName;
-            _info.name = properties.properties.deviceName;
+            _info.name = properties2.properties.deviceName;
             _info.driverVersion = propertiesVersion12.driverInfo;
+
+            VkPhysicalDeviceProperties properties;
+            vkGetPhysicalDeviceProperties(_physicalDevice, &properties);
+
+            VkSampleCountFlags sampleCounts = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
+            if (sampleCounts & VK_SAMPLE_COUNT_64_BIT)
+                _info.msaaSamples = 64;
+            else if (sampleCounts & VK_SAMPLE_COUNT_32_BIT)
+                _info.msaaSamples = 32;
+            else if (sampleCounts & VK_SAMPLE_COUNT_16_BIT)
+                _info.msaaSamples = 16;
+            else if (sampleCounts & VK_SAMPLE_COUNT_8_BIT)
+                _info.msaaSamples = 8;
+            else if (sampleCounts & VK_SAMPLE_COUNT_4_BIT)
+                _info.msaaSamples = 4;
+            else if (sampleCounts & VK_SAMPLE_COUNT_2_BIT)
+                _info.msaaSamples = 2;
+            else
+                _info.msaaSamples = 1;
         }
         //--------------------------------------------------------------------------
     }

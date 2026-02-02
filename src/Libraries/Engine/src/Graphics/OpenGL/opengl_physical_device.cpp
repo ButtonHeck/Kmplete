@@ -14,6 +14,10 @@ namespace Kmplete
             _info.name = String(reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
             _info.driverVersion = String(reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 
+            GLint samples = 0;
+            glGetIntegerv(GL_MAX_SAMPLES, &samples);
+            _info.msaaSamples = samples;
+
             PrintInfo();
         }
         //--------------------------------------------------------------------------
