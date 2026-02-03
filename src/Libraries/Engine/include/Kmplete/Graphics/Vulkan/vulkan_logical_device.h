@@ -19,7 +19,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const PhysicalDeviceProperties& properties);
+            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties);
             KMP_API ~VulkanLogicalDevice();
 
             KMP_NODISCARD KMP_API const VkDevice& GetImplDevice() const noexcept;
@@ -28,6 +28,7 @@ namespace Kmplete
 
         private:
             const VkPhysicalDevice& _physicalDevice;
+            const VkSurfaceKHR& _surface;
             const PhysicalDeviceProperties& _properties;
             VkDevice _device;
             VkQueue _graphicsQueue;

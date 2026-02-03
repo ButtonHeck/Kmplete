@@ -59,7 +59,7 @@ namespace Kmplete
             _QueryInfo();
             PrintInfo();
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _properties));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _properties));
         }
         //--------------------------------------------------------------------------
 

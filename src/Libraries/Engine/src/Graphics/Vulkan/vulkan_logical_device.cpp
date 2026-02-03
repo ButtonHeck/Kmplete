@@ -11,9 +11,10 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const PhysicalDeviceProperties& properties)
+        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
+            , _surface(surface)
             , _properties(properties)
             , _device(nullptr)
             , _graphicsQueue(nullptr)
