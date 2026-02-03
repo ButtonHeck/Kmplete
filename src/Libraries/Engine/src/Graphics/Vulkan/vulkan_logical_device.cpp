@@ -16,6 +16,8 @@ namespace Kmplete
             , _physicalDevice(physicalDevice)
             , _properties(properties)
             , _device(nullptr)
+            , _graphicsQueue(nullptr)
+            , _presentQueue(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -53,12 +55,45 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("failed to create logical device");
                 throw std::runtime_error("VulkanLogicalDevice: failed to create logical device");
             }
+
+            vkGetDeviceQueue(_device, queueFamiliesIndices.graphicsFamilyIndex.value(), 0, &_graphicsQueue);
+            vkGetDeviceQueue(_device, queueFamiliesIndices.presentFamilyIndex.value(), 0, &_presentQueue);
+
+            if (_graphicsQueue == nullptr)
+            {
+                KMP_LOG_CRITICAL("failed to get graphics queue from logical device");
+                throw std::runtime_error("VulkanLogicalDevice: failed to get graphics queue from logical device");
+            }
+
+            if (_presentQueue == nullptr)
+            {
+                KMP_LOG_CRITICAL("failed to get present queue from logical device");
+                throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
+            }
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
             vkDestroyDevice(_device, nullptr);
+        }
+        //--------------------------------------------------------------------------
+
+        const VkDevice& VulkanLogicalDevice::GetImplDevice() const noexcept
+        {
+            return _device;
+        }
+        //--------------------------------------------------------------------------
+
+        const VkQueue& VulkanLogicalDevice::GetGraphicsQueue() const noexcept
+        {
+            return _graphicsQueue;
+        }
+        //--------------------------------------------------------------------------
+
+        const VkQueue& VulkanLogicalDevice::GetPresentQueue() const noexcept
+        {
+            return _presentQueue;
         }
         //--------------------------------------------------------------------------
     }

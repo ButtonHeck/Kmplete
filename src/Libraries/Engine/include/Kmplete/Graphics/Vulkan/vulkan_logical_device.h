@@ -22,10 +22,16 @@ namespace Kmplete
             KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const PhysicalDeviceProperties& properties);
             KMP_API ~VulkanLogicalDevice();
 
+            KMP_NODISCARD KMP_API const VkDevice& GetImplDevice() const noexcept;
+            KMP_NODISCARD KMP_API const VkQueue& GetGraphicsQueue() const noexcept;
+            KMP_NODISCARD KMP_API const VkQueue& GetPresentQueue() const noexcept;
+
         private:
             const VkPhysicalDevice& _physicalDevice;
             const PhysicalDeviceProperties& _properties;
             VkDevice _device;
+            VkQueue _graphicsQueue;
+            VkQueue _presentQueue;
         };
         //--------------------------------------------------------------------------
     }
