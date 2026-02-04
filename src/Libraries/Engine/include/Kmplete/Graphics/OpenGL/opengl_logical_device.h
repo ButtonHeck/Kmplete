@@ -16,6 +16,9 @@ namespace Kmplete
         public:
             KMP_API OpenGLLogicalDevice() noexcept;
             KMP_API ~OpenGLLogicalDevice();
+
+            KMP_API void CreateSwapchain() override;
+            KMP_API void DeleteSwapchain() override;
         };
         //--------------------------------------------------------------------------
     }

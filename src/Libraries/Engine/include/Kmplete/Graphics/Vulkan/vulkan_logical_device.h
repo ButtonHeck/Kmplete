@@ -25,6 +25,9 @@ namespace Kmplete
             KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const Window& window);
             KMP_API ~VulkanLogicalDevice();
 
+            KMP_API void CreateSwapchain() override;
+            KMP_API void DeleteSwapchain() override;
+
             KMP_NODISCARD KMP_API const VkDevice& GetImplDevice() const noexcept;
             KMP_NODISCARD KMP_API const VkQueue& GetGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API const VkQueue& GetPresentQueue() const noexcept;

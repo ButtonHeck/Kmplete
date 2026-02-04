@@ -75,14 +75,26 @@ namespace Kmplete
                 throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
             }
 
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _window));
+            CreateSwapchain();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
-            _swapchain.reset();
+            DeleteSwapchain();
             vkDestroyDevice(_device, nullptr);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::CreateSwapchain()
+        {
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _window));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::DeleteSwapchain()
+        {
+            _swapchain.reset();
         }
         //--------------------------------------------------------------------------
 

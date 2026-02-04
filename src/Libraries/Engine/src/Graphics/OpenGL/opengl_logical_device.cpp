@@ -8,11 +8,23 @@ namespace Kmplete
     {
         OpenGLLogicalDevice::OpenGLLogicalDevice() noexcept
         {
-            _swapchain.reset(new OpenGLSwapchain());
+            CreateSwapchain();
         }
         //--------------------------------------------------------------------------
 
         OpenGLLogicalDevice::~OpenGLLogicalDevice()
+        {
+            DeleteSwapchain();
+        }
+        //--------------------------------------------------------------------------
+
+        void OpenGLLogicalDevice::CreateSwapchain()
+        {
+            _swapchain.reset(new OpenGLSwapchain());
+        }
+        //--------------------------------------------------------------------------
+
+        void OpenGLLogicalDevice::DeleteSwapchain()
         {
             _swapchain.reset();
         }
