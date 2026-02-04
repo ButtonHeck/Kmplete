@@ -48,6 +48,15 @@ namespace Kmplete
                 {
                     _physicalDevice = device;
                     _properties = deviceProperties;
+
+                    VkPhysicalDeviceMemoryProperties memoryProperties;
+                    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &memoryProperties);
+                    _properties.hardwareProperties.memoryProperties = memoryProperties;
+
+                    VkPhysicalDeviceProperties physicalDeviceProperties;
+                    vkGetPhysicalDeviceProperties(_physicalDevice, &physicalDeviceProperties);
+                    _properties.hardwareProperties.deviceProperties = physicalDeviceProperties;
+
                     break;
                 }
             }
@@ -123,29 +132,29 @@ namespace Kmplete
             const auto queueFamiliesIndices = _FindQueueFamiliesIndices(device);
             if (!queueFamiliesIndices.IsValid())
             {
-                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails(), HardwareProperties() }};
             }
 
             const auto extensionsSupported = _CheckDeviceExtensionSupport(device);
             if (!extensionsSupported)
             {
-                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails(), HardwareProperties() } };
             }
 
             const auto swapChainSupportDetails = _QuerySwapChainSupport(device);
             if (swapChainSupportDetails.surfaceFormats.empty() || swapChainSupportDetails.presentModes.empty())
             {
-                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails(), HardwareProperties() } };
             }
 
             VkPhysicalDeviceFeatures supportedFeatures;
             vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
             if (!supportedFeatures.samplerAnisotropy)
             {
-                return { false, { QueueFamilyIndices(), SwapChainSupportDetails() } };
+                return { false, { QueueFamilyIndices(), SwapChainSupportDetails(), HardwareProperties() } };
             }
 
-            return { true, { queueFamiliesIndices, swapChainSupportDetails } };
+            return { true, { queueFamiliesIndices, swapChainSupportDetails, HardwareProperties() } };
         }
         //--------------------------------------------------------------------------
 
@@ -217,9 +226,7 @@ namespace Kmplete
             _info.name = properties2.properties.deviceName;
             _info.driverVersion = propertiesVersion12.driverInfo;
 
-            VkPhysicalDeviceProperties properties;
-            vkGetPhysicalDeviceProperties(_physicalDevice, &properties);
-
+            const auto& properties = _properties.hardwareProperties.deviceProperties;
             VkSampleCountFlags sampleCounts = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
             if (sampleCounts & VK_SAMPLE_COUNT_64_BIT)
                 _info.msaaSamples = 64;

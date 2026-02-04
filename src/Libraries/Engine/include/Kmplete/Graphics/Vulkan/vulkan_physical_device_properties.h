@@ -35,10 +35,20 @@ namespace Kmplete
 
 
         //TODO: comments
+        struct HardwareProperties
+        {
+            VkPhysicalDeviceMemoryProperties memoryProperties;
+            VkPhysicalDeviceProperties deviceProperties;
+        };
+        //--------------------------------------------------------------------------
+
+
+        //TODO: comments
         struct PhysicalDeviceProperties
         {
             QueueFamilyIndices queueFamiliesIndices;
             SwapChainSupportDetails swapChainSupportDetails;
+            HardwareProperties hardwareProperties;
         };
         //--------------------------------------------------------------------------
     }
