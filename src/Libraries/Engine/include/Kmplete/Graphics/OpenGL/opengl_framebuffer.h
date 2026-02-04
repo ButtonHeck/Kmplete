@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Kmplete/Graphics/swapchain.h"
+#include "Kmplete/Graphics/framebuffer.h"
 #include "Kmplete/Base/kmplete_api.h"
 
 
@@ -9,13 +9,13 @@ namespace Kmplete
     namespace Graphics
     {
         //TODO: comments
-        class OpenGLSwapchain : public Swapchain
+        class OpenGLFramebuffer : public Framebuffer
         {
-            KMP_DISABLE_COPY_MOVE(OpenGLSwapchain)
+            KMP_DISABLE_COPY_MOVE(OpenGLFramebuffer)
 
         public:
-            KMP_API OpenGLSwapchain() noexcept;
-            KMP_API ~OpenGLSwapchain();
+            OpenGLFramebuffer() = default;
+            ~OpenGLFramebuffer() = default;
         };
         //--------------------------------------------------------------------------
     }

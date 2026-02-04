@@ -167,6 +167,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        //TODO: duplicate with framebuffer
         VkImageView VulkanSwapchain::_CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels)
         {
             VkImageViewCreateInfo viewInfo{};
