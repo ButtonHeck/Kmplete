@@ -31,6 +31,9 @@ namespace Kmplete
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
             KMP_NODISCARD VkExtent2D _ChooseExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 
+            void _CreateImageViews();
+            KMP_NODISCARD VkImageView _CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels);
+
         private:
             const VkDevice& _device;
             const VkSurfaceKHR& _surface;
@@ -40,6 +43,7 @@ namespace Kmplete
             Vector<VkImage> _swapchainImages;
             VkFormat _swapchainImageFormat;
             VkExtent2D _swapchainExtent;
+            Vector<VkImageView> _swapchainImageViews;
         };
         //--------------------------------------------------------------------------
     }

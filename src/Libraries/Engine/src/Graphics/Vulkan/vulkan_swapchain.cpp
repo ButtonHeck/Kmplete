@@ -23,6 +23,7 @@ namespace Kmplete
             , _swapchainImages()
             , _swapchainImageFormat()
             , _swapchainExtent()
+            , _swapchainImageViews()
         {
             const auto& swapchainDetails = properties.swapChainSupportDetails;
 
@@ -86,11 +87,18 @@ namespace Kmplete
 
             _swapchainImageFormat = surfaceFormat.format;
             _swapchainExtent = extent;
+
+            _CreateImageViews();
         }
         //--------------------------------------------------------------------------
 
         VulkanSwapchain::~VulkanSwapchain()
         {
+            for (auto imageView : _swapchainImageViews)
+            {
+                vkDestroyImageView(_device, imageView, nullptr);
+            }
+
             vkDestroySwapchainKHR(_device, _swapchain, nullptr);
         }
         //--------------------------------------------------------------------------
@@ -146,6 +154,40 @@ namespace Kmplete
             };
 
             return actualExtent;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_CreateImageViews()
+        {
+            _swapchainImageViews.resize(_swapchainImages.size());
+            for (size_t i = 0; i < _swapchainImages.size(); i++)
+            {
+                _swapchainImageViews[i] = _CreateImageView(_swapchainImages[i], _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanSwapchain::_CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels)
+        {
+            VkImageViewCreateInfo viewInfo{};
+            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+            viewInfo.image = image;
+            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewInfo.format = format;
+            viewInfo.subresourceRange.aspectMask = aspectFlags;
+            viewInfo.subresourceRange.baseMipLevel = 0;
+            viewInfo.subresourceRange.levelCount = mipLevels;
+            viewInfo.subresourceRange.baseArrayLayer = 0;
+            viewInfo.subresourceRange.layerCount = 1;
+
+            VkImageView imageView;
+            if (vkCreateImageView(_device, &viewInfo, nullptr, &imageView) != VK_SUCCESS)
+            {
+                KMP_LOG_CRITICAL("failed to create texture image view");
+                throw std::runtime_error("VulkanSwapchain: failed to create texture image view");
+            }
+
+            return imageView;
         }
         //--------------------------------------------------------------------------
     }

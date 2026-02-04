@@ -27,6 +27,7 @@ namespace Kmplete
 
             KMP_API void CreateSwapchain() override;
             KMP_API void DeleteSwapchain() override;
+            KMP_API void RecreateSwapchain() override;
 
             KMP_NODISCARD KMP_API const VkDevice& GetImplDevice() const noexcept;
             KMP_NODISCARD KMP_API const VkQueue& GetGraphicsQueue() const noexcept;

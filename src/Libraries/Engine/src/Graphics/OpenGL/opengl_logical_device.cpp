@@ -29,5 +29,12 @@ namespace Kmplete
             _swapchain.reset();
         }
         //--------------------------------------------------------------------------
+
+        void OpenGLLogicalDevice::RecreateSwapchain()
+        {
+            DeleteSwapchain();
+            CreateSwapchain();
+        }
+        //--------------------------------------------------------------------------
     }
 }

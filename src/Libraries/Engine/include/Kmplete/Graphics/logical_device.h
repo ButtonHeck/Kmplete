@@ -20,6 +20,7 @@ namespace Kmplete
 
             KMP_API virtual void CreateSwapchain() = 0;
             KMP_API virtual void DeleteSwapchain() = 0;
+            KMP_API virtual void RecreateSwapchain() = 0;
 
         protected:
             UPtr<Swapchain> _swapchain;

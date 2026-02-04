@@ -6,6 +6,10 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
+#if defined (KMP_WINDOW_BACKEND_GLFW)
+    #include <GLFW/glfw3.h>
+#endif
+
 #include <stdexcept>
 
 
@@ -95,6 +99,20 @@ namespace Kmplete
         void VulkanLogicalDevice::DeleteSwapchain()
         {
             _swapchain.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::RecreateSwapchain()
+        {
+            while (_window.IsIconified())
+            {
+                glfwWaitEvents();
+            }
+
+            vkDeviceWaitIdle(_device);
+
+            DeleteSwapchain();
+            CreateSwapchain();
         }
         //--------------------------------------------------------------------------
 
