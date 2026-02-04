@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Kmplete/Graphics/logical_device.h"
 #include "Kmplete/Base/kmplete_api.h"
 
 
@@ -9,13 +8,13 @@ namespace Kmplete
     namespace Graphics
     {
         //TODO: comments
-        class OpenGLLogicalDevice : public LogicalDevice
+        class Swapchain
         {
-            KMP_DISABLE_COPY_MOVE(OpenGLLogicalDevice)
+            KMP_DISABLE_COPY_MOVE(Swapchain)
 
         public:
-            KMP_API OpenGLLogicalDevice() noexcept;
-            KMP_API ~OpenGLLogicalDevice();
+            Swapchain() = default;
+            virtual ~Swapchain() = default;
         };
         //--------------------------------------------------------------------------
     }

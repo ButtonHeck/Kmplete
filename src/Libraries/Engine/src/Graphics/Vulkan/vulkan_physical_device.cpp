@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -21,10 +22,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanPhysicalDevice::VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface)
+        VulkanPhysicalDevice::VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window)
             : PhysicalDevice()
             , _instance(instance)
             , _surface(surface)
+            , _window(window)
             , _physicalDevice(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -59,7 +61,7 @@ namespace Kmplete
             _QueryInfo();
             PrintInfo();
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _properties));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _properties, _window));
         }
         //--------------------------------------------------------------------------
 

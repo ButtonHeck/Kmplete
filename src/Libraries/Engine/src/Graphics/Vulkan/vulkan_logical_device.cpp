@@ -1,5 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -11,11 +13,12 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties)
+        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const Window& window)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
             , _properties(properties)
+            , _window(window)
             , _device(nullptr)
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
@@ -71,11 +74,14 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("failed to get present queue from logical device");
                 throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
             }
+
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _window));
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
+            _swapchain.reset();
             vkDestroyDevice(_device, nullptr);
         }
         //--------------------------------------------------------------------------

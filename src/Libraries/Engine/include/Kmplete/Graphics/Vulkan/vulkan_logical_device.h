@@ -10,6 +10,9 @@
 
 namespace Kmplete
 {
+    class Window;
+
+
     namespace Graphics
     {
         //TODO: comments
@@ -19,7 +22,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties);
+            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const Window& window);
             KMP_API ~VulkanLogicalDevice();
 
             KMP_NODISCARD KMP_API const VkDevice& GetImplDevice() const noexcept;
@@ -30,6 +33,7 @@ namespace Kmplete
             const VkPhysicalDevice& _physicalDevice;
             const VkSurfaceKHR& _surface;
             const PhysicalDeviceProperties& _properties;
+            const Window& _window;
             VkDevice _device;
             VkQueue _graphicsQueue;
             VkQueue _presentQueue;

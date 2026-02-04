@@ -14,6 +14,9 @@
 
 namespace Kmplete
 {
+    class Window;
+
+
     namespace Graphics
     {
         //TODO: comments
@@ -26,7 +29,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API static const Vector<const char*>& GetEnabledDeviceExtensions();
 
         public:
-            KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface);
+            KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window);
             KMP_API ~VulkanPhysicalDevice();
 
             KMP_NODISCARD KMP_API const PhysicalDeviceProperties& GetProperties() const noexcept;
@@ -41,6 +44,7 @@ namespace Kmplete
         private:
             const VkInstance& _instance;
             const VkSurfaceKHR& _surface;
+            const Window& _window;
             VkPhysicalDevice _physicalDevice;
             PhysicalDeviceProperties _properties;
         };

@@ -146,12 +146,14 @@ namespace Kmplete
             _InitializeDebugMessenger();
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
-            _physicalDevice.reset(new VulkanPhysicalDevice(_instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetImplSurface()));
+            _physicalDevice.reset(new VulkanPhysicalDevice(_instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetImplSurface(), _window));
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::_Finalize()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
             {
                 DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
