@@ -20,11 +20,11 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent);
+            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent, 
+                                    const VkSurfaceFormatKHR& surfaceFormat, const VkFormat& depthFormat);
             KMP_API ~VulkanSwapchain();
 
         private:
-            KMP_NODISCARD VkSurfaceFormatKHR _ChooseSurfaceFormat(const Vector<VkSurfaceFormatKHR>& availableFormats) const;
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
 
             void _CreateImageViews();
@@ -39,6 +39,8 @@ namespace Kmplete
             const VkSurfaceKHR& _surface;
             const PhysicalDeviceProperties& _properties;
             const VkExtent2D& _swapchainExtent;
+            const VkSurfaceFormatKHR& _surfaceFormat;
+            const VkFormat& _depthFormat;
 
             VkSwapchainKHR _swapchain;
             Vector<VkImage> _swapchainImages;

@@ -5,9 +5,5 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        Swapchain::Swapchain() noexcept
-            : _framebuffers()
-        {}
-        //--------------------------------------------------------------------------
     }
 }

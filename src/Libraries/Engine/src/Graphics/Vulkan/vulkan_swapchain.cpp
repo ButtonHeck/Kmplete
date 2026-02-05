@@ -1,7 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Log/log.h"
 
-#include <limits>
 #include <algorithm>
 #include <stdexcept>
 
@@ -10,15 +9,18 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent)
+        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent, 
+                                         const VkSurfaceFormatKHR& surfaceFormat, const VkFormat& depthFormat)
             : Swapchain()
             , _device(device)
             , _surface(surface)
             , _properties(properties)
             , _swapchainExtent(swapchainExtent)
+            , _surfaceFormat(surfaceFormat)
+            , _depthFormat(depthFormat)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageFormat()
+            , _swapchainImageFormat(_surfaceFormat.format)
             , _swapchainImageViews()
             , _colorImage(VK_NULL_HANDLE)
             , _colorImageMemory(VK_NULL_HANDLE)
@@ -29,7 +31,6 @@ namespace Kmplete
         {
             const auto& swapchainDetails = properties.swapChainSupportDetails;
 
-            const auto surfaceFormat = _ChooseSurfaceFormat(swapchainDetails.surfaceFormats);
             const auto presentMode = _ChoosePresentMode(swapchainDetails.presentModes);
 
             UInt32 imageCount = swapchainDetails.surfaceCapabilities.minImageCount + 1;
@@ -42,8 +43,8 @@ namespace Kmplete
             createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
             createInfo.surface = _surface;
             createInfo.minImageCount = imageCount;
-            createInfo.imageFormat = surfaceFormat.format;
-            createInfo.imageColorSpace = surfaceFormat.colorSpace;
+            createInfo.imageFormat = _surfaceFormat.format;
+            createInfo.imageColorSpace = _surfaceFormat.colorSpace;
             createInfo.imageExtent = _swapchainExtent;
             createInfo.imageArrayLayers = 1;
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
@@ -86,8 +87,6 @@ namespace Kmplete
                 }
             }
 
-            _swapchainImageFormat = surfaceFormat.format;
-
             _CreateImageViews();
 
             const auto& deviceProperties = _properties.hardwareProperties.deviceProperties;
@@ -106,15 +105,15 @@ namespace Kmplete
             else if (sampleCounts & VK_SAMPLE_COUNT_2_BIT)
                 sampleCountBits = VK_SAMPLE_COUNT_2_BIT;
 
-            //_CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, sampleCountBits, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
-            //    VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-            //    VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImage, _colorImageMemory);
-            //_colorImageView = _CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, sampleCountBits, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
+                VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImage, _colorImageMemory);
+            _colorImageView = _CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
-            //_CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, sampleCountBits, _depthFormat, VK_IMAGE_TILING_OPTIMAL,
-            //    VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-            //    VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImage, _depthImageMemory);
-            //_depthImageView = _CreateImageView(_depthImage, _depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, sampleCountBits, _depthFormat, VK_IMAGE_TILING_OPTIMAL,
+                VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImage, _depthImageMemory);
+            _depthImageView = _CreateImageView(_depthImage, _depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
 
@@ -128,34 +127,12 @@ namespace Kmplete
             vkDestroyImage(_device, _depthImage, nullptr);
             vkFreeMemory(_device, _depthImageMemory, nullptr);
 
-            _framebuffers.clear();
-
             for (auto imageView : _swapchainImageViews)
             {
                 vkDestroyImageView(_device, imageView, nullptr);
             }
 
             vkDestroySwapchainKHR(_device, _swapchain, nullptr);
-        }
-        //--------------------------------------------------------------------------
-
-        VkSurfaceFormatKHR VulkanSwapchain::_ChooseSurfaceFormat(const Vector<VkSurfaceFormatKHR>& availableFormats) const
-        {
-            if (availableFormats.empty())
-            {
-                KMP_LOG_CRITICAL("unable to get available surface format");
-                throw std::runtime_error("VulkanSwapchain: unable to get available surface format");
-            }
-
-            for (const auto& availableFormat : availableFormats)
-            {
-                if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    return availableFormat;
-                }
-            }
-
-            return availableFormats[0];
         }
         //--------------------------------------------------------------------------
 

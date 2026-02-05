@@ -1,9 +1,6 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Base/pointers.h"
-#include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Graphics/framebuffer.h"
 
 
 namespace Kmplete
@@ -16,11 +13,8 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(Swapchain)
 
         public:
-            KMP_API Swapchain() noexcept;
+            Swapchain() = default;
             virtual ~Swapchain() = default;
-
-        protected:
-            Vector<UPtr<Framebuffer>> _framebuffers;
         };
         //--------------------------------------------------------------------------
     }

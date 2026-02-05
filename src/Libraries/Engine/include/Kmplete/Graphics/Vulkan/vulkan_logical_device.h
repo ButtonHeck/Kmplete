@@ -35,6 +35,9 @@ namespace Kmplete
 
         private:
             KMP_NODISCARD VkExtent2D _ChooseExtent() const;
+            KMP_NODISCARD VkSurfaceFormatKHR _ChooseSurfaceFormat() const;
+            KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
+            KMP_NODISCARD VkFormat _FindDepthFormat() const;
 
         private:
             const VkPhysicalDevice& _physicalDevice;

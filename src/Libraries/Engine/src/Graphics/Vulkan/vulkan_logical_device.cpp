@@ -12,6 +12,7 @@
     #include <GLFW/glfw3.h>
 #endif
 
+#include <limits>
 #include <stdexcept>
 
 
@@ -82,7 +83,6 @@ namespace Kmplete
                 throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
             }
 
-            _currentExtent = _ChooseExtent();
             CreateSwapchain();
         }
         //--------------------------------------------------------------------------
@@ -97,7 +97,9 @@ namespace Kmplete
         void VulkanLogicalDevice::CreateSwapchain()
         {
             _currentExtent = _ChooseExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _currentExtent));
+            const auto surfaceFormat = _ChooseSurfaceFormat();
+            const auto depthFormat = _FindDepthFormat();
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _currentExtent, surfaceFormat, depthFormat));
         }
         //--------------------------------------------------------------------------
 
@@ -154,6 +156,58 @@ namespace Kmplete
             };
 
             return actualExtent;
+        }
+        //--------------------------------------------------------------------------
+
+        VkSurfaceFormatKHR VulkanLogicalDevice::_ChooseSurfaceFormat() const
+        {
+            const auto& availableFormats = _properties.swapChainSupportDetails.surfaceFormats;
+            if (availableFormats.empty())
+            {
+                KMP_LOG_CRITICAL("unable to get available surface format");
+                throw std::runtime_error("VulkanLogicalDevice: unable to get available surface format");
+            }
+
+            for (const auto& availableFormat : availableFormats)
+            {
+                if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    return availableFormat;
+                }
+            }
+
+            return availableFormats[0];
+        }
+        //--------------------------------------------------------------------------
+
+        VkFormat VulkanLogicalDevice::_FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
+        {
+            for (auto format : candidates)
+            {
+                VkFormatProperties props;
+                vkGetPhysicalDeviceFormatProperties(_physicalDevice, format, &props);
+
+                if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
+                {
+                    return format;
+                }
+                else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
+                {
+                    return format;
+                }
+            }
+
+            KMP_LOG_CRITICAL("failed to find supported format");
+            throw std::runtime_error("VulkanLogicalDevice: failed to find supported format");
+        }
+        //--------------------------------------------------------------------------
+
+        VkFormat VulkanLogicalDevice::_FindDepthFormat() const
+        {
+            return _FindSupportedFormat(
+                { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT }, 
+                VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+            );
         }
         //--------------------------------------------------------------------------
     }
