@@ -11,9 +11,6 @@
 
 namespace Kmplete
 {
-    class Window;
-
-
     namespace Graphics
     {
         //TODO: comments
@@ -23,27 +20,38 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const Window& window);
+            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent);
             KMP_API ~VulkanSwapchain();
 
         private:
             KMP_NODISCARD VkSurfaceFormatKHR _ChooseSurfaceFormat(const Vector<VkSurfaceFormatKHR>& availableFormats) const;
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
-            KMP_NODISCARD VkExtent2D _ChooseExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
 
             void _CreateImageViews();
             KMP_NODISCARD VkImageView _CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels);
+
+            void _CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling,
+                              VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+            KMP_NODISCARD UInt32 _FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties);
 
         private:
             const VkDevice& _device;
             const VkSurfaceKHR& _surface;
             const PhysicalDeviceProperties& _properties;
-            const Window& _window;
+            const VkExtent2D& _swapchainExtent;
+
             VkSwapchainKHR _swapchain;
             Vector<VkImage> _swapchainImages;
             VkFormat _swapchainImageFormat;
-            VkExtent2D _swapchainExtent;
             Vector<VkImageView> _swapchainImageViews;
+
+            VkImage _colorImage;
+            VkDeviceMemory _colorImageMemory;
+            VkImageView _colorImageView;
+
+            VkImage _depthImage;
+            VkDeviceMemory _depthImageMemory;
+            VkImageView _depthImageView;
         };
         //--------------------------------------------------------------------------
     }

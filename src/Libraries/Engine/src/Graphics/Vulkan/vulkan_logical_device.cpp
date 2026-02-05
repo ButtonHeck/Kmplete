@@ -2,6 +2,8 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Window/window.h"
+#include "Kmplete/Math/math.h"
+#include "Kmplete/Math/geometry.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -26,6 +28,7 @@ namespace Kmplete
             , _device(nullptr)
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
+            , _currentExtent()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -79,6 +82,7 @@ namespace Kmplete
                 throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
             }
 
+            _currentExtent = _ChooseExtent();
             CreateSwapchain();
         }
         //--------------------------------------------------------------------------
@@ -92,7 +96,8 @@ namespace Kmplete
 
         void VulkanLogicalDevice::CreateSwapchain()
         {
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _window));
+            _currentExtent = _ChooseExtent();
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _currentExtent));
         }
         //--------------------------------------------------------------------------
 
@@ -131,6 +136,24 @@ namespace Kmplete
         const VkQueue& VulkanLogicalDevice::GetPresentQueue() const noexcept
         {
             return _presentQueue;
+        }
+        //--------------------------------------------------------------------------
+
+        VkExtent2D VulkanLogicalDevice::_ChooseExtent() const
+        {
+            const VkSurfaceCapabilitiesKHR& capabilities = _properties.swapChainSupportDetails.surfaceCapabilities;
+            if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
+            {
+                return capabilities.currentExtent;
+            }
+
+            const auto windowSize = _window.GetSize();
+            const auto actualExtent = VkExtent2D{
+                Math::Clamp(UInt32(windowSize.x), capabilities.minImageExtent.width, capabilities.maxImageExtent.width),
+                Math::Clamp(UInt32(windowSize.y), capabilities.minImageExtent.height, capabilities.maxImageExtent.height)
+            };
+
+            return actualExtent;
         }
         //--------------------------------------------------------------------------
     }

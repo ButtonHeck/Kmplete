@@ -34,13 +34,19 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VkQueue& GetPresentQueue() const noexcept;
 
         private:
+            KMP_NODISCARD VkExtent2D _ChooseExtent() const;
+
+        private:
             const VkPhysicalDevice& _physicalDevice;
             const VkSurfaceKHR& _surface;
             const PhysicalDeviceProperties& _properties;
             const Window& _window;
+
             VkDevice _device;
             VkQueue _graphicsQueue;
             VkQueue _presentQueue;
+
+            VkExtent2D _currentExtent;
         };
         //--------------------------------------------------------------------------
     }
