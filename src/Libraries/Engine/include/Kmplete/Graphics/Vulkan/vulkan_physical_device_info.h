@@ -30,6 +30,7 @@ namespace Kmplete
             VkPhysicalDeviceProperties deviceProperties;
             VkSampleCountFlags sampleCountsMask;
             std::priority_queue<VkSampleCountFlagBits> supportedSampleCounts;
+
             VkFormat defaultDepthFormat;
             VkSurfaceFormatKHR surfaceFormat;
 

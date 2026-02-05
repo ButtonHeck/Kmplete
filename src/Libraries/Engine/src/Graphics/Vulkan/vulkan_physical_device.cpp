@@ -46,45 +46,12 @@ namespace Kmplete
             {
                 const auto deviceCheck = _IsDeviceSuitable(device);
                 const auto deviceIsSuitable = deviceCheck.first;
-                const auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
                 if (deviceIsSuitable)
                 {
                     _physicalDevice = device;
 
-                    _physicalDeviceInfo.graphicsFamilyIndex = queueFamilyIndices.graphicsFamilyIndex.value();
-                    _physicalDeviceInfo.presentFamilyIndex = queueFamilyIndices.presentFamilyIndex.value();
-
-                    _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
-                    _physicalDeviceInfo.surfaceFormats = surfaceAndPresentModeProperties.surfaceFormats;
-                    _physicalDeviceInfo.presentModes = surfaceAndPresentModeProperties.presentModes;
-
-                    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceInfo.memoryProperties);
-                    vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceInfo.deviceProperties);
-
-                    const auto& properties = _physicalDeviceInfo.deviceProperties;
-                    _physicalDeviceInfo.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
-                    const auto samplesCountMask = _physicalDeviceInfo.sampleCountsMask;
-                    if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
-                    if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
-                    if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
-                    if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
-                    if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
-                    if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
-                    else
-                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
-
-                    _physicalDeviceInfo.defaultDepthFormat = _FindSupportedFormat(
-                        { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
-                        VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-                    );
-
-                    _physicalDeviceInfo.surfaceFormat = _FindSurfaceFormat();
+                    const auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
+                    _PopulatePhysicalDeviceInfo(queueFamilyIndices, surfaceAndPresentModeProperties);
                 }
             }
 
@@ -274,6 +241,45 @@ namespace Kmplete
 
             KMP_LOG_CRITICAL("failed to find supported format");
             throw std::runtime_error("VulkanPhysicalDevice: failed to find supported format");
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_PopulatePhysicalDeviceInfo(const QueueFamilyIndices& queueFamilyIndices, const SurfaceAndPresentModeProperties& surfaceAndPresentModeProperties)
+        {
+            _physicalDeviceInfo.graphicsFamilyIndex = queueFamilyIndices.graphicsFamilyIndex.value();
+            _physicalDeviceInfo.presentFamilyIndex = queueFamilyIndices.presentFamilyIndex.value();
+
+            _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
+            _physicalDeviceInfo.surfaceFormats = surfaceAndPresentModeProperties.surfaceFormats;
+            _physicalDeviceInfo.presentModes = surfaceAndPresentModeProperties.presentModes;
+
+            vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceInfo.memoryProperties);
+            vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceInfo.deviceProperties);
+
+            const auto& properties = _physicalDeviceInfo.deviceProperties;
+            _physicalDeviceInfo.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
+            const auto samplesCountMask = _physicalDeviceInfo.sampleCountsMask;
+            if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
+            if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
+            if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
+            if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
+            if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
+            if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
+            else
+                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
+
+            _physicalDeviceInfo.defaultDepthFormat = _FindSupportedFormat(
+                { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
+                VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+            );
+
+            _physicalDeviceInfo.surfaceFormat = _FindSurfaceFormat();
         }
         //--------------------------------------------------------------------------
 
