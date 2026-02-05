@@ -20,7 +20,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent, 
+            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent, 
                                     const VkSurfaceFormatKHR& surfaceFormat, const VkFormat& depthFormat);
             KMP_API ~VulkanSwapchain();
 
@@ -37,7 +37,7 @@ namespace Kmplete
         private:
             const VkDevice& _device;
             const VkSurfaceKHR& _surface;
-            const PhysicalDeviceProperties& _properties;
+            const PhysicalDeviceImplementationInfo& _physicalDeviceImplementationInfo;
             const VkExtent2D& _swapchainExtent;
             const VkSurfaceFormatKHR& _surfaceFormat;
             const VkFormat& _depthFormat;

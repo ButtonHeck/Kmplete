@@ -48,15 +48,15 @@ namespace Kmplete
                 if (deviceIsSuitable)
                 {
                     _physicalDevice = device;
-                    _properties = deviceProperties;
+                    _physicalDeviceImplementationInfo = deviceProperties;
 
                     VkPhysicalDeviceMemoryProperties memoryProperties;
                     vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &memoryProperties);
-                    _properties.hardwareProperties.memoryProperties = memoryProperties;
+                    _physicalDeviceImplementationInfo.hardwareProperties.memoryProperties = memoryProperties;
 
                     VkPhysicalDeviceProperties physicalDeviceProperties;
                     vkGetPhysicalDeviceProperties(_physicalDevice, &physicalDeviceProperties);
-                    _properties.hardwareProperties.deviceProperties = physicalDeviceProperties;
+                    _physicalDeviceImplementationInfo.hardwareProperties.deviceProperties = physicalDeviceProperties;
 
                     break;
                 }
@@ -71,7 +71,7 @@ namespace Kmplete
             _QueryInfo();
             PrintInfo();
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _properties, _window));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceImplementationInfo, _window));
         }
         //--------------------------------------------------------------------------
 
@@ -81,9 +81,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const PhysicalDeviceProperties& VulkanPhysicalDevice::GetProperties() const noexcept
+        const PhysicalDeviceImplementationInfo& VulkanPhysicalDevice::GetImplementationInfo() const noexcept
         {
-            return _properties;
+            return _physicalDeviceImplementationInfo;
         }
         //--------------------------------------------------------------------------
 
@@ -126,7 +126,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::pair<bool, PhysicalDeviceProperties> VulkanPhysicalDevice::_IsDeviceSuitable(VkPhysicalDevice device) const
+        std::pair<bool, PhysicalDeviceImplementationInfo> VulkanPhysicalDevice::_IsDeviceSuitable(VkPhysicalDevice device) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -227,7 +227,7 @@ namespace Kmplete
             _info.name = properties2.properties.deviceName;
             _info.driverVersion = propertiesVersion12.driverInfo;
 
-            const auto& properties = _properties.hardwareProperties.deviceProperties;
+            const auto& properties = _physicalDeviceImplementationInfo.hardwareProperties.deviceProperties;
             VkSampleCountFlags sampleCounts = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
             if (sampleCounts & VK_SAMPLE_COUNT_64_BIT)
                 _info.msaaSamples = 64;

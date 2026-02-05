@@ -44,7 +44,7 @@ namespace Kmplete
 
 
         //TODO: comments
-        struct PhysicalDeviceProperties
+        struct PhysicalDeviceImplementationInfo
         {
             QueueFamilyIndices queueFamiliesIndices;
             SwapChainSupportDetails swapChainSupportDetails;

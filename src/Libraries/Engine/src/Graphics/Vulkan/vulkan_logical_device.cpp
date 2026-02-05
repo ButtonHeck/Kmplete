@@ -20,11 +20,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const Window& window)
+        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const Window& window)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
-            , _properties(properties)
+            , _physicalDeviceImplementationInfo(info)
             , _window(window)
             , _device(nullptr)
             , _graphicsQueue(nullptr)
@@ -33,7 +33,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            const auto& queueFamiliesIndices = properties.queueFamiliesIndices;
+            const auto& queueFamiliesIndices = _physicalDeviceImplementationInfo.queueFamiliesIndices;
 
             Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
             Set<UInt32> queueFamiliesIndicesSet = { queueFamiliesIndices.graphicsFamilyIndex.value(), queueFamiliesIndices.presentFamilyIndex.value() };
@@ -99,7 +99,7 @@ namespace Kmplete
             _currentExtent = _ChooseExtent();
             const auto surfaceFormat = _ChooseSurfaceFormat();
             const auto depthFormat = _FindDepthFormat();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _properties, _currentExtent, surfaceFormat, depthFormat));
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceImplementationInfo, _currentExtent, surfaceFormat, depthFormat));
         }
         //--------------------------------------------------------------------------
 
@@ -143,7 +143,7 @@ namespace Kmplete
 
         VkExtent2D VulkanLogicalDevice::_ChooseExtent() const
         {
-            const VkSurfaceCapabilitiesKHR& capabilities = _properties.swapChainSupportDetails.surfaceCapabilities;
+            const VkSurfaceCapabilitiesKHR& capabilities = _physicalDeviceImplementationInfo.swapChainSupportDetails.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
             {
                 return capabilities.currentExtent;
@@ -161,7 +161,7 @@ namespace Kmplete
 
         VkSurfaceFormatKHR VulkanLogicalDevice::_ChooseSurfaceFormat() const
         {
-            const auto& availableFormats = _properties.swapChainSupportDetails.surfaceFormats;
+            const auto& availableFormats = _physicalDeviceImplementationInfo.swapChainSupportDetails.surfaceFormats;
             if (availableFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");

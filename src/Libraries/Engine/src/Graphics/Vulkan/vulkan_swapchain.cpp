@@ -9,12 +9,12 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceProperties& properties, const VkExtent2D& swapchainExtent, 
+        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent, 
                                          const VkSurfaceFormatKHR& surfaceFormat, const VkFormat& depthFormat)
             : Swapchain()
             , _device(device)
             , _surface(surface)
-            , _properties(properties)
+            , _physicalDeviceImplementationInfo(info)
             , _swapchainExtent(swapchainExtent)
             , _surfaceFormat(surfaceFormat)
             , _depthFormat(depthFormat)
@@ -29,7 +29,7 @@ namespace Kmplete
             , _depthImageMemory(VK_NULL_HANDLE)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            const auto& swapchainDetails = properties.swapChainSupportDetails;
+            const auto& swapchainDetails = _physicalDeviceImplementationInfo.swapChainSupportDetails;
 
             const auto presentMode = _ChoosePresentMode(swapchainDetails.presentModes);
 
@@ -49,7 +49,7 @@ namespace Kmplete
             createInfo.imageArrayLayers = 1;
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-            const auto& queueFamiliesIndices = properties.queueFamiliesIndices;
+            const auto& queueFamiliesIndices = _physicalDeviceImplementationInfo.queueFamiliesIndices;
             UInt32 indicesArray[] = { queueFamiliesIndices.graphicsFamilyIndex.value(), queueFamiliesIndices.presentFamilyIndex.value() };
             if (queueFamiliesIndices.graphicsFamilyIndex != queueFamiliesIndices.presentFamilyIndex)
             {
@@ -89,7 +89,7 @@ namespace Kmplete
 
             _CreateImageViews();
 
-            const auto& deviceProperties = _properties.hardwareProperties.deviceProperties;
+            const auto& deviceProperties = _physicalDeviceImplementationInfo.hardwareProperties.deviceProperties;
             VkSampleCountFlags sampleCounts = deviceProperties.limits.framebufferColorSampleCounts & deviceProperties.limits.framebufferDepthSampleCounts;
             auto sampleCountBits = VK_SAMPLE_COUNT_1_BIT;
             if (sampleCounts & VK_SAMPLE_COUNT_64_BIT)
@@ -231,7 +231,7 @@ namespace Kmplete
 
         UInt32 VulkanSwapchain::_FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties)
         {
-            const auto& memoryProperties = _properties.hardwareProperties.memoryProperties;
+            const auto& memoryProperties = _physicalDeviceImplementationInfo.hardwareProperties.memoryProperties;
 
             for (UInt32 i = 0; i < memoryProperties.memoryTypeCount; i++)
             {

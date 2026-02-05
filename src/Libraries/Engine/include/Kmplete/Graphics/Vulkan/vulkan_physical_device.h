@@ -32,11 +32,11 @@ namespace Kmplete
             KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window);
             KMP_API ~VulkanPhysicalDevice();
 
-            KMP_NODISCARD KMP_API const PhysicalDeviceProperties& GetProperties() const noexcept;
+            KMP_NODISCARD KMP_API const PhysicalDeviceImplementationInfo& GetImplementationInfo() const noexcept;
 
         private:
             KMP_NODISCARD QueueFamilyIndices _FindQueueFamiliesIndices(VkPhysicalDevice device) const;
-            KMP_NODISCARD std::pair<bool, PhysicalDeviceProperties> _IsDeviceSuitable(VkPhysicalDevice device) const;
+            KMP_NODISCARD std::pair<bool, PhysicalDeviceImplementationInfo> _IsDeviceSuitable(VkPhysicalDevice device) const;
             KMP_NODISCARD bool _CheckDeviceExtensionSupport(VkPhysicalDevice device) const;
             KMP_NODISCARD SwapChainSupportDetails _QuerySwapChainSupport(VkPhysicalDevice device) const;
             void _QueryInfo();
@@ -46,7 +46,7 @@ namespace Kmplete
             const VkSurfaceKHR& _surface;
             const Window& _window;
             VkPhysicalDevice _physicalDevice;
-            PhysicalDeviceProperties _properties;
+            PhysicalDeviceImplementationInfo _physicalDeviceImplementationInfo;
         };
         //--------------------------------------------------------------------------
     }
