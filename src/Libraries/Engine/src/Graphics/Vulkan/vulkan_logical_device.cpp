@@ -143,7 +143,7 @@ namespace Kmplete
 
         VkExtent2D VulkanLogicalDevice::_ChooseExtent() const
         {
-            const VkSurfaceCapabilitiesKHR& capabilities = _physicalDeviceImplementationInfo.swapChainSupportDetails.surfaceCapabilities;
+            const auto& capabilities = _physicalDeviceImplementationInfo.surfaceAndPresentModeProperties.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
             {
                 return capabilities.currentExtent;
@@ -161,22 +161,22 @@ namespace Kmplete
 
         VkSurfaceFormatKHR VulkanLogicalDevice::_ChooseSurfaceFormat() const
         {
-            const auto& availableFormats = _physicalDeviceImplementationInfo.swapChainSupportDetails.surfaceFormats;
-            if (availableFormats.empty())
+            const auto& surfaceFormats = _physicalDeviceImplementationInfo.surfaceAndPresentModeProperties.surfaceFormats;
+            if (surfaceFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");
                 throw std::runtime_error("VulkanLogicalDevice: unable to get available surface format");
             }
 
-            for (const auto& availableFormat : availableFormats)
+            for (const auto& surfaceFormat : surfaceFormats)
             {
-                if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
-                    return availableFormat;
+                    return surfaceFormat;
                 }
             }
 
-            return availableFormats[0];
+            return surfaceFormats[0];
         }
         //--------------------------------------------------------------------------
 

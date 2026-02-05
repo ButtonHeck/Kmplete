@@ -16,11 +16,10 @@ namespace Kmplete
             , _surface(surface)
             , _physicalDeviceImplementationInfo(info)
             , _swapchainExtent(swapchainExtent)
-            , _surfaceFormat(surfaceFormat)
             , _depthFormat(depthFormat)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageFormat(_surfaceFormat.format)
+            , _swapchainImageFormat(surfaceFormat.format)
             , _swapchainImageViews()
             , _colorImage(VK_NULL_HANDLE)
             , _colorImageMemory(VK_NULL_HANDLE)
@@ -29,7 +28,7 @@ namespace Kmplete
             , _depthImageMemory(VK_NULL_HANDLE)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            const auto& swapchainDetails = _physicalDeviceImplementationInfo.swapChainSupportDetails;
+            const auto& swapchainDetails = _physicalDeviceImplementationInfo.surfaceAndPresentModeProperties;
 
             const auto presentMode = _ChoosePresentMode(swapchainDetails.presentModes);
 
@@ -43,8 +42,8 @@ namespace Kmplete
             createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
             createInfo.surface = _surface;
             createInfo.minImageCount = imageCount;
-            createInfo.imageFormat = _surfaceFormat.format;
-            createInfo.imageColorSpace = _surfaceFormat.colorSpace;
+            createInfo.imageFormat = surfaceFormat.format;
+            createInfo.imageColorSpace = surfaceFormat.colorSpace;
             createInfo.imageExtent = _swapchainExtent;
             createInfo.imageArrayLayers = 1;
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
@@ -89,28 +88,14 @@ namespace Kmplete
 
             _CreateImageViews();
 
-            const auto& deviceProperties = _physicalDeviceImplementationInfo.hardwareProperties.deviceProperties;
-            VkSampleCountFlags sampleCounts = deviceProperties.limits.framebufferColorSampleCounts & deviceProperties.limits.framebufferDepthSampleCounts;
-            auto sampleCountBits = VK_SAMPLE_COUNT_1_BIT;
-            if (sampleCounts & VK_SAMPLE_COUNT_64_BIT)
-                sampleCountBits = VK_SAMPLE_COUNT_64_BIT;
-            else if (sampleCounts & VK_SAMPLE_COUNT_32_BIT)
-                sampleCountBits = VK_SAMPLE_COUNT_32_BIT;
-            else if (sampleCounts & VK_SAMPLE_COUNT_16_BIT)
-                sampleCountBits = VK_SAMPLE_COUNT_16_BIT;
-            else if (sampleCounts & VK_SAMPLE_COUNT_8_BIT)
-                sampleCountBits = VK_SAMPLE_COUNT_8_BIT;
-            else if (sampleCounts & VK_SAMPLE_COUNT_4_BIT)
-                sampleCountBits = VK_SAMPLE_COUNT_4_BIT;
-            else if (sampleCounts & VK_SAMPLE_COUNT_2_BIT)
-                sampleCountBits = VK_SAMPLE_COUNT_2_BIT;
+            const auto samplesCount = _physicalDeviceImplementationInfo.physicalDeviceProperties.MaximumSupportedSampleCount();
 
-            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, sampleCountBits, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
+            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImage, _colorImageMemory);
             _colorImageView = _CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
-            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, sampleCountBits, _depthFormat, VK_IMAGE_TILING_OPTIMAL,
+            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _depthFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImage, _depthImageMemory);
             _depthImageView = _CreateImageView(_depthImage, _depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
@@ -231,7 +216,7 @@ namespace Kmplete
 
         UInt32 VulkanSwapchain::_FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties)
         {
-            const auto& memoryProperties = _physicalDeviceImplementationInfo.hardwareProperties.memoryProperties;
+            const auto& memoryProperties = _physicalDeviceImplementationInfo.physicalDeviceProperties.memoryProperties;
 
             for (UInt32 i = 0; i < memoryProperties.memoryTypeCount; i++)
             {

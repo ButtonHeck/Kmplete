@@ -39,7 +39,6 @@ namespace Kmplete
             const VkSurfaceKHR& _surface;
             const PhysicalDeviceImplementationInfo& _physicalDeviceImplementationInfo;
             const VkExtent2D& _swapchainExtent;
-            const VkSurfaceFormatKHR& _surfaceFormat;
             const VkFormat& _depthFormat;
 
             VkSwapchainKHR _swapchain;

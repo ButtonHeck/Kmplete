@@ -35,16 +35,18 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const PhysicalDeviceImplementationInfo& GetImplementationInfo() const noexcept;
 
         private:
-            KMP_NODISCARD QueueFamilyIndices _FindQueueFamiliesIndices(VkPhysicalDevice device) const;
+            KMP_NODISCARD QueueFamilyIndices _QueryQueueFamiliesIndices(VkPhysicalDevice device) const;
             KMP_NODISCARD std::pair<bool, PhysicalDeviceImplementationInfo> _IsDeviceSuitable(VkPhysicalDevice device) const;
-            KMP_NODISCARD bool _CheckDeviceExtensionSupport(VkPhysicalDevice device) const;
-            KMP_NODISCARD SwapChainSupportDetails _QuerySwapChainSupport(VkPhysicalDevice device) const;
+            KMP_NODISCARD bool _QueryDeviceExtensionSupport(VkPhysicalDevice device) const;
+            KMP_NODISCARD SurfaceAndPresentModeProperties _QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const;
+
             void _QueryInfo();
 
         private:
             const VkInstance& _instance;
             const VkSurfaceKHR& _surface;
             const Window& _window;
+
             VkPhysicalDevice _physicalDevice;
             PhysicalDeviceImplementationInfo _physicalDeviceImplementationInfo;
         };

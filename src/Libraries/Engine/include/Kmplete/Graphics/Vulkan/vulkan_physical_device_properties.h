@@ -5,6 +5,8 @@
 
 #include <vulkan/vulkan.h>
 
+#include <queue>
+
 
 namespace Kmplete
 {
@@ -25,7 +27,7 @@ namespace Kmplete
 
 
         //TODO: comments
-        struct SwapChainSupportDetails
+        struct SurfaceAndPresentModeProperties
         {
             VkSurfaceCapabilitiesKHR surfaceCapabilities;
             Vector<VkSurfaceFormatKHR> surfaceFormats;
@@ -35,10 +37,17 @@ namespace Kmplete
 
 
         //TODO: comments
-        struct HardwareProperties
+        struct PhysicalDeviceProperties
         {
             VkPhysicalDeviceMemoryProperties memoryProperties;
             VkPhysicalDeviceProperties deviceProperties;
+            VkSampleCountFlags sampleCountsMask;
+            std::priority_queue<VkSampleCountFlagBits> supportedSampleCounts;
+
+            inline VkSampleCountFlagBits MaximumSupportedSampleCount() const noexcept
+            {
+                return supportedSampleCounts.top();
+            }
         };
         //--------------------------------------------------------------------------
 
@@ -47,8 +56,8 @@ namespace Kmplete
         struct PhysicalDeviceImplementationInfo
         {
             QueueFamilyIndices queueFamiliesIndices;
-            SwapChainSupportDetails swapChainSupportDetails;
-            HardwareProperties hardwareProperties;
+            SurfaceAndPresentModeProperties surfaceAndPresentModeProperties;
+            PhysicalDeviceProperties physicalDeviceProperties;
         };
         //--------------------------------------------------------------------------
     }
