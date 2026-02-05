@@ -10,13 +10,12 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent, 
-                                         const VkSurfaceFormatKHR& surfaceFormat, const VkFormat& depthFormat)
+                                         const VkSurfaceFormatKHR& surfaceFormat)
             : Swapchain()
             , _device(device)
             , _surface(surface)
             , _physicalDeviceImplementationInfo(info)
             , _swapchainExtent(swapchainExtent)
-            , _depthFormat(depthFormat)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
             , _swapchainImageFormat(surfaceFormat.format)
@@ -89,16 +88,17 @@ namespace Kmplete
             _CreateImageViews();
 
             const auto samplesCount = _physicalDeviceImplementationInfo.physicalDeviceProperties.MaximumSupportedSampleCount();
+            const auto depthFormat = _physicalDeviceImplementationInfo.physicalDeviceProperties.defaultDepthFormat;
 
             _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImage, _colorImageMemory);
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImage, _colorImageMemory, info);
             _colorImageView = _CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
-            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _depthFormat, VK_IMAGE_TILING_OPTIMAL,
+            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, depthFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImage, _depthImageMemory);
-            _depthImageView = _CreateImageView(_depthImage, _depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImage, _depthImageMemory, info);
+            _depthImageView = _CreateImageView(_depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
 
@@ -173,7 +173,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::_CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling,
-                                           VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory)
+                                           VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory, const PhysicalDeviceImplementationInfo& info)
         {
             VkImageCreateInfo imageInfo{};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -202,7 +202,7 @@ namespace Kmplete
             VkMemoryAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
             allocInfo.allocationSize = memRequirements.size;
-            allocInfo.memoryTypeIndex = _FindMemoryType(memRequirements.memoryTypeBits, properties);
+            allocInfo.memoryTypeIndex = info.physicalDeviceProperties.FindMemoryType(memRequirements.memoryTypeBits, properties);
 
             if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
             {
@@ -211,23 +211,6 @@ namespace Kmplete
             }
 
             vkBindImageMemory(_device, image, imageMemory, 0);
-        }
-        //--------------------------------------------------------------------------
-
-        UInt32 VulkanSwapchain::_FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties)
-        {
-            const auto& memoryProperties = _physicalDeviceImplementationInfo.physicalDeviceProperties.memoryProperties;
-
-            for (UInt32 i = 0; i < memoryProperties.memoryTypeCount; i++)
-            {
-                if ((typeFilter & (1 << i)) && (memoryProperties.memoryTypes[i].propertyFlags & properties) == properties)
-                {
-                    return i;
-                }
-            }
-
-            KMP_LOG_CRITICAL("failed to find suitable memory type");
-            throw std::runtime_error("VulkanSwapchain: failed to find suitable memory type");
         }
         //--------------------------------------------------------------------------
     }

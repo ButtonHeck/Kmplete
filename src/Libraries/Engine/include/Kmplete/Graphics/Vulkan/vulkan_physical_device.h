@@ -4,7 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/physical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_properties.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_implementation_info.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -39,6 +39,8 @@ namespace Kmplete
             KMP_NODISCARD std::pair<bool, PhysicalDeviceImplementationInfo> _IsDeviceSuitable(VkPhysicalDevice device) const;
             KMP_NODISCARD bool _QueryDeviceExtensionSupport(VkPhysicalDevice device) const;
             KMP_NODISCARD SurfaceAndPresentModeProperties _QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const;
+
+            KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
 
             void _QueryInfo();
 

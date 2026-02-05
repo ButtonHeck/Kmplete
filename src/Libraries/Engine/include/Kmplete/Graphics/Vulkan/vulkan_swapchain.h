@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Graphics/swapchain.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_properties.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_implementation_info.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -21,7 +21,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent, 
-                                    const VkSurfaceFormatKHR& surfaceFormat, const VkFormat& depthFormat);
+                                    const VkSurfaceFormatKHR& surfaceFormat);
             KMP_API ~VulkanSwapchain();
 
         private:
@@ -31,15 +31,13 @@ namespace Kmplete
             KMP_NODISCARD VkImageView _CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels);
 
             void _CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling,
-                              VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
-            KMP_NODISCARD UInt32 _FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties);
+                              VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory, const PhysicalDeviceImplementationInfo& info);
 
         private:
             const VkDevice& _device;
             const VkSurfaceKHR& _surface;
             const PhysicalDeviceImplementationInfo& _physicalDeviceImplementationInfo;
             const VkExtent2D& _swapchainExtent;
-            const VkFormat& _depthFormat;
 
             VkSwapchainKHR _swapchain;
             Vector<VkImage> _swapchainImages;

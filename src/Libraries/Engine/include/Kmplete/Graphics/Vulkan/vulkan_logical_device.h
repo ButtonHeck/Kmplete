@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Graphics/logical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_properties.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_implementation_info.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -36,8 +36,6 @@ namespace Kmplete
         private:
             KMP_NODISCARD VkExtent2D _ChooseExtent() const;
             KMP_NODISCARD VkSurfaceFormatKHR _ChooseSurfaceFormat() const;
-            KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
-            KMP_NODISCARD VkFormat _FindDepthFormat() const;
 
         private:
             const VkPhysicalDevice& _physicalDevice;

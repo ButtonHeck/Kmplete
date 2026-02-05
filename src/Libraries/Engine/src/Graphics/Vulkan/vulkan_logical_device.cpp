@@ -98,8 +98,7 @@ namespace Kmplete
         {
             _currentExtent = _ChooseExtent();
             const auto surfaceFormat = _ChooseSurfaceFormat();
-            const auto depthFormat = _FindDepthFormat();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceImplementationInfo, _currentExtent, surfaceFormat, depthFormat));
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceImplementationInfo, _currentExtent, surfaceFormat));
         }
         //--------------------------------------------------------------------------
 
@@ -177,37 +176,6 @@ namespace Kmplete
             }
 
             return surfaceFormats[0];
-        }
-        //--------------------------------------------------------------------------
-
-        VkFormat VulkanLogicalDevice::_FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
-        {
-            for (auto format : candidates)
-            {
-                VkFormatProperties props;
-                vkGetPhysicalDeviceFormatProperties(_physicalDevice, format, &props);
-
-                if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
-                {
-                    return format;
-                }
-                else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
-                {
-                    return format;
-                }
-            }
-
-            KMP_LOG_CRITICAL("failed to find supported format");
-            throw std::runtime_error("VulkanLogicalDevice: failed to find supported format");
-        }
-        //--------------------------------------------------------------------------
-
-        VkFormat VulkanLogicalDevice::_FindDepthFormat() const
-        {
-            return _FindSupportedFormat(
-                { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT }, 
-                VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-            );
         }
         //--------------------------------------------------------------------------
     }
