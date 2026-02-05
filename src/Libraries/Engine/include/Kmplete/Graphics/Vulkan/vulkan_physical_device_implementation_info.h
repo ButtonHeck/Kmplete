@@ -31,6 +31,7 @@ namespace Kmplete
             VkSampleCountFlags sampleCountsMask;
             std::priority_queue<VkSampleCountFlagBits> supportedSampleCounts;
             VkFormat defaultDepthFormat;
+            VkSurfaceFormatKHR surfaceFormat;
 
             KMP_NODISCARD KMP_API VkSampleCountFlagBits MaximumSupportedSampleCount() const;
             KMP_NODISCARD KMP_API UInt32 FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const;

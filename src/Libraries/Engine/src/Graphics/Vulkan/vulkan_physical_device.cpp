@@ -83,6 +83,8 @@ namespace Kmplete
                         { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
                         VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
                     );
+
+                    _physicalDeviceImplementationInfo.surfaceFormat = _FindSurfaceFormat();
                 }
             }
 
@@ -229,6 +231,27 @@ namespace Kmplete
             }
 
             return properties;
+        }
+        //--------------------------------------------------------------------------
+
+        VkSurfaceFormatKHR VulkanPhysicalDevice::_FindSurfaceFormat() const
+        {
+            const auto& surfaceFormats = _physicalDeviceImplementationInfo.surfaceFormats;
+            if (surfaceFormats.empty())
+            {
+                KMP_LOG_CRITICAL("unable to get available surface format");
+                throw std::runtime_error("VulkanPhysicalDevice: unable to get available surface format");
+            }
+
+            for (const auto& surfaceFormat : surfaceFormats)
+            {
+                if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    return surfaceFormat;
+                }
+            }
+
+            return surfaceFormats[0];
         }
         //--------------------------------------------------------------------------
 

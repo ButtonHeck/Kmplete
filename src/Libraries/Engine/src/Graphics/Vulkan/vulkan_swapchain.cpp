@@ -9,16 +9,14 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent, 
-                                         const VkSurfaceFormatKHR& surfaceFormat)
+        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent)
             : Swapchain()
             , _device(device)
-            , _surface(surface)
             , _physicalDeviceImplementationInfo(info)
             , _swapchainExtent(swapchainExtent)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageFormat(surfaceFormat.format)
+            , _swapchainImageFormat(_physicalDeviceImplementationInfo.surfaceFormat.format)
             , _swapchainImageViews()
             , _colorImage(VK_NULL_HANDLE)
             , _colorImageMemory(VK_NULL_HANDLE)
@@ -27,8 +25,6 @@ namespace Kmplete
             , _depthImageMemory(VK_NULL_HANDLE)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            const auto presentMode = _ChoosePresentMode(_physicalDeviceImplementationInfo.presentModes);
-
             UInt32 imageCount = _physicalDeviceImplementationInfo.surfaceCapabilities.minImageCount + 1;
             if (_physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount > 0 && imageCount > _physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount)
             {
@@ -37,10 +33,10 @@ namespace Kmplete
 
             VkSwapchainCreateInfoKHR createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-            createInfo.surface = _surface;
+            createInfo.surface = surface;
             createInfo.minImageCount = imageCount;
-            createInfo.imageFormat = surfaceFormat.format;
-            createInfo.imageColorSpace = surfaceFormat.colorSpace;
+            createInfo.imageFormat = _physicalDeviceImplementationInfo.surfaceFormat.format;
+            createInfo.imageColorSpace = _physicalDeviceImplementationInfo.surfaceFormat.colorSpace;
             createInfo.imageExtent = _swapchainExtent;
             createInfo.imageArrayLayers = 1;
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
@@ -59,7 +55,7 @@ namespace Kmplete
 
             createInfo.preTransform = _physicalDeviceImplementationInfo.surfaceCapabilities.currentTransform;
             createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode = presentMode;
+            createInfo.presentMode = _ChoosePresentMode(_physicalDeviceImplementationInfo.presentModes);
             createInfo.clipped = VK_TRUE;
             createInfo.oldSwapchain = VK_NULL_HANDLE;
 

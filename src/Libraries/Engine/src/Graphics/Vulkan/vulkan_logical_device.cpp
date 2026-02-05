@@ -97,9 +97,8 @@ namespace Kmplete
 
         void VulkanLogicalDevice::CreateSwapchain()
         {
-            _currentExtent = _ChooseExtent();
-            const auto surfaceFormat = _ChooseSurfaceFormat();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceImplementationInfo, _currentExtent, surfaceFormat));
+            _currentExtent = _UpdateExtent();
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceImplementationInfo, _currentExtent));
         }
         //--------------------------------------------------------------------------
 
@@ -141,7 +140,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkExtent2D VulkanLogicalDevice::_ChooseExtent() const
+        VkExtent2D VulkanLogicalDevice::_UpdateExtent() const
         {
             const auto& capabilities = _physicalDeviceImplementationInfo.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
@@ -156,27 +155,6 @@ namespace Kmplete
             };
 
             return actualExtent;
-        }
-        //--------------------------------------------------------------------------
-
-        VkSurfaceFormatKHR VulkanLogicalDevice::_ChooseSurfaceFormat() const
-        {
-            const auto& surfaceFormats = _physicalDeviceImplementationInfo.surfaceFormats;
-            if (surfaceFormats.empty())
-            {
-                KMP_LOG_CRITICAL("unable to get available surface format");
-                throw std::runtime_error("VulkanLogicalDevice: unable to get available surface format");
-            }
-
-            for (const auto& surfaceFormat : surfaceFormats)
-            {
-                if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    return surfaceFormat;
-                }
-            }
-
-            return surfaceFormats[0];
         }
         //--------------------------------------------------------------------------
     }

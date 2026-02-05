@@ -60,6 +60,7 @@ namespace Kmplete
             KMP_NODISCARD std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> _IsDeviceSuitable(VkPhysicalDevice device) const;
             KMP_NODISCARD bool _QueryDeviceExtensionSupport(VkPhysicalDevice device) const;
             KMP_NODISCARD SurfaceAndPresentModeProperties _QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const;
+            KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;
 
             KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
 
