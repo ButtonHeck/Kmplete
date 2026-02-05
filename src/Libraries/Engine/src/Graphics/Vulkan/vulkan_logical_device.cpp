@@ -20,11 +20,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const Window& window)
+        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const Window& window)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
-            , _physicalDeviceImplementationInfo(info)
+            , _physicalDeviceInfo(info)
             , _window(window)
             , _device(nullptr)
             , _graphicsQueue(nullptr)
@@ -35,8 +35,8 @@ namespace Kmplete
 
             Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
             Set<UInt32> queueFamiliesIndicesSet = {
-                _physicalDeviceImplementationInfo.graphicsFamilyIndex,
-                _physicalDeviceImplementationInfo.presentFamilyIndex
+                _physicalDeviceInfo.graphicsFamilyIndex,
+                _physicalDeviceInfo.presentFamilyIndex
             };
             const auto queuePriority = 1.0f;
             for (auto queueFamilyIndex : queueFamiliesIndicesSet)
@@ -69,8 +69,8 @@ namespace Kmplete
                 throw std::runtime_error("VulkanLogicalDevice: failed to create logical device");
             }
 
-            vkGetDeviceQueue(_device, _physicalDeviceImplementationInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
-            vkGetDeviceQueue(_device, _physicalDeviceImplementationInfo.presentFamilyIndex, 0, &_presentQueue);
+            vkGetDeviceQueue(_device, _physicalDeviceInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
+            vkGetDeviceQueue(_device, _physicalDeviceInfo.presentFamilyIndex, 0, &_presentQueue);
 
             if (_graphicsQueue == nullptr)
             {
@@ -98,7 +98,7 @@ namespace Kmplete
         void VulkanLogicalDevice::CreateSwapchain()
         {
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceImplementationInfo, _currentExtent));
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceInfo, _currentExtent));
         }
         //--------------------------------------------------------------------------
 
@@ -142,7 +142,7 @@ namespace Kmplete
 
         VkExtent2D VulkanLogicalDevice::_UpdateExtent() const
         {
-            const auto& capabilities = _physicalDeviceImplementationInfo.surfaceCapabilities;
+            const auto& capabilities = _physicalDeviceInfo.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
             {
                 return capabilities.currentExtent;

@@ -9,14 +9,14 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const VkExtent2D& swapchainExtent)
+        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent)
             : Swapchain()
             , _device(device)
-            , _physicalDeviceImplementationInfo(info)
+            , _physicalDeviceInfo(info)
             , _swapchainExtent(swapchainExtent)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageFormat(_physicalDeviceImplementationInfo.surfaceFormat.format)
+            , _swapchainImageFormat(_physicalDeviceInfo.surfaceFormat.format)
             , _swapchainImageViews()
             , _colorImage(VK_NULL_HANDLE)
             , _colorImageMemory(VK_NULL_HANDLE)
@@ -25,24 +25,24 @@ namespace Kmplete
             , _depthImageMemory(VK_NULL_HANDLE)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            UInt32 imageCount = _physicalDeviceImplementationInfo.surfaceCapabilities.minImageCount + 1;
-            if (_physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount > 0 && imageCount > _physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount)
+            UInt32 imageCount = _physicalDeviceInfo.surfaceCapabilities.minImageCount + 1;
+            if (_physicalDeviceInfo.surfaceCapabilities.maxImageCount > 0 && imageCount > _physicalDeviceInfo.surfaceCapabilities.maxImageCount)
             {
-                imageCount = _physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount;
+                imageCount = _physicalDeviceInfo.surfaceCapabilities.maxImageCount;
             }
 
             VkSwapchainCreateInfoKHR createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
             createInfo.surface = surface;
             createInfo.minImageCount = imageCount;
-            createInfo.imageFormat = _physicalDeviceImplementationInfo.surfaceFormat.format;
-            createInfo.imageColorSpace = _physicalDeviceImplementationInfo.surfaceFormat.colorSpace;
+            createInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
+            createInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
             createInfo.imageExtent = _swapchainExtent;
             createInfo.imageArrayLayers = 1;
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-            UInt32 indicesArray[] = { _physicalDeviceImplementationInfo.graphicsFamilyIndex, _physicalDeviceImplementationInfo.presentFamilyIndex };
-            if (_physicalDeviceImplementationInfo.graphicsFamilyIndex != _physicalDeviceImplementationInfo.presentFamilyIndex)
+            UInt32 indicesArray[] = { _physicalDeviceInfo.graphicsFamilyIndex, _physicalDeviceInfo.presentFamilyIndex };
+            if (_physicalDeviceInfo.graphicsFamilyIndex != _physicalDeviceInfo.presentFamilyIndex)
             {
                 createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 createInfo.queueFamilyIndexCount = 2;
@@ -53,9 +53,9 @@ namespace Kmplete
                 createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
             }
 
-            createInfo.preTransform = _physicalDeviceImplementationInfo.surfaceCapabilities.currentTransform;
+            createInfo.preTransform = _physicalDeviceInfo.surfaceCapabilities.currentTransform;
             createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode = _ChoosePresentMode(_physicalDeviceImplementationInfo.presentModes);
+            createInfo.presentMode = _ChoosePresentMode(_physicalDeviceInfo.presentModes);
             createInfo.clipped = VK_TRUE;
             createInfo.oldSwapchain = VK_NULL_HANDLE;
 
@@ -80,8 +80,8 @@ namespace Kmplete
 
             _CreateImageViews();
 
-            const auto samplesCount = _physicalDeviceImplementationInfo.MaximumSupportedSampleCount();
-            const auto depthFormat = _physicalDeviceImplementationInfo.defaultDepthFormat;
+            const auto samplesCount = _physicalDeviceInfo.MaximumSupportedSampleCount();
+            const auto depthFormat = _physicalDeviceInfo.defaultDepthFormat;
 
             _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -166,7 +166,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::_CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling,
-                                           VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory, const PhysicalDeviceImplementationInfo& info)
+                                           VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory, const PhysicalDeviceInfo& info)
         {
             VkImageCreateInfo imageInfo{};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;

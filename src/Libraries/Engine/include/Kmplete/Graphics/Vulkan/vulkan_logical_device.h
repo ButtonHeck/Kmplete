@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Kmplete/Graphics/logical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_implementation_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -22,7 +22,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceImplementationInfo& info, const Window& window);
+            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const Window& window);
             KMP_API ~VulkanLogicalDevice();
 
             KMP_API void CreateSwapchain() override;
@@ -39,7 +39,7 @@ namespace Kmplete
         private:
             const VkPhysicalDevice& _physicalDevice;
             const VkSurfaceKHR& _surface;
-            const PhysicalDeviceImplementationInfo& _physicalDeviceImplementationInfo;
+            const PhysicalDeviceInfo& _physicalDeviceInfo;
             const Window& _window;
 
             VkDevice _device;

@@ -4,7 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/physical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_implementation_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -32,7 +32,7 @@ namespace Kmplete
             KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window);
             KMP_API ~VulkanPhysicalDevice();
 
-            KMP_NODISCARD KMP_API const PhysicalDeviceImplementationInfo& GetImplementationInfo() const noexcept;
+            KMP_NODISCARD KMP_API const PhysicalDeviceInfo& GetDeviceInfo() const noexcept;
 
         private:
             //TODO: comments
@@ -72,7 +72,7 @@ namespace Kmplete
             const Window& _window;
 
             VkPhysicalDevice _physicalDevice;
-            PhysicalDeviceImplementationInfo _physicalDeviceImplementationInfo;
+            PhysicalDeviceInfo _physicalDeviceInfo;
         };
         //--------------------------------------------------------------------------
     }

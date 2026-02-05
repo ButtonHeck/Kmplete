@@ -14,9 +14,9 @@ namespace Kmplete
     namespace Graphics
     {
         //TODO: comments
-        struct PhysicalDeviceImplementationInfo
+        struct PhysicalDeviceInfo
         {
-            KMP_LOG_CLASSNAME(PhysicalDeviceImplementationInfo)
+            KMP_LOG_CLASSNAME(PhysicalDeviceInfo)
 
         public:
             UInt32 graphicsFamilyIndex;

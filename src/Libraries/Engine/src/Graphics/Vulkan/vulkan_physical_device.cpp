@@ -51,40 +51,40 @@ namespace Kmplete
                 {
                     _physicalDevice = device;
 
-                    _physicalDeviceImplementationInfo.graphicsFamilyIndex = queueFamilyIndices.graphicsFamilyIndex.value();
-                    _physicalDeviceImplementationInfo.presentFamilyIndex = queueFamilyIndices.presentFamilyIndex.value();
+                    _physicalDeviceInfo.graphicsFamilyIndex = queueFamilyIndices.graphicsFamilyIndex.value();
+                    _physicalDeviceInfo.presentFamilyIndex = queueFamilyIndices.presentFamilyIndex.value();
 
-                    _physicalDeviceImplementationInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
-                    _physicalDeviceImplementationInfo.surfaceFormats = surfaceAndPresentModeProperties.surfaceFormats;
-                    _physicalDeviceImplementationInfo.presentModes = surfaceAndPresentModeProperties.presentModes;
+                    _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
+                    _physicalDeviceInfo.surfaceFormats = surfaceAndPresentModeProperties.surfaceFormats;
+                    _physicalDeviceInfo.presentModes = surfaceAndPresentModeProperties.presentModes;
 
-                    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceImplementationInfo.memoryProperties);
-                    vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceImplementationInfo.deviceProperties);
+                    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceInfo.memoryProperties);
+                    vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceInfo.deviceProperties);
 
-                    const auto& properties = _physicalDeviceImplementationInfo.deviceProperties;
-                    _physicalDeviceImplementationInfo.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
-                    const auto samplesCountMask = _physicalDeviceImplementationInfo.sampleCountsMask;
+                    const auto& properties = _physicalDeviceInfo.deviceProperties;
+                    _physicalDeviceInfo.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
+                    const auto samplesCountMask = _physicalDeviceInfo.sampleCountsMask;
                     if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
                     else
-                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
+                        _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
 
-                    _physicalDeviceImplementationInfo.defaultDepthFormat = _FindSupportedFormat(
+                    _physicalDeviceInfo.defaultDepthFormat = _FindSupportedFormat(
                         { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
                         VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
                     );
 
-                    _physicalDeviceImplementationInfo.surfaceFormat = _FindSurfaceFormat();
+                    _physicalDeviceInfo.surfaceFormat = _FindSurfaceFormat();
                 }
             }
 
@@ -97,7 +97,7 @@ namespace Kmplete
             _QueryInfo();
             PrintInfo();
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceImplementationInfo, _window));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, _window));
         }
         //--------------------------------------------------------------------------
 
@@ -107,9 +107,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const PhysicalDeviceImplementationInfo& VulkanPhysicalDevice::GetImplementationInfo() const noexcept
+        const PhysicalDeviceInfo& VulkanPhysicalDevice::GetDeviceInfo() const noexcept
         {
-            return _physicalDeviceImplementationInfo;
+            return _physicalDeviceInfo;
         }
         //--------------------------------------------------------------------------
 
@@ -236,7 +236,7 @@ namespace Kmplete
 
         VkSurfaceFormatKHR VulkanPhysicalDevice::_FindSurfaceFormat() const
         {
-            const auto& surfaceFormats = _physicalDeviceImplementationInfo.surfaceFormats;
+            const auto& surfaceFormats = _physicalDeviceInfo.surfaceFormats;
             if (surfaceFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");
