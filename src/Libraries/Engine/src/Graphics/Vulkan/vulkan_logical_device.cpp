@@ -33,10 +33,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            const auto& queueFamiliesIndices = _physicalDeviceImplementationInfo.queueFamiliesIndices;
-
             Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-            Set<UInt32> queueFamiliesIndicesSet = { queueFamiliesIndices.graphicsFamilyIndex.value(), queueFamiliesIndices.presentFamilyIndex.value() };
+            Set<UInt32> queueFamiliesIndicesSet = {
+                _physicalDeviceImplementationInfo.graphicsFamilyIndex,
+                _physicalDeviceImplementationInfo.presentFamilyIndex
+            };
             const auto queuePriority = 1.0f;
             for (auto queueFamilyIndex : queueFamiliesIndicesSet)
             {
@@ -68,8 +69,8 @@ namespace Kmplete
                 throw std::runtime_error("VulkanLogicalDevice: failed to create logical device");
             }
 
-            vkGetDeviceQueue(_device, queueFamiliesIndices.graphicsFamilyIndex.value(), 0, &_graphicsQueue);
-            vkGetDeviceQueue(_device, queueFamiliesIndices.presentFamilyIndex.value(), 0, &_presentQueue);
+            vkGetDeviceQueue(_device, _physicalDeviceImplementationInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
+            vkGetDeviceQueue(_device, _physicalDeviceImplementationInfo.presentFamilyIndex, 0, &_presentQueue);
 
             if (_graphicsQueue == nullptr)
             {
@@ -142,7 +143,7 @@ namespace Kmplete
 
         VkExtent2D VulkanLogicalDevice::_ChooseExtent() const
         {
-            const auto& capabilities = _physicalDeviceImplementationInfo.surfaceAndPresentModeProperties.surfaceCapabilities;
+            const auto& capabilities = _physicalDeviceImplementationInfo.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
             {
                 return capabilities.currentExtent;
@@ -160,7 +161,7 @@ namespace Kmplete
 
         VkSurfaceFormatKHR VulkanLogicalDevice::_ChooseSurfaceFormat() const
         {
-            const auto& surfaceFormats = _physicalDeviceImplementationInfo.surfaceAndPresentModeProperties.surfaceFormats;
+            const auto& surfaceFormats = _physicalDeviceImplementationInfo.surfaceFormats;
             if (surfaceFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");

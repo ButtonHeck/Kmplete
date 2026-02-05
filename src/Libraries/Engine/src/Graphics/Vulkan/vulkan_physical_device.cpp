@@ -44,34 +44,42 @@ namespace Kmplete
             vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
             for (const auto& device : devices)
             {
-                const auto [deviceIsSuitable, physicalDeviceImplementationInfo] = _IsDeviceSuitable(device);
+                const auto deviceCheck = _IsDeviceSuitable(device);
+                const auto deviceIsSuitable = deviceCheck.first;
+                const auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
                 if (deviceIsSuitable)
                 {
                     _physicalDevice = device;
-                    _physicalDeviceImplementationInfo = physicalDeviceImplementationInfo;
 
-                    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceImplementationInfo.physicalDeviceProperties.memoryProperties);
-                    vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceImplementationInfo.physicalDeviceProperties.deviceProperties);
+                    _physicalDeviceImplementationInfo.graphicsFamilyIndex = queueFamilyIndices.graphicsFamilyIndex.value();
+                    _physicalDeviceImplementationInfo.presentFamilyIndex = queueFamilyIndices.presentFamilyIndex.value();
 
-                    const auto& properties = _physicalDeviceImplementationInfo.physicalDeviceProperties.deviceProperties;
-                    _physicalDeviceImplementationInfo.physicalDeviceProperties.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
-                    const auto samplesCountMask = _physicalDeviceImplementationInfo.physicalDeviceProperties.sampleCountsMask;
+                    _physicalDeviceImplementationInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
+                    _physicalDeviceImplementationInfo.surfaceFormats = surfaceAndPresentModeProperties.surfaceFormats;
+                    _physicalDeviceImplementationInfo.presentModes = surfaceAndPresentModeProperties.presentModes;
+
+                    vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceImplementationInfo.memoryProperties);
+                    vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceImplementationInfo.deviceProperties);
+
+                    const auto& properties = _physicalDeviceImplementationInfo.deviceProperties;
+                    _physicalDeviceImplementationInfo.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
+                    const auto samplesCountMask = _physicalDeviceImplementationInfo.sampleCountsMask;
                     if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
                     if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
                     else
-                        _physicalDeviceImplementationInfo.physicalDeviceProperties.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
+                        _physicalDeviceImplementationInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
 
-                    _physicalDeviceImplementationInfo.physicalDeviceProperties.defaultDepthFormat = _FindSupportedFormat(
+                    _physicalDeviceImplementationInfo.defaultDepthFormat = _FindSupportedFormat(
                         { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
                         VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
                     );
@@ -103,7 +111,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        QueueFamilyIndices VulkanPhysicalDevice::_QueryQueueFamiliesIndices(VkPhysicalDevice device) const
+        VulkanPhysicalDevice::QueueFamilyIndices VulkanPhysicalDevice::_QueryQueueFamiliesIndices(VkPhysicalDevice device) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -142,7 +150,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::pair<bool, PhysicalDeviceImplementationInfo> VulkanPhysicalDevice::_IsDeviceSuitable(VkPhysicalDevice device) const
+        std::pair<bool, std::pair<VulkanPhysicalDevice::QueueFamilyIndices, VulkanPhysicalDevice::SurfaceAndPresentModeProperties>> VulkanPhysicalDevice::_IsDeviceSuitable(VkPhysicalDevice device) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -171,7 +179,7 @@ namespace Kmplete
                 return { false, {} };
             }
 
-            return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties, PhysicalDeviceProperties{} } };
+            return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
         }
         //--------------------------------------------------------------------------
 
@@ -197,7 +205,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        SurfaceAndPresentModeProperties VulkanPhysicalDevice::_QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const
+        VulkanPhysicalDevice::SurfaceAndPresentModeProperties VulkanPhysicalDevice::_QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 

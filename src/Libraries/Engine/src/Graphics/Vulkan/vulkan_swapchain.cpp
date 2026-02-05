@@ -27,14 +27,12 @@ namespace Kmplete
             , _depthImageMemory(VK_NULL_HANDLE)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            const auto& swapchainDetails = _physicalDeviceImplementationInfo.surfaceAndPresentModeProperties;
+            const auto presentMode = _ChoosePresentMode(_physicalDeviceImplementationInfo.presentModes);
 
-            const auto presentMode = _ChoosePresentMode(swapchainDetails.presentModes);
-
-            UInt32 imageCount = swapchainDetails.surfaceCapabilities.minImageCount + 1;
-            if (swapchainDetails.surfaceCapabilities.maxImageCount > 0 && imageCount > swapchainDetails.surfaceCapabilities.maxImageCount)
+            UInt32 imageCount = _physicalDeviceImplementationInfo.surfaceCapabilities.minImageCount + 1;
+            if (_physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount > 0 && imageCount > _physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount)
             {
-                imageCount = swapchainDetails.surfaceCapabilities.maxImageCount;
+                imageCount = _physicalDeviceImplementationInfo.surfaceCapabilities.maxImageCount;
             }
 
             VkSwapchainCreateInfoKHR createInfo{};
@@ -47,9 +45,8 @@ namespace Kmplete
             createInfo.imageArrayLayers = 1;
             createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-            const auto& queueFamiliesIndices = _physicalDeviceImplementationInfo.queueFamiliesIndices;
-            UInt32 indicesArray[] = { queueFamiliesIndices.graphicsFamilyIndex.value(), queueFamiliesIndices.presentFamilyIndex.value() };
-            if (queueFamiliesIndices.graphicsFamilyIndex != queueFamiliesIndices.presentFamilyIndex)
+            UInt32 indicesArray[] = { _physicalDeviceImplementationInfo.graphicsFamilyIndex, _physicalDeviceImplementationInfo.presentFamilyIndex };
+            if (_physicalDeviceImplementationInfo.graphicsFamilyIndex != _physicalDeviceImplementationInfo.presentFamilyIndex)
             {
                 createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 createInfo.queueFamilyIndexCount = 2;
@@ -60,7 +57,7 @@ namespace Kmplete
                 createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
             }
 
-            createInfo.preTransform = swapchainDetails.surfaceCapabilities.currentTransform;
+            createInfo.preTransform = _physicalDeviceImplementationInfo.surfaceCapabilities.currentTransform;
             createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
             createInfo.presentMode = presentMode;
             createInfo.clipped = VK_TRUE;
@@ -87,8 +84,8 @@ namespace Kmplete
 
             _CreateImageViews();
 
-            const auto samplesCount = _physicalDeviceImplementationInfo.physicalDeviceProperties.MaximumSupportedSampleCount();
-            const auto depthFormat = _physicalDeviceImplementationInfo.physicalDeviceProperties.defaultDepthFormat;
+            const auto samplesCount = _physicalDeviceImplementationInfo.MaximumSupportedSampleCount();
+            const auto depthFormat = _physicalDeviceImplementationInfo.defaultDepthFormat;
 
             _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -202,7 +199,7 @@ namespace Kmplete
             VkMemoryAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
             allocInfo.allocationSize = memRequirements.size;
-            allocInfo.memoryTypeIndex = info.physicalDeviceProperties.FindMemoryType(memRequirements.memoryTypeBits, properties);
+            allocInfo.memoryTypeIndex = info.FindMemoryType(memRequirements.memoryTypeBits, properties);
 
             if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
             {
