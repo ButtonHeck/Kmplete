@@ -6,8 +6,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include <queue>
-
 
 namespace Kmplete
 {
@@ -29,7 +27,7 @@ namespace Kmplete
             VkPhysicalDeviceMemoryProperties memoryProperties;
             VkPhysicalDeviceProperties deviceProperties;
             VkSampleCountFlags sampleCountsMask;
-            std::priority_queue<VkSampleCountFlagBits> supportedSampleCounts;
+            PriorityQueue<VkSampleCountFlagBits> supportedSampleCounts;
 
             VkFormat defaultDepthFormat;
             VkSurfaceFormatKHR surfaceFormat;

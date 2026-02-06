@@ -9,6 +9,7 @@
 #include <map>
 #include <set>
 #include <array>
+#include <queue>
 
 
 namespace Kmplete
@@ -32,6 +33,9 @@ namespace Kmplete
 
     template<typename Value, size_t Size>
     using Array = std::array<Value, Size>;
+
+    template<typename Value>
+    using PriorityQueue = std::priority_queue<Value>;
 
     using String = std::string;
     using WString = std::wstring;
