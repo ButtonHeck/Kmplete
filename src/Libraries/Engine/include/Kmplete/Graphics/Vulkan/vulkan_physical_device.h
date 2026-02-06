@@ -2,14 +2,11 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
-
-#include <utility>
 
 
 namespace Kmplete
@@ -35,37 +32,11 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const PhysicalDeviceInfo& GetDeviceInfo() const noexcept;
 
         private:
-            //TODO: comments
-            struct QueueFamilyIndices
-            {
-                Optional<UInt32> graphicsFamilyIndex{};
-                Optional<UInt32> presentFamilyIndex{};
-
-                inline bool IsValid() const noexcept
-                {
-                    return graphicsFamilyIndex.has_value() && presentFamilyIndex.has_value();
-                }
-            };
-
-            //TODO: comments
-            struct SurfaceAndPresentModeProperties
-            {
-                VkSurfaceCapabilitiesKHR surfaceCapabilities{};
-                Vector<VkSurfaceFormatKHR> surfaceFormats{};
-                Vector<VkPresentModeKHR> presentModes{};
-            };
-
-        private:
-            KMP_NODISCARD QueueFamilyIndices _QueryQueueFamiliesIndices(VkPhysicalDevice device) const;
-            KMP_NODISCARD std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> _IsDeviceSuitable(VkPhysicalDevice device) const;
-            KMP_NODISCARD bool _QueryDeviceExtensionSupport(VkPhysicalDevice device) const;
-            KMP_NODISCARD SurfaceAndPresentModeProperties _QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const;
             KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;
-
             KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
 
-            void _PopulatePhysicalDeviceInfo(const QueueFamilyIndices& queueFamilyIndices, const SurfaceAndPresentModeProperties& surfaceAndPresentModeProperties);
-
+            void _PopulatePhysicalDeviceInfo(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
+                                             Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes);
             void _QueryGPUInfo() override;
 
         private:

@@ -1,16 +1,172 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
+#include <utility>
 
 
 namespace Kmplete
 {
     namespace Graphics
     {
+        namespace
+        {
+            //TODO: comments
+            struct QueueFamilyIndices
+            {
+                Optional<UInt32> graphicsFamilyIndex{};
+                Optional<UInt32> presentFamilyIndex{};
+
+                inline bool IsValid() const noexcept
+                {
+                    return graphicsFamilyIndex.has_value() && presentFamilyIndex.has_value();
+                }
+            };
+            //--------------------------------------------------------------------------
+
+
+            //TODO: comments
+            struct SurfaceAndPresentModeProperties
+            {
+                VkSurfaceCapabilitiesKHR surfaceCapabilities{};
+                Vector<VkSurfaceFormatKHR> surfaceFormats{};
+                Vector<VkPresentModeKHR> presentModes{};
+
+                inline bool IsValid() const noexcept
+                {
+                    return !surfaceFormats.empty() && !presentModes.empty();
+                }
+            };
+            //--------------------------------------------------------------------------
+
+
+            KMP_NODISCARD QueueFamilyIndices QueryQueueFamiliesIndices(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+                QueueFamilyIndices indices;
+
+                UInt32 queueFamilyCount = 0;
+                vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+                Vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+                vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+                int index = 0;
+                for (const auto& queueFamily : queueFamilies)
+                {
+                    if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+                    {
+                        indices.graphicsFamilyIndex = index;
+                    }
+
+                    VkBool32 presentFamilySupport = false;
+                    vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surface, &presentFamilySupport);
+                    if (presentFamilySupport)
+                    {
+                        indices.presentFamilyIndex = index;
+                    }
+
+                    if (indices.IsValid())
+                    {
+                        break;
+                    }
+
+                    index++;
+                }
+
+                return indices;
+            }
+            //--------------------------------------------------------------------------
+
+            KMP_NODISCARD bool QueryDeviceExtensionSupport(const VkPhysicalDevice& device)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+                UInt32 extensionCount;
+                vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+                Vector<VkExtensionProperties> availableExtensions(extensionCount);
+                vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+                const auto& enabledExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
+                Set<String> requiredExtensions(enabledExtensions.begin(), enabledExtensions.end());
+
+                for (const auto& extension : availableExtensions)
+                {
+                    requiredExtensions.erase(extension.extensionName);
+                }
+
+                return requiredExtensions.empty();
+            }
+            //--------------------------------------------------------------------------
+
+            KMP_NODISCARD SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+                SurfaceAndPresentModeProperties properties;
+                vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &properties.surfaceCapabilities);
+
+                UInt32 formatCount = 0;
+                vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
+                if (formatCount != 0)
+                {
+                    properties.surfaceFormats.resize(formatCount);
+                    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, properties.surfaceFormats.data());
+                }
+
+                UInt32 presentModeCount = 0;
+                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
+                if (presentModeCount != 0)
+                {
+                    properties.presentModes.resize(presentModeCount);
+                    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, properties.presentModes.data());
+                }
+
+                return properties;
+            }
+            //--------------------------------------------------------------------------
+
+            KMP_NODISCARD std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+                const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
+                if (!queueFamiliesIndices.IsValid())
+                {
+                    return { false, {} };
+                }
+
+                const auto extensionsSupported = QueryDeviceExtensionSupport(device);
+                if (!extensionsSupported)
+                {
+                    return { false, {} };
+                }
+
+                const auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(device, surface);
+                if (!surfaceAndPresentModeProperties.IsValid())
+                {
+                    return { false, {} };
+                }
+
+                VkPhysicalDeviceFeatures supportedFeatures;
+                vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+                if (!supportedFeatures.samplerAnisotropy)
+                {
+                    return { false, {} };
+                }
+
+                return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
+            }
+            //--------------------------------------------------------------------------
+        }
+
+
         const Vector<const char*>& VulkanPhysicalDevice::GetEnabledDeviceExtensions()
         {
             static const Vector<const char*> deviceExtensions =
@@ -44,14 +200,20 @@ namespace Kmplete
             vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
             for (const auto& device : devices)
             {
-                const auto deviceCheck = _IsDeviceSuitable(device);
-                const auto deviceIsSuitable = deviceCheck.first;
+                auto deviceCheck = IsDeviceSuitable(device, _surface);
+                auto deviceIsSuitable = deviceCheck.first;
                 if (deviceIsSuitable)
                 {
                     _physicalDevice = device;
 
-                    const auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
-                    _PopulatePhysicalDeviceInfo(queueFamilyIndices, surfaceAndPresentModeProperties);
+                    auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
+                    _PopulatePhysicalDeviceInfo(
+                        queueFamilyIndices.graphicsFamilyIndex.value(),
+                        queueFamilyIndices.presentFamilyIndex.value(), 
+                        surfaceAndPresentModeProperties.surfaceCapabilities, 
+                        std::move(surfaceAndPresentModeProperties.surfaceFormats),
+                        std::move(surfaceAndPresentModeProperties.presentModes)
+                    );
                 }
             }
 
@@ -80,129 +242,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanPhysicalDevice::QueueFamilyIndices VulkanPhysicalDevice::_QueryQueueFamiliesIndices(VkPhysicalDevice device) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            QueueFamilyIndices indices;
-
-            UInt32 queueFamilyCount = 0;
-            vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
-
-            Vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-            vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
-
-            int index = 0;
-            for (const auto& queueFamily : queueFamilies)
-            {
-                if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-                {
-                    indices.graphicsFamilyIndex = index;
-                }
-
-                VkBool32 presentFamilySupport = false;
-                vkGetPhysicalDeviceSurfaceSupportKHR(device, index, _surface, &presentFamilySupport);
-                if (presentFamilySupport)
-                {
-                    indices.presentFamilyIndex = index;
-                }
-
-                if (indices.IsValid())
-                {
-                    break;
-                }
-
-                index++;
-            }
-
-            return indices;
-        }
-        //--------------------------------------------------------------------------
-
-        std::pair<bool, std::pair<VulkanPhysicalDevice::QueueFamilyIndices, VulkanPhysicalDevice::SurfaceAndPresentModeProperties>> VulkanPhysicalDevice::_IsDeviceSuitable(VkPhysicalDevice device) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            const auto queueFamiliesIndices = _QueryQueueFamiliesIndices(device);
-            if (!queueFamiliesIndices.IsValid())
-            {
-                return { false, {} };
-            }
-
-            const auto extensionsSupported = _QueryDeviceExtensionSupport(device);
-            if (!extensionsSupported)
-            {
-                return { false, {} };
-            }
-
-            const auto surfaceAndPresentModeProperties = _QuerySurfaceAndPresentModeProperties(device);
-            if (surfaceAndPresentModeProperties.surfaceFormats.empty() || surfaceAndPresentModeProperties.presentModes.empty())
-            {
-                return { false, {} };
-            }
-
-            VkPhysicalDeviceFeatures supportedFeatures;
-            vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-            if (!supportedFeatures.samplerAnisotropy)
-            {
-                return { false, {} };
-            }
-
-            return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
-        }
-        //--------------------------------------------------------------------------
-
-        bool VulkanPhysicalDevice::_QueryDeviceExtensionSupport(VkPhysicalDevice device) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            UInt32 extensionCount;
-            vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
-
-            Vector<VkExtensionProperties> availableExtensions(extensionCount);
-            vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
-
-            const auto& enabledExtensions = GetEnabledDeviceExtensions();
-            Set<String> requiredExtensions(enabledExtensions.begin(), enabledExtensions.end());
-
-            for (const auto& extension : availableExtensions)
-            {
-                requiredExtensions.erase(extension.extensionName);
-            }
-
-            return requiredExtensions.empty();
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanPhysicalDevice::SurfaceAndPresentModeProperties VulkanPhysicalDevice::_QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            SurfaceAndPresentModeProperties properties;
-            vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, _surface, &properties.surfaceCapabilities);
-
-            UInt32 formatCount = 0;
-            vkGetPhysicalDeviceSurfaceFormatsKHR(device, _surface, &formatCount, nullptr);
-            if (formatCount != 0)
-            {
-                properties.surfaceFormats.resize(formatCount);
-                vkGetPhysicalDeviceSurfaceFormatsKHR(device, _surface, &formatCount, properties.surfaceFormats.data());
-            }
-
-            UInt32 presentModeCount = 0;
-            vkGetPhysicalDeviceSurfacePresentModesKHR(device, _surface, &presentModeCount, nullptr);
-            if (presentModeCount != 0)
-            {
-                properties.presentModes.resize(presentModeCount);
-                vkGetPhysicalDeviceSurfacePresentModesKHR(device, _surface, &presentModeCount, properties.presentModes.data());
-            }
-
-            return properties;
-        }
-        //--------------------------------------------------------------------------
-
         VkSurfaceFormatKHR VulkanPhysicalDevice::_FindSurfaceFormat() const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             const auto& surfaceFormats = _physicalDeviceInfo.surfaceFormats;
             if (surfaceFormats.empty())
             {
@@ -224,6 +267,8 @@ namespace Kmplete
 
         VkFormat VulkanPhysicalDevice::_FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             for (auto format : candidates)
             {
                 VkFormatProperties props;
@@ -244,14 +289,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::_PopulatePhysicalDeviceInfo(const QueueFamilyIndices& queueFamilyIndices, const SurfaceAndPresentModeProperties& surfaceAndPresentModeProperties)
+        void VulkanPhysicalDevice::_PopulatePhysicalDeviceInfo(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
+                                                               Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes)
         {
-            _physicalDeviceInfo.graphicsFamilyIndex = queueFamilyIndices.graphicsFamilyIndex.value();
-            _physicalDeviceInfo.presentFamilyIndex = queueFamilyIndices.presentFamilyIndex.value();
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
-            _physicalDeviceInfo.surfaceFormats = surfaceAndPresentModeProperties.surfaceFormats;
-            _physicalDeviceInfo.presentModes = surfaceAndPresentModeProperties.presentModes;
+            _physicalDeviceInfo.graphicsFamilyIndex = graphicsFamilyIndex;
+            _physicalDeviceInfo.presentFamilyIndex = presentFamilyIndex;
+
+            _physicalDeviceInfo.surfaceCapabilities = surfaceCapabilities;
+            _physicalDeviceInfo.surfaceFormats = std::move(surfaceFormats);
+            _physicalDeviceInfo.presentModes = std::move(presentModes);
 
             vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceInfo.memoryProperties);
             vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceInfo.deviceProperties);
@@ -285,6 +333,8 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_QueryGPUInfo()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             VkPhysicalDeviceVulkan12Properties propertiesVersion12{};
             propertiesVersion12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
             propertiesVersion12.pNext = nullptr;
