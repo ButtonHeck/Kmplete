@@ -65,7 +65,8 @@ namespace Kmplete
             KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
 
             void _PopulatePhysicalDeviceInfo(const QueueFamilyIndices& queueFamilyIndices, const SurfaceAndPresentModeProperties& surfaceAndPresentModeProperties);
-            void _QueryInfo();
+
+            void _QueryGPUInfo() override;
 
         private:
             const VkInstance& _instance;

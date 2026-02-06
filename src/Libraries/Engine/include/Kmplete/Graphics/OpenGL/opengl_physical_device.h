@@ -16,6 +16,9 @@ namespace Kmplete
         public:
             KMP_API OpenGLPhysicalDevice();
             KMP_API ~OpenGLPhysicalDevice();
+
+        protected:
+            void _QueryGPUInfo() override;
         };
         //--------------------------------------------------------------------------
     }

@@ -9,26 +9,23 @@ namespace Kmplete
         PhysicalDevice::PhysicalDevice() noexcept
             : _logicalDevice(nullptr)
         {
-            _info.vendor = "Unknown";
-            _info.name = "Unknown";
-            _info.driverVersion = "Unknown";
-
-            _info.msaaSamples = 0;
+            _gpuInfo.vendor = "Unknown";
+            _gpuInfo.name = "Unknown";
+            _gpuInfo.driverVersion = "Unknown";
         }
         //--------------------------------------------------------------------------
 
-        const PhysicalDevice::Info& PhysicalDevice::GetInfo() const noexcept
+        const PhysicalDevice::GPUInfo& PhysicalDevice::GetGPUInfo() const noexcept
         {
-            return _info;
+            return _gpuInfo;
         }
         //--------------------------------------------------------------------------
 
-        void PhysicalDevice::PrintInfo() const noexcept
+        void PhysicalDevice::PrintGPUInfo() const noexcept
         {
-            KMP_LOG_INFO("vendor - {}", _info.vendor);
-            KMP_LOG_INFO("name - {}", _info.name);
-            KMP_LOG_INFO("driver version - {}", _info.driverVersion);
-            KMP_LOG_INFO("MSAA samples - {}", _info.msaaSamples);
+            KMP_LOG_INFO("vendor - {}", _gpuInfo.vendor);
+            KMP_LOG_INFO("name - {}", _gpuInfo.name);
+            KMP_LOG_INFO("driver version - {}", _gpuInfo.driverVersion);
         }
         //--------------------------------------------------------------------------
     }

@@ -61,8 +61,8 @@ namespace Kmplete
                 throw std::runtime_error("VulkanPhysicalDevice: failed to find a suitable GPU");
             }
 
-            _QueryInfo();
-            PrintInfo();
+            _QueryGPUInfo();
+            PrintGPUInfo();
 
             _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, _window));
         }
@@ -283,7 +283,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::_QueryInfo()
+        void VulkanPhysicalDevice::_QueryGPUInfo()
         {
             VkPhysicalDeviceVulkan12Properties propertiesVersion12{};
             propertiesVersion12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
@@ -298,9 +298,9 @@ namespace Kmplete
             properties2.pNext = &propertiesVersion11;
             vkGetPhysicalDeviceProperties2(_physicalDevice, &properties2);
 
-            _info.vendor = propertiesVersion12.driverName;
-            _info.name = properties2.properties.deviceName;
-            _info.driverVersion = propertiesVersion12.driverInfo;
+            _gpuInfo.vendor = propertiesVersion12.driverName;
+            _gpuInfo.name = properties2.properties.deviceName;
+            _gpuInfo.driverVersion = propertiesVersion12.driverInfo;
         }
         //--------------------------------------------------------------------------
     }

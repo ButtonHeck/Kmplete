@@ -18,24 +18,25 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(PhysicalDevice)
 
         public:
-            struct Info
+            struct GPUInfo
             {
                 String vendor;
                 String name;
                 String driverVersion;
-
-                UInt32 msaaSamples;
             };
 
         public:
             PhysicalDevice() noexcept;
             virtual ~PhysicalDevice() = default;
 
-            KMP_NODISCARD KMP_API const Info& GetInfo() const noexcept;
-            KMP_API void PrintInfo() const noexcept;
+            KMP_NODISCARD KMP_API const GPUInfo& GetGPUInfo() const noexcept;
+            KMP_API void PrintGPUInfo() const noexcept;
 
         protected:
-            Info _info;
+            virtual void _QueryGPUInfo() = 0;
+
+        protected:
+            GPUInfo _gpuInfo;
             UPtr<LogicalDevice> _logicalDevice;
         };
         //--------------------------------------------------------------------------
