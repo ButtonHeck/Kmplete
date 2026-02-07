@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -42,10 +43,12 @@ namespace Kmplete
             imageCreationInfo.samples = creationParameters.numSamples;
             imageCreationInfo.flags = 0;
 
-            if (vkCreateImage(_device, &imageCreationInfo, nullptr, &_image) != VK_SUCCESS)
+            const auto result = vkCreateImage(_device, &imageCreationInfo, nullptr, &_image);
+            if (result != VK_SUCCESS)
             {
-                KMP_LOG_CRITICAL("failed to create image");
-                throw std::runtime_error("VulkanImage: failed to create image");
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create image: {}", resultDescription);
+                throw std::runtime_error(String("VulkanImage: failed to create image: ").append(resultDescription));
             }
         }
         //--------------------------------------------------------------------------
@@ -60,12 +63,14 @@ namespace Kmplete
             allocInfo.allocationSize = memoryRequirements.size;
             allocInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
 
-            if (vkAllocateMemory(_device, &allocInfo, nullptr, &_imageMemory) != VK_SUCCESS)
+            const auto result = vkAllocateMemory(_device, &allocInfo, nullptr, &_imageMemory);
+            if (result != VK_SUCCESS)
             {
                 vkDestroyImage(_device, _image, nullptr);
 
-                KMP_LOG_CRITICAL("failed to allocate image memory");
-                throw std::runtime_error("VulkanImage: failed to allocate image memory");
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to allocate image memory: {}", resultDescription);
+                throw std::runtime_error(String("VulkanImage: failed to allocate image memory: ").append(resultDescription));
             }
 
             vkBindImageMemory(_device, _image, _imageMemory, 0);

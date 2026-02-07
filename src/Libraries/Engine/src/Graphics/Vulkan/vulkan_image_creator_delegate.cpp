@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -39,10 +40,12 @@ namespace Kmplete
             imageInfo.flags = 0;
 
             VkImage image{};
-            if (vkCreateImage(_device, &imageInfo, nullptr, &image) != VK_SUCCESS)
+            auto result = vkCreateImage(_device, &imageInfo, nullptr, &image);
+            if (result != VK_SUCCESS)
             {
-                KMP_LOG_CRITICAL("failed to create image");
-                throw std::runtime_error("VulkanImageCreatorDelegate: failed to create image");
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create image: {}", resultDescription);
+                throw std::runtime_error(String("VulkanImageCreatorDelegate: failed to create image: ").append(resultDescription));
             }
 
             VkMemoryRequirements memRequirements;
@@ -53,10 +56,12 @@ namespace Kmplete
             allocInfo.allocationSize = memRequirements.size;
             allocInfo.memoryTypeIndex = _physicalDeviceInfo.FindMemoryType(memRequirements.memoryTypeBits, properties);
 
-            if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
+            result = vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory);
+            if (result != VK_SUCCESS)
             {
-                KMP_LOG_CRITICAL("failed to allocate image memory");
-                throw std::runtime_error("VulkanImageCreatorDelegate: failed to allocate image memory");
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to allocate image memory: {}", resultDescription);
+                throw std::runtime_error(String("VulkanImageCreatorDelegate: failed to allocate image memory: ").append(resultDescription));
             }
 
             vkBindImageMemory(_device, image, imageMemory, 0);
@@ -79,10 +84,12 @@ namespace Kmplete
             viewInfo.subresourceRange.layerCount = 1;
 
             VkImageView imageView;
-            if (vkCreateImageView(_device, &viewInfo, nullptr, &imageView) != VK_SUCCESS)
+            const auto result = vkCreateImageView(_device, &viewInfo, nullptr, &imageView);
+            if (result != VK_SUCCESS)
             {
-                KMP_LOG_CRITICAL("failed to create texture image view");
-                throw std::runtime_error("VulkanImageCreatorDelegate: failed to create texture image view");
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create texture image view: {}", resultDescription);
+                throw std::runtime_error(String("VulkanImageCreatorDelegate: failed to create texture image view: ").append(resultDescription));
             }
 
             return imageView;

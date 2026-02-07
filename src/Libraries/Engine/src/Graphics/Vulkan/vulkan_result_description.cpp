@@ -5,7 +5,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        String VkResultToString(VkResult result)
+        String VkResultToString(VkResult result) noexcept
         {
             switch (result)
             {

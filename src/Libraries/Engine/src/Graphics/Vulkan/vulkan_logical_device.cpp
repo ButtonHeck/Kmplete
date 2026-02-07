@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
@@ -64,10 +65,12 @@ namespace Kmplete
             createInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
             createInfo.pNext = nullptr;
 
-            if (vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device) != VK_SUCCESS)
+            const auto result = vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device);
+            if (result != VK_SUCCESS)
             {
-                KMP_LOG_CRITICAL("failed to create logical device");
-                throw std::runtime_error("VulkanLogicalDevice: failed to create logical device");
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create logical device: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create logical device: ").append(resultDescription));
             }
 
             vkGetDeviceQueue(_device, _physicalDeviceInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
