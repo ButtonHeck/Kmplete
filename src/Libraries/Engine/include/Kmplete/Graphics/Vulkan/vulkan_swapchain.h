@@ -26,7 +26,11 @@ namespace Kmplete
 
         private:
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
-            void _CreateImageViews();
+            void _CreateSwapchainObject(const VkSurfaceKHR& surface, UInt32 imageCount);
+            void _CreateSwapchainImages(UInt32 imageCount);
+            void _CreateSwapchainImageViews();
+            void _CreateAttachmentImages();
+            void _CreateAttachmentImagesViews();
 
         private:
             const VkDevice& _device;

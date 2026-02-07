@@ -32,67 +32,13 @@ namespace Kmplete
                 imageCount = _physicalDeviceInfo.surfaceCapabilities.maxImageCount;
             }
 
-            VkSwapchainCreateInfoKHR createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-            createInfo.surface = surface;
-            createInfo.minImageCount = imageCount;
-            createInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
-            createInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
-            createInfo.imageExtent = _swapchainExtent;
-            createInfo.imageArrayLayers = 1;
-            createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            _CreateSwapchainObject(surface, imageCount);
 
-            UInt32 indicesArray[] = { _physicalDeviceInfo.graphicsFamilyIndex, _physicalDeviceInfo.presentFamilyIndex };
-            if (_physicalDeviceInfo.graphicsFamilyIndex != _physicalDeviceInfo.presentFamilyIndex)
-            {
-                createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-                createInfo.queueFamilyIndexCount = 2;
-                createInfo.pQueueFamilyIndices = indicesArray;
-            }
-            else
-            {
-                createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            }
+            _CreateSwapchainImages(imageCount);
+            _CreateSwapchainImageViews();
 
-            createInfo.preTransform = _physicalDeviceInfo.surfaceCapabilities.currentTransform;
-            createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode = _ChoosePresentMode(_physicalDeviceInfo.presentModes);
-            createInfo.clipped = VK_TRUE;
-            createInfo.oldSwapchain = VK_NULL_HANDLE;
-
-            if (vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapchain) != VK_SUCCESS)
-            {
-                KMP_LOG_CRITICAL("failed to create swapchain");
-                throw std::runtime_error("VulkanSwapchain: failed to create swapchain");
-            }
-
-            vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, nullptr);
-            _swapchainImages.resize(imageCount);
-            vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, _swapchainImages.data());
-
-            for (const auto& swapchainImage : _swapchainImages)
-            {
-                if (swapchainImage == VK_NULL_HANDLE)
-                {
-                    KMP_LOG_CRITICAL("one of the swapchain images is invalid");
-                    throw std::runtime_error("VulkanSwapchain: one of the swapchain images is invalid");
-                }
-            }
-
-            _CreateImageViews();
-
-            const auto samplesCount = _physicalDeviceInfo.MaximumSupportedSampleCount();
-            const auto depthFormat = _physicalDeviceInfo.defaultDepthFormat;
-
-            _colorImage = _imageCreatorDelegate.CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
-                VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImageMemory, info);
-            _colorImageView = _imageCreatorDelegate.CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
-
-            _depthImage = _imageCreatorDelegate.CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, depthFormat, VK_IMAGE_TILING_OPTIMAL,
-                VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImageMemory, info);
-            _depthImageView = _imageCreatorDelegate.CreateImageView(_depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            _CreateAttachmentImages();
+            _CreateAttachmentImagesViews();
         }
         //--------------------------------------------------------------------------
 
@@ -132,13 +78,93 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateImageViews()
+        void VulkanSwapchain::_CreateSwapchainObject(const VkSurfaceKHR& surface, UInt32 imageCount)
+        {
+            VkSwapchainCreateInfoKHR createInfo{};
+            createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+            createInfo.surface = surface;
+            createInfo.minImageCount = imageCount;
+            createInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
+            createInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
+            createInfo.imageExtent = _swapchainExtent;
+            createInfo.imageArrayLayers = 1;
+            createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+            UInt32 indicesArray[] = { _physicalDeviceInfo.graphicsFamilyIndex, _physicalDeviceInfo.presentFamilyIndex };
+            if (_physicalDeviceInfo.graphicsFamilyIndex != _physicalDeviceInfo.presentFamilyIndex)
+            {
+                createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+                createInfo.queueFamilyIndexCount = 2;
+                createInfo.pQueueFamilyIndices = indicesArray;
+            }
+            else
+            {
+                createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            }
+
+            createInfo.preTransform = _physicalDeviceInfo.surfaceCapabilities.currentTransform;
+            createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            createInfo.presentMode = _ChoosePresentMode(_physicalDeviceInfo.presentModes);
+            createInfo.clipped = VK_TRUE;
+            createInfo.oldSwapchain = VK_NULL_HANDLE;
+
+            if (vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapchain) != VK_SUCCESS)
+            {
+                KMP_LOG_CRITICAL("failed to create swapchain");
+                throw std::runtime_error("VulkanSwapchain: failed to create swapchain");
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_CreateSwapchainImages(UInt32 imageCount)
+        {
+            vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, nullptr);
+            _swapchainImages.resize(imageCount);
+            vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, _swapchainImages.data());
+
+            for (const auto& swapchainImage : _swapchainImages)
+            {
+                if (swapchainImage == VK_NULL_HANDLE)
+                {
+                    KMP_LOG_CRITICAL("one of the swapchain images is invalid");
+                    throw std::runtime_error("VulkanSwapchain: one of the swapchain images is invalid");
+                }
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_CreateSwapchainImageViews()
         {
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
                 _swapchainImageViews[i] = _imageCreatorDelegate.CreateImageView(_swapchainImages[i], _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
             }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_CreateAttachmentImages()
+        {
+            _colorImage = _imageCreatorDelegate.CreateImage(
+                _swapchainExtent.width, _swapchainExtent.height, 1, _physicalDeviceInfo.MaximumSupportedSampleCount(), 
+                _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
+                VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImageMemory
+            );
+
+            _depthImage = _imageCreatorDelegate.CreateImage(
+                _swapchainExtent.width, _swapchainExtent.height, 1, _physicalDeviceInfo.MaximumSupportedSampleCount(), 
+                _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_TILING_OPTIMAL,
+                VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImageMemory
+            );
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_CreateAttachmentImagesViews()
+        {
+            _colorImageView = _imageCreatorDelegate.CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+            _depthImageView = _imageCreatorDelegate.CreateImageView(_depthImage, _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
     }

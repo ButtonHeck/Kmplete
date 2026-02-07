@@ -13,7 +13,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         VkImage VulkanImageCreatorDelegate::CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, 
-                                                        VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkDeviceMemory & imageMemory, const PhysicalDeviceInfo& info) const
+                                                        VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkDeviceMemory& imageMemory) const
         {
             VkImageCreateInfo imageInfo{};
             imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -44,7 +44,7 @@ namespace Kmplete
             VkMemoryAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
             allocInfo.allocationSize = memRequirements.size;
-            allocInfo.memoryTypeIndex = info.FindMemoryType(memRequirements.memoryTypeBits, properties);
+            allocInfo.memoryTypeIndex = _physicalDeviceInfo.FindMemoryType(memRequirements.memoryTypeBits, properties);
 
             if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
             {
