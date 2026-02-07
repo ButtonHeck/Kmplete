@@ -12,6 +12,13 @@ namespace Kmplete
         {}
         //--------------------------------------------------------------------------
 
+        VkImage VulkanImageCreatorDelegate::CreateImage(const VkExtent2D & extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, 
+                                                        VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkDeviceMemory& imageMemory) const
+        {
+            return CreateImage(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, properties, imageMemory);
+        }
+        //--------------------------------------------------------------------------
+
         VkImage VulkanImageCreatorDelegate::CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling, 
                                                         VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkDeviceMemory& imageMemory) const
         {

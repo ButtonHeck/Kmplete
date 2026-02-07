@@ -145,15 +145,17 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateAttachmentImages()
         {
+            const auto sampleCount = _physicalDeviceInfo.MaximumSupportedSampleCount();
+
             _colorImage = _imageCreatorDelegate.CreateImage(
-                _swapchainExtent.width, _swapchainExtent.height, 1, _physicalDeviceInfo.MaximumSupportedSampleCount(), 
+                _swapchainExtent, 1, sampleCount,
                 _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImageMemory
             );
 
             _depthImage = _imageCreatorDelegate.CreateImage(
-                _swapchainExtent.width, _swapchainExtent.height, 1, _physicalDeviceInfo.MaximumSupportedSampleCount(), 
+                _swapchainExtent, 1, sampleCount,
                 _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                 VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImageMemory
