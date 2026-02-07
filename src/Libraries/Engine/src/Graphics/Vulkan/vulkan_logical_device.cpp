@@ -30,6 +30,7 @@ namespace Kmplete
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
             , _currentExtent()
+            , _imageCreatorDelegate(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -84,6 +85,8 @@ namespace Kmplete
                 throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
             }
 
+            _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
+
             CreateSwapchain();
         }
         //--------------------------------------------------------------------------
@@ -91,6 +94,8 @@ namespace Kmplete
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
             DeleteSwapchain();
+
+            _imageCreatorDelegate.reset();
             vkDestroyDevice(_device, nullptr);
         }
         //--------------------------------------------------------------------------
@@ -98,7 +103,7 @@ namespace Kmplete
         void VulkanLogicalDevice::CreateSwapchain()
         {
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceInfo, _currentExtent));
+            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceInfo, _currentExtent, *_imageCreatorDelegate.get()));
         }
         //--------------------------------------------------------------------------
 

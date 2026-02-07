@@ -2,7 +2,9 @@
 
 #include "Kmplete/Graphics/logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/pointers.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -47,6 +49,7 @@ namespace Kmplete
             VkQueue _presentQueue;
 
             VkExtent2D _currentExtent;
+            UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;
         };
         //--------------------------------------------------------------------------
     }

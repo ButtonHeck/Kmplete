@@ -111,6 +111,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_physical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_logical_device.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_swapchain.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_framebuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_backend.cpp
@@ -118,6 +119,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_physical_device_info.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_logical_device.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_image_creator_delegate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_swapchain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_framebuffer.cpp
 )

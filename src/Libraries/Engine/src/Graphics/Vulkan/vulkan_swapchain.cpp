@@ -9,11 +9,12 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent)
+        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : Swapchain()
             , _device(device)
             , _physicalDeviceInfo(info)
             , _swapchainExtent(swapchainExtent)
+            , _imageCreatorDelegate(imageCreatorDelegate)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
             , _swapchainImageFormat(_physicalDeviceInfo.surfaceFormat.format)
@@ -83,15 +84,15 @@ namespace Kmplete
             const auto samplesCount = _physicalDeviceInfo.MaximumSupportedSampleCount();
             const auto depthFormat = _physicalDeviceInfo.defaultDepthFormat;
 
-            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
+            _colorImage = _imageCreatorDelegate.CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImage, _colorImageMemory, info);
-            _colorImageView = _CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImageMemory, info);
+            _colorImageView = _imageCreatorDelegate.CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
-            _CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, depthFormat, VK_IMAGE_TILING_OPTIMAL,
+            _depthImage = _imageCreatorDelegate.CreateImage(_swapchainExtent.width, _swapchainExtent.height, 1, samplesCount, depthFormat, VK_IMAGE_TILING_OPTIMAL,
                 VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImage, _depthImageMemory, info);
-            _depthImageView = _CreateImageView(_depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImageMemory, info);
+            _depthImageView = _imageCreatorDelegate.CreateImageView(_depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
 
@@ -136,74 +137,8 @@ namespace Kmplete
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
-                _swapchainImageViews[i] = _CreateImageView(_swapchainImages[i], _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+                _swapchainImageViews[i] = _imageCreatorDelegate.CreateImageView(_swapchainImages[i], _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
             }
-        }
-        //--------------------------------------------------------------------------
-
-        VkImageView VulkanSwapchain::_CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels)
-        {
-            VkImageViewCreateInfo viewInfo{};
-            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = image;
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            viewInfo.format = format;
-            viewInfo.subresourceRange.aspectMask = aspectFlags;
-            viewInfo.subresourceRange.baseMipLevel = 0;
-            viewInfo.subresourceRange.levelCount = mipLevels;
-            viewInfo.subresourceRange.baseArrayLayer = 0;
-            viewInfo.subresourceRange.layerCount = 1;
-
-            VkImageView imageView;
-            if (vkCreateImageView(_device, &viewInfo, nullptr, &imageView) != VK_SUCCESS)
-            {
-                KMP_LOG_CRITICAL("failed to create texture image view");
-                throw std::runtime_error("VulkanSwapchain: failed to create texture image view");
-            }
-
-            return imageView;
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanSwapchain::_CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, VkImageTiling tiling,
-                                           VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory, const PhysicalDeviceInfo& info)
-        {
-            VkImageCreateInfo imageInfo{};
-            imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-            imageInfo.imageType = VK_IMAGE_TYPE_2D;
-            imageInfo.extent.width = width;
-            imageInfo.extent.height = height;
-            imageInfo.extent.depth = 1;
-            imageInfo.mipLevels = mipLevels;
-            imageInfo.arrayLayers = 1;
-            imageInfo.format = format;
-            imageInfo.tiling = tiling;
-            imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            imageInfo.usage = usage;
-            imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            imageInfo.samples = numSamples;
-            imageInfo.flags = 0;
-
-            if (vkCreateImage(_device, &imageInfo, nullptr, &image) != VK_SUCCESS)
-            {
-                throw std::runtime_error("failed to create image");
-            }
-
-            VkMemoryRequirements memRequirements;
-            vkGetImageMemoryRequirements(_device, image, &memRequirements);
-
-            VkMemoryAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memRequirements.size;
-            allocInfo.memoryTypeIndex = info.FindMemoryType(memRequirements.memoryTypeBits, properties);
-
-            if (vkAllocateMemory(_device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS)
-            {
-                KMP_LOG_CRITICAL("failed to allocate image memory");
-                throw std::runtime_error("VulkanSwapchain: failed to allocate image memory");
-            }
-
-            vkBindImageMemory(_device, image, imageMemory, 0);
         }
         //--------------------------------------------------------------------------
     }
