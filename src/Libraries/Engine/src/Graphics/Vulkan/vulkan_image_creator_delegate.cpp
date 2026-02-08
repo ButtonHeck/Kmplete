@@ -44,6 +44,43 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                          VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        {
+            return CreateImagePtr(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, memoryProperties);
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                          VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        {
+            const VulkanImage::Parameters creationParameters = {
+                .width = width,
+                .height = height,
+                .mipLevels = mipLevels,
+                .numSamples = numSamples,
+                .format = format,
+                .tiling = tiling,
+                .usage = usage,
+                .memoryProperties = memoryProperties
+            };
+
+            return CreateImagePtr(creationParameters);
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VulkanImage::Parameters& creationParameters) const
+        {
+            return new VulkanImage(_device, _physicalDeviceInfo, creationParameters);
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
+        {
+            return CreateImageView(image.GetImage(), format, aspectFlags, mipLevels);
+        }
+        //--------------------------------------------------------------------------
+
         VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
         {
             VkImageViewCreateInfo viewInfo{};

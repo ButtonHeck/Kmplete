@@ -156,7 +156,7 @@ namespace Kmplete
                 .usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                 .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
             };
-            _colorImage.reset(new VulkanImage(_device, _physicalDeviceInfo, creationParameters));
+            _colorImage.reset(_imageCreatorDelegate.CreateImagePtr(creationParameters));
 
             creationParameters = {
                 .width = _swapchainExtent.width,
@@ -168,14 +168,14 @@ namespace Kmplete
                 .usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                 .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
             };
-            _depthImage.reset(new VulkanImage(_device, _physicalDeviceInfo, creationParameters));
+            _depthImage.reset(_imageCreatorDelegate.CreateImagePtr(creationParameters));
         }
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::_CreateAttachmentImagesViews()
         {
-            _colorImageView = _imageCreatorDelegate.CreateImageView(_colorImage->GetImage(), _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
-            _depthImageView = _imageCreatorDelegate.CreateImageView(_depthImage->GetImage(), _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            _colorImageView = _imageCreatorDelegate.CreateImageView(*_colorImage.get(), _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+            _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
     }
