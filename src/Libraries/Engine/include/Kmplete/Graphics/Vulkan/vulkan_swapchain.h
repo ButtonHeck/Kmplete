@@ -3,8 +3,10 @@
 #include "Kmplete/Graphics/swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/pointers.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -44,12 +46,10 @@ namespace Kmplete
             VkFormat _swapchainImageFormat;
             Vector<VkImageView> _swapchainImageViews;
 
-            VkImage _colorImage;
-            VkDeviceMemory _colorImageMemory;
+            UPtr<VulkanImage> _colorImage;
             VkImageView _colorImageView;
 
-            VkImage _depthImage;
-            VkDeviceMemory _depthImageMemory;
+            UPtr<VulkanImage> _depthImage;
             VkImageView _depthImageView;
         };
         //--------------------------------------------------------------------------

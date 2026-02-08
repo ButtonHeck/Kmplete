@@ -25,6 +25,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const VkImage& VulkanImage::GetImage() const noexcept
+        {
+            return _image;
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanImage::_CreateImageObject(const Parameters& creationParameters)
         {
             VkImageCreateInfo imageCreationInfo{};

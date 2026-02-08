@@ -20,11 +20,9 @@ namespace Kmplete
             , _swapchainImages()
             , _swapchainImageFormat(_physicalDeviceInfo.surfaceFormat.format)
             , _swapchainImageViews()
-            , _colorImage(VK_NULL_HANDLE)
-            , _colorImageMemory(VK_NULL_HANDLE)
+            , _colorImage(nullptr)
             , _colorImageView(VK_NULL_HANDLE)
-            , _depthImage(VK_NULL_HANDLE)
-            , _depthImageMemory(VK_NULL_HANDLE)
+            , _depthImage(nullptr)
             , _depthImageView(VK_NULL_HANDLE)
         {
             UInt32 imageCount = _physicalDeviceInfo.surfaceCapabilities.minImageCount + 1;
@@ -46,12 +44,10 @@ namespace Kmplete
         VulkanSwapchain::~VulkanSwapchain()
         {
             vkDestroyImageView(_device, _colorImageView, nullptr);
-            vkDestroyImage(_device, _colorImage, nullptr);
-            vkFreeMemory(_device, _colorImageMemory, nullptr);
+            _colorImage.reset();
 
             vkDestroyImageView(_device, _depthImageView, nullptr);
-            vkDestroyImage(_device, _depthImage, nullptr);
-            vkFreeMemory(_device, _depthImageMemory, nullptr);
+            _depthImage.reset();
 
             for (auto imageView : _swapchainImageViews)
             {
@@ -150,26 +146,36 @@ namespace Kmplete
         {
             const auto sampleCount = _physicalDeviceInfo.MaximumSupportedSampleCount();
 
-            _colorImage = _imageCreatorDelegate.CreateImage(
-                _swapchainExtent, 1, sampleCount,
-                _swapchainImageFormat, VK_IMAGE_TILING_OPTIMAL,
-                VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _colorImageMemory
-            );
+            VulkanImage::Parameters creationParameters = {
+                .width = _swapchainExtent.width,
+                .height = _swapchainExtent.height,
+                .mipLevels = 1,
+                .numSamples = sampleCount,
+                .format = _swapchainImageFormat,
+                .tiling = VK_IMAGE_TILING_OPTIMAL,
+                .usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+            };
+            _colorImage.reset(new VulkanImage(_device, _physicalDeviceInfo, creationParameters));
 
-            _depthImage = _imageCreatorDelegate.CreateImage(
-                _swapchainExtent, 1, sampleCount,
-                _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_TILING_OPTIMAL,
-                VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, _depthImageMemory
-            );
+            creationParameters = {
+                .width = _swapchainExtent.width,
+                .height = _swapchainExtent.height,
+                .mipLevels = 1,
+                .numSamples = sampleCount,
+                .format = _physicalDeviceInfo.defaultDepthFormat,
+                .tiling = VK_IMAGE_TILING_OPTIMAL,
+                .usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
+                .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+            };
+            _depthImage.reset(new VulkanImage(_device, _physicalDeviceInfo, creationParameters));
         }
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::_CreateAttachmentImagesViews()
         {
-            _colorImageView = _imageCreatorDelegate.CreateImageView(_colorImage, _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
-            _depthImageView = _imageCreatorDelegate.CreateImageView(_depthImage, _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            _colorImageView = _imageCreatorDelegate.CreateImageView(_colorImage->GetImage(), _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+            _depthImageView = _imageCreatorDelegate.CreateImageView(_depthImage->GetImage(), _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
     }
