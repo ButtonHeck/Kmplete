@@ -36,6 +36,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VkQueue& GetPresentQueue() const noexcept;
 
         private:
+            void _CreateLogicalDeviceObject();
+            void _GetDeviceQueues();
+            KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
         private:

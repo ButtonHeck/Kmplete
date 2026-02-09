@@ -35,62 +35,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-            Set<UInt32> queueFamiliesIndicesSet = {
-                _physicalDeviceInfo.graphicsFamilyIndex,
-                _physicalDeviceInfo.presentFamilyIndex
-            };
-            const auto queuePriority = 1.0f;
-            for (auto queueFamilyIndex : queueFamiliesIndicesSet)
-            {
-                VkDeviceQueueCreateInfo queueCreateInfo{};
-                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-                queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
-                queueCreateInfo.queueCount = 1;
-                queueCreateInfo.pQueuePriorities = &queuePriority;
-                queueCreateInfos.push_back(queueCreateInfo);
-            }
-
-            VkPhysicalDeviceFeatures deviceFeatures{};
-            deviceFeatures.samplerAnisotropy = VK_TRUE;
-
-            VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures{};
-            dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
-            dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
-
-            const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
-
-            VkDeviceCreateInfo createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-            createInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
-            createInfo.pQueueCreateInfos = queueCreateInfos.data();
-            createInfo.pEnabledFeatures = &deviceFeatures;
-            createInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
-            createInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
-            createInfo.pNext = &dynamicRenderingFeatures;
-
-            const auto result = vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create logical device: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create logical device: ").append(resultDescription));
-            }
-
-            vkGetDeviceQueue(_device, _physicalDeviceInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
-            vkGetDeviceQueue(_device, _physicalDeviceInfo.presentFamilyIndex, 0, &_presentQueue);
-
-            if (_graphicsQueue == nullptr)
-            {
-                KMP_LOG_CRITICAL("failed to get graphics queue from logical device");
-                throw std::runtime_error("VulkanLogicalDevice: failed to get graphics queue from logical device");
-            }
-
-            if (_presentQueue == nullptr)
-            {
-                KMP_LOG_CRITICAL("failed to get present queue from logical device");
-                throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
-            }
+            _CreateLogicalDeviceObject();
+            _GetDeviceQueues();
 
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
 
@@ -149,6 +95,80 @@ namespace Kmplete
         const VkQueue& VulkanLogicalDevice::GetPresentQueue() const noexcept
         {
             return _presentQueue;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateLogicalDeviceObject()
+        {
+            const auto queueCreateInfos = _CreateQueueCreateInfos();
+
+            VkPhysicalDeviceFeatures deviceFeatures{};
+            deviceFeatures.samplerAnisotropy = VK_TRUE;
+
+            VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures{};
+            dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
+            dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
+
+            const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
+
+            VkDeviceCreateInfo createInfo{};
+            createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
+            createInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
+            createInfo.pQueueCreateInfos = queueCreateInfos.data();
+            createInfo.pEnabledFeatures = &deviceFeatures;
+            createInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
+            createInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
+            createInfo.pNext = &dynamicRenderingFeatures;
+
+            const auto result = vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device);
+            if (result != VK_SUCCESS)
+            {
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create logical device: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create logical device: ").append(resultDescription));
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_GetDeviceQueues()
+        {
+            vkGetDeviceQueue(_device, _physicalDeviceInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
+            vkGetDeviceQueue(_device, _physicalDeviceInfo.presentFamilyIndex, 0, &_presentQueue);
+
+            if (_graphicsQueue == nullptr)
+            {
+                KMP_LOG_CRITICAL("failed to get graphics queue from logical device");
+                throw std::runtime_error("VulkanLogicalDevice: failed to get graphics queue from logical device");
+            }
+
+            if (_presentQueue == nullptr)
+            {
+                KMP_LOG_CRITICAL("failed to get present queue from logical device");
+                throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        Vector<VkDeviceQueueCreateInfo> VulkanLogicalDevice::_CreateQueueCreateInfos() const
+        {
+            Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
+            Set<UInt32> queueFamiliesIndicesSet = {
+                _physicalDeviceInfo.graphicsFamilyIndex,
+                _physicalDeviceInfo.presentFamilyIndex
+            };
+            const auto queuePriority = 1.0f;
+
+            for (auto queueFamilyIndex : queueFamiliesIndicesSet)
+            {
+                VkDeviceQueueCreateInfo queueCreateInfo{};
+                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+                queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
+                queueCreateInfo.queueCount = 1;
+                queueCreateInfo.pQueuePriorities = &queuePriority;
+                queueCreateInfos.push_back(queueCreateInfo);
+            }
+
+            return queueCreateInfos;
         }
         //--------------------------------------------------------------------------
 
