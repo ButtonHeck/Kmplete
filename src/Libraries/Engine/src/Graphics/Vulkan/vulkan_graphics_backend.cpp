@@ -203,7 +203,6 @@ namespace Kmplete
         {
             VkApplicationInfo applicationInfo{};
             applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-            applicationInfo.pNext = nullptr;
             applicationInfo.pApplicationName = "Kmplete Application";
             applicationInfo.applicationVersion = VK_MAKE_VERSION(GetKmpleteVersionMajor(), GetKmpleteVersionMinor(), GetKmpleteVersionPatch());
             applicationInfo.pEngineName = "Kmplete engine";
@@ -232,12 +231,7 @@ namespace Kmplete
             {
                 instanceCreateInfo.enabledLayerCount = UInt32(LayerNames.size());
                 instanceCreateInfo.ppEnabledLayerNames = LayerNames.data();
-                instanceCreateInfo.pNext = reinterpret_cast<VkDebugUtilsMessengerCreateInfoEXT*>(&debugMessengerCreateInfo);
-            }
-            else
-            {
-                instanceCreateInfo.enabledLayerCount = 0;
-                instanceCreateInfo.pNext = nullptr;
+                instanceCreateInfo.pNext = &debugMessengerCreateInfo;
             }
         }
         //--------------------------------------------------------------------------
