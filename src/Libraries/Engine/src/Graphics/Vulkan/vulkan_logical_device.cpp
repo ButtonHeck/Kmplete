@@ -54,6 +54,10 @@ namespace Kmplete
             VkPhysicalDeviceFeatures deviceFeatures{};
             deviceFeatures.samplerAnisotropy = VK_TRUE;
 
+            VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures{};
+            dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
+            dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
+
             const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
 
             VkDeviceCreateInfo createInfo{};
@@ -63,7 +67,7 @@ namespace Kmplete
             createInfo.pEnabledFeatures = &deviceFeatures;
             createInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
             createInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
-            createInfo.pNext = nullptr;
+            createInfo.pNext = &dynamicRenderingFeatures;
 
             const auto result = vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device);
             if (result != VK_SUCCESS)
