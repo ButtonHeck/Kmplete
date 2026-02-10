@@ -116,6 +116,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_framebuffer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_result_description.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_command_pool.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_surface.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_physical_device.cpp
@@ -126,6 +127,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_framebuffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_result_description.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_command_pool.cpp
 )
 AddTargetSourcesGroup(Kmplete "Localization"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h

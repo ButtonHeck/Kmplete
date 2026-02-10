@@ -32,12 +32,14 @@ namespace Kmplete
             , _presentQueue(nullptr)
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
+            , _commandPool(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _CreateLogicalDeviceObject();
             _GetDeviceQueues();
 
+            _commandPool.reset(new VulkanCommandPool(_device, _physicalDeviceInfo.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
 
             CreateSwapchain();
@@ -49,6 +51,7 @@ namespace Kmplete
             DeleteSwapchain();
 
             _imageCreatorDelegate.reset();
+            _commandPool.reset();
             vkDestroyDevice(_device, nullptr);
         }
         //--------------------------------------------------------------------------
