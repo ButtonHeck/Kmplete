@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Graphics/command_pool.h"
 #include "Kmplete/Graphics/swapchain.h"
 
 
@@ -23,6 +24,7 @@ namespace Kmplete
             KMP_API virtual void RecreateSwapchain() = 0;
 
         protected:
+            UPtr<CommandPool> _commandPool;
             UPtr<Swapchain> _swapchain;
         };
         //--------------------------------------------------------------------------

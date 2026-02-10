@@ -10,7 +10,8 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanCommandPool::VulkanCommandPool(const VkDevice& device, UInt32 graphicsQueueIndex)
-            : _device(device)
+            : CommandPool()
+            , _device(device)
             , _commandPool(VK_NULL_HANDLE)
         {
             VkCommandPoolCreateInfo createPoolInfo{};

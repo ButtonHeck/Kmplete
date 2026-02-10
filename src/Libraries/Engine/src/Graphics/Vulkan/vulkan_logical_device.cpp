@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Window/window.h"
@@ -32,7 +33,6 @@ namespace Kmplete
             , _presentQueue(nullptr)
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
-            , _commandPool(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
