@@ -39,6 +39,7 @@ namespace Kmplete
             void _CreateLogicalDeviceObject();
             void _GetDeviceQueues();
             void _CreateSemaphoreObjects();
+            void _InitializeSubmitInfo();
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
@@ -54,6 +55,9 @@ namespace Kmplete
             VkQueue _presentQueue;
             VkSemaphore _presentCompleteSemaphore;
             VkSemaphore _renderCompleteSemaphore;
+
+            VkPipelineStageFlags _submitPipelineStages;
+            VkSubmitInfo _submitInfo;
 
             VkExtent2D _currentExtent;
             UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;

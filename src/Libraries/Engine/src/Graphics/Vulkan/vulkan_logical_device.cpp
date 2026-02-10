@@ -33,6 +33,8 @@ namespace Kmplete
             , _presentQueue(nullptr)
             , _presentCompleteSemaphore(VK_NULL_HANDLE)
             , _renderCompleteSemaphore(VK_NULL_HANDLE)
+            , _submitPipelineStages(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT)
+            , _submitInfo()
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
         {
@@ -41,6 +43,7 @@ namespace Kmplete
             _CreateLogicalDeviceObject();
             _GetDeviceQueues();
             _CreateSemaphoreObjects();
+            _InitializeSubmitInfo();
 
             _commandPool.reset(new VulkanCommandPool(_device, _physicalDeviceInfo.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
@@ -179,6 +182,17 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("failed to create rendering complete semaphore: {}", resultDescription);
                 throw std::runtime_error(String("VulkanLogicalDevice: failed to create rendering complete semaphore: ").append(resultDescription));
             }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_InitializeSubmitInfo()
+        {
+            _submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+            _submitInfo.pWaitDstStageMask = &_submitPipelineStages;
+            _submitInfo.waitSemaphoreCount = 1;
+            _submitInfo.pWaitSemaphores = &_presentCompleteSemaphore;
+            _submitInfo.signalSemaphoreCount = 1;
+            _submitInfo.pSignalSemaphores = &_renderCompleteSemaphore;
         }
         //--------------------------------------------------------------------------
 
