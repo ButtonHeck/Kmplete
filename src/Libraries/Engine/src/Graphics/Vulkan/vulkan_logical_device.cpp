@@ -31,6 +31,8 @@ namespace Kmplete
             , _device(nullptr)
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
+            , _presentCompleteSemaphore(VK_NULL_HANDLE)
+            , _renderCompleteSemaphore(VK_NULL_HANDLE)
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
         {
@@ -38,6 +40,7 @@ namespace Kmplete
 
             _CreateLogicalDeviceObject();
             _GetDeviceQueues();
+            _CreateSemaphoreObjects();
 
             _commandPool.reset(new VulkanCommandPool(_device, _physicalDeviceInfo.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
@@ -52,6 +55,10 @@ namespace Kmplete
 
             _imageCreatorDelegate.reset();
             _commandPool.reset();
+
+            vkDestroySemaphore(_device, _presentCompleteSemaphore, nullptr);
+            vkDestroySemaphore(_device, _renderCompleteSemaphore, nullptr);
+
             vkDestroyDevice(_device, nullptr);
         }
         //--------------------------------------------------------------------------
@@ -148,6 +155,29 @@ namespace Kmplete
             {
                 KMP_LOG_CRITICAL("failed to get present queue from logical device");
                 throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateSemaphoreObjects()
+        {
+            VkSemaphoreCreateInfo semaphoreCreateInfo{};
+            semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+            auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphore);
+            if (result != VK_SUCCESS)
+            {
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create presentation complete semaphore: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create presentation complete semaphore: ").append(resultDescription));
+            }
+
+            result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphore);
+            if (result != VK_SUCCESS)
+            {
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create rendering complete semaphore: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create rendering complete semaphore: ").append(resultDescription));
             }
         }
         //--------------------------------------------------------------------------
