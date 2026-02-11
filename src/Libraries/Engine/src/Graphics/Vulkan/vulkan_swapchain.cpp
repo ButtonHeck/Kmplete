@@ -16,6 +16,7 @@ namespace Kmplete
             , _physicalDeviceInfo(info)
             , _swapchainExtent(swapchainExtent)
             , _imageCreatorDelegate(imageCreatorDelegate)
+            , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
             , _swapchainImageFormat(_physicalDeviceInfo.surfaceFormat.format)
@@ -25,15 +26,15 @@ namespace Kmplete
             , _depthImage(nullptr)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            UInt32 imageCount = _physicalDeviceInfo.surfaceCapabilities.minImageCount + 1;
-            if (_physicalDeviceInfo.surfaceCapabilities.maxImageCount > 0 && imageCount > _physicalDeviceInfo.surfaceCapabilities.maxImageCount)
+            _imageCount = _physicalDeviceInfo.surfaceCapabilities.minImageCount + 1;
+            if (_physicalDeviceInfo.surfaceCapabilities.maxImageCount > 0 && _imageCount > _physicalDeviceInfo.surfaceCapabilities.maxImageCount)
             {
-                imageCount = _physicalDeviceInfo.surfaceCapabilities.maxImageCount;
+                _imageCount = _physicalDeviceInfo.surfaceCapabilities.maxImageCount;
             }
 
-            _CreateSwapchainObject(surface, imageCount);
+            _CreateSwapchainObject(surface);
 
-            _CreateSwapchainImages(imageCount);
+            _CreateSwapchainImages();
             _CreateSwapchainImageViews();
 
             _CreateAttachmentImages();
@@ -58,6 +59,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        UInt32 VulkanSwapchain::GetImageCount() const
+        {
+            return _imageCount;
+        }
+        //--------------------------------------------------------------------------
+
         VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const
         {
             if (presentModes.empty())
@@ -75,12 +82,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainObject(const VkSurfaceKHR& surface, UInt32 imageCount)
+        void VulkanSwapchain::_CreateSwapchainObject(const VkSurfaceKHR& surface)
         {
             VkSwapchainCreateInfoKHR createInfo{};
             createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
             createInfo.surface = surface;
-            createInfo.minImageCount = imageCount;
+            createInfo.minImageCount = _imageCount;
             createInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
             createInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
             createInfo.imageExtent = _swapchainExtent;
@@ -115,11 +122,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainImages(UInt32 imageCount)
+        void VulkanSwapchain::_CreateSwapchainImages()
         {
-            vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, nullptr);
-            _swapchainImages.resize(imageCount);
-            vkGetSwapchainImagesKHR(_device, _swapchain, &imageCount, _swapchainImages.data());
+            vkGetSwapchainImagesKHR(_device, _swapchain, &_imageCount, nullptr);
+            _swapchainImages.resize(_imageCount);
+            vkGetSwapchainImagesKHR(_device, _swapchain, &_imageCount, _swapchainImages.data());
 
             for (const auto& swapchainImage : _swapchainImages)
             {

@@ -35,6 +35,7 @@ namespace Kmplete
             , _renderCompleteSemaphore(VK_NULL_HANDLE)
             , _submitPipelineStages(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT)
             , _submitInfo()
+            , _drawCommandBuffers()
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
         {
@@ -49,11 +50,14 @@ namespace Kmplete
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
 
             CreateSwapchain();
+
+            _CreateCommandBuffers();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
+            _DeleteCommandBuffers();
             DeleteSwapchain();
 
             _imageCreatorDelegate.reset();
@@ -88,8 +92,11 @@ namespace Kmplete
 
             vkDeviceWaitIdle(_device);
 
+            _DeleteCommandBuffers();
             DeleteSwapchain();
+
             CreateSwapchain();
+            _CreateCommandBuffers();
         }
         //--------------------------------------------------------------------------
 
@@ -193,6 +200,32 @@ namespace Kmplete
             _submitInfo.pWaitSemaphores = &_presentCompleteSemaphore;
             _submitInfo.signalSemaphoreCount = 1;
             _submitInfo.pSignalSemaphores = &_renderCompleteSemaphore;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateCommandBuffers()
+        {
+            _drawCommandBuffers.resize(dynamic_cast<VulkanSwapchain*>(_swapchain.get())->GetImageCount());
+
+            VkCommandBufferAllocateInfo allocateInfo{};
+            allocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+            allocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetPool();
+            allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+            allocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
+
+            const auto result = vkAllocateCommandBuffers(_device, &allocateInfo, _drawCommandBuffers.data());
+            if (result != VK_SUCCESS)
+            {
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create command buffers: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create command buffers: ").append(resultDescription));
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteCommandBuffers()
+        {
+            vkFreeCommandBuffers(_device, dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
         }
         //--------------------------------------------------------------------------
 

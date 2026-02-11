@@ -26,11 +26,13 @@ namespace Kmplete
             KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             KMP_API ~VulkanSwapchain();
 
+            KMP_NODISCARD KMP_API UInt32 GetImageCount() const;
+
         private:
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
 
-            void _CreateSwapchainObject(const VkSurfaceKHR& surface, UInt32 imageCount);
-            void _CreateSwapchainImages(UInt32 imageCount);
+            void _CreateSwapchainObject(const VkSurfaceKHR& surface);
+            void _CreateSwapchainImages();
             void _CreateSwapchainImageViews();
             void _CreateAttachmentImages();
             void _CreateAttachmentImagesViews();
@@ -41,6 +43,7 @@ namespace Kmplete
             const VkExtent2D& _swapchainExtent;
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
 
+            UInt32 _imageCount;
             VkSwapchainKHR _swapchain;
             Vector<VkImage> _swapchainImages;
             VkFormat _swapchainImageFormat;
