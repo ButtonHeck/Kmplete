@@ -27,6 +27,10 @@ set_target_properties(BaseLib PROPERTIES
     FOLDER Kmplete/Libraries/BaseLib
 )
 
+target_link_libraries(BaseLib
+    INTERFACE GSL
+)
+
 if(${KMPLETE_BUILD_TESTS})
     add_subdirectory(tests)
 endif()

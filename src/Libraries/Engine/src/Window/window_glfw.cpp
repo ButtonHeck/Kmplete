@@ -380,7 +380,7 @@ namespace Kmplete
 
         KMP_ASSERT(cursor.GetImplPointer());
 
-        glfwSetCursor(_window, reinterpret_cast<GLFWcursor*>(cursor.GetImplPointer()));
+        glfwSetCursor(_window, reinterpret_cast<GLFWcursor*>(cursor.GetImplPointer().get()));
     }
     //--------------------------------------------------------------------------
 

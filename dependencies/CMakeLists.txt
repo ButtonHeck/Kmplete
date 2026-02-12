@@ -193,6 +193,21 @@ if(NOT entt_POPULATED)
 endif()
 
 
+# GSL
+message("---- Kmplete dependencies: GSL")
+FetchContent_Declare(GSL
+    GIT_REPOSITORY https://github.com/microsoft/GSL.git
+    GIT_TAG v4.2.1
+)
+FetchContent_GetProperties(GSL)
+
+if(NOT GSL_POPULATED)
+    FetchContent_Populate(GSL)
+    
+    add_subdirectory(${gsl_SOURCE_DIR} ${gsl_BINARY_DIR})
+endif()
+
+
 # FreeType
 message("---- Kmplete dependencies: FreeType")
 FetchContent_Declare(freetype

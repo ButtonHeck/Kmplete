@@ -18,7 +18,7 @@ namespace Kmplete
             : GraphicsSurface(window)
             , _instance(instance)
         {
-            GLFWwindow* windowImpl = reinterpret_cast<GLFWwindow*>(window.GetImplPointer());
+            GLFWwindow* windowImpl = reinterpret_cast<GLFWwindow*>(window.GetImplPointer().get());
             const auto result = glfwCreateWindowSurface(_instance, windowImpl, nullptr, &_surface);
             if (result != VK_SUCCESS)
             {
