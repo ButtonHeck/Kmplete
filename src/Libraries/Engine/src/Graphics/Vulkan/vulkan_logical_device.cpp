@@ -36,6 +36,7 @@ namespace Kmplete
             , _submitPipelineStages(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT)
             , _submitInfo()
             , _drawCommandBuffers()
+            , _waitFences()
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
         {
@@ -52,11 +53,13 @@ namespace Kmplete
             CreateSwapchain();
 
             _CreateCommandBuffers();
+            _CreateFences();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
+            _DeleteFences();
             _DeleteCommandBuffers();
             DeleteSwapchain();
 
@@ -92,11 +95,13 @@ namespace Kmplete
 
             vkDeviceWaitIdle(_device);
 
+            _DeleteFences();
             _DeleteCommandBuffers();
             DeleteSwapchain();
 
             CreateSwapchain();
             _CreateCommandBuffers();
+            _CreateFences();
         }
         //--------------------------------------------------------------------------
 
@@ -226,6 +231,35 @@ namespace Kmplete
         void VulkanLogicalDevice::_DeleteCommandBuffers()
         {
             vkFreeCommandBuffers(_device, dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateFences()
+        {
+            VkFenceCreateInfo createInfo{};
+            createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+            createInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+            _waitFences.resize(UInt32(_drawCommandBuffers.size()));
+            for (auto& fence : _waitFences)
+            {
+                const auto result = vkCreateFence(_device, &createInfo, nullptr, &fence);
+                if (result != VK_SUCCESS)
+                {
+                    const auto resultDescription = VkResultToString(result);
+                    KMP_LOG_CRITICAL("failed to create wait fence: {}", resultDescription);
+                    throw std::runtime_error(String("VulkanLogicalDevice: failed to create wait fence: ").append(resultDescription));
+                }
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteFences()
+        {
+            for (auto& fence : _waitFences)
+            {
+                vkDestroyFence(_device, fence, nullptr);
+            }
         }
         //--------------------------------------------------------------------------
 
