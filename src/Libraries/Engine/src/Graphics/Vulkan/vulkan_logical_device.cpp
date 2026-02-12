@@ -37,6 +37,7 @@ namespace Kmplete
             , _submitInfo()
             , _drawCommandBuffers()
             , _waitFences()
+            , _pipelineCache(VK_NULL_HANDLE)
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
         {
@@ -54,11 +55,14 @@ namespace Kmplete
 
             _CreateCommandBuffers();
             _CreateFences();
+            _CreatePipelineCache();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
+            vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
+
             _DeleteFences();
             _DeleteCommandBuffers();
             DeleteSwapchain();
@@ -259,6 +263,21 @@ namespace Kmplete
             for (auto& fence : _waitFences)
             {
                 vkDestroyFence(_device, fence, nullptr);
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreatePipelineCache()
+        {
+            VkPipelineCacheCreateInfo cacheCreateInfo{};
+            cacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+
+            const auto result = vkCreatePipelineCache(_device, &cacheCreateInfo, nullptr, &_pipelineCache);
+            if (result != VK_SUCCESS)
+            {
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create pipeline cache: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create pipeline cache: ").append(resultDescription));
             }
         }
         //--------------------------------------------------------------------------

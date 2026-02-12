@@ -47,6 +47,8 @@ namespace Kmplete
             void _CreateFences();
             void _DeleteFences();
 
+            void _CreatePipelineCache();
+
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
@@ -67,6 +69,8 @@ namespace Kmplete
 
             Vector<VkCommandBuffer> _drawCommandBuffers;
             Vector<VkFence> _waitFences;
+
+            VkPipelineCache _pipelineCache;
 
             VkExtent2D _currentExtent;
             UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;
