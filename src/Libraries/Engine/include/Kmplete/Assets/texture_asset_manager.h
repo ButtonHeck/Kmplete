@@ -6,6 +6,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Assets/texture_asset.h"
 #include "Kmplete/Graphics/graphics_base.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -32,7 +33,7 @@ namespace Kmplete
         public:
             static constexpr StringID ErrorTextureSID = 0;
 
-            KMP_API explicit TextureAssetManager(Graphics::GraphicsBackendType backendType);
+            KMP_API explicit TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend);
 
             KMP_API bool CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically = false);
             KMP_API bool CreateAsset(StringID textureSid, const Graphics::Image& image);
@@ -50,7 +51,7 @@ namespace Kmplete
             KMP_NODISCARD bool _TextureSidIsValid(StringID textureSid);
 
         private:
-            const Graphics::GraphicsBackendType _backendType;
+            Graphics::GraphicsBackend& _graphicsBackend;
             HashMap<StringID, UPtr<Assets::TextureAsset>> _textures;
         };
         //--------------------------------------------------------------------------

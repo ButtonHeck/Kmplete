@@ -14,8 +14,8 @@ namespace Kmplete
 {
     namespace Assets
     {
-        TextureAssetManager::TextureAssetManager(Graphics::GraphicsBackendType backendType)
-            : _backendType(backendType)
+        TextureAssetManager::TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend)
+            : _graphicsBackend(graphicsBackend)
         {
             if (!_CreateErrorTextureAsset())
             {
@@ -35,7 +35,8 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = Graphics::TextureFactory::CreateTexture(_backendType, filepath, flipVertically);
+            const auto backendType = _graphicsBackend.GetType();
+            auto* texture = Graphics::TextureFactory::CreateTexture(backendType, filepath, flipVertically);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture '{}'", filepath);
@@ -57,7 +58,8 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = Graphics::TextureFactory::CreateTexture(_backendType, image);
+            const auto backendType = _graphicsBackend.GetType();
+            auto* texture = Graphics::TextureFactory::CreateTexture(backendType, image);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture from image");
@@ -150,7 +152,8 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = Graphics::TextureFactory::CreateTexture(_backendType, Graphics::Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), Graphics::ImageChannels::RGB));
+            const auto backendType = _graphicsBackend.GetType();
+            auto* texture = Graphics::TextureFactory::CreateTexture(backendType, Graphics::Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), Graphics::ImageChannels::RGB));
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("error texture failed to load");

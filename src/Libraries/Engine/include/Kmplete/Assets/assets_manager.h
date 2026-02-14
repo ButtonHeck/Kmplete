@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Assets/texture_asset_manager.h"
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Assets/assets_interface.h"
@@ -24,7 +25,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
         public:
-            KMP_API AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackendType type);
+            KMP_API AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackend& graphicsBackend);
             KMP_API ~AssetsManager();
 
             KMP_NODISCARD KMP_API const TextureAssetManager& GetTextureAssetManager() const noexcept;
@@ -39,7 +40,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool UnloadAssets(const Vector<StringID>& assetsSids);
 
         private:
-            void _Initialize(Graphics::GraphicsBackendType type);
+            void _Initialize();
             void _Finalize();
 
             void _LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath);
@@ -51,6 +52,7 @@ namespace Kmplete
 
         private:
             const Filepath _dataPath;
+            Graphics::GraphicsBackend& _graphicsBackend;
             UPtr<TextureAssetManager> _textureAssetManager;
             UPtr<FontAssetManager> _fontAssetManager;
             HashMap<StringID, AssetLookupInfo> _lookupMap;

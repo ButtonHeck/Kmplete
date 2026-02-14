@@ -12,13 +12,14 @@ namespace Kmplete
 {
     namespace Assets
     {
-        AssetsManager::AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackendType type)
+        AssetsManager::AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackend& graphicsBackend)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _dataPath(applicationPath / AssetsFolder)
+            , _graphicsBackend(graphicsBackend)
             , _textureAssetManager(nullptr)
             , _fontAssetManager(nullptr)
         {
-            _Initialize(type);
+            _Initialize();
 
             KMP_PROFILE_CONSTRUCTOR_END();
         }
@@ -148,7 +149,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_Initialize(Graphics::GraphicsBackendType type)
+        void AssetsManager::_Initialize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -158,7 +159,7 @@ namespace Kmplete
                 throw std::runtime_error("AssetsManager: cannot create due to data path does not exist");
             }
 
-            _textureAssetManager.reset(new TextureAssetManager(type));
+            _textureAssetManager.reset(new TextureAssetManager(_graphicsBackend));
             _fontAssetManager.reset(new FontAssetManager());
         }
         //--------------------------------------------------------------------------
