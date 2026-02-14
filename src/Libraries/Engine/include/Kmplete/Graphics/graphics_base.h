@@ -35,5 +35,8 @@ namespace Kmplete
         static constexpr auto UnknownStr = "Unknown";
         static constexpr auto DefaultAPIStr = OpenGLStr;
         //--------------------------------------------------------------------------
+
+
+        static constexpr auto NumConcurrentFrames = 2;
     }
 }

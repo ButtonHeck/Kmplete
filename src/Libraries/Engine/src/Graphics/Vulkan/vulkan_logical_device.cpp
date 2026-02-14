@@ -31,12 +31,10 @@ namespace Kmplete
             , _device(nullptr)
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
-            , _presentCompleteSemaphore(VK_NULL_HANDLE)
-            , _renderCompleteSemaphore(VK_NULL_HANDLE)
-            , _submitPipelineStages(VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT)
-            , _submitInfo()
-            , _drawCommandBuffers()
+            , _presentCompleteSemaphores()
+            , _renderCompleteSemaphores()
             , _waitFences()
+            , _drawCommandBuffers()
             , _pipelineCache(VK_NULL_HANDLE)
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
@@ -46,7 +44,6 @@ namespace Kmplete
             _CreateLogicalDeviceObject();
             _GetDeviceQueues();
             _CreateSemaphoreObjects();
-            _InitializeSubmitInfo();
 
             _commandPool.reset(new VulkanCommandPool(_device, _physicalDeviceInfo.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
@@ -70,8 +67,11 @@ namespace Kmplete
             _imageCreatorDelegate.reset();
             _commandPool.reset();
 
-            vkDestroySemaphore(_device, _presentCompleteSemaphore, nullptr);
-            vkDestroySemaphore(_device, _renderCompleteSemaphore, nullptr);
+            for (UInt32 i = 0; i < NumConcurrentFrames; i++)
+            {
+                vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
+                vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
+            }
 
             vkDestroyDevice(_device, nullptr);
         }
@@ -183,39 +183,29 @@ namespace Kmplete
             VkSemaphoreCreateInfo semaphoreCreateInfo{};
             semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
 
-            auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphore);
-            if (result != VK_SUCCESS)
+            for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create presentation complete semaphore: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create presentation complete semaphore: ").append(resultDescription));
-            }
+                auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphores[i]);
+                if (result != VK_SUCCESS)
+                {
+                    const auto resultDescription = VkResultToString(result);
+                    KMP_LOG_CRITICAL("failed to create presentation complete semaphore: {}", resultDescription);
+                    throw std::runtime_error(String("VulkanLogicalDevice: failed to create presentation complete semaphore: ").append(resultDescription));
+                }
 
-            result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphore);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create rendering complete semaphore: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create rendering complete semaphore: ").append(resultDescription));
+                result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
+                if (result != VK_SUCCESS)
+                {
+                    const auto resultDescription = VkResultToString(result);
+                    KMP_LOG_CRITICAL("failed to create rendering complete semaphore: {}", resultDescription);
+                    throw std::runtime_error(String("VulkanLogicalDevice: failed to create rendering complete semaphore: ").append(resultDescription));
+                }
             }
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_InitializeSubmitInfo()
-        {
-            _submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-            _submitInfo.pWaitDstStageMask = &_submitPipelineStages;
-            _submitInfo.waitSemaphoreCount = 1;
-            _submitInfo.pWaitSemaphores = &_presentCompleteSemaphore;
-            _submitInfo.signalSemaphoreCount = 1;
-            _submitInfo.pSignalSemaphores = &_renderCompleteSemaphore;
         }
         //--------------------------------------------------------------------------
 
         void VulkanLogicalDevice::_CreateCommandBuffers()
         {
-            _drawCommandBuffers.resize(dynamic_cast<VulkanSwapchain*>(_swapchain.get())->GetImageCount());
-
             VkCommandBufferAllocateInfo allocateInfo{};
             allocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
             allocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetPool();
@@ -244,7 +234,6 @@ namespace Kmplete
             createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
             createInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-            _waitFences.resize(UInt32(_drawCommandBuffers.size()));
             for (auto& fence : _waitFences)
             {
                 const auto result = vkCreateFence(_device, &createInfo, nullptr, &fence);

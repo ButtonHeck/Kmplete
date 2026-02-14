@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
@@ -39,7 +40,6 @@ namespace Kmplete
             void _CreateLogicalDeviceObject();
             void _GetDeviceQueues();
             void _CreateSemaphoreObjects();
-            void _InitializeSubmitInfo();
 
             void _CreateCommandBuffers();
             void _DeleteCommandBuffers();
@@ -61,15 +61,11 @@ namespace Kmplete
             VkDevice _device;
             VkQueue _graphicsQueue;
             VkQueue _presentQueue;
-            VkSemaphore _presentCompleteSemaphore;
-            VkSemaphore _renderCompleteSemaphore;
 
-            VkPipelineStageFlags _submitPipelineStages;
-            VkSubmitInfo _submitInfo;
-
-            Vector<VkCommandBuffer> _drawCommandBuffers;
-            Vector<VkFence> _waitFences;
-
+            Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;
+            Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
+            Array<VkFence, NumConcurrentFrames> _waitFences;
+            Array<VkCommandBuffer, NumConcurrentFrames> _drawCommandBuffers;
             VkPipelineCache _pipelineCache;
 
             VkExtent2D _currentExtent;
