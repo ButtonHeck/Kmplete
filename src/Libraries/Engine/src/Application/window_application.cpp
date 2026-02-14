@@ -151,12 +151,13 @@ namespace Kmplete
 
         if (!mainWindowIsIconified)
         {
+            _graphicsBackend->StartFrame(frameTimestep);
             _frameListenerManager->_RenderFrameListeners();
         }
 
         _frameListenerManager->_ProcessFrameListenersCommands();
 
-        window.SwapBuffers();
+        _graphicsBackend->EndFrame();
 
         return true;
     }

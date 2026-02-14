@@ -24,6 +24,9 @@ namespace Kmplete
             KMP_API explicit OpenGLGraphicsBackend(Window& window);
             KMP_API ~OpenGLGraphicsBackend();
 
+            KMP_API void StartFrame(float frameTimestep) override;
+            KMP_API void EndFrame() override;
+
         private:
             void _Initialize();
             void _Finalize();

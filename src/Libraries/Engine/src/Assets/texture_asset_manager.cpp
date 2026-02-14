@@ -19,8 +19,9 @@ namespace Kmplete
         {
             if (!_CreateErrorTextureAsset())
             {
-                KMP_LOG_CRITICAL("error texture loading failed");
-                throw std::runtime_error("TextureAssetManager: error texture loading failed");
+                //TODO: uncomment after finishing Vulkan implementation
+                //KMP_LOG_CRITICAL("error texture loading failed");
+                //throw std::runtime_error("TextureAssetManager: error texture loading failed");
             }
         }
         //--------------------------------------------------------------------------

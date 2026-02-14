@@ -115,6 +115,16 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanGraphicsBackend::StartFrame(KMP_MB_UNUSED float frameTimestep)
+        {
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsBackend::EndFrame()
+        {
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanGraphicsBackend::_Initialize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);

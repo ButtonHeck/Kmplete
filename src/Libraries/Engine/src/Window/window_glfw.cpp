@@ -657,7 +657,10 @@ namespace Kmplete
                 userData->eventCallback(event);
             }
 
-            glfwSwapBuffers(window);
+            if (glfwGetCurrentContext() != nullptr)
+            {
+                glfwSwapBuffers(window);
+            }
             }
         );
 

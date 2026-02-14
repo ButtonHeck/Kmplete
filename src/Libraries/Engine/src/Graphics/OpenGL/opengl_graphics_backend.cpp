@@ -30,6 +30,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void OpenGLGraphicsBackend::StartFrame(KMP_MB_UNUSED float frameTimestep)
+        {
+        }
+        //--------------------------------------------------------------------------
+
+        void OpenGLGraphicsBackend::EndFrame()
+        {
+            _window.SwapBuffers();
+        }
+        //--------------------------------------------------------------------------
+
         void OpenGLGraphicsBackend::_Initialize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);

@@ -32,6 +32,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
             KMP_NODISCARD KMP_API const PhysicalDevice& GetPhysicalDevice() const noexcept;
 
+            KMP_API virtual void StartFrame(float frameTimestep) = 0;
+            KMP_API virtual void EndFrame() = 0;
+
         protected:
             Window& _window;
             UPtr<GraphicsSurface> _surface;
