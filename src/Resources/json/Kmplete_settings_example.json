@@ -16,7 +16,7 @@
     },
     "WindowApplication": {
         "WindowBackend": {
-            "GraphicsBackendType": "OpenGL",
+            "GraphicsBackendType": "Vulkan",
             "MainWindow": {
                 "Name": "Main",
                 "X": 100,

@@ -33,7 +33,7 @@ namespace Kmplete
         static constexpr auto OpenGLStr = "OpenGL";
         static constexpr auto VulkanStr = "Vulkan";
         static constexpr auto UnknownStr = "Unknown";
-        static constexpr auto DefaultAPIStr = OpenGLStr;
+        static constexpr auto DefaultAPIStr = VulkanStr;
         //--------------------------------------------------------------------------
 
 

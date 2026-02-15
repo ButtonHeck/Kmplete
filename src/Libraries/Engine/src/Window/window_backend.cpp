@@ -18,7 +18,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     WindowBackend::WindowBackend()
-        : _graphicsBackendType(Graphics::GraphicsBackendType::OpenGL)
+        : _graphicsBackendType(Graphics::GraphicsBackendType::Vulkan)
     {}
     //--------------------------------------------------------------------------
 
