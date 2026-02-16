@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Kmplete/ImGui/implementation.h"
+#include "Kmplete/ImGui/context_opengl.h"
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Profile/profiler.h"
-
-
-struct GLFWwindow;
 
 
 namespace Kmplete
@@ -20,13 +18,13 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(ImGuiImplementationGlfwOpenGL)
 
         public:
-            ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName = ConfigurationFileName);
+            explicit ImGuiImplementationGlfwOpenGL(ContextOpenGL* context);
             virtual ~ImGuiImplementationGlfwOpenGL();
 
             void CreateFontsTexture() const override;
 
         private:
-            void _Initialize(NonNull<GLFWwindow*> window) const;
+            void _Initialize() const;
             void _Finalize() const;
 
             void _NewFrameImpl() const override;

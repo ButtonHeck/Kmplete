@@ -85,7 +85,7 @@ namespace Kmplete
 
         if (ImGui::BeginMenuBar())
         {
-            _ComposeMenuLanguage();
+            //_ComposeMenuLanguage(); //TODO: uncomment after Vulkan full initialization done
             _ComposeMenuFile();
             _ComposeMenuView();
 

@@ -8,6 +8,8 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
+#include "Kmplete/ImGui/context_opengl.h"
+#include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -52,7 +54,16 @@ namespace Kmplete
 
         const auto dpiScale = _mainWindow.GetDPIScale();
 
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
+        ImGuiUtils::Context* context = nullptr;
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::OpenGL)
+        {
+            context = new ImGuiUtils::ContextOpenGL(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true);
+        }
+        else if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+
+        }
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         _AddImGuiFonts(dpiScale);
 
@@ -138,7 +149,16 @@ namespace Kmplete
         const auto scale = event.GetScale();
 
         _imguiImpl.reset();
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true));
+        ImGuiUtils::Context* context = nullptr;
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::OpenGL)
+        {
+            context = new ImGuiUtils::ContextOpenGL(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true);
+        }
+        else if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+
+        }
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         _AddImGuiFonts(scale);
 

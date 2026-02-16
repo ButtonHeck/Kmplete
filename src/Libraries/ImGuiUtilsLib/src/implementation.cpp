@@ -1,5 +1,8 @@
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/ImGui/implementation_glfw_opengl.h"
+#include "Kmplete/ImGui/implementation_glfw_vulkan.h"
+#include "Kmplete/ImGui/context_opengl.h"
+#include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
@@ -12,14 +15,20 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementation* ImGuiImplementation::CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
+        ImGuiImplementation* ImGuiImplementation::CreateImpl(Context* implementationContext)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
-            if (graphicsBackendType == "OpenGL")
+            if (implementationContext->graphicsBackendType == "OpenGL")
             {
-                return new ImGuiImplementationGlfwOpenGL(reinterpret_cast<GLFWwindow*>(window), dockingEnabled, viewportsEnabled, configName);
+                ContextOpenGL* contextOpenGL = dynamic_cast<ContextOpenGL*>(implementationContext);
+                return new ImGuiImplementationGlfwOpenGL(contextOpenGL);
+            }
+            else if (implementationContext->graphicsBackendType == "Vulkan")
+            {
+                ContextVulkan* contextVulkan = dynamic_cast<ContextVulkan*>(implementationContext);
+                return new ImGuiImplementationGlfwVulkan(contextVulkan);
             }
 #else
     #error "No suitable window/graphics backends are provided!"
@@ -28,7 +37,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        ImGuiImplementation::ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
+        ImGuiImplementation::ImGuiImplementation(Context* implementationContext)
+            : _context(implementationContext)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -36,17 +46,17 @@ namespace Kmplete
             ImGui::CreateContext();
             auto& io = ImGui::GetIO();
 
-            if (dockingEnabled)
+            if (_context->dockingEnabled)
             {
                 io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
             }
-            if (viewportsEnabled)
+            if (_context->viewportsEnabled)
             {
                 io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
             }
 
             io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
-            io.IniFilename = configName;
+            io.IniFilename = _context->configName;
         }
         //--------------------------------------------------------------------------
 

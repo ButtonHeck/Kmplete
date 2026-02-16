@@ -2,6 +2,8 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/pointers.h"
+#include "Kmplete/ImGui/context.h"
 
 
 namespace Kmplete
@@ -15,11 +17,10 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(ImGuiImplementation)
 
         protected:
-            static constexpr auto ConfigurationFileName = "imgui.ini";
             static constexpr auto DefaultFontSize = 18;
 
         public:
-            KMP_NODISCARD static ImGuiImplementation* CreateImpl(void* window, const String& graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, const char* configName = ConfigurationFileName);
+            KMP_NODISCARD static ImGuiImplementation* CreateImpl(Context* implementationContext);
 
         public:
             virtual ~ImGuiImplementation();
@@ -37,10 +38,13 @@ namespace Kmplete
             virtual void CreateFontsTexture() const = 0;
 
         protected:
-            ImGuiImplementation(bool dockingEnabled, bool viewportsEnabled, const char* configName = ConfigurationFileName);
+            explicit ImGuiImplementation(Context* implementationContext);
 
             virtual void _NewFrameImpl() const = 0;
             virtual void _RenderImpl() const = 0;
+
+        protected:
+            UPtr<Context> _context;
         };
         //--------------------------------------------------------------------------
     }

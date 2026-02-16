@@ -10,11 +10,11 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
-            : ImGuiImplementation(dockingEnabled, viewportsEnabled, configName)
+        ImGuiImplementationGlfwOpenGL::ImGuiImplementationGlfwOpenGL(ContextOpenGL* context)
+            : ImGuiImplementation(context)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         {
-            _Initialize(window);
+            _Initialize();
 
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -34,10 +34,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwOpenGL::_Initialize(NonNull<GLFWwindow*> window) const
+        void ImGuiImplementationGlfwOpenGL::_Initialize() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            const auto window = reinterpret_cast<GLFWwindow*>(_context->window);
             ImGui_ImplGlfw_InitForOpenGL(window, true);
             ImGui_ImplOpenGL3_Init("#version 330");
         }

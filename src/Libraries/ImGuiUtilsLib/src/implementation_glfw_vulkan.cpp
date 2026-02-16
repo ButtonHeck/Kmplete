@@ -11,11 +11,11 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ImGuiImplementationGlfwVulkan::ImGuiImplementationGlfwVulkan(NonNull<GLFWwindow*> window, bool dockingEnabled, bool viewportsEnabled, const char* configName /*= ConfigurationFileName*/)
-            : ImGuiImplementation(dockingEnabled, viewportsEnabled, configName)
+        ImGuiImplementationGlfwVulkan::ImGuiImplementationGlfwVulkan(ContextVulkan* context)
+            : ImGuiImplementation(context)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         {
-            _Initialize(window);
+            _Initialize();
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
@@ -28,14 +28,21 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_Initialize(NonNull<GLFWwindow*> window) const
+        void ImGuiImplementationGlfwVulkan::CreateFontsTexture() const
+        {
+            ImGui_ImplVulkan_CreateFontsTexture();
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementationGlfwVulkan::_Initialize() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            const auto window = reinterpret_cast<GLFWwindow*>(_context->window);
             ImGui_ImplGlfw_InitForVulkan(window, true);
 
-            ImGui_ImplVulkan_InitInfo initInfo{};
-            initInfo.UseDynamicRendering = true;
+            const auto contextVulkan = dynamic_cast<ContextVulkan*>(_context.get());
+            ImGui_ImplVulkan_InitInfo initInfo = contextVulkan->initInfo;
 
             ImGui_ImplVulkan_Init(&initInfo);
         }

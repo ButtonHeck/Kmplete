@@ -204,7 +204,7 @@ target_link_libraries(Kmplete
     PRIVATE stb_image
     PRIVATE glad
     PRIVATE freetype
-    PRIVATE Vulkan::Vulkan
+    PUBLIC Vulkan::Vulkan
 )
 
 if(UNIX)
