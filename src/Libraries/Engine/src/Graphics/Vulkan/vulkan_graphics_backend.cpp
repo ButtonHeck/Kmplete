@@ -115,13 +115,19 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::StartFrame(KMP_MB_UNUSED float frameTimestep)
+        void VulkanGraphicsBackend::StartFrame(float)
         {
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::EndFrame()
         {
+        }
+        //--------------------------------------------------------------------------
+
+        VkInstance VulkanGraphicsBackend::GetVkInstance() const noexcept
+        {
+            return _instance;
         }
         //--------------------------------------------------------------------------
 

@@ -236,6 +236,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkPhysicalDevice VulkanPhysicalDevice::GetVkPhysicalDevice() const noexcept
+        {
+            return _physicalDevice;
+        }
+        //--------------------------------------------------------------------------
+
         const PhysicalDeviceInfo& VulkanPhysicalDevice::GetDeviceInfo() const noexcept
         {
             return _physicalDeviceInfo;

@@ -32,6 +32,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const GPUInfo& GetGPUInfo() const noexcept;
             KMP_API void PrintGPUInfo() const noexcept;
 
+            KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept;
+
         protected:
             virtual void _QueryGPUInfo() = 0;
 

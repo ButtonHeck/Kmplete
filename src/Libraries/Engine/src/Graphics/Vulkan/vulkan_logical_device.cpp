@@ -109,19 +109,19 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const VkDevice& VulkanLogicalDevice::GetImplDevice() const noexcept
+        VkDevice VulkanLogicalDevice::GetVkDevice() const noexcept
         {
             return _device;
         }
         //--------------------------------------------------------------------------
 
-        const VkQueue& VulkanLogicalDevice::GetGraphicsQueue() const noexcept
+        VkQueue VulkanLogicalDevice::GetVkGraphicsQueue() const noexcept
         {
             return _graphicsQueue;
         }
         //--------------------------------------------------------------------------
 
-        const VkQueue& VulkanLogicalDevice::GetPresentQueue() const noexcept
+        VkQueue VulkanLogicalDevice::GetVkPresentQueue() const noexcept
         {
             return _presentQueue;
         }

@@ -26,6 +26,8 @@ namespace Kmplete
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
 
+            KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
+
         private:
             void _Initialize();
             void _Finalize();

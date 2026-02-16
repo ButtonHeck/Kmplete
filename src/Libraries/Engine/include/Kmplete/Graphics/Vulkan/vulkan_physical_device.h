@@ -29,6 +29,7 @@ namespace Kmplete
             KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window);
             KMP_API ~VulkanPhysicalDevice();
 
+            KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
             KMP_NODISCARD KMP_API const PhysicalDeviceInfo& GetDeviceInfo() const noexcept;
 
         private:

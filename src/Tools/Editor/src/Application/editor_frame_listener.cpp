@@ -3,6 +3,9 @@
 
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -69,7 +72,27 @@ namespace Kmplete
         }
         else if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
+            const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
+            const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+            const auto& logicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
 
+            ImGui_ImplVulkan_InitInfo initInfo{};
+            initInfo.Instance = vulkanBackend.GetVkInstance();
+            initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
+            initInfo.Device = logicalDevice.GetVkDevice();
+            initInfo.QueueFamily = physicalDevice.GetDeviceInfo().graphicsFamilyIndex;
+            initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
+            initInfo.PipelineCache = VK_NULL_HANDLE;
+            //initInfo.DescriptorPool = ;
+            initInfo.Allocator = VK_NULL_HANDLE;
+            initInfo.MinImageCount = Graphics::NumConcurrentFrames;
+            initInfo.ImageCount = Graphics::NumConcurrentFrames;
+            initInfo.CheckVkResultFn = nullptr;
+            initInfo.UseDynamicRendering = true;
+            initInfo.PipelineRenderingCreateInfo = { .sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO };
+            initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetDeviceInfo().surfaceFormat.format;
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 

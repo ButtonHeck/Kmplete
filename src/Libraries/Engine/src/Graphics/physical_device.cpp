@@ -28,5 +28,11 @@ namespace Kmplete
             KMP_LOG_INFO("driver version - {}", _gpuInfo.driverVersion);
         }
         //--------------------------------------------------------------------------
+
+        const LogicalDevice& PhysicalDevice::GetLogicalDevice() const noexcept
+        {
+            return *_logicalDevice.get();
+        }
+        //--------------------------------------------------------------------------
     }
 }
