@@ -54,6 +54,7 @@ namespace Kmplete
 
     private:
         void _Initialize();
+        void _InitializeImGui(float dpiScale);
         void _Finalize();
 
         void _NewFrame();

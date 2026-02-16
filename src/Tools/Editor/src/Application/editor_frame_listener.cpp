@@ -54,6 +54,14 @@ namespace Kmplete
 
         const auto dpiScale = _mainWindow.GetDPIScale();
 
+        _InitializeImGui(dpiScale);
+
+        _metricsTimer.Mark();
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorFrameListener::_InitializeImGui(float dpiScale)
+    {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::OpenGL)
         {
@@ -66,10 +74,7 @@ namespace Kmplete
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         _AddImGuiFonts(dpiScale);
-
         _imguiImpl->Stylize(dpiScale);
-
-        _metricsTimer.Mark();
     }
     //--------------------------------------------------------------------------
 
@@ -149,20 +154,7 @@ namespace Kmplete
         const auto scale = event.GetScale();
 
         _imguiImpl.reset();
-        ImGuiUtils::Context* context = nullptr;
-        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::OpenGL)
-        {
-            context = new ImGuiUtils::ContextOpenGL(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true);
-        }
-        else if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
-        {
-
-        }
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
-
-        _AddImGuiFonts(scale);
-
-        _imguiImpl->Stylize(scale);
+        _InitializeImGui(scale);
 
         return true;
     }
