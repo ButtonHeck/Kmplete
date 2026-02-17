@@ -25,7 +25,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const Window& window);
+            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window);
             KMP_API ~VulkanLogicalDevice();
 
             KMP_API void CreateSwapchain() override;
@@ -55,8 +55,8 @@ namespace Kmplete
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
         private:
-            const VkPhysicalDevice& _physicalDevice;
-            const VkSurfaceKHR& _surface;
+            VkPhysicalDevice _physicalDevice;
+            VkSurfaceKHR _surface;
             const PhysicalDeviceInfo& _physicalDeviceInfo;
             const Window& _window;
 

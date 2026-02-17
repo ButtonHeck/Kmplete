@@ -18,7 +18,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanBuffer)
 
         public:
-            KMP_API VulkanBuffer(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data);
+            KMP_API VulkanBuffer(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data);
             KMP_API ~VulkanBuffer();
 
             KMP_NODISCARD KMP_API VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
@@ -34,8 +34,8 @@ namespace Kmplete
             void _SetupDescriptor(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 
         private:
-            VkDevice _device;
             const PhysicalDeviceInfo& _physicalDeviceInfo;
+            VkDevice _device;
             VkBuffer _buffer;
             VkDeviceMemory _memory;
             VkDescriptorBufferInfo _descriptor;

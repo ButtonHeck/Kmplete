@@ -179,11 +179,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanPhysicalDevice::VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window)
+        VulkanPhysicalDevice::VulkanPhysicalDevice(const Window& window, VkInstance instance, VkSurfaceKHR surface)
             : PhysicalDevice()
+            , _window(window)
             , _instance(instance)
             , _surface(surface)
-            , _window(window)
             , _physicalDevice(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);

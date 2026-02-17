@@ -14,7 +14,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanGraphicsSurface::VulkanGraphicsSurface(Window& window, const VkInstance& instance)
+        VulkanGraphicsSurface::VulkanGraphicsSurface(Window& window, VkInstance instance)
             : GraphicsSurface(window)
             , _instance(instance)
         {
@@ -35,7 +35,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const VkSurfaceKHR& VulkanGraphicsSurface::GetImplSurface() const noexcept
+        VkSurfaceKHR VulkanGraphicsSurface::GetVkSurface() const noexcept
         {
             return _surface;
         }

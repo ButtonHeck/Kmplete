@@ -8,9 +8,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanBuffer::VulkanBuffer(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data)
-            : _device(device)
-            , _physicalDeviceInfo(physicalDeviceInfo)
+        VulkanBuffer::VulkanBuffer(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data)
+            : _physicalDeviceInfo(physicalDeviceInfo)
+            , _device(device)
             , _buffer(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
             , _descriptor()

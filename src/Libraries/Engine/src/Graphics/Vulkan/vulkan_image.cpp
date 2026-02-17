@@ -8,7 +8,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImage::VulkanImage(const VkDevice& device, const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters)
+        VulkanImage::VulkanImage(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
@@ -25,7 +25,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const VkImage& VulkanImage::GetImage() const noexcept
+        VkImage VulkanImage::GetVkImage() const noexcept
         {
             return _image;
         }

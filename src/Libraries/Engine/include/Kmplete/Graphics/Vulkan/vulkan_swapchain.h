@@ -23,7 +23,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanSwapchain(VkDevice device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             KMP_API ~VulkanSwapchain();
 
             KMP_NODISCARD KMP_API UInt32 GetImageCount() const;
@@ -38,7 +38,7 @@ namespace Kmplete
             void _CreateAttachmentImagesViews();
 
         private:
-            const VkDevice& _device;
+            VkDevice _device;
             const PhysicalDeviceInfo& _physicalDeviceInfo;
             const VkExtent2D& _swapchainExtent;
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;

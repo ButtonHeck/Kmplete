@@ -164,7 +164,7 @@ namespace Kmplete
             _InitializeDebugMessenger();
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
-            _physicalDevice.reset(new VulkanPhysicalDevice(_instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetImplSurface(), _window));
+            _physicalDevice.reset(new VulkanPhysicalDevice(_window, _instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetVkSurface()));
         }
         //--------------------------------------------------------------------------
 

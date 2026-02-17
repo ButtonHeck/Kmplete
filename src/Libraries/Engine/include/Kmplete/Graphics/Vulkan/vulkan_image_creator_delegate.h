@@ -20,7 +20,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanImageCreatorDelegate)
 
         public:
-            KMP_API VulkanImageCreatorDelegate(const VkDevice& device, const PhysicalDeviceInfo& physicalDeviceInfo);
+            KMP_API VulkanImageCreatorDelegate(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo);
 
             KMP_NODISCARD KMP_API VulkanImage CreateImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                           VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
@@ -38,7 +38,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const;
 
         private:
-            const VkDevice& _device;
+            VkDevice _device;
             const PhysicalDeviceInfo& _physicalDeviceInfo;
         };
         //--------------------------------------------------------------------------

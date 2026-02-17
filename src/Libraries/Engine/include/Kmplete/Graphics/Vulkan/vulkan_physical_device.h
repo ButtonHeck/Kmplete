@@ -26,7 +26,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API static const Vector<const char*>& GetEnabledDeviceExtensions();
 
         public:
-            KMP_API VulkanPhysicalDevice(const VkInstance& instance, const VkSurfaceKHR& surface, const Window& window);
+            KMP_API VulkanPhysicalDevice(const Window& window, VkInstance instance, VkSurfaceKHR surface);
             KMP_API ~VulkanPhysicalDevice();
 
             KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
@@ -41,10 +41,9 @@ namespace Kmplete
             void _QueryGPUInfo() override;
 
         private:
-            const VkInstance& _instance;
-            const VkSurfaceKHR& _surface;
             const Window& _window;
-
+            VkInstance _instance;
+            VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;
             PhysicalDeviceInfo _physicalDeviceInfo;
         };

@@ -19,14 +19,13 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanCommandPool)
 
         public:
-            KMP_API VulkanCommandPool(const VkDevice& device, UInt32 graphicsQueueIndex);
+            KMP_API VulkanCommandPool(VkDevice device, UInt32 graphicsQueueIndex);
             KMP_API ~VulkanCommandPool();
 
-            KMP_NODISCARD KMP_API const VkCommandPool& GetPool() const noexcept;
+            KMP_NODISCARD KMP_API VkCommandPool GetVkCommandPool() const noexcept;
 
         private:
-            const VkDevice& _device;
-
+            VkDevice _device;
             VkCommandPool _commandPool;
         };
         //--------------------------------------------------------------------------

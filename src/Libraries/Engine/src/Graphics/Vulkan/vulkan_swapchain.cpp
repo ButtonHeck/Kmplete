@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(const VkDevice& device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : Swapchain()
             , _device(device)
             , _physicalDeviceInfo(info)

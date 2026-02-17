@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanCommandPool::VulkanCommandPool(const VkDevice& device, UInt32 graphicsQueueIndex)
+        VulkanCommandPool::VulkanCommandPool(VkDevice device, UInt32 graphicsQueueIndex)
             : CommandPool()
             , _device(device)
             , _commandPool(VK_NULL_HANDLE)
@@ -35,7 +35,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const VkCommandPool& VulkanCommandPool::GetPool() const noexcept
+        VkCommandPool VulkanCommandPool::GetVkCommandPool() const noexcept
         {
             return _commandPool;
         }

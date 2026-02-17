@@ -22,7 +22,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(const VkPhysicalDevice& physicalDevice, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const Window& window)
+        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
@@ -217,7 +217,7 @@ namespace Kmplete
         {
             VkCommandBufferAllocateInfo allocateInfo{};
             allocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-            allocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetPool();
+            allocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool();
             allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
             allocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
 
@@ -233,7 +233,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_DeleteCommandBuffers()
         {
-            vkFreeCommandBuffers(_device, dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
+            vkFreeCommandBuffers(_device, dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
         }
         //--------------------------------------------------------------------------
 

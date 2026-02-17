@@ -35,18 +35,17 @@ namespace Kmplete
             };
 
         public:
-            KMP_API VulkanImage(const VkDevice& device, const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters);
+            KMP_API VulkanImage(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters);
             KMP_API ~VulkanImage();
 
-            KMP_NODISCARD KMP_API const VkImage& GetImage() const noexcept;
+            KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
 
         private:
             void _CreateImageObject(const Parameters& creationParameters);
             void _AllocateImageMemory(const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters);
 
         private:
-            const VkDevice& _device;
-
+            VkDevice _device;
             VkImage _image;
             VkDeviceMemory _imageMemory;
         };

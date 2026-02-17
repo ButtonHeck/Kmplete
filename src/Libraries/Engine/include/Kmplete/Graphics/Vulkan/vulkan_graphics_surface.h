@@ -21,13 +21,13 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanGraphicsSurface)
 
         public:
-            KMP_API VulkanGraphicsSurface(Window& window, const VkInstance& instance);
+            KMP_API VulkanGraphicsSurface(Window& window, VkInstance instance);
             KMP_API ~VulkanGraphicsSurface();
 
-            KMP_NODISCARD KMP_API const VkSurfaceKHR& GetImplSurface() const noexcept;
+            KMP_NODISCARD KMP_API VkSurfaceKHR GetVkSurface() const noexcept;
 
         private:
-            const VkInstance& _instance;
+            VkInstance _instance;
             VkSurfaceKHR _surface;
         };
         //--------------------------------------------------------------------------

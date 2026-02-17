@@ -7,7 +7,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(const VkDevice& device, const PhysicalDeviceInfo& physicalDeviceInfo)
+        VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo)
             : _device(device)
             , _physicalDeviceInfo(physicalDeviceInfo)
         {}
@@ -77,7 +77,7 @@ namespace Kmplete
 
         VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
         {
-            return CreateImageView(image.GetImage(), format, aspectFlags, mipLevels);
+            return CreateImageView(image.GetVkImage(), format, aspectFlags, mipLevels);
         }
         //--------------------------------------------------------------------------
 
