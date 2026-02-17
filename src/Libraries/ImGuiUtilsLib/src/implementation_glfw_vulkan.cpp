@@ -69,6 +69,13 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             //ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), )
+
+            const auto& io = ImGui::GetIO();
+            if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+            {
+                ImGui::UpdatePlatformWindows();
+                ImGui::RenderPlatformWindowsDefault();
+            }
         }
         //--------------------------------------------------------------------------
     }

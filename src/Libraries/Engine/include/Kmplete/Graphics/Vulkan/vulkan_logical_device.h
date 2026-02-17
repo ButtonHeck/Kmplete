@@ -35,6 +35,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
             KMP_NODISCARD KMP_API VkQueue GetVkGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API VkQueue GetVkPresentQueue() const noexcept;
+            KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
 
         private:
             void _CreateLogicalDeviceObject();
@@ -48,6 +49,7 @@ namespace Kmplete
             void _DeleteFences();
 
             void _CreatePipelineCache();
+            void _CreateDescriptorPool();
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
@@ -67,6 +69,7 @@ namespace Kmplete
             Array<VkFence, NumConcurrentFrames> _waitFences;
             Array<VkCommandBuffer, NumConcurrentFrames> _drawCommandBuffers;
             VkPipelineCache _pipelineCache;
+            VkDescriptorPool _descriptorPool;
 
             VkExtent2D _currentExtent;
             UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;

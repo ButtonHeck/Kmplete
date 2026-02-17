@@ -83,7 +83,7 @@ namespace Kmplete
             initInfo.QueueFamily = physicalDevice.GetDeviceInfo().graphicsFamilyIndex;
             initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
-            //initInfo.DescriptorPool = ;
+            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
             initInfo.Allocator = VK_NULL_HANDLE;
             initInfo.MinImageCount = Graphics::NumConcurrentFrames;
             initInfo.ImageCount = Graphics::NumConcurrentFrames;

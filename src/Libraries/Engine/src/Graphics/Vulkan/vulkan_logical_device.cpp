@@ -36,6 +36,7 @@ namespace Kmplete
             , _waitFences()
             , _drawCommandBuffers()
             , _pipelineCache(VK_NULL_HANDLE)
+            , _descriptorPool(VK_NULL_HANDLE)
             , _currentExtent()
             , _imageCreatorDelegate(nullptr)
         {
@@ -53,11 +54,13 @@ namespace Kmplete
             _CreateCommandBuffers();
             _CreateFences();
             _CreatePipelineCache();
+            _CreateDescriptorPool();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
+            vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
             vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
 
             _DeleteFences();
@@ -124,6 +127,12 @@ namespace Kmplete
         VkQueue VulkanLogicalDevice::GetVkPresentQueue() const noexcept
         {
             return _presentQueue;
+        }
+        //--------------------------------------------------------------------------
+
+        VkDescriptorPool VulkanLogicalDevice::GetVkDescriptorPool() const noexcept
+        {
+            return _descriptorPool;
         }
         //--------------------------------------------------------------------------
 
@@ -267,6 +276,39 @@ namespace Kmplete
                 const auto resultDescription = VkResultToString(result);
                 KMP_LOG_CRITICAL("failed to create pipeline cache: {}", resultDescription);
                 throw std::runtime_error(String("VulkanLogicalDevice: failed to create pipeline cache: ").append(resultDescription));
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateDescriptorPool()
+        {
+            //TODO: fix numbers
+            VkDescriptorPoolSize poolSizes[] = { 
+                { VK_DESCRIPTOR_TYPE_SAMPLER, 100 },
+                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 100 },
+                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 100 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 100 },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 100 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 100 },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 100 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 100 },
+                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 100 },
+                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 100 },
+                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 100 } };
+
+            VkDescriptorPoolCreateInfo poolInfo{};
+            poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+            poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+            poolInfo.maxSets = 100;
+            poolInfo.poolSizeCount = UInt32(std::size(poolSizes));
+            poolInfo.pPoolSizes = poolSizes;
+
+            const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
+            if (result != VK_SUCCESS)
+            {
+                const auto resultDescription = VkResultToString(result);
+                KMP_LOG_CRITICAL("failed to create descriptor pool: {}", resultDescription);
+                throw std::runtime_error(String("VulkanLogicalDevice: failed to create descriptor pool: ").append(resultDescription));
             }
         }
         //--------------------------------------------------------------------------
