@@ -1,7 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
@@ -152,12 +151,7 @@ namespace Kmplete
             _PrintAvailableExtensions();
 
             const auto result = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create VkInstance: {}", resultDescription);
-                throw std::runtime_error(String("VulkanGraphicsBackend: failed to create VkInstance: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
 
             _InitializeDebugMessenger();
 
@@ -275,12 +269,7 @@ namespace Kmplete
             if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
             {
                 const auto result = CreateDebugUtilsMessengerEXT(_instance, nullptr, &_debugMessenger);
-                if (result != VK_SUCCESS)
-                {
-                    const auto resultDescription = VkResultToString(result);
-                    KMP_LOG_CRITICAL("failed to setup debug messenger: {}", resultDescription);
-                    throw std::runtime_error(String("VulkanGraphicsBackend: failed to setup debug messenger: ").append(resultDescription));
-                }
+                VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
             }
         }
         //--------------------------------------------------------------------------

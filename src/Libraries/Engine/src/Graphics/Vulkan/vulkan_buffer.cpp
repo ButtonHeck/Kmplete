@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
@@ -24,12 +23,7 @@ namespace Kmplete
             auto bufferCreateInfo = VulkanUtils::GetVkBufferCreateInfo(_size, _usageFlags);
 
             auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create buffer object: {}", resultDescription);
-                throw std::runtime_error(String("VulkanBuffer: failed to create buffer object: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
 
             VkMemoryRequirements memoryRequirements;
             vkGetBufferMemoryRequirements(_device, _buffer, &memoryRequirements);
@@ -46,24 +40,14 @@ namespace Kmplete
             }
 
             result = vkAllocateMemory(_device, &memoryAllocateInfo, nullptr, &_memory);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to allocate buffer memory: {}", resultDescription);
-                throw std::runtime_error(String("VulkanBuffer: failed to allocate buffer memory: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
 
             _alignment = memoryRequirements.alignment;
 
             if (data != nullptr)
             {
                 result = Map();
-                if (result != VK_SUCCESS)
-                {
-                    const auto resultDescription = VkResultToString(result);
-                    KMP_LOG_CRITICAL("failed to map buffer memory: {}", resultDescription);
-                    throw std::runtime_error(String("VulkanBuffer: failed to map buffer memory: ").append(resultDescription));
-                }
+                VulkanUtils::CheckResult(result, "VulkanBuffer: failed to map buffer memory");
 
                 memcpy(_mapped, data, size);
                 if ((_memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
@@ -77,12 +61,7 @@ namespace Kmplete
             _SetupDescriptor();
 
             result = Bind();
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to bind buffer: {}", resultDescription);
-                throw std::runtime_error(String("VulkanBuffer: failed to bind buffer: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
         }
         //--------------------------------------------------------------------------
 

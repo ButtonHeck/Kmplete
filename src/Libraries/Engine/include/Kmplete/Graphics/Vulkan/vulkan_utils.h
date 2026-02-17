@@ -39,6 +39,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkMappedMemoryRange GetVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset);
 
             KMP_NODISCARD KMP_API VkBufferCreateInfo GetVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags);
+
+            KMP_API VkResult CheckResult(VkResult result, const char* message, bool throwException = true);
         }
         //--------------------------------------------------------------------------
     }

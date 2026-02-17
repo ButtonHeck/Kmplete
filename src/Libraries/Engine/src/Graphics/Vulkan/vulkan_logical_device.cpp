@@ -2,7 +2,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
@@ -156,12 +155,7 @@ namespace Kmplete
             deviceCreateInfo.pNext = &dynamicRenderingFeatures;
 
             const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create logical device: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create logical device: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
         }
         //--------------------------------------------------------------------------
 
@@ -191,20 +185,10 @@ namespace Kmplete
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
                 auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphores[i]);
-                if (result != VK_SUCCESS)
-                {
-                    const auto resultDescription = VkResultToString(result);
-                    KMP_LOG_CRITICAL("failed to create presentation complete semaphore: {}", resultDescription);
-                    throw std::runtime_error(String("VulkanLogicalDevice: failed to create presentation complete semaphore: ").append(resultDescription));
-                }
+                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create presentation complete semaphore");
 
                 result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
-                if (result != VK_SUCCESS)
-                {
-                    const auto resultDescription = VkResultToString(result);
-                    KMP_LOG_CRITICAL("failed to create rendering complete semaphore: {}", resultDescription);
-                    throw std::runtime_error(String("VulkanLogicalDevice: failed to create rendering complete semaphore: ").append(resultDescription));
-                }
+                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
             }
         }
         //--------------------------------------------------------------------------
@@ -216,12 +200,7 @@ namespace Kmplete
             commandBufferAllocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
 
             const auto result = vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, _drawCommandBuffers.data());
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create command buffers: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create command buffers: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create command buffers");
         }
         //--------------------------------------------------------------------------
 
@@ -238,12 +217,7 @@ namespace Kmplete
             for (auto& fence : _waitFences)
             {
                 const auto result = vkCreateFence(_device, &createInfo, nullptr, &fence);
-                if (result != VK_SUCCESS)
-                {
-                    const auto resultDescription = VkResultToString(result);
-                    KMP_LOG_CRITICAL("failed to create wait fence: {}", resultDescription);
-                    throw std::runtime_error(String("VulkanLogicalDevice: failed to create wait fence: ").append(resultDescription));
-                }
+                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create wait fence");
             }
         }
         //--------------------------------------------------------------------------
@@ -262,12 +236,7 @@ namespace Kmplete
             auto pipelineCacheCreateInfo = VulkanUtils::GetVkPipelineCacheCreateInfo();
 
             const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create pipeline cache: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create pipeline cache: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
         }
         //--------------------------------------------------------------------------
 
@@ -293,12 +262,7 @@ namespace Kmplete
             poolInfo.pPoolSizes = poolSizes;
 
             const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create descriptor pool: {}", resultDescription);
-                throw std::runtime_error(String("VulkanLogicalDevice: failed to create descriptor pool: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create descriptor pool");
         }
         //--------------------------------------------------------------------------
 

@@ -1,4 +1,9 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Log/log.h"
+
+#include <stdexcept>
 
 
 namespace Kmplete
@@ -200,6 +205,22 @@ namespace Kmplete
                 bufferCreateInfo.size = size;
                 bufferCreateInfo.usage = usageFlags;
                 return bufferCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkResult CheckResult(VkResult result, const char* message, bool throwException /*= true*/)
+            {
+                if (result != VK_SUCCESS)
+                {
+                    const auto resultDescription = VkResultToString(result);
+                    KMP_LOG_CRITICAL_FN("{}: {}", message, resultDescription);
+                    if (throwException)
+                    {
+                        throw std::runtime_error(String(message).append(": ").append(resultDescription));
+                    }
+                }
+
+                return result;
             }
             //--------------------------------------------------------------------------
         }

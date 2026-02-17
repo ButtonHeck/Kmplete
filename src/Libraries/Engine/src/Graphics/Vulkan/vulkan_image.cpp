@@ -1,6 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
@@ -50,12 +49,7 @@ namespace Kmplete
             imageCreationInfo.flags = 0;
 
             const auto result = vkCreateImage(_device, &imageCreationInfo, nullptr, &_image);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create image: {}", resultDescription);
-                throw std::runtime_error(String("VulkanImage: failed to create image: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanImage: failed to create image");
         }
         //--------------------------------------------------------------------------
 
@@ -72,10 +66,7 @@ namespace Kmplete
             if (result != VK_SUCCESS)
             {
                 vkDestroyImage(_device, _image, nullptr);
-
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to allocate image memory: {}", resultDescription);
-                throw std::runtime_error(String("VulkanImage: failed to allocate image memory: ").append(resultDescription));
+                VulkanUtils::CheckResult(result, "VulkanImage: failed to allocate image memory");
             }
 
             vkBindImageMemory(_device, _image, _imageMemory, 0);

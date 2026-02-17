@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
@@ -113,12 +112,7 @@ namespace Kmplete
             swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
             const auto result = vkCreateSwapchainKHR(_device, &swapchainCreateInfo, nullptr, &_swapchain);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create swapchain: {}", resultDescription);
-                throw std::runtime_error(String("VulkanSwapchain: failed to create swapchain: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to create swapchain");
         }
         //--------------------------------------------------------------------------
 

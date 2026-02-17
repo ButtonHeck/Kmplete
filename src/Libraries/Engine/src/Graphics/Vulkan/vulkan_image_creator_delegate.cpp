@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
@@ -96,12 +95,7 @@ namespace Kmplete
 
             VkImageView imageView;
             const auto result = vkCreateImageView(_device, &viewCreateInfo, nullptr, &imageView);
-            if (result != VK_SUCCESS)
-            {
-                const auto resultDescription = VkResultToString(result);
-                KMP_LOG_CRITICAL("failed to create texture image view: {}", resultDescription);
-                throw std::runtime_error(String("VulkanImageCreatorDelegate: failed to create texture image view: ").append(resultDescription));
-            }
+            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create texture image view");
 
             return imageView;
         }
