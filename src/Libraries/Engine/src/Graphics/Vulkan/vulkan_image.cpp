@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -33,8 +34,7 @@ namespace Kmplete
 
         void VulkanImage::_CreateImageObject(const Parameters& creationParameters)
         {
-            VkImageCreateInfo imageCreationInfo{};
-            imageCreationInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+            auto imageCreationInfo = VulkanUtils::GetVkImageCreateInfo();
             imageCreationInfo.imageType = VK_IMAGE_TYPE_2D;
             imageCreationInfo.extent.width = creationParameters.width;
             imageCreationInfo.extent.height = creationParameters.height;
@@ -64,12 +64,11 @@ namespace Kmplete
             VkMemoryRequirements memoryRequirements;
             vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
 
-            VkMemoryAllocateInfo allocInfo{};
-            allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-            allocInfo.allocationSize = memoryRequirements.size;
-            allocInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
+            auto memoryAllocationInfo = VulkanUtils::GetVkMemoryAllocateInfo();
+            memoryAllocationInfo.allocationSize = memoryRequirements.size;
+            memoryAllocationInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
 
-            const auto result = vkAllocateMemory(_device, &allocInfo, nullptr, &_imageMemory);
+            const auto result = vkAllocateMemory(_device, &memoryAllocationInfo, nullptr, &_imageMemory);
             if (result != VK_SUCCESS)
             {
                 vkDestroyImage(_device, _image, nullptr);

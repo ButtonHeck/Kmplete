@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
 #include <algorithm>
@@ -10,7 +11,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VkSurfaceKHR& surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : Swapchain()
             , _device(device)
             , _physicalDeviceInfo(info)
@@ -82,37 +83,36 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainObject(const VkSurfaceKHR& surface)
+        void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface)
         {
-            VkSwapchainCreateInfoKHR createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-            createInfo.surface = surface;
-            createInfo.minImageCount = _imageCount;
-            createInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
-            createInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
-            createInfo.imageExtent = _swapchainExtent;
-            createInfo.imageArrayLayers = 1;
-            createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            auto swapchainCreateInfo = VulkanUtils::GetVkSwapchainCreateInfoKHR();
+            swapchainCreateInfo.surface = surface;
+            swapchainCreateInfo.minImageCount = _imageCount;
+            swapchainCreateInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
+            swapchainCreateInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
+            swapchainCreateInfo.imageExtent = _swapchainExtent;
+            swapchainCreateInfo.imageArrayLayers = 1;
+            swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
             UInt32 indicesArray[] = { _physicalDeviceInfo.graphicsFamilyIndex, _physicalDeviceInfo.presentFamilyIndex };
             if (_physicalDeviceInfo.graphicsFamilyIndex != _physicalDeviceInfo.presentFamilyIndex)
             {
-                createInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-                createInfo.queueFamilyIndexCount = 2;
-                createInfo.pQueueFamilyIndices = indicesArray;
+                swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+                swapchainCreateInfo.queueFamilyIndexCount = 2;
+                swapchainCreateInfo.pQueueFamilyIndices = indicesArray;
             }
             else
             {
-                createInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
             }
 
-            createInfo.preTransform = _physicalDeviceInfo.surfaceCapabilities.currentTransform;
-            createInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            createInfo.presentMode = _ChoosePresentMode(_physicalDeviceInfo.presentModes);
-            createInfo.clipped = VK_TRUE;
-            createInfo.oldSwapchain = VK_NULL_HANDLE;
+            swapchainCreateInfo.preTransform = _physicalDeviceInfo.surfaceCapabilities.currentTransform;
+            swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            swapchainCreateInfo.presentMode = _ChoosePresentMode(_physicalDeviceInfo.presentModes);
+            swapchainCreateInfo.clipped = VK_TRUE;
+            swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
-            const auto result = vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapchain);
+            const auto result = vkCreateSwapchainKHR(_device, &swapchainCreateInfo, nullptr, &_swapchain);
             if (result != VK_SUCCESS)
             {
                 const auto resultDescription = VkResultToString(result);

@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -89,7 +90,7 @@ namespace Kmplete
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
             initInfo.CheckVkResultFn = nullptr;
             initInfo.UseDynamicRendering = true;
-            initInfo.PipelineRenderingCreateInfo = { .sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO };
+            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::GetVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetDeviceInfo().surfaceFormat.format;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);

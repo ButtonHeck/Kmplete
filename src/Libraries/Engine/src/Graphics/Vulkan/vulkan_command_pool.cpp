@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
 #include <stdexcept>
@@ -14,8 +15,7 @@ namespace Kmplete
             , _device(device)
             , _commandPool(VK_NULL_HANDLE)
         {
-            VkCommandPoolCreateInfo createPoolInfo{};
-            createPoolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+            auto createPoolInfo = VulkanUtils::GetVkCommandPoolCreateInfo();
             createPoolInfo.queueFamilyIndex = graphicsQueueIndex;
             createPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 

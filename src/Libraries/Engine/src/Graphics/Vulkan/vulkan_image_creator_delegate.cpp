@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -83,19 +84,18 @@ namespace Kmplete
 
         VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
         {
-            VkImageViewCreateInfo viewInfo{};
-            viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-            viewInfo.image = image;
-            viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            viewInfo.format = format;
-            viewInfo.subresourceRange.aspectMask = aspectFlags;
-            viewInfo.subresourceRange.baseMipLevel = 0;
-            viewInfo.subresourceRange.levelCount = mipLevels;
-            viewInfo.subresourceRange.baseArrayLayer = 0;
-            viewInfo.subresourceRange.layerCount = 1;
+            auto viewCreateInfo = VulkanUtils::GetVkImageViewCreateInfo();
+            viewCreateInfo.image = image;
+            viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            viewCreateInfo.format = format;
+            viewCreateInfo.subresourceRange.aspectMask = aspectFlags;
+            viewCreateInfo.subresourceRange.baseMipLevel = 0;
+            viewCreateInfo.subresourceRange.levelCount = mipLevels;
+            viewCreateInfo.subresourceRange.baseArrayLayer = 0;
+            viewCreateInfo.subresourceRange.layerCount = 1;
 
             VkImageView imageView;
-            const auto result = vkCreateImageView(_device, &viewInfo, nullptr, &imageView);
+            const auto result = vkCreateImageView(_device, &viewCreateInfo, nullptr, &imageView);
             if (result != VK_SUCCESS)
             {
                 const auto resultDescription = VkResultToString(result);

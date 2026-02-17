@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
@@ -341,16 +342,13 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            VkPhysicalDeviceVulkan12Properties propertiesVersion12{};
-            propertiesVersion12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
+            auto propertiesVersion12 = VulkanUtils::GetVkPhysicalDeviceVulkan12Properties();
             propertiesVersion12.pNext = nullptr;
 
-            VkPhysicalDeviceVulkan11Properties propertiesVersion11{};
-            propertiesVersion11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
+            auto propertiesVersion11 = VulkanUtils::GetVkPhysicalDeviceVulkan11Properties();
             propertiesVersion11.pNext = &propertiesVersion12;
 
-            VkPhysicalDeviceProperties2 properties2{};
-            properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+            auto properties2 = VulkanUtils::GetVkPhysicalDeviceProperties2();
             properties2.pNext = &propertiesVersion11;
             vkGetPhysicalDeviceProperties2(_physicalDevice, &properties2);
 

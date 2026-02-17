@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
@@ -57,9 +58,7 @@ namespace Kmplete
 
         static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo()
         {
-            VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{};
-            debugMessengerCreateInfo = {};
-            debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+            auto debugMessengerCreateInfo = VulkanUtils::GetVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
@@ -70,7 +69,6 @@ namespace Kmplete
                 VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
             debugMessengerCreateInfo.pfnUserCallback = DebugCallback;
-            debugMessengerCreateInfo.pUserData = nullptr;
 
             return debugMessengerCreateInfo;
         }
@@ -217,8 +215,7 @@ namespace Kmplete
 
         VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const
         {
-            VkApplicationInfo applicationInfo{};
-            applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+            auto applicationInfo = VulkanUtils::GetVkApplicationInfo();
             applicationInfo.pApplicationName = "Kmplete Application";
             applicationInfo.applicationVersion = VK_MAKE_VERSION(GetKmpleteVersionMajor(), GetKmpleteVersionMinor(), GetKmpleteVersionPatch());
             applicationInfo.pEngineName = "Kmplete engine";
@@ -231,8 +228,7 @@ namespace Kmplete
 
         VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const
         {
-            VkInstanceCreateInfo instanceCreateInfo{};
-            instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+            auto instanceCreateInfo = VulkanUtils::GetVkInstanceCreateInfo();
             instanceCreateInfo.pApplicationInfo = &applicationInfo;
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
             instanceCreateInfo.ppEnabledExtensionNames = extensionsNames.data();

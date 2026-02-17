@@ -3,6 +3,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
@@ -143,22 +144,18 @@ namespace Kmplete
             VkPhysicalDeviceFeatures deviceFeatures{};
             deviceFeatures.samplerAnisotropy = VK_TRUE;
 
-            VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures{};
-            dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
-            dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
-
+            auto dynamicRenderingFeatures = VulkanUtils::GetVkPhysicalDeviceDynamicRenderingFeatures();
             const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
 
-            VkDeviceCreateInfo createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-            createInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
-            createInfo.pQueueCreateInfos = queueCreateInfos.data();
-            createInfo.pEnabledFeatures = &deviceFeatures;
-            createInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
-            createInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
-            createInfo.pNext = &dynamicRenderingFeatures;
+            auto deviceCreateInfo = VulkanUtils::GetVkDeviceCreateInfo();
+            deviceCreateInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
+            deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
+            deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+            deviceCreateInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
+            deviceCreateInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
+            deviceCreateInfo.pNext = &dynamicRenderingFeatures;
 
-            const auto result = vkCreateDevice(_physicalDevice, &createInfo, nullptr, &_device);
+            const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
             if (result != VK_SUCCESS)
             {
                 const auto resultDescription = VkResultToString(result);
@@ -189,8 +186,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateSemaphoreObjects()
         {
-            VkSemaphoreCreateInfo semaphoreCreateInfo{};
-            semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+            auto semaphoreCreateInfo = VulkanUtils::GetVkSemaphoreCreateInfo();
 
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
@@ -215,13 +211,11 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateCommandBuffers()
         {
-            VkCommandBufferAllocateInfo allocateInfo{};
-            allocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-            allocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool();
-            allocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-            allocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
+            auto commandBufferAllocateInfo = VulkanUtils::GetVkCommandBufferAllocateInfo();
+            commandBufferAllocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool();
+            commandBufferAllocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
 
-            const auto result = vkAllocateCommandBuffers(_device, &allocateInfo, _drawCommandBuffers.data());
+            const auto result = vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, _drawCommandBuffers.data());
             if (result != VK_SUCCESS)
             {
                 const auto resultDescription = VkResultToString(result);
@@ -239,9 +233,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateFences()
         {
-            VkFenceCreateInfo createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-            createInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+            auto createInfo = VulkanUtils::GetVkFenceCreateInfo();
 
             for (auto& fence : _waitFences)
             {
@@ -267,10 +259,9 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreatePipelineCache()
         {
-            VkPipelineCacheCreateInfo cacheCreateInfo{};
-            cacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+            auto pipelineCacheCreateInfo = VulkanUtils::GetVkPipelineCacheCreateInfo();
 
-            const auto result = vkCreatePipelineCache(_device, &cacheCreateInfo, nullptr, &_pipelineCache);
+            const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
             if (result != VK_SUCCESS)
             {
                 const auto resultDescription = VkResultToString(result);
@@ -296,9 +287,7 @@ namespace Kmplete
                 { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 100 },
                 { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 100 } };
 
-            VkDescriptorPoolCreateInfo poolInfo{};
-            poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-            poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+            auto poolInfo = VulkanUtils::GetVkDescriptorPoolCreateInfo();
             poolInfo.maxSets = 100;
             poolInfo.poolSizeCount = UInt32(std::size(poolSizes));
             poolInfo.pPoolSizes = poolSizes;
@@ -324,8 +313,7 @@ namespace Kmplete
 
             for (auto queueFamilyIndex : queueFamiliesIndicesSet)
             {
-                VkDeviceQueueCreateInfo queueCreateInfo{};
-                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
+                auto queueCreateInfo = VulkanUtils::GetVkDeviceQueueCreateInfo();
                 queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
                 queueCreateInfo.queueCount = 1;
                 queueCreateInfo.pQueuePriorities = &queuePriority;

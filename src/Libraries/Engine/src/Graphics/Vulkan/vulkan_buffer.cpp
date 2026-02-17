@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 
@@ -20,12 +21,9 @@ namespace Kmplete
             , _usageFlags(usageFlags)
             , _memoryPropertyFlags(memoryPropertyFlags)
         {
-            VkBufferCreateInfo createInfo{};
-            createInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-            createInfo.usage = _usageFlags;
-            createInfo.size = _size;
+            auto bufferCreateInfo = VulkanUtils::GetVkBufferCreateInfo(_size, _usageFlags);
 
-            auto result = vkCreateBuffer(_device, &createInfo, nullptr, &_buffer);
+            auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
             if (result != VK_SUCCESS)
             {
                 const auto resultDescription = VkResultToString(result);
@@ -34,16 +32,15 @@ namespace Kmplete
             }
 
             VkMemoryRequirements memoryRequirements;
-            VkMemoryAllocateInfo memoryAllocateInfo{};
-            memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
             vkGetBufferMemoryRequirements(_device, _buffer, &memoryRequirements);
+
+            auto memoryAllocateInfo = VulkanUtils::GetVkMemoryAllocateInfo();
             memoryAllocateInfo.allocationSize = memoryRequirements.size;
             memoryAllocateInfo.memoryTypeIndex = _physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, _memoryPropertyFlags);
 
-            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo{};
+            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::GetVkMemoryAllocateFlagsInfoKHR();
             if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
             {
-                allocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
                 allocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
                 memoryAllocateInfo.pNext = &allocateFlagsInfo;
             }
@@ -126,11 +123,8 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            VkMappedMemoryRange mappedRange{};
-            mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            auto mappedRange = VulkanUtils::GetVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
-            mappedRange.offset = offset;
-            mappedRange.size = size;
 
             return vkFlushMappedMemoryRanges(_device, 1, &mappedRange);
         }
@@ -138,11 +132,8 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            VkMappedMemoryRange mappedRange{};
-            mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
+            auto mappedRange = VulkanUtils::GetVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
-            mappedRange.offset = offset;
-            mappedRange.size = size;
 
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);
         }
