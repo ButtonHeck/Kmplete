@@ -43,6 +43,7 @@ namespace Kmplete
         private:
             VkInstance _instance;
             VkDebugUtilsMessengerEXT _debugMessenger;
+            UInt32 _currentBufferIndex;
         };
         //--------------------------------------------------------------------------
     }

@@ -25,8 +25,11 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window);
+            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window, const UInt32& currentBufferIndex);
             KMP_API ~VulkanLogicalDevice();
+
+            KMP_API void StartFrame(float frameTimestep) override;
+            KMP_API void EndFrame() override;
 
             KMP_API void CreateSwapchain() override;
             KMP_API void DeleteSwapchain() override;
@@ -59,6 +62,7 @@ namespace Kmplete
             VkSurfaceKHR _surface;
             const PhysicalDeviceInfo& _physicalDeviceInfo;
             const Window& _window;
+            const UInt32& _currentBufferIndex;
 
             VkDevice _device;
             VkQueue _graphicsQueue;

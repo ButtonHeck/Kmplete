@@ -22,12 +22,13 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window)
+        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
             , _physicalDeviceInfo(info)
             , _window(window)
+            , _currentBufferIndex(currentBufferIndex)
             , _device(nullptr)
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
@@ -80,10 +81,26 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanLogicalDevice::StartFrame(float frameTimestep)
+        {
+            vkWaitForFences(_device, 1, &_waitFences[_currentBufferIndex], VK_TRUE, UINT64_MAX);
+            const auto result = vkResetFences(_device, 1, &_waitFences[_currentBufferIndex]);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to reset wait fence");
+
+            _swapchain->StartFrame(frameTimestep);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::EndFrame()
+        {
+            _swapchain->EndFrame();
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::CreateSwapchain()
         {
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _surface, _physicalDeviceInfo, _currentExtent, *_imageCreatorDelegate.get()));
+            _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _physicalDeviceInfo, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
         }
         //--------------------------------------------------------------------------
 

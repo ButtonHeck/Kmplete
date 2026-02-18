@@ -29,6 +29,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDeviceQueueCreateInfo GetVkDeviceQueueCreateInfo();
             KMP_NODISCARD KMP_API VkCommandPoolCreateInfo GetVkCommandPoolCreateInfo();
             KMP_NODISCARD KMP_API VkSwapchainCreateInfoKHR GetVkSwapchainCreateInfoKHR();
+            KMP_NODISCARD KMP_API VkPresentInfoKHR GetVkPresentInfoKHR();
             KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR GetVkPipelineRenderingCreateInfoKHR();
 
             KMP_NODISCARD KMP_API VkImageCreateInfo GetVkImageCreateInfo();

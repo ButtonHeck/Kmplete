@@ -10,12 +10,19 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent,
+                                         const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
+                                         const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
             , _device(device)
+            , _graphicsQueue(graphicsQueue)
             , _physicalDeviceInfo(info)
             , _swapchainExtent(swapchainExtent)
             , _imageCreatorDelegate(imageCreatorDelegate)
+            , _currentBufferIndex(currentBufferIndex)
+            , _presentCompleteSemaphores(presentCompleteSemaphores)
+            , _renderCompleteSemaphores(renderCompleteSemaphores)
+            , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
@@ -57,9 +64,54 @@ namespace Kmplete
 
             vkDestroySwapchainKHR(_device, _swapchain, nullptr);
         }
+
+        void VulkanSwapchain::StartFrame(float /*frameTimestep*/)
+        {
+            const auto result = AcquireNextImage();
+            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
+        }
         //--------------------------------------------------------------------------
 
-        UInt32 VulkanSwapchain::GetImageCount() const
+        void VulkanSwapchain::EndFrame()
+        {
+            const auto result = QueuePresent();
+            if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
+            {
+                //TODO: probably window resize
+            }
+            else
+            {
+                VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to present swapchain image");
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        VkResult VulkanSwapchain::AcquireNextImage()
+        {
+            return vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_currentBufferIndex], nullptr, &_imageIndex);
+        }
+        //--------------------------------------------------------------------------
+
+        VkResult VulkanSwapchain::QueuePresent()
+        {
+            auto presentInfo = VulkanUtils::GetVkPresentInfoKHR();
+            presentInfo.swapchainCount = 1;
+            presentInfo.pSwapchains = &_swapchain;
+            presentInfo.pImageIndices = &_imageIndex;
+            presentInfo.waitSemaphoreCount = 1;
+            presentInfo.pWaitSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
+
+            return vkQueuePresentKHR(_graphicsQueue, &presentInfo);
+        }
+        //--------------------------------------------------------------------------
+
+        UInt32 VulkanSwapchain::GetImageIndex() const noexcept
+        {
+            return _imageIndex;
+        }
+        //--------------------------------------------------------------------------
+
+        UInt32 VulkanSwapchain::GetImageCount() const noexcept
         {
             return _imageCount;
         }

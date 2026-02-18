@@ -32,6 +32,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const GPUInfo& GetGPUInfo() const noexcept;
             KMP_API void PrintGPUInfo() const noexcept;
 
+            KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
+            KMP_API virtual void EndFrame() {};
+
             KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept;
 
         protected:

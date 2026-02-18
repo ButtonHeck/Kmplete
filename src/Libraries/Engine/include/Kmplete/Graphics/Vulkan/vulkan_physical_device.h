@@ -26,8 +26,11 @@ namespace Kmplete
             KMP_NODISCARD KMP_API static const Vector<const char*>& GetEnabledDeviceExtensions();
 
         public:
-            KMP_API VulkanPhysicalDevice(const Window& window, VkInstance instance, VkSurfaceKHR surface);
+            KMP_API VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface);
             KMP_API ~VulkanPhysicalDevice();
+
+            KMP_API void StartFrame(float frameTimestep) override;
+            KMP_API void EndFrame() override;
 
             KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
             KMP_NODISCARD KMP_API const PhysicalDeviceInfo& GetDeviceInfo() const noexcept;
@@ -42,6 +45,7 @@ namespace Kmplete
 
         private:
             const Window& _window;
+            const UInt32& _currentBufferIndex;
             VkInstance _instance;
             VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;

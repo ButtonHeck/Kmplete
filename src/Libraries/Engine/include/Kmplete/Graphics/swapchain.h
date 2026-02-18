@@ -15,6 +15,9 @@ namespace Kmplete
         public:
             Swapchain() = default;
             virtual ~Swapchain() = default;
+
+            KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
+            KMP_API virtual void EndFrame() {};
         };
         //--------------------------------------------------------------------------
     }

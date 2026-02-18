@@ -101,6 +101,9 @@ namespace Kmplete
 
         VulkanGraphicsBackend::VulkanGraphicsBackend(Window& window)
             : GraphicsBackend(window)
+            , _instance(VK_NULL_HANDLE)
+            , _debugMessenger(VK_NULL_HANDLE)
+            , _currentBufferIndex(0)
         {
             _Initialize();
         }
@@ -112,13 +115,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::StartFrame(float)
+        void VulkanGraphicsBackend::StartFrame(float frameTimestep)
         {
+            _physicalDevice->StartFrame(frameTimestep);
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::EndFrame()
         {
+            _physicalDevice->EndFrame();
+
+            _currentBufferIndex = (_currentBufferIndex + 1) % NumConcurrentFrames;
         }
         //--------------------------------------------------------------------------
 
@@ -156,7 +163,7 @@ namespace Kmplete
             _InitializeDebugMessenger();
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
-            _physicalDevice.reset(new VulkanPhysicalDevice(_window, _instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetVkSurface()));
+            _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetVkSurface()));
         }
         //--------------------------------------------------------------------------
 

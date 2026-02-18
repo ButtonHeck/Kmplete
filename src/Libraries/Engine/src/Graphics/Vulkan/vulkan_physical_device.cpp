@@ -180,9 +180,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanPhysicalDevice::VulkanPhysicalDevice(const Window& window, VkInstance instance, VkSurfaceKHR surface)
+        VulkanPhysicalDevice::VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface)
             : PhysicalDevice()
             , _window(window)
+            , _currentBufferIndex(currentBufferIndex)
             , _instance(instance)
             , _surface(surface)
             , _physicalDevice(VK_NULL_HANDLE)
@@ -227,13 +228,25 @@ namespace Kmplete
             _QueryGPUInfo();
             PrintGPUInfo();
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, _window));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, _window, _currentBufferIndex));
         }
         //--------------------------------------------------------------------------
 
         VulkanPhysicalDevice::~VulkanPhysicalDevice()
         {
             _logicalDevice.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::StartFrame(float frameTimestep)
+        {
+            _logicalDevice->StartFrame(frameTimestep);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::EndFrame()
+        {
+            _logicalDevice->EndFrame();
         }
         //--------------------------------------------------------------------------
 

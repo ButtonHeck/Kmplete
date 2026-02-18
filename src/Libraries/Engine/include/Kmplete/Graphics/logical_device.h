@@ -19,6 +19,9 @@ namespace Kmplete
             KMP_API LogicalDevice() noexcept;
             virtual ~LogicalDevice() = default;
 
+            KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
+            KMP_API virtual void EndFrame() {};
+
             KMP_API virtual void CreateSwapchain() = 0;
             KMP_API virtual void DeleteSwapchain() = 0;
             KMP_API virtual void RecreateSwapchain() = 0;
