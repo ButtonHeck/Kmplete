@@ -23,12 +23,14 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDeviceCreateInfo GetVkDeviceCreateInfo();
             KMP_NODISCARD KMP_API VkSemaphoreCreateInfo GetVkSemaphoreCreateInfo();
             KMP_NODISCARD KMP_API VkCommandBufferAllocateInfo GetVkCommandBufferAllocateInfo(bool primary = true);
+            KMP_NODISCARD KMP_API VkCommandBufferBeginInfo GetVkCommandBufferBeginInfo();
             KMP_NODISCARD KMP_API VkFenceCreateInfo GetVkFenceCreateInfo(bool signaled = true);
             KMP_NODISCARD KMP_API VkPipelineCacheCreateInfo GetVkPipelineCacheCreateInfo();
             KMP_NODISCARD KMP_API VkDescriptorPoolCreateInfo GetVkDescriptorPoolCreateInfo();
             KMP_NODISCARD KMP_API VkDeviceQueueCreateInfo GetVkDeviceQueueCreateInfo();
             KMP_NODISCARD KMP_API VkCommandPoolCreateInfo GetVkCommandPoolCreateInfo();
             KMP_NODISCARD KMP_API VkSwapchainCreateInfoKHR GetVkSwapchainCreateInfoKHR();
+            KMP_NODISCARD KMP_API VkSubmitInfo GetVkSubmitInfo();
             KMP_NODISCARD KMP_API VkPresentInfoKHR GetVkPresentInfoKHR();
             KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR GetVkPipelineRenderingCreateInfoKHR();
 

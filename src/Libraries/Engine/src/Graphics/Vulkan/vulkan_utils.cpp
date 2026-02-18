@@ -95,6 +95,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkCommandBufferBeginInfo GetVkCommandBufferBeginInfo()
+            {
+                VkCommandBufferBeginInfo commandBufferBeginInfo{};
+                commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+                return commandBufferBeginInfo;
+            }
+            //--------------------------------------------------------------------------
+
             VkFenceCreateInfo GetVkFenceCreateInfo(bool signaled /*= true*/)
             {
                 VkFenceCreateInfo fenceCreateInfo{};
@@ -145,6 +153,14 @@ namespace Kmplete
                 VkSwapchainCreateInfoKHR swapchainCreateInfo{};
                 swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
                 return swapchainCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkSubmitInfo GetVkSubmitInfo()
+            {
+                VkSubmitInfo submitInfo{};
+                submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+                return submitInfo;
             }
             //--------------------------------------------------------------------------
 

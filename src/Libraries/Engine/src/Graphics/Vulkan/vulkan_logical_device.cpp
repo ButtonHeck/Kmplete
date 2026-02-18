@@ -84,15 +84,36 @@ namespace Kmplete
         void VulkanLogicalDevice::StartFrame(float frameTimestep)
         {
             vkWaitForFences(_device, 1, &_waitFences[_currentBufferIndex], VK_TRUE, UINT64_MAX);
-            const auto result = vkResetFences(_device, 1, &_waitFences[_currentBufferIndex]);
+            auto result = vkResetFences(_device, 1, &_waitFences[_currentBufferIndex]);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to reset wait fence");
 
             _swapchain->StartFrame(frameTimestep);
+
+            vkResetCommandBuffer(_drawCommandBuffers[_currentBufferIndex], 0);
+            auto commandBufferBeginInfo = VulkanUtils::GetVkCommandBufferBeginInfo();
+            result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
         }
         //--------------------------------------------------------------------------
 
         void VulkanLogicalDevice::EndFrame()
         {
+            auto result = vkEndCommandBuffer(_drawCommandBuffers[_currentBufferIndex]);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");
+
+            VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            auto submitInfo = VulkanUtils::GetVkSubmitInfo();
+            submitInfo.pWaitDstStageMask = &waitStageMask;
+            submitInfo.pCommandBuffers = &_drawCommandBuffers[_currentBufferIndex];
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pWaitSemaphores = &_presentCompleteSemaphores[_currentBufferIndex];
+            submitInfo.waitSemaphoreCount = 1;
+            submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
+            submitInfo.signalSemaphoreCount = 1;
+
+            result = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _waitFences[_currentBufferIndex]);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to submit commands to queue");
+
             _swapchain->EndFrame();
         }
         //--------------------------------------------------------------------------
