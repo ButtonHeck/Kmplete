@@ -96,11 +96,80 @@ namespace Kmplete
             auto commandBufferBeginInfo = VulkanUtils::GetVkCommandBufferBeginInfo();
             result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
+
+            const auto vulkanSwapchain = dynamic_cast<VulkanSwapchain*>(_swapchain.get());
+            VulkanUtils::InsertImageMemoryBarrier(
+                _drawCommandBuffers[_currentBufferIndex], 
+                vulkanSwapchain->GetCurrentImage(), 
+                0, 
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 
+                VK_IMAGE_LAYOUT_UNDEFINED, 
+                VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 
+                VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            );
+            VulkanUtils::InsertImageMemoryBarrier(
+                _drawCommandBuffers[_currentBufferIndex],
+                _depthStencilAttachment->GetImage(), 
+                0, 
+                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT, 
+                VK_IMAGE_LAYOUT_UNDEFINED, 
+                VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT, 
+                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT, 
+                VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
+            );
+
+            auto colorAttachmentInfo = VulkanUtils::GetVkRenderingAttachmentInfo();
+            colorAttachmentInfo.imageView = vulkanSwapchain->GetCurrentImageView();
+            colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachmentInfo.clearValue.color = { 0.0f, 0.0f, 0.2f, 0.0f }; //TODO: numbers
+
+            auto depthStencilAttachmentInfo = VulkanUtils::GetVkRenderingAttachmentInfo();
+            depthStencilAttachmentInfo.imageView = _depthStencilAttachment->GetImageView();
+            depthStencilAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            depthStencilAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            depthStencilAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            depthStencilAttachmentInfo.clearValue.depthStencil = { 1.0f, 0 };
+
+            auto renderingInfo = VulkanUtils::GetVkRenderingInfo();
+            renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = 1;
+            renderingInfo.pColorAttachments = &colorAttachmentInfo;
+            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
+            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
+
+            vkCmdBeginRendering(_drawCommandBuffers[_currentBufferIndex], &renderingInfo);
+
+            VkViewport viewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) };
+            vkCmdSetViewport(_drawCommandBuffers[_currentBufferIndex], 0, 1, &viewport);
+
+            VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
+            vkCmdSetScissor(_drawCommandBuffers[_currentBufferIndex], 0, 1, &scissor);
         }
         //--------------------------------------------------------------------------
 
         void VulkanLogicalDevice::EndFrame()
         {
+            vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex]);
+
+            const auto vulkanSwapchain = dynamic_cast<VulkanSwapchain*>(_swapchain.get());
+            VulkanUtils::InsertImageMemoryBarrier(
+                _drawCommandBuffers[_currentBufferIndex], 
+                vulkanSwapchain->GetCurrentImage(), 
+                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 
+                0, 
+                VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
+                VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, 
+                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 
+                VK_PIPELINE_STAGE_2_NONE, 
+                VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            );
+
             auto result = vkEndCommandBuffer(_drawCommandBuffers[_currentBufferIndex]);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");
 

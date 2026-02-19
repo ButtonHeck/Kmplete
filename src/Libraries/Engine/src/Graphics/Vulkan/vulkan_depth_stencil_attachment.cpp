@@ -64,5 +64,17 @@ namespace Kmplete
             vkFreeMemory(_device, _memory, nullptr);
         }
         //--------------------------------------------------------------------------
+
+        VkImage VulkanDepthStencilAttachment::GetImage() const noexcept
+        {
+            return _image;
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanDepthStencilAttachment::GetImageView() const noexcept
+        {
+            return _view;
+        }
+        //--------------------------------------------------------------------------
     }
 }

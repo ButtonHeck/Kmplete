@@ -33,6 +33,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkSubmitInfo GetVkSubmitInfo();
             KMP_NODISCARD KMP_API VkPresentInfoKHR GetVkPresentInfoKHR();
             KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR GetVkPipelineRenderingCreateInfoKHR();
+            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetVkRenderingAttachmentInfo();
+            KMP_NODISCARD KMP_API VkRenderingInfo GetVkRenderingInfo();
 
             KMP_NODISCARD KMP_API VkImageCreateInfo GetVkImageCreateInfo();
             KMP_NODISCARD KMP_API VkImageViewCreateInfo GetVkImageViewCreateInfo();

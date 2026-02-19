@@ -21,6 +21,9 @@ namespace Kmplete
             KMP_API VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent);
             KMP_API ~VulkanDepthStencilAttachment();
 
+            KMP_NODISCARD KMP_API VkImage GetImage() const noexcept;
+            KMP_NODISCARD KMP_API VkImageView GetImageView() const noexcept;
+
         private:
             VkDevice _device;
             VkImage _image;

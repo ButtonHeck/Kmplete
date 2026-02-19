@@ -181,6 +181,22 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkRenderingAttachmentInfo GetVkRenderingAttachmentInfo()
+            {
+                VkRenderingAttachmentInfo colorAttachment{};
+                colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
+                return colorAttachment;
+            }
+            //--------------------------------------------------------------------------
+
+            VkRenderingInfo GetVkRenderingInfo()
+            {
+                VkRenderingInfo renderingInfo{};
+                renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO_KHR;
+                return renderingInfo;
+            }
+            //--------------------------------------------------------------------------
+
             VkImageCreateInfo GetVkImageCreateInfo()
             {
                 VkImageCreateInfo imageCreationInfo{};
