@@ -35,10 +35,11 @@ namespace Kmplete
             , _presentCompleteSemaphores()
             , _renderCompleteSemaphores()
             , _waitFences()
+            , _depthStencilAttachment(nullptr)
             , _drawCommandBuffers()
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
-            , _currentExtent()
+            , _currentExtent(_UpdateExtent())
             , _imageCreatorDelegate(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -54,6 +55,7 @@ namespace Kmplete
 
             _CreateCommandBuffers();
             _CreateFences();
+            _CreateDepthStencilAttachment();
             _CreatePipelineCache();
             _CreateDescriptorPool();
         }
@@ -64,6 +66,7 @@ namespace Kmplete
             vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
             vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
 
+            _DeleteDepthStencilAttachment();
             _DeleteFences();
             _DeleteCommandBuffers();
             DeleteSwapchain();
@@ -140,6 +143,7 @@ namespace Kmplete
 
             vkDeviceWaitIdle(_device);
 
+            _DeleteDepthStencilAttachment();
             _DeleteFences();
             _DeleteCommandBuffers();
             DeleteSwapchain();
@@ -147,6 +151,7 @@ namespace Kmplete
             CreateSwapchain();
             _CreateCommandBuffers();
             _CreateFences();
+            _CreateDepthStencilAttachment();
         }
         //--------------------------------------------------------------------------
 
@@ -266,6 +271,18 @@ namespace Kmplete
             {
                 vkDestroyFence(_device, fence, nullptr);
             }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateDepthStencilAttachment()
+        {
+            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_physicalDeviceInfo, _device, _currentExtent));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteDepthStencilAttachment()
+        {
+            _depthStencilAttachment.reset();
         }
         //--------------------------------------------------------------------------
 

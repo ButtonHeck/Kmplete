@@ -1,0 +1,68 @@
+#include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
+
+
+namespace Kmplete
+{
+    namespace Graphics
+    {
+        VulkanDepthStencilAttachment::VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent)
+            : _device(device)
+            , _image(VK_NULL_HANDLE)
+            , _memory(VK_NULL_HANDLE)
+            , _view(VK_NULL_HANDLE)
+        {
+            auto imageCreateInfo = VulkanUtils::GetVkImageCreateInfo();
+            imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
+            imageCreateInfo.format = physicalDeviceInfo.defaultDepthFormat;
+            imageCreateInfo.extent = VkExtent3D{ .width = extent.width, .height = extent.height, .depth = 1 };
+            imageCreateInfo.mipLevels = 1;
+            imageCreateInfo.arrayLayers = 1;
+            imageCreateInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+            imageCreateInfo.tiling = VK_IMAGE_TILING_OPTIMAL;
+            imageCreateInfo.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+            imageCreateInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+
+            auto result = vkCreateImage(_device, &imageCreateInfo, nullptr, &_image);
+            VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to create depth-stencil image");
+
+            VkMemoryRequirements memoryRequirements{};
+            vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
+
+            auto memoryAllocateInfo = VulkanUtils::GetVkMemoryAllocateInfo();
+            memoryAllocateInfo.allocationSize = memoryRequirements.size;
+            memoryAllocateInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            result = vkAllocateMemory(_device, &memoryAllocateInfo, nullptr, &_memory);
+            VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to allocate depth-stencil memory");
+            result = vkBindImageMemory(_device, _image, _memory, 0);
+            VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to bind depth-stencil image memory");
+
+            auto imageViewCreateInfo = VulkanUtils::GetVkImageViewCreateInfo();
+            imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            imageViewCreateInfo.image = _image;
+            imageViewCreateInfo.format = physicalDeviceInfo.defaultDepthFormat;
+            imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+            imageViewCreateInfo.subresourceRange.levelCount = 1;
+            imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+            imageViewCreateInfo.subresourceRange.layerCount = 1;
+            imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
+            if (physicalDeviceInfo.defaultDepthFormat >= VK_FORMAT_D16_UNORM_S8_UINT)
+            {
+                imageViewCreateInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
+            }
+
+            result = vkCreateImageView(_device, &imageViewCreateInfo, nullptr, &_view);
+            VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to create depth-stencil image view");
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanDepthStencilAttachment::~VulkanDepthStencilAttachment()
+        {
+            vkDestroyImageView(_device, _view, nullptr);
+            vkDestroyImage(_device, _image, nullptr);
+            vkFreeMemory(_device, _memory, nullptr);
+        }
+        //--------------------------------------------------------------------------
+    }
+}
