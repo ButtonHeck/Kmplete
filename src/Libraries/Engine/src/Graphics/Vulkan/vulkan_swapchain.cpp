@@ -117,6 +117,18 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkImage VulkanSwapchain::GetCurrentImage() const
+        {
+            return _swapchainImages[_imageIndex];
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanSwapchain::GetCurrentImageView() const
+        {
+            return _swapchainImageViews[_imageIndex];
+        }
+        //--------------------------------------------------------------------------
+
         VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const
         {
             if (presentModes.empty())

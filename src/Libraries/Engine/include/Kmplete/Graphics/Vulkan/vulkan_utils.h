@@ -36,6 +36,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkImageCreateInfo GetVkImageCreateInfo();
             KMP_NODISCARD KMP_API VkImageViewCreateInfo GetVkImageViewCreateInfo();
+            KMP_NODISCARD KMP_API VkImageMemoryBarrier GetVkImageMemoryBarrier();
 
             KMP_NODISCARD KMP_API VkMemoryAllocateInfo GetVkMemoryAllocateInfo();
             KMP_NODISCARD KMP_API VkMemoryAllocateFlagsInfoKHR GetVkMemoryAllocateFlagsInfoKHR();
@@ -44,6 +45,18 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkBufferCreateInfo GetVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags);
 
             KMP_API VkResult CheckResult(VkResult result, const char* message, bool throwException = true);
+
+            KMP_API void InsertImageMemoryBarrier(
+                VkCommandBuffer cmdbuffer,
+                VkImage image,
+                VkAccessFlags srcAccessMask,
+                VkAccessFlags dstAccessMask,
+                VkImageLayout oldImageLayout,
+                VkImageLayout newImageLayout,
+                VkPipelineStageFlags srcStageMask,
+                VkPipelineStageFlags dstStageMask,
+                VkImageSubresourceRange subresourceRange
+            );
         }
         //--------------------------------------------------------------------------
     }

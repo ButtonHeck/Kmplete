@@ -37,6 +37,8 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API UInt32 GetImageIndex() const noexcept;
             KMP_NODISCARD KMP_API UInt32 GetImageCount() const noexcept;
+            KMP_NODISCARD KMP_API VkImage GetCurrentImage() const;
+            KMP_NODISCARD KMP_API VkImageView GetCurrentImageView() const;
 
         private:
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
