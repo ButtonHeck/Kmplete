@@ -252,19 +252,28 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
-            VkPhysicalDeviceFeatures deviceFeatures{};
-            deviceFeatures.samplerAnisotropy = VK_TRUE;
+            VkPhysicalDeviceFeatures features{};
+            features.samplerAnisotropy = VK_TRUE;
 
-            auto dynamicRenderingFeatures = VulkanUtils::GetVkPhysicalDeviceDynamicRenderingFeatures();
+            VkPhysicalDeviceVulkan13Features features13{};
+            features13.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
+            features13.dynamicRendering = VK_TRUE;
+            features13.synchronization2 = VK_TRUE;
+
+            VkPhysicalDeviceFeatures2 features2{};
+            features2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+            features2.features = features;
+            features2.pNext = &features13;
+
             const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
 
             auto deviceCreateInfo = VulkanUtils::GetVkDeviceCreateInfo();
             deviceCreateInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
-            deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
+            deviceCreateInfo.pEnabledFeatures = nullptr;
             deviceCreateInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
             deviceCreateInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
-            deviceCreateInfo.pNext = &dynamicRenderingFeatures;
+            deviceCreateInfo.pNext = &features2;
 
             const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
