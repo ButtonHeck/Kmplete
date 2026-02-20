@@ -1,6 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
@@ -102,6 +100,8 @@ namespace Kmplete
         VulkanGraphicsBackend::VulkanGraphicsBackend(Window& window)
             : GraphicsBackend(window)
             , _instance(VK_NULL_HANDLE)
+            , _surface(nullptr)
+            , _physicalDevice(nullptr)
             , _debugMessenger(VK_NULL_HANDLE)
             , _currentBufferIndex(0)
         {
@@ -112,6 +112,18 @@ namespace Kmplete
         VulkanGraphicsBackend::~VulkanGraphicsBackend()
         {
             _Finalize();
+        }
+        //--------------------------------------------------------------------------
+
+        const GraphicsSurface& VulkanGraphicsBackend::GetGraphicsSurface() const noexcept
+        {
+            return *_surface.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const PhysicalDevice& VulkanGraphicsBackend::GetPhysicalDevice() const noexcept
+        {
+            return *_physicalDevice.get();
         }
         //--------------------------------------------------------------------------
 
@@ -163,7 +175,7 @@ namespace Kmplete
             _InitializeDebugMessenger();
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
-            _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, dynamic_cast<VulkanGraphicsSurface*>(_surface.get())->GetVkSurface()));
+            _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
         }
         //--------------------------------------------------------------------------
 

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -23,6 +25,9 @@ namespace Kmplete
             KMP_API explicit VulkanGraphicsBackend(Window& window);
             KMP_API ~VulkanGraphicsBackend();
 
+            KMP_NODISCARD KMP_API const GraphicsSurface& GetGraphicsSurface() const noexcept override;
+            KMP_NODISCARD KMP_API const PhysicalDevice& GetPhysicalDevice() const noexcept override;
+
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
 
@@ -42,6 +47,8 @@ namespace Kmplete
 
         private:
             VkInstance _instance;
+            UPtr<VulkanGraphicsSurface> _surface;
+            UPtr<VulkanPhysicalDevice> _physicalDevice;
             VkDebugUtilsMessengerEXT _debugMessenger;
             UInt32 _currentBufferIndex;
         };

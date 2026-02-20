@@ -1,6 +1,4 @@
 #include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
-#include "Kmplete/Graphics/OpenGL/opengl_graphics_surface.h"
-#include "Kmplete/Graphics/OpenGL/opengl_physical_device.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -19,6 +17,8 @@ namespace Kmplete
     {
         OpenGLGraphicsBackend::OpenGLGraphicsBackend(Window& window)
             : GraphicsBackend(window)
+            , _surface(nullptr)
+            , _physicalDevice(nullptr)
         {
             _Initialize();
         }
@@ -27,6 +27,18 @@ namespace Kmplete
         OpenGLGraphicsBackend::~OpenGLGraphicsBackend()
         {
             _Finalize();
+        }
+        //--------------------------------------------------------------------------
+
+        const GraphicsSurface& OpenGLGraphicsBackend::GetGraphicsSurface() const noexcept
+        {
+            return *_surface.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const PhysicalDevice& OpenGLGraphicsBackend::GetPhysicalDevice() const noexcept
+        {
+            return *_physicalDevice.get();
         }
         //--------------------------------------------------------------------------
 

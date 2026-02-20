@@ -30,15 +30,15 @@ namespace Kmplete
             virtual ~GraphicsBackend() = default;
 
             KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
-            KMP_NODISCARD KMP_API const PhysicalDevice& GetPhysicalDevice() const noexcept;
+
+            KMP_NODISCARD KMP_API virtual const GraphicsSurface& GetGraphicsSurface() const noexcept = 0;
+            KMP_NODISCARD KMP_API virtual const PhysicalDevice& GetPhysicalDevice() const noexcept = 0;
 
             KMP_API virtual void StartFrame(float frameTimestep) = 0;
             KMP_API virtual void EndFrame() = 0;
 
         protected:
             Window& _window;
-            UPtr<GraphicsSurface> _surface;
-            UPtr<PhysicalDevice> _physicalDevice;
         };
         //--------------------------------------------------------------------------
     }

@@ -31,20 +31,12 @@ namespace Kmplete
 
         GraphicsBackend::GraphicsBackend(Window& window)
             : _window(window)
-            , _surface(nullptr)
-            , _physicalDevice(nullptr)
         {}
         //--------------------------------------------------------------------------
 
         GraphicsBackendType GraphicsBackend::GetType() const noexcept
         {
             return _window.GetGraphicsBackendType();
-        }
-        //--------------------------------------------------------------------------
-
-        const PhysicalDevice& GraphicsBackend::GetPhysicalDevice() const noexcept
-        {
-            return *_physicalDevice.get();
         }
         //--------------------------------------------------------------------------
     }

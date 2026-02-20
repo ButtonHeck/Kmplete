@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/OpenGL/opengl_graphics_surface.h"
+#include "Kmplete/Graphics/OpenGL/opengl_physical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -24,12 +26,19 @@ namespace Kmplete
             KMP_API explicit OpenGLGraphicsBackend(Window& window);
             KMP_API ~OpenGLGraphicsBackend();
 
+            KMP_NODISCARD KMP_API const GraphicsSurface& GetGraphicsSurface() const noexcept override;
+            KMP_NODISCARD KMP_API const PhysicalDevice& GetPhysicalDevice() const noexcept override;
+
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
 
         private:
             void _Initialize();
             void _Finalize();
+
+        private:
+            UPtr<OpenGLGraphicsSurface> _surface;
+            UPtr<OpenGLPhysicalDevice> _physicalDevice;
         };
         //--------------------------------------------------------------------------
     }
