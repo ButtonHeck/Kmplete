@@ -187,6 +187,11 @@ namespace Kmplete
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to submit commands to queue");
 
             _swapchain->EndFrame();
+
+            if (_device != VK_NULL_HANDLE)
+            {
+                vkDeviceWaitIdle(_device);
+            }
         }
         //--------------------------------------------------------------------------
 
