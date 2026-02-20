@@ -33,7 +33,7 @@ namespace Kmplete
             , _depthImage(nullptr)
             , _depthImageView(VK_NULL_HANDLE)
         {
-            _imageCount = _physicalDeviceInfo.surfaceCapabilities.minImageCount + 1;
+            _imageCount = NumConcurrentFrames;
             if (_physicalDeviceInfo.surfaceCapabilities.maxImageCount > 0 && _imageCount > _physicalDeviceInfo.surfaceCapabilities.maxImageCount)
             {
                 _imageCount = _physicalDeviceInfo.surfaceCapabilities.maxImageCount;
