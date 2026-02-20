@@ -83,7 +83,6 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_surface.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/physical_device.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/logical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/swapchain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp

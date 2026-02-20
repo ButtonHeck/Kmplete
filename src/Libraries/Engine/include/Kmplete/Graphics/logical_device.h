@@ -16,19 +16,18 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(LogicalDevice)
 
         public:
-            KMP_API LogicalDevice() noexcept;
+            LogicalDevice() = default;
             virtual ~LogicalDevice() = default;
 
             KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
             KMP_API virtual void EndFrame() {};
 
+            KMP_NODISCARD KMP_API virtual const CommandPool& GetCommandPool() const noexcept = 0;
+            KMP_NODISCARD KMP_API virtual const Swapchain& GetSwapchain() const noexcept = 0;
+
             KMP_API virtual void CreateSwapchain() = 0;
             KMP_API virtual void DeleteSwapchain() = 0;
             KMP_API virtual void RecreateSwapchain() = 0;
-
-        protected:
-            UPtr<CommandPool> _commandPool;
-            UPtr<Swapchain> _swapchain;
         };
         //--------------------------------------------------------------------------
     }

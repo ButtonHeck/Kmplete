@@ -1,6 +1,4 @@
 #include "Kmplete/Graphics/OpenGL/opengl_logical_device.h"
-#include "Kmplete/Graphics/OpenGL/opengl_command_pool.h"
-#include "Kmplete/Graphics/OpenGL/opengl_swapchain.h"
 
 
 namespace Kmplete
@@ -8,8 +6,9 @@ namespace Kmplete
     namespace Graphics
     {
         OpenGLLogicalDevice::OpenGLLogicalDevice() noexcept
+            : _commandPool(new OpenGLCommandPool())
+            , _swapchain(nullptr)
         {
-            _commandPool.reset(new OpenGLCommandPool());
             CreateSwapchain();
         }
         //--------------------------------------------------------------------------
@@ -18,6 +17,18 @@ namespace Kmplete
         {
             DeleteSwapchain();
             _commandPool.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        const CommandPool& OpenGLLogicalDevice::GetCommandPool() const noexcept
+        {
+            return *_commandPool.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const Swapchain& OpenGLLogicalDevice::GetSwapchain() const noexcept
+        {
+            return *_swapchain.get();
         }
         //--------------------------------------------------------------------------
 

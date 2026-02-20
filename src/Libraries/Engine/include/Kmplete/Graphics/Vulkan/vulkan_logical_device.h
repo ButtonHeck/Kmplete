@@ -5,6 +5,8 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -31,6 +33,9 @@ namespace Kmplete
 
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
+
+            KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
+            KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
 
             KMP_API void CreateSwapchain() override;
             KMP_API void DeleteSwapchain() override;
@@ -76,7 +81,9 @@ namespace Kmplete
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
             Array<VkFence, NumConcurrentFrames> _waitFences;
             UPtr<VulkanDepthStencilAttachment> _depthStencilAttachment;
+            UPtr<VulkanCommandPool> _commandPool;
             Array<VkCommandBuffer, NumConcurrentFrames> _drawCommandBuffers;
+            UPtr<VulkanSwapchain> _swapchain;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
 

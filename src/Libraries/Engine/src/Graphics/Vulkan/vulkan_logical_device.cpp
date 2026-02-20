@@ -1,7 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
@@ -36,7 +34,9 @@ namespace Kmplete
             , _renderCompleteSemaphores()
             , _waitFences()
             , _depthStencilAttachment(nullptr)
+            , _commandPool(nullptr)
             , _drawCommandBuffers()
+            , _swapchain(nullptr)
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
             , _currentExtent(_UpdateExtent())
@@ -97,10 +97,9 @@ namespace Kmplete
             result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
 
-            const auto vulkanSwapchain = dynamic_cast<VulkanSwapchain*>(_swapchain.get());
             VulkanUtils::InsertImageMemoryBarrier(
                 _drawCommandBuffers[_currentBufferIndex], 
-                vulkanSwapchain->GetCurrentImage(), 
+                _swapchain->GetCurrentImage(), 
                 0, 
                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 
                 VK_IMAGE_LAYOUT_UNDEFINED, 
@@ -122,7 +121,7 @@ namespace Kmplete
             );
 
             auto colorAttachmentInfo = VulkanUtils::GetVkRenderingAttachmentInfo();
-            colorAttachmentInfo.imageView = vulkanSwapchain->GetCurrentImageView();
+            colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
             colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -157,10 +156,9 @@ namespace Kmplete
         {
             vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex]);
 
-            const auto vulkanSwapchain = dynamic_cast<VulkanSwapchain*>(_swapchain.get());
             VulkanUtils::InsertImageMemoryBarrier(
                 _drawCommandBuffers[_currentBufferIndex], 
-                vulkanSwapchain->GetCurrentImage(), 
+                _swapchain->GetCurrentImage(), 
                 VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 
                 0, 
                 VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
@@ -192,6 +190,18 @@ namespace Kmplete
             {
                 vkDeviceWaitIdle(_device);
             }
+        }
+        //--------------------------------------------------------------------------
+
+        const CommandPool& VulkanLogicalDevice::GetCommandPool() const noexcept
+        {
+            return *_commandPool.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const Swapchain& VulkanLogicalDevice::GetSwapchain() const noexcept
+        {
+            return *_swapchain.get();
         }
         //--------------------------------------------------------------------------
 
