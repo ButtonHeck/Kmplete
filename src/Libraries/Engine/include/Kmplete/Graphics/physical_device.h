@@ -35,14 +35,13 @@ namespace Kmplete
             KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
             KMP_API virtual void EndFrame() {};
 
-            KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept;
+            KMP_NODISCARD KMP_API virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;
 
         protected:
             virtual void _QueryGPUInfo() = 0;
 
         protected:
             GPUInfo _gpuInfo;
-            UPtr<LogicalDevice> _logicalDevice;
         };
         //--------------------------------------------------------------------------
     }

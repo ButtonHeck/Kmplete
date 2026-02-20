@@ -7,7 +7,6 @@ namespace Kmplete
     namespace Graphics
     {
         PhysicalDevice::PhysicalDevice() noexcept
-            : _logicalDevice(nullptr)
         {
             _gpuInfo.vendor = "Unknown";
             _gpuInfo.name = "Unknown";
@@ -26,12 +25,6 @@ namespace Kmplete
             KMP_LOG_INFO("vendor - {}", _gpuInfo.vendor);
             KMP_LOG_INFO("name - {}", _gpuInfo.name);
             KMP_LOG_INFO("driver version - {}", _gpuInfo.driverVersion);
-        }
-        //--------------------------------------------------------------------------
-
-        const LogicalDevice& PhysicalDevice::GetLogicalDevice() const noexcept
-        {
-            return *_logicalDevice.get();
         }
         //--------------------------------------------------------------------------
     }

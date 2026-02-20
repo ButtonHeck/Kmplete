@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -32,6 +33,8 @@ namespace Kmplete
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
 
+            KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept override;
+
             KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
             KMP_NODISCARD KMP_API const PhysicalDeviceInfo& GetDeviceInfo() const noexcept;
 
@@ -50,6 +53,7 @@ namespace Kmplete
             VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;
             PhysicalDeviceInfo _physicalDeviceInfo;
+            UPtr<VulkanLogicalDevice> _logicalDevice;
         };
         //--------------------------------------------------------------------------
     }

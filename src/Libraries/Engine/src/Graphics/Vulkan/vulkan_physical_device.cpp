@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
@@ -187,6 +186,7 @@ namespace Kmplete
             , _instance(instance)
             , _surface(surface)
             , _physicalDevice(VK_NULL_HANDLE)
+            , _logicalDevice(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -247,6 +247,12 @@ namespace Kmplete
         void VulkanPhysicalDevice::EndFrame()
         {
             _logicalDevice->EndFrame();
+        }
+        //--------------------------------------------------------------------------
+
+        const LogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() const noexcept
+        {
+            return *_logicalDevice.get();
         }
         //--------------------------------------------------------------------------
 

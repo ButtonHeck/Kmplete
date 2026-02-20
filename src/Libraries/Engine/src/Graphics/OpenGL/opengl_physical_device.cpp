@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/OpenGL/opengl_physical_device.h"
-#include "Kmplete/Graphics/OpenGL/opengl_logical_device.h"
 
 #include <glad/glad.h>
 
@@ -10,6 +9,7 @@ namespace Kmplete
     {
         OpenGLPhysicalDevice::OpenGLPhysicalDevice()
             : PhysicalDevice()
+            , _logicalDevice(nullptr)
         {
             _QueryGPUInfo();
             PrintGPUInfo();
@@ -21,6 +21,12 @@ namespace Kmplete
         OpenGLPhysicalDevice::~OpenGLPhysicalDevice()
         {
             _logicalDevice.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        const LogicalDevice& OpenGLPhysicalDevice::GetLogicalDevice() const noexcept
+        {
+            return *_logicalDevice.get();
         }
         //--------------------------------------------------------------------------
 
