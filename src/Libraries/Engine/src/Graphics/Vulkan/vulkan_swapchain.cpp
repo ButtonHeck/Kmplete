@@ -137,10 +137,11 @@ namespace Kmplete
                 throw std::runtime_error("VulkanSwapchain: unable to get available present mode");
             }
 
-            if (std::find(presentModes.begin(), presentModes.end(), VK_PRESENT_MODE_MAILBOX_KHR) != presentModes.end())
-            {
-                return VK_PRESENT_MODE_MAILBOX_KHR;
-            }
+            // TODO: add presentation option in a future, use FIFO by default right now
+            //if (std::find(presentModes.begin(), presentModes.end(), VK_PRESENT_MODE_MAILBOX_KHR) != presentModes.end())
+            //{
+            //    return VK_PRESENT_MODE_MAILBOX_KHR;
+            //}
 
             return VK_PRESENT_MODE_FIFO_KHR;
         }
