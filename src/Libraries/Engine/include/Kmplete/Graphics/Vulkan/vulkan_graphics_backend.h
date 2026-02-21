@@ -30,6 +30,7 @@ namespace Kmplete
 
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
+            KMP_API void HandleWindowResize() override;
 
             KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
 

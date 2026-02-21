@@ -186,6 +186,7 @@ namespace Kmplete
             , _instance(instance)
             , _surface(surface)
             , _physicalDevice(VK_NULL_HANDLE)
+            , _physicalDeviceInfo()
             , _logicalDevice(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -247,6 +248,13 @@ namespace Kmplete
         void VulkanPhysicalDevice::EndFrame()
         {
             _logicalDevice->EndFrame();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::HandleWindowResize()
+        {
+            _UpdateSurfaceInfo();
+            _logicalDevice->RecreateSwapchain();
         }
         //--------------------------------------------------------------------------
 
@@ -354,6 +362,15 @@ namespace Kmplete
             );
 
             _physicalDeviceInfo.surfaceFormat = _FindSurfaceFormat();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_UpdateSurfaceInfo()
+        {
+            auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
+            _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
+            _physicalDeviceInfo.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
+            _physicalDeviceInfo.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
         }
         //--------------------------------------------------------------------------
 

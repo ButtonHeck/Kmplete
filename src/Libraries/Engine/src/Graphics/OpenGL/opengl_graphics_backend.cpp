@@ -53,6 +53,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void OpenGLGraphicsBackend::HandleWindowResize()
+        {
+        }
+        //--------------------------------------------------------------------------
+
         void OpenGLGraphicsBackend::_Initialize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);

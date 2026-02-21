@@ -141,6 +141,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanGraphicsBackend::HandleWindowResize()
+        {
+            _physicalDevice->HandleWindowResize();
+        }
+        //--------------------------------------------------------------------------
+
         VkInstance VulkanGraphicsBackend::GetVkInstance() const noexcept
         {
             return _instance;

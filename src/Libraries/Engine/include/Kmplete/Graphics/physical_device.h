@@ -34,6 +34,7 @@ namespace Kmplete
 
             KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
             KMP_API virtual void EndFrame() {};
+            KMP_API virtual void HandleWindowResize() {};
 
             KMP_NODISCARD KMP_API virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;
 

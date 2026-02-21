@@ -73,6 +73,7 @@ namespace Kmplete
 
         if (event.GetTypeID() == Events::WindowFramebufferResizeEventTypeID)
         {
+            _graphicsBackend->HandleWindowResize();
         }
     }
     //--------------------------------------------------------------------------

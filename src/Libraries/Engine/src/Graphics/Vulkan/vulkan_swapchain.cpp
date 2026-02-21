@@ -194,8 +194,6 @@ namespace Kmplete
             _swapchainImages.resize(_imageCount);
             vkGetSwapchainImagesKHR(_device, _swapchain, &_imageCount, _swapchainImages.data());
 
-            KMP_LOG_INFO("swapchain contains {} images", _imageCount);
-
             for (const auto& swapchainImage : _swapchainImages)
             {
                 if (swapchainImage == VK_NULL_HANDLE)

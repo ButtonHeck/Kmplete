@@ -32,6 +32,7 @@ namespace Kmplete
 
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
+            KMP_API void HandleWindowResize() override;
 
             KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept override;
 
@@ -44,6 +45,7 @@ namespace Kmplete
 
             void _PopulatePhysicalDeviceInfo(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
                                              Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes);
+            void _UpdateSurfaceInfo();
             void _QueryGPUInfo() override;
 
         private:
