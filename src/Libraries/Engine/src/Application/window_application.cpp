@@ -8,6 +8,7 @@
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Event/key_events.h"
+#include "Kmplete/Event/window_events.h"
 
 
 namespace Kmplete
@@ -69,6 +70,10 @@ namespace Kmplete
     {
         _inputManager->ProcessInputEvents(event);
         _frameListenerManager->_DispatchEventToFrameListeners(event);
+
+        if (event.GetTypeID() == Events::WindowFramebufferResizeEventTypeID)
+        {
+        }
     }
     //--------------------------------------------------------------------------
 
