@@ -157,6 +157,7 @@ namespace Kmplete
 
         if (mainWindowIsIconified)
         {
+            //TODO: limit updates per second
             _frameListenerManager->_ProcessFrameListenersCommands();
         }
         else
