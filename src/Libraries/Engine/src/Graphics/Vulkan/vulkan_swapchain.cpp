@@ -68,28 +68,14 @@ namespace Kmplete
         void VulkanSwapchain::StartFrame(float /*frameTimestep*/)
         {
             const auto result = AcquireNextImage();
-            if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
-            {
-                //TODO: probably window resize
-            }
-            else
-            {
-                VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
-            }
+            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
         }
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::EndFrame()
         {
             const auto result = QueuePresent();
-            if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR)
-            {
-                //TODO: probably window resize
-            }
-            else
-            {
-                VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to present swapchain image");
-            }
+            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to present swapchain image");
         }
         //--------------------------------------------------------------------------
 
