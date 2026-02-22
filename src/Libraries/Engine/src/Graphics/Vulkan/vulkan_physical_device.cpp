@@ -13,160 +13,6 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace
-        {
-            //TODO: comments
-            struct QueueFamilyIndices
-            {
-                Optional<UInt32> graphicsFamilyIndex{};
-                Optional<UInt32> presentFamilyIndex{};
-
-                inline bool IsValid() const noexcept
-                {
-                    return graphicsFamilyIndex.has_value() && presentFamilyIndex.has_value();
-                }
-            };
-            //--------------------------------------------------------------------------
-
-
-            //TODO: comments
-            struct SurfaceAndPresentModeProperties
-            {
-                VkSurfaceCapabilitiesKHR surfaceCapabilities{};
-                Vector<VkSurfaceFormatKHR> surfaceFormats{};
-                Vector<VkPresentModeKHR> presentModes{};
-
-                inline bool IsValid() const noexcept
-                {
-                    return !surfaceFormats.empty() && !presentModes.empty();
-                }
-            };
-            //--------------------------------------------------------------------------
-
-
-            KMP_NODISCARD QueueFamilyIndices QueryQueueFamiliesIndices(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-                QueueFamilyIndices indices;
-
-                UInt32 queueFamilyCount = 0;
-                vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
-
-                Vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-                vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
-
-                int index = 0;
-                for (const auto& queueFamily : queueFamilies)
-                {
-                    if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
-                    {
-                        indices.graphicsFamilyIndex = index;
-                    }
-
-                    VkBool32 presentFamilySupport = false;
-                    vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surface, &presentFamilySupport);
-                    if (presentFamilySupport)
-                    {
-                        indices.presentFamilyIndex = index;
-                    }
-
-                    if (indices.IsValid())
-                    {
-                        break;
-                    }
-
-                    index++;
-                }
-
-                return indices;
-            }
-            //--------------------------------------------------------------------------
-
-            KMP_NODISCARD bool QueryDeviceExtensionSupport(const VkPhysicalDevice& device)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-                UInt32 extensionCount;
-                vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
-
-                Vector<VkExtensionProperties> availableExtensions(extensionCount);
-                vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
-
-                const auto& enabledExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
-                Set<String> requiredExtensions(enabledExtensions.begin(), enabledExtensions.end());
-
-                for (const auto& extension : availableExtensions)
-                {
-                    requiredExtensions.erase(extension.extensionName);
-                }
-
-                return requiredExtensions.empty();
-            }
-            //--------------------------------------------------------------------------
-
-            KMP_NODISCARD SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-                SurfaceAndPresentModeProperties properties;
-                vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &properties.surfaceCapabilities);
-
-                UInt32 formatCount = 0;
-                vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
-                if (formatCount != 0)
-                {
-                    properties.surfaceFormats.resize(formatCount);
-                    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, properties.surfaceFormats.data());
-                }
-
-                UInt32 presentModeCount = 0;
-                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
-                if (presentModeCount != 0)
-                {
-                    properties.presentModes.resize(presentModeCount);
-                    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, properties.presentModes.data());
-                }
-
-                return properties;
-            }
-            //--------------------------------------------------------------------------
-
-            KMP_NODISCARD std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(const VkPhysicalDevice& device, const VkSurfaceKHR& surface)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-                const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
-                if (!queueFamiliesIndices.IsValid())
-                {
-                    return { false, {} };
-                }
-
-                const auto extensionsSupported = QueryDeviceExtensionSupport(device);
-                if (!extensionsSupported)
-                {
-                    return { false, {} };
-                }
-
-                const auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(device, surface);
-                if (!surfaceAndPresentModeProperties.IsValid())
-                {
-                    return { false, {} };
-                }
-
-                VkPhysicalDeviceFeatures supportedFeatures;
-                vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-                if (!supportedFeatures.samplerAnisotropy)
-                {
-                    return { false, {} };
-                }
-
-                return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
-            }
-            //--------------------------------------------------------------------------
-        }
-
-
         const Vector<const char*>& VulkanPhysicalDevice::GetEnabledDeviceExtensions()
         {
             static const Vector<const char*> deviceExtensions =
@@ -203,7 +49,7 @@ namespace Kmplete
             vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
             for (const auto& device : devices)
             {
-                auto deviceCheck = IsDeviceSuitable(device, _surface);
+                auto deviceCheck = VulkanUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
                 auto deviceIsSuitable = deviceCheck.first;
                 if (deviceIsSuitable)
                 {
@@ -367,7 +213,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_UpdateSurfaceInfo()
         {
-            auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
+            auto surfaceAndPresentModeProperties = VulkanUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
             _physicalDeviceInfo.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
             _physicalDeviceInfo.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
