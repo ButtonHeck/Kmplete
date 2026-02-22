@@ -8,7 +8,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanDepthStencilAttachment::VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent)
+        VulkanDepthStencilAttachment::VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent, VkFormat depthStencilFormat)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
@@ -16,7 +16,7 @@ namespace Kmplete
         {
             auto imageCreateInfo = VulkanUtils::InitVkImageCreateInfo();
             imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
-            imageCreateInfo.format = physicalDeviceInfo.defaultDepthFormat;
+            imageCreateInfo.format = depthStencilFormat;
             imageCreateInfo.extent = VkExtent3D{ .width = extent.width, .height = extent.height, .depth = 1 };
             imageCreateInfo.mipLevels = 1;
             imageCreateInfo.arrayLayers = 1;
@@ -42,13 +42,13 @@ namespace Kmplete
             auto imageViewCreateInfo = VulkanUtils::InitVkImageViewCreateInfo();
             imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             imageViewCreateInfo.image = _image;
-            imageViewCreateInfo.format = physicalDeviceInfo.defaultDepthFormat;
+            imageViewCreateInfo.format = depthStencilFormat;
             imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
             imageViewCreateInfo.subresourceRange.levelCount = 1;
             imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
             imageViewCreateInfo.subresourceRange.layerCount = 1;
             imageViewCreateInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT;
-            if (physicalDeviceInfo.defaultDepthFormat >= VK_FORMAT_D16_UNORM_S8_UINT)
+            if (depthStencilFormat >= VK_FORMAT_D16_UNORM_S8_UINT)
             {
                 imageViewCreateInfo.subresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
             }

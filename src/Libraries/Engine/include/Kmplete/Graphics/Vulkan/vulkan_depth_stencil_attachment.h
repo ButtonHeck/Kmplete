@@ -18,7 +18,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(VulkanDepthStencilAttachment)
 
         public:
-            KMP_API VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent);
+            KMP_API VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent, VkFormat depthStencilFormat);
             KMP_API ~VulkanDepthStencilAttachment();
 
             KMP_NODISCARD KMP_API VkImage GetImage() const noexcept;

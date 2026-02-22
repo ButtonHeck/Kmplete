@@ -365,7 +365,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateDepthStencilAttachment()
         {
-            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_physicalDeviceInfo, _device, _currentExtent));
+            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_physicalDeviceInfo, _device, _currentExtent, _physicalDeviceInfo.defaultDepthFormat));
         }
         //--------------------------------------------------------------------------
 
