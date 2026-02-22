@@ -6,7 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Utils/function_utils.h"

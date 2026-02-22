@@ -10,6 +10,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        KMP_NODISCARD KMP_API String VkResultToString(VkResult result) noexcept;
+        namespace VulkanUtils
+        {
+            KMP_NODISCARD KMP_API String VkResultToString(VkResult result) noexcept;
+        }
     }
 }

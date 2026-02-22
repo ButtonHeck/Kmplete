@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 
 
 namespace Kmplete

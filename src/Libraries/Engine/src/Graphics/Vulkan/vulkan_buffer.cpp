@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 
