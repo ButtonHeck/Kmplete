@@ -328,7 +328,7 @@ namespace Kmplete
         void VulkanLogicalDevice::_CreateCommandBuffers()
         {
             auto commandBufferAllocateInfo = VulkanUtils::InitVkCommandBufferAllocateInfo();
-            commandBufferAllocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool();
+            commandBufferAllocateInfo.commandPool = _commandPool->GetVkCommandPool();
             commandBufferAllocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
 
             const auto result = vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, _drawCommandBuffers.data());
@@ -338,7 +338,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_DeleteCommandBuffers()
         {
-            vkFreeCommandBuffers(_device, dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
+            vkFreeCommandBuffers(_device, _commandPool->GetVkCommandPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
         }
         //--------------------------------------------------------------------------
 
