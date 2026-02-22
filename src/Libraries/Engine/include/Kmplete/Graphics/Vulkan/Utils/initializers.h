@@ -11,40 +11,40 @@ namespace Kmplete
     {
         namespace VulkanUtils
         {
-            KMP_NODISCARD KMP_API VkDebugUtilsMessengerCreateInfoEXT GetVkDebugUtilsMessengerCreateInfo();
-            KMP_NODISCARD KMP_API VkApplicationInfo GetVkApplicationInfo();
-            KMP_NODISCARD KMP_API VkInstanceCreateInfo GetVkInstanceCreateInfo();
+            KMP_NODISCARD KMP_API VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo();
+            KMP_NODISCARD KMP_API VkApplicationInfo InitVkApplicationInfo();
+            KMP_NODISCARD KMP_API VkInstanceCreateInfo InitVkInstanceCreateInfo();
 
-            KMP_NODISCARD KMP_API VkPhysicalDeviceDynamicRenderingFeatures GetVkPhysicalDeviceDynamicRenderingFeatures();
-            KMP_NODISCARD KMP_API VkPhysicalDeviceProperties2 GetVkPhysicalDeviceProperties2();
-            KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan11Properties GetVkPhysicalDeviceVulkan11Properties();
-            KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan12Properties GetVkPhysicalDeviceVulkan12Properties();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceDynamicRenderingFeatures InitVkPhysicalDeviceDynamicRenderingFeatures();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceProperties2 InitVkPhysicalDeviceProperties2();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan11Properties InitVkPhysicalDeviceVulkan11Properties();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan12Properties InitVkPhysicalDeviceVulkan12Properties();
 
-            KMP_NODISCARD KMP_API VkDeviceCreateInfo GetVkDeviceCreateInfo();
-            KMP_NODISCARD KMP_API VkSemaphoreCreateInfo GetVkSemaphoreCreateInfo();
-            KMP_NODISCARD KMP_API VkCommandBufferAllocateInfo GetVkCommandBufferAllocateInfo(bool primary = true);
-            KMP_NODISCARD KMP_API VkCommandBufferBeginInfo GetVkCommandBufferBeginInfo();
-            KMP_NODISCARD KMP_API VkFenceCreateInfo GetVkFenceCreateInfo(bool signaled = true);
-            KMP_NODISCARD KMP_API VkPipelineCacheCreateInfo GetVkPipelineCacheCreateInfo();
-            KMP_NODISCARD KMP_API VkDescriptorPoolCreateInfo GetVkDescriptorPoolCreateInfo();
-            KMP_NODISCARD KMP_API VkDeviceQueueCreateInfo GetVkDeviceQueueCreateInfo();
-            KMP_NODISCARD KMP_API VkCommandPoolCreateInfo GetVkCommandPoolCreateInfo();
-            KMP_NODISCARD KMP_API VkSwapchainCreateInfoKHR GetVkSwapchainCreateInfoKHR();
-            KMP_NODISCARD KMP_API VkSubmitInfo GetVkSubmitInfo();
-            KMP_NODISCARD KMP_API VkPresentInfoKHR GetVkPresentInfoKHR();
-            KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR GetVkPipelineRenderingCreateInfoKHR();
-            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetVkRenderingAttachmentInfo();
-            KMP_NODISCARD KMP_API VkRenderingInfo GetVkRenderingInfo();
+            KMP_NODISCARD KMP_API VkDeviceCreateInfo InitVkDeviceCreateInfo();
+            KMP_NODISCARD KMP_API VkSemaphoreCreateInfo InitVkSemaphoreCreateInfo();
+            KMP_NODISCARD KMP_API VkCommandBufferAllocateInfo InitVkCommandBufferAllocateInfo(bool primary = true);
+            KMP_NODISCARD KMP_API VkCommandBufferBeginInfo InitVkCommandBufferBeginInfo();
+            KMP_NODISCARD KMP_API VkFenceCreateInfo InitVkFenceCreateInfo(bool signaled = true);
+            KMP_NODISCARD KMP_API VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo();
+            KMP_NODISCARD KMP_API VkDescriptorPoolCreateInfo InitVkDescriptorPoolCreateInfo();
+            KMP_NODISCARD KMP_API VkDeviceQueueCreateInfo InitVkDeviceQueueCreateInfo();
+            KMP_NODISCARD KMP_API VkCommandPoolCreateInfo InitVkCommandPoolCreateInfo();
+            KMP_NODISCARD KMP_API VkSwapchainCreateInfoKHR InitVkSwapchainCreateInfoKHR();
+            KMP_NODISCARD KMP_API VkSubmitInfo InitVkSubmitInfo();
+            KMP_NODISCARD KMP_API VkPresentInfoKHR InitVkPresentInfoKHR();
+            KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR();
+            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo InitVkRenderingAttachmentInfo();
+            KMP_NODISCARD KMP_API VkRenderingInfo InitVkRenderingInfo();
 
-            KMP_NODISCARD KMP_API VkImageCreateInfo GetVkImageCreateInfo();
-            KMP_NODISCARD KMP_API VkImageViewCreateInfo GetVkImageViewCreateInfo();
-            KMP_NODISCARD KMP_API VkImageMemoryBarrier GetVkImageMemoryBarrier();
+            KMP_NODISCARD KMP_API VkImageCreateInfo InitVkImageCreateInfo();
+            KMP_NODISCARD KMP_API VkImageViewCreateInfo InitVkImageViewCreateInfo();
+            KMP_NODISCARD KMP_API VkImageMemoryBarrier InitVkImageMemoryBarrier();
 
-            KMP_NODISCARD KMP_API VkMemoryAllocateInfo GetVkMemoryAllocateInfo();
-            KMP_NODISCARD KMP_API VkMemoryAllocateFlagsInfoKHR GetVkMemoryAllocateFlagsInfoKHR();
-            KMP_NODISCARD KMP_API VkMappedMemoryRange GetVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset);
+            KMP_NODISCARD KMP_API VkMemoryAllocateInfo InitVkMemoryAllocateInfo();
+            KMP_NODISCARD KMP_API VkMemoryAllocateFlagsInfoKHR InitVkMemoryAllocateFlagsInfoKHR();
+            KMP_NODISCARD KMP_API VkMappedMemoryRange InitVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset);
 
-            KMP_NODISCARD KMP_API VkBufferCreateInfo GetVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags);
+            KMP_NODISCARD KMP_API VkBufferCreateInfo InitVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags);
         }
     }
 }

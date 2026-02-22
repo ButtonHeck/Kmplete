@@ -14,7 +14,7 @@ namespace Kmplete
             , _memory(VK_NULL_HANDLE)
             , _view(VK_NULL_HANDLE)
         {
-            auto imageCreateInfo = VulkanUtils::GetVkImageCreateInfo();
+            auto imageCreateInfo = VulkanUtils::InitVkImageCreateInfo();
             imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
             imageCreateInfo.format = physicalDeviceInfo.defaultDepthFormat;
             imageCreateInfo.extent = VkExtent3D{ .width = extent.width, .height = extent.height, .depth = 1 };
@@ -31,7 +31,7 @@ namespace Kmplete
             VkMemoryRequirements memoryRequirements{};
             vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
 
-            auto memoryAllocateInfo = VulkanUtils::GetVkMemoryAllocateInfo();
+            auto memoryAllocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
             memoryAllocateInfo.allocationSize = memoryRequirements.size;
             memoryAllocateInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
             result = vkAllocateMemory(_device, &memoryAllocateInfo, nullptr, &_memory);
@@ -39,7 +39,7 @@ namespace Kmplete
             result = vkBindImageMemory(_device, _image, _memory, 0);
             VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to bind depth-stencil image memory");
 
-            auto imageViewCreateInfo = VulkanUtils::GetVkImageViewCreateInfo();
+            auto imageViewCreateInfo = VulkanUtils::InitVkImageViewCreateInfo();
             imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             imageViewCreateInfo.image = _image;
             imageViewCreateInfo.format = physicalDeviceInfo.defaultDepthFormat;

@@ -225,13 +225,13 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto propertiesVersion12 = VulkanUtils::GetVkPhysicalDeviceVulkan12Properties();
+            auto propertiesVersion12 = VulkanUtils::InitVkPhysicalDeviceVulkan12Properties();
             propertiesVersion12.pNext = nullptr;
 
-            auto propertiesVersion11 = VulkanUtils::GetVkPhysicalDeviceVulkan11Properties();
+            auto propertiesVersion11 = VulkanUtils::InitVkPhysicalDeviceVulkan11Properties();
             propertiesVersion11.pNext = &propertiesVersion12;
 
-            auto properties2 = VulkanUtils::GetVkPhysicalDeviceProperties2();
+            auto properties2 = VulkanUtils::InitVkPhysicalDeviceProperties2();
             properties2.pNext = &propertiesVersion11;
             vkGetPhysicalDeviceProperties2(_physicalDevice, &properties2);
 

@@ -34,7 +34,7 @@ namespace Kmplete
 
         void VulkanImage::_CreateImageObject(const Parameters& creationParameters)
         {
-            auto imageCreationInfo = VulkanUtils::GetVkImageCreateInfo();
+            auto imageCreationInfo = VulkanUtils::InitVkImageCreateInfo();
             imageCreationInfo.imageType = VK_IMAGE_TYPE_2D;
             imageCreationInfo.extent.width = creationParameters.width;
             imageCreationInfo.extent.height = creationParameters.height;
@@ -59,7 +59,7 @@ namespace Kmplete
             VkMemoryRequirements memoryRequirements;
             vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
 
-            auto memoryAllocationInfo = VulkanUtils::GetVkMemoryAllocateInfo();
+            auto memoryAllocationInfo = VulkanUtils::InitVkMemoryAllocateInfo();
             memoryAllocationInfo.allocationSize = memoryRequirements.size;
             memoryAllocationInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
 

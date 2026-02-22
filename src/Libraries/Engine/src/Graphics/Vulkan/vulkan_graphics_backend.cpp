@@ -56,7 +56,7 @@ namespace Kmplete
 
         static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo()
         {
-            auto debugMessengerCreateInfo = VulkanUtils::GetVkDebugUtilsMessengerCreateInfo();
+            auto debugMessengerCreateInfo = VulkanUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
@@ -238,7 +238,7 @@ namespace Kmplete
 
         VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const
         {
-            auto applicationInfo = VulkanUtils::GetVkApplicationInfo();
+            auto applicationInfo = VulkanUtils::InitVkApplicationInfo();
             applicationInfo.pApplicationName = "Kmplete Application";
             applicationInfo.applicationVersion = VK_MAKE_VERSION(GetKmpleteVersionMajor(), GetKmpleteVersionMinor(), GetKmpleteVersionPatch());
             applicationInfo.pEngineName = "Kmplete engine";
@@ -251,7 +251,7 @@ namespace Kmplete
 
         VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const
         {
-            auto instanceCreateInfo = VulkanUtils::GetVkInstanceCreateInfo();
+            auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo();
             instanceCreateInfo.pApplicationInfo = &applicationInfo;
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
             instanceCreateInfo.ppEnabledExtensionNames = extensionsNames.data();

@@ -90,7 +90,7 @@ namespace Kmplete
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
             initInfo.CheckVkResultFn = nullptr;
             initInfo.UseDynamicRendering = true;
-            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::GetVkPipelineRenderingCreateInfoKHR();
+            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetDeviceInfo().surfaceFormat.format;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);

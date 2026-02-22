@@ -7,7 +7,7 @@ namespace Kmplete
     {
         namespace VulkanUtils
         {
-            VkDebugUtilsMessengerCreateInfoEXT GetVkDebugUtilsMessengerCreateInfo()
+            VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo()
             {
                 VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{};
                 debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
@@ -16,7 +16,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkApplicationInfo GetVkApplicationInfo()
+            VkApplicationInfo InitVkApplicationInfo()
             {
                 VkApplicationInfo applicationInfo{};
                 applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -24,7 +24,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkInstanceCreateInfo GetVkInstanceCreateInfo()
+            VkInstanceCreateInfo InitVkInstanceCreateInfo()
             {
                 VkInstanceCreateInfo instanceCreateInfo{};
                 instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
@@ -32,7 +32,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPhysicalDeviceDynamicRenderingFeatures GetVkPhysicalDeviceDynamicRenderingFeatures()
+            VkPhysicalDeviceDynamicRenderingFeatures InitVkPhysicalDeviceDynamicRenderingFeatures()
             {
                 VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures{};
                 dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
@@ -41,7 +41,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPhysicalDeviceProperties2 GetVkPhysicalDeviceProperties2()
+            VkPhysicalDeviceProperties2 InitVkPhysicalDeviceProperties2()
             {
                 VkPhysicalDeviceProperties2 properties2{};
                 properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
@@ -49,7 +49,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPhysicalDeviceVulkan11Properties GetVkPhysicalDeviceVulkan11Properties()
+            VkPhysicalDeviceVulkan11Properties InitVkPhysicalDeviceVulkan11Properties()
             {
                 VkPhysicalDeviceVulkan11Properties propertiesVersion11{};
                 propertiesVersion11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
@@ -57,7 +57,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPhysicalDeviceVulkan12Properties GetVkPhysicalDeviceVulkan12Properties()
+            VkPhysicalDeviceVulkan12Properties InitVkPhysicalDeviceVulkan12Properties()
             {
                 VkPhysicalDeviceVulkan12Properties propertiesVersion12{};
                 propertiesVersion12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
@@ -65,7 +65,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkDeviceCreateInfo GetVkDeviceCreateInfo()
+            VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {
                 VkDeviceCreateInfo deviceCreateInfo{};
                 deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
@@ -73,7 +73,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkSemaphoreCreateInfo GetVkSemaphoreCreateInfo()
+            VkSemaphoreCreateInfo InitVkSemaphoreCreateInfo()
             {
                 VkSemaphoreCreateInfo semaphoreCreateInfo{};
                 semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -81,7 +81,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkCommandBufferAllocateInfo GetVkCommandBufferAllocateInfo(bool primary /*= true*/)
+            VkCommandBufferAllocateInfo InitVkCommandBufferAllocateInfo(bool primary /*= true*/)
             {
                 VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
                 commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
@@ -90,7 +90,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkCommandBufferBeginInfo GetVkCommandBufferBeginInfo()
+            VkCommandBufferBeginInfo InitVkCommandBufferBeginInfo()
             {
                 VkCommandBufferBeginInfo commandBufferBeginInfo{};
                 commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
@@ -98,7 +98,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkFenceCreateInfo GetVkFenceCreateInfo(bool signaled /*= true*/)
+            VkFenceCreateInfo InitVkFenceCreateInfo(bool signaled /*= true*/)
             {
                 VkFenceCreateInfo fenceCreateInfo{};
                 fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
@@ -110,7 +110,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPipelineCacheCreateInfo GetVkPipelineCacheCreateInfo()
+            VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo()
             {
                 VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
                 pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
@@ -118,7 +118,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkDescriptorPoolCreateInfo GetVkDescriptorPoolCreateInfo()
+            VkDescriptorPoolCreateInfo InitVkDescriptorPoolCreateInfo()
             {
                 VkDescriptorPoolCreateInfo poolCreateInfo{};
                 poolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
@@ -127,7 +127,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkDeviceQueueCreateInfo GetVkDeviceQueueCreateInfo()
+            VkDeviceQueueCreateInfo InitVkDeviceQueueCreateInfo()
             {
                 VkDeviceQueueCreateInfo queueCreateInfo{};
                 queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
@@ -135,7 +135,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkCommandPoolCreateInfo GetVkCommandPoolCreateInfo()
+            VkCommandPoolCreateInfo InitVkCommandPoolCreateInfo()
             {
                 VkCommandPoolCreateInfo commandPoolCreateInfo{};
                 commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
@@ -143,7 +143,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkSwapchainCreateInfoKHR GetVkSwapchainCreateInfoKHR()
+            VkSwapchainCreateInfoKHR InitVkSwapchainCreateInfoKHR()
             {
                 VkSwapchainCreateInfoKHR swapchainCreateInfo{};
                 swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -151,7 +151,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkSubmitInfo GetVkSubmitInfo()
+            VkSubmitInfo InitVkSubmitInfo()
             {
                 VkSubmitInfo submitInfo{};
                 submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
@@ -159,7 +159,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPresentInfoKHR GetVkPresentInfoKHR()
+            VkPresentInfoKHR InitVkPresentInfoKHR()
             {
                 VkPresentInfoKHR presentInfo{};
                 presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -168,7 +168,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPipelineRenderingCreateInfoKHR GetVkPipelineRenderingCreateInfoKHR()
+            VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR()
             {
                 VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo{};
                 pipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
@@ -176,7 +176,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkRenderingAttachmentInfo GetVkRenderingAttachmentInfo()
+            VkRenderingAttachmentInfo InitVkRenderingAttachmentInfo()
             {
                 VkRenderingAttachmentInfo colorAttachment{};
                 colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
@@ -184,7 +184,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkRenderingInfo GetVkRenderingInfo()
+            VkRenderingInfo InitVkRenderingInfo()
             {
                 VkRenderingInfo renderingInfo{};
                 renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO_KHR;
@@ -192,7 +192,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkImageCreateInfo GetVkImageCreateInfo()
+            VkImageCreateInfo InitVkImageCreateInfo()
             {
                 VkImageCreateInfo imageCreationInfo{};
                 imageCreationInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
@@ -200,7 +200,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkImageViewCreateInfo GetVkImageViewCreateInfo()
+            VkImageViewCreateInfo InitVkImageViewCreateInfo()
             {
                 VkImageViewCreateInfo viewCreateInfo{};
                 viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
@@ -208,7 +208,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkImageMemoryBarrier GetVkImageMemoryBarrier()
+            VkImageMemoryBarrier InitVkImageMemoryBarrier()
             {
                 VkImageMemoryBarrier imageMemoryBarrier{};
                 imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
@@ -218,7 +218,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkMemoryAllocateInfo GetVkMemoryAllocateInfo()
+            VkMemoryAllocateInfo InitVkMemoryAllocateInfo()
             {
                 VkMemoryAllocateInfo memoryAllocateInfo{};
                 memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
@@ -226,7 +226,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkMemoryAllocateFlagsInfoKHR GetVkMemoryAllocateFlagsInfoKHR()
+            VkMemoryAllocateFlagsInfoKHR InitVkMemoryAllocateFlagsInfoKHR()
             {
                 VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo{};
                 memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
@@ -234,7 +234,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkMappedMemoryRange GetVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset)
+            VkMappedMemoryRange InitVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset)
             {
                 VkMappedMemoryRange mappedRange{};
                 mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
@@ -244,7 +244,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkBufferCreateInfo GetVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags)
+            VkBufferCreateInfo InitVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags)
             {
                 VkBufferCreateInfo bufferCreateInfo{};
                 bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;

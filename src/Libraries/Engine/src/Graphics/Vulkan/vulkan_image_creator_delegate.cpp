@@ -84,7 +84,7 @@ namespace Kmplete
 
         VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
         {
-            auto viewCreateInfo = VulkanUtils::GetVkImageViewCreateInfo();
+            auto viewCreateInfo = VulkanUtils::InitVkImageViewCreateInfo();
             viewCreateInfo.image = image;
             viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             viewCreateInfo.format = format;

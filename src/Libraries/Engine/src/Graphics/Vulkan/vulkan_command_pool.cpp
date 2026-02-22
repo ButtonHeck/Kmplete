@@ -15,7 +15,7 @@ namespace Kmplete
             , _device(device)
             , _commandPool(VK_NULL_HANDLE)
         {
-            auto createPoolInfo = VulkanUtils::GetVkCommandPoolCreateInfo();
+            auto createPoolInfo = VulkanUtils::InitVkCommandPoolCreateInfo();
             createPoolInfo.queueFamilyIndex = graphicsQueueIndex;
             createPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 

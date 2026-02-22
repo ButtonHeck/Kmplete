@@ -21,7 +21,7 @@ namespace Kmplete
             , _usageFlags(usageFlags)
             , _memoryPropertyFlags(memoryPropertyFlags)
         {
-            auto bufferCreateInfo = VulkanUtils::GetVkBufferCreateInfo(_size, _usageFlags);
+            auto bufferCreateInfo = VulkanUtils::InitVkBufferCreateInfo(_size, _usageFlags);
 
             auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
             VulkanUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
@@ -29,11 +29,11 @@ namespace Kmplete
             VkMemoryRequirements memoryRequirements;
             vkGetBufferMemoryRequirements(_device, _buffer, &memoryRequirements);
 
-            auto memoryAllocateInfo = VulkanUtils::GetVkMemoryAllocateInfo();
+            auto memoryAllocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
             memoryAllocateInfo.allocationSize = memoryRequirements.size;
             memoryAllocateInfo.memoryTypeIndex = _physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, _memoryPropertyFlags);
 
-            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::GetVkMemoryAllocateFlagsInfoKHR();
+            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::InitVkMemoryAllocateFlagsInfoKHR();
             if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
             {
                 allocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
@@ -103,7 +103,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            auto mappedRange = VulkanUtils::GetVkMappedMemoryRange(size, offset);
+            auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
             return vkFlushMappedMemoryRanges(_device, 1, &mappedRange);
@@ -112,7 +112,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            auto mappedRange = VulkanUtils::GetVkMappedMemoryRange(size, offset);
+            auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);

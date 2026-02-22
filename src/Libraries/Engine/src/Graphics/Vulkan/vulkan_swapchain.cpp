@@ -88,7 +88,7 @@ namespace Kmplete
 
         VkResult VulkanSwapchain::QueuePresent()
         {
-            auto presentInfo = VulkanUtils::GetVkPresentInfoKHR();
+            auto presentInfo = VulkanUtils::InitVkPresentInfoKHR();
             presentInfo.swapchainCount = 1;
             presentInfo.pSwapchains = &_swapchain;
             presentInfo.pImageIndices = &_imageIndex;
@@ -143,7 +143,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface)
         {
-            auto swapchainCreateInfo = VulkanUtils::GetVkSwapchainCreateInfoKHR();
+            auto swapchainCreateInfo = VulkanUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = surface;
             swapchainCreateInfo.minImageCount = _imageCount;
             swapchainCreateInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;

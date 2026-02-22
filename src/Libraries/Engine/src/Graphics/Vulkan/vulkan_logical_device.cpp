@@ -94,7 +94,7 @@ namespace Kmplete
             _swapchain->StartFrame(frameTimestep);
 
             vkResetCommandBuffer(_drawCommandBuffers[_currentBufferIndex], 0);
-            auto commandBufferBeginInfo = VulkanUtils::GetVkCommandBufferBeginInfo();
+            auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
             result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
 
@@ -121,21 +121,21 @@ namespace Kmplete
                 VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
             );
 
-            auto colorAttachmentInfo = VulkanUtils::GetVkRenderingAttachmentInfo();
+            auto colorAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
             colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
             colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             colorAttachmentInfo.clearValue.color = { 0.0f, 0.0f, 0.2f, 0.0f }; //TODO: numbers
 
-            auto depthStencilAttachmentInfo = VulkanUtils::GetVkRenderingAttachmentInfo();
+            auto depthStencilAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
             depthStencilAttachmentInfo.imageView = _depthStencilAttachment->GetImageView();
             depthStencilAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             depthStencilAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             depthStencilAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
             depthStencilAttachmentInfo.clearValue.depthStencil = { 1.0f, 0 };
 
-            auto renderingInfo = VulkanUtils::GetVkRenderingInfo();
+            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };
             renderingInfo.layerCount = 1;
             renderingInfo.colorAttachmentCount = 1;
@@ -173,7 +173,7 @@ namespace Kmplete
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");
 
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            auto submitInfo = VulkanUtils::GetVkSubmitInfo();
+            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
             submitInfo.pWaitDstStageMask = &waitStageMask;
             submitInfo.pCommandBuffers = &_drawCommandBuffers[_currentBufferIndex];
             submitInfo.commandBufferCount = 1;
@@ -278,7 +278,7 @@ namespace Kmplete
 
             const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
 
-            auto deviceCreateInfo = VulkanUtils::GetVkDeviceCreateInfo();
+            auto deviceCreateInfo = VulkanUtils::InitVkDeviceCreateInfo();
             deviceCreateInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
             deviceCreateInfo.pEnabledFeatures = nullptr;
@@ -312,7 +312,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateSemaphoreObjects()
         {
-            auto semaphoreCreateInfo = VulkanUtils::GetVkSemaphoreCreateInfo();
+            auto semaphoreCreateInfo = VulkanUtils::InitVkSemaphoreCreateInfo();
 
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
@@ -327,7 +327,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateCommandBuffers()
         {
-            auto commandBufferAllocateInfo = VulkanUtils::GetVkCommandBufferAllocateInfo();
+            auto commandBufferAllocateInfo = VulkanUtils::InitVkCommandBufferAllocateInfo();
             commandBufferAllocateInfo.commandPool = dynamic_cast<VulkanCommandPool*>(_commandPool.get())->GetVkCommandPool();
             commandBufferAllocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
 
@@ -344,7 +344,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateFences()
         {
-            auto createInfo = VulkanUtils::GetVkFenceCreateInfo();
+            auto createInfo = VulkanUtils::InitVkFenceCreateInfo();
 
             for (auto& fence : _waitFences)
             {
@@ -377,7 +377,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreatePipelineCache()
         {
-            auto pipelineCacheCreateInfo = VulkanUtils::GetVkPipelineCacheCreateInfo();
+            auto pipelineCacheCreateInfo = VulkanUtils::InitVkPipelineCacheCreateInfo();
 
             const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
@@ -400,7 +400,7 @@ namespace Kmplete
                 { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 100 },
                 { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 100 } };
 
-            auto poolInfo = VulkanUtils::GetVkDescriptorPoolCreateInfo();
+            auto poolInfo = VulkanUtils::InitVkDescriptorPoolCreateInfo();
             poolInfo.maxSets = 100;
             poolInfo.poolSizeCount = UInt32(std::size(poolSizes));
             poolInfo.pPoolSizes = poolSizes;
@@ -421,7 +421,7 @@ namespace Kmplete
 
             for (auto queueFamilyIndex : queueFamiliesIndicesSet)
             {
-                auto queueCreateInfo = VulkanUtils::GetVkDeviceQueueCreateInfo();
+                auto queueCreateInfo = VulkanUtils::InitVkDeviceQueueCreateInfo();
                 queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
                 queueCreateInfo.queueCount = 1;
                 queueCreateInfo.pQueuePriorities = &queuePriority;
