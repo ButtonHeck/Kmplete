@@ -143,7 +143,10 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::HandleWindowResize()
         {
-            _physicalDevice->HandleWindowResize();
+            if (!_window.IsIconified())
+            {
+                _physicalDevice->HandleWindowResize();
+            }
         }
         //--------------------------------------------------------------------------
 

@@ -220,11 +220,6 @@ namespace Kmplete
 
         void VulkanLogicalDevice::RecreateSwapchain()
         {
-            while (_window.IsIconified())
-            {
-                glfwWaitEvents();
-            }
-
             vkDeviceWaitIdle(_device);
 
             _DeleteDepthStencilAttachment();

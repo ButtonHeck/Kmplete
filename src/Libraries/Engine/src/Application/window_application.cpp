@@ -155,15 +155,17 @@ namespace Kmplete
 
         _frameListenerManager->_UpdateFrameListeners(frameTimestep, mainWindowIsIconified);
 
-        if (!mainWindowIsIconified)
+        if (mainWindowIsIconified)
+        {
+            _frameListenerManager->_ProcessFrameListenersCommands();
+        }
+        else
         {
             _graphicsBackend->StartFrame(frameTimestep);
             _frameListenerManager->_RenderFrameListeners();
+            _frameListenerManager->_ProcessFrameListenersCommands();
+            _graphicsBackend->EndFrame();
         }
-
-        _frameListenerManager->_ProcessFrameListenersCommands();
-
-        _graphicsBackend->EndFrame();
 
         return true;
     }
@@ -171,9 +173,13 @@ namespace Kmplete
 
     void WindowApplication::_ProcessEvents(Window& window, float frameTimestep)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
         _inputManager->ResetMouseMove();
         _inputManager->UpdateTimerActions(frameTimestep);
+
         window.FetchEvents();
+
         _inputManager->PropagateActionEvents();
         _frameListenerManager->_DispatchQueuedEventsToFrameListeners();
     }
