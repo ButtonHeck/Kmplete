@@ -21,11 +21,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex)
+        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
-            , _physicalDeviceInfo(info)
+            , _vulkanContext(vulkanContext)
             , _memoryTypeDelegate(memoryTypeDelegate)
             , _window(window)
             , _currentBufferIndex(currentBufferIndex)
@@ -50,7 +50,7 @@ namespace Kmplete
             _GetDeviceQueues();
             _CreateSemaphoreObjects();
 
-            _commandPool.reset(new VulkanCommandPool(_device, _physicalDeviceInfo.graphicsFamilyIndex));
+            _commandPool.reset(new VulkanCommandPool(_device, _vulkanContext.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
 
             CreateSwapchain();
@@ -210,7 +210,7 @@ namespace Kmplete
         void VulkanLogicalDevice::CreateSwapchain()
         {
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _physicalDeviceInfo, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
         }
         //--------------------------------------------------------------------------
 
@@ -294,8 +294,8 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_GetDeviceQueues()
         {
-            vkGetDeviceQueue(_device, _physicalDeviceInfo.graphicsFamilyIndex, 0, &_graphicsQueue);
-            vkGetDeviceQueue(_device, _physicalDeviceInfo.presentFamilyIndex, 0, &_presentQueue);
+            vkGetDeviceQueue(_device, _vulkanContext.graphicsFamilyIndex, 0, &_graphicsQueue);
+            vkGetDeviceQueue(_device, _vulkanContext.presentFamilyIndex, 0, &_presentQueue);
 
             if (_graphicsQueue == nullptr)
             {
@@ -366,7 +366,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateDepthStencilAttachment()
         {
-            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_memoryTypeDelegate, _device, _currentExtent, _physicalDeviceInfo.defaultDepthFormat));
+            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_memoryTypeDelegate, _device, _currentExtent, _vulkanContext.defaultDepthFormat));
         }
         //--------------------------------------------------------------------------
 
@@ -415,8 +415,8 @@ namespace Kmplete
         {
             Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
             Set<UInt32> queueFamiliesIndicesSet = {
-                _physicalDeviceInfo.graphicsFamilyIndex,
-                _physicalDeviceInfo.presentFamilyIndex
+                _vulkanContext.graphicsFamilyIndex,
+                _vulkanContext.presentFamilyIndex
             };
             const auto queuePriority = 1.0f;
 
@@ -435,7 +435,7 @@ namespace Kmplete
 
         VkExtent2D VulkanLogicalDevice::_UpdateExtent() const
         {
-            const auto& capabilities = _physicalDeviceInfo.surfaceCapabilities;
+            const auto& capabilities = _vulkanContext.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
             {
                 return capabilities.currentExtent;

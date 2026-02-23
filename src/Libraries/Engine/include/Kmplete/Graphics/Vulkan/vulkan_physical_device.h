@@ -3,7 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/physical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -38,14 +38,14 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept override;
 
             KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
-            KMP_NODISCARD KMP_API const PhysicalDeviceInfo& GetDeviceInfo() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanContext& GetVulkanContext() const noexcept;
 
         private:
             KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;
             KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
 
-            void _PopulatePhysicalDeviceInfo(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
-                                             Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes);
+            void _PopulateVulkanContext(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
+                                        Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes);
             void _UpdateSurfaceInfo();
             void _QueryGPUInfo() override;
 
@@ -55,7 +55,7 @@ namespace Kmplete
             VkInstance _instance;
             VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;
-            PhysicalDeviceInfo _physicalDeviceInfo;
+            VulkanContext _vulkanContext;
             UPtr<VulkanMemoryTypeDelegate> _memoryTypeDelegate;
             UPtr<VulkanLogicalDevice> _logicalDevice;
         };

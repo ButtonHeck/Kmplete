@@ -2,7 +2,7 @@
 
 #include "Kmplete/Graphics/swapchain.h"
 #include "Kmplete/Graphics/graphics_base.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Base/kmplete_api.h"
@@ -24,7 +24,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent,
+            KMP_API VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                     const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                     const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             KMP_API ~VulkanSwapchain();
@@ -52,7 +52,7 @@ namespace Kmplete
         private:
             VkDevice _device;
             VkQueue _graphicsQueue;
-            const PhysicalDeviceInfo& _physicalDeviceInfo;
+            const VulkanContext& _vulkanContext;
             const VkExtent2D& _swapchainExtent;
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
             const UInt32& _currentBufferIndex;

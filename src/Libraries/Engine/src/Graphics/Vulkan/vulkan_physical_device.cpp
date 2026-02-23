@@ -33,7 +33,7 @@ namespace Kmplete
             , _instance(instance)
             , _surface(surface)
             , _physicalDevice(VK_NULL_HANDLE)
-            , _physicalDeviceInfo()
+            , _vulkanContext()
             , _memoryTypeDelegate(nullptr)
             , _logicalDevice(nullptr)
         {
@@ -58,7 +58,7 @@ namespace Kmplete
                     _physicalDevice = device;
 
                     auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
-                    _PopulatePhysicalDeviceInfo(
+                    _PopulateVulkanContext(
                         queueFamilyIndices.graphicsFamilyIndex.value(),
                         queueFamilyIndices.presentFamilyIndex.value(), 
                         surfaceAndPresentModeProperties.surfaceCapabilities, 
@@ -77,8 +77,8 @@ namespace Kmplete
             _QueryGPUInfo();
             PrintGPUInfo();
 
-            _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_physicalDeviceInfo.memoryProperties));
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, *_memoryTypeDelegate.get(), _window, _currentBufferIndex));
+            _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_vulkanContext.memoryProperties));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), _window, _currentBufferIndex));
         }
         //--------------------------------------------------------------------------
 
@@ -120,9 +120,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const PhysicalDeviceInfo& VulkanPhysicalDevice::GetDeviceInfo() const noexcept
+        const VulkanContext& VulkanPhysicalDevice::GetVulkanContext() const noexcept
         {
-            return _physicalDeviceInfo;
+            return _vulkanContext;
         }
         //--------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            const auto& surfaceFormats = _physicalDeviceInfo.surfaceFormats;
+            const auto& surfaceFormats = _vulkanContext.surfaceFormats;
             if (surfaceFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");
@@ -173,54 +173,54 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::_PopulatePhysicalDeviceInfo(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
+        void VulkanPhysicalDevice::_PopulateVulkanContext(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
                                                                Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _physicalDeviceInfo.graphicsFamilyIndex = graphicsFamilyIndex;
-            _physicalDeviceInfo.presentFamilyIndex = presentFamilyIndex;
+            _vulkanContext.graphicsFamilyIndex = graphicsFamilyIndex;
+            _vulkanContext.presentFamilyIndex = presentFamilyIndex;
 
-            _physicalDeviceInfo.surfaceCapabilities = surfaceCapabilities;
-            _physicalDeviceInfo.surfaceFormats = std::move(surfaceFormats);
-            _physicalDeviceInfo.presentModes = std::move(presentModes);
+            _vulkanContext.surfaceCapabilities = surfaceCapabilities;
+            _vulkanContext.surfaceFormats = std::move(surfaceFormats);
+            _vulkanContext.presentModes = std::move(presentModes);
 
-            vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_physicalDeviceInfo.memoryProperties);
-            vkGetPhysicalDeviceProperties(_physicalDevice, &_physicalDeviceInfo.deviceProperties);
+            vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_vulkanContext.memoryProperties);
+            vkGetPhysicalDeviceProperties(_physicalDevice, &_vulkanContext.deviceProperties);
 
-            const auto& properties = _physicalDeviceInfo.deviceProperties;
-            _physicalDeviceInfo.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
-            const auto samplesCountMask = _physicalDeviceInfo.sampleCountsMask;
+            const auto& properties = _vulkanContext.deviceProperties;
+            _vulkanContext.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
+            const auto samplesCountMask = _vulkanContext.sampleCountsMask;
             if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
             if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
             if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
             if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
             if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
             if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
             else
-                _physicalDeviceInfo.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
+                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
 
-            _physicalDeviceInfo.defaultDepthFormat = _FindSupportedFormat(
+            _vulkanContext.defaultDepthFormat = _FindSupportedFormat(
                 { VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT, VK_FORMAT_D16_UNORM_S8_UINT },
                 VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
             );
 
-            _physicalDeviceInfo.surfaceFormat = _FindSurfaceFormat();
+            _vulkanContext.surfaceFormat = _FindSurfaceFormat();
         }
         //--------------------------------------------------------------------------
 
         void VulkanPhysicalDevice::_UpdateSurfaceInfo()
         {
             auto surfaceAndPresentModeProperties = VulkanUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
-            _physicalDeviceInfo.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
-            _physicalDeviceInfo.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
-            _physicalDeviceInfo.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
+            _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
+            _vulkanContext.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
+            _vulkanContext.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
         }
         //--------------------------------------------------------------------------
 

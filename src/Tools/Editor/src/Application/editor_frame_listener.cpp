@@ -7,6 +7,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Assets/assets_manager.h"
 #include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Utils/function_utils.h"
@@ -81,7 +82,7 @@ namespace Kmplete
             initInfo.Instance = vulkanBackend.GetVkInstance();
             initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
             initInfo.Device = logicalDevice.GetVkDevice();
-            initInfo.QueueFamily = physicalDevice.GetDeviceInfo().graphicsFamilyIndex;
+            initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
             initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
             initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
@@ -92,7 +93,7 @@ namespace Kmplete
             initInfo.UseDynamicRendering = true;
             initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetDeviceInfo().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));

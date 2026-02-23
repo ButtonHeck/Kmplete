@@ -110,7 +110,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_physical_device.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_context.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_logical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h

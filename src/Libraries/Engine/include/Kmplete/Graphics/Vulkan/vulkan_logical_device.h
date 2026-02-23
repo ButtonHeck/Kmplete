@@ -2,7 +2,7 @@
 
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/logical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
@@ -29,7 +29,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex);
+            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex);
             KMP_API ~VulkanLogicalDevice();
 
             KMP_API void StartFrame(float frameTimestep) override;
@@ -70,7 +70,7 @@ namespace Kmplete
         private:
             VkPhysicalDevice _physicalDevice;
             VkSurfaceKHR _surface;
-            const PhysicalDeviceInfo& _physicalDeviceInfo;
+            const VulkanContext& _vulkanContext;
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
             const Window& _window;
             const UInt32& _currentBufferIndex;

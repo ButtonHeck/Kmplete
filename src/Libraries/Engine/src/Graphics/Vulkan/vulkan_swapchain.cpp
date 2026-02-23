@@ -11,13 +11,13 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VkExtent2D& swapchainExtent,
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                          const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
             , _device(device)
             , _graphicsQueue(graphicsQueue)
-            , _physicalDeviceInfo(info)
+            , _vulkanContext(vulkanContext)
             , _swapchainExtent(swapchainExtent)
             , _imageCreatorDelegate(imageCreatorDelegate)
             , _currentBufferIndex(currentBufferIndex)
@@ -27,7 +27,7 @@ namespace Kmplete
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageFormat(_physicalDeviceInfo.surfaceFormat.format)
+            , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _swapchainImageViews()
             , _colorImage(nullptr)
             , _colorImageView(VK_NULL_HANDLE)
@@ -35,9 +35,9 @@ namespace Kmplete
             , _depthImageView(VK_NULL_HANDLE)
         {
             _imageCount = NumConcurrentFrames;
-            if (_physicalDeviceInfo.surfaceCapabilities.maxImageCount > 0 && _imageCount > _physicalDeviceInfo.surfaceCapabilities.maxImageCount)
+            if (_vulkanContext.surfaceCapabilities.maxImageCount > 0 && _imageCount > _vulkanContext.surfaceCapabilities.maxImageCount)
             {
-                _imageCount = _physicalDeviceInfo.surfaceCapabilities.maxImageCount;
+                _imageCount = _vulkanContext.surfaceCapabilities.maxImageCount;
             }
 
             _CreateSwapchainObject(surface);
@@ -146,14 +146,14 @@ namespace Kmplete
             auto swapchainCreateInfo = VulkanUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = surface;
             swapchainCreateInfo.minImageCount = _imageCount;
-            swapchainCreateInfo.imageFormat = _physicalDeviceInfo.surfaceFormat.format;
-            swapchainCreateInfo.imageColorSpace = _physicalDeviceInfo.surfaceFormat.colorSpace;
+            swapchainCreateInfo.imageFormat = _vulkanContext.surfaceFormat.format;
+            swapchainCreateInfo.imageColorSpace = _vulkanContext.surfaceFormat.colorSpace;
             swapchainCreateInfo.imageExtent = _swapchainExtent;
             swapchainCreateInfo.imageArrayLayers = 1;
             swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-            UInt32 indicesArray[] = { _physicalDeviceInfo.graphicsFamilyIndex, _physicalDeviceInfo.presentFamilyIndex };
-            if (_physicalDeviceInfo.graphicsFamilyIndex != _physicalDeviceInfo.presentFamilyIndex)
+            UInt32 indicesArray[] = { _vulkanContext.graphicsFamilyIndex, _vulkanContext.presentFamilyIndex };
+            if (_vulkanContext.graphicsFamilyIndex != _vulkanContext.presentFamilyIndex)
             {
                 swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 swapchainCreateInfo.queueFamilyIndexCount = 2;
@@ -164,9 +164,9 @@ namespace Kmplete
                 swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
             }
 
-            swapchainCreateInfo.preTransform = _physicalDeviceInfo.surfaceCapabilities.currentTransform;
+            swapchainCreateInfo.preTransform = _vulkanContext.surfaceCapabilities.currentTransform;
             swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            swapchainCreateInfo.presentMode = _ChoosePresentMode(_physicalDeviceInfo.presentModes);
+            swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes);
             swapchainCreateInfo.clipped = VK_TRUE;
             swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
@@ -204,7 +204,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateAttachmentImages()
         {
-            const auto sampleCount = _physicalDeviceInfo.MaximumSupportedSampleCount();
+            const auto sampleCount = _vulkanContext.supportedSampleCounts.top();
 
             VulkanImage::Parameters creationParameters = {
                 .width = _swapchainExtent.width,
@@ -223,7 +223,7 @@ namespace Kmplete
                 .height = _swapchainExtent.height,
                 .mipLevels = 1,
                 .numSamples = sampleCount,
-                .format = _physicalDeviceInfo.defaultDepthFormat,
+                .format = _vulkanContext.defaultDepthFormat,
                 .tiling = VK_IMAGE_TILING_OPTIMAL,
                 .usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
                 .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -236,7 +236,7 @@ namespace Kmplete
         {
             //TODO: need this?
             _colorImageView = _imageCreatorDelegate.CreateImageView(*_colorImage.get(), _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
-            _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), _physicalDeviceInfo.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), _vulkanContext.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
         }
         //--------------------------------------------------------------------------
     }
