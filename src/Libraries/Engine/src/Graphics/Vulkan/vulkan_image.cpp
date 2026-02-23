@@ -55,14 +55,8 @@ namespace Kmplete
 
         void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters)
         {
-            VkMemoryRequirements memoryRequirements;
-            vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
-
-            auto memoryAllocationInfo = VulkanUtils::InitVkMemoryAllocateInfo();
-            memoryAllocationInfo.allocationSize = memoryRequirements.size;
-            memoryAllocationInfo.memoryTypeIndex = memoryTypeDelegate.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
-
-            const auto result = vkAllocateMemory(_device, &memoryAllocationInfo, nullptr, &_imageMemory);
+            const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, creationParameters.memoryProperties);
+            const auto result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_imageMemory);
             if (result != VK_SUCCESS)
             {
                 vkDestroyImage(_device, _image, nullptr);

@@ -27,13 +27,8 @@ namespace Kmplete
             auto result = vkCreateImage(_device, &imageCreateInfo, nullptr, &_image);
             VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to create depth-stencil image");
 
-            VkMemoryRequirements memoryRequirements{};
-            vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
-
-            auto memoryAllocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
-            memoryAllocateInfo.allocationSize = memoryRequirements.size;
-            memoryAllocateInfo.memoryTypeIndex = memoryTypeDelegate.FindMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
-            result = vkAllocateMemory(_device, &memoryAllocateInfo, nullptr, &_memory);
+            const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_memory);
             VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to allocate depth-stencil memory");
             result = vkBindImageMemory(_device, _image, _memory, 0);
             VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to bind depth-stencil image memory");

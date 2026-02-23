@@ -18,8 +18,17 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanMemoryTypeDelegate)
 
         public:
+            struct MemoryContext
+            {
+                VkMemoryRequirements requirements{};
+                VkMemoryAllocateInfo allocateInfo{};
+            };
+
+        public:
             KMP_API explicit VulkanMemoryTypeDelegate(VkPhysicalDeviceMemoryProperties memoryProperties) noexcept;
 
+            KMP_NODISCARD KMP_API MemoryContext GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const;
+            KMP_NODISCARD KMP_API MemoryContext GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const;
             KMP_NODISCARD KMP_API UInt32 FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const;
 
         private:

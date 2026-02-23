@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -9,6 +10,32 @@ namespace Kmplete
         VulkanMemoryTypeDelegate::VulkanMemoryTypeDelegate(VkPhysicalDeviceMemoryProperties memoryProperties) noexcept
             : _memoryProperties(memoryProperties)
         {}
+        //--------------------------------------------------------------------------
+
+        VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const
+        {
+            MemoryContext context{};
+            vkGetBufferMemoryRequirements(device, buffer, &context.requirements);
+
+            context.allocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
+            context.allocateInfo.allocationSize = context.requirements.size;
+            context.allocateInfo.memoryTypeIndex = FindMemoryType(context.requirements.memoryTypeBits, properties);
+
+            return context;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const
+        {
+            MemoryContext context{};
+            vkGetImageMemoryRequirements(device, image, &context.requirements);
+
+            context.allocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
+            context.allocateInfo.allocationSize = context.requirements.size;
+            context.allocateInfo.memoryTypeIndex = FindMemoryType(context.requirements.memoryTypeBits, properties);
+
+            return context;
+        }
         //--------------------------------------------------------------------------
 
         UInt32 VulkanMemoryTypeDelegate::FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const

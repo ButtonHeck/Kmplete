@@ -18,31 +18,24 @@ namespace Kmplete
             , _alignment(0)
             , _mapped(nullptr)
             , _usageFlags(usageFlags)
-            , _memoryPropertyFlags(memoryPropertyFlags)
         {
             auto bufferCreateInfo = VulkanUtils::InitVkBufferCreateInfo(_size, _usageFlags);
 
             auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
             VulkanUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
 
-            VkMemoryRequirements memoryRequirements;
-            vkGetBufferMemoryRequirements(_device, _buffer, &memoryRequirements);
-
-            auto memoryAllocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
-            memoryAllocateInfo.allocationSize = memoryRequirements.size;
-            memoryAllocateInfo.memoryTypeIndex = memoryTypeDelegate.FindMemoryType(memoryRequirements.memoryTypeBits, _memoryPropertyFlags);
-
+            auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, memoryPropertyFlags);
             VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::InitVkMemoryAllocateFlagsInfoKHR();
             if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
             {
                 allocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
-                memoryAllocateInfo.pNext = &allocateFlagsInfo;
+                bufferMemoryContext.allocateInfo.pNext = &allocateFlagsInfo;
             }
 
-            result = vkAllocateMemory(_device, &memoryAllocateInfo, nullptr, &_memory);
+            result = vkAllocateMemory(_device, &bufferMemoryContext.allocateInfo, nullptr, &_memory);
             VulkanUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
 
-            _alignment = memoryRequirements.alignment;
+            _alignment = bufferMemoryContext.requirements.alignment;
 
             if (data != nullptr)
             {
@@ -50,7 +43,7 @@ namespace Kmplete
                 VulkanUtils::CheckResult(result, "VulkanBuffer: failed to map buffer memory");
 
                 memcpy(_mapped, data, size);
-                if ((_memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
+                if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
                 {
                     Flush();
                 }

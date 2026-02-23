@@ -42,7 +42,6 @@ namespace Kmplete
             VkDeviceSize _alignment;
             void* _mapped;
             VkBufferUsageFlags _usageFlags;
-            VkMemoryPropertyFlags _memoryPropertyFlags;
         };
         //--------------------------------------------------------------------------
     }
