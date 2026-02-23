@@ -21,11 +21,12 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const Window& window, const UInt32& currentBufferIndex)
+        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const PhysicalDeviceInfo& info, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
             , _physicalDevice(physicalDevice)
             , _surface(surface)
             , _physicalDeviceInfo(info)
+            , _memoryTypeDelegate(memoryTypeDelegate)
             , _window(window)
             , _currentBufferIndex(currentBufferIndex)
             , _device(nullptr)
@@ -50,7 +51,7 @@ namespace Kmplete
             _CreateSemaphoreObjects();
 
             _commandPool.reset(new VulkanCommandPool(_device, _physicalDeviceInfo.graphicsFamilyIndex));
-            _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _physicalDeviceInfo));
+            _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
 
             CreateSwapchain();
 
@@ -365,7 +366,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateDepthStencilAttachment()
         {
-            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_physicalDeviceInfo, _device, _currentExtent, _physicalDeviceInfo.defaultDepthFormat));
+            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_memoryTypeDelegate, _device, _currentExtent, _physicalDeviceInfo.defaultDepthFormat));
         }
         //--------------------------------------------------------------------------
 

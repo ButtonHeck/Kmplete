@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/nullability.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -20,7 +20,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanImageCreatorDelegate)
 
         public:
-            KMP_API VulkanImageCreatorDelegate(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo);
+            KMP_API VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
 
             KMP_NODISCARD KMP_API VulkanImage CreateImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                           VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
@@ -39,7 +39,7 @@ namespace Kmplete
 
         private:
             VkDevice _device;
-            const PhysicalDeviceInfo& _physicalDeviceInfo;
+            const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
         };
         //--------------------------------------------------------------------------
     }

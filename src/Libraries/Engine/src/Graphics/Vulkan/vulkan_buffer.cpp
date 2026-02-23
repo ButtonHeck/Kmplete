@@ -9,9 +9,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanBuffer::VulkanBuffer(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data)
-            : _physicalDeviceInfo(physicalDeviceInfo)
-            , _device(device)
+        VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data)
+            : _device(device)
             , _buffer(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
             , _descriptor()
@@ -31,7 +30,7 @@ namespace Kmplete
 
             auto memoryAllocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
             memoryAllocateInfo.allocationSize = memoryRequirements.size;
-            memoryAllocateInfo.memoryTypeIndex = _physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, _memoryPropertyFlags);
+            memoryAllocateInfo.memoryTypeIndex = memoryTypeDelegate.FindMemoryType(memoryRequirements.memoryTypeBits, _memoryPropertyFlags);
 
             VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::InitVkMemoryAllocateFlagsInfoKHR();
             if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)

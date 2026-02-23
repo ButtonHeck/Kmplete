@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log.h"
@@ -9,13 +8,13 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImage::VulkanImage(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters)
+        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
         {
             _CreateImageObject(creationParameters);
-            _AllocateImageMemory(physicalDeviceInfo, creationParameters);
+            _AllocateImageMemory(memoryTypeDelegate, creationParameters);
         }
         //--------------------------------------------------------------------------
 
@@ -54,14 +53,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_AllocateImageMemory(const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters)
+        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters)
         {
             VkMemoryRequirements memoryRequirements;
             vkGetImageMemoryRequirements(_device, _image, &memoryRequirements);
 
             auto memoryAllocationInfo = VulkanUtils::InitVkMemoryAllocateInfo();
             memoryAllocationInfo.allocationSize = memoryRequirements.size;
-            memoryAllocationInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
+            memoryAllocationInfo.memoryTypeIndex = memoryTypeDelegate.FindMemoryType(memoryRequirements.memoryTypeBits, creationParameters.memoryProperties);
 
             const auto result = vkAllocateMemory(_device, &memoryAllocationInfo, nullptr, &_imageMemory);
             if (result != VK_SUCCESS)

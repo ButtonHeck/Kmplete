@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 
@@ -8,7 +7,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanDepthStencilAttachment::VulkanDepthStencilAttachment(const PhysicalDeviceInfo& physicalDeviceInfo, VkDevice device, const VkExtent2D& extent, VkFormat depthStencilFormat)
+        VulkanDepthStencilAttachment::VulkanDepthStencilAttachment(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VkExtent2D& extent, VkFormat depthStencilFormat)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
@@ -33,7 +32,7 @@ namespace Kmplete
 
             auto memoryAllocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
             memoryAllocateInfo.allocationSize = memoryRequirements.size;
-            memoryAllocateInfo.memoryTypeIndex = physicalDeviceInfo.FindMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+            memoryAllocateInfo.memoryTypeIndex = memoryTypeDelegate.FindMemoryType(memoryRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
             result = vkAllocateMemory(_device, &memoryAllocateInfo, nullptr, &_memory);
             VulkanUtils::CheckResult(result, "VulkanDepthStencilAttachment: failed to allocate depth-stencil memory");
             result = vkBindImageMemory(_device, _image, _memory, 0);

@@ -8,9 +8,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo)
+        VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
             : _device(device)
-            , _physicalDeviceInfo(physicalDeviceInfo)
+            , _memoryTypeDelegate(memoryTypeDelegate)
         {}
         //--------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ namespace Kmplete
 
         VulkanImage VulkanImageCreatorDelegate::CreateImage(const VulkanImage::Parameters& creationParameters) const
         {
-            return VulkanImage(_device, _physicalDeviceInfo, creationParameters);
+            return VulkanImage(_device, _memoryTypeDelegate, creationParameters);
         }
         //--------------------------------------------------------------------------
 
@@ -72,7 +72,7 @@ namespace Kmplete
 
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VulkanImage::Parameters& creationParameters) const
         {
-            return new VulkanImage(_device, _physicalDeviceInfo, creationParameters);
+            return new VulkanImage(_device, _memoryTypeDelegate, creationParameters);
         }
         //--------------------------------------------------------------------------
 

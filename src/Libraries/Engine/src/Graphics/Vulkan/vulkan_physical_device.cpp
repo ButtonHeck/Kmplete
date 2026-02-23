@@ -34,6 +34,7 @@ namespace Kmplete
             , _surface(surface)
             , _physicalDevice(VK_NULL_HANDLE)
             , _physicalDeviceInfo()
+            , _memoryTypeDelegate(nullptr)
             , _logicalDevice(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -76,13 +77,15 @@ namespace Kmplete
             _QueryGPUInfo();
             PrintGPUInfo();
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, _window, _currentBufferIndex));
+            _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_physicalDeviceInfo.memoryProperties));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _physicalDeviceInfo, *_memoryTypeDelegate.get(), _window, _currentBufferIndex));
         }
         //--------------------------------------------------------------------------
 
         VulkanPhysicalDevice::~VulkanPhysicalDevice()
         {
             _logicalDevice.reset();
+            _memoryTypeDelegate.reset();
         }
         //--------------------------------------------------------------------------
 

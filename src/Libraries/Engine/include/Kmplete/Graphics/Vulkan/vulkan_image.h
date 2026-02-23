@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -11,9 +12,6 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        struct PhysicalDeviceInfo;
-
-
         //TODO: comments
         class VulkanImage
         {
@@ -35,14 +33,14 @@ namespace Kmplete
             };
 
         public:
-            KMP_API VulkanImage(VkDevice device, const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters);
+            KMP_API VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters);
             KMP_API ~VulkanImage();
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
 
         private:
             void _CreateImageObject(const Parameters& creationParameters);
-            void _AllocateImageMemory(const PhysicalDeviceInfo& physicalDeviceInfo, const Parameters& creationParameters);
+            void _AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters);
 
         private:
             VkDevice _device;

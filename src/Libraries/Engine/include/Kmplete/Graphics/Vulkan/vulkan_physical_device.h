@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device_info.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
 
@@ -55,6 +56,7 @@ namespace Kmplete
             VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;
             PhysicalDeviceInfo _physicalDeviceInfo;
+            UPtr<VulkanMemoryTypeDelegate> _memoryTypeDelegate;
             UPtr<VulkanLogicalDevice> _logicalDevice;
         };
         //--------------------------------------------------------------------------
