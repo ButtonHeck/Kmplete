@@ -74,29 +74,30 @@ namespace Kmplete
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
         private:
-            VkPhysicalDevice _physicalDevice;
-            VkSurfaceKHR _surface;
             const VulkanContext& _vulkanContext;
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
             const Window& _window;
             const UInt32& _currentBufferIndex;
 
+            VkPhysicalDevice _physicalDevice;
+            VkSurfaceKHR _surface;
+
             VkDevice _device;
             VkQueue _graphicsQueue;
             VkQueue _presentQueue;
+            UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;
 
             Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
             Array<VkFence, NumConcurrentFrames> _waitFences;
-            UPtr<VulkanDepthStencilAttachment> _depthStencilAttachment;
             UPtr<VulkanCommandPool> _commandPool;
-            Array<VkCommandBuffer, NumConcurrentFrames> _drawCommandBuffers;
             UPtr<VulkanSwapchain> _swapchain;
+            Array<VkCommandBuffer, NumConcurrentFrames> _drawCommandBuffers;
+            UPtr<VulkanDepthStencilAttachment> _depthStencilAttachment;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
 
             VkExtent2D _currentExtent;
-            UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;
         };
         //--------------------------------------------------------------------------
     }
