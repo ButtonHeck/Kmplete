@@ -34,13 +34,10 @@ namespace Kmplete
 
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
+            KMP_API void HandleWindowResize() override;
 
             KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
-
-            KMP_API void CreateSwapchain() override;
-            KMP_API void DeleteSwapchain() override;
-            KMP_API void RecreateSwapchain() override;
 
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
             KMP_NODISCARD KMP_API VkQueue GetVkGraphicsQueue() const noexcept;
@@ -57,6 +54,9 @@ namespace Kmplete
 
             void _CreateFences();
             void _DeleteFences();
+
+            void _CreateSwapchain();
+            void _DeleteSwapchain();
 
             void _CreateDepthStencilAttachment();
             void _DeleteDepthStencilAttachment();

@@ -9,13 +9,13 @@ namespace Kmplete
             : _commandPool(new OpenGLCommandPool())
             , _swapchain(nullptr)
         {
-            CreateSwapchain();
+            _CreateSwapchain();
         }
         //--------------------------------------------------------------------------
 
         OpenGLLogicalDevice::~OpenGLLogicalDevice()
         {
-            DeleteSwapchain();
+            _DeleteSwapchain();
             _commandPool.reset();
         }
         //--------------------------------------------------------------------------
@@ -32,22 +32,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void OpenGLLogicalDevice::CreateSwapchain()
+        void OpenGLLogicalDevice::_CreateSwapchain()
         {
             _swapchain.reset(new OpenGLSwapchain());
         }
         //--------------------------------------------------------------------------
 
-        void OpenGLLogicalDevice::DeleteSwapchain()
+        void OpenGLLogicalDevice::_DeleteSwapchain()
         {
             _swapchain.reset();
-        }
-        //--------------------------------------------------------------------------
-
-        void OpenGLLogicalDevice::RecreateSwapchain()
-        {
-            DeleteSwapchain();
-            CreateSwapchain();
         }
         //--------------------------------------------------------------------------
     }

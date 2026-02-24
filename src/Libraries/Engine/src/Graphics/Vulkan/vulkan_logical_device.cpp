@@ -53,8 +53,7 @@ namespace Kmplete
             _commandPool.reset(new VulkanCommandPool(_device, _vulkanContext.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
 
-            CreateSwapchain();
-
+            _CreateSwapchain();
             _CreateCommandBuffers();
             _CreateFences();
             _CreateDepthStencilAttachment();
@@ -71,7 +70,7 @@ namespace Kmplete
             _DeleteDepthStencilAttachment();
             _DeleteFences();
             _DeleteCommandBuffers();
-            DeleteSwapchain();
+            _DeleteSwapchain();
 
             _imageCreatorDelegate.reset();
             _commandPool.reset();
@@ -195,6 +194,22 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanLogicalDevice::HandleWindowResize()
+        {
+            vkDeviceWaitIdle(_device);
+
+            _DeleteDepthStencilAttachment();
+            _DeleteFences();
+            _DeleteCommandBuffers();
+            _DeleteSwapchain();
+
+            _CreateSwapchain();
+            _CreateCommandBuffers();
+            _CreateFences();
+            _CreateDepthStencilAttachment();
+        }
+        //--------------------------------------------------------------------------
+
         const CommandPool& VulkanLogicalDevice::GetCommandPool() const noexcept
         {
             return *_commandPool.get();
@@ -207,32 +222,16 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::CreateSwapchain()
+        void VulkanLogicalDevice::_CreateSwapchain()
         {
             _currentExtent = _UpdateExtent();
             _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::DeleteSwapchain()
+        void VulkanLogicalDevice::_DeleteSwapchain()
         {
             _swapchain.reset();
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::RecreateSwapchain()
-        {
-            vkDeviceWaitIdle(_device);
-
-            _DeleteDepthStencilAttachment();
-            _DeleteFences();
-            _DeleteCommandBuffers();
-            DeleteSwapchain();
-
-            CreateSwapchain();
-            _CreateCommandBuffers();
-            _CreateFences();
-            _CreateDepthStencilAttachment();
         }
         //--------------------------------------------------------------------------
 

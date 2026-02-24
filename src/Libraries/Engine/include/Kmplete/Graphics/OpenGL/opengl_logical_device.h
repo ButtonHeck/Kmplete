@@ -22,9 +22,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
 
-            KMP_API void CreateSwapchain() override;
-            KMP_API void DeleteSwapchain() override;
-            KMP_API void RecreateSwapchain() override;
+        private:
+            void _CreateSwapchain();
+            void _DeleteSwapchain();
 
         private:
             UPtr<OpenGLCommandPool> _commandPool;

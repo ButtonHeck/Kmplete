@@ -104,7 +104,7 @@ namespace Kmplete
         void VulkanPhysicalDevice::HandleWindowResize()
         {
             _UpdateSurfaceInfo();
-            _logicalDevice->RecreateSwapchain();
+            _logicalDevice->HandleWindowResize();
         }
         //--------------------------------------------------------------------------
 
