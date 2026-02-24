@@ -25,6 +25,10 @@ set_target_properties(TriangleVulkan PROPERTIES
     FOLDER Kmplete/Sandboxes/TriangleVulkan
 )
 
+target_compile_definitions(TriangleVulkan
+    PRIVATE KMP_SANDBOX_RESOURCES_FOLDER=\"${KmpleteSandboxResourcesFolder}/\"
+)
+
 target_link_libraries(TriangleVulkan
     PRIVATE Kmplete
     PRIVATE ImGuiUtilsLib
