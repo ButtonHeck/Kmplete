@@ -297,6 +297,8 @@ namespace Kmplete
         void VulkanLogicalDevice::_CreateSynchronizationObjects()
         {
             auto semaphoreCreateInfo = VulkanUtils::InitVkSemaphoreCreateInfo();
+            auto fenceCreateInfo = VulkanUtils::InitVkFenceCreateInfo();
+
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
                 auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphores[i]);
@@ -304,12 +306,8 @@ namespace Kmplete
 
                 result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
                 VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
-            }
 
-            auto createInfo = VulkanUtils::InitVkFenceCreateInfo();
-            for (auto& fence : _waitFences)
-            {
-                const auto result = vkCreateFence(_device, &createInfo, nullptr, &fence);
+                result = vkCreateFence(_device, &fenceCreateInfo, nullptr, &_waitFences[i]);
                 VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create wait fence");
             }
         }
@@ -321,11 +319,7 @@ namespace Kmplete
             {
                 vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
                 vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
-            }
-
-            for (auto& fence : _waitFences)
-            {
-                vkDestroyFence(_device, fence, nullptr);
+                vkDestroyFence(_device, _waitFences[i], nullptr);
             }
         }
         //--------------------------------------------------------------------------
