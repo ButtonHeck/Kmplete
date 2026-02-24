@@ -47,22 +47,28 @@ namespace Kmplete
         private:
             void _CreateLogicalDeviceObject();
             void _GetDeviceQueues();
-            void _CreateSemaphoreObjects();
+            void _DeleteLogicalDeviceObject();
 
-            void _CreateCommandBuffers();
-            void _DeleteCommandBuffers();
+            void _CreateSynchronizationObjects();
+            void _DeleteSyncronizationObjects();
 
-            void _CreateFences();
-            void _DeleteFences();
+            void _CreateCommandPool();
+            void _DeleteCommandPool();
 
             void _CreateSwapchain();
             void _DeleteSwapchain();
+
+            void _CreateCommandBuffers();
+            void _DeleteCommandBuffers();
 
             void _CreateDepthStencilAttachment();
             void _DeleteDepthStencilAttachment();
 
             void _CreatePipelineCache();
+            void _DeletePipelineCache();
+
             void _CreateDescriptorPool();
+            void _DeleteDescriptorPool();
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;

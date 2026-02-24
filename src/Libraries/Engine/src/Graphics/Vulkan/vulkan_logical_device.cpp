@@ -48,14 +48,13 @@ namespace Kmplete
 
             _CreateLogicalDeviceObject();
             _GetDeviceQueues();
-            _CreateSemaphoreObjects();
 
-            _commandPool.reset(new VulkanCommandPool(_device, _vulkanContext.graphicsFamilyIndex));
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
 
+            _CreateSynchronizationObjects();
+            _CreateCommandPool();
             _CreateSwapchain();
             _CreateCommandBuffers();
-            _CreateFences();
             _CreateDepthStencilAttachment();
             _CreatePipelineCache();
             _CreateDescriptorPool();
@@ -64,24 +63,16 @@ namespace Kmplete
 
         VulkanLogicalDevice::~VulkanLogicalDevice()
         {
-            vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
-            vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
-
+            _DeleteDescriptorPool();
+            _DeletePipelineCache();
             _DeleteDepthStencilAttachment();
-            _DeleteFences();
             _DeleteCommandBuffers();
             _DeleteSwapchain();
+            _DeleteCommandPool();
+            _DeleteSyncronizationObjects();
 
             _imageCreatorDelegate.reset();
-            _commandPool.reset();
-
-            for (UInt32 i = 0; i < NumConcurrentFrames; i++)
-            {
-                vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
-                vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
-            }
-
-            vkDestroyDevice(_device, nullptr);
+            _DeleteLogicalDeviceObject();
         }
         //--------------------------------------------------------------------------
 
@@ -199,13 +190,13 @@ namespace Kmplete
             vkDeviceWaitIdle(_device);
 
             _DeleteDepthStencilAttachment();
-            _DeleteFences();
             _DeleteCommandBuffers();
             _DeleteSwapchain();
+            _DeleteSyncronizationObjects();
 
+            _CreateSynchronizationObjects();
             _CreateSwapchain();
             _CreateCommandBuffers();
-            _CreateFences();
             _CreateDepthStencilAttachment();
         }
         //--------------------------------------------------------------------------
@@ -219,19 +210,6 @@ namespace Kmplete
         const Swapchain& VulkanLogicalDevice::GetSwapchain() const noexcept
         {
             return *_swapchain.get();
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_CreateSwapchain()
-        {
-            _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteSwapchain()
-        {
-            _swapchain.reset();
         }
         //--------------------------------------------------------------------------
 
@@ -310,10 +288,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateSemaphoreObjects()
+        void VulkanLogicalDevice::_DeleteLogicalDeviceObject()
+        {
+            vkDestroyDevice(_device, nullptr);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateSynchronizationObjects()
         {
             auto semaphoreCreateInfo = VulkanUtils::InitVkSemaphoreCreateInfo();
-
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
                 auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphores[i]);
@@ -322,6 +305,53 @@ namespace Kmplete
                 result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
                 VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
             }
+
+            auto createInfo = VulkanUtils::InitVkFenceCreateInfo();
+            for (auto& fence : _waitFences)
+            {
+                const auto result = vkCreateFence(_device, &createInfo, nullptr, &fence);
+                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create wait fence");
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteSyncronizationObjects()
+        {
+            for (UInt32 i = 0; i < NumConcurrentFrames; i++)
+            {
+                vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
+                vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
+            }
+
+            for (auto& fence : _waitFences)
+            {
+                vkDestroyFence(_device, fence, nullptr);
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateCommandPool()
+        {
+            _commandPool.reset(new VulkanCommandPool(_device, _vulkanContext.graphicsFamilyIndex));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteCommandPool()
+        {
+            _commandPool.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateSwapchain()
+        {
+            _currentExtent = _UpdateExtent();
+            _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteSwapchain()
+        {
+            _swapchain.reset();
         }
         //--------------------------------------------------------------------------
 
@@ -339,27 +369,6 @@ namespace Kmplete
         void VulkanLogicalDevice::_DeleteCommandBuffers()
         {
             vkFreeCommandBuffers(_device, _commandPool->GetVkCommandPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_CreateFences()
-        {
-            auto createInfo = VulkanUtils::InitVkFenceCreateInfo();
-
-            for (auto& fence : _waitFences)
-            {
-                const auto result = vkCreateFence(_device, &createInfo, nullptr, &fence);
-                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create wait fence");
-            }
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteFences()
-        {
-            for (auto& fence : _waitFences)
-            {
-                vkDestroyFence(_device, fence, nullptr);
-            }
         }
         //--------------------------------------------------------------------------
 
@@ -381,6 +390,12 @@ namespace Kmplete
 
             const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeletePipelineCache()
+        {
+            vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
         }
         //--------------------------------------------------------------------------
 
@@ -407,6 +422,12 @@ namespace Kmplete
 
             const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create descriptor pool");
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteDescriptorPool()
+        {
+            vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
         }
         //--------------------------------------------------------------------------
 
