@@ -139,7 +139,8 @@ namespace Kmplete
 
             for (const auto& surfaceFormat : surfaceFormats)
             {
-                if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_SRGB && surfaceFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                //TODO: add to settings in a future, use default RBG
+                if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_UINT && surfaceFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
                 {
                     return surfaceFormat;
                 }

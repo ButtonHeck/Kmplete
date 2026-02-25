@@ -69,7 +69,6 @@ namespace Kmplete
         void _EndFrame() const;
 
         KMP_NODISCARD bool _OnWindowCloseEvent(Events::WindowCloseEvent& event);
-        KMP_NODISCARD bool _OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent& event);
         KMP_NODISCARD bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
 
         void _AddImGuiFonts(float scale);
@@ -84,7 +83,6 @@ namespace Kmplete
         Time::Timer _metricsTimer;
 
         Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
-        Events::EventHandlerGuard<Events::WindowFramebufferRefreshEvent> _windowFramebufferRefreshHandler;
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
     };
     //--------------------------------------------------------------------------

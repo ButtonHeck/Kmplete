@@ -43,6 +43,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkQueue GetVkGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API VkQueue GetVkPresentQueue() const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
+            KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentVkCommandBuffer() const noexcept;
 
         private:
             void _CreateLogicalDeviceObject();

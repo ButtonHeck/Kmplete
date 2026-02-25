@@ -5,6 +5,8 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Profile/profiler.h"
 
+#include <vulkan/vulkan.h>
+
 
 struct GLFWwindow;
 
@@ -25,12 +27,17 @@ namespace Kmplete
 
             void CreateFontsTexture() const override;
 
+            void SetCommandBuffer(VkCommandBuffer commandBuffer);
+
         private:
             void _Initialize() const;
             void _Finalize() const;
 
             void _NewFrameImpl() const override;
             void _RenderImpl() const override;
+
+        private:
+            VkCommandBuffer _commandBuffer;
         };
         //--------------------------------------------------------------------------
     }

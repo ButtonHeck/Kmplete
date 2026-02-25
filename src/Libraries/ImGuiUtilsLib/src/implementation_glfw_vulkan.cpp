@@ -1,7 +1,6 @@
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 
 #include <GLFW/glfw3.h>
-#include <vulkan/vulkan.h>
 #include <imgui.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_vulkan.h>
@@ -14,6 +13,7 @@ namespace Kmplete
         ImGuiImplementationGlfwVulkan::ImGuiImplementationGlfwVulkan(ContextVulkan* context)
             : ImGuiImplementation(context)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
+            , _commandBuffer(VK_NULL_HANDLE)
         {
             _Initialize();
             KMP_PROFILE_CONSTRUCTOR_END()
@@ -31,6 +31,12 @@ namespace Kmplete
         void ImGuiImplementationGlfwVulkan::CreateFontsTexture() const
         {
             ImGui_ImplVulkan_CreateFontsTexture();
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementationGlfwVulkan::SetCommandBuffer(VkCommandBuffer commandBuffer)
+        {
+            _commandBuffer = commandBuffer;
         }
         //--------------------------------------------------------------------------
 
@@ -68,7 +74,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            //ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), )
+            ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), _commandBuffer);
 
             const auto& io = ImGui::GetIO();
             if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

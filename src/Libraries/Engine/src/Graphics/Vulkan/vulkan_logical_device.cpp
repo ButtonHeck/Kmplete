@@ -237,6 +237,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkCommandBuffer VulkanLogicalDevice::GetCurrentVkCommandBuffer() const noexcept
+        {
+            return _drawCommandBuffers[_currentBufferIndex];
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateLogicalDeviceObject()
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();

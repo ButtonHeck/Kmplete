@@ -15,6 +15,7 @@
 #include "Kmplete/ImGui/scope_guards.h"
 #include "Kmplete/ImGui/context_opengl.h"
 #include "Kmplete/ImGui/context_vulkan.h"
+#include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -36,7 +37,6 @@ namespace Kmplete
         , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager))
         , _metricsTimer(1000)
         , _windowCloseHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowCloseEvent))
-        , _windowFramebufferRefreshHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowFramebufferRefreshEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent))
     {
         _Initialize();
@@ -94,6 +94,8 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
@@ -150,7 +152,19 @@ namespace Kmplete
             _EndApplicationArea();
         }
 
-        _imguiImpl->Render();
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+            auto commandBuffer = vulkanLogicalDevice.GetCurrentVkCommandBuffer();
+            auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+            vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
+            vulkanImGuiUtils->Render();
+        }
+        else
+        {
+            _imguiImpl->Render();
+        }
+
         _EndFrame();
     }
     //--------------------------------------------------------------------------
@@ -160,15 +174,6 @@ namespace Kmplete
         KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
         return _uiCompositor->OnWindowCloseEvent(event);
-    }
-    //--------------------------------------------------------------------------
-
-    bool EditorFrameListener::_OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
-    {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-        Render();
-        return true;
     }
     //--------------------------------------------------------------------------
 
