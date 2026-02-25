@@ -2,10 +2,17 @@
 #include "test_frame_listeners.h"
 
 #include "Kmplete/ImGui/scope_guards.h"
+#include "Kmplete/ImGui/context_vulkan.h"
+#include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Event/event_queue.h"
 
 #include <imgui.h>
@@ -54,7 +61,35 @@ namespace Kmplete
 
     void MainFrameListener::Initialize()
     {
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
+        ImGuiUtils::Context* context = nullptr;
+        if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(*_graphicsBackend);
+            const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend->GetPhysicalDevice());
+            const auto& logicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
+
+            ImGui_ImplVulkan_InitInfo initInfo{};
+            initInfo.Instance = vulkanBackend.GetVkInstance();
+            initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
+            initInfo.Device = logicalDevice.GetVkDevice();
+            initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
+            initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
+            initInfo.PipelineCache = VK_NULL_HANDLE;
+            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
+            initInfo.Allocator = VK_NULL_HANDLE;
+            initInfo.MinImageCount = Graphics::NumConcurrentFrames;
+            initInfo.ImageCount = Graphics::NumConcurrentFrames;
+            initInfo.CheckVkResultFn = nullptr;
+            initInfo.UseDynamicRendering = true;
+            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
+            initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, initInfo);
+        }
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
+        
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
         _imguiImpl->Stylize(_mainWindow.GetDPIScale());
@@ -211,7 +246,19 @@ namespace Kmplete
 
         ImGui::End(); //Id_Dockspace
 
-        _imguiImpl->Render();
+        if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend->GetPhysicalDevice().GetLogicalDevice());
+            auto commandBuffer = vulkanLogicalDevice.GetCurrentVkCommandBuffer();
+            auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+            vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
+            vulkanImGuiUtils->Render();
+        }
+        else
+        {
+            _imguiImpl->Render();
+        }
+
         ImGui::EndFrame();
 
         _sharedState.updateMask = 0;
@@ -902,7 +949,6 @@ namespace Kmplete
     bool MainFrameListener::OnWindowFramebufferRefreshEvent(Events::WindowFramebufferRefreshEvent&)
     {
         _windowFramebufferRefreshEventInvokedCount++;
-        Render();
         return true;
     }
 
@@ -911,7 +957,35 @@ namespace Kmplete
         const auto scale = evt.GetScale();
 
         _imguiImpl.reset();
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(_mainWindow.GetImplPointer(), GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, "imgui_test_app.ini"));
+
+        ImGuiUtils::Context* context = nullptr;
+        if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(*_graphicsBackend);
+            const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend->GetPhysicalDevice());
+            const auto& logicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
+
+            ImGui_ImplVulkan_InitInfo initInfo{};
+            initInfo.Instance = vulkanBackend.GetVkInstance();
+            initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
+            initInfo.Device = logicalDevice.GetVkDevice();
+            initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
+            initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
+            initInfo.PipelineCache = VK_NULL_HANDLE;
+            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
+            initInfo.Allocator = VK_NULL_HANDLE;
+            initInfo.MinImageCount = Graphics::NumConcurrentFrames;
+            initInfo.ImageCount = Graphics::NumConcurrentFrames;
+            initInfo.CheckVkResultFn = nullptr;
+            initInfo.UseDynamicRendering = true;
+            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
+            initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, initInfo);
+        }
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale, 15);

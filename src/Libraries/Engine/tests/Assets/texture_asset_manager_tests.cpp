@@ -17,7 +17,7 @@ using namespace Kmplete::Assets;
 using namespace Kmplete::Graphics;
 
 
-static UPtr<GraphicsBackend> prepareOpenGLBackend(GraphicsBackendType type)
+static UPtr<GraphicsBackend> prepareBackend(GraphicsBackendType type)
 {
     auto windowBackend = Kmplete::WindowBackend::Create();
     windowBackend->SetGraphicsBackendType(type);
@@ -28,25 +28,12 @@ static UPtr<GraphicsBackend> prepareOpenGLBackend(GraphicsBackendType type)
 //--------------------------------------------------------------------------
 
 
-TEST_CASE("TextureAssetManager initialization error type", "[graphics][texture_asset_manager][asset]")
+TEST_CASE("TextureAssetManager initialization Vulkan", "[graphics][texture_asset_manager][asset]")
 {
-    const auto graphicsBackendType = GraphicsBackendType::Unknown;
-    prepareOpenGLBackend(graphicsBackendType);
+    const auto graphicsBackend = prepareBackend(GraphicsBackendType::Vulkan);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_THROWS(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
-    REQUIRE(textureAssetManager == nullptr);
-}
-//--------------------------------------------------------------------------
-
-
-TEST_CASE("TextureAssetManager initialization opengl", "[graphics][texture_asset_manager][asset]")
-{
-    const auto graphicsBackendType = GraphicsBackendType::OpenGL;
-    prepareOpenGLBackend(graphicsBackendType);
-
-    UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
+    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(*graphicsBackend.get()));
     REQUIRE(textureAssetManager);
 }
 //--------------------------------------------------------------------------
@@ -54,11 +41,10 @@ TEST_CASE("TextureAssetManager initialization opengl", "[graphics][texture_asset
 
 TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset_manager][texture][asset]")
 {
-    const auto graphicsBackendType = GraphicsBackendType::OpenGL;
-    prepareOpenGLBackend(graphicsBackendType);
+    const auto graphicsBackend = prepareBackend(GraphicsBackendType::Vulkan);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
+    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(*graphicsBackend.get()));
     REQUIRE(textureAssetManager);
 
     bool ok = false;
@@ -88,11 +74,10 @@ TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset
 
 TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_manager][texture][asset]")
 {
-    const auto graphicsBackendType = GraphicsBackendType::OpenGL;
-    prepareOpenGLBackend(graphicsBackendType);
+    const auto graphicsBackend = prepareBackend(GraphicsBackendType::Vulkan);
 
     UPtr<TextureAssetManager> textureAssetManager;
-    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(graphicsBackendType));
+    REQUIRE_NOTHROW(textureAssetManager = CreateUPtr<TextureAssetManager>(*graphicsBackend.get()));
     REQUIRE(textureAssetManager);
 
     // loading from image
