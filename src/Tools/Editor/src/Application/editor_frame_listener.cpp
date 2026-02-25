@@ -38,6 +38,7 @@ namespace Kmplete
         , _metricsTimer(1000)
         , _windowCloseHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowCloseEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent))
+        , _editorFullscreenHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnEditorFullscreenEvent))
     {
         _Initialize();
 
@@ -186,6 +187,13 @@ namespace Kmplete
         _imguiImpl.reset();
         _InitializeImGui(scale);
 
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool EditorFrameListener::_OnEditorFullscreenEvent(Events::EditorFullscreenEvent& event)
+    {
+        _mainWindow.SetScreenMode(event.screenMode);
         return true;
     }
     //--------------------------------------------------------------------------

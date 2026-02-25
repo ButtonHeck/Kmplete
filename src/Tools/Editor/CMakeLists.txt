@@ -26,6 +26,7 @@ AddTargetSourcesGroup(Editor "Application"
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/editor_frame_listener.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/events.h
 )
 AddTargetSourcesGroup(Editor "UI"
     ${CMAKE_CURRENT_LIST_DIR}/src/UI/editor_ui_compositor.h
