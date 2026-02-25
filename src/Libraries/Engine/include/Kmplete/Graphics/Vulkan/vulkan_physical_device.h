@@ -41,11 +41,6 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanContext& GetVulkanContext() const noexcept;
 
         private:
-            KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;
-            KMP_NODISCARD VkFormat _FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
-
-            void _PopulateVulkanContext(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
-                                        Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes);
             void _UpdateSurfaceInfo();
             void _QueryGPUInfo() override;
 

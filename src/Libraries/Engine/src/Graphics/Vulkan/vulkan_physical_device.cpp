@@ -58,10 +58,11 @@ namespace Kmplete
                     _physicalDevice = device;
 
                     auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
-                    _PopulateVulkanContext(
+                    _vulkanContext.Populate(
+                        _physicalDevice,
                         queueFamilyIndices.graphicsFamilyIndex.value(),
-                        queueFamilyIndices.presentFamilyIndex.value(), 
-                        surfaceAndPresentModeProperties.surfaceCapabilities, 
+                        queueFamilyIndices.presentFamilyIndex.value(),
+                        surfaceAndPresentModeProperties.surfaceCapabilities,
                         std::move(surfaceAndPresentModeProperties.surfaceFormats),
                         std::move(surfaceAndPresentModeProperties.presentModes)
                     );
@@ -123,96 +124,6 @@ namespace Kmplete
         const VulkanContext& VulkanPhysicalDevice::GetVulkanContext() const noexcept
         {
             return _vulkanContext;
-        }
-        //--------------------------------------------------------------------------
-
-        VkSurfaceFormatKHR VulkanPhysicalDevice::_FindSurfaceFormat() const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            const auto& surfaceFormats = _vulkanContext.surfaceFormats;
-            if (surfaceFormats.empty())
-            {
-                KMP_LOG_CRITICAL("unable to get available surface format");
-                throw std::runtime_error("VulkanPhysicalDevice: unable to get available surface format");
-            }
-
-            for (const auto& surfaceFormat : surfaceFormats)
-            {
-                //TODO: add to settings in a future, use default RBG
-                if (surfaceFormat.format == VK_FORMAT_B8G8R8A8_UINT && surfaceFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    return surfaceFormat;
-                }
-            }
-
-            return surfaceFormats[0];
-        }
-        //--------------------------------------------------------------------------
-
-        VkFormat VulkanPhysicalDevice::_FindSupportedFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            for (auto format : candidates)
-            {
-                VkFormatProperties props;
-                vkGetPhysicalDeviceFormatProperties(_physicalDevice, format, &props);
-
-                if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
-                {
-                    return format;
-                }
-                else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
-                {
-                    return format;
-                }
-            }
-
-            KMP_LOG_CRITICAL("failed to find supported format");
-            throw std::runtime_error("VulkanPhysicalDevice: failed to find supported format");
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanPhysicalDevice::_PopulateVulkanContext(UInt32 graphicsFamilyIndex, UInt32 presentFamilyIndex, const VkSurfaceCapabilitiesKHR& surfaceCapabilities,
-                                                               Vector<VkSurfaceFormatKHR>&& surfaceFormats, Vector<VkPresentModeKHR>&& presentModes)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            _vulkanContext.graphicsFamilyIndex = graphicsFamilyIndex;
-            _vulkanContext.presentFamilyIndex = presentFamilyIndex;
-
-            _vulkanContext.surfaceCapabilities = surfaceCapabilities;
-            _vulkanContext.surfaceFormats = std::move(surfaceFormats);
-            _vulkanContext.presentModes = std::move(presentModes);
-
-            vkGetPhysicalDeviceMemoryProperties(_physicalDevice, &_vulkanContext.memoryProperties);
-            vkGetPhysicalDeviceProperties(_physicalDevice, &_vulkanContext.deviceProperties);
-
-            const auto& properties = _vulkanContext.deviceProperties;
-            _vulkanContext.sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
-            const auto samplesCountMask = _vulkanContext.sampleCountsMask;
-            if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
-            else
-                _vulkanContext.supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
-
-            _vulkanContext.defaultDepthFormat = _FindSupportedFormat(
-                { VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT, VK_FORMAT_D16_UNORM_S8_UINT },
-                VK_IMAGE_TILING_OPTIMAL, VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-            );
-
-            _vulkanContext.surfaceFormat = _FindSurfaceFormat();
         }
         //--------------------------------------------------------------------------
 
