@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stdexcept>
 
@@ -15,6 +16,8 @@ namespace Kmplete
             , _device(device)
             , _commandPool(VK_NULL_HANDLE)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             auto createPoolInfo = VulkanUtils::InitVkCommandPoolCreateInfo();
             createPoolInfo.queueFamilyIndex = graphicsQueueIndex;
             createPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
@@ -26,6 +29,8 @@ namespace Kmplete
 
         VulkanCommandPool::~VulkanCommandPool()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             vkDestroyCommandPool(_device, _commandPool, nullptr);
         }
         //--------------------------------------------------------------------------
