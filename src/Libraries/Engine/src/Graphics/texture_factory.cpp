@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/texture_factory.h"
-#include "Kmplete/Graphics/OpenGL/opengl_texture.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
@@ -10,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Filepath& filepath, bool flipVertically /*= false*/)
+        Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Filepath& filepath, KMP_MB_UNUSED bool flipVertically /*= false*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -18,8 +17,9 @@ namespace Kmplete
             {
                 switch (backendType)
                 {
-                case GraphicsBackendType::OpenGL:
-                    return new OpenGLTexture(filepath, flipVertically);
+                case GraphicsBackendType::Vulkan:
+                    KMP_LOG_WARN("not implemented yet"); (void)filepath;
+                    break;
 
                 default:
                     KMP_LOG_ERROR("unknown graphics backend type");
@@ -42,8 +42,9 @@ namespace Kmplete
 
             switch (backendType)
             {
-            case GraphicsBackendType::OpenGL:
-                return new OpenGLTexture(image);
+            case GraphicsBackendType::Vulkan:
+                KMP_LOG_WARN("not implemented yet"); (void)image;
+                break;
 
             default:
                 KMP_LOG_ERROR("unknown graphics backend type");

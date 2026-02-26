@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/graphics_backend.h"
-#include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
@@ -18,8 +17,6 @@ namespace Kmplete
 
             switch (graphicsBackendType)
             {
-            case GraphicsBackendType::OpenGL:
-                return CreateUPtr<OpenGLGraphicsBackend>(window);
             case GraphicsBackendType::Vulkan:
                 return CreateUPtr<VulkanGraphicsBackend>(window);
             default:

@@ -7,7 +7,6 @@ project(ImGuiUtilsLib LANGUAGES CXX)
 aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
 source_group("Imgui" FILES
     ${IMGUI_SOURCES}
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.cpp
     ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
@@ -15,7 +14,6 @@ source_group("Imgui" FILES
 
 add_library(ImGuiUtilsLib STATIC
     ${IMGUI_SOURCES}
-    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
     ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.cpp
     ${imgui_SOURCE_DIR}/misc/cpp/imgui_stdlib.cpp
@@ -25,18 +23,14 @@ AddTargetSourcesGroup(ImGuiUtilsLib "Utils"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/helper_functions.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/scope_guards.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/context.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/context_opengl.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/context_vulkan.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation_glfw_opengl.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/ImGui/implementation_glfw_vulkan.h
     ${CMAKE_CURRENT_LIST_DIR}/src/helper_functions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/scope_guards.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/context.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/context_opengl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/context_vulkan.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/implementation.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/implementation_glfw_opengl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/implementation_glfw_vulkan.cpp
 )
 

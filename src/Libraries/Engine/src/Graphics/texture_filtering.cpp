@@ -1,8 +1,6 @@
 #include "Kmplete/Graphics/texture_filtering.h"
 #include "Kmplete/Core/assertion.h"
 
-#include <glad/glad.h>
-
 
 namespace Kmplete
 {
@@ -41,29 +39,6 @@ namespace Kmplete
         void TextureFiltering::SetMagFilter(TextureFilter filter) noexcept
         {
             _magFilter = filter;
-        }
-        //--------------------------------------------------------------------------
-
-        int TextureFiltering::ToOpenGL(TextureFilter filter) const
-        {
-            switch (filter)
-            {
-                case TextureFilter::Nearest:
-                    return GL_NEAREST;
-                case TextureFilter::Linear:
-                    return GL_LINEAR;
-                case TextureFilter::NearestMipmapNearest:
-                    return GL_NEAREST_MIPMAP_NEAREST;
-                case TextureFilter::LinearMipmapNearest:
-                    return GL_LINEAR_MIPMAP_NEAREST;
-                case TextureFilter::NearestMipmapLinear:
-                    return GL_NEAREST_MIPMAP_LINEAR;
-                case TextureFilter::LinearMipmapLinear:
-                    return GL_LINEAR_MIPMAP_LINEAR;
-                default:
-                    KMP_ASSERT(false && "Invalid texture filter");
-                    return GL_LINEAR;
-            }
         }
         //--------------------------------------------------------------------------
 

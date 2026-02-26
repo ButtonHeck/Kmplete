@@ -1,7 +1,5 @@
 #include "Kmplete/ImGui/implementation.h"
-#include "Kmplete/ImGui/implementation_glfw_opengl.h"
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
-#include "Kmplete/ImGui/context_opengl.h"
 #include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
@@ -20,12 +18,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
-            if (implementationContext->graphicsBackendType == "OpenGL")
-            {
-                ContextOpenGL* contextOpenGL = dynamic_cast<ContextOpenGL*>(implementationContext);
-                return new ImGuiImplementationGlfwOpenGL(contextOpenGL);
-            }
-            else if (implementationContext->graphicsBackendType == "Vulkan")
+            if (implementationContext->graphicsBackendType == "Vulkan")
             {
                 ContextVulkan* contextVulkan = dynamic_cast<ContextVulkan*>(implementationContext);
                 return new ImGuiImplementationGlfwVulkan(contextVulkan);

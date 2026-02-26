@@ -38,7 +38,7 @@ namespace Kmplete
     //! "ConfirmExit" function (e.g. some editor apps may show additional dialog window if
     //! some data is not saved). This class is responsible for connecting low-level events (KeyPressed, WindowMoved etc.),
     //! provided by the underlying window, to the subsystems responsible of delegating or/and further processing these events.
-    //! By default graphics API is set to OpenGL
+    //! By default graphics API is set to Vulkan
     //! @see Application
     //! @see WindowBackend
     //! @see Window

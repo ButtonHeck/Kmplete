@@ -90,22 +90,6 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
 )
-AddTargetSourcesGroup(Kmplete "Graphics/OpenGL"
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_backend.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_graphics_surface.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_physical_device.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_logical_device.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_swapchain.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_framebuffer.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_texture.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/OpenGL/opengl_command_pool.h
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_backend.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_graphics_surface.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_physical_device.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_logical_device.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_swapchain.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/OpenGL/opengl_texture.cpp
-)
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_surface.h
@@ -211,7 +195,6 @@ target_link_libraries(Kmplete
     PUBLIC glfw
     
     PRIVATE stb_image
-    PRIVATE glad
     PRIVATE freetype
     PUBLIC Vulkan::Vulkan
 )

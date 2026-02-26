@@ -9,11 +9,6 @@
 cmake_minimum_required(VERSION 3.20)
 
 ## Dependencies without FetchContent
-# glad
-message("---- Kmplete dependencies: glad")
-add_subdirectory(glad)
-set_target_properties(glad PROPERTIES FOLDER Dependencies/glad)
-
 # stb_image
 message("---- Kmplete dependencies: stb_image")
 add_subdirectory(stb_image)

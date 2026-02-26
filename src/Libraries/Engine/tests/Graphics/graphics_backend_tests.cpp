@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/graphics_backend.h"
-#include "Kmplete/Graphics/OpenGL/opengl_graphics_backend.h"
 #include "Kmplete/Window/window_backend.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Base/pointers.h"
@@ -24,10 +23,10 @@ TEST_CASE("Graphics backend initialization error type", "[graphics]")
 }
 //--------------------------------------------------------------------------
 
-TEST_CASE("Graphics backend initialization opengl", "[graphics]")
+TEST_CASE("Graphics backend initialization Vulkan", "[graphics]")
 {
     auto windowBackend = Kmplete::WindowBackend::Create();
-    windowBackend->SetGraphicsBackendType(GraphicsBackendType::OpenGL);
+    windowBackend->SetGraphicsBackendType(GraphicsBackendType::Vulkan);
     auto& mainWindow = windowBackend->CreateMainWindow();
 
     UPtr<GraphicsBackend> backend;

@@ -9,8 +9,6 @@ namespace Kmplete
         {
             switch (type)
             {
-            case GraphicsBackendType::OpenGL:
-                return OpenGLStr;
             case GraphicsBackendType::Vulkan:
                 return VulkanStr;
             default:
@@ -21,11 +19,7 @@ namespace Kmplete
 
         GraphicsBackendType StringToGraphicsBackendType(const String& string) noexcept
         {
-            if (string == OpenGLStr)
-            {
-                return GraphicsBackendType::OpenGL;
-            }
-            else if (string == VulkanStr)
+            if (string == VulkanStr)
             {
                 return GraphicsBackendType::Vulkan;
             }

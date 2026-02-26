@@ -34,8 +34,6 @@ namespace Kmplete
             KMP_API void SetMinFilter(TextureFilter filter) noexcept;
             KMP_API void SetMagFilter(TextureFilter filter) noexcept;
 
-            KMP_NODISCARD KMP_API int ToOpenGL(TextureFilter filter) const;
-
             KMP_NODISCARD KMP_API bool IsMagFilterValid() const noexcept;
 
         private:

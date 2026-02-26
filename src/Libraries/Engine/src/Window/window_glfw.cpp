@@ -528,14 +528,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-        if (_graphicsBackendType == Graphics::GraphicsBackendType::OpenGL)
-        {
-            glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-            glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        }
-        else if (_graphicsBackendType == Graphics::GraphicsBackendType::Vulkan)
+        if (_graphicsBackendType == Graphics::GraphicsBackendType::Vulkan)
         {
             glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
         }
@@ -655,11 +648,6 @@ namespace Kmplete
             {
                 Events::WindowFramebufferRefreshEvent event;
                 userData->eventCallback(event);
-            }
-
-            if (glfwGetCurrentContext() != nullptr)
-            {
-                glfwSwapBuffers(window);
             }
             }
         );

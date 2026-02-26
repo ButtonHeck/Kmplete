@@ -13,7 +13,6 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
-#include "Kmplete/ImGui/context_opengl.h"
 #include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Log/log.h"
@@ -69,11 +68,7 @@ namespace Kmplete
     void EditorFrameListener::_InitializeImGui(float dpiScale)
     {
         ImGuiUtils::Context* context = nullptr;
-        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::OpenGL)
-        {
-            context = new ImGuiUtils::ContextOpenGL(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true);
-        }
-        else if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
             const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
             const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
