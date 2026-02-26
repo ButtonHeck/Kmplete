@@ -85,6 +85,8 @@ namespace Kmplete
 
         VulkanPhysicalDevice::~VulkanPhysicalDevice()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             _logicalDevice.reset();
             _memoryTypeDelegate.reset();
         }
@@ -92,18 +94,24 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::StartFrame(float frameTimestep)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             _logicalDevice->StartFrame(frameTimestep);
         }
         //--------------------------------------------------------------------------
 
         void VulkanPhysicalDevice::EndFrame()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             _logicalDevice->EndFrame();
         }
         //--------------------------------------------------------------------------
 
         void VulkanPhysicalDevice::HandleWindowResize()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             _UpdateSurfaceInfo();
             _logicalDevice->HandleWindowResize();
         }
@@ -129,6 +137,8 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_UpdateSurfaceInfo()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+
             auto surfaceAndPresentModeProperties = VulkanUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
             _vulkanContext.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);

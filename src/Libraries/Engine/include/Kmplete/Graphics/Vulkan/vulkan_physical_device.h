@@ -47,6 +47,7 @@ namespace Kmplete
         private:
             const Window& _window;
             const UInt32& _currentBufferIndex;
+
             VkInstance _instance;
             VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;
