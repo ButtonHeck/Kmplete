@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -13,6 +14,8 @@ namespace Kmplete
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             _CreateImageObject(creationParameters);
             _AllocateImageMemory(memoryTypeDelegate, creationParameters);
         }
@@ -20,6 +23,8 @@ namespace Kmplete
 
         VulkanImage::~VulkanImage()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             vkDestroyImage(_device, _image, nullptr);
             vkFreeMemory(_device, _imageMemory, nullptr);
         }
@@ -33,6 +38,8 @@ namespace Kmplete
 
         void VulkanImage::_CreateImageObject(const Parameters& creationParameters)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             auto imageCreationInfo = VulkanUtils::InitVkImageCreateInfo();
             imageCreationInfo.imageType = VK_IMAGE_TYPE_2D;
             imageCreationInfo.extent.width = creationParameters.width;
@@ -55,6 +62,8 @@ namespace Kmplete
 
         void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, creationParameters.memoryProperties);
             const auto result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_imageMemory);
             if (result != VK_SUCCESS)
