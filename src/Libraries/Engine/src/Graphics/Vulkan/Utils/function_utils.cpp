@@ -41,6 +41,8 @@ namespace Kmplete
                 VkPipelineStageFlags dstStageMask, 
                 VkImageSubresourceRange subresourceRange)
             {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
                 auto imageMemoryBarrier = InitVkImageMemoryBarrier();
                 imageMemoryBarrier.srcAccessMask = srcAccessMask;
                 imageMemoryBarrier.dstAccessMask = dstAccessMask;
