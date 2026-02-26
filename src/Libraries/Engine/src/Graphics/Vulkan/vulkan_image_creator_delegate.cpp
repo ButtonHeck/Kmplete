@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -9,8 +10,8 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
-            : _device(device)
-            , _memoryTypeDelegate(memoryTypeDelegate)
+            : _memoryTypeDelegate(memoryTypeDelegate)
+            , _device(device)
         {}
         //--------------------------------------------------------------------------
 
@@ -41,6 +42,8 @@ namespace Kmplete
 
         VulkanImage VulkanImageCreatorDelegate::CreateImage(const VulkanImage::Parameters& creationParameters) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             return VulkanImage(_device, _memoryTypeDelegate, creationParameters);
         }
         //--------------------------------------------------------------------------
@@ -72,6 +75,8 @@ namespace Kmplete
 
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VulkanImage::Parameters& creationParameters) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             return new VulkanImage(_device, _memoryTypeDelegate, creationParameters);
         }
         //--------------------------------------------------------------------------
@@ -84,6 +89,8 @@ namespace Kmplete
 
         VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             auto viewCreateInfo = VulkanUtils::InitVkImageViewCreateInfo();
             viewCreateInfo.image = image;
             viewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;

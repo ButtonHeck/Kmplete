@@ -38,8 +38,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const;
 
         private:
-            VkDevice _device;
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
+
+            VkDevice _device;
         };
         //--------------------------------------------------------------------------
     }
