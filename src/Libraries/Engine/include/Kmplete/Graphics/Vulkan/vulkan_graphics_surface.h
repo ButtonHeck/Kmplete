@@ -2,7 +2,6 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Graphics/graphics_surface.h"
-#include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
 
@@ -18,7 +17,6 @@ namespace Kmplete
         class VulkanGraphicsSurface : public GraphicsSurface
         {
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsSurface)
-            KMP_LOG_CLASSNAME(VulkanGraphicsSurface)
 
         public:
             KMP_API VulkanGraphicsSurface(Window& window, VkInstance instance);

@@ -3,12 +3,11 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
     #include <GLFW/glfw3.h>
 #endif
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -19,6 +18,8 @@ namespace Kmplete
             : GraphicsSurface(window)
             , _instance(instance)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             GLFWwindow* windowImpl = reinterpret_cast<GLFWwindow*>(window.GetImplPointer().get());
             const auto result = glfwCreateWindowSurface(_instance, windowImpl, nullptr, &_surface);
             VulkanUtils::CheckResult(result, "VulkanGraphicsSurface: failed to create Vulkan surface");
@@ -27,6 +28,8 @@ namespace Kmplete
 
         VulkanGraphicsSurface::~VulkanGraphicsSurface()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             vkDestroySurfaceKHR(_instance, _surface, nullptr);
         }
         //--------------------------------------------------------------------------
