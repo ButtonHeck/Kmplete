@@ -56,6 +56,8 @@ namespace Kmplete
 
         static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+
             auto debugMessengerCreateInfo = VulkanUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
@@ -74,6 +76,8 @@ namespace Kmplete
 
         static VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkAllocationCallbacks* allocator, VkDebugUtilsMessengerEXT* debugMessenger)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
             if (func != nullptr)
             {
@@ -89,6 +93,8 @@ namespace Kmplete
 
         static void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* allocator)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
             if (func != nullptr)
             {
@@ -238,6 +244,8 @@ namespace Kmplete
 
         VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             auto applicationInfo = VulkanUtils::InitVkApplicationInfo();
             applicationInfo.pApplicationName = "Kmplete Application";
             applicationInfo.applicationVersion = VK_MAKE_VERSION(GetKmpleteVersionMajor(), GetKmpleteVersionMinor(), GetKmpleteVersionPatch());
@@ -251,6 +259,8 @@ namespace Kmplete
 
         VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo();
             instanceCreateInfo.pApplicationInfo = &applicationInfo;
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
