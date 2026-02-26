@@ -2,7 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -19,6 +19,8 @@ namespace Kmplete
             , _mapped(nullptr)
             , _usageFlags(usageFlags)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             auto bufferCreateInfo = VulkanUtils::InitVkBufferCreateInfo(_size, _usageFlags);
 
             auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
@@ -60,18 +62,24 @@ namespace Kmplete
 
         VulkanBuffer::~VulkanBuffer()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             Destroy();
         }
         //--------------------------------------------------------------------------
 
         VkResult VulkanBuffer::Map(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             return vkMapMemory(_device, _memory, offset, size, 0, &_mapped);
         }
         //--------------------------------------------------------------------------
 
         void VulkanBuffer::Unmap()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             if (_mapped)
             {
                 vkUnmapMemory(_device, _memory);
@@ -82,12 +90,16 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Bind(VkDeviceSize offset /*= 0*/)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             return vkBindBufferMemory(_device, _buffer, _memory, offset);
         }
         //--------------------------------------------------------------------------
 
         void VulkanBuffer::CopyTo(void* data, VkDeviceSize size)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             KMP_ASSERT(_mapped);
             memcpy(_mapped, data, size);
         }
@@ -95,6 +107,8 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
@@ -104,6 +118,8 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
@@ -113,6 +129,8 @@ namespace Kmplete
 
         void VulkanBuffer::Destroy()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             if (_buffer)
             {
                 vkDestroyBuffer(_device, _buffer, nullptr);
