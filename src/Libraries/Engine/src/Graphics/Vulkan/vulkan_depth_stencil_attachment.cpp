@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -13,6 +14,8 @@ namespace Kmplete
             , _memory(VK_NULL_HANDLE)
             , _view(VK_NULL_HANDLE)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             auto imageCreateInfo = VulkanUtils::InitVkImageCreateInfo();
             imageCreateInfo.imageType = VK_IMAGE_TYPE_2D;
             imageCreateInfo.format = depthStencilFormat;
@@ -54,6 +57,8 @@ namespace Kmplete
 
         VulkanDepthStencilAttachment::~VulkanDepthStencilAttachment()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             vkDestroyImageView(_device, _view, nullptr);
             vkDestroyImage(_device, _image, nullptr);
             vkFreeMemory(_device, _memory, nullptr);
