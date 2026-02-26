@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -14,6 +15,8 @@ namespace Kmplete
 
         VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             MemoryContext context{};
             vkGetBufferMemoryRequirements(device, buffer, &context.requirements);
 
@@ -27,6 +30,8 @@ namespace Kmplete
 
         VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
             MemoryContext context{};
             vkGetImageMemoryRequirements(device, image, &context.requirements);
 
@@ -40,6 +45,8 @@ namespace Kmplete
 
         UInt32 VulkanMemoryTypeDelegate::FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+
             for (UInt32 i = 0; i < _memoryProperties.memoryTypeCount; i++)
             {
                 if ((typeFilter & (1 << i)) && (_memoryProperties.memoryTypes[i].propertyFlags & properties) == properties)
