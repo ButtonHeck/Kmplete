@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <algorithm>
 #include <stdexcept>
@@ -15,14 +16,14 @@ namespace Kmplete
                                          const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
-            , _device(device)
-            , _graphicsQueue(graphicsQueue)
             , _vulkanContext(vulkanContext)
             , _swapchainExtent(swapchainExtent)
             , _imageCreatorDelegate(imageCreatorDelegate)
             , _currentBufferIndex(currentBufferIndex)
             , _presentCompleteSemaphores(presentCompleteSemaphores)
             , _renderCompleteSemaphores(renderCompleteSemaphores)
+            , _device(device)
+            , _graphicsQueue(graphicsQueue)
             , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
@@ -34,6 +35,8 @@ namespace Kmplete
             , _depthImage(nullptr)
             , _depthImageView(VK_NULL_HANDLE)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             _imageCount = NumConcurrentFrames;
             if (_vulkanContext.surfaceCapabilities.maxImageCount > 0 && _imageCount > _vulkanContext.surfaceCapabilities.maxImageCount)
             {
@@ -52,6 +55,8 @@ namespace Kmplete
 
         VulkanSwapchain::~VulkanSwapchain()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             vkDestroyImageView(_device, _colorImageView, nullptr);
             _colorImage.reset();
 
@@ -68,6 +73,8 @@ namespace Kmplete
 
         void VulkanSwapchain::StartFrame(float /*frameTimestep*/)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             const auto result = AcquireNextImage();
             VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
         }
@@ -75,6 +82,8 @@ namespace Kmplete
 
         void VulkanSwapchain::EndFrame()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             const auto result = QueuePresent();
             VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to present swapchain image");
         }
@@ -82,12 +91,16 @@ namespace Kmplete
 
         VkResult VulkanSwapchain::AcquireNextImage()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             return vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_currentBufferIndex], nullptr, &_imageIndex);
         }
         //--------------------------------------------------------------------------
 
         VkResult VulkanSwapchain::QueuePresent()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
             auto presentInfo = VulkanUtils::InitVkPresentInfoKHR();
             presentInfo.swapchainCount = 1;
             presentInfo.pSwapchains = &_swapchain;
@@ -143,6 +156,8 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             auto swapchainCreateInfo = VulkanUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = surface;
             swapchainCreateInfo.minImageCount = _imageCount;
@@ -177,6 +192,8 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainImages()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             vkGetSwapchainImagesKHR(_device, _swapchain, &_imageCount, nullptr);
             _swapchainImages.resize(_imageCount);
             vkGetSwapchainImagesKHR(_device, _swapchain, &_imageCount, _swapchainImages.data());
@@ -194,6 +211,8 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainImageViews()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
@@ -204,6 +223,8 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateAttachmentImages()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             const auto sampleCount = _vulkanContext.supportedSampleCounts.top();
 
             VulkanImage::Parameters creationParameters = {
@@ -234,6 +255,8 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateAttachmentImagesViews()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             //TODO: need this?
             _colorImageView = _imageCreatorDelegate.CreateImageView(*_colorImage.get(), _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
             _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), _vulkanContext.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);

@@ -50,8 +50,6 @@ namespace Kmplete
             void _CreateAttachmentImagesViews();
 
         private:
-            VkDevice _device;
-            VkQueue _graphicsQueue;
             const VulkanContext& _vulkanContext;
             const VkExtent2D& _swapchainExtent;
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
@@ -59,6 +57,8 @@ namespace Kmplete
             const Array<VkSemaphore, NumConcurrentFrames>& _presentCompleteSemaphores;
             const Array<VkSemaphore, NumConcurrentFrames>& _renderCompleteSemaphores;
 
+            VkDevice _device;
+            VkQueue _graphicsQueue;
             UInt32 _imageIndex;
             UInt32 _imageCount;
             VkSwapchainKHR _swapchain;
