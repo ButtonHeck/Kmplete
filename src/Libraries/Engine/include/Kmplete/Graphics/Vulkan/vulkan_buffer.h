@@ -27,6 +27,8 @@ namespace Kmplete
             KMP_API VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_NODISCARD KMP_API VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 
+            KMP_NODISCARD KMP_API VkBuffer GetVkBuffer() const noexcept;
+
         private:
             VkDevice _device;
             VkBuffer _buffer;

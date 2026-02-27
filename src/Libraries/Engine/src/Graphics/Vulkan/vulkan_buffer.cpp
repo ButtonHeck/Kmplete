@@ -114,5 +114,11 @@ namespace Kmplete
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);
         }
         //--------------------------------------------------------------------------
+
+        VkBuffer VulkanBuffer::GetVkBuffer() const noexcept
+        {
+            return _buffer;
+        }
+        //--------------------------------------------------------------------------
     }
 }
