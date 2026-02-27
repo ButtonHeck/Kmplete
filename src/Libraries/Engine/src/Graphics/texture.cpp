@@ -15,18 +15,5 @@ namespace Kmplete
             return reinterpret_cast<void*>(_handle);
         }
         //--------------------------------------------------------------------------
-
-        const TextureFiltering& Texture::GetFiltering() const
-        {
-            return _filtering;
-        }
-        //--------------------------------------------------------------------------
-
-        void Texture::SetFiltering(const TextureFiltering& filtering)
-        {
-            _filtering = filtering;
-            _SetFilteringImpl();
-        }
-        //--------------------------------------------------------------------------
     }
 }
