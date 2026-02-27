@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/helper_structs.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -227,7 +228,7 @@ namespace Kmplete
 
             const auto sampleCount = _vulkanContext.supportedSampleCounts.top();
 
-            VulkanImage::Parameters creationParameters = {
+            VulkanUtils::ImageParameters creationParameters = {
                 .width = _swapchainExtent.width,
                 .height = _swapchainExtent.height,
                 .mipLevels = 1,

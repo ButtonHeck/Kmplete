@@ -404,6 +404,8 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateDepthStencilAttachment()
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
             _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_memoryTypeDelegate, _device, _currentExtent, _vulkanContext.defaultDepthFormat));
         }
         //--------------------------------------------------------------------------

@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters)
+        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanUtils::ImageParameters& creationParameters)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
@@ -36,7 +36,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_CreateImageObject(const Parameters& creationParameters)
+        void VulkanImage::_CreateImageObject(const VulkanUtils::ImageParameters& creationParameters)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -60,19 +60,26 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Parameters& creationParameters)
+        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanUtils::ImageParameters& creationParameters)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, creationParameters.memoryProperties);
-            const auto result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_imageMemory);
+
+            auto result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_imageMemory);
             if (result != VK_SUCCESS)
             {
                 vkDestroyImage(_device, _image, nullptr);
                 VulkanUtils::CheckResult(result, "VulkanImage: failed to allocate image memory");
             }
 
-            vkBindImageMemory(_device, _image, _imageMemory, 0);
+            result = vkBindImageMemory(_device, _image, _imageMemory, 0);
+            if (result != VK_SUCCESS)
+            {
+                vkDestroyImage(_device, _image, nullptr);
+                vkFreeMemory(_device, _imageMemory, nullptr);
+                VulkanUtils::CheckResult(result, "VulkanImage: failed to bind image memory");
+            }
         }
         //--------------------------------------------------------------------------
     }

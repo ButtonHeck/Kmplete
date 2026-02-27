@@ -25,7 +25,7 @@ namespace Kmplete
         VulkanImage VulkanImageCreatorDelegate::CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                             VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            const VulkanImage::Parameters creationParameters = {
+            const VulkanUtils::ImageParameters creationParameters = {
                 .width = width,
                 .height = height,
                 .mipLevels = mipLevels,
@@ -40,7 +40,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage VulkanImageCreatorDelegate::CreateImage(const VulkanImage::Parameters& creationParameters) const
+        VulkanImage VulkanImageCreatorDelegate::CreateImage(const VulkanUtils::ImageParameters& creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -58,7 +58,7 @@ namespace Kmplete
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                           VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            const VulkanImage::Parameters creationParameters = {
+            const VulkanUtils::ImageParameters creationParameters = {
                 .width = width,
                 .height = height,
                 .mipLevels = mipLevels,
@@ -73,7 +73,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VulkanImage::Parameters& creationParameters) const
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VulkanUtils::ImageParameters& creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -106,6 +106,29 @@ namespace Kmplete
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create texture image view");
 
             return imageView;
+        }
+        //--------------------------------------------------------------------------
+
+        VkSampler VulkanImageCreatorDelegate::CreateSampler(const VulkanUtils::SamplerParameters& creationParameters) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            auto samplerCreateInfo = VulkanUtils::InitVkSamplerCreateInfo();
+            samplerCreateInfo.magFilter = creationParameters.magnificationFilter;
+            samplerCreateInfo.minFilter = creationParameters.minificationFilter;
+            samplerCreateInfo.mipmapMode = creationParameters.mipmapMode;
+            samplerCreateInfo.addressModeU = creationParameters.addressModeU;
+            samplerCreateInfo.addressModeV = creationParameters.addressModeV;
+            samplerCreateInfo.addressModeW = creationParameters.addressModeW;
+            samplerCreateInfo.minLod = creationParameters.minLod;
+            samplerCreateInfo.maxLod = creationParameters.maxLod;
+            samplerCreateInfo.maxAnisotropy = creationParameters.maxAnisotropy;
+
+            VkSampler sampler;
+            const auto result = vkCreateSampler(_device, &samplerCreateInfo, nullptr, &sampler);
+            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
+
+            return sampler;
         }
         //--------------------------------------------------------------------------
     }

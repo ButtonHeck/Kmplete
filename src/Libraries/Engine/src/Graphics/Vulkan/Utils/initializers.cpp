@@ -218,6 +218,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkSamplerCreateInfo InitVkSamplerCreateInfo()
+            {
+                VkSamplerCreateInfo samplerInfo{};
+                samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+                return samplerInfo;
+            }
+            //--------------------------------------------------------------------------
+
             VkMemoryAllocateInfo InitVkMemoryAllocateInfo()
             {
                 VkMemoryAllocateInfo memoryAllocateInfo{};
