@@ -9,22 +9,14 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Filepath& filepath, KMP_MB_UNUSED bool flipVertically /*= false*/)
+        Nullable<Texture*> TextureFactory::CreateTexture(GraphicsBackendType backendType, const Filepath& filepath, bool flipVertically /*= false*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             try
             {
-                switch (backendType)
-                {
-                case GraphicsBackendType::Vulkan:
-                    KMP_LOG_WARN("not implemented yet"); (void)filepath;
-                    break;
-
-                default:
-                    KMP_LOG_ERROR("unknown graphics backend type");
-                    break;
-                }
+                Image image(filepath, flipVertically);
+                return CreateTexture(backendType, image);
             }
             catch (const std::exception&)
             {
