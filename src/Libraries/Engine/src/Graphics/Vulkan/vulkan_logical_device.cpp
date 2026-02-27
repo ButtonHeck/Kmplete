@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/image.h"
@@ -522,8 +523,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            (void)image;
-            return nullptr;
+            return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool());
         }
         //--------------------------------------------------------------------------
     }
