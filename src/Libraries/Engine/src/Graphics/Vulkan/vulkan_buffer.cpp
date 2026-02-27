@@ -9,13 +9,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, void* data)
+        VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size)
             : _device(device)
             , _buffer(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
-            , _descriptor()
             , _size(size)
-            , _alignment(0)
             , _mapped(nullptr)
             , _usageFlags(usageFlags)
         {
@@ -37,24 +35,6 @@ namespace Kmplete
             result = vkAllocateMemory(_device, &bufferMemoryContext.allocateInfo, nullptr, &_memory);
             VulkanUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
 
-            _alignment = bufferMemoryContext.requirements.alignment;
-
-            if (data != nullptr)
-            {
-                result = Map();
-                VulkanUtils::CheckResult(result, "VulkanBuffer: failed to map buffer memory");
-
-                memcpy(_mapped, data, size);
-                if ((memoryPropertyFlags & VK_MEMORY_PROPERTY_HOST_COHERENT_BIT) == 0)
-                {
-                    Flush();
-                }
-
-                Unmap();
-            }
-
-            _SetupDescriptor();
-
             result = Bind();
             VulkanUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
         }
@@ -64,7 +44,15 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            Destroy();
+            if (_buffer)
+            {
+                vkDestroyBuffer(_device, _buffer, nullptr);
+            }
+
+            if (_memory)
+            {
+                vkFreeMemory(_device, _memory, nullptr);
+            }
         }
         //--------------------------------------------------------------------------
 
@@ -124,30 +112,6 @@ namespace Kmplete
             mappedRange.memory = _memory;
 
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanBuffer::Destroy()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            if (_buffer)
-            {
-                vkDestroyBuffer(_device, _buffer, nullptr);
-            }
-
-            if (_memory)
-            {
-                vkFreeMemory(_device, _memory, nullptr);
-            }
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanBuffer::_SetupDescriptor(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
-        {
-            _descriptor.buffer = _buffer;
-            _descriptor.offset = offset;
-            _descriptor.range = size;
         }
         //--------------------------------------------------------------------------
     }
