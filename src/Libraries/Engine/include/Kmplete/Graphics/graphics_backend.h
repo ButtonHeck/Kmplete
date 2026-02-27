@@ -2,9 +2,12 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/graphics_surface.h"
 #include "Kmplete/Graphics/physical_device.h"
+#include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -15,6 +18,9 @@ namespace Kmplete
 
     namespace Graphics
     {
+        class Image;
+
+
         //! Base class/factory for graphics backend - an object that should do necessary API initialization
         //! for graphics-related functions
         class GraphicsBackend
@@ -37,6 +43,9 @@ namespace Kmplete
             KMP_API virtual void StartFrame(float frameTimestep) = 0;
             KMP_API virtual void EndFrame() = 0;
             KMP_API virtual void HandleWindowResize() = 0;
+
+            KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, bool flipVertically = false);
+            KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Image& image) = 0;
 
         protected:
             Window& _window;

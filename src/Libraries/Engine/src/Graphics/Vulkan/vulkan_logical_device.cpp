@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
@@ -514,6 +515,15 @@ namespace Kmplete
             };
 
             return actualExtent;
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<Texture*> VulkanLogicalDevice::CreateTexture(const Image& image) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            (void)image;
+            return nullptr;
         }
         //--------------------------------------------------------------------------
     }

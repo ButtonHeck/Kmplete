@@ -2,6 +2,7 @@
 
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/logical_device.h"
+#include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
@@ -10,6 +11,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/nullability.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -22,6 +24,9 @@ namespace Kmplete
 
     namespace Graphics
     {
+        class Image;
+
+
         //TODO: comments
         class VulkanLogicalDevice : public LogicalDevice
         {
@@ -44,6 +49,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkQueue GetVkPresentQueue() const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentVkCommandBuffer() const noexcept;
+
+            KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) const;
 
         private:
             void _CreateLogicalDeviceObject();

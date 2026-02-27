@@ -1,5 +1,4 @@
 #include "Kmplete/Assets/texture_asset_manager.h"
-#include "Kmplete/Graphics/texture_factory.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Internal/error_texture_data.h"
 #include "Kmplete/Log/log.h"
@@ -35,8 +34,7 @@ namespace Kmplete
                 return false;
             }
 
-            const auto backendType = _graphicsBackend.GetType();
-            auto* texture = Graphics::TextureFactory::CreateTexture(backendType, filepath, flipVertically);
+            auto* texture = _graphicsBackend.CreateTexture(filepath, flipVertically);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture '{}'", filepath);
@@ -58,8 +56,7 @@ namespace Kmplete
                 return false;
             }
 
-            const auto backendType = _graphicsBackend.GetType();
-            auto* texture = Graphics::TextureFactory::CreateTexture(backendType, image);
+            auto* texture = _graphicsBackend.CreateTexture(image);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture from image");
@@ -152,8 +149,7 @@ namespace Kmplete
                 return false;
             }
 
-            const auto backendType = _graphicsBackend.GetType();
-            auto* texture = Graphics::TextureFactory::CreateTexture(backendType, Graphics::Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), Graphics::ImageChannels::RGB));
+            auto* texture = _graphicsBackend.CreateTexture(Graphics::Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), Graphics::ImageChannels::RGB));
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("error texture failed to load");

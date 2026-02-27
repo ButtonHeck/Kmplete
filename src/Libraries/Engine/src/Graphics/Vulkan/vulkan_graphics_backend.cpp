@@ -157,6 +157,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        Nullable<Texture*> VulkanGraphicsBackend::CreateTexture(const Image& image)
+        {
+            const auto& logicalDevice = dynamic_cast<const VulkanLogicalDevice&>(_physicalDevice->GetLogicalDevice());
+            return logicalDevice.CreateTexture(image);
+        }
+        //--------------------------------------------------------------------------
+
         VkInstance VulkanGraphicsBackend::GetVkInstance() const noexcept
         {
             return _instance;

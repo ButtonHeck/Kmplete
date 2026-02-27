@@ -32,6 +32,8 @@ namespace Kmplete
             KMP_API void EndFrame() override;
             KMP_API void HandleWindowResize() override;
 
+            KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) override;
+
             KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
 
         private:
