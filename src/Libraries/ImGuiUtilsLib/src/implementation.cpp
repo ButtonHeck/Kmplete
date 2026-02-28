@@ -5,7 +5,6 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 
-#include <imgui.h>
 #include <forkawesome-webfont.h>
 
 
@@ -160,6 +159,12 @@ namespace Kmplete
             style.DisabledAlpha = 0.4f;
 
             style.ScaleAllSizes(dpiScale);
+        }
+        //--------------------------------------------------------------------------
+
+        ImTextureID ImGuiImplementation::GetTexture(StringID sid) const
+        {
+            return _textureMap.at(sid);
         }
         //--------------------------------------------------------------------------
     }

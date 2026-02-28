@@ -2,8 +2,11 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/ImGui/context.h"
+
+#include <imgui.h>
 
 
 namespace Kmplete
@@ -36,6 +39,9 @@ namespace Kmplete
             void Stylize(float dpiScale) const;
 
             virtual void CreateFontsTexture() const = 0;
+            virtual void AddTexture(StringID sid, void* sampler, void* view) = 0;
+            virtual void RemoveTexture(StringID sid) = 0;
+            KMP_NODISCARD ImTextureID GetTexture(StringID sid) const;
 
         protected:
             explicit ImGuiImplementation(Context* implementationContext);
@@ -45,6 +51,7 @@ namespace Kmplete
 
         protected:
             UPtr<Context> _context;
+            HashMap<StringID, ImTextureID> _textureMap;
         };
         //--------------------------------------------------------------------------
     }

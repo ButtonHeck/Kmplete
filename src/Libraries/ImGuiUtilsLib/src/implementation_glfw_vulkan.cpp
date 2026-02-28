@@ -34,6 +34,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void ImGuiImplementationGlfwVulkan::AddTexture(StringID sid, void* sampler, void* view)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            VkSampler vulkanSampler = reinterpret_cast<VkSampler>(sampler);
+            VkImageView vulkanImageView = reinterpret_cast<VkImageView>(view);
+
+            _textureMap[sid] = ImGui_ImplVulkan_AddTexture(vulkanSampler, vulkanImageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+        }
+        //--------------------------------------------------------------------------
+
+        void ImGuiImplementationGlfwVulkan::RemoveTexture(StringID sid)
+        {
+            _textureMap.erase(sid);
+        }
+        //--------------------------------------------------------------------------
+
         void ImGuiImplementationGlfwVulkan::SetCommandBuffer(VkCommandBuffer commandBuffer)
         {
             _commandBuffer = commandBuffer;
@@ -54,8 +71,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_Finalize() const
+        void ImGuiImplementationGlfwVulkan::_Finalize()
         {
+            _textureMap.clear();
+
             ImGui_ImplVulkan_Shutdown();
             ImGui_ImplGlfw_Shutdown();
         }

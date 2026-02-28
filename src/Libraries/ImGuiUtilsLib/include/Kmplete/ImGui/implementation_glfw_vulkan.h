@@ -26,12 +26,14 @@ namespace Kmplete
             virtual ~ImGuiImplementationGlfwVulkan();
 
             void CreateFontsTexture() const override;
+            void AddTexture(StringID sid, void* sampler, void* view) override;
+            void RemoveTexture(StringID sid) override;
 
             void SetCommandBuffer(VkCommandBuffer commandBuffer);
 
         private:
             void _Initialize() const;
-            void _Finalize() const;
+            void _Finalize();
 
             void _NewFrameImpl() const override;
             void _RenderImpl() const override;

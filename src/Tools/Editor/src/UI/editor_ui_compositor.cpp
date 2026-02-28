@@ -28,14 +28,14 @@ namespace Kmplete
 
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
-                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const HashMap<StringID, void*>& imguiTextureIDs)
+                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const ImGuiUtils::ImGuiImplementation& imguiImpl)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _mainWindow(mainWindow)
         , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
         , _needCheckImguiIniFile(true)
-        , _imguiTextureIDs(imguiTextureIDs)
+        , _imguiImpl(imguiImpl)
     {
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::_FillDictionary));
@@ -105,8 +105,8 @@ namespace Kmplete
         const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
 
         static const ImTextureID languageIcons[] = {
-            static_cast<ImTextureID>(_imguiTextureIDs.at("_flag_usa"_sid)),
-            static_cast<ImTextureID>(_imguiTextureIDs.at("_flag_russian"_sid))
+            static_cast<ImTextureID>(_imguiImpl.GetTexture("_flag_usa"_sid)),
+            static_cast<ImTextureID>(_imguiImpl.GetTexture("_flag_russian"_sid))
         };
 
         int languageIndex = 0;

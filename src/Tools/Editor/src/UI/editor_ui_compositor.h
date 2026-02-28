@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Event/window_events.h"
+#include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -36,7 +37,7 @@ namespace Kmplete
 
     public:
         EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
-                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const HashMap<StringID, void*>& imguiTextureIDs);
+                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const ImGuiUtils::ImGuiImplementation& imguiImpl);
 
         void ComposeMainArea();
         void ComposeStatusBar(Time::Timer& metricsTimer);
@@ -84,7 +85,7 @@ namespace Kmplete
         _UIComponentsState _state;
         _UIPopupsState _popups;
         bool _needCheckImguiIniFile;
-        const HashMap<StringID, void*>& _imguiTextureIDs;
+        const ImGuiUtils::ImGuiImplementation& _imguiImpl;
     };
     //--------------------------------------------------------------------------
 }

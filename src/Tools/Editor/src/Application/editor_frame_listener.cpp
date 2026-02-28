@@ -62,7 +62,7 @@ namespace Kmplete
 
         _InitializeImGui(dpiScale);
 
-        _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, _imguiTextureIDs));
+        _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, *_imguiImpl.get()));
 
         _metricsTimer.Mark();
     }
@@ -100,9 +100,9 @@ namespace Kmplete
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
             auto& flagUSATexture = dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_usa"_sid).GetTexture());
-            _imguiTextureIDs["_flag_usa"_sid] = ImGui_ImplVulkan_AddTexture(flagUSATexture.GetVkSampler(), flagUSATexture.GetVkImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
             auto& flagRussiaTexture = dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_russian"_sid).GetTexture());
-            _imguiTextureIDs["_flag_russian"_sid] = ImGui_ImplVulkan_AddTexture(flagRussiaTexture.GetVkSampler(), flagRussiaTexture.GetVkImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            _imguiImpl->AddTexture("_flag_usa"_sid, flagUSATexture.GetVkSampler(), flagUSATexture.GetVkImageView());
+            _imguiImpl->AddTexture("_flag_russian"_sid, flagRussiaTexture.GetVkSampler(), flagRussiaTexture.GetVkImageView());
         }
 
         _AddImGuiFonts(dpiScale);
