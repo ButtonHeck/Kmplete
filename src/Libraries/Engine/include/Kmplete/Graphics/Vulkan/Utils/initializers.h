@@ -19,6 +19,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPhysicalDeviceProperties2 InitVkPhysicalDeviceProperties2();
             KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan11Properties InitVkPhysicalDeviceVulkan11Properties();
             KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan12Properties InitVkPhysicalDeviceVulkan12Properties();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceFeatures2 InitVkPhysicalDeviceFeatures2();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan13Features InitVkPhysicalDeviceVulkan13Features();
 
             KMP_NODISCARD KMP_API VkDeviceCreateInfo InitVkDeviceCreateInfo();
             KMP_NODISCARD KMP_API VkSemaphoreCreateInfo InitVkSemaphoreCreateInfo();

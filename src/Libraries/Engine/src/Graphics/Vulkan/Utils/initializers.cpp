@@ -65,6 +65,22 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceFeatures2 InitVkPhysicalDeviceFeatures2()
+            {
+                VkPhysicalDeviceFeatures2 physicalDeviceFeatures2{};
+                physicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
+                return physicalDeviceFeatures2;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPhysicalDeviceVulkan13Features InitVkPhysicalDeviceVulkan13Features()
+            {
+                VkPhysicalDeviceVulkan13Features physicalDeviceFeatures13{};
+                physicalDeviceFeatures13.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
+                return physicalDeviceFeatures13;
+            }
+            //--------------------------------------------------------------------------
+
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {
                 VkDeviceCreateInfo deviceCreateInfo{};
