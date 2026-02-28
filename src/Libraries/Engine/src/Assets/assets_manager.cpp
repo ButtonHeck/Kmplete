@@ -278,7 +278,7 @@ namespace Kmplete
             {
                 try
                 {
-                    const auto assetImage = Graphics::Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), Graphics::ImageChannels::Unknown);
+                    const auto assetImage = Graphics::Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), Graphics::ImageChannels::RGBAlpha);
                     return _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
                 }
                 catch (KMP_MB_UNUSED const std::exception& e)
