@@ -24,6 +24,7 @@ namespace Kmplete
             , _height(0)
             , _channels(desiredChannels)
             , _pixels(nullptr)
+            , _dataSize(0)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -40,6 +41,8 @@ namespace Kmplete
 
             _FixChannels(desiredChannels, channelsInFile);
 
+            _dataSize = _width * _height * static_cast<int>(_channels);
+
             KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
         }
         //--------------------------------------------------------------------------
@@ -50,6 +53,7 @@ namespace Kmplete
             , _height(size.y)
             , _channels(channels)
             , _pixels(nullptr)
+            , _dataSize(0)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -74,6 +78,8 @@ namespace Kmplete
             _pixels = new UByte[bufferSize];
             std::memcpy(_pixels, pixelBuffer, bufferSize);
 
+            _dataSize = bufferSize;
+
             KMP_LOG_INFO("created [{}x{}] ({} channels) from pixel buffer", _width, _height, static_cast<int>(_channels));
         }
         //--------------------------------------------------------------------------
@@ -84,6 +90,7 @@ namespace Kmplete
             , _height(0)
             , _channels(desiredChannels)
             , _pixels(nullptr)
+            , _dataSize(0)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -112,6 +119,8 @@ namespace Kmplete
 
             _FixChannels(desiredChannels, channelsInFile);
 
+            _dataSize = _width * _height * static_cast<int>(_channels);
+
             KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
         }
         //--------------------------------------------------------------------------
@@ -130,8 +139,10 @@ namespace Kmplete
             , _height(rhs._height)
             , _channels(rhs._channels)
             , _pixels(rhs._pixels)
+            , _dataSize(rhs._dataSize)
         {
             rhs._pixels = nullptr;
+            rhs._dataSize = 0;
         }
         //--------------------------------------------------------------------------
 
@@ -151,8 +162,10 @@ namespace Kmplete
             _height = rhs._height;
             _channels = rhs._channels;
             _pixels = rhs._pixels;
+            _dataSize = rhs._dataSize;
 
             rhs._pixels = nullptr;
+            rhs._dataSize = 0;
 
             return *this;
         }
@@ -179,6 +192,12 @@ namespace Kmplete
         Nullable<UByte*> Image::GetPixels() const noexcept
         {
             return _pixels;
+        }
+        //--------------------------------------------------------------------------
+
+        UInt64 Image::GetDataSize() const noexcept
+        {
+            return _dataSize;
         }
         //--------------------------------------------------------------------------
 

@@ -32,6 +32,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API int GetHeight() const noexcept;
             KMP_NODISCARD KMP_API int GetChannels() const noexcept;
             KMP_NODISCARD KMP_API Nullable<UByte*> GetPixels() const noexcept;
+            KMP_NODISCARD KMP_API UInt64 GetDataSize() const noexcept;
 
         private:
             void _DeleteData();
@@ -43,6 +44,7 @@ namespace Kmplete
             int _height;
             ImageChannels _channels;
             UByte* _pixels;
+            UInt64 _dataSize;
         };
         //--------------------------------------------------------------------------
     }

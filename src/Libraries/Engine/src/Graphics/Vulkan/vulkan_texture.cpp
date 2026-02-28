@@ -50,8 +50,7 @@ namespace Kmplete
             };
             _sampler = imageCreator.CreateSampler(samplerParameters);
 
-            const auto dataSize = image.GetWidth() * image.GetHeight() * 4;
-            _buffer.reset(new VulkanBuffer(memoryTypeDelegate, _logicalDevice, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, dataSize));
+            _buffer.reset(new VulkanBuffer(memoryTypeDelegate, _logicalDevice, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize()));
             if (!_buffer)
             {
                 KMP_LOG_ERROR("failed to create texture buffer");
@@ -61,7 +60,7 @@ namespace Kmplete
             auto result = _buffer->Map();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
             
-            _buffer->CopyTo(image.GetPixels(), dataSize);
+            _buffer->CopyTo(image.GetPixels(), image.GetDataSize());
 
             result = _buffer->Flush();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
