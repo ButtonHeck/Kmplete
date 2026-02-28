@@ -54,7 +54,7 @@ namespace Kmplete
         void LoadSettings(SettingsDocument& settings);
 
     private:
-        void _Initialize();
+        void _Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
         void _InitializeImGui(float dpiScale);
         void _Finalize();
 
@@ -83,6 +83,7 @@ namespace Kmplete
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
         UPtr<EditorUICompositor> _uiCompositor;
         Time::Timer _metricsTimer;
+        HashMap<StringID, void*> _imguiTextureIDs;
 
         Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;

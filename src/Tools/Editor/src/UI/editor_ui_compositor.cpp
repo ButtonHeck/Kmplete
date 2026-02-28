@@ -28,13 +28,14 @@ namespace Kmplete
 
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
-                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
+                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const HashMap<StringID, void*>& imguiTextureIDs)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _mainWindow(mainWindow)
         , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
         , _needCheckImguiIniFile(true)
+        , _imguiTextureIDs(imguiTextureIDs)
     {
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::_FillDictionary));
@@ -87,7 +88,7 @@ namespace Kmplete
 
         if (ImGui::BeginMenuBar())
         {
-            //_ComposeMenuLanguage(); //TODO: uncomment after Vulkan full initialization done
+            _ComposeMenuLanguage();
             _ComposeMenuFile();
             _ComposeMenuView();
 
@@ -104,8 +105,8 @@ namespace Kmplete
         const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
 
         static const ImTextureID languageIcons[] = {
-            static_cast<ImTextureID>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_usa"_sid).GetTexture().GetHandle()),
-            static_cast<ImTextureID>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_russian"_sid).GetTexture().GetHandle())
+            static_cast<ImTextureID>(_imguiTextureIDs.at("_flag_usa"_sid)),
+            static_cast<ImTextureID>(_imguiTextureIDs.at("_flag_russian"_sid))
         };
 
         int languageIndex = 0;

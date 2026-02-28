@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Assets/assets_manager.h"
@@ -33,13 +34,13 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _assetsManager(assetsManager)
         , _imguiImpl(nullptr)
-        , _uiCompositor(CreateUPtr<EditorUICompositor>(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager))
+        , _uiCompositor(nullptr)
         , _metricsTimer(1000)
         , _windowCloseHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowCloseEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent))
         , _editorFullscreenHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnEditorFullscreenEvent))
     {
-        _Initialize();
+        _Initialize(localizationManager, systemMetricsManager, inputManager);
 
         KMP_PROFILE_CONSTRUCTOR_END()
     }
@@ -53,13 +54,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_Initialize()
+    void EditorFrameListener::_Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
         const auto dpiScale = _mainWindow.GetDPIScale();
 
         _InitializeImGui(dpiScale);
+
+        _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, _imguiTextureIDs));
 
         _metricsTimer.Mark();
     }
@@ -93,8 +96,14 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);
+
+            _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
+
+            auto& flagUSATexture = dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_usa"_sid).GetTexture());
+            _imguiTextureIDs["_flag_usa"_sid] = ImGui_ImplVulkan_AddTexture(flagUSATexture.GetVkSampler(), flagUSATexture.GetVkImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+            auto& flagRussiaTexture = dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_russian"_sid).GetTexture());
+            _imguiTextureIDs["_flag_russian"_sid] = ImGui_ImplVulkan_AddTexture(flagRussiaTexture.GetVkSampler(), flagRussiaTexture.GetVkImageView(), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
         }
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         _AddImGuiFonts(dpiScale);
         _imguiImpl->Stylize(dpiScale);
