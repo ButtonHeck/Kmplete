@@ -24,6 +24,7 @@ namespace Kmplete
             KMP_API ~VulkanImage();
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
+            KMP_NODISCARD KMP_API VkDeviceSize GetMemorySize() const noexcept;
 
         private:
             void _CreateImageObject(const VulkanUtils::ImageParameters& creationParameters);
@@ -33,6 +34,7 @@ namespace Kmplete
             VkDevice _device;
             VkImage _image;
             VkDeviceMemory _imageMemory;
+            VkDeviceSize _memorySize;
         };
         //--------------------------------------------------------------------------
     }

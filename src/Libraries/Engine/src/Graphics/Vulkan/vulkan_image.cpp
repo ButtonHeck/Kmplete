@@ -13,6 +13,7 @@ namespace Kmplete
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
+            , _memorySize(0)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -33,6 +34,12 @@ namespace Kmplete
         VkImage VulkanImage::GetVkImage() const noexcept
         {
             return _image;
+        }
+        //--------------------------------------------------------------------------
+
+        VkDeviceSize VulkanImage::GetMemorySize() const noexcept
+        {
+            return _memorySize;
         }
         //--------------------------------------------------------------------------
 
@@ -80,6 +87,8 @@ namespace Kmplete
                 vkFreeMemory(_device, _imageMemory, nullptr);
                 VulkanUtils::CheckResult(result, "VulkanImage: failed to bind image memory");
             }
+
+            _memorySize = imageMemoryContext.allocateInfo.allocationSize;
         }
         //--------------------------------------------------------------------------
     }
