@@ -29,6 +29,9 @@ namespace Kmplete
             KMP_API VulkanTexture(VkDevice device, VkQueue graphicsQueue, const Image& image, const VulkanImageCreatorDelegate& imageCreator, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkCommandPool commandPool);
             KMP_API ~VulkanTexture();
 
+            KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
+            KMP_NODISCARD KMP_API VkSampler GetVkSampler() const noexcept;
+
         private:
             VkDevice _logicalDevice;
             UPtr<VulkanImage> _image;

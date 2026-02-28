@@ -148,7 +148,7 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = _graphicsBackend.CreateTexture(Graphics::Image(&pixelBuffer[0], 32 * 32 * 3, Math::Size2I(32, 32), Graphics::ImageChannels::RGB));
+            auto* texture = _graphicsBackend.CreateTexture(Graphics::Image(&pixelBuffer[0], 32 * 32 * 4, Math::Size2I(32, 32), Graphics::ImageChannels::RGBAlpha));
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("error texture failed to load");

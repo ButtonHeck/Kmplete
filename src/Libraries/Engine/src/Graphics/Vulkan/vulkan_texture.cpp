@@ -61,7 +61,7 @@ namespace Kmplete
             auto result = _buffer->Map();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
             
-            _buffer->CopyTo(image.GetPixels(), image.GetWidth() * image.GetHeight());
+            _buffer->CopyTo(image.GetPixels(), dataSize);
 
             result = _buffer->Flush();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
@@ -131,6 +131,18 @@ namespace Kmplete
             vkDestroyImageView(_logicalDevice, _imageView, nullptr);
 
             _image.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanTexture::GetVkImageView() const noexcept
+        {
+            return _imageView;
+        }
+        //--------------------------------------------------------------------------
+
+        VkSampler VulkanTexture::GetVkSampler() const noexcept
+        {
+            return _sampler;
         }
         //--------------------------------------------------------------------------
     }
