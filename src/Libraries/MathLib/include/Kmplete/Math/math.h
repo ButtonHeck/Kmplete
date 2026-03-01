@@ -45,5 +45,19 @@ namespace Kmplete
             return glm::log2(value);
         }
         //--------------------------------------------------------------------------
+
+        template<typename ValueType> requires (IsArithmetic<ValueType>::value)
+        KMP_NODISCARD ValueType Floor(ValueType value)
+        {
+            return ValueType(glm::floor(value));
+        }
+        //--------------------------------------------------------------------------
+
+        template<typename ValueType> requires (IsArithmetic<ValueType>::value)
+        KMP_NODISCARD ValueType Ceil(ValueType value)
+        {
+            return ValueType(glm::ceil(value));
+        }
+        //--------------------------------------------------------------------------
     }
 }

@@ -25,7 +25,7 @@ namespace Kmplete
             VulkanUtils::ImageParameters creationParameters = {
                 .width = UInt32(image.GetWidth()),
                 .height = UInt32(image.GetHeight()),
-                .mipLevels = 1,
+                .mipLevels = image.GetMipLevels(),
                 .numSamples = VK_SAMPLE_COUNT_1_BIT,
                 .format = VK_FORMAT_R8G8B8A8_UNORM,
                 .tiling = VK_IMAGE_TILING_OPTIMAL,

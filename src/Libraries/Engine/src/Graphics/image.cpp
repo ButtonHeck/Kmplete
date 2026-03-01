@@ -2,6 +2,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Math/math.h"
 
 #include <stb_image.h>
 
@@ -198,6 +199,12 @@ namespace Kmplete
         UInt64 Image::GetDataSize() const noexcept
         {
             return _dataSize;
+        }
+        //--------------------------------------------------------------------------
+
+        UInt32 Image::GetMipLevels() const noexcept
+        {
+            return UInt32(Math::Floor(Math::Log2(Math::Max(_width, _height)).value())) + 1;
         }
         //--------------------------------------------------------------------------
 
