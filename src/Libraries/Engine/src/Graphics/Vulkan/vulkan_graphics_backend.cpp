@@ -37,10 +37,6 @@ namespace Kmplete
             {
                 KMP_LOG_DEBUG_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
             }
-            else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT)
-            {
-                KMP_LOG_INFO_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
-            }
             else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
             {
                 KMP_LOG_WARN_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
