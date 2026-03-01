@@ -14,6 +14,9 @@
 namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "WindowApplication";
+    static constexpr auto IconifiedFPSStr = "IconifiedFPS";
+    static constexpr auto IconifiedFPSMin = UInt32(10);
+    static constexpr auto IconifiedFPSMax = UInt32(60);
 
 
     WindowApplication::WindowApplication(const WindowApplicationParameters& parameters)
@@ -25,6 +28,7 @@ namespace Kmplete
         , _assetsManager(nullptr)
         , _frameListenerManager(nullptr)
         , _frameClock()
+        , _iconifiedFPS(10)
     {
         _Initialize(parameters);
 
@@ -157,8 +161,8 @@ namespace Kmplete
 
         if (mainWindowIsIconified)
         {
-            //TODO: limit updates per second
             _frameListenerManager->_ProcessFrameListenersCommands();
+            _IconifiedSleep();
         }
         else
         {
@@ -186,6 +190,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void WindowApplication::_IconifiedSleep()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+        const auto iconifiedSleepTimeMs = 1000.0f / float(_iconifiedFPS);
+        const auto elapsedTimeThisFrame = _frameClock.Peek();
+
+        if (elapsedTimeThisFrame < iconifiedSleepTimeMs)
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(UInt32(iconifiedSleepTimeMs - elapsedTimeThisFrame)));
+        }
+    }
+    //--------------------------------------------------------------------------
+
     void WindowApplication::_SaveSettings() const
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -196,6 +214,8 @@ namespace Kmplete
             KMP_LOG_WARN("failed to create settings entry for saving");
             return;
         }
+
+        settings.value().get().SaveUInt(IconifiedFPSStr, _iconifiedFPS);
         
         _windowBackend->SaveSettings(*settings);
     }
@@ -210,6 +230,13 @@ namespace Kmplete
         {
             KMP_LOG_WARN("failed to get settings entry for loading");
             return;
+        }
+
+        _iconifiedFPS = settings.value().get().GetUInt(IconifiedFPSStr, IconifiedFPSMin);
+        if (_iconifiedFPS < IconifiedFPSMin || _iconifiedFPS > IconifiedFPSMax)
+        {
+            KMP_LOG_WARN("iconified FPS ({} from settings) required to be in range from 10 to 60, value will be clamped", _iconifiedFPS);
+            _iconifiedFPS = Math::Clamp(_iconifiedFPS, IconifiedFPSMin, IconifiedFPSMax);
         }
 
         _windowBackend->LoadSettings(*settings);

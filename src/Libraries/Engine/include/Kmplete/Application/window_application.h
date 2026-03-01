@@ -66,6 +66,7 @@ namespace Kmplete
 
         KMP_NODISCARD bool _RunFrameIteration(Window& window);
         void _ProcessEvents(Window& window, float frameTimestep);
+        void _IconifiedSleep();
 
         void _SaveSettings() const;
         void _LoadSettings();
@@ -79,6 +80,7 @@ namespace Kmplete
 
     private:
         Time::Clock _frameClock;
+        UInt32 _iconifiedFPS;
     };
     //--------------------------------------------------------------------------
 }
