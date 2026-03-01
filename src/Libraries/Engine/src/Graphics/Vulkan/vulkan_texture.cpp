@@ -25,7 +25,7 @@ namespace Kmplete
             VulkanUtils::ImageParameters creationParameters = {
                 .width = UInt32(image.GetWidth()),
                 .height = UInt32(image.GetHeight()),
-                .mipLevels = image.GetMipLevels(),
+                .mipLevels = 1,
                 .numSamples = VK_SAMPLE_COUNT_1_BIT,
                 .format = VK_FORMAT_R8G8B8A8_UNORM,
                 .tiling = VK_IMAGE_TILING_OPTIMAL,
@@ -60,7 +60,7 @@ namespace Kmplete
             auto result = _buffer->Map();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
             
-            _buffer->CopyTo(image.GetPixels(), _image->GetMemorySize());
+            _buffer->CopyTo(image.GetPixels(), image.GetDataSize());
 
             result = _buffer->Flush();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
