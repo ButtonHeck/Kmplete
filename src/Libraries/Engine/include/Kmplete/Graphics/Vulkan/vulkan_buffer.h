@@ -23,7 +23,7 @@ namespace Kmplete
             KMP_API void Unmap();
 
             KMP_NODISCARD KMP_API VkResult Bind(VkDeviceSize offset = 0);
-            KMP_API void CopyTo(void* data, VkDeviceSize size);
+            KMP_API void CopyToMappedMemory(void* data, VkDeviceSize size);
             KMP_API VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_NODISCARD KMP_API VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 

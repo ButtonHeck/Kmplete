@@ -84,7 +84,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanBuffer::CopyTo(void* data, VkDeviceSize size)
+        void VulkanBuffer::CopyToMappedMemory(void* data, VkDeviceSize size)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
