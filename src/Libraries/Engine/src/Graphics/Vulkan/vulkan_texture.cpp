@@ -22,20 +22,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            VulkanUtils::ImageParameters creationParameters = {
-                .width = UInt32(image.GetWidth()),
-                .height = UInt32(image.GetHeight()),
-                .mipLevels = 1,
-                .numSamples = VK_SAMPLE_COUNT_1_BIT,
-                .format = VK_FORMAT_R8G8B8A8_UNORM,
-                .tiling = VK_IMAGE_TILING_OPTIMAL,
-                .usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-                .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-            };
-            _image.reset(imageCreator.CreateImagePtr(creationParameters));
+            _InitializeImage(image, imageCreator);
+
             auto vulkanImage = _image->GetVkImage();
 
-            _imageView = imageCreator.CreateImageView(vulkanImage, creationParameters.format, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+            _imageView = imageCreator.CreateImageView(vulkanImage, VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, 1);
 
             VulkanUtils::SamplerParameters samplerParameters = {
                 .magnificationFilter = VK_FILTER_LINEAR,
@@ -127,6 +118,24 @@ namespace Kmplete
         VkSampler VulkanTexture::GetVkSampler() const noexcept
         {
             return _sampler;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanTexture::_InitializeImage(const Image& image, const VulkanImageCreatorDelegate& imageCreator)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            VulkanUtils::ImageParameters creationParameters = {
+                    .width = UInt32(image.GetWidth()),
+                    .height = UInt32(image.GetHeight()),
+                    .mipLevels = image.GetMipLevels(),
+                    .numSamples = VK_SAMPLE_COUNT_1_BIT,
+                    .format = VK_FORMAT_R8G8B8A8_UNORM,
+                    .tiling = VK_IMAGE_TILING_OPTIMAL,
+                    .usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+                    .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+            };
+            _image.reset(imageCreator.CreateImagePtr(creationParameters));
         }
         //--------------------------------------------------------------------------
 
