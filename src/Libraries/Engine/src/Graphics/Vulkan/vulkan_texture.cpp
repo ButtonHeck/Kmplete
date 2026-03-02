@@ -50,29 +50,14 @@ namespace Kmplete
             };
             _sampler = imageCreator.CreateSampler(samplerParameters);
 
-            _buffer.reset(new VulkanBuffer(memoryTypeDelegate, _logicalDevice, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, _image->GetMemorySize()));
-            if (!_buffer)
-            {
-                KMP_LOG_ERROR("failed to create texture buffer");
-                throw std::runtime_error("VulkanTexture: failed to create texture buffer");
-            }
-
-            auto result = _buffer->Map();
-            VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
-            
-            _buffer->CopyTo(image.GetPixels(), image.GetDataSize());
-
-            result = _buffer->Flush();
-            VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
-
-            _buffer->Unmap();
+            _InitializeBuffer(memoryTypeDelegate, image);
 
             auto commandBufferAllocateInfo = VulkanUtils::InitVkCommandBufferAllocateInfo();
             commandBufferAllocateInfo.commandPool = commandPool;
             commandBufferAllocateInfo.commandBufferCount = 1;
 
             VkCommandBuffer commandBuffer;
-            result = vkAllocateCommandBuffers(_logicalDevice, &commandBufferAllocateInfo, &commandBuffer);
+            const auto result = vkAllocateCommandBuffers(_logicalDevice, &commandBufferAllocateInfo, &commandBuffer);
 
             auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
             commandBufferBeginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -142,6 +127,29 @@ namespace Kmplete
         VkSampler VulkanTexture::GetVkSampler() const noexcept
         {
             return _sampler;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanTexture::_InitializeBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Image& image)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _buffer.reset(new VulkanBuffer(memoryTypeDelegate, _logicalDevice, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize()));
+            if (!_buffer)
+            {
+                KMP_LOG_ERROR("failed to create texture buffer");
+                throw std::runtime_error("VulkanTexture: failed to create texture buffer");
+            }
+
+            auto result = _buffer->Map();
+            VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
+
+            _buffer->CopyToMappedMemory(image.GetPixels(), image.GetDataSize());
+
+            result = _buffer->Flush();
+            VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
+
+            _buffer->Unmap();
         }
         //--------------------------------------------------------------------------
     }

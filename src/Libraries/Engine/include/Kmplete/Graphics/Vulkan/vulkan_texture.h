@@ -33,6 +33,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkSampler GetVkSampler() const noexcept;
 
         private:
+            void _InitializeBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Image& image);
+
+        private:
             VkDevice _logicalDevice;
             UPtr<VulkanImage> _image;
             VkImageView _imageView;
