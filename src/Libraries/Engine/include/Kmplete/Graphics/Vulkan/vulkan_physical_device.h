@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_format_delegate.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -51,6 +52,7 @@ namespace Kmplete
             VkInstance _instance;
             VkSurfaceKHR _surface;
             VkPhysicalDevice _physicalDevice;
+            UPtr<VulkanFormatDelegate> _formatDelegate;
             VulkanContext _vulkanContext;
             UPtr<VulkanMemoryTypeDelegate> _memoryTypeDelegate;
             UPtr<VulkanLogicalDevice> _logicalDevice;

@@ -14,7 +14,7 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanTexture::VulkanTexture(VkDevice device, VkQueue graphicsQueue, const Image& image, const VulkanImageCreatorDelegate& imageCreator, 
-                                     const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkCommandPool commandPool, const VulkanContext& vulkanContext)
+                                     const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkCommandPool commandPool, const VulkanFormatDelegate& formatDelegate)
             : _logicalDevice(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
@@ -25,7 +25,7 @@ namespace Kmplete
             _InitializeImage(image, imageCreator);
             _TransitionImageLayout(image.GetMipLevels(), commandPool, graphicsQueue);
             _CopyStagingBufferToImage(memoryTypeDelegate, image, commandPool, graphicsQueue);
-            _GenerateMipmaps(image, vulkanContext, commandPool, graphicsQueue);
+            _GenerateMipmaps(image, formatDelegate, commandPool, graphicsQueue);
             _InitializeImageView(image, imageCreator);
             _InitializeSampler(image, imageCreator);
         }
@@ -140,11 +140,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_GenerateMipmaps(const Image& image, const VulkanContext& vulkanContext, VkCommandPool commandPool, VkQueue graphicsQueue)
+        void VulkanTexture::_GenerateMipmaps(const Image& image, const VulkanFormatDelegate& formatDelegate, VkCommandPool commandPool, VkQueue graphicsQueue)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            const auto formatProperties = vulkanContext.GetFormatProperties(VK_FORMAT_R8G8B8A8_UNORM);
+            const auto formatProperties = formatDelegate.GetFormatProperties(VK_FORMAT_R8G8B8A8_UNORM);
             if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
             {
                 KMP_LOG_ERROR("image format does not support linear blitting");

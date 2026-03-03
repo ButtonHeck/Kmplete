@@ -33,6 +33,7 @@ namespace Kmplete
             , _instance(instance)
             , _surface(surface)
             , _physicalDevice(VK_NULL_HANDLE)
+            , _formatDelegate(nullptr)
             , _vulkanContext()
             , _memoryTypeDelegate(nullptr)
             , _logicalDevice(nullptr)
@@ -57,9 +58,12 @@ namespace Kmplete
                 {
                     _physicalDevice = device;
 
+                    _formatDelegate.reset(new VulkanFormatDelegate(_physicalDevice));
+
                     auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
                     _vulkanContext.Populate(
-                        _physicalDevice,
+                        _physicalDevice, 
+                        *_formatDelegate.get(),
                         queueFamilyIndices.graphicsFamilyIndex.value(),
                         queueFamilyIndices.presentFamilyIndex.value(),
                         surfaceAndPresentModeProperties.surfaceCapabilities,
@@ -79,7 +83,7 @@ namespace Kmplete
             PrintGPUInfo();
 
             _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_vulkanContext.memoryProperties));
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), _window, _currentBufferIndex));
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
         }
         //--------------------------------------------------------------------------
 
@@ -89,6 +93,7 @@ namespace Kmplete
 
             _logicalDevice.reset();
             _memoryTypeDelegate.reset();
+            _formatDelegate.reset();
         }
         //--------------------------------------------------------------------------
 

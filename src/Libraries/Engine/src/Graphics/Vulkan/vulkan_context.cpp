@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_format_delegate.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -7,8 +8,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        void VulkanContext::Populate(VkPhysicalDevice physDevice, UInt32 graphicsIndex, UInt32 presentIndex, const VkSurfaceCapabilitiesKHR& surfCapabilities, 
-                                     Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam)
+        void VulkanContext::Populate(VkPhysicalDevice physDevice, const VulkanFormatDelegate& formatDelegate, UInt32 graphicsIndex, UInt32 presentIndex, 
+                                     const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -40,7 +41,7 @@ namespace Kmplete
             else
                 supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
 
-            defaultDepthFormat = FindImageFormat(
+            defaultDepthFormat = formatDelegate.FindImageFormat(
                 { 
                   VK_FORMAT_D32_SFLOAT_S8_UINT, 
                   VK_FORMAT_D24_UNORM_S8_UINT, 
@@ -51,39 +52,6 @@ namespace Kmplete
             );
 
             surfaceFormat = _FindSurfaceFormat();
-        }
-        //--------------------------------------------------------------------------
-
-        VkFormat VulkanContext::FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            for (auto format : candidates)
-            {
-                auto formatProperties = GetFormatProperties(format);
-
-                if (tiling == VK_IMAGE_TILING_LINEAR && (formatProperties.linearTilingFeatures & features) == features)
-                {
-                    return format;
-                }
-                else if (tiling == VK_IMAGE_TILING_OPTIMAL && (formatProperties.optimalTilingFeatures & features) == features)
-                {
-                    return format;
-                }
-            }
-
-            KMP_LOG_CRITICAL("failed to find supported format");
-            throw std::runtime_error("VulkanContext: failed to find supported format");
-        }
-        //--------------------------------------------------------------------------
-
-        VkFormatProperties VulkanContext::GetFormatProperties(VkFormat format) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VkFormatProperties formatProperties;
-            vkGetPhysicalDeviceFormatProperties(physicalDevice, format, &formatProperties);
-            return formatProperties;
         }
         //--------------------------------------------------------------------------
 

@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
@@ -34,7 +35,8 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex);
+            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, 
+                                        const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
             KMP_API ~VulkanLogicalDevice();
 
             KMP_API void StartFrame(float frameTimestep) override;
@@ -84,6 +86,7 @@ namespace Kmplete
         private:
             const VulkanContext& _vulkanContext;
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
+            const VulkanFormatDelegate& _formatDelegate;
             const Window& _window;
             const UInt32& _currentBufferIndex;
 

@@ -23,10 +23,12 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Window& window, const UInt32& currentBufferIndex)
+        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, 
+                                                 const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
             , _vulkanContext(vulkanContext)
             , _memoryTypeDelegate(memoryTypeDelegate)
+            , _formatDelegate(formatDelegate)
             , _window(window)
             , _currentBufferIndex(currentBufferIndex)
             , _physicalDevice(physicalDevice)
@@ -521,7 +523,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool(), _vulkanContext);
+            return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool(), _formatDelegate);
         }
         //--------------------------------------------------------------------------
     }

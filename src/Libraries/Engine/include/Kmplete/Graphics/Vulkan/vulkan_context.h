@@ -11,6 +11,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanFormatDelegate;
+
+
         //TODO: comments
         struct VulkanContext
         {
@@ -36,11 +39,8 @@ namespace Kmplete
             VkSurfaceFormatKHR surfaceFormat{};
 
         public:
-            KMP_API void Populate(VkPhysicalDevice physDevice, UInt32 graphicsIndex, UInt32 presentIndex, const VkSurfaceCapabilitiesKHR& surfCapabilities, 
-                                  Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
-
-            KMP_NODISCARD KMP_API VkFormat FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
-            KMP_NODISCARD KMP_API VkFormatProperties GetFormatProperties(VkFormat format) const;
+            KMP_API void Populate(VkPhysicalDevice physDevice, const VulkanFormatDelegate& formatDelegate, UInt32 graphicsIndex, UInt32 presentIndex, 
+                                  const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
 
         private:
             KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;
