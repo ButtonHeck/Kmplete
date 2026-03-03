@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanTexture::VulkanTexture(VkDevice device, VkQueue graphicsQueue, const Image& image, const VulkanImageCreatorDelegate& imageCreator, 
+        VulkanTexture::VulkanTexture(VkDevice device, VkQueue graphicsQueue, const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate, 
                                      const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkCommandPool commandPool, const VulkanFormatDelegate& formatDelegate)
             : _logicalDevice(device)
             , _image(nullptr)
@@ -22,12 +22,12 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _InitializeImage(image, imageCreator);
+            _InitializeImage(image, imageCreatorDelegate);
             _TransitionImageLayout(image.GetMipLevels(), commandPool, graphicsQueue);
             _CopyStagingBufferToImage(memoryTypeDelegate, image, commandPool, graphicsQueue);
             _GenerateMipmaps(image, formatDelegate, commandPool, graphicsQueue);
-            _InitializeImageView(image, imageCreator);
-            _InitializeSampler(image, imageCreator);
+            _InitializeImageView(image, imageCreatorDelegate);
+            _InitializeSampler(image, imageCreatorDelegate);
         }
         //--------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeImage(const Image& image, const VulkanImageCreatorDelegate& imageCreator)
+        void VulkanTexture::_InitializeImage(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -68,7 +68,7 @@ namespace Kmplete
                 .usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                 .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
             };
-            _image.reset(imageCreator.CreateImagePtr(creationParameters));
+            _image.reset(imageCreatorDelegate.CreateImagePtr(creationParameters));
         }
         //--------------------------------------------------------------------------
 
@@ -228,15 +228,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeImageView(const Image& image, const VulkanImageCreatorDelegate& imageCreator)
+        void VulkanTexture::_InitializeImageView(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _imageView = imageCreator.CreateImageView(_image->GetVkImage(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, image.GetMipLevels());
+            _imageView = imageCreatorDelegate.CreateImageView(_image->GetVkImage(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, image.GetMipLevels());
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeSampler(const Image& image, const VulkanImageCreatorDelegate& imageCreator)
+        void VulkanTexture::_InitializeSampler(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -251,7 +251,7 @@ namespace Kmplete
                 .maxLod = float(image.GetMipLevels()),
                 .maxAnisotropy = 1.0f
             };
-            _sampler = imageCreator.CreateSampler(samplerParameters);
+            _sampler = imageCreatorDelegate.CreateSampler(samplerParameters);
         }
         //--------------------------------------------------------------------------
     }
