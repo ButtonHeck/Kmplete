@@ -40,47 +40,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            UInt32 deviceCount = 0;
-            vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
-            if (deviceCount == 0)
-            {
-                KMP_LOG_CRITICAL("failed to find GPUs with Vulkan support");
-                throw std::runtime_error("VulkanPhysicalDevice: failed to find GPUs with Vulkan support");
-            }
-
-            Vector<VkPhysicalDevice> devices(deviceCount);
-            vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
-            for (const auto& device : devices)
-            {
-                auto deviceCheck = VulkanUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
-                auto deviceIsSuitable = deviceCheck.first;
-                if (deviceIsSuitable)
-                {
-                    _physicalDevice = device;
-
-                    _formatDelegate.reset(new VulkanFormatDelegate(_physicalDevice));
-                    auto defaultDepthFormat = _formatDelegate->FindImageFormat(
-                        {
-                          VK_FORMAT_D32_SFLOAT_S8_UINT,
-                          VK_FORMAT_D24_UNORM_S8_UINT,
-                          VK_FORMAT_D16_UNORM_S8_UINT
-                        },
-                        VK_IMAGE_TILING_OPTIMAL,
-                        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-                    );
-
-                    auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
-                    _vulkanContext.Populate(
-                        _physicalDevice, 
-                        defaultDepthFormat,
-                        queueFamilyIndices.graphicsFamilyIndex.value(),
-                        queueFamilyIndices.presentFamilyIndex.value(),
-                        surfaceAndPresentModeProperties.surfaceCapabilities,
-                        std::move(surfaceAndPresentModeProperties.surfaceFormats),
-                        std::move(surfaceAndPresentModeProperties.presentModes)
-                    );
-                }
-            }
+            Vector<VkPhysicalDevice> devices = _GetListOfPhysicalDevices();
+            _PickSuitablePhysicalDevice(devices);
 
             if (_physicalDevice == VK_NULL_HANDLE)
             {
@@ -146,6 +107,63 @@ namespace Kmplete
         const VulkanContext& VulkanPhysicalDevice::GetVulkanContext() const noexcept
         {
             return _vulkanContext;
+        }
+        //--------------------------------------------------------------------------
+
+        Vector<VkPhysicalDevice> VulkanPhysicalDevice::_GetListOfPhysicalDevices() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            UInt32 deviceCount = 0;
+            vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
+            if (deviceCount == 0)
+            {
+                KMP_LOG_CRITICAL("failed to find GPUs with Vulkan support");
+                throw std::runtime_error("VulkanPhysicalDevice: failed to find GPUs with Vulkan support");
+            }
+
+            Vector<VkPhysicalDevice> devices(deviceCount);
+            vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
+
+            return devices;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_PickSuitablePhysicalDevice(const Vector<VkPhysicalDevice>& physicalDevices)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            for (const auto& device : physicalDevices)
+            {
+                auto deviceCheck = VulkanUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
+                auto deviceIsSuitable = deviceCheck.first;
+                if (deviceIsSuitable)
+                {
+                    _physicalDevice = device;
+
+                    _formatDelegate.reset(new VulkanFormatDelegate(_physicalDevice));
+                    auto defaultDepthFormat = _formatDelegate->FindImageFormat(
+                        {
+                          VK_FORMAT_D32_SFLOAT_S8_UINT,
+                          VK_FORMAT_D24_UNORM_S8_UINT,
+                          VK_FORMAT_D16_UNORM_S8_UINT
+                        },
+                        VK_IMAGE_TILING_OPTIMAL,
+                        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+                    );
+
+                    auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
+                    _vulkanContext.Populate(
+                        _physicalDevice,
+                        defaultDepthFormat,
+                        queueFamilyIndices.graphicsFamilyIndex.value(),
+                        queueFamilyIndices.presentFamilyIndex.value(),
+                        surfaceAndPresentModeProperties.surfaceCapabilities,
+                        std::move(surfaceAndPresentModeProperties.surfaceFormats),
+                        std::move(surfaceAndPresentModeProperties.presentModes)
+                    );
+                }
+            }
         }
         //--------------------------------------------------------------------------
 

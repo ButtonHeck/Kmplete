@@ -42,6 +42,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanContext& GetVulkanContext() const noexcept;
 
         private:
+            KMP_NODISCARD Vector<VkPhysicalDevice> _GetListOfPhysicalDevices() const;
+            void _PickSuitablePhysicalDevice(const Vector<VkPhysicalDevice>& physicalDevices);
             void _UpdateSurfaceInfo();
             void _QueryGPUInfo() override;
 
