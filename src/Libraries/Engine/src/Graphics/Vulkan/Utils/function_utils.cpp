@@ -181,6 +181,49 @@ namespace Kmplete
                 return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
             }
             //--------------------------------------------------------------------------
+
+            VkCommandBuffer StartSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandPool commandPool)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+                auto commandBufferAllocateInfo = InitVkCommandBufferAllocateInfo();
+                commandBufferAllocateInfo.commandPool = commandPool;
+                commandBufferAllocateInfo.commandBufferCount = 1;
+
+                VkCommandBuffer commandBuffer;
+                auto result = vkAllocateCommandBuffers(logicalDevice, &commandBufferAllocateInfo, &commandBuffer);
+                CheckResult(result, "failed to allocate command buffers");
+
+                auto commandBufferBeginInfo = InitVkCommandBufferBeginInfo();
+                commandBufferBeginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+                result = vkBeginCommandBuffer(commandBuffer, &commandBufferBeginInfo);
+                CheckResult(result, "failed to begin command buffer");
+
+                return commandBuffer;
+            }
+            //--------------------------------------------------------------------------
+
+            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+                auto result = vkEndCommandBuffer(commandBuffer);
+                CheckResult(result, "failed to end command buffer");
+
+                auto submitInfo = InitVkSubmitInfo();
+                submitInfo.commandBufferCount = 1;
+                submitInfo.pCommandBuffers = &commandBuffer;
+
+                result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+                CheckResult(result, "failed to submit to queue");
+
+                result = vkDeviceWaitIdle(logicalDevice);
+                CheckResult(result, "failed to wait device to be idle");
+
+                vkFreeCommandBuffers(logicalDevice, commandPool, 1, &commandBuffer);
+            }
+            //--------------------------------------------------------------------------
         }
     }
 }

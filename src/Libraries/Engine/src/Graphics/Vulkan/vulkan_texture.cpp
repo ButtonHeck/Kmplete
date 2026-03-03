@@ -76,7 +76,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto transitionCommandBuffer = _StartSingleTimeCommandBuffer(commandPool);
+            auto transitionCommandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
 
             VulkanUtils::InsertImageMemoryBarrier(
                 transitionCommandBuffer,
@@ -90,7 +90,7 @@ namespace Kmplete
                 VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, mipLevels, 0, 1 }
             );
 
-            _EndSingleTimeCommandBuffer(transitionCommandBuffer, commandPool, graphicsQueue);
+            VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, transitionCommandBuffer, commandPool, graphicsQueue);
         }
         //--------------------------------------------------------------------------
 
@@ -100,7 +100,7 @@ namespace Kmplete
 
             auto stagingBuffer = _InitializeStagingBuffer(memoryTypeDelegate, image);
 
-            auto copyCommandBuffer = _StartSingleTimeCommandBuffer(commandPool);
+            auto copyCommandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
 
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -110,7 +110,7 @@ namespace Kmplete
             region.imageExtent.depth = 1;
             vkCmdCopyBufferToImage(copyCommandBuffer, stagingBuffer->GetVkBuffer(), _image->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 
-            _EndSingleTimeCommandBuffer(copyCommandBuffer, commandPool, graphicsQueue);
+            VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, copyCommandBuffer, commandPool, graphicsQueue);
         }
         //--------------------------------------------------------------------------
 
@@ -151,7 +151,7 @@ namespace Kmplete
                 throw std::runtime_error("VulkanTexture: image format does not support linear blitting");
             }
 
-            auto commandBuffer = _StartSingleTimeCommandBuffer(commandPool);
+            auto commandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
             auto vulkanImage = _image->GetVkImage();
 
             auto imageBarrier = VulkanUtils::InitVkImageMemoryBarrier();
@@ -224,7 +224,7 @@ namespace Kmplete
                 0, nullptr,
                 1, &imageBarrier);
 
-            _EndSingleTimeCommandBuffer(commandBuffer, commandPool, graphicsQueue);
+            VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, commandBuffer, commandPool, graphicsQueue);
         }
         //--------------------------------------------------------------------------
 
@@ -252,43 +252,6 @@ namespace Kmplete
                 .maxAnisotropy = 1.0f
             };
             _sampler = imageCreator.CreateSampler(samplerParameters);
-        }
-        //--------------------------------------------------------------------------
-
-        VkCommandBuffer VulkanTexture::_StartSingleTimeCommandBuffer(VkCommandPool commandPool) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            auto commandBufferAllocateInfo = VulkanUtils::InitVkCommandBufferAllocateInfo();
-            commandBufferAllocateInfo.commandPool = commandPool;
-            commandBufferAllocateInfo.commandBufferCount = 1;
-
-            VkCommandBuffer commandBuffer;
-            vkAllocateCommandBuffers(_logicalDevice, &commandBufferAllocateInfo, &commandBuffer);
-
-            auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
-            commandBufferBeginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-            vkBeginCommandBuffer(commandBuffer, &commandBufferBeginInfo);
-
-            return commandBuffer;
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanTexture::_EndSingleTimeCommandBuffer(VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            vkEndCommandBuffer(commandBuffer);
-
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &commandBuffer;
-
-            vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-            vkDeviceWaitIdle(_logicalDevice);
-
-            vkFreeCommandBuffers(_logicalDevice, commandPool, 1, &commandBuffer);
         }
         //--------------------------------------------------------------------------
     }

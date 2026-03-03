@@ -43,9 +43,6 @@ namespace Kmplete
             void _InitializeImageView(const Image& image, const VulkanImageCreatorDelegate& imageCreator);
             void _InitializeSampler(const Image& image, const VulkanImageCreatorDelegate& imageCreator);
 
-            KMP_NODISCARD VkCommandBuffer _StartSingleTimeCommandBuffer(VkCommandPool commandPool) const;
-            void _EndSingleTimeCommandBuffer(VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue) const;
-
         private:
             VkDevice _logicalDevice;
             UPtr<VulkanImage> _image;
