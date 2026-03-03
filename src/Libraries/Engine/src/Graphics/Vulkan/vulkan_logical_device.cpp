@@ -521,7 +521,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool());
+            return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool(), _vulkanContext);
         }
         //--------------------------------------------------------------------------
     }
