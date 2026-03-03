@@ -59,11 +59,20 @@ namespace Kmplete
                     _physicalDevice = device;
 
                     _formatDelegate.reset(new VulkanFormatDelegate(_physicalDevice));
+                    auto defaultDepthFormat = _formatDelegate->FindImageFormat(
+                        {
+                          VK_FORMAT_D32_SFLOAT_S8_UINT,
+                          VK_FORMAT_D24_UNORM_S8_UINT,
+                          VK_FORMAT_D16_UNORM_S8_UINT
+                        },
+                        VK_IMAGE_TILING_OPTIMAL,
+                        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+                    );
 
                     auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
                     _vulkanContext.Populate(
                         _physicalDevice, 
-                        *_formatDelegate.get(),
+                        defaultDepthFormat,
                         queueFamilyIndices.graphicsFamilyIndex.value(),
                         queueFamilyIndices.presentFamilyIndex.value(),
                         surfaceAndPresentModeProperties.surfaceCapabilities,

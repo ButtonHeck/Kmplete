@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_format_delegate.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -8,7 +7,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        void VulkanContext::Populate(VkPhysicalDevice physDevice, const VulkanFormatDelegate& formatDelegate, UInt32 graphicsIndex, UInt32 presentIndex, 
+        void VulkanContext::Populate(VkPhysicalDevice physDevice, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                                      const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
@@ -41,15 +40,7 @@ namespace Kmplete
             else
                 supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
 
-            defaultDepthFormat = formatDelegate.FindImageFormat(
-                { 
-                  VK_FORMAT_D32_SFLOAT_S8_UINT, 
-                  VK_FORMAT_D24_UNORM_S8_UINT, 
-                  VK_FORMAT_D16_UNORM_S8_UINT 
-                },
-                VK_IMAGE_TILING_OPTIMAL, 
-                VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
-            );
+            defaultDepthFormat = depthFormat;
 
             surfaceFormat = _FindSurfaceFormat();
         }
