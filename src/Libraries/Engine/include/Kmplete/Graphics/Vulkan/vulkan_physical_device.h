@@ -4,9 +4,9 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_format_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>

@@ -93,29 +93,23 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_physical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_context.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_logical_device.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_swapchain.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_command_pool.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_texture.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_format_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_surface.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_context.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_logical_device.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_image_creator_delegate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_memory_type_delegate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_swapchain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_command_pool.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_buffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_depth_stencil_attachment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_texture.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_format_delegate.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Utils"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Utils/initializers.h
@@ -125,6 +119,14 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Utils"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Utils/initializers.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Utils/function_utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Utils/result_description.cpp
+)
+AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Delegates"
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_format_delegate.cpp
 )
 AddTargetSourcesGroup(Kmplete "Localization"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h

@@ -2,7 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/nullability.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Graphics/Vulkan/Utils/helper_structs.h"
 #include "Kmplete/Log/log_class_macro.h"
