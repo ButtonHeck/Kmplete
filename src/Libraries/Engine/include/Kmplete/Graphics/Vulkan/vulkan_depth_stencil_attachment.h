@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
 
 #include <vulkan/vulkan.h>
 
@@ -10,6 +9,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanMemoryTypeDelegate;
+
+
         //TODO: comments
         class VulkanDepthStencilAttachment
         {

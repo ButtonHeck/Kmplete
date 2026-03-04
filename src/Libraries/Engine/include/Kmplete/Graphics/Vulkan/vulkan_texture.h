@@ -5,9 +5,6 @@
 #include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_image_creator_delegate.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_memory_type_delegate.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_format_delegate.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -18,7 +15,9 @@ namespace Kmplete
     namespace Graphics
     {
         class Image;
-
+        class VulkanImageCreatorDelegate;
+        class VulkanMemoryTypeDelegate;
+        class VulkanFormatDelegate;
 
         //TODO: comments
         class VulkanTexture : public Texture
