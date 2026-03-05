@@ -2,7 +2,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
-#include "Kmplete/Graphics/Vulkan/Utils/helper_structs.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/image.h"
@@ -61,17 +60,22 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            VulkanUtils::ImageParameters creationParameters = {
-                .width = UInt32(image.GetWidth()),
-                .height = UInt32(image.GetHeight()),
-                .mipLevels = image.GetMipLevels(),
-                .numSamples = VK_SAMPLE_COUNT_1_BIT,
-                .format = VK_FORMAT_R8G8B8A8_UNORM,
-                .tiling = VK_IMAGE_TILING_OPTIMAL,
-                .usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-                .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-            };
-            _image.reset(imageCreatorDelegate.CreateImagePtr(creationParameters));
+            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
+            creationParameters.imageType = VK_IMAGE_TYPE_2D;
+            creationParameters.extent.width = UInt32(image.GetWidth());
+            creationParameters.extent.height = UInt32(image.GetHeight());
+            creationParameters.extent.depth = 1;
+            creationParameters.mipLevels = image.GetMipLevels();
+            creationParameters.arrayLayers = 1;
+            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            creationParameters.samples = VK_SAMPLE_COUNT_1_BIT;
+            creationParameters.format = VK_FORMAT_R8G8B8A8_UNORM;
+            creationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
+            creationParameters.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+            creationParameters.flags = 0;
+
+            _image.reset(imageCreatorDelegate.CreateImagePtr(creationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
         }
         //--------------------------------------------------------------------------
 

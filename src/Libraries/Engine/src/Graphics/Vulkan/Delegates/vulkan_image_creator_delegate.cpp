@@ -15,6 +15,7 @@ namespace Kmplete
         {}
         //--------------------------------------------------------------------------
 
+
         VulkanImage VulkanImageCreatorDelegate::CreateImage(const VkExtent2D & extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                             VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
@@ -25,28 +26,33 @@ namespace Kmplete
         VulkanImage VulkanImageCreatorDelegate::CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                             VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            const VulkanUtils::ImageParameters creationParameters = {
-                .width = width,
-                .height = height,
-                .mipLevels = mipLevels,
-                .numSamples = numSamples,
-                .format = format,
-                .tiling = tiling,
-                .usage = usage,
-                .memoryProperties = memoryProperties
-            };
+            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
+            creationParameters.imageType = VK_IMAGE_TYPE_2D;
+            creationParameters.extent.width = width;
+            creationParameters.extent.height = height;
+            creationParameters.extent.depth = 1;
+            creationParameters.mipLevels = mipLevels;
+            creationParameters.arrayLayers = 1;
+            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            creationParameters.samples = numSamples;
+            creationParameters.format = format;
+            creationParameters.tiling = tiling;
+            creationParameters.usage = usage;
+            creationParameters.flags = 0;
 
-            return CreateImage(creationParameters);
+            return CreateImage(creationParameters, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage VulkanImageCreatorDelegate::CreateImage(const VulkanUtils::ImageParameters& creationParameters) const
+        VulkanImage VulkanImageCreatorDelegate::CreateImage(VkImageCreateInfo creationParameters, VkMemoryPropertyFlags memoryProperties) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            return VulkanImage(_device, _memoryTypeDelegate, creationParameters);
+            return VulkanImage(_device, _memoryTypeDelegate, creationParameters, memoryProperties);
         }
         //--------------------------------------------------------------------------
+
 
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                           VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
@@ -58,28 +64,33 @@ namespace Kmplete
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                           VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            const VulkanUtils::ImageParameters creationParameters = {
-                .width = width,
-                .height = height,
-                .mipLevels = mipLevels,
-                .numSamples = numSamples,
-                .format = format,
-                .tiling = tiling,
-                .usage = usage,
-                .memoryProperties = memoryProperties
-            };
+            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
+            creationParameters.imageType = VK_IMAGE_TYPE_2D;
+            creationParameters.extent.width = width;
+            creationParameters.extent.height = height;
+            creationParameters.extent.depth = 1;
+            creationParameters.mipLevels = mipLevels;
+            creationParameters.arrayLayers = 1;
+            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            creationParameters.samples = numSamples;
+            creationParameters.format = format;
+            creationParameters.tiling = tiling;
+            creationParameters.usage = usage;
+            creationParameters.flags = 0;
 
-            return CreateImagePtr(creationParameters);
+            return CreateImagePtr(creationParameters, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VulkanUtils::ImageParameters& creationParameters) const
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(VkImageCreateInfo creationParameters, VkMemoryPropertyFlags memoryProperties) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            return new VulkanImage(_device, _memoryTypeDelegate, creationParameters);
+            return new VulkanImage(_device, _memoryTypeDelegate, creationParameters, memoryProperties);
         }
         //--------------------------------------------------------------------------
+
 
         VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const
         {
@@ -110,6 +121,7 @@ namespace Kmplete
             return imageView;
         }
         //--------------------------------------------------------------------------
+
 
         VkSampler VulkanImageCreatorDelegate::CreateSampler(VkSamplerCreateInfo creationParameters) const
         {

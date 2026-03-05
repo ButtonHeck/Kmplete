@@ -115,7 +115,6 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Utils"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Utils/initializers.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Utils/function_utils.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Utils/result_description.h
-    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Utils/helper_structs.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Utils/initializers.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Utils/function_utils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Utils/result_description.cpp

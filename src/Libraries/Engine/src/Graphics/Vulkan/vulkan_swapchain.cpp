@@ -1,7 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
-#include "Kmplete/Graphics/Vulkan/Utils/helper_structs.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -235,29 +234,36 @@ namespace Kmplete
 
             const auto sampleCount = _vulkanContext.supportedSampleCounts.top();
 
-            VulkanUtils::ImageParameters creationParameters = {
-                .width = _swapchainExtent.width,
-                .height = _swapchainExtent.height,
-                .mipLevels = 1,
-                .numSamples = sampleCount,
-                .format = _swapchainImageFormat,
-                .tiling = VK_IMAGE_TILING_OPTIMAL,
-                .usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-            };
-            _colorImage.reset(_imageCreatorDelegate.CreateImagePtr(creationParameters)); //TODO: need this?
+            auto colorCreationParameters = VulkanUtils::InitVkImageCreateInfo();
+            colorCreationParameters.imageType = VK_IMAGE_TYPE_2D;
+            colorCreationParameters.extent.width = _swapchainExtent.width;
+            colorCreationParameters.extent.height = _swapchainExtent.height;
+            colorCreationParameters.extent.depth = 1;
+            colorCreationParameters.mipLevels = 1;
+            colorCreationParameters.arrayLayers = 1;
+            colorCreationParameters.samples = sampleCount;
+            colorCreationParameters.format = _swapchainImageFormat;
+            colorCreationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
+            colorCreationParameters.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            colorCreationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            colorCreationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            colorCreationParameters.flags = 0;
 
-            creationParameters = {
-                .width = _swapchainExtent.width,
-                .height = _swapchainExtent.height,
-                .mipLevels = 1,
-                .numSamples = sampleCount,
-                .format = _vulkanContext.defaultDepthFormat,
-                .tiling = VK_IMAGE_TILING_OPTIMAL,
-                .usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
-                .memoryProperties = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-            };
-            _depthImage.reset(_imageCreatorDelegate.CreateImagePtr(creationParameters)); //TODO: need this?
+            _colorImage.reset(_imageCreatorDelegate.CreateImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)); //TODO: need this?
+
+            auto depthCreationParameters = VulkanUtils::InitVkImageCreateInfo();
+            depthCreationParameters.imageType = VK_IMAGE_TYPE_2D;
+            depthCreationParameters.extent.width = _swapchainExtent.width;
+            depthCreationParameters.extent.height = _swapchainExtent.height;
+            depthCreationParameters.extent.depth = 1;
+            depthCreationParameters.mipLevels = 1;
+            depthCreationParameters.arrayLayers = 1;
+            depthCreationParameters.samples = sampleCount;
+            depthCreationParameters.format = _vulkanContext.defaultDepthFormat;
+            depthCreationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
+            depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+
+            _depthImage.reset(_imageCreatorDelegate.CreateImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)); //TODO: need this?
         }
         //--------------------------------------------------------------------------
 

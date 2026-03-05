@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanUtils::ImageParameters& creationParameters)
+        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkImageCreateInfo creationParameters, VkMemoryPropertyFlags memoryProperties)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
@@ -19,7 +19,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _CreateImageObject(creationParameters);
-            _AllocateImageMemory(memoryTypeDelegate, creationParameters);
+            _AllocateImageMemory(memoryTypeDelegate, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
@@ -44,35 +44,20 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_CreateImageObject(const VulkanUtils::ImageParameters& creationParameters)
+        void VulkanImage::_CreateImageObject(VkImageCreateInfo creationParameters)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto imageCreationInfo = VulkanUtils::InitVkImageCreateInfo();
-            imageCreationInfo.imageType = VK_IMAGE_TYPE_2D;
-            imageCreationInfo.extent.width = creationParameters.width;
-            imageCreationInfo.extent.height = creationParameters.height;
-            imageCreationInfo.extent.depth = 1;
-            imageCreationInfo.mipLevels = creationParameters.mipLevels;
-            imageCreationInfo.arrayLayers = 1;
-            imageCreationInfo.format = creationParameters.format;
-            imageCreationInfo.tiling = creationParameters.tiling;
-            imageCreationInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            imageCreationInfo.usage = creationParameters.usage;
-            imageCreationInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            imageCreationInfo.samples = creationParameters.numSamples;
-            imageCreationInfo.flags = 0;
-
-            const auto result = vkCreateImage(_device, &imageCreationInfo, nullptr, &_image);
+            const auto result = vkCreateImage(_device, &creationParameters, nullptr, &_image);
             VulkanUtils::CheckResult(result, "VulkanImage: failed to create image");
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanUtils::ImageParameters& creationParameters)
+        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, creationParameters.memoryProperties);
+            const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, memoryProperties);
 
             auto result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_imageMemory);
             if (result != VK_SUCCESS)
