@@ -235,16 +235,16 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            VulkanUtils::ImageViewParameters imageViewParameters = {
-                .image = _image->GetVkImage(),
-                .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                .format = VK_FORMAT_R8G8B8A8_UNORM,
-                .aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT,
-                .baseMipLevel = 0,
-                .mipLevels = image.GetMipLevels(),
-                .baseArrayLayer = 0,
-                .layers = 1
-            };
+            auto imageViewParameters = VulkanUtils::InitVkImageViewCreateInfo();
+            imageViewParameters.image = _image->GetVkImage();
+            imageViewParameters.viewType = VK_IMAGE_VIEW_TYPE_2D;
+            imageViewParameters.format = VK_FORMAT_R8G8B8A8_UNORM;
+            imageViewParameters.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+            imageViewParameters.subresourceRange.baseMipLevel = 0;
+            imageViewParameters.subresourceRange.levelCount = image.GetMipLevels();
+            imageViewParameters.subresourceRange.baseArrayLayer = 0;
+            imageViewParameters.subresourceRange.layerCount = 1;
+
             _imageView = imageCreatorDelegate.CreateImageView(imageViewParameters);
         }
         //--------------------------------------------------------------------------

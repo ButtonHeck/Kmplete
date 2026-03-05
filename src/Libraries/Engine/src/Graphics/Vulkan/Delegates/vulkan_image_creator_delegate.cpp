@@ -89,37 +89,22 @@ namespace Kmplete
 
         VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const
         {
-            VulkanUtils::ImageViewParameters creationParameters = {
-                .image = image,
-                .viewType = viewType,
-                .format = format,
-                .aspectFlags = subresourceRange.aspectMask,
-                .baseMipLevel = subresourceRange.baseMipLevel,
-                .mipLevels = subresourceRange.levelCount,
-                .baseArrayLayer = subresourceRange.baseArrayLayer,
-                .layers = subresourceRange.layerCount
-            };
+            auto creationParameters = VulkanUtils::InitVkImageViewCreateInfo();
+            creationParameters.image = image;
+            creationParameters.viewType = viewType;
+            creationParameters.format = format;
+            creationParameters.subresourceRange = subresourceRange;
 
             return CreateImageView(creationParameters);
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanUtils::ImageViewParameters& creationParameters) const
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImageViewCreateInfo creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            auto viewCreateInfo = VulkanUtils::InitVkImageViewCreateInfo();
-            viewCreateInfo.image = creationParameters.image;
-            viewCreateInfo.viewType = creationParameters.viewType;
-            viewCreateInfo.format = creationParameters.format;
-            viewCreateInfo.subresourceRange.aspectMask = creationParameters.aspectFlags;
-            viewCreateInfo.subresourceRange.baseMipLevel = creationParameters.baseMipLevel;
-            viewCreateInfo.subresourceRange.levelCount = creationParameters.mipLevels;
-            viewCreateInfo.subresourceRange.baseArrayLayer = creationParameters.baseArrayLayer;
-            viewCreateInfo.subresourceRange.layerCount = creationParameters.layers;
-
             VkImageView imageView;
-            const auto result = vkCreateImageView(_device, &viewCreateInfo, nullptr, &imageView);
+            const auto result = vkCreateImageView(_device, &creationParameters, nullptr, &imageView);
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create texture image view");
 
             return imageView;

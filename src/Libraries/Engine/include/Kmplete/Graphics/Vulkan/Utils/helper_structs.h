@@ -27,21 +27,6 @@ namespace Kmplete
 
 
             //TODO: comments
-            struct ImageViewParameters
-            {
-                VkImage image;
-                VkImageViewType viewType;
-                VkFormat format;
-                VkImageAspectFlags aspectFlags;
-                UInt32 baseMipLevel;
-                UInt32 mipLevels;
-                UInt32 baseArrayLayer;
-                UInt32 layers;
-            };
-            //--------------------------------------------------------------------------
-
-
-            //TODO: comments
             struct SamplerParameters
             {
                 VkFilter magnificationFilter;

@@ -37,7 +37,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkImageView CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const;
             KMP_NODISCARD KMP_API VkImageView CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const;
-            KMP_NODISCARD KMP_API VkImageView CreateImageView(const VulkanUtils::ImageViewParameters& creationParameters) const;
+            KMP_NODISCARD KMP_API VkImageView CreateImageView(VkImageViewCreateInfo creationParameters) const;
 
             KMP_NODISCARD KMP_API VkSampler CreateSampler(const VulkanUtils::SamplerParameters& creationParameters) const;
 
