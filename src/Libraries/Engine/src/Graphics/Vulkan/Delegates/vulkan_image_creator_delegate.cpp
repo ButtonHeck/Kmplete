@@ -81,23 +81,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const
         {
-            return CreateImageView(image.GetVkImage(), format, aspectFlags, mipLevels);
+            return CreateImageView(image.GetVkImage(), viewType, format, subresourceRange);
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const
         {
             VulkanUtils::ImageViewParameters creationParameters = {
                 .image = image,
-                .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                .viewType = viewType,
                 .format = format,
-                .aspectFlags = aspectFlags,
-                .baseMipLevel = 0,
-                .mipLevels = mipLevels,
-                .baseArrayLayer = 0,
-                .layers = 1
+                .aspectFlags = subresourceRange.aspectMask,
+                .baseMipLevel = subresourceRange.baseMipLevel,
+                .mipLevels = subresourceRange.levelCount,
+                .baseArrayLayer = subresourceRange.baseArrayLayer,
+                .layers = subresourceRange.layerCount
             };
 
             return CreateImageView(creationParameters);

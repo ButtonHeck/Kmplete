@@ -217,7 +217,14 @@ namespace Kmplete
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
-                _swapchainImageViews[i] = _imageCreatorDelegate.CreateImageView(_swapchainImages[i], _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
+                VkImageSubresourceRange subresourceRange = {
+                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                    .baseMipLevel = 0,
+                    .levelCount = 1,
+                    .baseArrayLayer = 0,
+                    .layerCount = 1
+                };
+                _swapchainImageViews[i] = _imageCreatorDelegate.CreateImageView(_swapchainImages[i], VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, subresourceRange);
             }
         }
         //--------------------------------------------------------------------------
@@ -258,9 +265,23 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            //TODO: need this?
-            _colorImageView = _imageCreatorDelegate.CreateImageView(*_colorImage.get(), _swapchainImageFormat, VK_IMAGE_ASPECT_COLOR_BIT, 1);
-            _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), _vulkanContext.defaultDepthFormat, VK_IMAGE_ASPECT_DEPTH_BIT, 1);
+            VkImageSubresourceRange colorSubresourceRange = {
+                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                    .baseMipLevel = 0,
+                    .levelCount = 1,
+                    .baseArrayLayer = 0,
+                    .layerCount = 1
+            };
+            _colorImageView = _imageCreatorDelegate.CreateImageView(*_colorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange); //TODO: need this?
+
+            VkImageSubresourceRange depthSubresourceRange = {
+                    .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT,
+                    .baseMipLevel = 0,
+                    .levelCount = 1,
+                    .baseArrayLayer = 0,
+                    .layerCount = 1
+            };
+            _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange); //TODO: need this?
         }
         //--------------------------------------------------------------------------
     }

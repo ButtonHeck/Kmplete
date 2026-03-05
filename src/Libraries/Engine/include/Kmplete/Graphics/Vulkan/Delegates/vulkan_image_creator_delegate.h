@@ -35,8 +35,8 @@ namespace Kmplete
                                                                         VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
             KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateImagePtr(const VulkanUtils::ImageParameters& creationParameters) const;
 
-            KMP_NODISCARD KMP_API VkImageView CreateImageView(const VulkanImage& image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const;
-            KMP_NODISCARD KMP_API VkImageView CreateImageView(VkImage image, VkFormat format, VkImageAspectFlags aspectFlags, UInt32 mipLevels) const;
+            KMP_NODISCARD KMP_API VkImageView CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const;
+            KMP_NODISCARD KMP_API VkImageView CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const;
             KMP_NODISCARD KMP_API VkImageView CreateImageView(const VulkanUtils::ImageViewParameters& creationParameters) const;
 
             KMP_NODISCARD KMP_API VkSampler CreateSampler(const VulkanUtils::SamplerParameters& creationParameters) const;
