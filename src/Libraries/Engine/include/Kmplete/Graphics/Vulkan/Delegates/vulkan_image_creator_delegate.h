@@ -22,6 +22,8 @@ namespace Kmplete
         public:
             KMP_API VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
 
+            KMP_NODISCARD KMP_API VkImage CreateVkImage(const VkImageCreateInfo& creationParameters) const;
+
             KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                 VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
             KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,

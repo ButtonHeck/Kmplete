@@ -16,6 +16,19 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        VkImage VulkanImageCreatorDelegate::CreateVkImage(const VkImageCreateInfo& creationParameters) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VkImage image;
+            const auto result = vkCreateImage(_device, &creationParameters, nullptr, &image);
+            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create image");
+
+            return image;
+        }
+        //--------------------------------------------------------------------------
+
+
         VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkExtent2D & extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                   VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
