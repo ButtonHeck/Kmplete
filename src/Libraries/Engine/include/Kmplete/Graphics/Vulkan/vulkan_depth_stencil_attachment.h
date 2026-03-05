@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/pointers.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 
 #include <vulkan/vulkan.h>
 
@@ -9,7 +11,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        class VulkanMemoryTypeDelegate;
+        class VulkanImageCreatorDelegate;
 
 
         //TODO: comments
@@ -18,7 +20,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(VulkanDepthStencilAttachment)
 
         public:
-            KMP_API VulkanDepthStencilAttachment(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VkExtent2D& extent, VkFormat depthStencilFormat);
+            KMP_API VulkanDepthStencilAttachment(const VulkanImageCreatorDelegate& imageCreatorDelegate, VkDevice device, const VkExtent2D& extent, VkFormat depthStencilFormat);
             KMP_API ~VulkanDepthStencilAttachment();
 
             KMP_NODISCARD KMP_API VkImage GetImage() const noexcept;
@@ -26,8 +28,8 @@ namespace Kmplete
 
         private:
             VkDevice _device;
-            VkImage _image;
-            VkDeviceMemory _memory;
+
+            UPtr<VulkanImage> _image;
             VkImageView _view;
         };
         //--------------------------------------------------------------------------

@@ -408,7 +408,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(_memoryTypeDelegate, _device, _currentExtent, _vulkanContext.defaultDepthFormat));
+            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(*_imageCreatorDelegate.get(), _device, _currentExtent, _vulkanContext.defaultDepthFormat));
         }
         //--------------------------------------------------------------------------
 
