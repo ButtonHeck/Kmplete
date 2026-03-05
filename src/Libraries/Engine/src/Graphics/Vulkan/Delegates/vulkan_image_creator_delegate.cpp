@@ -16,53 +16,15 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanImage VulkanImageCreatorDelegate::CreateImage(const VkExtent2D & extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
-                                                            VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkExtent2D & extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                  VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            return CreateImage(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, memoryProperties);
+            return CreateVulkanImage(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage VulkanImageCreatorDelegate::CreateImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
-                                                            VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
-        {
-            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
-            creationParameters.imageType = VK_IMAGE_TYPE_2D;
-            creationParameters.extent.width = width;
-            creationParameters.extent.height = height;
-            creationParameters.extent.depth = 1;
-            creationParameters.mipLevels = mipLevels;
-            creationParameters.arrayLayers = 1;
-            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            creationParameters.samples = numSamples;
-            creationParameters.format = format;
-            creationParameters.tiling = tiling;
-            creationParameters.usage = usage;
-            creationParameters.flags = 0;
-
-            return CreateImage(creationParameters, memoryProperties);
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanImage VulkanImageCreatorDelegate::CreateImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            return VulkanImage(_device, _memoryTypeDelegate, creationParameters, memoryProperties);
-        }
-        //--------------------------------------------------------------------------
-
-
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
-                                                                          VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
-        {
-            return CreateImagePtr(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, memoryProperties);
-        }
-        //--------------------------------------------------------------------------
-
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
-                                                                          VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                  VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
             auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
             creationParameters.imageType = VK_IMAGE_TYPE_2D;
@@ -79,26 +41,64 @@ namespace Kmplete
             creationParameters.usage = usage;
             creationParameters.flags = 0;
 
-            return CreateImagePtr(creationParameters, memoryProperties);
+            return CreateVulkanImage(creationParameters, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
+        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            return new VulkanImage(_device, _memoryTypeDelegate, creationParameters, memoryProperties);
+            return VulkanImage(_device, creationParameters, _memoryTypeDelegate, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            return CreateImageView(image.GetVkImage(), viewType, format, subresourceRange);
+            return CreateVulkanImagePtr(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        {
+            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
+            creationParameters.imageType = VK_IMAGE_TYPE_2D;
+            creationParameters.extent.width = width;
+            creationParameters.extent.height = height;
+            creationParameters.extent.depth = 1;
+            creationParameters.mipLevels = mipLevels;
+            creationParameters.arrayLayers = 1;
+            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+            creationParameters.samples = numSamples;
+            creationParameters.format = format;
+            creationParameters.tiling = tiling;
+            creationParameters.usage = usage;
+            creationParameters.flags = 0;
+
+            return CreateVulkanImagePtr(creationParameters, memoryProperties);
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            return new VulkanImage(_device, creationParameters, _memoryTypeDelegate, memoryProperties);
+        }
+        //--------------------------------------------------------------------------
+
+
+        VkImageView VulkanImageCreatorDelegate::CreateVkImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
+        {
+            return CreateVkImageView(image.GetVkImage(), viewType, format, subresourceRange);
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanImageCreatorDelegate::CreateVkImageView(VkImage image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
         {
             auto creationParameters = VulkanUtils::InitVkImageViewCreateInfo();
             creationParameters.image = image;
@@ -106,11 +106,11 @@ namespace Kmplete
             creationParameters.format = format;
             creationParameters.subresourceRange = subresourceRange;
 
-            return CreateImageView(creationParameters);
+            return CreateVkImageView(creationParameters);
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VkImageViewCreateInfo& creationParameters) const
+        VkImageView VulkanImageCreatorDelegate::CreateVkImageView(const VkImageViewCreateInfo& creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -123,7 +123,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VkSampler VulkanImageCreatorDelegate::CreateSampler(const VkSamplerCreateInfo& creationParameters) const
+        VkSampler VulkanImageCreatorDelegate::CreateVkSampler(const VkSamplerCreateInfo& creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 

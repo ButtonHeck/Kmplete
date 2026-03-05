@@ -223,7 +223,7 @@ namespace Kmplete
                     .baseArrayLayer = 0,
                     .layerCount = 1
                 };
-                _swapchainImageViews[i] = _imageCreatorDelegate.CreateImageView(_swapchainImages[i], VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, subresourceRange);
+                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, subresourceRange);
             }
         }
         //--------------------------------------------------------------------------
@@ -249,7 +249,7 @@ namespace Kmplete
             colorCreationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             colorCreationParameters.flags = 0;
 
-            _colorImage.reset(_imageCreatorDelegate.CreateImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)); //TODO: need this?
+            _colorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)); //TODO: need this?
 
             auto depthCreationParameters = VulkanUtils::InitVkImageCreateInfo();
             depthCreationParameters.imageType = VK_IMAGE_TYPE_2D;
@@ -263,7 +263,7 @@ namespace Kmplete
             depthCreationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
             depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
 
-            _depthImage.reset(_imageCreatorDelegate.CreateImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)); //TODO: need this?
+            _depthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT)); //TODO: need this?
         }
         //--------------------------------------------------------------------------
 
@@ -278,7 +278,7 @@ namespace Kmplete
                     .baseArrayLayer = 0,
                     .layerCount = 1
             };
-            _colorImageView = _imageCreatorDelegate.CreateImageView(*_colorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange); //TODO: need this?
+            _colorImageView = _imageCreatorDelegate.CreateVkImageView(*_colorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange); //TODO: need this?
 
             VkImageSubresourceRange depthSubresourceRange = {
                     .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT,
@@ -287,7 +287,7 @@ namespace Kmplete
                     .baseArrayLayer = 0,
                     .layerCount = 1
             };
-            _depthImageView = _imageCreatorDelegate.CreateImageView(*_depthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange); //TODO: need this?
+            _depthImageView = _imageCreatorDelegate.CreateVkImageView(*_depthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange); //TODO: need this?
         }
         //--------------------------------------------------------------------------
     }

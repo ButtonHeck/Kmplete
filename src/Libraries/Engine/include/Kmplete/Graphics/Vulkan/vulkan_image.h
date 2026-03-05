@@ -21,7 +21,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanImage)
 
         public:
-            KMP_API VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties);
+            KMP_API VulkanImage(VkDevice device, const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
             KMP_API ~VulkanImage();
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;

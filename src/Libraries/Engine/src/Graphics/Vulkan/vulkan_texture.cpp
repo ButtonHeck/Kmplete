@@ -75,7 +75,7 @@ namespace Kmplete
             creationParameters.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
             creationParameters.flags = 0;
 
-            _image.reset(imageCreatorDelegate.CreateImagePtr(creationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+            _image.reset(imageCreatorDelegate.CreateVulkanImagePtr(creationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
         }
         //--------------------------------------------------------------------------
 
@@ -249,7 +249,7 @@ namespace Kmplete
             imageViewParameters.subresourceRange.baseArrayLayer = 0;
             imageViewParameters.subresourceRange.layerCount = 1;
 
-            _imageView = imageCreatorDelegate.CreateImageView(imageViewParameters);
+            _imageView = imageCreatorDelegate.CreateVkImageView(imageViewParameters);
         }
         //--------------------------------------------------------------------------
 
@@ -268,7 +268,7 @@ namespace Kmplete
             samplerParameters.maxLod = float(image.GetMipLevels());
             samplerParameters.maxAnisotropy = 1.0f;
 
-            _sampler = imageCreatorDelegate.CreateSampler(samplerParameters);
+            _sampler = imageCreatorDelegate.CreateVkSampler(samplerParameters);
         }
         //--------------------------------------------------------------------------
     }
