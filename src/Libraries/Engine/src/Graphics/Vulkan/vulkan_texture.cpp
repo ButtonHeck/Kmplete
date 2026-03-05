@@ -235,7 +235,17 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _imageView = imageCreatorDelegate.CreateImageView(_image->GetVkImage(), VK_FORMAT_R8G8B8A8_UNORM, VK_IMAGE_ASPECT_COLOR_BIT, image.GetMipLevels());
+            VulkanUtils::ImageViewParameters imageViewParameters = {
+                .image = _image->GetVkImage(),
+                .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                .format = VK_FORMAT_R8G8B8A8_UNORM,
+                .aspectFlags = VK_IMAGE_ASPECT_COLOR_BIT,
+                .baseMipLevel = 0,
+                .mipLevels = image.GetMipLevels(),
+                .baseArrayLayer = 0,
+                .layers = 1
+            };
+            _imageView = imageCreatorDelegate.CreateImageView(imageViewParameters);
         }
         //--------------------------------------------------------------------------
 
