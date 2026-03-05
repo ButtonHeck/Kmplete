@@ -45,7 +45,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage VulkanImageCreatorDelegate::CreateImage(VkImageCreateInfo creationParameters, VkMemoryPropertyFlags memoryProperties) const
+        VulkanImage VulkanImageCreatorDelegate::CreateImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -83,7 +83,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(VkImageCreateInfo creationParameters, VkMemoryPropertyFlags memoryProperties) const
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -92,13 +92,13 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
         {
             return CreateImageView(image.GetVkImage(), viewType, format, subresourceRange);
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, VkImageSubresourceRange subresourceRange) const
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImage image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
         {
             auto creationParameters = VulkanUtils::InitVkImageViewCreateInfo();
             creationParameters.image = image;
@@ -110,7 +110,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateImageView(VkImageViewCreateInfo creationParameters) const
+        VkImageView VulkanImageCreatorDelegate::CreateImageView(const VkImageViewCreateInfo& creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -123,7 +123,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VkSampler VulkanImageCreatorDelegate::CreateSampler(VkSamplerCreateInfo creationParameters) const
+        VkSampler VulkanImageCreatorDelegate::CreateSampler(const VkSamplerCreateInfo& creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 

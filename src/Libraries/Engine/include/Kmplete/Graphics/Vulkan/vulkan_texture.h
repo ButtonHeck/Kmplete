@@ -19,6 +19,7 @@ namespace Kmplete
         class VulkanMemoryTypeDelegate;
         class VulkanFormatDelegate;
 
+
         //TODO: comments
         class VulkanTexture : public Texture
         {

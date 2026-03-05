@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkImageCreateInfo creationParameters, VkMemoryPropertyFlags memoryProperties)
+        VulkanImage::VulkanImage(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties)
             : _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
@@ -44,7 +44,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_CreateImageObject(VkImageCreateInfo creationParameters)
+        void VulkanImage::_CreateImageObject(const VkImageCreateInfo& creationParameters)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
