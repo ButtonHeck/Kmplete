@@ -253,17 +253,17 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            VulkanUtils::SamplerParameters samplerParameters = {
-                .magnificationFilter = VK_FILTER_LINEAR,
-                .minificationFilter = VK_FILTER_LINEAR,
-                .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-                .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .minLod = 0.0f,
-                .maxLod = float(image.GetMipLevels()),
-                .maxAnisotropy = 1.0f
-            };
+            auto samplerParameters = VulkanUtils::InitVkSamplerCreateInfo();
+            samplerParameters.magFilter = VK_FILTER_LINEAR;
+            samplerParameters.minFilter = VK_FILTER_LINEAR;
+            samplerParameters.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+            samplerParameters.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+            samplerParameters.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+            samplerParameters.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+            samplerParameters.minLod = 0.0f;
+            samplerParameters.maxLod = float(image.GetMipLevels());
+            samplerParameters.maxAnisotropy = 1.0f;
+
             _sampler = imageCreatorDelegate.CreateSampler(samplerParameters);
         }
         //--------------------------------------------------------------------------

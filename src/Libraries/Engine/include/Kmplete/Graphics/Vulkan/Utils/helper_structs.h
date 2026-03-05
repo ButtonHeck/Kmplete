@@ -24,22 +24,6 @@ namespace Kmplete
                 VkMemoryPropertyFlags memoryProperties;
             };
             //--------------------------------------------------------------------------
-
-
-            //TODO: comments
-            struct SamplerParameters
-            {
-                VkFilter magnificationFilter;
-                VkFilter minificationFilter;
-                VkSamplerMipmapMode mipmapMode;
-                VkSamplerAddressMode addressModeU;
-                VkSamplerAddressMode addressModeV;
-                VkSamplerAddressMode addressModeW;
-                float minLod;
-                float maxLod;
-                float maxAnisotropy;
-            };
-            //--------------------------------------------------------------------------
         }
     }
 }

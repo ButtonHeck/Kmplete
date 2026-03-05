@@ -111,23 +111,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkSampler VulkanImageCreatorDelegate::CreateSampler(const VulkanUtils::SamplerParameters& creationParameters) const
+        VkSampler VulkanImageCreatorDelegate::CreateSampler(VkSamplerCreateInfo creationParameters) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            auto samplerCreateInfo = VulkanUtils::InitVkSamplerCreateInfo();
-            samplerCreateInfo.magFilter = creationParameters.magnificationFilter;
-            samplerCreateInfo.minFilter = creationParameters.minificationFilter;
-            samplerCreateInfo.mipmapMode = creationParameters.mipmapMode;
-            samplerCreateInfo.addressModeU = creationParameters.addressModeU;
-            samplerCreateInfo.addressModeV = creationParameters.addressModeV;
-            samplerCreateInfo.addressModeW = creationParameters.addressModeW;
-            samplerCreateInfo.minLod = creationParameters.minLod;
-            samplerCreateInfo.maxLod = creationParameters.maxLod;
-            samplerCreateInfo.maxAnisotropy = creationParameters.maxAnisotropy;
-
             VkSampler sampler;
-            const auto result = vkCreateSampler(_device, &samplerCreateInfo, nullptr, &sampler);
+            const auto result = vkCreateSampler(_device, &creationParameters, nullptr, &sampler);
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
 
             return sampler;
