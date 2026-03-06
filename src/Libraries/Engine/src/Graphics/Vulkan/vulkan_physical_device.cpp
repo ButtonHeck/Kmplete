@@ -110,6 +110,18 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const VulkanFormatDelegate& VulkanPhysicalDevice::GetVulkanFormatDelegate() const noexcept
+        {
+            return *_formatDelegate.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const VulkanMemoryTypeDelegate& VulkanPhysicalDevice::GetVulkanMemoryTypeDelegate() const noexcept
+        {
+            return *_memoryTypeDelegate.get();
+        }
+        //--------------------------------------------------------------------------
+
         Vector<VkPhysicalDevice> VulkanPhysicalDevice::_GetListOfPhysicalDevices() const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);

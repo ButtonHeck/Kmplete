@@ -40,6 +40,8 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
             KMP_NODISCARD KMP_API const VulkanContext& GetVulkanContext() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanFormatDelegate& GetVulkanFormatDelegate() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanMemoryTypeDelegate& GetVulkanMemoryTypeDelegate() const noexcept;
 
         private:
             KMP_NODISCARD Vector<VkPhysicalDevice> _GetListOfPhysicalDevices() const;

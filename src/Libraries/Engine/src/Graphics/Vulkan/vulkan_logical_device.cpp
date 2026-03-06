@@ -255,6 +255,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const VulkanImageCreatorDelegate& VulkanLogicalDevice::GetVulkanImageCreatorDelegate() const noexcept
+        {
+            return *_imageCreatorDelegate.get();
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateLogicalDeviceObject()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);

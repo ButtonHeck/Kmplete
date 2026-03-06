@@ -51,6 +51,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkQueue GetVkPresentQueue() const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentVkCommandBuffer() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
 
             KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) const;
 
