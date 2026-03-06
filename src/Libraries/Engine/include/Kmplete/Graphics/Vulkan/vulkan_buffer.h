@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/type_traits.h"
 
 #include <vulkan/vulkan.h>
 
@@ -15,10 +16,12 @@ namespace Kmplete
         //TODO: comments
         class VulkanBuffer
         {
-            KMP_DISABLE_COPY_MOVE(VulkanBuffer)
+            KMP_DISABLE_COPY(VulkanBuffer)
 
         public:
             KMP_API VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size);
+            KMP_API VulkanBuffer(VulkanBuffer&& other) noexcept;
+            KMP_API VulkanBuffer& operator=(VulkanBuffer&& other) noexcept;
             KMP_API ~VulkanBuffer();
 
             KMP_NODISCARD KMP_API VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
@@ -40,5 +43,8 @@ namespace Kmplete
             VkBufferUsageFlags _usageFlags;
         };
         //--------------------------------------------------------------------------
+
+        static_assert(IsMoveConstructible<VulkanBuffer>::value);
+        static_assert(IsMoveAssignable<VulkanBuffer>::value);
     }
 }

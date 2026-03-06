@@ -41,6 +41,59 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanBuffer::VulkanBuffer(VulkanBuffer&& other) noexcept
+            : _device(other._device)
+            , _buffer(other._buffer)
+            , _memory(other._memory)
+            , _size(other._size)
+            , _mapped(other._mapped)
+            , _usageFlags(other._usageFlags)
+        {
+            other._device = VK_NULL_HANDLE;
+            other._buffer = VK_NULL_HANDLE;
+            other._memory = VK_NULL_HANDLE;
+            other._size = 0ULL;
+            other._mapped = nullptr;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanBuffer& VulkanBuffer::operator=(VulkanBuffer&& other) noexcept
+        {
+            if (this == &other)
+            {
+                return *this;
+            }
+
+            Unmap();
+
+            if (_buffer)
+            {
+                vkDestroyBuffer(_device, _buffer, nullptr);
+            }
+
+            if (_memory)
+            {
+                vkFreeMemory(_device, _memory, nullptr);
+            }
+
+            _device = other._device;
+            _buffer = other._buffer;
+            _memory = other._memory;
+            _size = other._size;
+            _mapped = other._mapped;
+            _usageFlags = other._usageFlags;
+
+            other.Unmap();
+            other._device = VK_NULL_HANDLE;
+            other._buffer = VK_NULL_HANDLE;
+            other._memory = VK_NULL_HANDLE;
+            other._size = 0ULL;
+            other._mapped = nullptr;
+
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
         VulkanBuffer::~VulkanBuffer()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
