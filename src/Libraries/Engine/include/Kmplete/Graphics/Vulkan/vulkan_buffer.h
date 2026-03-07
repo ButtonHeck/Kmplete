@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
 
 #include <vulkan/vulkan.h>
@@ -28,7 +29,7 @@ namespace Kmplete
             KMP_API void Unmap();
 
             KMP_NODISCARD KMP_API VkResult Bind(VkDeviceSize offset = 0);
-            KMP_API void CopyToMappedMemory(void* data, VkDeviceSize size);
+            KMP_API void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);
             KMP_API VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_NODISCARD KMP_API VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
 

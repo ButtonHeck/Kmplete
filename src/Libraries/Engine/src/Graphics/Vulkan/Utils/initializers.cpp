@@ -126,14 +126,6 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo()
-            {
-                VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
-                pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-                return pipelineCacheCreateInfo;
-            }
-            //--------------------------------------------------------------------------
-
             VkDescriptorPoolCreateInfo InitVkDescriptorPoolCreateInfo()
             {
                 VkDescriptorPoolCreateInfo poolCreateInfo{};
@@ -184,14 +176,6 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR()
-            {
-                VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo{};
-                pipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-                return pipelineRenderingCreateInfo;
-            }
-            //--------------------------------------------------------------------------
-
             VkRenderingAttachmentInfo InitVkRenderingAttachmentInfo()
             {
                 VkRenderingAttachmentInfo colorAttachment{};
@@ -205,6 +189,110 @@ namespace Kmplete
                 VkRenderingInfo renderingInfo{};
                 renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO_KHR;
                 return renderingInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkDescriptorSetLayoutCreateInfo InitVkDescriptorSetLayoutCreateInfo()
+            {
+                VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo{};
+                descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+                return descriptorSetLayoutCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineLayoutCreateInfo InitVkPipelineLayoutCreateInfo()
+            {
+                VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
+                pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+                return pipelineLayoutCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo()
+            {
+                VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
+                pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
+                return pipelineCacheCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR()
+            {
+                VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo{};
+                pipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
+                return pipelineRenderingCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkGraphicsPipelineCreateInfo InitVkGraphicsPipelineCreateInfo()
+            {
+                VkGraphicsPipelineCreateInfo graphicsPipelineCreateInfo{};
+                graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+                return graphicsPipelineCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineInputAssemblyStateCreateInfo InitVkPipelineInputAssemblyStateCreateInfo()
+            {
+                VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo{};
+                inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+                return inputAssemblyInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineRasterizationStateCreateInfo InitVkPipelineRasterizationStateCreateInfo()
+            {
+                VkPipelineRasterizationStateCreateInfo rasterizationStateCreateInfo{};
+                rasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+                return rasterizationStateCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineColorBlendStateCreateInfo InitVkPipelineColorBlendStateCreateInfo()
+            {
+                VkPipelineColorBlendStateCreateInfo colorBlendStateCreateInfo{};
+                colorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+                return colorBlendStateCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineViewportStateCreateInfo InitVkPipelineViewportStateCreateInfo()
+            {
+                VkPipelineViewportStateCreateInfo viewportStateCreateInfo{};
+                viewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+                return viewportStateCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineDynamicStateCreateInfo InitVkPipelineDynamicStateCreateInfo()
+            {
+                VkPipelineDynamicStateCreateInfo dynamicStateCreationInfo{};
+                dynamicStateCreationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+                return dynamicStateCreationInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineDepthStencilStateCreateInfo InitVkPipelineDepthStencilStateCreateInfo()
+            {
+                VkPipelineDepthStencilStateCreateInfo depthStencilStateCreateInfo{};
+                depthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
+                return depthStencilStateCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineMultisampleStateCreateInfo InitVkPipelineMultisampleStateCreateInfo()
+            {
+                VkPipelineMultisampleStateCreateInfo multisamplingStateCreateInfo{};
+                multisamplingStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+                return multisamplingStateCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkPipelineVertexInputStateCreateInfo InitVkPipelineVertexInputStateCreateInfo()
+            {
+                VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
+                vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+                return vertexInputStateCreateInfo;
             }
             //--------------------------------------------------------------------------
 
@@ -275,6 +363,14 @@ namespace Kmplete
                 bufferCreateInfo.size = size;
                 bufferCreateInfo.usage = usageFlags;
                 return bufferCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
+            VkShaderModuleCreateInfo InitVkShaderModuleCreateInfo()
+            {
+                VkShaderModuleCreateInfo shaderModuleCreateInfo{};
+                shaderModuleCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+                return shaderModuleCreateInfo;
             }
             //--------------------------------------------------------------------------
         }

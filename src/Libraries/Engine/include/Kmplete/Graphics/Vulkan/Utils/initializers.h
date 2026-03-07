@@ -27,16 +27,28 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkCommandBufferAllocateInfo InitVkCommandBufferAllocateInfo(bool primary = true);
             KMP_NODISCARD KMP_API VkCommandBufferBeginInfo InitVkCommandBufferBeginInfo();
             KMP_NODISCARD KMP_API VkFenceCreateInfo InitVkFenceCreateInfo(bool signaled = true);
-            KMP_NODISCARD KMP_API VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo();
             KMP_NODISCARD KMP_API VkDescriptorPoolCreateInfo InitVkDescriptorPoolCreateInfo();
             KMP_NODISCARD KMP_API VkDeviceQueueCreateInfo InitVkDeviceQueueCreateInfo();
             KMP_NODISCARD KMP_API VkCommandPoolCreateInfo InitVkCommandPoolCreateInfo();
             KMP_NODISCARD KMP_API VkSwapchainCreateInfoKHR InitVkSwapchainCreateInfoKHR();
             KMP_NODISCARD KMP_API VkSubmitInfo InitVkSubmitInfo();
             KMP_NODISCARD KMP_API VkPresentInfoKHR InitVkPresentInfoKHR();
-            KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR();
             KMP_NODISCARD KMP_API VkRenderingAttachmentInfo InitVkRenderingAttachmentInfo();
             KMP_NODISCARD KMP_API VkRenderingInfo InitVkRenderingInfo();
+            KMP_NODISCARD KMP_API VkDescriptorSetLayoutCreateInfo InitVkDescriptorSetLayoutCreateInfo();
+
+            KMP_NODISCARD KMP_API VkPipelineLayoutCreateInfo InitVkPipelineLayoutCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR();
+            KMP_NODISCARD KMP_API VkGraphicsPipelineCreateInfo InitVkGraphicsPipelineCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineInputAssemblyStateCreateInfo InitVkPipelineInputAssemblyStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineRasterizationStateCreateInfo InitVkPipelineRasterizationStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineColorBlendStateCreateInfo InitVkPipelineColorBlendStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineViewportStateCreateInfo InitVkPipelineViewportStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineDynamicStateCreateInfo InitVkPipelineDynamicStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineDepthStencilStateCreateInfo InitVkPipelineDepthStencilStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineMultisampleStateCreateInfo InitVkPipelineMultisampleStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineVertexInputStateCreateInfo InitVkPipelineVertexInputStateCreateInfo();
 
             KMP_NODISCARD KMP_API VkImageCreateInfo InitVkImageCreateInfo();
             KMP_NODISCARD KMP_API VkImageViewCreateInfo InitVkImageViewCreateInfo();
@@ -48,6 +60,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkMappedMemoryRange InitVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset);
 
             KMP_NODISCARD KMP_API VkBufferCreateInfo InitVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags);
+
+            KMP_NODISCARD KMP_API VkShaderModuleCreateInfo InitVkShaderModuleCreateInfo();
         }
     }
 }

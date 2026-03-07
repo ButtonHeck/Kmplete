@@ -138,12 +138,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanBuffer::CopyToMappedMemory(void* data, VkDeviceSize size)
+        void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             KMP_ASSERT(_mapped);
-            memcpy(_mapped, data, size);
+            memcpy((char*)_mapped + mappedOffset, data, size);
         }
         //--------------------------------------------------------------------------
 

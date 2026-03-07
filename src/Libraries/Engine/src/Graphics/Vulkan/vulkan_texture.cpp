@@ -136,7 +136,7 @@ namespace Kmplete
             auto result = buffer->Map();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
 
-            buffer->CopyToMappedMemory(image.GetPixels(), image.GetDataSize());
+            buffer->CopyToMappedMemory(0, image.GetPixels(), image.GetDataSize());
 
             result = buffer->Flush();
             VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
