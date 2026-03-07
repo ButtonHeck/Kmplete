@@ -3,8 +3,10 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
-#include "Kmplete/Event/window_events.h"
-#include "Kmplete/Event/event_handler_guard.h"
+#include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
+
+#include <vulkan/vulkan.h>
 
 
 namespace Kmplete
@@ -15,21 +17,28 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(MainFrameListener)
 
     public:
-        MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow);
+        MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend);
         ~MainFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;
 
     private:
-        bool OnWindowFramebufferResizeEvent(Events::WindowFramebufferResizeEvent& event);
-
         void _Initialize();
         void _Finalize();
 
     private:
         Window& _mainWindow;
-        Events::EventHandlerGuard<Events::WindowFramebufferResizeEvent> _windowFramebufferResizeHandler;
+        Graphics::GraphicsBackend& _graphicsBackend;
+
+        UPtr<Graphics::VulkanBuffer> _vertexBuffer;
+        UPtr<Graphics::VulkanBuffer> _indexBuffer;
+        UInt32 _indexCount;
+        VkDevice _device;
+        VkDescriptorSetLayout _descriptorSetLayout;
+        VkPipelineLayout _pipelineLayout;
+        VkPipeline _pipeline;
+        VkCommandBuffer _commandBuffer;
     };
     //--------------------------------------------------------------------------
 }

@@ -22,7 +22,7 @@ namespace Kmplete
     {
         _mainWindow.SetTitle(_applicationName.c_str());
 
-        _mainFrameListener.reset(new MainFrameListener(*_frameListenerManager.get(), _mainWindow));
+        _mainFrameListener.reset(new MainFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get()));
 
         _LoadSettings();
     }
