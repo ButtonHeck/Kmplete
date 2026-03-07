@@ -87,9 +87,9 @@ namespace Kmplete
 
         // 1. create vertex buffer data
         const Vector<Vertex> vertices{
-            {{ 1.0f,  1.0f}, {1.0f, 0.0f, 0.0f}},
-            {{-1.0f,  1.0f}, {0.0f, 1.0f, 0.0f}},
-            {{ 0.0f, -1.0f}, {0.0f, 0.0f, 1.0f}}
+            {{ 0.95f,  0.95f}, {1.0f, 0.0f, 0.0f}},
+            {{-0.95f,  0.97f}, {0.0f, 1.0f, 0.0f}},
+            {{-0.92f, -0.95f}, {0.0f, 0.0f, 1.0f}}
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
@@ -98,6 +98,7 @@ namespace Kmplete
         const Vector<UInt32> indices{ 0, 1, 2 };
         _indexCount = UInt32(indices.size());
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
+
 
         //3. create staging buffer
         Graphics::VulkanBuffer stagingBuffer(
@@ -108,6 +109,7 @@ namespace Kmplete
             vertexBufferSize + indexBufferSize
         );
 
+
         // 4. fill staging buffer data
         auto result = stagingBuffer.Map();
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to map texture buffer");
@@ -116,6 +118,7 @@ namespace Kmplete
         result = stagingBuffer.Flush();
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to flush texture buffer");
         stagingBuffer.Unmap();
+
 
         // 5. create device-local vertex buffer
         _vertexBuffer.reset(new Graphics::VulkanBuffer(
@@ -126,6 +129,7 @@ namespace Kmplete
             vertexBufferSize
         ));
 
+
         // 6. create device-local index buffer
         _indexBuffer.reset(new Graphics::VulkanBuffer(
             vulkanMemoryTypeDelegate,
@@ -134,6 +138,7 @@ namespace Kmplete
             VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
             indexBufferSize
         ));
+
 
         // 7. copy staging buffer to device-local vertex and index buffer
         VkCommandBuffer copyCmd;
@@ -155,6 +160,7 @@ namespace Kmplete
         vkCmdCopyBuffer(copyCmd, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
         result = vkEndCommandBuffer(copyCmd);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to end command buffer");
+
 
         // 8. submit copy command to queue
         auto submitInfo = Graphics::VulkanUtils::InitVkSubmitInfo();
@@ -182,12 +188,14 @@ namespace Kmplete
         result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCI, nullptr, &_descriptorSetLayout);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout");
         
+
         // 10. create pipeline layout
         auto pipelineLayoutCI = Graphics::VulkanUtils::InitVkPipelineLayoutCreateInfo();
         pipelineLayoutCI.setLayoutCount = 1;
         pipelineLayoutCI.pSetLayouts = &_descriptorSetLayout;
         result = vkCreatePipelineLayout(_device, &pipelineLayoutCI, nullptr, &_pipelineLayout);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create pipeline layout");
+
 
         // 11.1 begin creating graphics pipeline
         auto pipelineCI = Graphics::VulkanUtils::InitVkGraphicsPipelineCreateInfo();
@@ -300,6 +308,7 @@ namespace Kmplete
 
         // 11.13 create pipeline object
         result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
+
 
         // 12. destroy shader modules
         vkDestroyShaderModule(_device, shaderStages[0].module, nullptr);
