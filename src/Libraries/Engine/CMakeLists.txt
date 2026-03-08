@@ -82,7 +82,6 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/swapchain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"

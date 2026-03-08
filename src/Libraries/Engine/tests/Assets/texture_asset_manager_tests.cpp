@@ -89,15 +89,10 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
     // checking texture properties
-    UInt64 textureHandle = 0UL;
     Assets::TextureAsset* textureAsset = nullptr;
     REQUIRE_NOTHROW(textureAsset = &(textureAssetManager->GetAsset(imageSid)));
     REQUIRE(textureAsset);
     REQUIRE(textureAsset->GetStringID() == imageSid);
-    void* textureRawHandlePtr = nullptr;
-    REQUIRE_NOTHROW(textureRawHandlePtr = textureAsset->GetTexture().GetHandle());
-    textureHandle = (reinterpret_cast<UInt64>(textureRawHandlePtr));
-    REQUIRE(textureHandle != 0UL);
 
     // try adding same texture from image
     REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image));
