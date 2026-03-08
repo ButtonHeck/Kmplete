@@ -8,6 +8,7 @@
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -546,6 +547,41 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             return new VulkanBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
+        }
+        //--------------------------------------------------------------------------
+
+        VkShaderModule VulkanLogicalDevice::CreateShaderModule(const Filepath& filename) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            if (!Filesystem::FilepathExists(filename))
+            {
+                KMP_LOG_ERROR("shader file not found '{}'", filename);
+                return VK_NULL_HANDLE;
+            }
+
+            const auto shaderBinary = Filesystem::ReadFileAsBinary(filename);
+            if (shaderBinary.empty())
+            {
+                KMP_LOG_ERROR("failed to load shader binary from '{}'", filename);
+                return VK_NULL_HANDLE;
+            }
+
+            if (shaderBinary.size() % 4 != 0)
+            {
+                KMP_LOG_ERROR("shader binary size is not multiple of four '{}'", filename);
+                return VK_NULL_HANDLE;
+            }
+
+            auto shaderModuleCreateInfo = Graphics::VulkanUtils::InitVkShaderModuleCreateInfo();
+            shaderModuleCreateInfo.codeSize = shaderBinary.size();
+            shaderModuleCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
+
+            VkShaderModule shaderModule;
+            auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &shaderModule);
+            Graphics::VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create shader module");
+
+            return shaderModule;
         }
         //--------------------------------------------------------------------------
     }

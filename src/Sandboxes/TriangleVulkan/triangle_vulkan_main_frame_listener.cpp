@@ -10,7 +10,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
-#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Log/log.h"
 
@@ -24,27 +23,6 @@ namespace Kmplete
             float position[2];
             float color[3];
         };
-        //--------------------------------------------------------------------------
-
-
-        VkShaderModule LoadSPIRVShader(const String& filename, VkDevice device)
-        {
-            const auto shaderBinary = Filesystem::ReadFileAsBinary(filename);
-            if (shaderBinary.empty())
-            {
-                KMP_LOG_ERROR_FN("MainFrameListener: failed to load shader binary from '{}'", filename);
-                return VK_NULL_HANDLE;
-            }
-
-            auto shaderModuleCI = Graphics::VulkanUtils::InitVkShaderModuleCreateInfo();
-            shaderModuleCI.codeSize = shaderBinary.size();
-            shaderModuleCI.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
-
-            VkShaderModule shaderModule;
-            auto result = vkCreateShaderModule(device, &shaderModuleCI, nullptr, &shaderModule);
-            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create shader module");
-            return shaderModule;
-        }
         //--------------------------------------------------------------------------
     }
 
@@ -258,12 +236,12 @@ namespace Kmplete
         // vertex shader
         shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-        shaderStages[0].module = LoadSPIRVShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"), _device);
+        shaderStages[0].module = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
         shaderStages[0].pName = "main";
         // fragment shader
         shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
         shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        shaderStages[1].module = LoadSPIRVShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"), _device);
+        shaderStages[1].module = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
         shaderStages[1].pName = "main";
 
         // 11.11 dynamic rendering
