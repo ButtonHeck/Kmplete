@@ -525,7 +525,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<Texture*> VulkanLogicalDevice::CreateTexture(const Image& image) const
+        Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
