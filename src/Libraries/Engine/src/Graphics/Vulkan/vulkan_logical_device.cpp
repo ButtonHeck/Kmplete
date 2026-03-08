@@ -532,5 +532,21 @@ namespace Kmplete
             return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool(), _formatDelegate);
         }
         //--------------------------------------------------------------------------
+
+        VulkanBuffer VulkanLogicalDevice::CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return VulkanBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanBuffer*> VulkanLogicalDevice::CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return new VulkanBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
+        }
+        //--------------------------------------------------------------------------
     }
 }

@@ -7,6 +7,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -54,6 +55,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
+
+            KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
 
         private:
             void _CreateLogicalDeviceObject();

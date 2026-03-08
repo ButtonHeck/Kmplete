@@ -6,7 +6,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
-#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
@@ -79,7 +78,6 @@ namespace Kmplete
 
         const Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
-        const Graphics::VulkanMemoryTypeDelegate& vulkanMemoryTypeDelegate = vulkanPhysicalDevice.GetVulkanMemoryTypeDelegate();
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
         const Graphics::VulkanCommandPool& vulkanCommandPool = dynamic_cast<const Graphics::VulkanCommandPool&>(vulkanDevice.GetCommandPool());
         VkQueue graphicsQueue = vulkanDevice.GetVkGraphicsQueue();
@@ -101,13 +99,7 @@ namespace Kmplete
 
 
         //3. create staging buffer
-        Graphics::VulkanBuffer stagingBuffer(
-            vulkanMemoryTypeDelegate, 
-            _device,
-            VK_BUFFER_USAGE_TRANSFER_SRC_BIT, 
-            VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, 
-            vertexBufferSize + indexBufferSize
-        );
+        Graphics::VulkanBuffer stagingBuffer = vulkanDevice.CreateBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + indexBufferSize);
 
 
         // 4. fill staging buffer data
@@ -121,23 +113,11 @@ namespace Kmplete
 
 
         // 5. create device-local vertex buffer
-        _vertexBuffer.reset(new Graphics::VulkanBuffer(
-            vulkanMemoryTypeDelegate,
-            _device,
-            VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            vertexBufferSize
-        ));
+        _vertexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize));
 
 
         // 6. create device-local index buffer
-        _indexBuffer.reset(new Graphics::VulkanBuffer(
-            vulkanMemoryTypeDelegate,
-            _device,
-            VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT,
-            VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
-            indexBufferSize
-        ));
+        _indexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
 
 
         // 7. copy staging buffer to device-local vertex and index buffer
