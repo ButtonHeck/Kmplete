@@ -86,17 +86,18 @@ namespace Kmplete
 
             auto transitionCommandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
 
-            VulkanUtils::InsertImageMemoryBarrier(
-                transitionCommandBuffer,
-                _image->GetVkImage(),
-                VK_ACCESS_NONE,
-                VK_ACCESS_TRANSFER_WRITE_BIT,
-                VK_IMAGE_LAYOUT_UNDEFINED,
-                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                VK_PIPELINE_STAGE_HOST_BIT,
-                VK_PIPELINE_STAGE_TRANSFER_BIT,
-                VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, mipLevels, 0, 1 }
-            );
+            const VulkanUtils::MemoryBarrierParameters barrierParameters = {
+                .cmdbuffer = transitionCommandBuffer,
+                .image = _image->GetVkImage(),
+                .srcAccessMask = VK_ACCESS_NONE,
+                .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                .newImageLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+                .srcStageMask = VK_PIPELINE_STAGE_HOST_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, mipLevels, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
 
             VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, transitionCommandBuffer, commandPool, graphicsQueue);
         }

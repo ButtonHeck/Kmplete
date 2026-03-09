@@ -94,28 +94,31 @@ namespace Kmplete
             result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
 
-            VulkanUtils::InsertImageMemoryBarrier(
-                _drawCommandBuffers[_currentBufferIndex], 
-                _swapchain->GetCurrentImage(), 
-                0, 
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 
-                VK_IMAGE_LAYOUT_UNDEFINED, 
-                VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 
-                VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
-            );
-            VulkanUtils::InsertImageMemoryBarrier(
-                _drawCommandBuffers[_currentBufferIndex],
-                _depthStencilAttachment->GetImage(), 
-                0, 
-                VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT, 
-                VK_IMAGE_LAYOUT_UNDEFINED, 
-                VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT, 
-                VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT, 
-                VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
-            );
+            VulkanUtils::MemoryBarrierParameters barrierParameters = {
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .image = _swapchain->GetCurrentImage(),
+                .srcAccessMask = VK_ACCESS_NONE,
+                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+
+            barrierParameters = {
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .image = _depthStencilAttachment->GetImage(),
+                .srcAccessMask = VK_ACCESS_NONE,
+                .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
 
             auto colorAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
             colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
@@ -155,17 +158,18 @@ namespace Kmplete
 
             vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex]);
 
-            VulkanUtils::InsertImageMemoryBarrier(
-                _drawCommandBuffers[_currentBufferIndex], 
-                _swapchain->GetCurrentImage(), 
-                VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT, 
-                0, 
-                VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL, 
-                VK_IMAGE_LAYOUT_PRESENT_SRC_KHR, 
-                VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT, 
-                VK_PIPELINE_STAGE_2_NONE, 
-                VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
-            );
+            VulkanUtils::MemoryBarrierParameters barrierParameters = {
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .image = _swapchain->GetCurrentImage(),
+                .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                .dstAccessMask = VK_ACCESS_NONE,
+                .oldImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_2_NONE,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
 
             auto result = vkEndCommandBuffer(_drawCommandBuffers[_currentBufferIndex]);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");

@@ -10,38 +10,6 @@ namespace Kmplete
     {
         namespace VulkanUtils
         {
-            void InsertImageMemoryBarrier(
-                VkCommandBuffer cmdbuffer, 
-                VkImage image, 
-                VkAccessFlags srcAccessMask,
-                VkAccessFlags dstAccessMask, 
-                VkImageLayout oldImageLayout, 
-                VkImageLayout newImageLayout, 
-                VkPipelineStageFlags srcStageMask, 
-                VkPipelineStageFlags dstStageMask, 
-                VkImageSubresourceRange subresourceRange)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-                auto imageMemoryBarrier = InitVkImageMemoryBarrier();
-                imageMemoryBarrier.srcAccessMask = srcAccessMask;
-                imageMemoryBarrier.dstAccessMask = dstAccessMask;
-                imageMemoryBarrier.oldLayout = oldImageLayout;
-                imageMemoryBarrier.newLayout = newImageLayout;
-                imageMemoryBarrier.image = image;
-                imageMemoryBarrier.subresourceRange = subresourceRange;
-
-                vkCmdPipelineBarrier(
-                    cmdbuffer,
-                    srcStageMask,
-                    dstStageMask,
-                    0,
-                    0, nullptr,
-                    0, nullptr,
-                    1, &imageMemoryBarrier);
-            }
-            //--------------------------------------------------------------------------
-
             SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface)
             {
                 KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -159,6 +127,29 @@ namespace Kmplete
                 }
 
                 return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
+            }
+            //--------------------------------------------------------------------------
+
+            void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters)
+            {
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+                auto imageMemoryBarrier = InitVkImageMemoryBarrier();
+                imageMemoryBarrier.srcAccessMask = barrierParameters.srcAccessMask;
+                imageMemoryBarrier.dstAccessMask = barrierParameters.dstAccessMask;
+                imageMemoryBarrier.oldLayout = barrierParameters.oldImageLayout;
+                imageMemoryBarrier.newLayout = barrierParameters.newImageLayout;
+                imageMemoryBarrier.image = barrierParameters.image;
+                imageMemoryBarrier.subresourceRange = barrierParameters.subresourceRange;
+
+                vkCmdPipelineBarrier(
+                    barrierParameters.cmdbuffer,
+                    barrierParameters.srcStageMask,
+                    barrierParameters.dstStageMask,
+                    0,
+                    0, nullptr,
+                    0, nullptr,
+                    1, &imageMemoryBarrier);
             }
             //--------------------------------------------------------------------------
 

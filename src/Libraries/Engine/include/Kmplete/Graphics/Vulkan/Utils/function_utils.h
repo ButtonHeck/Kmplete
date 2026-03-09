@@ -54,23 +54,28 @@ namespace Kmplete
             //--------------------------------------------------------------------------
 
 
-            KMP_API void InsertImageMemoryBarrier(
-                VkCommandBuffer cmdbuffer,
-                VkImage image,
-                VkAccessFlags srcAccessMask,
-                VkAccessFlags dstAccessMask,
-                VkImageLayout oldImageLayout,
-                VkImageLayout newImageLayout,
-                VkPipelineStageFlags srcStageMask,
-                VkPipelineStageFlags dstStageMask,
-                VkImageSubresourceRange subresourceRange
-            );
+            // TODO: comments
+            struct MemoryBarrierParameters
+            {
+                VkCommandBuffer cmdbuffer;
+                VkImage image;
+                VkAccessFlags srcAccessMask;
+                VkAccessFlags dstAccessMask;
+                VkImageLayout oldImageLayout;
+                VkImageLayout newImageLayout;
+                VkPipelineStageFlags srcStageMask;
+                VkPipelineStageFlags dstStageMask;
+                VkImageSubresourceRange subresourceRange;
+            };
+            //--------------------------------------------------------------------------
+
 
             KMP_NODISCARD SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface);
             KMP_NODISCARD QueueFamilyIndices QueryQueueFamiliesIndices(VkPhysicalDevice device, VkSurfaceKHR surface);
             KMP_NODISCARD bool QueryDeviceExtensionSupport(VkPhysicalDevice device, const Vector<const char*>& enabledExtensions);
             KMP_NODISCARD std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions);
 
+            KMP_API void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters);
             KMP_NODISCARD VkCommandBuffer StartSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandPool commandPool);
             void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue);
         }
