@@ -1,4 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Log/log.h"
+
+#include <stdexcept>
 
 
 namespace Kmplete
@@ -7,6 +10,22 @@ namespace Kmplete
     {
         namespace VulkanUtils
         {
+            VkResult CheckResult(VkResult result, const char* message, bool throwException /*= true*/)
+            {
+                if (result != VK_SUCCESS)
+                {
+                    const auto resultDescription = VkResultToString(result);
+                    KMP_LOG_CRITICAL_FN("{}: {}", message, resultDescription);
+                    if (throwException)
+                    {
+                        throw std::runtime_error(String(message).append(": ").append(resultDescription));
+                    }
+                }
+
+                return result;
+            }
+            //--------------------------------------------------------------------------
+
             String VkResultToString(VkResult result) noexcept
             {
                 switch (result)

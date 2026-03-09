@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
@@ -10,10 +11,6 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-
-#if defined (KMP_WINDOW_BACKEND_GLFW)
-    #include <GLFW/glfw3.h>
-#endif
 
 #include <limits>
 #include <stdexcept>
