@@ -296,6 +296,15 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPipelineShaderStageCreateInfo InitVkPipelineShaderStageCreateInfo(VkShaderStageFlagBits stage)
+            {
+                VkPipelineShaderStageCreateInfo shaderStageCreateInfo{};
+                shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+                shaderStageCreateInfo.stage = stage;
+                return shaderStageCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+
             VkImageCreateInfo InitVkImageCreateInfo()
             {
                 VkImageCreateInfo imageCreationInfo{};

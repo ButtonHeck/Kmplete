@@ -11,6 +11,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/nullability.h"
@@ -60,6 +61,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API VkShaderModule CreateShaderModule(const Filepath& filename) const;
+            KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> CreateShadersInitializers(const Vector<VulkanUtils::ShaderCreateInfo>& shaderInfos) const;
 
         private:
             void _CreateLogicalDeviceObject();

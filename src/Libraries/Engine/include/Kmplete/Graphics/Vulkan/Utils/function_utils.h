@@ -63,6 +63,16 @@ namespace Kmplete
 
             KMP_NODISCARD VkCommandBuffer StartSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandPool commandPool);
             void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue);
+
+
+            // TODO: comments
+            struct ShaderCreateInfo
+            {
+                Filepath filepath;
+                VkShaderStageFlagBits stage;
+                const char* entryPointName;
+            };
+            //--------------------------------------------------------------------------
         }
     }
 }

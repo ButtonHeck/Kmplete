@@ -232,17 +232,10 @@ namespace Kmplete
         vertexInputStateCI.pVertexAttributeDescriptions = vertexInputAttributes.data();
 
         // 11.10 shaders
-        Array<VkPipelineShaderStageCreateInfo, 2> shaderStages{};
-        // vertex shader
-        shaderStages[0].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        shaderStages[0].stage = VK_SHADER_STAGE_VERTEX_BIT;
-        shaderStages[0].module = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
-        shaderStages[0].pName = "main";
-        // fragment shader
-        shaderStages[1].sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-        shaderStages[1].stage = VK_SHADER_STAGE_FRAGMENT_BIT;
-        shaderStages[1].module = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
-        shaderStages[1].pName = "main";
+        const auto shaderStages = vulkanDevice.CreateShadersInitializers({
+            {String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"), VK_SHADER_STAGE_VERTEX_BIT, "main"},
+            {String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"), VK_SHADER_STAGE_FRAGMENT_BIT, "main"}
+        });
 
         // 11.11 dynamic rendering
         auto pipelineRenderingCI = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
@@ -269,8 +262,10 @@ namespace Kmplete
 
 
         // 12. destroy shader modules
-        vkDestroyShaderModule(_device, shaderStages[0].module, nullptr);
-        vkDestroyShaderModule(_device, shaderStages[1].module, nullptr);
+        for (const auto& shaderStage : shaderStages)
+        {
+            vkDestroyShaderModule(_device, shaderStage.module, nullptr);
+        }
 
         KMP_LOG_DEBUG("initialization finished");
     }

@@ -2,7 +2,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
-#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
@@ -582,6 +581,26 @@ namespace Kmplete
             Graphics::VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create shader module");
 
             return shaderModule;
+        }
+        //--------------------------------------------------------------------------
+
+        Vector<VkPipelineShaderStageCreateInfo> VulkanLogicalDevice::CreateShadersInitializers(const Vector<VulkanUtils::ShaderCreateInfo>& shaderInfos) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            Vector<VkPipelineShaderStageCreateInfo> initializers;
+            initializers.reserve(shaderInfos.size());
+
+            for (const auto& shaderInfo : shaderInfos)
+            {
+                auto createInfo = VulkanUtils::InitVkPipelineShaderStageCreateInfo(shaderInfo.stage);
+                createInfo.module = CreateShaderModule(shaderInfo.filepath);
+                createInfo.pName = shaderInfo.entryPointName;
+
+                initializers.push_back(createInfo);
+            }
+
+            return initializers;
         }
         //--------------------------------------------------------------------------
     }
