@@ -13,9 +13,8 @@ namespace Kmplete
         {
             KMP_NODISCARD KMP_API VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo();
             KMP_NODISCARD KMP_API VkApplicationInfo InitVkApplicationInfo();
-            KMP_NODISCARD KMP_API VkInstanceCreateInfo InitVkInstanceCreateInfo();
+            KMP_NODISCARD KMP_API VkInstanceCreateInfo InitVkInstanceCreateInfo(const VkApplicationInfo& applicationInfo);
 
-            KMP_NODISCARD KMP_API VkPhysicalDeviceDynamicRenderingFeatures InitVkPhysicalDeviceDynamicRenderingFeatures();
             KMP_NODISCARD KMP_API VkPhysicalDeviceProperties2 InitVkPhysicalDeviceProperties2();
             KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan11Properties InitVkPhysicalDeviceVulkan11Properties();
             KMP_NODISCARD KMP_API VkPhysicalDeviceVulkan12Properties InitVkPhysicalDeviceVulkan12Properties();

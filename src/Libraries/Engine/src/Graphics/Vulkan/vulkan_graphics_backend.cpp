@@ -57,7 +57,6 @@ namespace Kmplete
             auto debugMessengerCreateInfo = VulkanUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_INFO_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
             debugMessengerCreateInfo.messageType =
@@ -263,8 +262,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo();
-            instanceCreateInfo.pApplicationInfo = &applicationInfo;
+            auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo(applicationInfo);
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
             instanceCreateInfo.ppEnabledExtensionNames = extensionsNames.data();
 

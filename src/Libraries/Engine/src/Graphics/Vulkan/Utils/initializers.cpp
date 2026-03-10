@@ -9,108 +9,102 @@ namespace Kmplete
         {
             VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo()
             {
-                VkDebugUtilsMessengerCreateInfoEXT debugMessengerCreateInfo{};
-                debugMessengerCreateInfo.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
-                debugMessengerCreateInfo.pUserData = nullptr;
-                return debugMessengerCreateInfo;
+                return VkDebugUtilsMessengerCreateInfoEXT{
+                    .sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
+                    .pUserData = nullptr
+                };
             }
             //--------------------------------------------------------------------------
 
             VkApplicationInfo InitVkApplicationInfo()
             {
-                VkApplicationInfo applicationInfo{};
-                applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
-                return applicationInfo;
+                return VkApplicationInfo{
+                    .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
-            VkInstanceCreateInfo InitVkInstanceCreateInfo()
+            VkInstanceCreateInfo InitVkInstanceCreateInfo(const VkApplicationInfo& applicationInfo)
             {
-                VkInstanceCreateInfo instanceCreateInfo{};
-                instanceCreateInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
-                return instanceCreateInfo;
+                return VkInstanceCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                    .pApplicationInfo = &applicationInfo
+                };
             }
             //--------------------------------------------------------------------------
 
-            VkPhysicalDeviceDynamicRenderingFeatures InitVkPhysicalDeviceDynamicRenderingFeatures()
-            {
-                VkPhysicalDeviceDynamicRenderingFeatures dynamicRenderingFeatures{};
-                dynamicRenderingFeatures.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DYNAMIC_RENDERING_FEATURES_KHR;
-                dynamicRenderingFeatures.dynamicRendering = VK_TRUE;
-                return dynamicRenderingFeatures;
-            }
-            //--------------------------------------------------------------------------
 
             VkPhysicalDeviceProperties2 InitVkPhysicalDeviceProperties2()
             {
-                VkPhysicalDeviceProperties2 properties2{};
-                properties2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
-                return properties2;
+                return VkPhysicalDeviceProperties2{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPhysicalDeviceVulkan11Properties InitVkPhysicalDeviceVulkan11Properties()
             {
-                VkPhysicalDeviceVulkan11Properties propertiesVersion11{};
-                propertiesVersion11.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES;
-                return propertiesVersion11;
+                return VkPhysicalDeviceVulkan11Properties{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPhysicalDeviceVulkan12Properties InitVkPhysicalDeviceVulkan12Properties()
             {
-                VkPhysicalDeviceVulkan12Properties propertiesVersion12{};
-                propertiesVersion12.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES;
-                return propertiesVersion12;
+                return VkPhysicalDeviceVulkan12Properties{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPhysicalDeviceFeatures2 InitVkPhysicalDeviceFeatures2()
             {
-                VkPhysicalDeviceFeatures2 physicalDeviceFeatures2{};
-                physicalDeviceFeatures2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2;
-                return physicalDeviceFeatures2;
+                return VkPhysicalDeviceFeatures2{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPhysicalDeviceVulkan13Features InitVkPhysicalDeviceVulkan13Features()
             {
-                VkPhysicalDeviceVulkan13Features physicalDeviceFeatures13{};
-                physicalDeviceFeatures13.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES;
-                return physicalDeviceFeatures13;
+                return VkPhysicalDeviceVulkan13Features{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES
+                };
             }
             //--------------------------------------------------------------------------
 
+
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {
-                VkDeviceCreateInfo deviceCreateInfo{};
-                deviceCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO;
-                return deviceCreateInfo;
+                return VkDeviceCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkSemaphoreCreateInfo InitVkSemaphoreCreateInfo()
             {
-                VkSemaphoreCreateInfo semaphoreCreateInfo{};
-                semaphoreCreateInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-                return semaphoreCreateInfo;
+                return VkSemaphoreCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkCommandBufferAllocateInfo InitVkCommandBufferAllocateInfo(bool primary /*= true*/)
             {
-                VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
-                commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-                commandBufferAllocateInfo.level = primary ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY;
-                return commandBufferAllocateInfo;
+                return VkCommandBufferAllocateInfo{
+                    .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+                    .level = primary ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY
+                };
             }
             //--------------------------------------------------------------------------
 
             VkCommandBufferBeginInfo InitVkCommandBufferBeginInfo()
             {
-                VkCommandBufferBeginInfo commandBufferBeginInfo{};
-                commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-                return commandBufferBeginInfo;
+                return VkCommandBufferBeginInfo{
+                    .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
@@ -128,258 +122,260 @@ namespace Kmplete
 
             VkDescriptorPoolCreateInfo InitVkDescriptorPoolCreateInfo()
             {
-                VkDescriptorPoolCreateInfo poolCreateInfo{};
-                poolCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-                poolCreateInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-                return poolCreateInfo;
+                return VkDescriptorPoolCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                    .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
+                };
             }
             //--------------------------------------------------------------------------
 
             VkDeviceQueueCreateInfo InitVkDeviceQueueCreateInfo()
             {
-                VkDeviceQueueCreateInfo queueCreateInfo{};
-                queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-                return queueCreateInfo;
+                return VkDeviceQueueCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkCommandPoolCreateInfo InitVkCommandPoolCreateInfo()
             {
-                VkCommandPoolCreateInfo commandPoolCreateInfo{};
-                commandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-                return commandPoolCreateInfo;
+                return VkCommandPoolCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkSwapchainCreateInfoKHR InitVkSwapchainCreateInfoKHR()
             {
-                VkSwapchainCreateInfoKHR swapchainCreateInfo{};
-                swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-                return swapchainCreateInfo;
+                return VkSwapchainCreateInfoKHR{
+                    .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR
+                };
             }
             //--------------------------------------------------------------------------
 
             VkSubmitInfo InitVkSubmitInfo()
             {
-                VkSubmitInfo submitInfo{};
-                submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-                return submitInfo;
+                return VkSubmitInfo{
+                    .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPresentInfoKHR InitVkPresentInfoKHR()
             {
-                VkPresentInfoKHR presentInfo{};
-                presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
-                presentInfo.pNext = nullptr;
-                return presentInfo;
+                return VkPresentInfoKHR{
+                    .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR
+                };
             }
             //--------------------------------------------------------------------------
 
             VkRenderingAttachmentInfo InitVkRenderingAttachmentInfo()
             {
-                VkRenderingAttachmentInfo colorAttachment{};
-                colorAttachment.sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO;
-                return colorAttachment;
+                return VkRenderingAttachmentInfo{
+                    .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkRenderingInfo InitVkRenderingInfo()
             {
-                VkRenderingInfo renderingInfo{};
-                renderingInfo.sType = VK_STRUCTURE_TYPE_RENDERING_INFO_KHR;
-                return renderingInfo;
+                return VkRenderingInfo{
+                    .sType = VK_STRUCTURE_TYPE_RENDERING_INFO_KHR
+                };
             }
             //--------------------------------------------------------------------------
 
             VkDescriptorSetLayoutCreateInfo InitVkDescriptorSetLayoutCreateInfo()
             {
-                VkDescriptorSetLayoutCreateInfo descriptorSetLayoutCreateInfo{};
-                descriptorSetLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-                return descriptorSetLayoutCreateInfo;
+                return VkDescriptorSetLayoutCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
+
             VkPipelineLayoutCreateInfo InitVkPipelineLayoutCreateInfo()
             {
-                VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo{};
-                pipelineLayoutCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-                return pipelineLayoutCreateInfo;
+                return VkPipelineLayoutCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo()
             {
-                VkPipelineCacheCreateInfo pipelineCacheCreateInfo{};
-                pipelineCacheCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO;
-                return pipelineCacheCreateInfo;
+                return VkPipelineCacheCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_CACHE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineRenderingCreateInfoKHR InitVkPipelineRenderingCreateInfoKHR()
             {
-                VkPipelineRenderingCreateInfoKHR pipelineRenderingCreateInfo{};
-                pipelineRenderingCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO;
-                return pipelineRenderingCreateInfo;
+                return VkPipelineRenderingCreateInfoKHR{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkGraphicsPipelineCreateInfo InitVkGraphicsPipelineCreateInfo()
             {
-                VkGraphicsPipelineCreateInfo graphicsPipelineCreateInfo{};
-                graphicsPipelineCreateInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-                return graphicsPipelineCreateInfo;
+                return VkGraphicsPipelineCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineInputAssemblyStateCreateInfo InitVkPipelineInputAssemblyStateCreateInfo()
             {
-                VkPipelineInputAssemblyStateCreateInfo inputAssemblyInfo{};
-                inputAssemblyInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
-                return inputAssemblyInfo;
+                return VkPipelineInputAssemblyStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineRasterizationStateCreateInfo InitVkPipelineRasterizationStateCreateInfo()
             {
-                VkPipelineRasterizationStateCreateInfo rasterizationStateCreateInfo{};
-                rasterizationStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
-                return rasterizationStateCreateInfo;
+                return VkPipelineRasterizationStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineColorBlendStateCreateInfo InitVkPipelineColorBlendStateCreateInfo()
             {
-                VkPipelineColorBlendStateCreateInfo colorBlendStateCreateInfo{};
-                colorBlendStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
-                return colorBlendStateCreateInfo;
+                return VkPipelineColorBlendStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineViewportStateCreateInfo InitVkPipelineViewportStateCreateInfo()
             {
-                VkPipelineViewportStateCreateInfo viewportStateCreateInfo{};
-                viewportStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
-                return viewportStateCreateInfo;
+                return VkPipelineViewportStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineDynamicStateCreateInfo InitVkPipelineDynamicStateCreateInfo()
             {
-                VkPipelineDynamicStateCreateInfo dynamicStateCreationInfo{};
-                dynamicStateCreationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
-                return dynamicStateCreationInfo;
+                return VkPipelineDynamicStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineDepthStencilStateCreateInfo InitVkPipelineDepthStencilStateCreateInfo()
             {
-                VkPipelineDepthStencilStateCreateInfo depthStencilStateCreateInfo{};
-                depthStencilStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO;
-                return depthStencilStateCreateInfo;
+                return VkPipelineDepthStencilStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_DEPTH_STENCIL_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineMultisampleStateCreateInfo InitVkPipelineMultisampleStateCreateInfo()
             {
-                VkPipelineMultisampleStateCreateInfo multisamplingStateCreateInfo{};
-                multisamplingStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
-                return multisamplingStateCreateInfo;
+                return VkPipelineMultisampleStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineVertexInputStateCreateInfo InitVkPipelineVertexInputStateCreateInfo()
             {
-                VkPipelineVertexInputStateCreateInfo vertexInputStateCreateInfo{};
-                vertexInputStateCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
-                return vertexInputStateCreateInfo;
+                return VkPipelineVertexInputStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkPipelineShaderStageCreateInfo InitVkPipelineShaderStageCreateInfo(VkShaderStageFlagBits stage)
             {
-                VkPipelineShaderStageCreateInfo shaderStageCreateInfo{};
-                shaderStageCreateInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
-                shaderStageCreateInfo.stage = stage;
-                return shaderStageCreateInfo;
+                return VkPipelineShaderStageCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+                    .stage = stage
+                };
             }
             //--------------------------------------------------------------------------
 
+
             VkImageCreateInfo InitVkImageCreateInfo()
             {
-                VkImageCreateInfo imageCreationInfo{};
-                imageCreationInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-                return imageCreationInfo;
+                return VkImageCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkImageViewCreateInfo InitVkImageViewCreateInfo()
             {
-                VkImageViewCreateInfo viewCreateInfo{};
-                viewCreateInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-                return viewCreateInfo;
+                return VkImageViewCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkImageMemoryBarrier InitVkImageMemoryBarrier()
             {
-                VkImageMemoryBarrier imageMemoryBarrier{};
-                imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
-                imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-                imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-                return imageMemoryBarrier;
+                return VkImageMemoryBarrier{
+                    .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                    .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                    .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED
+                };
             }
             //--------------------------------------------------------------------------
 
             VkSamplerCreateInfo InitVkSamplerCreateInfo()
             {
-                VkSamplerCreateInfo samplerInfo{};
-                samplerInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-                return samplerInfo;
+                return VkSamplerCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
+
             VkMemoryAllocateInfo InitVkMemoryAllocateInfo()
             {
-                VkMemoryAllocateInfo memoryAllocateInfo{};
-                memoryAllocateInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-                return memoryAllocateInfo;
+                return VkMemoryAllocateInfo{
+                    .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
 
             VkMemoryAllocateFlagsInfoKHR InitVkMemoryAllocateFlagsInfoKHR()
             {
-                VkMemoryAllocateFlagsInfoKHR memoryAllocateFlagsInfo{};
-                memoryAllocateFlagsInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR;
-                return memoryAllocateFlagsInfo;
+                return VkMemoryAllocateFlagsInfoKHR{
+                    .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO_KHR
+                };
             }
             //--------------------------------------------------------------------------
 
             VkMappedMemoryRange InitVkMappedMemoryRange(VkDeviceSize size, VkDeviceSize offset)
             {
-                VkMappedMemoryRange mappedRange{};
-                mappedRange.sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE;
-                mappedRange.size = size;
-                mappedRange.offset = offset;
-                return mappedRange;
+                return VkMappedMemoryRange{
+                    .sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
+                    .offset = offset,
+                    .size = size
+                };
             }
             //--------------------------------------------------------------------------
 
             VkBufferCreateInfo InitVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags)
             {
-                VkBufferCreateInfo bufferCreateInfo{};
-                bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-                bufferCreateInfo.size = size;
-                bufferCreateInfo.usage = usageFlags;
-                return bufferCreateInfo;
+                return VkBufferCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
+                    .size = size,
+                    .usage = usageFlags
+                };
             }
             //--------------------------------------------------------------------------
 
             VkShaderModuleCreateInfo InitVkShaderModuleCreateInfo()
             {
-                VkShaderModuleCreateInfo shaderModuleCreateInfo{};
-                shaderModuleCreateInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
-                return shaderModuleCreateInfo;
+                return VkShaderModuleCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO
+                };
             }
             //--------------------------------------------------------------------------
         }
