@@ -16,7 +16,6 @@ namespace Kmplete
     {
         class Image;
         class VulkanImageCreatorDelegate;
-        class VulkanMemoryTypeDelegate;
         class VulkanFormatDelegate;
 
 
@@ -27,8 +26,8 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanTexture)
 
         public:
-            KMP_API VulkanTexture(VkDevice device, VkQueue graphicsQueue, const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate, 
-                                  const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkCommandPool commandPool, const VulkanFormatDelegate& formatDelegate);
+            KMP_API VulkanTexture(VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, const Image& image, 
+                                  const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanFormatDelegate& formatDelegate);
             KMP_API ~VulkanTexture();
 
             KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
@@ -36,10 +35,9 @@ namespace Kmplete
 
         private:
             void _InitializeImage(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate);
-            void _TransitionImageLayout(UInt32 mipLevels, VkCommandPool commandPool, VkQueue graphicsQueue);
-            void _CopyStagingBufferToImage(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Image& image, VkCommandPool commandPool, VkQueue graphicsQueue);
-            KMP_NODISCARD UPtr<VulkanBuffer> _InitializeStagingBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Image& image);
-            void _GenerateMipmaps(const Image& image, const VulkanFormatDelegate& formatDelegate, VkCommandPool commandPool, VkQueue graphicsQueue);
+            void _TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer);
+            void _CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const Image& image, VkCommandBuffer commandBuffer);
+            void _GenerateMipmaps(const Image& image, const VulkanFormatDelegate& formatDelegate, VkCommandBuffer commandBuffer);
             void _InitializeImageView(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             void _InitializeSampler(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 

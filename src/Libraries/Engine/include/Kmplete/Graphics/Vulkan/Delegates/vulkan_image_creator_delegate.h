@@ -4,6 +4,7 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -13,6 +14,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class Image;
+
+
         //TODO: comments
         class VulkanImageCreatorDelegate
         {
@@ -41,6 +45,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkImageView CreateVkImageView(const VkImageViewCreateInfo& creationParameters) const;
 
             KMP_NODISCARD KMP_API VkSampler CreateVkSampler(const VkSamplerCreateInfo& creationParameters) const;
+
+            KMP_NODISCARD KMP_API VulkanBuffer CreateStagingImageBuffer(const Image& image) const;
 
         private:
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;

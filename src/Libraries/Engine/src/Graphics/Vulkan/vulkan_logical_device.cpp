@@ -603,7 +603,21 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return new VulkanTexture(_device, _graphicsQueue, image, *_imageCreatorDelegate.get(), _memoryTypeDelegate, _commandPool->GetVkCommandPool(), _formatDelegate);
+            auto commandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_device, _commandPool->GetVkCommandPool());
+            try
+            {
+                auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
+                auto* texture = new VulkanTexture(_device, commandBuffer, imageBuffer, image, *_imageCreatorDelegate.get(), _formatDelegate);
+                VulkanUtils::EndSingleTimeCommandBuffer(_device, commandBuffer, _commandPool->GetVkCommandPool(), _graphicsQueue);
+                return texture;
+            }
+            catch (KMP_MB_UNUSED const std::runtime_error& e)
+            {
+                KMP_LOG_ERROR("failed to create a texture - {}", e.what());
+                vkFreeCommandBuffers(_device, _commandPool->GetVkCommandPool(), 1, &commandBuffer);
+            }
+
+            return nullptr;
         }
         //--------------------------------------------------------------------------
 

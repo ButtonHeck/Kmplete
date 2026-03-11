@@ -1,6 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
-#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
@@ -16,8 +15,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanTexture::VulkanTexture(VkDevice device, VkQueue graphicsQueue, const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate, 
-                                     const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkCommandPool commandPool, const VulkanFormatDelegate& formatDelegate)
+        VulkanTexture::VulkanTexture(VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, const Image& image, 
+                                     const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanFormatDelegate& formatDelegate)
             : _logicalDevice(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
@@ -26,9 +25,9 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _InitializeImage(image, imageCreatorDelegate);
-            _TransitionImageLayout(image.GetMipLevels(), commandPool, graphicsQueue);
-            _CopyStagingBufferToImage(memoryTypeDelegate, image, commandPool, graphicsQueue);
-            _GenerateMipmaps(image, formatDelegate, commandPool, graphicsQueue);
+            _TransitionImageLayout(image.GetMipLevels(), commandBuffer);
+            _CopyStagingBufferToImage(stagingBuffer, image, commandBuffer);
+            _GenerateMipmaps(image, formatDelegate, commandBuffer);
             _InitializeImageView(image, imageCreatorDelegate);
             _InitializeSampler(image, imageCreatorDelegate);
         }
@@ -80,14 +79,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_TransitionImageLayout(UInt32 mipLevels, VkCommandPool commandPool, VkQueue graphicsQueue)
+        void VulkanTexture::_TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto transitionCommandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
-
             const VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = transitionCommandBuffer,
+                .cmdbuffer = commandBuffer,
                 .image = _image->GetVkImage(),
                 .srcAccessMask = VK_ACCESS_NONE,
                 .dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
@@ -98,18 +95,12 @@ namespace Kmplete
                 .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, mipLevels, 0, 1 }
             };
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-
-            VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, transitionCommandBuffer, commandPool, graphicsQueue);
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_CopyStagingBufferToImage(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Image& image, VkCommandPool commandPool, VkQueue graphicsQueue)
+        void VulkanTexture::_CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const Image& image, VkCommandBuffer commandBuffer)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            auto stagingBuffer = _InitializeStagingBuffer(memoryTypeDelegate, image);
-
-            auto copyCommandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
 
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -117,39 +108,11 @@ namespace Kmplete
             region.imageExtent.width = UInt32(image.GetWidth());
             region.imageExtent.height = UInt32(image.GetHeight());
             region.imageExtent.depth = 1;
-            vkCmdCopyBufferToImage(copyCommandBuffer, stagingBuffer->GetVkBuffer(), _image->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
-
-            VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, copyCommandBuffer, commandPool, graphicsQueue);
+            vkCmdCopyBufferToImage(commandBuffer, stagingBuffer.GetVkBuffer(), _image->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
         }
         //--------------------------------------------------------------------------
 
-        UPtr<VulkanBuffer> VulkanTexture::_InitializeStagingBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const Image& image)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            auto buffer = CreateUPtr<VulkanBuffer>(memoryTypeDelegate, _logicalDevice, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize());
-
-            if (!buffer)
-            {
-                KMP_LOG_ERROR("failed to create texture buffer");
-                throw std::runtime_error("VulkanTexture: failed to create texture buffer");
-            }
-
-            auto result = buffer->Map();
-            VulkanUtils::CheckResult(result, "VulkanTexture: failed to map texture buffer");
-
-            buffer->CopyToMappedMemory(0, image.GetPixels(), image.GetDataSize());
-
-            result = buffer->Flush();
-            VulkanUtils::CheckResult(result, "VulkanTexture: failed to flush texture buffer");
-
-            buffer->Unmap();
-
-            return buffer;
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanTexture::_GenerateMipmaps(const Image& image, const VulkanFormatDelegate& formatDelegate, VkCommandPool commandPool, VkQueue graphicsQueue)
+        void VulkanTexture::_GenerateMipmaps(const Image& image, const VulkanFormatDelegate& formatDelegate, VkCommandBuffer commandBuffer)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -160,7 +123,6 @@ namespace Kmplete
                 throw std::runtime_error("VulkanTexture: image format does not support linear blitting");
             }
 
-            auto commandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_logicalDevice, commandPool);
             auto vulkanImage = _image->GetVkImage();
 
             auto imageBarrier = VulkanUtils::InitVkImageMemoryBarrier();
@@ -232,8 +194,6 @@ namespace Kmplete
                 0, nullptr,
                 0, nullptr,
                 1, &imageBarrier);
-
-            VulkanUtils::EndSingleTimeCommandBuffer(_logicalDevice, commandBuffer, commandPool, graphicsQueue);
         }
         //--------------------------------------------------------------------------
 

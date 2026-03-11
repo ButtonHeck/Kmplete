@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -145,6 +146,26 @@ namespace Kmplete
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
 
             return sampler;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanBuffer VulkanImageCreatorDelegate::CreateStagingImageBuffer(const Image& image) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize());
+
+            auto result = buffer.Map();
+            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to map texture buffer");
+
+            buffer.CopyToMappedMemory(0, image.GetPixels(), image.GetDataSize());
+
+            result = buffer.Flush();
+            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to flush texture buffer");
+
+            buffer.Unmap();
+
+            return buffer;
         }
         //--------------------------------------------------------------------------
     }
