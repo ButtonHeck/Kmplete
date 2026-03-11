@@ -44,5 +44,12 @@ namespace Kmplete
             throw std::runtime_error("VulkanFormatDelegate: failed to find supported format");
         }
         //--------------------------------------------------------------------------
+
+        bool VulkanFormatDelegate::IsMipmapCompatible(VkFormat format) const
+        {
+            const auto formatProperties = GetFormatProperties(format);
+            return formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+        }
+        //--------------------------------------------------------------------------
     }
 }

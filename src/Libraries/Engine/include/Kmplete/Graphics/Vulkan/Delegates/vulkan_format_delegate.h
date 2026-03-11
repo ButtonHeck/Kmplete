@@ -22,6 +22,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkFormatProperties GetFormatProperties(VkFormat format) const;
             KMP_NODISCARD KMP_API VkFormat FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;
+            KMP_NODISCARD KMP_API bool IsMipmapCompatible(VkFormat format) const;
 
         private:
             VkPhysicalDevice _physicalDevice;

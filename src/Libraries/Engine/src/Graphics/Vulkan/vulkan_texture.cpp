@@ -1,6 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
-#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
@@ -15,8 +14,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanTexture::VulkanTexture(VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, const Image& image, 
-                                     const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanFormatDelegate& formatDelegate)
+        VulkanTexture::VulkanTexture(VkFormat format, bool mipmapEnabled, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
+                                     const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : _logicalDevice(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
@@ -24,12 +23,14 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _InitializeImage(image, imageCreatorDelegate);
-            _TransitionImageLayout(image.GetMipLevels(), commandBuffer);
+            const auto mipLevels = mipmapEnabled ? image.GetMipLevels() : 1;
+
+            _InitializeImage(format, mipLevels, image, imageCreatorDelegate);
+            _TransitionImageLayout(mipLevels, commandBuffer);
             _CopyStagingBufferToImage(stagingBuffer, image, commandBuffer);
-            _GenerateMipmaps(image, formatDelegate, commandBuffer);
-            _InitializeImageView(image, imageCreatorDelegate);
-            _InitializeSampler(image, imageCreatorDelegate);
+            _GenerateMipmaps(image, mipLevels, commandBuffer);
+            _InitializeImageView(format, mipLevels, imageCreatorDelegate);
+            _InitializeSampler(mipLevels, imageCreatorDelegate);
         }
         //--------------------------------------------------------------------------
 
@@ -56,7 +57,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeImage(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        void VulkanTexture::_InitializeImage(VkFormat format, UInt32 mipLevels, const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -65,12 +66,12 @@ namespace Kmplete
             creationParameters.extent.width = UInt32(image.GetWidth());
             creationParameters.extent.height = UInt32(image.GetHeight());
             creationParameters.extent.depth = 1;
-            creationParameters.mipLevels = image.GetMipLevels();
+            creationParameters.mipLevels = mipLevels;
             creationParameters.arrayLayers = 1;
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             creationParameters.samples = VK_SAMPLE_COUNT_1_BIT;
-            creationParameters.format = VK_FORMAT_R8G8B8A8_UNORM;
+            creationParameters.format = format;
             creationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
             creationParameters.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
             creationParameters.flags = 0;
@@ -112,16 +113,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_GenerateMipmaps(const Image& image, const VulkanFormatDelegate& formatDelegate, VkCommandBuffer commandBuffer)
+        void VulkanTexture::_GenerateMipmaps(const Image& image, UInt32 mipLevels, VkCommandBuffer commandBuffer)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            const auto formatProperties = formatDelegate.GetFormatProperties(VK_FORMAT_R8G8B8A8_UNORM);
-            if (!(formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT))
-            {
-                KMP_LOG_ERROR("image format does not support linear blitting");
-                throw std::runtime_error("VulkanTexture: image format does not support linear blitting");
-            }
 
             auto vulkanImage = _image->GetVkImage();
 
@@ -135,7 +129,7 @@ namespace Kmplete
             Int32 mipWidth = Int32(image.GetWidth());
             Int32 mipHeight = Int32(image.GetHeight());
 
-            for (UInt32 mip = 1; mip < image.GetMipLevels(); mip++)
+            for (UInt32 mip = 1; mip < mipLevels; mip++)
             {
                 imageBarrier.subresourceRange.baseMipLevel = mip - 1;
                 imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
@@ -184,7 +178,7 @@ namespace Kmplete
                 }
             }
 
-            imageBarrier.subresourceRange.baseMipLevel = image.GetMipLevels() - 1;
+            imageBarrier.subresourceRange.baseMipLevel = mipLevels - 1;
             imageBarrier.oldLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL;
             imageBarrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
             imageBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
@@ -197,17 +191,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeImageView(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        void VulkanTexture::_InitializeImageView(VkFormat format, UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             auto imageViewParameters = VulkanUtils::InitVkImageViewCreateInfo();
             imageViewParameters.image = _image->GetVkImage();
             imageViewParameters.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            imageViewParameters.format = VK_FORMAT_R8G8B8A8_UNORM;
+            imageViewParameters.format = format;
             imageViewParameters.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             imageViewParameters.subresourceRange.baseMipLevel = 0;
-            imageViewParameters.subresourceRange.levelCount = image.GetMipLevels();
+            imageViewParameters.subresourceRange.levelCount = mipLevels;
             imageViewParameters.subresourceRange.baseArrayLayer = 0;
             imageViewParameters.subresourceRange.layerCount = 1;
 
@@ -215,7 +209,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeSampler(const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        void VulkanTexture::_InitializeSampler(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -227,7 +221,7 @@ namespace Kmplete
             samplerParameters.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
             samplerParameters.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
             samplerParameters.minLod = 0.0f;
-            samplerParameters.maxLod = float(image.GetMipLevels());
+            samplerParameters.maxLod = float(mipLevels);
             samplerParameters.maxAnisotropy = 1.0f;
 
             _sampler = imageCreatorDelegate.CreateVkSampler(samplerParameters);

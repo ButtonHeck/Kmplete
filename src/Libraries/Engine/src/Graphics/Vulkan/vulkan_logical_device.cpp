@@ -1,3 +1,4 @@
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
@@ -606,8 +607,10 @@ namespace Kmplete
             auto commandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_device, _commandPool->GetVkCommandPool());
             try
             {
+                const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
+                const auto mipmapEnabled = _formatDelegate.IsMipmapCompatible(textureVkFormat);
                 auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
-                auto* texture = new VulkanTexture(_device, commandBuffer, imageBuffer, image, *_imageCreatorDelegate.get(), _formatDelegate);
+                auto* texture = new VulkanTexture(textureVkFormat, mipmapEnabled, _device, commandBuffer, imageBuffer, image, *_imageCreatorDelegate.get());
                 VulkanUtils::EndSingleTimeCommandBuffer(_device, commandBuffer, _commandPool->GetVkCommandPool(), _graphicsQueue);
                 return texture;
             }
