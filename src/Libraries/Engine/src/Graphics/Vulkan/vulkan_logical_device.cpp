@@ -83,72 +83,14 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            vkWaitForFences(_device, 1, &_waitFences[_currentBufferIndex], VK_TRUE, UINT64_MAX);
-            auto result = vkResetFences(_device, 1, &_waitFences[_currentBufferIndex]);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to reset wait fence");
+            _StartFrameRestartFence();
 
             _swapchain->StartFrame(frameTimestep);
 
-            vkResetCommandBuffer(_drawCommandBuffers[_currentBufferIndex], 0);
-            auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
-            result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
-
-            VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
-                .image = _swapchain->GetCurrentImage(),
-                .srcAccessMask = VK_ACCESS_NONE,
-                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
-            };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-
-            barrierParameters = {
-                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
-                .image = _depthStencilAttachment->GetImage(),
-                .srcAccessMask = VK_ACCESS_NONE,
-                .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
-            };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-
-            auto colorAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
-            colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
-            colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            colorAttachmentInfo.clearValue.color = { 0.0f, 0.0f, 0.2f, 0.0f }; //TODO: numbers
-
-            auto depthStencilAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
-            depthStencilAttachmentInfo.imageView = _depthStencilAttachment->GetImageView();
-            depthStencilAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            depthStencilAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            depthStencilAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            depthStencilAttachmentInfo.clearValue.depthStencil = { 1.0f, 0 };
-
-            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
-            renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };
-            renderingInfo.layerCount = 1;
-            renderingInfo.colorAttachmentCount = 1;
-            renderingInfo.pColorAttachments = &colorAttachmentInfo;
-            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
-            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
-
-            vkCmdBeginRendering(_drawCommandBuffers[_currentBufferIndex], &renderingInfo);
-
-            VkViewport viewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) };
-            vkCmdSetViewport(_drawCommandBuffers[_currentBufferIndex], 0, 1, &viewport);
-
-            VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
-            vkCmdSetScissor(_drawCommandBuffers[_currentBufferIndex], 0, 1, &scissor);
+            _StartFrameRestartCommandBuffer();
+            _StartFrameTransitionColorAndDepthStencilImages();
+            _StartFrameBeginRendering();
+            _StartFrameSetupViewportAndScissor();
         }
         //--------------------------------------------------------------------------
 
@@ -156,43 +98,14 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex]);
-
-            VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
-                .image = _swapchain->GetCurrentImage(),
-                .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .dstAccessMask = VK_ACCESS_NONE,
-                .oldImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_2_NONE,
-                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
-            };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-
-            auto result = vkEndCommandBuffer(_drawCommandBuffers[_currentBufferIndex]);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");
-
-            VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
-            submitInfo.pWaitDstStageMask = &waitStageMask;
-            submitInfo.pCommandBuffers = &_drawCommandBuffers[_currentBufferIndex];
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pWaitSemaphores = &_presentCompleteSemaphores[_currentBufferIndex];
-            submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
-            submitInfo.signalSemaphoreCount = 1;
-
-            result = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _waitFences[_currentBufferIndex]);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to submit commands to queue");
+            _EndFrameEndRendering();
+            _EndFrameTransitionColorAndDepthStencilImages();
+            _EndFrameEndCommandBuffer();
+            _EndFrameQueueSubmit();
 
             _swapchain->EndFrame();
 
-            if (_device != VK_NULL_HANDLE)
-            {
-                vkDeviceWaitIdle(_device);
-            }
+            WaitIdle();
         }
         //--------------------------------------------------------------------------
 
@@ -200,7 +113,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            vkDeviceWaitIdle(_device);
+            WaitIdle();
 
             _DeleteDepthStencilAttachment();
             _DeleteCommandBuffers();
@@ -211,6 +124,17 @@ namespace Kmplete
             _CreateSwapchain();
             _CreateCommandBuffers();
             _CreateDepthStencilAttachment();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::WaitIdle() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            if (_device != VK_NULL_HANDLE)
+            {
+                vkDeviceWaitIdle(_device);
+            }
         }
         //--------------------------------------------------------------------------
 
@@ -523,6 +447,155 @@ namespace Kmplete
             };
 
             return actualExtent;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_StartFrameRestartFence()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            vkWaitForFences(_device, 1, &_waitFences[_currentBufferIndex], VK_TRUE, UINT64_MAX);
+            auto result = vkResetFences(_device, 1, &_waitFences[_currentBufferIndex]);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to reset wait fence");
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_StartFrameRestartCommandBuffer()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            vkResetCommandBuffer(_drawCommandBuffers[_currentBufferIndex], 0);
+            auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
+            auto result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
+        }
+
+        void VulkanLogicalDevice::_StartFrameTransitionColorAndDepthStencilImages()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VulkanUtils::MemoryBarrierParameters barrierParameters = {
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .image = _swapchain->GetCurrentImage(),
+                .srcAccessMask = VK_ACCESS_NONE,
+                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+
+            barrierParameters = {
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .image = _depthStencilAttachment->GetImage(),
+                .srcAccessMask = VK_ACCESS_NONE,
+                .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
+                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
+                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_StartFrameBeginRendering()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            auto colorAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
+            colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
+            colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+            colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+            colorAttachmentInfo.clearValue.color = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+            auto depthStencilAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
+            depthStencilAttachmentInfo.imageView = _depthStencilAttachment->GetImageView();
+            depthStencilAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
+            depthStencilAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+            depthStencilAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+            depthStencilAttachmentInfo.clearValue.depthStencil = { 1.0f, 0 };
+
+            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
+            renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = 1;
+            renderingInfo.pColorAttachments = &colorAttachmentInfo;
+            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
+            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
+
+            vkCmdBeginRendering(_drawCommandBuffers[_currentBufferIndex], &renderingInfo);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_StartFrameSetupViewportAndScissor()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VkViewport viewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) };
+            vkCmdSetViewport(_drawCommandBuffers[_currentBufferIndex], 0, 1, &viewport);
+
+            VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
+            vkCmdSetScissor(_drawCommandBuffers[_currentBufferIndex], 0, 1, &scissor);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_EndFrameEndRendering()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex]);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_EndFrameTransitionColorAndDepthStencilImages()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VulkanUtils::MemoryBarrierParameters barrierParameters = {
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .image = _swapchain->GetCurrentImage(),
+                .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                .dstAccessMask = VK_ACCESS_NONE,
+                .oldImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
+                .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .dstStageMask = VK_PIPELINE_STAGE_2_NONE,
+                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+            };
+            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_EndFrameEndCommandBuffer()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            auto result = vkEndCommandBuffer(_drawCommandBuffers[_currentBufferIndex]);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_EndFrameQueueSubmit()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            submitInfo.pWaitDstStageMask = &waitStageMask;
+            submitInfo.pCommandBuffers = &_drawCommandBuffers[_currentBufferIndex];
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pWaitSemaphores = &_presentCompleteSemaphores[_currentBufferIndex];
+            submitInfo.waitSemaphoreCount = 1;
+            submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
+            submitInfo.signalSemaphoreCount = 1;
+
+            const auto result = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _waitFences[_currentBufferIndex]);
+            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to submit commands to queue");
         }
         //--------------------------------------------------------------------------
 

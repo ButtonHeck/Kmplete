@@ -45,6 +45,7 @@ namespace Kmplete
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;
             KMP_API void HandleWindowResize() override;
+            KMP_API void WaitIdle() const;
 
             KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
@@ -91,6 +92,17 @@ namespace Kmplete
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
+
+            void _StartFrameRestartFence();
+            void _StartFrameRestartCommandBuffer();
+            void _StartFrameTransitionColorAndDepthStencilImages();
+            void _StartFrameBeginRendering();
+            void _StartFrameSetupViewportAndScissor();
+
+            void _EndFrameEndRendering();
+            void _EndFrameTransitionColorAndDepthStencilImages();
+            void _EndFrameEndCommandBuffer();
+            void _EndFrameQueueSubmit();
 
         private:
             const VulkanContext& _vulkanContext;
