@@ -290,7 +290,7 @@ namespace Kmplete
     {
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
 
-        _commandBuffer = vulkanDevice.GetCurrentVkCommandBuffer();
+        _commandBuffer = vulkanDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
         vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline);
 
         VkDeviceSize offsets[1]{ 0 };

@@ -175,9 +175,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkCommandBuffer VulkanLogicalDevice::GetCurrentVkCommandBuffer() const noexcept
+        const VulkanCommandBuffer& VulkanLogicalDevice::GetCurrentCommandBuffer() const noexcept
         {
-            return _drawCommandBuffers[_currentBufferIndex];
+            return _drawCommandBuffers.at(_currentBufferIndex);
         }
         //--------------------------------------------------------------------------
 
@@ -319,12 +319,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto commandBufferAllocateInfo = VulkanUtils::InitVkCommandBufferAllocateInfo();
-            commandBufferAllocateInfo.commandPool = _commandPool->GetVkCommandPool();
-            commandBufferAllocateInfo.commandBufferCount = UInt32(_drawCommandBuffers.size());
-
-            const auto result = vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, _drawCommandBuffers.data());
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create command buffers");
+            _drawCommandBuffers.reserve(NumConcurrentFrames);
+            for (size_t i = 0; i < NumConcurrentFrames; i++)
+            {
+                _drawCommandBuffers.emplace_back(_device, _commandPool->GetVkCommandPool());
+            }
         }
         //--------------------------------------------------------------------------
 
@@ -332,7 +331,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            vkFreeCommandBuffers(_device, _commandPool->GetVkCommandPool(), UInt32(_drawCommandBuffers.size()), _drawCommandBuffers.data());
+            _drawCommandBuffers.clear();
         }
         //--------------------------------------------------------------------------
 
@@ -465,10 +464,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            vkResetCommandBuffer(_drawCommandBuffers[_currentBufferIndex], 0);
-            auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
-            auto result = vkBeginCommandBuffer(_drawCommandBuffers[_currentBufferIndex], &commandBufferBeginInfo);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to begin command buffer");
+            _drawCommandBuffers[_currentBufferIndex].Reset();
+            _drawCommandBuffers[_currentBufferIndex].Begin();
         }
 
         void VulkanLogicalDevice::_StartFrameTransitionColorAndDepthStencilImages()
@@ -476,7 +473,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(),
                 .image = _swapchain->GetCurrentImage(),
                 .srcAccessMask = VK_ACCESS_NONE,
                 .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
@@ -489,7 +486,7 @@ namespace Kmplete
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
 
             barrierParameters = {
-                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(),
                 .image = _depthStencilAttachment->GetImage(),
                 .srcAccessMask = VK_ACCESS_NONE,
                 .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
@@ -529,7 +526,7 @@ namespace Kmplete
             renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
             renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
 
-            vkCmdBeginRendering(_drawCommandBuffers[_currentBufferIndex], &renderingInfo);
+            vkCmdBeginRendering(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), &renderingInfo);
         }
         //--------------------------------------------------------------------------
 
@@ -538,10 +535,10 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VkViewport viewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) };
-            vkCmdSetViewport(_drawCommandBuffers[_currentBufferIndex], 0, 1, &viewport);
+            vkCmdSetViewport(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), 0, 1, &viewport);
 
             VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
-            vkCmdSetScissor(_drawCommandBuffers[_currentBufferIndex], 0, 1, &scissor);
+            vkCmdSetScissor(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), 0, 1, &scissor);
         }
         //--------------------------------------------------------------------------
 
@@ -549,7 +546,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex]);
+            vkCmdEndRendering(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer());
         }
         //--------------------------------------------------------------------------
 
@@ -558,7 +555,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex],
+                .cmdbuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(),
                 .image = _swapchain->GetCurrentImage(),
                 .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                 .dstAccessMask = VK_ACCESS_NONE,
@@ -576,8 +573,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            auto result = vkEndCommandBuffer(_drawCommandBuffers[_currentBufferIndex]);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to end command buffer");
+            _drawCommandBuffers[_currentBufferIndex].End();
         }
         //--------------------------------------------------------------------------
 
@@ -585,10 +581,12 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
+            const auto commandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
+
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
             auto submitInfo = VulkanUtils::InitVkSubmitInfo();
             submitInfo.pWaitDstStageMask = &waitStageMask;
-            submitInfo.pCommandBuffers = &_drawCommandBuffers[_currentBufferIndex];
+            submitInfo.pCommandBuffers = &commandBuffer;
             submitInfo.commandBufferCount = 1;
             submitInfo.pWaitSemaphores = &_presentCompleteSemaphores[_currentBufferIndex];
             submitInfo.waitSemaphoreCount = 1;

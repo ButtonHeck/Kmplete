@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -54,7 +55,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkQueue GetVkGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API VkQueue GetVkPresentQueue() const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
-            KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentVkCommandBuffer() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanCommandBuffer& GetCurrentCommandBuffer() const noexcept;
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
@@ -124,7 +125,7 @@ namespace Kmplete
             Array<VkFence, NumConcurrentFrames> _waitFences;
             UPtr<VulkanCommandPool> _commandPool;
             UPtr<VulkanSwapchain> _swapchain;
-            Array<VkCommandBuffer, NumConcurrentFrames> _drawCommandBuffers;
+            Vector<VulkanCommandBuffer> _drawCommandBuffers;
             UPtr<VulkanDepthStencilAttachment> _depthStencilAttachment;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;

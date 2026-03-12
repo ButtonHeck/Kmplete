@@ -86,6 +86,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanCommandBuffer::Reset() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            const auto result = vkResetCommandBuffer(_commandBuffer, 0);
+            VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to reset command buffer");
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanCommandBuffer::Submit(VkQueue queue, VkFence fence /*= VK_NULL_HANDLE*/, bool waitFence /*= false*/) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
@@ -102,6 +111,12 @@ namespace Kmplete
                 result = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
                 Graphics::VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to wait on fence");
             }
+        }
+        //--------------------------------------------------------------------------
+
+        VkCommandBuffer VulkanCommandBuffer::GetVkCommandBuffer() const noexcept
+        {
+            return _commandBuffer;
         }
         //--------------------------------------------------------------------------
     }
