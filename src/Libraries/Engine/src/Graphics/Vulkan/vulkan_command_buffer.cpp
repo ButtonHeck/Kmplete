@@ -95,25 +95,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanCommandBuffer::Submit(VkQueue queue, VkFence fence /*= VK_NULL_HANDLE*/, bool waitFence /*= false*/) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &_commandBuffer;
-
-            auto result = vkQueueSubmit(queue, 1, &submitInfo, fence);
-            VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to submit to queue");
-
-            if (fence != VK_NULL_HANDLE && waitFence)
-            {
-                result = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
-                Graphics::VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to wait on fence");
-            }
-        }
-        //--------------------------------------------------------------------------
-
         VkCommandBuffer VulkanCommandBuffer::GetVkCommandBuffer() const noexcept
         {
             return _commandBuffer;

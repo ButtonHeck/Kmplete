@@ -9,6 +9,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -63,6 +64,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
+            KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
             KMP_NODISCARD KMP_API VkShaderModule CreateShaderModule(const Filepath& filename) const;
             KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> CreateShadersInitializers(const Vector<VulkanUtils::ShaderCreateInfo>& shaderInfos) const;
 
@@ -123,7 +125,7 @@ namespace Kmplete
 
             Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
-            Array<VkFence, NumConcurrentFrames> _waitFences;
+            Vector<VulkanFence> _waitFences;
             UPtr<VulkanCommandPool> _commandPool;
             UPtr<VulkanSwapchain> _swapchain;
             Vector<VulkanCommandBuffer> _drawCommandBuffers;

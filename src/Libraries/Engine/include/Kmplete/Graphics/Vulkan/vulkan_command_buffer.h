@@ -23,7 +23,6 @@ namespace Kmplete
             KMP_API void Begin(VkCommandBufferUsageFlags flags = 0) const;
             KMP_API void End() const;
             KMP_API void Reset() const;
-            KMP_API void Submit(VkQueue queue, VkFence fence = VK_NULL_HANDLE, bool waitFence = false) const;
 
             KMP_NODISCARD KMP_API VkCommandBuffer GetVkCommandBuffer() const noexcept;
 

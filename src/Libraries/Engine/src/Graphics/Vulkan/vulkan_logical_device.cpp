@@ -253,7 +253,6 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             auto semaphoreCreateInfo = VulkanUtils::InitVkSemaphoreCreateInfo();
-            auto fenceCreateInfo = VulkanUtils::InitVkFenceCreateInfo();
 
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
@@ -263,8 +262,7 @@ namespace Kmplete
                 result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
                 VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
 
-                result = vkCreateFence(_device, &fenceCreateInfo, nullptr, &_waitFences[i]);
-                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create wait fence");
+                _waitFences.emplace_back(_device, true);
             }
         }
         //--------------------------------------------------------------------------
@@ -273,11 +271,12 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
+            _waitFences.clear();
+
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
                 vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
                 vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
-                vkDestroyFence(_device, _waitFences[i], nullptr);
             }
         }
         //--------------------------------------------------------------------------
@@ -454,9 +453,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            vkWaitForFences(_device, 1, &_waitFences[_currentBufferIndex], VK_TRUE, UINT64_MAX);
-            auto result = vkResetFences(_device, 1, &_waitFences[_currentBufferIndex]);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to reset wait fence");
+            _waitFences[_currentBufferIndex].Wait(UINT64_MAX);
+            _waitFences[_currentBufferIndex].Reset();
         }
         //--------------------------------------------------------------------------
 
@@ -593,7 +591,7 @@ namespace Kmplete
             submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
             submitInfo.signalSemaphoreCount = 1;
 
-            const auto result = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _waitFences[_currentBufferIndex]);
+            const auto result = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _waitFences[_currentBufferIndex].GetVkFence());
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to submit commands to queue");
         }
         //--------------------------------------------------------------------------
@@ -649,6 +647,14 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             return VulkanCommandBuffer(_device, _commandPool->GetVkCommandPool());
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanFence VulkanLogicalDevice::CreateFence(bool signaled /*= true*/) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return VulkanFence(_device, signaled);
         }
         //--------------------------------------------------------------------------
 

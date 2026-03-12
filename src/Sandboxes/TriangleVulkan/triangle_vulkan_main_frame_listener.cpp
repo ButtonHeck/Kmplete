@@ -117,18 +117,12 @@ namespace Kmplete
             auto submitInfo = Graphics::VulkanUtils::InitVkSubmitInfo();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &commandBuffer;
-            auto fenceCreateInfo = Graphics::VulkanUtils::InitVkFenceCreateInfo(false);
-            VkFence fence;
-            result = vkCreateFence(_device, &fenceCreateInfo, nullptr, &fence);
-            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create fence");
+            Graphics::VulkanFence fence = vulkanDevice.CreateFence(false);
 
-            result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence);
+            result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence.GetVkFence());
             Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to submit to queue");
 
-            result = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
-            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to wait on fence");
-
-            vkDestroyFence(_device, fence, nullptr);
+            fence.Wait(UINT64_MAX);
         }
 
 
