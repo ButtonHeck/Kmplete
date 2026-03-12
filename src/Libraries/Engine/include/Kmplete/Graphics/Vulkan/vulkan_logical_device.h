@@ -62,6 +62,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
+            KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
             KMP_NODISCARD KMP_API VkShaderModule CreateShaderModule(const Filepath& filename) const;
             KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> CreateShadersInitializers(const Vector<VulkanUtils::ShaderCreateInfo>& shaderInfos) const;
 

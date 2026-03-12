@@ -58,7 +58,6 @@ namespace Kmplete
         const Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        const Graphics::VulkanCommandPool& vulkanCommandPool = dynamic_cast<const Graphics::VulkanCommandPool&>(vulkanDevice.GetCommandPool());
         VkQueue graphicsQueue = vulkanDevice.GetVkGraphicsQueue();
         _device = vulkanDevice.GetVkDevice();
 
@@ -99,45 +98,38 @@ namespace Kmplete
         _indexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
 
 
-        // 7. copy staging buffer to device-local vertex and index buffer
-        VkCommandBuffer copyCmd;
-        auto cmdBufAllocateInfo = Graphics::VulkanUtils::InitVkCommandBufferAllocateInfo();
-        cmdBufAllocateInfo.commandPool = vulkanCommandPool.GetVkCommandPool();
-        cmdBufAllocateInfo.commandBufferCount = 1;
-        result = vkAllocateCommandBuffers(_device, &cmdBufAllocateInfo, &copyCmd);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to allocate command buffer");
+        {
+            // 7. copy staging buffer to device-local vertex and index buffer
+            Graphics::VulkanCommandBuffer copyCmd = vulkanDevice.CreateCommandBuffer();
+            VkCommandBuffer commandBuffer = copyCmd.GetVkCommandBuffer();
+            copyCmd.Begin();
 
-        auto cmdBufInfo = Graphics::VulkanUtils::InitVkCommandBufferBeginInfo();
-        result = vkBeginCommandBuffer(copyCmd, &cmdBufInfo);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to begin command buffer");
-
-        VkBufferCopy copyRegion{};
-        copyRegion.size = vertexBufferSize;
-        vkCmdCopyBuffer(copyCmd, stagingBuffer.GetVkBuffer(), _vertexBuffer->GetVkBuffer(), 1, &copyRegion);
-        copyRegion.size = indexBufferSize;
-        copyRegion.srcOffset = vertexBufferSize;
-        vkCmdCopyBuffer(copyCmd, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
-        result = vkEndCommandBuffer(copyCmd);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to end command buffer");
+            VkBufferCopy copyRegion{};
+            copyRegion.size = vertexBufferSize;
+            vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _vertexBuffer->GetVkBuffer(), 1, &copyRegion);
+            copyRegion.size = indexBufferSize;
+            copyRegion.srcOffset = vertexBufferSize;
+            vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
+            copyCmd.End();
 
 
-        // 8. submit copy command to queue
-        auto submitInfo = Graphics::VulkanUtils::InitVkSubmitInfo();
-        submitInfo.commandBufferCount = 1;
-        submitInfo.pCommandBuffers = &copyCmd;
-        auto fenceCreateInfo = Graphics::VulkanUtils::InitVkFenceCreateInfo(false);
-        VkFence fence;
-        result = vkCreateFence(_device, &fenceCreateInfo, nullptr, &fence);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create fence");
+            // 8. submit copy command to queue
+            auto submitInfo = Graphics::VulkanUtils::InitVkSubmitInfo();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &commandBuffer;
+            auto fenceCreateInfo = Graphics::VulkanUtils::InitVkFenceCreateInfo(false);
+            VkFence fence;
+            result = vkCreateFence(_device, &fenceCreateInfo, nullptr, &fence);
+            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create fence");
 
-        result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to submit to queue");
+            result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence);
+            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to submit to queue");
 
-        result = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to wait on fence");
+            result = vkWaitForFences(_device, 1, &fence, VK_TRUE, UINT64_MAX);
+            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to wait on fence");
 
-        vkDestroyFence(_device, fence, nullptr);
-        vkFreeCommandBuffers(_device, vulkanCommandPool.GetVkCommandPool(), 1, &copyCmd);
+            vkDestroyFence(_device, fence, nullptr);
+        }
 
 
         // 9. create empty descriptor set layout

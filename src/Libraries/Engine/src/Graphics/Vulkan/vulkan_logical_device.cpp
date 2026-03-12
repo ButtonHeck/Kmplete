@@ -644,6 +644,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanCommandBuffer VulkanLogicalDevice::CreateCommandBuffer() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return VulkanCommandBuffer(_device, _commandPool->GetVkCommandPool());
+        }
+        //--------------------------------------------------------------------------
+
         VkShaderModule VulkanLogicalDevice::CreateShaderModule(const Filepath& filename) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
