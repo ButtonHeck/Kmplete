@@ -14,7 +14,6 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        class Image;
         class VulkanImageCreatorDelegate;
 
 
@@ -25,19 +24,19 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanTexture)
 
         public:
-            KMP_API VulkanTexture(VkFormat format, bool mipmapEnabled, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, const Image& image,
-                                  const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
+                                  const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             KMP_API ~VulkanTexture();
 
             KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
             KMP_NODISCARD KMP_API VkSampler GetVkSampler() const noexcept;
 
         private:
-            void _InitializeImage(VkFormat format, UInt32 mipLevels, const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            void _InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             void _TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer);
-            void _CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const Image& image, VkCommandBuffer commandBuffer);
-            void _GenerateMipmaps(const Image& image, UInt32 mipLevels, VkCommandBuffer commandBuffer);
-            void _InitializeImageView(VkFormat format, UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            void _CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, VkCommandBuffer commandBuffer);
+            void _GenerateMipmaps(const VkExtent3D& extent, UInt32 mipLevels, VkCommandBuffer commandBuffer);
+            void _InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             void _InitializeSampler(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         private:

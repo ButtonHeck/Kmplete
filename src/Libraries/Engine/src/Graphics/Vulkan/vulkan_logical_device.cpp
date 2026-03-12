@@ -608,9 +608,15 @@ namespace Kmplete
             try
             {
                 const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
-                const auto mipmapEnabled = _formatDelegate.IsMipmapCompatible(textureVkFormat);
+                const auto mipLevels = _formatDelegate.IsMipmapCompatible(textureVkFormat) ? image.GetMipLevels() : 1;
                 auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
-                auto* texture = new VulkanTexture(textureVkFormat, mipmapEnabled, _device, commandBuffer, imageBuffer, image, *_imageCreatorDelegate.get());
+                const auto extent = VkExtent3D{
+                    .width = UInt32(image.GetWidth()),
+                    .height = UInt32(image.GetHeight()),
+                    .depth = 1
+                };
+
+                auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer, imageBuffer, extent, *_imageCreatorDelegate.get());
                 VulkanUtils::EndSingleTimeCommandBuffer(_device, commandBuffer, _commandPool->GetVkCommandPool(), _graphicsQueue);
                 return texture;
             }

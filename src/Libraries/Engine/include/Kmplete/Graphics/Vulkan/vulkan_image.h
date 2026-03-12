@@ -26,6 +26,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
             KMP_NODISCARD KMP_API VkDeviceSize GetMemorySize() const noexcept;
+            KMP_NODISCARD KMP_API VkFormat GetVkFormat() const noexcept;
 
         private:
             void _CreateImageObject(const VkImageCreateInfo& creationParameters);
@@ -36,6 +37,7 @@ namespace Kmplete
             VkImage _image;
             VkDeviceMemory _imageMemory;
             VkDeviceSize _memorySize;
+            VkFormat _format;
         };
         //--------------------------------------------------------------------------
     }

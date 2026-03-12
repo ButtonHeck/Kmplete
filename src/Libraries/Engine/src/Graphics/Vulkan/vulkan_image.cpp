@@ -15,6 +15,7 @@ namespace Kmplete
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
             , _memorySize(0)
+            , _format(creationParameters.format)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -41,6 +42,12 @@ namespace Kmplete
         VkDeviceSize VulkanImage::GetMemorySize() const noexcept
         {
             return _memorySize;
+        }
+        //--------------------------------------------------------------------------
+
+        VkFormat VulkanImage::GetVkFormat() const noexcept
+        {
+            return _format;
         }
         //--------------------------------------------------------------------------
 

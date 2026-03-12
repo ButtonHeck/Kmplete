@@ -3,7 +3,6 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
-#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -14,8 +13,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanTexture::VulkanTexture(VkFormat format, bool mipmapEnabled, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
-                                     const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
+                                     const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : _logicalDevice(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
@@ -23,13 +22,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            const auto mipLevels = mipmapEnabled ? image.GetMipLevels() : 1;
-
-            _InitializeImage(format, mipLevels, image, imageCreatorDelegate);
+            _InitializeImage(format, mipLevels, extent, imageCreatorDelegate);
             _TransitionImageLayout(mipLevels, commandBuffer);
-            _CopyStagingBufferToImage(stagingBuffer, image, commandBuffer);
-            _GenerateMipmaps(image, mipLevels, commandBuffer);
-            _InitializeImageView(format, mipLevels, imageCreatorDelegate);
+            _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
+            _GenerateMipmaps(extent, mipLevels, commandBuffer);
+            _InitializeImageView(mipLevels, imageCreatorDelegate);
             _InitializeSampler(mipLevels, imageCreatorDelegate);
         }
         //--------------------------------------------------------------------------
@@ -57,15 +54,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeImage(VkFormat format, UInt32 mipLevels, const Image& image, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        void VulkanTexture::_InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
             creationParameters.imageType = VK_IMAGE_TYPE_2D;
-            creationParameters.extent.width = UInt32(image.GetWidth());
-            creationParameters.extent.height = UInt32(image.GetHeight());
-            creationParameters.extent.depth = 1;
+            creationParameters.extent = extent;
             creationParameters.mipLevels = mipLevels;
             creationParameters.arrayLayers = 1;
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
@@ -99,21 +94,19 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const Image& image, VkCommandBuffer commandBuffer)
+        void VulkanTexture::_CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, VkCommandBuffer commandBuffer)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             region.imageSubresource.layerCount = 1;
-            region.imageExtent.width = UInt32(image.GetWidth());
-            region.imageExtent.height = UInt32(image.GetHeight());
-            region.imageExtent.depth = 1;
+            region.imageExtent = extent;
             vkCmdCopyBufferToImage(commandBuffer, stagingBuffer.GetVkBuffer(), _image->GetVkImage(), VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_GenerateMipmaps(const Image& image, UInt32 mipLevels, VkCommandBuffer commandBuffer)
+        void VulkanTexture::_GenerateMipmaps(const VkExtent3D& extent, UInt32 mipLevels, VkCommandBuffer commandBuffer)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -126,8 +119,8 @@ namespace Kmplete
             imageBarrier.subresourceRange.layerCount = 1;
             imageBarrier.subresourceRange.levelCount = 1;
 
-            Int32 mipWidth = Int32(image.GetWidth());
-            Int32 mipHeight = Int32(image.GetHeight());
+            Int32 mipWidth = extent.width;
+            Int32 mipHeight = extent.height;
 
             for (UInt32 mip = 1; mip < mipLevels; mip++)
             {
@@ -191,14 +184,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanTexture::_InitializeImageView(VkFormat format, UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             auto imageViewParameters = VulkanUtils::InitVkImageViewCreateInfo();
             imageViewParameters.image = _image->GetVkImage();
             imageViewParameters.viewType = VK_IMAGE_VIEW_TYPE_2D;
-            imageViewParameters.format = format;
+            imageViewParameters.format = _image->GetVkFormat();
             imageViewParameters.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             imageViewParameters.subresourceRange.baseMipLevel = 0;
             imageViewParameters.subresourceRange.levelCount = mipLevels;
