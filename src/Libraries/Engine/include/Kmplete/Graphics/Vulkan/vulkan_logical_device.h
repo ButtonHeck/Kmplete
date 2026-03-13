@@ -10,6 +10,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -51,16 +52,14 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
-
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
-            KMP_NODISCARD KMP_API VkQueue GetVkGraphicsQueue() const noexcept;
-            KMP_NODISCARD KMP_API VkQueue GetVkPresentQueue() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanQueue& GetPresentationQueue() const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
             KMP_NODISCARD KMP_API const VulkanCommandBuffer& GetCurrentCommandBuffer() const noexcept;
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
-
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
@@ -70,7 +69,7 @@ namespace Kmplete
 
         private:
             void _CreateLogicalDeviceObject();
-            void _GetDeviceQueues();
+            void _CreateDeviceQueues();
             void _DeleteLogicalDeviceObject();
 
             void _CreateSynchronizationObjects();
@@ -119,8 +118,8 @@ namespace Kmplete
             VkSurfaceKHR _surface;
 
             VkDevice _device;
-            VkQueue _graphicsQueue;
-            VkQueue _presentQueue;
+            UPtr<VulkanQueue> _graphicsQueue;
+            UPtr<VulkanQueue> _presentQueue;
             UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;
 
             Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;

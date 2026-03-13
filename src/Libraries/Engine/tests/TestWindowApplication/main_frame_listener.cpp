@@ -73,7 +73,7 @@ namespace Kmplete
             initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
             initInfo.Device = logicalDevice.GetVkDevice();
             initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
-            initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
+            initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
             initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
             initInfo.Allocator = VK_NULL_HANDLE;
@@ -970,7 +970,7 @@ namespace Kmplete
             initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
             initInfo.Device = logicalDevice.GetVkDevice();
             initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
-            initInfo.Queue = logicalDevice.GetVkGraphicsQueue();
+            initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
             initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
             initInfo.Allocator = VK_NULL_HANDLE;

@@ -4,6 +4,7 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
@@ -24,7 +25,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
+            KMP_API VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                     const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                     const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             KMP_API ~VulkanSwapchain();
@@ -33,7 +34,7 @@ namespace Kmplete
             KMP_API void EndFrame() override;
 
             KMP_API VkResult AcquireNextImage();
-            KMP_API VkResult QueuePresent();
+            KMP_API void QueuePresent();
 
             KMP_NODISCARD KMP_API UInt32 GetImageIndex() const noexcept;
             KMP_NODISCARD KMP_API UInt32 GetImageCount() const noexcept;
@@ -56,9 +57,9 @@ namespace Kmplete
             const UInt32& _currentBufferIndex;
             const Array<VkSemaphore, NumConcurrentFrames>& _presentCompleteSemaphores;
             const Array<VkSemaphore, NumConcurrentFrames>& _renderCompleteSemaphores;
+            const VulkanQueue& _presentationQueue;
 
             VkDevice _device;
-            VkQueue _graphicsQueue;
             UInt32 _imageIndex;
             UInt32 _imageCount;
             VkSwapchainKHR _swapchain;

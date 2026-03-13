@@ -49,7 +49,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _CreateLogicalDeviceObject();
-            _GetDeviceQueues();
+            _CreateDeviceQueues();
 
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
 
@@ -76,6 +76,9 @@ namespace Kmplete
             _DeleteSyncronizationObjects();
 
             _imageCreatorDelegate.reset();
+            _graphicsQueue.reset();
+            _presentQueue.reset();
+
             _DeleteLogicalDeviceObject();
         }
         //--------------------------------------------------------------------------
@@ -157,15 +160,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkQueue VulkanLogicalDevice::GetVkGraphicsQueue() const noexcept
+        const VulkanQueue& VulkanLogicalDevice::GetGraphicsQueue() const noexcept
         {
-            return _graphicsQueue;
+            return *_graphicsQueue.get();
         }
         //--------------------------------------------------------------------------
 
-        VkQueue VulkanLogicalDevice::GetVkPresentQueue() const noexcept
+        const VulkanQueue& VulkanLogicalDevice::GetPresentationQueue() const noexcept
         {
-            return _presentQueue;
+            return *_presentQueue.get();
         }
         //--------------------------------------------------------------------------
 
@@ -219,24 +222,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_GetDeviceQueues()
+        void VulkanLogicalDevice::_CreateDeviceQueues()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            vkGetDeviceQueue(_device, _vulkanContext.graphicsFamilyIndex, 0, &_graphicsQueue);
-            vkGetDeviceQueue(_device, _vulkanContext.presentFamilyIndex, 0, &_presentQueue);
-
-            if (_graphicsQueue == nullptr)
-            {
-                KMP_LOG_CRITICAL("failed to get graphics queue from logical device");
-                throw std::runtime_error("VulkanLogicalDevice: failed to get graphics queue from logical device");
-            }
-
-            if (_presentQueue == nullptr)
-            {
-                KMP_LOG_CRITICAL("failed to get present queue from logical device");
-                throw std::runtime_error("VulkanLogicalDevice: failed to get present queue from logical device");
-            }
+            const auto graphicsQueueSupportPresentation = (_vulkanContext.graphicsFamilyIndex == _vulkanContext.presentFamilyIndex);
+            _graphicsQueue.reset(new VulkanQueue(_device, _vulkanContext.graphicsFamilyIndex, graphicsQueueSupportPresentation));
+            _presentQueue.reset(new VulkanQueue(_device, _vulkanContext.presentFamilyIndex, true));
         }
         //--------------------------------------------------------------------------
 
@@ -302,7 +294,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, _graphicsQueue, _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
         }
         //--------------------------------------------------------------------------
 
@@ -591,8 +583,7 @@ namespace Kmplete
             submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
             submitInfo.signalSemaphoreCount = 1;
 
-            const auto result = vkQueueSubmit(_graphicsQueue, 1, &submitInfo, _waitFences[_currentBufferIndex].GetVkFence());
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to submit commands to queue");
+            _graphicsQueue->Submit({submitInfo}, _waitFences[_currentBufferIndex].GetVkFence());
         }
         //--------------------------------------------------------------------------
 
@@ -613,7 +604,7 @@ namespace Kmplete
                 };
 
                 auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer, imageBuffer, extent, *_imageCreatorDelegate.get());
-                VulkanUtils::EndSingleTimeCommandBuffer(_device, commandBuffer, _commandPool->GetVkCommandPool(), _graphicsQueue);
+                VulkanUtils::EndSingleTimeCommandBuffer(_device, commandBuffer, _commandPool->GetVkCommandPool(), *_graphicsQueue.get());
                 return texture;
             }
             catch (KMP_MB_UNUSED const std::runtime_error& e)

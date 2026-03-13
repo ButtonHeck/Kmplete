@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -175,7 +176,7 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
-            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue)
+            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, const VulkanQueue& queue)
             {
                 KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
@@ -186,8 +187,7 @@ namespace Kmplete
                 submitInfo.commandBufferCount = 1;
                 submitInfo.pCommandBuffers = &commandBuffer;
 
-                result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-                CheckResult(result, "failed to submit to queue");
+                queue.Submit({submitInfo}, VK_NULL_HANDLE);
 
                 result = vkDeviceWaitIdle(logicalDevice);
                 CheckResult(result, "failed to wait device to be idle");

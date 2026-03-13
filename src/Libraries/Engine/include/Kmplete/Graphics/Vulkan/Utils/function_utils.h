@@ -13,6 +13,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanQueue;
+
+
         namespace VulkanUtils
         {
             //TODO: comments
@@ -77,7 +80,7 @@ namespace Kmplete
 
             KMP_API void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters);
             KMP_NODISCARD VkCommandBuffer StartSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandPool commandPool);
-            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, VkQueue graphicsQueue);
+            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, const VulkanQueue& queue);
         }
     }
 }

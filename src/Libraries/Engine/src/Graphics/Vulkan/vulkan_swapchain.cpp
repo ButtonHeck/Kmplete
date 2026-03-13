@@ -12,7 +12,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, VkQueue graphicsQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                          const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
@@ -22,8 +22,8 @@ namespace Kmplete
             , _currentBufferIndex(currentBufferIndex)
             , _presentCompleteSemaphores(presentCompleteSemaphores)
             , _renderCompleteSemaphores(renderCompleteSemaphores)
+            , _presentationQueue(presentationQueue)
             , _device(device)
-            , _graphicsQueue(graphicsQueue)
             , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
@@ -84,8 +84,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            const auto result = QueuePresent();
-            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to present swapchain image");
+            QueuePresent();
         }
         //--------------------------------------------------------------------------
 
@@ -97,7 +96,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkResult VulkanSwapchain::QueuePresent()
+        void VulkanSwapchain::QueuePresent()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
@@ -108,7 +107,7 @@ namespace Kmplete
             presentInfo.waitSemaphoreCount = 1;
             presentInfo.pWaitSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
 
-            return vkQueuePresentKHR(_graphicsQueue, &presentInfo);
+            _presentationQueue.Present(presentInfo);
         }
         //--------------------------------------------------------------------------
 

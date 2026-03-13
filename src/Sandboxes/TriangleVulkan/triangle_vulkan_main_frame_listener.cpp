@@ -58,7 +58,6 @@ namespace Kmplete
         const Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        VkQueue graphicsQueue = vulkanDevice.GetVkGraphicsQueue();
         _device = vulkanDevice.GetVkDevice();
 
         // 1. create vertex buffer data
@@ -119,9 +118,7 @@ namespace Kmplete
             submitInfo.pCommandBuffers = &commandBuffer;
             Graphics::VulkanFence fence = vulkanDevice.CreateFence(false);
 
-            result = vkQueueSubmit(graphicsQueue, 1, &submitInfo, fence.GetVkFence());
-            Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to submit to queue");
-
+            vulkanDevice.GetGraphicsQueue().Submit({submitInfo}, fence.GetVkFence());
             fence.Wait(UINT64_MAX);
         }
 
