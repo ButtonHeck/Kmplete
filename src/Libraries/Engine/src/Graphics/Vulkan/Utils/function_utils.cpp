@@ -1,7 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -151,48 +150,6 @@ namespace Kmplete
                     0, nullptr,
                     0, nullptr,
                     1, &imageMemoryBarrier);
-            }
-            //--------------------------------------------------------------------------
-
-            VkCommandBuffer StartSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandPool commandPool)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-                auto commandBufferAllocateInfo = InitVkCommandBufferAllocateInfo();
-                commandBufferAllocateInfo.commandPool = commandPool;
-                commandBufferAllocateInfo.commandBufferCount = 1;
-
-                VkCommandBuffer commandBuffer;
-                auto result = vkAllocateCommandBuffers(logicalDevice, &commandBufferAllocateInfo, &commandBuffer);
-                CheckResult(result, "failed to allocate command buffers");
-
-                auto commandBufferBeginInfo = InitVkCommandBufferBeginInfo();
-                commandBufferBeginInfo.flags |= VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-                result = vkBeginCommandBuffer(commandBuffer, &commandBufferBeginInfo);
-                CheckResult(result, "failed to begin command buffer");
-
-                return commandBuffer;
-            }
-            //--------------------------------------------------------------------------
-
-            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, const VulkanQueue& queue)
-            {
-                KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-                auto result = vkEndCommandBuffer(commandBuffer);
-                CheckResult(result, "failed to end command buffer");
-
-                auto submitInfo = InitVkSubmitInfo();
-                submitInfo.commandBufferCount = 1;
-                submitInfo.pCommandBuffers = &commandBuffer;
-
-                queue.Submit({submitInfo}, VK_NULL_HANDLE);
-
-                result = vkDeviceWaitIdle(logicalDevice);
-                CheckResult(result, "failed to wait device to be idle");
-
-                vkFreeCommandBuffers(logicalDevice, commandPool, 1, &commandBuffer);
             }
             //--------------------------------------------------------------------------
         }

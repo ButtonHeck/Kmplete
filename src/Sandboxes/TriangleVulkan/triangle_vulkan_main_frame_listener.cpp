@@ -113,13 +113,9 @@ namespace Kmplete
 
 
             // 8. submit copy command to queue
-            auto submitInfo = Graphics::VulkanUtils::InitVkSubmitInfo();
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &commandBuffer;
             Graphics::VulkanFence fence = vulkanDevice.CreateFence(false);
-
-            vulkanDevice.GetGraphicsQueue().Submit({submitInfo}, fence.GetVkFence());
-            fence.Wait(UINT64_MAX);
+            vulkanDevice.GetGraphicsQueue().Submit(copyCmd, fence.GetVkFence());
+            fence.Wait();
         }
 
 

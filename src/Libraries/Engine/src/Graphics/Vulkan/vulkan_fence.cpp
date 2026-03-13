@@ -57,6 +57,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanFence::Wait() const
+        {
+            Wait(UINT64_MAX);
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanFence::Wait(UInt64 timeout) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);

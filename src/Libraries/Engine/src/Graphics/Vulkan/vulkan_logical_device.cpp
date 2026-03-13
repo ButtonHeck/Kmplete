@@ -445,7 +445,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            _waitFences[_currentBufferIndex].Wait(UINT64_MAX);
+            _waitFences[_currentBufferIndex].Wait();
             _waitFences[_currentBufferIndex].Reset();
         }
         //--------------------------------------------------------------------------
@@ -591,9 +591,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto commandBuffer = VulkanUtils::StartSingleTimeCommandBuffer(_device, _commandPool->GetVkCommandPool());
             try
             {
+                auto commandBuffer = CreateCommandBuffer();
+                commandBuffer.Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+
                 const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
                 const auto mipLevels = _formatDelegate.IsMipmapCompatible(textureVkFormat) ? image.GetMipLevels() : 1;
                 auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
@@ -603,14 +605,19 @@ namespace Kmplete
                     .depth = 1
                 };
 
-                auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer, imageBuffer, extent, *_imageCreatorDelegate.get());
-                VulkanUtils::EndSingleTimeCommandBuffer(_device, commandBuffer, _commandPool->GetVkCommandPool(), *_graphicsQueue.get());
+                auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer.GetVkCommandBuffer(), imageBuffer, extent, *_imageCreatorDelegate.get());
+
+                commandBuffer.End();
+
+                auto fence = CreateFence(false);
+                _graphicsQueue->Submit(commandBuffer, fence.GetVkFence());
+                fence.Wait();
+
                 return texture;
             }
             catch (KMP_MB_UNUSED const std::runtime_error& e)
             {
                 KMP_LOG_ERROR("failed to create a texture - {}", e.what());
-                vkFreeCommandBuffers(_device, _commandPool->GetVkCommandPool(), 1, &commandBuffer);
             }
 
             return nullptr;

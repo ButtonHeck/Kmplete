@@ -1,5 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -65,6 +67,20 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             vkQueueWaitIdle(_queue);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanQueue::Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            const auto buffer = commandBuffer.GetVkCommandBuffer();
+            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &buffer;
+
+            const auto result = vkQueueSubmit(_queue, 1, &submitInfo, fence);
+            VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
         }
         //--------------------------------------------------------------------------
 

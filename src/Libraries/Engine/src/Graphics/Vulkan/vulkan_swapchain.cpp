@@ -165,6 +165,11 @@ namespace Kmplete
             swapchainCreateInfo.imageExtent = _swapchainExtent;
             swapchainCreateInfo.imageArrayLayers = 1;
             swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            swapchainCreateInfo.preTransform = _vulkanContext.surfaceCapabilities.currentTransform;
+            swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes);
+            swapchainCreateInfo.clipped = VK_TRUE;
+            swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
             UInt32 indicesArray[] = { _vulkanContext.graphicsFamilyIndex, _vulkanContext.presentFamilyIndex };
             if (_vulkanContext.graphicsFamilyIndex != _vulkanContext.presentFamilyIndex)
@@ -177,12 +182,6 @@ namespace Kmplete
             {
                 swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
             }
-
-            swapchainCreateInfo.preTransform = _vulkanContext.surfaceCapabilities.currentTransform;
-            swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-            swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes);
-            swapchainCreateInfo.clipped = VK_TRUE;
-            swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 
             const auto result = vkCreateSwapchainKHR(_device, &swapchainCreateInfo, nullptr, &_swapchain);
             VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to create swapchain");

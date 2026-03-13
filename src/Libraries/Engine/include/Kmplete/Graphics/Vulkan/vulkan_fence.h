@@ -21,6 +21,7 @@ namespace Kmplete
             KMP_API VulkanFence& operator=(VulkanFence&& other) noexcept;
             KMP_API ~VulkanFence();
 
+            KMP_API void Wait() const;
             KMP_API void Wait(UInt64 timeout) const;
             KMP_API void Reset() const;
 

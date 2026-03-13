@@ -13,9 +13,6 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        class VulkanQueue;
-
-
         namespace VulkanUtils
         {
             //TODO: comments
@@ -79,8 +76,6 @@ namespace Kmplete
             KMP_NODISCARD std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions);
 
             KMP_API void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters);
-            KMP_NODISCARD VkCommandBuffer StartSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandPool commandPool);
-            void EndSingleTimeCommandBuffer(VkDevice logicalDevice, VkCommandBuffer commandBuffer, VkCommandPool commandPool, const VulkanQueue& queue);
         }
     }
 }

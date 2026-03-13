@@ -12,6 +12,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanCommandBuffer;
+
+
         class VulkanQueue
         {
             KMP_DISABLE_COPY(VulkanQueue)
@@ -24,6 +27,7 @@ namespace Kmplete
             ~VulkanQueue() = default;
 
             KMP_API void WaitIdle() const;
+            KMP_API void Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const;
             KMP_API void Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const;
             KMP_API void Present(const VkPresentInfoKHR& presentationInfo) const;
 
