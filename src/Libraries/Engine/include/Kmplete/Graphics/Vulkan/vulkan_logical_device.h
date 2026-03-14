@@ -11,10 +11,10 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_shader.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
-#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/nullability.h"
@@ -64,8 +64,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
-            KMP_NODISCARD KMP_API VkShaderModule CreateShaderModule(const Filepath& filename) const;
-            KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> CreateShadersInitializers(const Vector<VulkanUtils::ShaderCreateInfo>& shaderInfos) const;
+            KMP_NODISCARD KMP_API VulkanShader CreateShader(const Filepath& filepath) const;
 
         private:
             void _CreateLogicalDeviceObject();

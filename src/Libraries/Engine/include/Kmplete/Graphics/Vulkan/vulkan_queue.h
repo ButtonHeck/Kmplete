@@ -15,6 +15,7 @@ namespace Kmplete
         class VulkanCommandBuffer;
 
 
+        //TODO: comments
         class VulkanQueue
         {
             KMP_DISABLE_COPY(VulkanQueue)

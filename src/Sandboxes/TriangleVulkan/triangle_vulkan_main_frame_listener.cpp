@@ -212,10 +212,12 @@ namespace Kmplete
         vertexInputStateCI.pVertexAttributeDescriptions = vertexInputAttributes.data();
 
         // 11.10 shaders
-        const auto shaderStages = vulkanDevice.CreateShadersInitializers({
-            {String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"), VK_SHADER_STAGE_VERTEX_BIT, "main"},
-            {String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"), VK_SHADER_STAGE_FRAGMENT_BIT, "main"}
-        });
+        const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
+        const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
+        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
+            vertexShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
+            fragmentShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
+        };
 
         // 11.11 dynamic rendering
         auto pipelineRenderingCI = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
@@ -239,13 +241,6 @@ namespace Kmplete
 
         // 11.13 create pipeline object
         result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
-
-
-        // 12. destroy shader modules
-        for (const auto& shaderStage : shaderStages)
-        {
-            vkDestroyShaderModule(_device, shaderStage.module, nullptr);
-        }
 
         KMP_LOG_DEBUG("initialization finished");
     }

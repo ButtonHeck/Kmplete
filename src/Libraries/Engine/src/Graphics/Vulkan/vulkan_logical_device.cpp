@@ -4,12 +4,11 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
-#include "Kmplete/Base/types_aliases.h"
-#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -656,58 +655,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkShaderModule VulkanLogicalDevice::CreateShaderModule(const Filepath& filename) const
+        VulkanShader VulkanLogicalDevice::CreateShader(const Filepath& filepath) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            if (!Filesystem::FilepathExists(filename))
-            {
-                KMP_LOG_ERROR("shader file not found '{}'", filename);
-                return VK_NULL_HANDLE;
-            }
-
-            const auto shaderBinary = Filesystem::ReadFileAsBinary(filename);
-            if (shaderBinary.empty())
-            {
-                KMP_LOG_ERROR("failed to load shader binary from '{}'", filename);
-                return VK_NULL_HANDLE;
-            }
-
-            if (shaderBinary.size() % 4 != 0)
-            {
-                KMP_LOG_ERROR("shader binary size is not multiple of four '{}'", filename);
-                return VK_NULL_HANDLE;
-            }
-
-            auto shaderModuleCreateInfo = Graphics::VulkanUtils::InitVkShaderModuleCreateInfo();
-            shaderModuleCreateInfo.codeSize = shaderBinary.size();
-            shaderModuleCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
-
-            VkShaderModule shaderModule;
-            auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &shaderModule);
-            Graphics::VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create shader module");
-
-            return shaderModule;
-        }
-        //--------------------------------------------------------------------------
-
-        Vector<VkPipelineShaderStageCreateInfo> VulkanLogicalDevice::CreateShadersInitializers(const Vector<VulkanUtils::ShaderCreateInfo>& shaderInfos) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            Vector<VkPipelineShaderStageCreateInfo> initializers;
-            initializers.reserve(shaderInfos.size());
-
-            for (const auto& shaderInfo : shaderInfos)
-            {
-                auto createInfo = VulkanUtils::InitVkPipelineShaderStageCreateInfo(shaderInfo.stage);
-                createInfo.module = CreateShaderModule(shaderInfo.filepath);
-                createInfo.pName = shaderInfo.entryPointName;
-
-                initializers.push_back(createInfo);
-            }
-
-            return initializers;
+            return VulkanShader(_device, filepath);
         }
         //--------------------------------------------------------------------------
     }
