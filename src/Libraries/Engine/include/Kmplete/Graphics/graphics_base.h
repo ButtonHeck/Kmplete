@@ -57,12 +57,14 @@ namespace Kmplete
         {
             ShaderDataType type;
             size_t offset;
+            UInt32 location;
             bool normalized;
 
             BufferElement() = default;
-            explicit BufferElement(ShaderDataType dataType, bool isNormalized = false)
+            BufferElement(ShaderDataType dataType, UInt32 loc, bool isNormalized = false)
                 : type(dataType)
                 , offset(0)
+                , location(loc)
                 , normalized(isNormalized)
             {}
         };
@@ -73,9 +75,10 @@ namespace Kmplete
         {
         public:
             BufferLayout() = default;
-            KMP_API explicit BufferLayout(std::initializer_list<BufferElement> elements);
+            KMP_API explicit BufferLayout(std::initializer_list<BufferElement> elements, bool isInstanced = false);
 
             KMP_NODISCARD KMP_API UInt32 GetStride() const noexcept;
+            KMP_NODISCARD KMP_API bool IsInstanced() const noexcept;
             KMP_NODISCARD KMP_API const Vector<BufferElement>& GetElements() const noexcept;
 
         private:
@@ -84,6 +87,7 @@ namespace Kmplete
         private:
             Vector<BufferElement> _elements;
             UInt32 _stride = 0;
+            bool _instanced = false;
         };
         //--------------------------------------------------------------------------
     }

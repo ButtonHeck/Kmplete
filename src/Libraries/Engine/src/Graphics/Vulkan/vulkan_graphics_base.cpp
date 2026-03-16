@@ -6,7 +6,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VkFormat ImageChannelsToVkFormat(ImageChannels channels)
+        VkFormat ImageChannelsToVkFormat(ImageChannels channels) noexcept
         {
             switch (channels)
             {
@@ -24,6 +24,27 @@ namespace Kmplete
             }
 
             return VK_FORMAT_R8G8B8A8_UNORM;
+        }
+        //--------------------------------------------------------------------------
+
+        VkFormat ShaderDataTypeToVkFormat(ShaderDataType type) noexcept
+        {
+            switch (type)
+            {
+            case ShaderDataType::Float1:
+                return VK_FORMAT_R32_SFLOAT;
+            case ShaderDataType::Float2:
+                return VK_FORMAT_R32G32_SFLOAT;
+            case ShaderDataType::Float3:
+                return VK_FORMAT_R32G32B32_SFLOAT;
+            case ShaderDataType::Float4:
+                return VK_FORMAT_R32G32B32A32_SFLOAT;
+            default:
+                break;
+            }
+
+            KMP_LOG_WARN_FN("VulkanGraphicsBase: shader data type is unknown or complementary VkFormat is not added yet");
+            return VK_FORMAT_R32G32B32_SFLOAT;
         }
         //--------------------------------------------------------------------------
     }

@@ -91,10 +91,11 @@ namespace Kmplete
 
         // 5. create device-local vertex buffer
         const auto vertexBufferLayout = Graphics::BufferLayout({
-            Graphics::BufferElement{Graphics::ShaderDataType::Float2},
-            Graphics::BufferElement{Graphics::ShaderDataType::Float3}
+            Graphics::BufferElement{Graphics::ShaderDataType::Float2, 0},
+            Graphics::BufferElement{Graphics::ShaderDataType::Float3, 1}
         });
-        _vertexBuffer.reset(vulkanDevice.CreateVertexBufferPtr(VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize, vertexBufferLayout));
+        _vertexBuffer.reset(vulkanDevice.CreateVertexBufferPtr(VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize));
+        _vertexBuffer->AddLayout(vertexBufferLayout);
 
 
         // 6. create device-local index buffer
@@ -192,28 +193,14 @@ namespace Kmplete
         auto multisampleStateCI = Graphics::VulkanUtils::InitVkPipelineMultisampleStateCreateInfo();
         multisampleStateCI.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
-        // 11.9 vertex input binding
-        VkVertexInputBindingDescription vertexInputBinding{};
-        vertexInputBinding.binding = 0;
-        vertexInputBinding.stride = sizeof(Vertex);
-        vertexInputBinding.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
-        Array<VkVertexInputAttributeDescription, 2> vertexInputAttributes{};
-        // position
-        vertexInputAttributes[0].binding = 0;
-        vertexInputAttributes[0].location = 0;
-        vertexInputAttributes[0].format = VK_FORMAT_R32G32_SFLOAT;
-        vertexInputAttributes[0].offset = offsetof(Vertex, position);
-        // color
-        vertexInputAttributes[1].binding = 0;
-        vertexInputAttributes[1].location = 1;
-        vertexInputAttributes[1].format = VK_FORMAT_R32G32B32_SFLOAT;
-        vertexInputAttributes[1].offset = offsetof(Vertex, color);
 
+        // 11.9 vertex input binding
+        const auto& [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
         auto vertexInputStateCI = Graphics::VulkanUtils::InitVkPipelineVertexInputStateCreateInfo();
-        vertexInputStateCI.vertexBindingDescriptionCount = 1;
-        vertexInputStateCI.pVertexBindingDescriptions = &vertexInputBinding;
-        vertexInputStateCI.vertexAttributeDescriptionCount = 2;
-        vertexInputStateCI.pVertexAttributeDescriptions = vertexInputAttributes.data();
+        vertexInputStateCI.vertexBindingDescriptionCount = UInt32(inputDescriptions.size());
+        vertexInputStateCI.pVertexBindingDescriptions = inputDescriptions.data();
+        vertexInputStateCI.vertexAttributeDescriptionCount = UInt32(attributeDescriptions.size());
+        vertexInputStateCI.pVertexAttributeDescriptions = attributeDescriptions.data();
 
         // 11.10 shaders
         const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));

@@ -74,9 +74,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements)
+        BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, bool isInstanced /*= false*/)
             : _elements(elements)
             , _stride(0)
+            , _instanced(isInstanced)
         {
             _CalculateLayout();
         }
@@ -85,6 +86,12 @@ namespace Kmplete
         UInt32 BufferLayout::GetStride() const noexcept
         {
             return _stride;
+        }
+        //--------------------------------------------------------------------------
+
+        bool BufferLayout::IsInstanced() const noexcept
+        {
+            return _instanced;
         }
         //--------------------------------------------------------------------------
 
