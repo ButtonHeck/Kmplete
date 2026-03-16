@@ -631,11 +631,27 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanVertexBuffer VulkanLogicalDevice::CreateVertexBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const BufferLayout& layout) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return VulkanVertexBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, layout);
+        }
+        //--------------------------------------------------------------------------
+
         Nullable<VulkanBuffer*> VulkanLogicalDevice::CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             return new VulkanBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanVertexBuffer*> VulkanLogicalDevice::CreateVertexBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const BufferLayout& layout) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return new VulkanVertexBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, layout);
         }
         //--------------------------------------------------------------------------
 

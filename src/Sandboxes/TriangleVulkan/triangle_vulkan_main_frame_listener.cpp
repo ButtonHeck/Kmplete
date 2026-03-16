@@ -90,7 +90,11 @@ namespace Kmplete
 
 
         // 5. create device-local vertex buffer
-        _vertexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize));
+        const auto vertexBufferLayout = Graphics::BufferLayout({
+            Graphics::BufferElement{Graphics::ShaderDataType::Float2},
+            Graphics::BufferElement{Graphics::ShaderDataType::Float3}
+        });
+        _vertexBuffer.reset(vulkanDevice.CreateVertexBufferPtr(VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize, vertexBufferLayout));
 
 
         // 6. create device-local index buffer

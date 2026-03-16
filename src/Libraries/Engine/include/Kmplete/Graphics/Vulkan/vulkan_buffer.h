@@ -23,7 +23,7 @@ namespace Kmplete
             KMP_API VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size);
             KMP_API VulkanBuffer(VulkanBuffer&& other) noexcept;
             KMP_API VulkanBuffer& operator=(VulkanBuffer&& other) noexcept;
-            KMP_API ~VulkanBuffer();
+            KMP_API virtual ~VulkanBuffer();
 
             KMP_NODISCARD KMP_API VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_API void Unmap();

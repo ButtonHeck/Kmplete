@@ -5,6 +5,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 
 #include <vulkan/vulkan.h>
 
@@ -31,7 +32,7 @@ namespace Kmplete
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
 
-        UPtr<Graphics::VulkanBuffer> _vertexBuffer;
+        UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
         UInt32 _indexCount;
         VkDevice _device;

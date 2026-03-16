@@ -95,6 +95,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_command_pool.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_buffer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_command_buffer.h
@@ -111,6 +112,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_command_pool.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_buffer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_vertex_buffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_depth_stencil_attachment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_texture.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_command_buffer.cpp
