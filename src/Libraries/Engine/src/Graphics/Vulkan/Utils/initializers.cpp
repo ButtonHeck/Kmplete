@@ -74,6 +74,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceExtendedDynamicState3FeaturesEXT InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT()
+            {
+                return VkPhysicalDeviceExtendedDynamicState3FeaturesEXT{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTENDED_DYNAMIC_STATE_3_FEATURES_EXT
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {

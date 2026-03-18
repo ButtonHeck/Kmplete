@@ -133,6 +133,7 @@ namespace Kmplete
         
 
         // 10. create pipeline layout
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto pipelineLayoutCI = Graphics::VulkanUtils::InitVkPipelineLayoutCreateInfo();
         pipelineLayoutCI.setLayoutCount = 1;
         pipelineLayoutCI.pSetLayouts = &_descriptorSetLayout;
@@ -141,14 +142,17 @@ namespace Kmplete
 
 
         // 11.1 begin creating graphics pipeline
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto pipelineCI = Graphics::VulkanUtils::InitVkGraphicsPipelineCreateInfo();
         pipelineCI.layout = _pipelineLayout;
 
         // 11.2 input assembly stage
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto inputAssemblyStateCI = Graphics::VulkanUtils::InitVkPipelineInputAssemblyStateCreateInfo();
         inputAssemblyStateCI.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
 
         // 11.3 rasterization state
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto rasterizationStateCI = Graphics::VulkanUtils::InitVkPipelineRasterizationStateCreateInfo();
         rasterizationStateCI.polygonMode = VK_POLYGON_MODE_FILL;
         rasterizationStateCI.cullMode = VK_CULL_MODE_NONE;
@@ -159,6 +163,7 @@ namespace Kmplete
         rasterizationStateCI.lineWidth = 1.0f;
 
         // 11.4 color blend state
+        //TODO: remove after complete VulkanGraphicsPipeline
         VkPipelineColorBlendAttachmentState blendAttachmentState{};
         blendAttachmentState.colorWriteMask = 0xf;
         blendAttachmentState.blendEnable = VK_FALSE;
@@ -167,17 +172,25 @@ namespace Kmplete
         colorBlendStateCI.pAttachments = &blendAttachmentState;
 
         // 11.5 viewport state
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto viewportStateCI = Graphics::VulkanUtils::InitVkPipelineViewportStateCreateInfo();
         viewportStateCI.viewportCount = 1;
         viewportStateCI.scissorCount = 1;
 
         // 11.6 dynamic states
-        Vector<VkDynamicState> dynamicStateEnables = { VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR };
+        //TODO: remove after complete VulkanGraphicsPipeline
+        Vector<VkDynamicState> dynamicStateEnables = {
+            VK_DYNAMIC_STATE_VIEWPORT, 
+            VK_DYNAMIC_STATE_SCISSOR,
+            VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT,
+            //VK_DYNAMIC_STATE_COLOR_BLEND_ENABLE_EXT
+        };
         auto dynamicStateCI = Graphics::VulkanUtils::InitVkPipelineDynamicStateCreateInfo();
         dynamicStateCI.pDynamicStates = dynamicStateEnables.data();
         dynamicStateCI.dynamicStateCount = static_cast<uint32_t>(dynamicStateEnables.size());
 
         // 11.7 depth and stencil state
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto depthStencilStateCI = Graphics::VulkanUtils::InitVkPipelineDepthStencilStateCreateInfo();
         depthStencilStateCI.depthTestEnable = VK_TRUE;
         depthStencilStateCI.depthWriteEnable = VK_TRUE;
@@ -190,11 +203,13 @@ namespace Kmplete
         depthStencilStateCI.front = depthStencilStateCI.back;
 
         // 11.8 multisampling state
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto multisampleStateCI = Graphics::VulkanUtils::InitVkPipelineMultisampleStateCreateInfo();
         multisampleStateCI.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
 
 
         // 11.9 vertex input binding
+        //TODO: remove after complete VulkanGraphicsPipeline
         const auto& [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
         auto vertexInputStateCI = Graphics::VulkanUtils::InitVkPipelineVertexInputStateCreateInfo();
         vertexInputStateCI.vertexBindingDescriptionCount = UInt32(inputDescriptions.size());
@@ -211,6 +226,7 @@ namespace Kmplete
         };
 
         // 11.11 dynamic rendering
+        //TODO: remove after complete VulkanGraphicsPipeline
         auto pipelineRenderingCI = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
         pipelineRenderingCI.colorAttachmentCount = 1;
         pipelineRenderingCI.pColorAttachmentFormats = &vulkanContext.surfaceFormat.format;
@@ -261,6 +277,16 @@ namespace Kmplete
         VkDeviceSize offsets[1]{ 0 };
         VkBuffer vertexBuffer = _vertexBuffer->GetVkBuffer();
         VkBuffer indexBuffer = _indexBuffer->GetVkBuffer();
+
+        // TODO: abstract away this
+        auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
+        auto instance = vulkanBackend.GetVkInstance();
+        auto cmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(instance, "vkCmdSetRasterizationSamplesEXT");
+        if (cmdSetRasterizationSamplesEXT)
+        {
+            cmdSetRasterizationSamplesEXT(_commandBuffer, VK_SAMPLE_COUNT_1_BIT);
+        }
+
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);
         vkCmdBindIndexBuffer(_commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(_commandBuffer, _indexCount, 1, 0, 0, 0);

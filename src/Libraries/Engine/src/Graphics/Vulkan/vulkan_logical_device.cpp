@@ -66,6 +66,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            _pipelines.clear();
             _DeleteDescriptorPool();
             _DeletePipelineCache();
             _DeleteDepthStencilAttachment();
@@ -195,12 +196,17 @@ namespace Kmplete
 
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
+            auto dynamicStateFeatures3 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
+            dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
+
             VkPhysicalDeviceFeatures features{};
             features.samplerAnisotropy = VK_TRUE;
 
             auto features13 = VulkanUtils::InitVkPhysicalDeviceVulkan13Features();
             features13.dynamicRendering = VK_TRUE;
             features13.synchronization2 = VK_TRUE;
+            features13.pNext = &dynamicStateFeatures3;
 
             auto features2 = VulkanUtils::InitVkPhysicalDeviceFeatures2();
             features2.features = features;

@@ -13,6 +13,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -20,6 +21,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -133,6 +135,7 @@ namespace Kmplete
             UPtr<VulkanDepthStencilAttachment> _depthStencilAttachment;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
+            HashMap<StringID, UPtr<VulkanGraphicsPipeline>> _pipelines;
 
             VkExtent2D _currentExtent;
         };
