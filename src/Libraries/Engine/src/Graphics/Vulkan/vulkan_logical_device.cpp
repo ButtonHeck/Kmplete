@@ -592,6 +592,33 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanGraphicsPipeline& VulkanLogicalDevice::AddGraphicsPipeline(StringID sid)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            if (_pipelines.contains(sid))
+            {
+                KMP_LOG_WARN("pipeline with sid '{}' has already been created", sid);
+                return *_pipelines[sid].get();
+            }
+
+            const auto [iterator, hasEmplaced] = _pipelines.emplace(sid, CreateUPtr<VulkanGraphicsPipeline>(_device, sid));
+            return *iterator->second.get();
+        }
+        //--------------------------------------------------------------------------
+
+        OptionalRef<VulkanGraphicsPipeline> VulkanLogicalDevice::GetGraphicsPipeline(StringID sid)
+        {
+            if (_pipelines.contains(sid))
+            {
+                return *_pipelines[sid].get();
+            }
+            
+            KMP_LOG_ERROR("graphics pipeline with sid '{}' not found", sid);
+            return std::nullopt;
+        }
+        //--------------------------------------------------------------------------
+
         Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
