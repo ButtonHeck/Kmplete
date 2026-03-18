@@ -36,7 +36,8 @@ namespace Kmplete
             KMP_API void EndFrame() override;
             KMP_API void HandleWindowResize() override;
 
-            KMP_NODISCARD KMP_API const LogicalDevice& GetLogicalDevice() const noexcept override;
+            KMP_NODISCARD KMP_API const VulkanLogicalDevice& GetLogicalDevice() const noexcept override;
+            KMP_NODISCARD KMP_API VulkanLogicalDevice& GetLogicalDevice() noexcept override;
 
             KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
             KMP_NODISCARD KMP_API const VulkanContext& GetVulkanContext() const noexcept;

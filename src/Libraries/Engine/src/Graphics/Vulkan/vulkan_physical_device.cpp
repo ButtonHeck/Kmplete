@@ -93,7 +93,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const LogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() const noexcept
+        const VulkanLogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() const noexcept
+        {
+            return *_logicalDevice.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanLogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() noexcept
         {
             return *_logicalDevice.get();
         }

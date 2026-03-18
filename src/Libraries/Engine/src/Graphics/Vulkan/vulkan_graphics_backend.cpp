@@ -123,7 +123,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const PhysicalDevice& VulkanGraphicsBackend::GetPhysicalDevice() const noexcept
+        const VulkanPhysicalDevice& VulkanGraphicsBackend::GetPhysicalDevice() const noexcept
+        {
+            return *_physicalDevice.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanPhysicalDevice& VulkanGraphicsBackend::GetPhysicalDevice() noexcept
         {
             return *_physicalDevice.get();
         }

@@ -37,8 +37,6 @@ namespace Kmplete
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
         , _descriptorSetLayout(VK_NULL_HANDLE)
-        , _pipelineLayout(VK_NULL_HANDLE)
-        , _pipeline(VK_NULL_HANDLE)
         , _commandBuffer(VK_NULL_HANDLE)
     {
         _Initialize();
@@ -55,8 +53,8 @@ namespace Kmplete
     {
         KMP_LOG_DEBUG("initialization started...");
 
-        const Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
-        const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+        Graphics::VulkanLogicalDevice& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
         _device = vulkanDevice.GetVkDevice();
 
@@ -130,124 +128,51 @@ namespace Kmplete
         descriptorSetLayoutCI.pBindings = nullptr;
         result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCI, nullptr, &_descriptorSetLayout);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout");
-        
 
-        // 10. create pipeline layout
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto pipelineLayoutCI = Graphics::VulkanUtils::InitVkPipelineLayoutCreateInfo();
-        pipelineLayoutCI.setLayoutCount = 1;
-        pipelineLayoutCI.pSetLayouts = &_descriptorSetLayout;
-        result = vkCreatePipelineLayout(_device, &pipelineLayoutCI, nullptr, &_pipelineLayout);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create pipeline layout");
+        auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
+        pipeline.AddDescriptorSetLayout(_descriptorSetLayout);
+        pipeline.SetupInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, false);
+        pipeline.SetupPolygonMode(VK_POLYGON_MODE_FILL);
+        pipeline.SetupCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        pipeline.SetupDepthClamping(false);
+        pipeline.SetupRasterizerDiscard(false);
+        pipeline.SetupDepthBiasParameters(false, 0.0f, 0.0f, 0.0f);
 
-
-        // 11.1 begin creating graphics pipeline
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto pipelineCI = Graphics::VulkanUtils::InitVkGraphicsPipelineCreateInfo();
-        pipelineCI.layout = _pipelineLayout;
-
-        // 11.2 input assembly stage
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto inputAssemblyStateCI = Graphics::VulkanUtils::InitVkPipelineInputAssemblyStateCreateInfo();
-        inputAssemblyStateCI.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
-
-        // 11.3 rasterization state
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto rasterizationStateCI = Graphics::VulkanUtils::InitVkPipelineRasterizationStateCreateInfo();
-        rasterizationStateCI.polygonMode = VK_POLYGON_MODE_FILL;
-        rasterizationStateCI.cullMode = VK_CULL_MODE_NONE;
-        rasterizationStateCI.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
-        rasterizationStateCI.depthClampEnable = VK_FALSE;
-        rasterizationStateCI.rasterizerDiscardEnable = VK_FALSE;
-        rasterizationStateCI.depthBiasEnable = VK_FALSE;
-        rasterizationStateCI.lineWidth = 1.0f;
-
-        // 11.4 color blend state
-        //TODO: remove after complete VulkanGraphicsPipeline
         VkPipelineColorBlendAttachmentState blendAttachmentState{};
         blendAttachmentState.colorWriteMask = 0xf;
         blendAttachmentState.blendEnable = VK_FALSE;
-        auto colorBlendStateCI = Graphics::VulkanUtils::InitVkPipelineColorBlendStateCreateInfo();
-        colorBlendStateCI.attachmentCount = 1;
-        colorBlendStateCI.pAttachments = &blendAttachmentState;
+        pipeline.AddColorBlendAttachment(blendAttachmentState);
 
-        // 11.5 viewport state
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto viewportStateCI = Graphics::VulkanUtils::InitVkPipelineViewportStateCreateInfo();
-        viewportStateCI.viewportCount = 1;
-        viewportStateCI.scissorCount = 1;
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VIEWPORT).AddDynamicState(VK_DYNAMIC_STATE_SCISSOR).AddDynamicState(VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT);
+        pipeline.SetupDepthTest(true);
+        pipeline.SetupDepthWrite(true);
+        pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
+        pipeline.SetupDepthBoundsTest(false, 0.0f, 1.0f);
+        pipeline.SetupStencilTest(false);
+        pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
+        pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipeline.AddRenderingColorAttachment(vulkanContext.surfaceFormat.format);
 
-        // 11.6 dynamic states
-        //TODO: remove after complete VulkanGraphicsPipeline
-        Vector<VkDynamicState> dynamicStateEnables = {
-            VK_DYNAMIC_STATE_VIEWPORT, 
-            VK_DYNAMIC_STATE_SCISSOR,
-            VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT,
-            //VK_DYNAMIC_STATE_COLOR_BLEND_ENABLE_EXT
-        };
-        auto dynamicStateCI = Graphics::VulkanUtils::InitVkPipelineDynamicStateCreateInfo();
-        dynamicStateCI.pDynamicStates = dynamicStateEnables.data();
-        dynamicStateCI.dynamicStateCount = static_cast<uint32_t>(dynamicStateEnables.size());
+        VkStencilOpState back{};
+        back.failOp = VK_STENCIL_OP_KEEP;
+        back.passOp = VK_STENCIL_OP_KEEP;
+        back.compareOp = VK_COMPARE_OP_ALWAYS;
+        pipeline.SetupStencilStates(back, back);
 
-        // 11.7 depth and stencil state
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto depthStencilStateCI = Graphics::VulkanUtils::InitVkPipelineDepthStencilStateCreateInfo();
-        depthStencilStateCI.depthTestEnable = VK_TRUE;
-        depthStencilStateCI.depthWriteEnable = VK_TRUE;
-        depthStencilStateCI.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
-        depthStencilStateCI.depthBoundsTestEnable = VK_FALSE;
-        depthStencilStateCI.back.failOp = VK_STENCIL_OP_KEEP;
-        depthStencilStateCI.back.passOp = VK_STENCIL_OP_KEEP;
-        depthStencilStateCI.back.compareOp = VK_COMPARE_OP_ALWAYS;
-        depthStencilStateCI.stencilTestEnable = VK_FALSE;
-        depthStencilStateCI.front = depthStencilStateCI.back;
-
-        // 11.8 multisampling state
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto multisampleStateCI = Graphics::VulkanUtils::InitVkPipelineMultisampleStateCreateInfo();
-        multisampleStateCI.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
-
-
-        // 11.9 vertex input binding
-        //TODO: remove after complete VulkanGraphicsPipeline
-        const auto& [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
-        auto vertexInputStateCI = Graphics::VulkanUtils::InitVkPipelineVertexInputStateCreateInfo();
-        vertexInputStateCI.vertexBindingDescriptionCount = UInt32(inputDescriptions.size());
-        vertexInputStateCI.pVertexBindingDescriptions = inputDescriptions.data();
-        vertexInputStateCI.vertexAttributeDescriptionCount = UInt32(attributeDescriptions.size());
-        vertexInputStateCI.pVertexAttributeDescriptions = attributeDescriptions.data();
+        auto [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
+        pipeline.AddVertexInputBindings(std::move(inputDescriptions));
+        pipeline.AddVertexAttributesDescriptions(std::move(attributeDescriptions));
 
         // 11.10 shaders
         const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
         const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
-        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
+        auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             vertexShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
             fragmentShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
         };
+        pipeline.AddShaderStages(std::move(shaderStages));
 
-        // 11.11 dynamic rendering
-        //TODO: remove after complete VulkanGraphicsPipeline
-        auto pipelineRenderingCI = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
-        pipelineRenderingCI.colorAttachmentCount = 1;
-        pipelineRenderingCI.pColorAttachmentFormats = &vulkanContext.surfaceFormat.format;
-        pipelineRenderingCI.depthAttachmentFormat = vulkanContext.defaultDepthFormat;
-        pipelineRenderingCI.stencilAttachmentFormat = vulkanContext.defaultDepthFormat;
-
-        // 11.12 assign all previous stages to pipeline creation info
-        pipelineCI.pVertexInputState = &vertexInputStateCI;
-        pipelineCI.pInputAssemblyState = &inputAssemblyStateCI;
-        pipelineCI.pRasterizationState = &rasterizationStateCI;
-        pipelineCI.pColorBlendState = &colorBlendStateCI;
-        pipelineCI.pMultisampleState = &multisampleStateCI;
-        pipelineCI.pViewportState = &viewportStateCI;
-        pipelineCI.pDepthStencilState = &depthStencilStateCI;
-        pipelineCI.pDynamicState = &dynamicStateCI;
-        pipelineCI.stageCount = UInt32(shaderStages.size());
-        pipelineCI.pStages = shaderStages.data();
-        pipelineCI.pNext = &pipelineRenderingCI;
-
-        // 11.13 create pipeline object
-        result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
+        pipeline.Build();
 
         KMP_LOG_DEBUG("initialization finished");
     }
@@ -257,8 +182,6 @@ namespace Kmplete
     {
         _vertexBuffer.reset();
         _indexBuffer.reset();
-        vkDestroyPipeline(_device, _pipeline, nullptr);
-        vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
         vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout, nullptr);
     }
     //--------------------------------------------------------------------------
@@ -270,9 +193,11 @@ namespace Kmplete
     void MainFrameListener::Render()
     {
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
+        auto pipeline = pipelineOpt.value().get().GetVkPipeline();
 
         _commandBuffer = vulkanDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
-        vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipeline);
+        vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
         VkDeviceSize offsets[1]{ 0 };
         VkBuffer vertexBuffer = _vertexBuffer->GetVkBuffer();

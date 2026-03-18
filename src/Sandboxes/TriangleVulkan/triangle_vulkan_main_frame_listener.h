@@ -37,8 +37,6 @@ namespace Kmplete
         UInt32 _indexCount;
         VkDevice _device;
         VkDescriptorSetLayout _descriptorSetLayout;
-        VkPipelineLayout _pipelineLayout;
-        VkPipeline _pipeline;
         VkCommandBuffer _commandBuffer;
     };
     //--------------------------------------------------------------------------

@@ -26,7 +26,8 @@ namespace Kmplete
             KMP_API ~VulkanGraphicsBackend();
 
             KMP_NODISCARD KMP_API const GraphicsSurface& GetGraphicsSurface() const noexcept override;
-            KMP_NODISCARD KMP_API const PhysicalDevice& GetPhysicalDevice() const noexcept override;
+            KMP_NODISCARD KMP_API const VulkanPhysicalDevice& GetPhysicalDevice() const noexcept override;
+            KMP_NODISCARD KMP_API VulkanPhysicalDevice& GetPhysicalDevice() noexcept override;
 
             KMP_API void StartFrame(float frameTimestep) override;
             KMP_API void EndFrame() override;

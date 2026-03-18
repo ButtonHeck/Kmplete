@@ -607,11 +607,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        OptionalRef<VulkanGraphicsPipeline> VulkanLogicalDevice::GetGraphicsPipeline(StringID sid)
+        OptionalRef<VulkanGraphicsPipeline> VulkanLogicalDevice::GetGraphicsPipeline(StringID sid) const
         {
             if (_pipelines.contains(sid))
             {
-                return *_pipelines[sid].get();
+                return *_pipelines.at(sid).get();
             }
             
             KMP_LOG_ERROR("graphics pipeline with sid '{}' not found", sid);

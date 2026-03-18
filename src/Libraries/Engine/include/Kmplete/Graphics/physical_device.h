@@ -37,6 +37,7 @@ namespace Kmplete
             KMP_API virtual void HandleWindowResize() {};
 
             KMP_NODISCARD KMP_API virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;
+            KMP_NODISCARD KMP_API virtual LogicalDevice& GetLogicalDevice() noexcept = 0;
 
         protected:
             virtual void _QueryGPUInfo() = 0;
