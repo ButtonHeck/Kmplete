@@ -13,6 +13,12 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/ImGui/helper_functions.h"
+#include "Kmplete/ImGui/scope_guards.h"
+#include "Kmplete/ImGui/context_vulkan.h"
+#include "Kmplete/ImGui/implementation_glfw_vulkan.h"
+#include "Kmplete/Assets/assets_manager.h"
+#include "Kmplete/Event/event_queue.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -29,7 +35,7 @@ namespace Kmplete
     }
 
 
-    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
@@ -39,6 +45,9 @@ namespace Kmplete
         , _device(VK_NULL_HANDLE)
         , _descriptorSetLayout(VK_NULL_HANDLE)
         , _commandBuffer(VK_NULL_HANDLE)
+        , _imguiImpl(nullptr)
+        , _assetsManager(assetsManager)
+        , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
     {
         _Initialize();
     }
@@ -52,14 +61,18 @@ namespace Kmplete
 
     void MainFrameListener::_Initialize()
     {
-        KMP_LOG_DEBUG("initialization started...");
+        _InitializeTriangle();
+        _InitializeImGui(_mainWindow.GetDPIScale());
+    }
+    //--------------------------------------------------------------------------
 
+    void MainFrameListener::_InitializeTriangle()
+    {
         Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         Graphics::VulkanLogicalDevice& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
         _device = vulkanDevice.GetVkDevice();
 
-        // 1. create vertex buffer data
         const Vector<Vertex> vertices{
             {{ 0.95f,  0.95f}, {1.0f, 0.0f, 0.0f}},
             {{-0.95f,  0.97f}, {0.0f, 1.0f, 0.0f}},
@@ -68,17 +81,14 @@ namespace Kmplete
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
 
-        // 2. create index buffer data
         const Vector<UInt32> indices{ 0, 1, 2 };
         _indexCount = UInt32(indices.size());
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
 
-        //3. create staging buffer
         Graphics::VulkanBuffer stagingBuffer = vulkanDevice.CreateBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + indexBufferSize);
 
 
-        // 4. fill staging buffer data
         auto result = stagingBuffer.Map();
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to map texture buffer");
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
@@ -88,7 +98,6 @@ namespace Kmplete
         stagingBuffer.Unmap();
 
 
-        // 5. create device-local vertex buffer
         const auto vertexBufferLayout = Graphics::BufferLayout({
             Graphics::BufferElement{Graphics::ShaderDataType::Float2, 0},
             Graphics::BufferElement{Graphics::ShaderDataType::Float3, 1}
@@ -97,12 +106,10 @@ namespace Kmplete
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
 
-        // 6. create device-local index buffer
         _indexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
 
 
         {
-            // 7. copy staging buffer to device-local vertex and index buffer
             Graphics::VulkanCommandBuffer copyCmd = vulkanDevice.CreateCommandBuffer();
             VkCommandBuffer commandBuffer = copyCmd.GetVkCommandBuffer();
             copyCmd.Begin();
@@ -116,14 +123,12 @@ namespace Kmplete
             copyCmd.End();
 
 
-            // 8. submit copy command to queue
             Graphics::VulkanFence fence = vulkanDevice.CreateFence(false);
             vulkanDevice.GetGraphicsQueue().Submit(copyCmd, fence.GetVkFence());
             fence.Wait();
         }
 
 
-        // 9. create empty descriptor set layout
         auto descriptorSetLayoutCI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
         descriptorSetLayoutCI.bindingCount = 0;
         descriptorSetLayoutCI.pBindings = nullptr;
@@ -164,7 +169,6 @@ namespace Kmplete
         pipeline.AddVertexInputBindings(std::move(inputDescriptions));
         pipeline.AddVertexAttributesDescriptions(std::move(attributeDescriptions));
 
-        // 11.10 shaders
         const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
         const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
         auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
@@ -174,16 +178,69 @@ namespace Kmplete
         pipeline.AddShaderStages(std::move(shaderStages));
 
         pipeline.Build();
+    }
+    //--------------------------------------------------------------------------
 
-        KMP_LOG_DEBUG("initialization finished");
+    void MainFrameListener::_InitializeImGui(float dpiScale)
+    {
+        ImGuiUtils::Context* context = nullptr;
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
+            const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+            const auto& logicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
+
+            ImGui_ImplVulkan_InitInfo initInfo{};
+            initInfo.Instance = vulkanBackend.GetVkInstance();
+            initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
+            initInfo.Device = logicalDevice.GetVkDevice();
+            initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
+            initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
+            initInfo.PipelineCache = VK_NULL_HANDLE;
+            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
+            initInfo.Allocator = VK_NULL_HANDLE;
+            initInfo.MinImageCount = Graphics::NumConcurrentFrames;
+            initInfo.ImageCount = Graphics::NumConcurrentFrames;
+            initInfo.CheckVkResultFn = nullptr;
+            initInfo.UseDynamicRendering = true;
+            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
+            initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);
+        }
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
+
+        const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
+        _imguiImpl->Stylize(dpiScale);
     }
     //--------------------------------------------------------------------------
 
     void MainFrameListener::_Finalize()
     {
+        _imguiImpl.reset();
+
         _vertexBuffer.reset();
         _indexBuffer.reset();
         vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout, nullptr);
+    }
+    //--------------------------------------------------------------------------
+
+    void MainFrameListener::_SetMultisampling(UInt32 samples)
+    {
+        Events::QueueEvent(CreateUPtr<Events::MultisamplingChangeEvent>(samples));
+    }
+    //--------------------------------------------------------------------------
+
+    bool MainFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
+    {
+        Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        auto& cswapchain = dynamic_cast<const Graphics::VulkanSwapchain&>(vulkanDevice.GetSwapchain());
+        auto& swapchain = const_cast<Graphics::VulkanSwapchain&>(cswapchain);
+        swapchain.SetMultisampling(VkSampleCountFlagBits(evt.msaaSamples));
+        return true;
     }
     //--------------------------------------------------------------------------
 
@@ -192,6 +249,13 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     void MainFrameListener::Render()
+    {
+        _RenderTriangle();
+        _RenderImGui();
+    }
+    //--------------------------------------------------------------------------
+
+    void MainFrameListener::_RenderTriangle()
     {
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
@@ -217,6 +281,38 @@ namespace Kmplete
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);
         vkCmdBindIndexBuffer(_commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(_commandBuffer, _indexCount, 1, 0, 0, 0);
+    }
+    //--------------------------------------------------------------------------
+
+    void MainFrameListener::_RenderImGui()
+    {
+        _imguiImpl->NewFrame();
+
+        static constexpr auto applicationWindowFlags =
+            ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+
+        ImGui::Begin("TriangleVulkan", nullptr, applicationWindowFlags);
+        if (ImGui::Button("Multisampling 1"))
+        {
+            _SetMultisampling(1);
+        }
+        if (ImGui::Button("Multisampling 2"))
+        {
+            _SetMultisampling(2);
+        }
+        if (ImGui::Button("Multisampling 4"))
+        {
+            _SetMultisampling(4);
+        }
+        ImGui::End();
+
+        auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        auto commandBuffer = vulkanLogicalDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
+        auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+        vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
+        vulkanImGuiUtils->Render();
+
+        ImGui::EndFrame();
     }
     //--------------------------------------------------------------------------
 }

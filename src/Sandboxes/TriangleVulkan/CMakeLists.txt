@@ -7,6 +7,7 @@ project(TriangleVulkan LANGUAGES CXX)
 set(TriangleVulkan_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/triangle_vulkan_application.h
     ${CMAKE_CURRENT_LIST_DIR}/triangle_vulkan_main_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/events.h
 )
 set(TriangleVulkan_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
