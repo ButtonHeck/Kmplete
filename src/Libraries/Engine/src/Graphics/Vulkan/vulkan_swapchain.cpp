@@ -57,11 +57,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            vkDestroyImageView(_device, _multisampledColorImageView, nullptr);
-            _multisampledColorImage.reset();
-
-            vkDestroyImageView(_device, _multisampledDepthImageView, nullptr);
-            _multisampledDepthImage.reset();
+            _DestroyMultisamplingAttachments();
 
             for (auto imageView : _swapchainImageViews)
             {
@@ -70,6 +66,7 @@ namespace Kmplete
 
             vkDestroySwapchainKHR(_device, _swapchain, nullptr);
         }
+        //--------------------------------------------------------------------------
 
         void VulkanSwapchain::StartFrame(float /*frameTimestep*/)
         {
@@ -128,8 +125,8 @@ namespace Kmplete
                 _msaaSamples = _vulkanContext.supportedSampleCounts.top();
             }
 
-            _CreateMultisampledImages();
-            _CreateMultisampledImagesViews();
+            _DestroyMultisamplingAttachments();
+            _CreateMultisampledAttachments();
         }
         //--------------------------------------------------------------------------
 
@@ -272,7 +269,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateMultisampledImages()
+        void VulkanSwapchain::_CreateMultisampledAttachments()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -306,34 +303,46 @@ namespace Kmplete
             depthCreationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
             depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanSwapchain::_CreateMultisampledImagesViews()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             VkImageSubresourceRange colorSubresourceRange = {
-                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                    .baseMipLevel = 0,
-                    .levelCount = 1,
-                    .baseArrayLayer = 0,
-                    .layerCount = 1
+                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                .baseMipLevel = 0,
+                .levelCount = 1,
+                .baseArrayLayer = 0,
+                .layerCount = 1
             };
             _multisampledColorImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledColorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange);
 
             VkImageSubresourceRange depthSubresourceRange = {
-                    .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT,
-                    .baseMipLevel = 0,
-                    .levelCount = 1,
-                    .baseArrayLayer = 0,
-                    .layerCount = 1
+                .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT,
+                .baseMipLevel = 0,
+                .levelCount = 1,
+                .baseArrayLayer = 0,
+                .layerCount = 1
             };
             if (_vulkanContext.defaultDepthFormat >= VK_FORMAT_D16_UNORM_S8_UINT)
             {
                 depthSubresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
             }
             _multisampledDepthImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledDepthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_DestroyMultisamplingAttachments()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            if (_multisampledColorImageView != VK_NULL_HANDLE)
+            {
+                vkDestroyImageView(_device, _multisampledColorImageView, nullptr);
+            }
+            _multisampledColorImage.reset();
+
+            if (_multisampledDepthImageView != VK_NULL_HANDLE)
+            {
+                vkDestroyImageView(_device, _multisampledDepthImageView, nullptr);
+            }
+            _multisampledDepthImage.reset();
         }
         //--------------------------------------------------------------------------
     }

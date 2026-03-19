@@ -55,8 +55,8 @@ namespace Kmplete
             void _CreateSwapchainObject(VkSurfaceKHR surface);
             void _CreateSwapchainImages();
             void _CreateSwapchainImageViews();
-            void _CreateMultisampledImages();
-            void _CreateMultisampledImagesViews();
+            void _CreateMultisampledAttachments();
+            void _DestroyMultisamplingAttachments();
 
         private:
             const VulkanContext& _vulkanContext;
