@@ -201,7 +201,25 @@ namespace Kmplete
 
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicState(VkDynamicState dynamicState)
         {
-            _dynamicStates.push_back(dynamicState);
+            if (std::find(_dynamicStates.cbegin(), _dynamicStates.cend(), dynamicState) == _dynamicStates.cend())
+            {
+                _dynamicStates.push_back(dynamicState);
+            }
+
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates)
+        {
+            for (const auto& state : dynamicStates)
+            {
+                if (std::find(_dynamicStates.cbegin(), _dynamicStates.cend(), state) == _dynamicStates.cend())
+                {
+                    _dynamicStates.push_back(state);
+                }
+            }
+
             return *this;
         }
         //--------------------------------------------------------------------------
@@ -227,7 +245,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthBoundsTest(bool enabled, float min, float max)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthBoundsTest(bool enabled, float min /*= 0.0f*/, float max /*= 1.0f*/)
         {
             _depthStencilStateCreateInfo.depthBoundsTestEnable = enabled;
             _depthStencilStateCreateInfo.minDepthBounds = min;

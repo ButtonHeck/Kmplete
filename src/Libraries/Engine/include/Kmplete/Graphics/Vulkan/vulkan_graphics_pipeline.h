@@ -35,10 +35,11 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& SetupColorBlendConstants(Array<float, 4> constants);
             KMP_API VulkanGraphicsPipeline& AddColorBlendAttachment(VkPipelineColorBlendAttachmentState colorBlendAttachment);
             KMP_API VulkanGraphicsPipeline& AddDynamicState(VkDynamicState dynamicState);
+            KMP_API VulkanGraphicsPipeline& AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates);
             KMP_API VulkanGraphicsPipeline& SetupDepthTest(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetupDepthWrite(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetupDepthComparison(VkCompareOp compareOp);
-            KMP_API VulkanGraphicsPipeline& SetupDepthBoundsTest(bool enabled, float min, float max);
+            KMP_API VulkanGraphicsPipeline& SetupDepthBoundsTest(bool enabled, float min = 0.0f, float max = 1.0f);
             KMP_API VulkanGraphicsPipeline& SetupStencilTest(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetupStencilStates(VkStencilOpState frontFaceState, VkStencilOpState backFaceState);
             KMP_API VulkanGraphicsPipeline& SetupMultisamplingSamples(VkSampleCountFlagBits samples);

@@ -149,11 +149,11 @@ namespace Kmplete
         blendAttachmentState.blendEnable = VK_FALSE;
         pipeline.AddColorBlendAttachment(blendAttachmentState);
 
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VIEWPORT).AddDynamicState(VK_DYNAMIC_STATE_SCISSOR).AddDynamicState(VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT);
+        pipeline.AddDynamicStates({VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT});
         pipeline.SetupDepthTest(true);
         pipeline.SetupDepthWrite(true);
         pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
-        pipeline.SetupDepthBoundsTest(false, 0.0f, 1.0f);
+        pipeline.SetupDepthBoundsTest(false);
         pipeline.SetupStencilTest(false);
         pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
         pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
