@@ -36,10 +36,18 @@ namespace Kmplete
             KMP_API VkResult AcquireNextImage();
             KMP_API void QueuePresent();
 
+            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetMultisampling() const noexcept;
+            KMP_API void SetMultisampling(VkSampleCountFlagBits samples);
+
             KMP_NODISCARD KMP_API UInt32 GetImageIndex() const noexcept;
             KMP_NODISCARD KMP_API UInt32 GetImageCount() const noexcept;
             KMP_NODISCARD KMP_API VkImage GetCurrentImage() const;
             KMP_NODISCARD KMP_API VkImageView GetCurrentImageView() const;
+
+            KMP_NODISCARD KMP_API VkImage GetMultisampledColorImage() const;
+            KMP_NODISCARD KMP_API VkImage GetMultisampledDepthStencilImage() const;
+            KMP_NODISCARD KMP_API VkImageView GetMultisampledColorImageView() const;
+            KMP_NODISCARD KMP_API VkImageView GetMultisampledDepthStencilImageView() const;
 
         private:
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
@@ -47,8 +55,8 @@ namespace Kmplete
             void _CreateSwapchainObject(VkSurfaceKHR surface);
             void _CreateSwapchainImages();
             void _CreateSwapchainImageViews();
-            void _CreateAttachmentImages();
-            void _CreateAttachmentImagesViews();
+            void _CreateMultisampledImages();
+            void _CreateMultisampledImagesViews();
 
         private:
             const VulkanContext& _vulkanContext;
@@ -67,11 +75,11 @@ namespace Kmplete
             VkFormat _swapchainImageFormat;
             Vector<VkImageView> _swapchainImageViews;
 
-            UPtr<VulkanImage> _colorImage;
-            VkImageView _colorImageView;
-
-            UPtr<VulkanImage> _depthImage;
-            VkImageView _depthImageView;
+            VkSampleCountFlagBits _msaaSamples;
+            UPtr<VulkanImage> _multisampledColorImage;
+            VkImageView _multisampledColorImageView;
+            UPtr<VulkanImage> _multisampledDepthImage;
+            VkImageView _multisampledDepthImageView;
         };
         //--------------------------------------------------------------------------
     }

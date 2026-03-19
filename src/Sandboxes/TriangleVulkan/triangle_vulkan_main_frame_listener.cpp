@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
@@ -209,7 +210,8 @@ namespace Kmplete
         auto cmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(instance, "vkCmdSetRasterizationSamplesEXT");
         if (cmdSetRasterizationSamplesEXT)
         {
-            cmdSetRasterizationSamplesEXT(_commandBuffer, VK_SAMPLE_COUNT_1_BIT);
+            const auto& swapchain = dynamic_cast<const Graphics::VulkanSwapchain&>(vulkanDevice.GetSwapchain());
+            cmdSetRasterizationSamplesEXT(_commandBuffer, swapchain.GetMultisampling());
         }
 
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);

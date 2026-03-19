@@ -40,7 +40,6 @@ namespace Kmplete
             , _commandPool(nullptr)
             , _swapchain(nullptr)
             , _drawCommandBuffers()
-            , _depthStencilAttachment(nullptr)
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
             , _currentExtent(_UpdateExtent())
@@ -56,7 +55,6 @@ namespace Kmplete
             _CreateCommandPool();
             _CreateSwapchain();
             _CreateCommandBuffers();
-            _CreateDepthStencilAttachment();
             _CreatePipelineCache();
             _CreateDescriptorPool();
         }
@@ -69,7 +67,6 @@ namespace Kmplete
             _pipelines.clear();
             _DeleteDescriptorPool();
             _DeletePipelineCache();
-            _DeleteDepthStencilAttachment();
             _DeleteCommandBuffers();
             _DeleteSwapchain();
             _DeleteCommandPool();
@@ -119,7 +116,6 @@ namespace Kmplete
 
             WaitIdle();
 
-            _DeleteDepthStencilAttachment();
             _DeleteCommandBuffers();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
@@ -127,7 +123,6 @@ namespace Kmplete
             _CreateSynchronizationObjects();
             _CreateSwapchain();
             _CreateCommandBuffers();
-            _CreateDepthStencilAttachment();
         }
         //--------------------------------------------------------------------------
 
@@ -331,22 +326,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateDepthStencilAttachment()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            _depthStencilAttachment.reset(new VulkanDepthStencilAttachment(*_imageCreatorDelegate.get(), _device, _currentExtent, _vulkanContext.defaultDepthFormat));
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteDepthStencilAttachment()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            _depthStencilAttachment.reset();
-        }
-        //--------------------------------------------------------------------------
-
         void VulkanLogicalDevice::_CreatePipelineCache()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -482,7 +461,7 @@ namespace Kmplete
 
             barrierParameters = {
                 .cmdbuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(),
-                .image = _depthStencilAttachment->GetImage(),
+                .image = _swapchain->GetMultisampledDepthStencilImage(),
                 .srcAccessMask = VK_ACCESS_NONE,
                 .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
                 .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
@@ -500,14 +479,24 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             auto colorAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
-            colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
             colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
             colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
             colorAttachmentInfo.clearValue.color = { 0.0f, 0.0f, 0.0f, 0.0f };
+            if (_swapchain->GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
+            {
+                colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
+            }
+            else
+            {
+                colorAttachmentInfo.imageView = _swapchain->GetMultisampledColorImageView();
+                colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
+                colorAttachmentInfo.resolveImageView = _swapchain->GetCurrentImageView();
+                colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
+            }
 
             auto depthStencilAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
-            depthStencilAttachmentInfo.imageView = _depthStencilAttachment->GetImageView();
+            depthStencilAttachmentInfo.imageView = _swapchain->GetMultisampledDepthStencilImageView();
             depthStencilAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
             depthStencilAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
             depthStencilAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;

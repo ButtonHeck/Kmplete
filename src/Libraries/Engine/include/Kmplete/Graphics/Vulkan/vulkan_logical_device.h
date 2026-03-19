@@ -3,7 +3,6 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_depth_stencil_attachment.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
@@ -92,9 +91,6 @@ namespace Kmplete
             void _CreateCommandBuffers();
             void _DeleteCommandBuffers();
 
-            void _CreateDepthStencilAttachment();
-            void _DeleteDepthStencilAttachment();
-
             void _CreatePipelineCache();
             void _DeletePipelineCache();
 
@@ -136,7 +132,6 @@ namespace Kmplete
             UPtr<VulkanCommandPool> _commandPool;
             UPtr<VulkanSwapchain> _swapchain;
             Vector<VulkanCommandBuffer> _drawCommandBuffers;
-            UPtr<VulkanDepthStencilAttachment> _depthStencilAttachment;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
             HashMap<StringID, UPtr<VulkanGraphicsPipeline>> _pipelines;
