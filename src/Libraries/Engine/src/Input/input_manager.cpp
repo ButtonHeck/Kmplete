@@ -408,7 +408,7 @@ namespace Kmplete
 
         bool InputManager::_ContainsActionIdentifier(const Vector<ActionIdentifier>& actionsIdentifiers, ActionIdentifier actionId) const
         {
-            return std::find(actionsIdentifiers.cbegin(), actionsIdentifiers.cend(), actionId) != actionsIdentifiers.cend();
+            return Utils::VectorContains(actionsIdentifiers, actionId);
         }
         //--------------------------------------------------------------------------
     }

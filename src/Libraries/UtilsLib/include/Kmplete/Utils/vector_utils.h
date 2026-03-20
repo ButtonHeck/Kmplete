@@ -20,5 +20,12 @@ namespace Kmplete
             std::move(source.begin(), source.end(), std::back_inserter(destination));
         }
         //--------------------------------------------------------------------------
+
+        template<typename Value>
+        bool VectorContains(const Vector<Value>& vector, const Value& value)
+        {
+            return std::find(vector.cbegin(), vector.cend(), value) != vector.cend();
+        }
+        //--------------------------------------------------------------------------
     }
 }

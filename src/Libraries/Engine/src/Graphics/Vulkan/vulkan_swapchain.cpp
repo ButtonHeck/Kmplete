@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -187,7 +188,7 @@ namespace Kmplete
             }
 
             // TODO: add presentation option in a future, use FIFO by default right now
-            //if (std::find(presentModes.begin(), presentModes.end(), VK_PRESENT_MODE_MAILBOX_KHR) != presentModes.end())
+            //if (Utils::VectorContains(presentModes, VK_PRESENT_MODE_MAILBOX_KHR))
             //{
             //    return VK_PRESENT_MODE_MAILBOX_KHR;
             //}

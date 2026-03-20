@@ -201,7 +201,7 @@ namespace Kmplete
 
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicState(VkDynamicState dynamicState)
         {
-            if (std::find(_dynamicStates.cbegin(), _dynamicStates.cend(), dynamicState) == _dynamicStates.cend())
+            if (!Utils::VectorContains(_dynamicStates, dynamicState))
             {
                 _dynamicStates.push_back(dynamicState);
             }
@@ -214,7 +214,7 @@ namespace Kmplete
         {
             for (const auto& state : dynamicStates)
             {
-                if (std::find(_dynamicStates.cbegin(), _dynamicStates.cend(), state) == _dynamicStates.cend())
+                if (!Utils::VectorContains(_dynamicStates, state))
                 {
                     _dynamicStates.push_back(state);
                 }
