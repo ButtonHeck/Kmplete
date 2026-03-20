@@ -149,7 +149,6 @@ namespace Kmplete
         blendAttachmentState.blendEnable = VK_FALSE;
         pipeline.AddColorBlendAttachment(blendAttachmentState);
 
-        pipeline.AddDynamicStates({VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT});
         pipeline.SetupDepthTest(true);
         pipeline.SetupDepthWrite(true);
         pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
