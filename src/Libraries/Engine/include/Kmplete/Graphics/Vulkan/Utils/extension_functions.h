@@ -12,11 +12,13 @@ namespace Kmplete
         //TODO: comments
         struct VulkanCommands
         {
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             static PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessengerEXT;
             static PFN_vkDestroyDebugUtilsMessengerEXT DestroyDebugUtilsMessengerEXT;
+#endif
             static PFN_vkCmdSetRasterizationSamplesEXT CmdSetRasterizationSamplesEXT;
 
-            KMP_NODISCARD KMP_API static bool LoadExtensionFunctions(VkInstance instance);
+            KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };
         //--------------------------------------------------------------------------
     }

@@ -7,8 +7,10 @@ namespace Kmplete
 {
     namespace Graphics
     {
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         PFN_vkCreateDebugUtilsMessengerEXT VulkanCommands::CreateDebugUtilsMessengerEXT = nullptr;
         PFN_vkDestroyDebugUtilsMessengerEXT VulkanCommands::DestroyDebugUtilsMessengerEXT = nullptr;
+#endif
         PFN_vkCmdSetRasterizationSamplesEXT VulkanCommands::CmdSetRasterizationSamplesEXT = nullptr;
 
 
@@ -16,6 +18,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             CreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
             if (CreateDebugUtilsMessengerEXT == nullptr)
             {
@@ -29,6 +32,7 @@ namespace Kmplete
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkDestroyDebugUtilsMessengerEXT function");
                 return false;
             }
+#endif
 
             CmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(instance, "vkCmdSetRasterizationSamplesEXT");
             if (CmdSetRasterizationSamplesEXT == nullptr)

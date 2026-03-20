@@ -14,12 +14,6 @@
 #include <cstring>
 #include <stdexcept>
 
-#if defined (KMP_CONFIG_TYPE_PRODUCTION)
-    #define KMP_ENABLE_VULKAN_VALIDATION_LAYER false
-#else
-    #define KMP_ENABLE_VULKAN_VALIDATION_LAYER true
-#endif
-
 
 namespace Kmplete
 {
@@ -28,6 +22,7 @@ namespace Kmplete
 
     namespace Graphics
     {
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
             VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
             KMP_MB_UNUSED VkDebugUtilsMessageTypeFlagsEXT messageType,
@@ -69,6 +64,7 @@ namespace Kmplete
             return debugMessengerCreateInfo;
         }
         //--------------------------------------------------------------------------
+#endif
 
 
         VulkanGraphicsBackend::VulkanGraphicsBackend(Window& window)
@@ -146,23 +142,23 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
+            if (!_CheckValidationLayerSupport())
             {
-                if (!_CheckValidationLayerSupport())
-                {
-                    KMP_LOG_CRITICAL("{} layer requested but not found", ValidationLayerName);
-                    throw std::runtime_error("VulkanGraphicsBackend: failed to initialize");
-                }
+                KMP_LOG_CRITICAL("{} layer requested but not found", ValidationLayerName);
+                throw std::runtime_error("VulkanGraphicsBackend: failed to initialize");
             }
+#endif
 
             VkApplicationInfo applicationInfo = _CreateApplicationInfo();
             auto extensionsNames = _GetRequiredExtensionsNames();
             VkInstanceCreateInfo instanceCreateInfo = _CreateInstanceCreateInfo(applicationInfo, extensionsNames);
 
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
             _AttachDebugMessengerInfo(instanceCreateInfo, debugMessengerCreateInfo);
-
             _PrintAvailableExtensions();
+#endif
 
             const auto result = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
             VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
@@ -173,7 +169,9 @@ namespace Kmplete
                 throw std::runtime_error("VulkanGraphicsBackend: extension functions failed to load");
             }
 
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             _InitializeDebugMessenger();
+#endif
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
             _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
@@ -184,46 +182,14 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
-            {
-                VulkanCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
-            }
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
+            VulkanCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
+#endif
 
             _physicalDevice.reset();
             _surface.reset();
 
             vkDestroyInstance(_instance, nullptr);
-        }
-        //--------------------------------------------------------------------------
-
-        bool VulkanGraphicsBackend::_CheckValidationLayerSupport() const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            UInt32 layerCount;
-            vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
-
-            Vector<VkLayerProperties> availableLayers(layerCount);
-            vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
-
-            KMP_LOG_DEBUG("available layers:");
-            for (const auto& layer : availableLayers)
-            {
-                KMP_MB_UNUSED const auto layerVersionMajor = VK_API_VERSION_MAJOR(layer.specVersion);
-                KMP_MB_UNUSED const auto layerVersionMinor = VK_API_VERSION_MINOR(layer.specVersion);
-                KMP_MB_UNUSED const auto layerVersionPatch = VK_API_VERSION_PATCH(layer.specVersion);
-                KMP_LOG_DEBUG("\t{} ({}), Spec version: {}.{}.{}, Impl. version: {}", 
-                    layer.layerName, layer.description, 
-                    layerVersionMajor, layerVersionMinor, layerVersionPatch, layer.implementationVersion
-                );
-
-                if (std::strcmp(ValidationLayerName, layer.layerName) == 0)
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
         //--------------------------------------------------------------------------
 
@@ -254,20 +220,48 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+        bool VulkanGraphicsBackend::_CheckValidationLayerSupport() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            UInt32 layerCount;
+            vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+            Vector<VkLayerProperties> availableLayers(layerCount);
+            vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+
+            KMP_LOG_DEBUG("available layers:");
+            for (const auto& layer : availableLayers)
+            {
+                KMP_MB_UNUSED const auto layerVersionMajor = VK_API_VERSION_MAJOR(layer.specVersion);
+                KMP_MB_UNUSED const auto layerVersionMinor = VK_API_VERSION_MINOR(layer.specVersion);
+                KMP_MB_UNUSED const auto layerVersionPatch = VK_API_VERSION_PATCH(layer.specVersion);
+                KMP_LOG_DEBUG("\t{} ({}), Spec version: {}.{}.{}, Impl. version: {}",
+                    layer.layerName, layer.description,
+                    layerVersionMajor, layerVersionMinor, layerVersionPatch, layer.implementationVersion
+                );
+
+                if (std::strcmp(ValidationLayerName, layer.layerName) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanGraphicsBackend::_AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const
         {
-            if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
-            {
-                instanceCreateInfo.enabledLayerCount = UInt32(LayerNames.size());
-                instanceCreateInfo.ppEnabledLayerNames = LayerNames.data();
-                instanceCreateInfo.pNext = &debugMessengerCreateInfo;
-            }
+            instanceCreateInfo.enabledLayerCount = UInt32(LayerNames.size());
+            instanceCreateInfo.ppEnabledLayerNames = LayerNames.data();
+            instanceCreateInfo.pNext = &debugMessengerCreateInfo;
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::_PrintAvailableExtensions() const
         {
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
             UInt32 extensionCount = 0;
             vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
             Vector<VkExtensionProperties> extensions(extensionCount);
@@ -281,7 +275,6 @@ namespace Kmplete
                 KMP_MB_UNUSED const auto extensionVersionPatch = VK_API_VERSION_PATCH(extension.specVersion);
                 KMP_LOG_DEBUG("\t{}, Spec version: {}.{}.{}", extension.extensionName, extensionVersionMajor, extensionVersionMinor, extensionVersionPatch);
             }
-#endif
         }
         //--------------------------------------------------------------------------
 
@@ -289,14 +282,12 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
-            {
-                auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
-                const auto result = VulkanCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
-                VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
-            }
+            auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
+            const auto result = VulkanCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
+            VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
         }
         //--------------------------------------------------------------------------
+#endif
 
         Vector<const char*> VulkanGraphicsBackend::_GetRequiredExtensionsNames() const
         {
@@ -308,10 +299,9 @@ namespace Kmplete
 
             Vector<const char*> extensionsNames(extensionsStrings, extensionsStrings + extensionsCount);
 
-            if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
-            {
-                extensionsNames.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
-            }
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
+            extensionsNames.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+#endif
 
             return extensionsNames;
 #else
