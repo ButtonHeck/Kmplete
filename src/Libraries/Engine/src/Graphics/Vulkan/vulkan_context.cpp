@@ -7,11 +7,12 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        void VulkanContext::Populate(VkPhysicalDevice physDevice, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
+        void VulkanContext::Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                                      const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            this->instance = vkInstance;
             this->physicalDevice = physDevice;
             this->graphicsFamilyIndex = graphicsIndex;
             this->presentFamilyIndex = presentIndex;

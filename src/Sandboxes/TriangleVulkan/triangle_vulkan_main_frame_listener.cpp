@@ -256,23 +256,13 @@ namespace Kmplete
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
         auto pipeline = pipelineOpt.value().get().GetVkPipeline();
-
         _commandBuffer = vulkanDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
-        vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
 
         VkDeviceSize offsets[1]{ 0 };
         VkBuffer vertexBuffer = _vertexBuffer->GetVkBuffer();
         VkBuffer indexBuffer = _indexBuffer->GetVkBuffer();
 
-        // TODO: abstract away this
-        auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
-        auto instance = vulkanBackend.GetVkInstance();
-        auto cmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(instance, "vkCmdSetRasterizationSamplesEXT");
-        if (cmdSetRasterizationSamplesEXT)
-        {
-            cmdSetRasterizationSamplesEXT(_commandBuffer, vulkanDevice.GetMultisampling());
-        }
-
+        vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);
         vkCmdBindIndexBuffer(_commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(_commandBuffer, _indexCount, 1, 0, 0, 0);

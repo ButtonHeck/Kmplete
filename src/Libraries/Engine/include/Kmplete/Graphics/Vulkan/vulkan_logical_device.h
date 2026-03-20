@@ -108,6 +108,7 @@ namespace Kmplete
             void _StartFrameTransitionColorAndDepthStencilImages();
             void _StartFrameBeginRendering();
             void _StartFrameSetupViewportAndScissor();
+            void _StartFrameSetupRasterizationSamples();
 
             void _EndFrameEndRendering();
             void _EndFrameTransitionColorAndDepthStencilImages();

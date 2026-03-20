@@ -17,6 +17,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanContext)
 
         public:
+            VkInstance instance;
             VkPhysicalDevice physicalDevice;
 
             UInt32 graphicsFamilyIndex{};
@@ -36,7 +37,7 @@ namespace Kmplete
             VkSurfaceFormatKHR surfaceFormat{};
 
         public:
-            KMP_API void Populate(VkPhysicalDevice physDevice, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex, 
+            KMP_API void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                                   const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
 
         private:

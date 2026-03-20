@@ -173,6 +173,7 @@ namespace Kmplete
 
                     auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;
                     _vulkanContext.Populate(
+                        _instance,
                         _physicalDevice,
                         defaultDepthFormat,
                         queueFamilyIndices.graphicsFamilyIndex.value(),

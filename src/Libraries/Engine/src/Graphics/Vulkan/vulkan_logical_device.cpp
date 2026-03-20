@@ -93,6 +93,7 @@ namespace Kmplete
             _StartFrameTransitionColorAndDepthStencilImages();
             _StartFrameBeginRendering();
             _StartFrameSetupViewportAndScissor();
+            _StartFrameSetupRasterizationSamples();
         }
         //--------------------------------------------------------------------------
 
@@ -545,6 +546,18 @@ namespace Kmplete
 
             VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
             vkCmdSetScissor(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), 0, 1, &scissor);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_StartFrameSetupRasterizationSamples()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            static auto cmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(_vulkanContext.instance, "vkCmdSetRasterizationSamplesEXT");
+            if (cmdSetRasterizationSamplesEXT)
+            {
+                cmdSetRasterizationSamplesEXT(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), GetMultisampling());
+            }
         }
         //--------------------------------------------------------------------------
 
