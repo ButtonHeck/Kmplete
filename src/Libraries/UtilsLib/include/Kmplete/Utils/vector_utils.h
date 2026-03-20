@@ -27,5 +27,12 @@ namespace Kmplete
             return std::find(vector.cbegin(), vector.cend(), value) != vector.cend();
         }
         //--------------------------------------------------------------------------
+
+        template<typename Value, typename Predicate>
+        bool VectorContainsIf(const Vector<Value>& vector, Predicate predicate)
+        {
+            return std::find_if(vector.cbegin(), vector.cend(), predicate) != vector.cend();
+        }
+        //--------------------------------------------------------------------------
     }
 }

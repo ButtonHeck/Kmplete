@@ -3,6 +3,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Utils/vector_utils.h"
 
 #include <boost/process.hpp>
 
@@ -286,9 +287,7 @@ namespace Kmplete
 
             const auto& entryPath = directoryEntry.path();
             const auto entryExtension = entryPath.extension().string();
-            return std::find_if(filesExtensions.cbegin(), filesExtensions.cend(),
-                [entryExtension](const String& enabledExtension) { return enabledExtension == entryExtension; })
-                != filesExtensions.cend();
+            return Utils::VectorContainsIf(filesExtensions, [entryExtension](const String& enabledExtension) { return enabledExtension == entryExtension; });
         }
         //--------------------------------------------------------------------------
 

@@ -400,9 +400,7 @@ namespace Kmplete
 
         bool InputManager::_ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const
         {
-            return std::find_if(callbacks.cbegin(), callbacks.cend(), [taggedCallback](const TaggedActionCallback& callbackInVector) {
-                return callbackInVector.tag == taggedCallback.tag;
-            }) != callbacks.cend();
+            return Utils::VectorContainsIf(callbacks, [taggedCallback](const TaggedActionCallback& callbackInVector) { return callbackInVector.tag == taggedCallback.tag; });
         }
         //--------------------------------------------------------------------------
 
