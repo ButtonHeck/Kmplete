@@ -20,7 +20,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, 
+        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
                                                  const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
             , _vulkanContext(vulkanContext)
@@ -43,6 +43,7 @@ namespace Kmplete
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
             , _currentExtent(_UpdateExtent())
+            , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -134,6 +135,27 @@ namespace Kmplete
             {
                 vkDeviceWaitIdle(_device);
             }
+        }
+        //--------------------------------------------------------------------------
+
+        VkSampleCountFlagBits VulkanLogicalDevice::GetMultisampling() const noexcept
+        {
+            return _msaaSamples;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::SetMultisampling(VkSampleCountFlagBits samples)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _msaaSamples = samples;
+            if (_msaaSamples > _vulkanContext.supportedSampleCounts.top())
+            {
+                KMP_LOG_WARN("cannot set MSAA samples to {}, set to maximum supported {}", UInt32(samples), UInt32(_vulkanContext.supportedSampleCounts.top()));
+                _msaaSamples = _vulkanContext.supportedSampleCounts.top();
+            }
+
+            _swapchain->SetMultisampling(_msaaSamples);
         }
         //--------------------------------------------------------------------------
 
@@ -294,7 +316,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _surface, _vulkanContext, _currentExtent, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _surface, _vulkanContext, _currentExtent, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
         }
         //--------------------------------------------------------------------------
 

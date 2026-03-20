@@ -14,7 +14,7 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
-                                         const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
+                                         VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
             , _vulkanContext(vulkanContext)
@@ -31,7 +31,7 @@ namespace Kmplete
             , _swapchainImages()
             , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _swapchainImageViews()
-            , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
+            , _msaaSamples(msaaSamples)
             , _multisampledColorImage(nullptr)
             , _multisampledColorImageView(VK_NULL_HANDLE)
             , _multisampledDepthImage(nullptr)
@@ -50,7 +50,7 @@ namespace Kmplete
             _CreateSwapchainImages();
             _CreateSwapchainImageViews();
 
-            SetMultisampling(VK_SAMPLE_COUNT_1_BIT);
+            SetMultisampling(_msaaSamples);
         }
         //--------------------------------------------------------------------------
 

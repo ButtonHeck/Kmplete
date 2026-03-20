@@ -26,7 +26,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
-                                    const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
+                                    VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                     const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             KMP_API ~VulkanSwapchain();
 

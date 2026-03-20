@@ -6,7 +6,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
@@ -236,9 +235,7 @@ namespace Kmplete
     bool MainFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
     {
         Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
-        auto& cswapchain = dynamic_cast<const Graphics::VulkanSwapchain&>(vulkanDevice.GetSwapchain());
-        auto& swapchain = const_cast<Graphics::VulkanSwapchain&>(cswapchain);
-        swapchain.SetMultisampling(VkSampleCountFlagBits(evt.msaaSamples));
+        vulkanDevice.SetMultisampling(VkSampleCountFlagBits(evt.msaaSamples));
         return true;
     }
     //--------------------------------------------------------------------------
@@ -273,8 +270,7 @@ namespace Kmplete
         auto cmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(instance, "vkCmdSetRasterizationSamplesEXT");
         if (cmdSetRasterizationSamplesEXT)
         {
-            const auto& swapchain = dynamic_cast<const Graphics::VulkanSwapchain&>(vulkanDevice.GetSwapchain());
-            cmdSetRasterizationSamplesEXT(_commandBuffer, swapchain.GetMultisampling());
+            cmdSetRasterizationSamplesEXT(_commandBuffer, vulkanDevice.GetMultisampling());
         }
 
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);

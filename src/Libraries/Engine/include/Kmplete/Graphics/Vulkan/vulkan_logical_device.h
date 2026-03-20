@@ -44,7 +44,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
 
         public:
-            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate, 
+            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
                                         const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
             KMP_API ~VulkanLogicalDevice();
 
@@ -52,6 +52,9 @@ namespace Kmplete
             KMP_API void EndFrame() override;
             KMP_API void HandleWindowResize() override;
             KMP_API void WaitIdle() const;
+
+            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetMultisampling() const noexcept;
+            KMP_API void SetMultisampling(VkSampleCountFlagBits samples);
 
             KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
@@ -137,6 +140,7 @@ namespace Kmplete
             HashMap<StringID, UPtr<VulkanGraphicsPipeline>> _pipelines;
 
             VkExtent2D _currentExtent;
+            VkSampleCountFlagBits _msaaSamples;
         };
         //--------------------------------------------------------------------------
     }
