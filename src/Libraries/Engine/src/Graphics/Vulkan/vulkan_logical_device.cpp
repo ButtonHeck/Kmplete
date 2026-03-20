@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
@@ -553,11 +554,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            static auto cmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(_vulkanContext.instance, "vkCmdSetRasterizationSamplesEXT");
-            if (cmdSetRasterizationSamplesEXT)
-            {
-                cmdSetRasterizationSamplesEXT(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), GetMultisampling());
-            }
+            VulkanCommands::CmdSetRasterizationSamplesEXT(_drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer(), GetMultisampling());
         }
         //--------------------------------------------------------------------------
 

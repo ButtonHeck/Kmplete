@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
@@ -66,35 +67,6 @@ namespace Kmplete
             debugMessengerCreateInfo.pfnUserCallback = DebugCallback;
 
             return debugMessengerCreateInfo;
-        }
-        //--------------------------------------------------------------------------
-
-        static VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkAllocationCallbacks* allocator, VkDebugUtilsMessengerEXT* debugMessenger)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
-            if (func != nullptr)
-            {
-                auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
-                return func(instance, &debugMessengerCreateInfo, allocator, debugMessenger);
-            }
-            else
-            {
-                return VK_ERROR_EXTENSION_NOT_PRESENT;
-            }
-        }
-        //--------------------------------------------------------------------------
-
-        static void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* allocator)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-            if (func != nullptr)
-            {
-                func(instance, debugMessenger, allocator);
-            }
         }
         //--------------------------------------------------------------------------
 
@@ -195,6 +167,12 @@ namespace Kmplete
             const auto result = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
             VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
 
+            if (!VulkanCommands::LoadExtensionFunctions(_instance))
+            {
+                KMP_LOG_CRITICAL("extension functions failed to load");
+                throw std::runtime_error("VulkanGraphicsBackend: extension functions failed to load");
+            }
+
             _InitializeDebugMessenger();
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
@@ -208,7 +186,7 @@ namespace Kmplete
 
             if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
             {
-                DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
+                VulkanCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
             }
 
             _physicalDevice.reset();
@@ -313,7 +291,8 @@ namespace Kmplete
 
             if (KMP_ENABLE_VULKAN_VALIDATION_LAYER)
             {
-                const auto result = CreateDebugUtilsMessengerEXT(_instance, nullptr, &_debugMessenger);
+                auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
+                const auto result = VulkanCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
                 VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
             }
         }
