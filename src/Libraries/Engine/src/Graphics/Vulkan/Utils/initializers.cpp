@@ -201,6 +201,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkWriteDescriptorSet InitVkWriteDescriptorSet()
+            {
+                return VkWriteDescriptorSet{
+                    .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkPipelineLayoutCreateInfo InitVkPipelineLayoutCreateInfo()
             {

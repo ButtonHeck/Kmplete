@@ -36,6 +36,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkRenderingAttachmentInfo InitVkRenderingAttachmentInfo();
             KMP_NODISCARD KMP_API VkRenderingInfo InitVkRenderingInfo();
             KMP_NODISCARD KMP_API VkDescriptorSetLayoutCreateInfo InitVkDescriptorSetLayoutCreateInfo();
+            KMP_NODISCARD KMP_API VkWriteDescriptorSet InitVkWriteDescriptorSet();
 
             KMP_NODISCARD KMP_API VkPipelineLayoutCreateInfo InitVkPipelineLayoutCreateInfo();
             KMP_NODISCARD KMP_API VkPipelineCacheCreateInfo InitVkPipelineCacheCreateInfo();
