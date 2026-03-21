@@ -138,6 +138,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        UInt32 VulkanGraphicsBackend::GetCurrentBufferIndex() const noexcept
+        {
+            return _currentBufferIndex;
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanGraphicsBackend::_Initialize()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);

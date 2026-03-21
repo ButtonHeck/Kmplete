@@ -102,6 +102,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_queue.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_shader.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_surface.cpp
@@ -119,6 +120,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_queue.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_shader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_graphics_pipeline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/vulkan_uniform_buffer.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Utils"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Utils/initializers.h

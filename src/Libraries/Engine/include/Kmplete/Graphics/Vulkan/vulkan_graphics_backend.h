@@ -36,6 +36,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) override;
 
             KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
+            KMP_NODISCARD KMP_API UInt32 GetCurrentBufferIndex() const noexcept;
 
         private:
             void _Initialize();

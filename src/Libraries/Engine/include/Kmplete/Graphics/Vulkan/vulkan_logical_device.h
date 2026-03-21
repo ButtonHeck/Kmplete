@@ -9,6 +9,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader.h"
@@ -71,8 +72,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API VulkanVertexBuffer CreateVertexBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
+            KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> CreateVertexBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
             KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
             KMP_NODISCARD KMP_API VulkanShader CreateShader(const Filepath& filepath) const;

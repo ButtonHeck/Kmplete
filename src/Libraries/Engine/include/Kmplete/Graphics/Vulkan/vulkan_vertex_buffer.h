@@ -36,5 +36,8 @@ namespace Kmplete
             Vector<BufferLayout> _layouts;
         };
         //--------------------------------------------------------------------------
+
+        static_assert(IsMoveConstructible<VulkanVertexBuffer>::value);
+        static_assert(IsMoveAssignable<VulkanVertexBuffer>::value);
     }
 }

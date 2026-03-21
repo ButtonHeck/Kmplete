@@ -51,6 +51,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& SetupRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
 
             KMP_NODISCARD KMP_API VkPipeline GetVkPipeline() const noexcept;
+            KMP_NODISCARD KMP_API VkPipelineLayout GetVkPipelineLayout() const noexcept;
 
         private:
             void _SetupDefault() noexcept;

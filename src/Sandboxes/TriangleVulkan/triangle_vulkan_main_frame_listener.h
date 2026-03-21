@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Event/event_handler_guard.h"
 
@@ -47,11 +48,19 @@ namespace Kmplete
         bool _OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent&);
 
     private:
+        struct ShaderData
+        {
+            float colorMultiplier;
+        };
+        //--------------------------------------------------------------------------
+
+    private:
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
 
         UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
+        Vector<UPtr<Graphics::VulkanUniformBuffer>> _uniformBuffers;
         UInt32 _indexCount;
         VkDevice _device;
         VkDescriptorSetLayout _descriptorSetLayout;
@@ -61,6 +70,7 @@ namespace Kmplete
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
+        ShaderData _shaderData;
     };
     //--------------------------------------------------------------------------
 }

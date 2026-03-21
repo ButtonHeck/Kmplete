@@ -326,6 +326,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkPipelineLayout VulkanGraphicsPipeline::GetVkPipelineLayout() const noexcept
+        {
+            return _pipelineLayout;
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanGraphicsPipeline::_SetupDefault() noexcept
         {
             _inputAssemblyCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;

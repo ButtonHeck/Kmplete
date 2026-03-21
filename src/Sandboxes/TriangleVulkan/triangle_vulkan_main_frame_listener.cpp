@@ -40,6 +40,7 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _vertexBuffer(nullptr)
         , _indexBuffer(nullptr)
+        , _uniformBuffers()
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
         , _descriptorSetLayout(VK_NULL_HANDLE)
@@ -47,6 +48,7 @@ namespace Kmplete
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
+        , _shaderData(ShaderData{.colorMultiplier = 1.0f})
     {
         _Initialize();
     }
@@ -107,6 +109,12 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
 
+        for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
+        {
+            _uniformBuffers.emplace_back(vulkanDevice.CreateUniformBufferPtr(0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData)));
+            _uniformBuffers[i]->Map();
+        }
+
 
         {
             Graphics::VulkanCommandBuffer copyCmd = vulkanDevice.CreateCommandBuffer();
@@ -128,11 +136,38 @@ namespace Kmplete
         }
 
 
+        VkDescriptorSetLayoutBinding layoutBinding{};
+        layoutBinding.binding = 0;
+        layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        layoutBinding.descriptorCount = 1;
+        layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
         auto descriptorSetLayoutCI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
-        descriptorSetLayoutCI.bindingCount = 0;
-        descriptorSetLayoutCI.pBindings = nullptr;
+        descriptorSetLayoutCI.bindingCount = 1;
+        descriptorSetLayoutCI.pBindings = &layoutBinding;
         result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCI, nullptr, &_descriptorSetLayout);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout");
+        for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
+        {
+            VkDescriptorPool descriptorPool = vulkanDevice.GetVkDescriptorPool();
+            VkDescriptorSetAllocateInfo allocInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+            VkDescriptorSet& descriptorSet = _uniformBuffers[i]->GetVkDescriptorSet();
+            allocInfo.descriptorPool = descriptorPool;
+            allocInfo.descriptorSetCount = 1;
+            allocInfo.pSetLayouts = &_descriptorSetLayout;
+            vkAllocateDescriptorSets(vulkanDevice.GetVkDevice(), &allocInfo, &descriptorSet);
+
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = _uniformBuffers[i]->GetVkBuffer();
+            bufferInfo.range = sizeof(ShaderData);
+
+            auto writeDescriptorSet = Graphics::VulkanUtils::InitVkWriteDescriptorSet();
+            writeDescriptorSet.dstSet = descriptorSet;
+            writeDescriptorSet.descriptorCount = 1;
+            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            writeDescriptorSet.pBufferInfo = &bufferInfo;
+            writeDescriptorSet.dstBinding = 0;
+            vkUpdateDescriptorSets(vulkanDevice.GetVkDevice(), 1, &writeDescriptorSet, 0, nullptr);
+        }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
         pipeline.AddDescriptorSetLayout(_descriptorSetLayout);
@@ -220,6 +255,7 @@ namespace Kmplete
     {
         _imguiImpl.reset();
 
+        _uniformBuffers.clear();
         _vertexBuffer.reset();
         _indexBuffer.reset();
         vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout, nullptr);
@@ -253,14 +289,20 @@ namespace Kmplete
 
     void MainFrameListener::_RenderTriangle()
     {
+        auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
         auto pipeline = pipelineOpt.value().get().GetVkPipeline();
+        auto pipelineLayout = pipelineOpt.value().get().GetVkPipelineLayout();
         _commandBuffer = vulkanDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
+        const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
 
         VkDeviceSize offsets[1]{ 0 };
         VkBuffer vertexBuffer = _vertexBuffer->GetVkBuffer();
         VkBuffer indexBuffer = _indexBuffer->GetVkBuffer();
+
+        _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
+        vkCmdBindDescriptorSets(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &_uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), 0, nullptr);
 
         vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);
@@ -289,6 +331,8 @@ namespace Kmplete
         {
             _SetMultisampling(4);
         }
+        ImGui::SliderFloat("Color multiplier", &_shaderData.colorMultiplier, 0.2f, 1.0f);
+
         ImGui::End();
 
         auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
