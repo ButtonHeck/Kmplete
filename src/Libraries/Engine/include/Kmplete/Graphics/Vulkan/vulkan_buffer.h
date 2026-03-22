@@ -37,9 +37,9 @@ namespace Kmplete
 
         protected:
             VkDevice _device;
+            VkBuffer _buffer;
 
         private:
-            VkBuffer _buffer;
             VkDeviceMemory _memory;
             VkDeviceSize _size;
             void* _mapped;

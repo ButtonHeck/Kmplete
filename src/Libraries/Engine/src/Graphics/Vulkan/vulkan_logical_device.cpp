@@ -693,11 +693,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanUniformBuffer VulkanLogicalDevice::CreateUniformBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
+        VulkanUniformBuffer VulkanLogicalDevice::CreateUniformBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return VulkanUniformBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, _descriptorPool);
+            return VulkanUniformBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, _descriptorPool, descriptorSetLayouts, binding);
         }
         //--------------------------------------------------------------------------
 
@@ -717,11 +717,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanUniformBuffer*> VulkanLogicalDevice::CreateUniformBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
+        Nullable<VulkanUniformBuffer*> VulkanLogicalDevice::CreateUniformBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return new VulkanUniformBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, _descriptorPool);
+            return new VulkanUniformBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, _descriptorPool, descriptorSetLayouts, binding);
         }
         //--------------------------------------------------------------------------
 

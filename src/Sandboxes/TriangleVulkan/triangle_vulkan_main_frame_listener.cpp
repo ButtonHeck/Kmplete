@@ -110,12 +110,6 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
 
-        for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
-        {
-            _uniformBuffers.emplace_back(vulkanDevice.CreateUniformBufferPtr(0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData)));
-            _uniformBuffers[i]->Map();
-        }
-
 
         {
             Graphics::VulkanCommandBuffer copyCmd = vulkanDevice.CreateCommandBuffer();
@@ -137,13 +131,14 @@ namespace Kmplete
         }
 
 
+        const auto shaderUniformVariableBinding = 3;
         auto descriptorSetLayout0CI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
         descriptorSetLayout0CI.bindingCount = 0;
         descriptorSetLayout0CI.pBindings = nullptr;
         result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayout0CI, nullptr, &_descriptorSetLayout0);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout 0");
         VkDescriptorSetLayoutBinding layoutBinding{};
-        layoutBinding.binding = 3;
+        layoutBinding.binding = shaderUniformVariableBinding;
         layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         layoutBinding.descriptorCount = 1;
         layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -152,27 +147,11 @@ namespace Kmplete
         descriptorSetLayout1CI.pBindings = &layoutBinding;
         result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayout1CI, nullptr, &_descriptorSetLayout1);
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout 1");
+
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
-            VkDescriptorPool descriptorPool = vulkanDevice.GetVkDescriptorPool();
-            VkDescriptorSetAllocateInfo allocInfo = Graphics::VulkanUtils::InitVkDescriptorSetAllocateInfo();
-            VkDescriptorSet& descriptorSet = _uniformBuffers[i]->GetVkDescriptorSet();
-            allocInfo.descriptorPool = descriptorPool;
-            allocInfo.descriptorSetCount = 1;
-            allocInfo.pSetLayouts = &_descriptorSetLayout1;
-            vkAllocateDescriptorSets(vulkanDevice.GetVkDevice(), &allocInfo, &descriptorSet);
-
-            VkDescriptorBufferInfo bufferInfo{};
-            bufferInfo.buffer = _uniformBuffers[i]->GetVkBuffer();
-            bufferInfo.range = sizeof(ShaderData);
-
-            auto writeDescriptorSet = Graphics::VulkanUtils::InitVkWriteDescriptorSet();
-            writeDescriptorSet.dstSet = descriptorSet;
-            writeDescriptorSet.descriptorCount = 1;
-            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            writeDescriptorSet.pBufferInfo = &bufferInfo;
-            writeDescriptorSet.dstBinding = 3;
-            vkUpdateDescriptorSets(vulkanDevice.GetVkDevice(), 1, &writeDescriptorSet, 0, nullptr);
+            _uniformBuffers.emplace_back(vulkanDevice.CreateUniformBufferPtr(0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData), { _descriptorSetLayout1 }, shaderUniformVariableBinding));
+            _uniformBuffers[i]->Map();
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
