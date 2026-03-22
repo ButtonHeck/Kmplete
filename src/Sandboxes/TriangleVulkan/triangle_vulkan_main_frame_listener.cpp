@@ -43,7 +43,8 @@ namespace Kmplete
         , _uniformBuffers()
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
-        , _descriptorSetLayout(VK_NULL_HANDLE)
+        , _descriptorSetLayout0(VK_NULL_HANDLE)
+        , _descriptorSetLayout1(VK_NULL_HANDLE)
         , _commandBuffer(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
@@ -136,24 +137,29 @@ namespace Kmplete
         }
 
 
+        auto descriptorSetLayout0CI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
+        descriptorSetLayout0CI.bindingCount = 0;
+        descriptorSetLayout0CI.pBindings = nullptr;
+        result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayout0CI, nullptr, &_descriptorSetLayout0);
+        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout 0");
         VkDescriptorSetLayoutBinding layoutBinding{};
-        layoutBinding.binding = 0;
+        layoutBinding.binding = 3;
         layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         layoutBinding.descriptorCount = 1;
         layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        auto descriptorSetLayoutCI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
-        descriptorSetLayoutCI.bindingCount = 1;
-        descriptorSetLayoutCI.pBindings = &layoutBinding;
-        result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCI, nullptr, &_descriptorSetLayout);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout");
+        auto descriptorSetLayout1CI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
+        descriptorSetLayout1CI.bindingCount = 1;
+        descriptorSetLayout1CI.pBindings = &layoutBinding;
+        result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayout1CI, nullptr, &_descriptorSetLayout1);
+        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout 1");
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             VkDescriptorPool descriptorPool = vulkanDevice.GetVkDescriptorPool();
-            VkDescriptorSetAllocateInfo allocInfo{ VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO };
+            VkDescriptorSetAllocateInfo allocInfo = Graphics::VulkanUtils::InitVkDescriptorSetAllocateInfo();
             VkDescriptorSet& descriptorSet = _uniformBuffers[i]->GetVkDescriptorSet();
             allocInfo.descriptorPool = descriptorPool;
             allocInfo.descriptorSetCount = 1;
-            allocInfo.pSetLayouts = &_descriptorSetLayout;
+            allocInfo.pSetLayouts = &_descriptorSetLayout1;
             vkAllocateDescriptorSets(vulkanDevice.GetVkDevice(), &allocInfo, &descriptorSet);
 
             VkDescriptorBufferInfo bufferInfo{};
@@ -165,12 +171,13 @@ namespace Kmplete
             writeDescriptorSet.descriptorCount = 1;
             writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             writeDescriptorSet.pBufferInfo = &bufferInfo;
-            writeDescriptorSet.dstBinding = 0;
+            writeDescriptorSet.dstBinding = 3;
             vkUpdateDescriptorSets(vulkanDevice.GetVkDevice(), 1, &writeDescriptorSet, 0, nullptr);
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
-        pipeline.AddDescriptorSetLayout(_descriptorSetLayout);
+        pipeline.AddDescriptorSetLayout(_descriptorSetLayout0);
+        pipeline.AddDescriptorSetLayout(_descriptorSetLayout1);
         pipeline.SetupInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, false);
         pipeline.SetupPolygonMode(VK_POLYGON_MODE_FILL);
         pipeline.SetupCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
@@ -258,7 +265,8 @@ namespace Kmplete
         _uniformBuffers.clear();
         _vertexBuffer.reset();
         _indexBuffer.reset();
-        vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout, nullptr);
+        vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout1, nullptr);
+        vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout0, nullptr);
     }
     //--------------------------------------------------------------------------
 
@@ -301,8 +309,9 @@ namespace Kmplete
         VkBuffer vertexBuffer = _vertexBuffer->GetVkBuffer();
         VkBuffer indexBuffer = _indexBuffer->GetVkBuffer();
 
+        const auto descriptorSetIndex = 1; // should match with triangle.frag "layout (set = 1, binding = ...)"
         _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
-        vkCmdBindDescriptorSets(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &_uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), 0, nullptr);
+        vkCmdBindDescriptorSets(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, descriptorSetIndex, 1, &_uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), 0, nullptr);
 
         vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);

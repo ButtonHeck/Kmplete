@@ -2,7 +2,7 @@
 
 layout (location = 0) in vec3 inColor;
 
-layout (binding = 0) uniform UBO 
+layout (set = 1, binding = 3) uniform UBO 
 {
     float colorMultiplier;
 } ubo;

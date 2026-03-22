@@ -201,6 +201,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkDescriptorSetAllocateInfo InitVkDescriptorSetAllocateInfo()
+            {
+                return VkDescriptorSetAllocateInfo{
+                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO
+                };
+            }
+            //--------------------------------------------------------------------------
+
             VkWriteDescriptorSet InitVkWriteDescriptorSet()
             {
                 return VkWriteDescriptorSet{
