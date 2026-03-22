@@ -74,6 +74,7 @@ namespace Kmplete
         Graphics::VulkanLogicalDevice& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
         _device = vulkanDevice.GetVkDevice();
+        const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
 
         const Vector<Vertex> vertices{
             {{ 0.95f,  0.95f}, {1.0f, 0.0f, 0.0f}},
@@ -88,7 +89,7 @@ namespace Kmplete
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
 
-        Graphics::VulkanBuffer stagingBuffer = vulkanDevice.CreateBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + indexBufferSize);
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer(VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + indexBufferSize);
 
 
         auto result = stagingBuffer.Map();
@@ -104,11 +105,11 @@ namespace Kmplete
             Graphics::BufferElement{Graphics::ShaderDataType::Float2, 0},
             Graphics::BufferElement{Graphics::ShaderDataType::Float3, 1}
         });
-        _vertexBuffer.reset(vulkanDevice.CreateVertexBufferPtr(VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize));
+        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr(VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize));
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
 
-        _indexBuffer.reset(vulkanDevice.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
+        _indexBuffer.reset(vulkanBufferCreator.CreateBufferPtr(VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize));
 
 
         {
@@ -150,7 +151,7 @@ namespace Kmplete
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
-            _uniformBuffers.emplace_back(vulkanDevice.CreateUniformBufferPtr(0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData), { _descriptorSetLayout1 }, shaderUniformVariableBinding));
+            _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData), { _descriptorSetLayout1 }, shaderUniformVariableBinding));
             _uniformBuffers[i]->Map();
         }
 

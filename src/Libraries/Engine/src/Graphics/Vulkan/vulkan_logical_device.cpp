@@ -43,6 +43,8 @@ namespace Kmplete
             , _drawCommandBuffers()
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
+            , _pipelines()
+            , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
         {
@@ -59,6 +61,8 @@ namespace Kmplete
             _CreateCommandBuffers();
             _CreatePipelineCache();
             _CreateDescriptorPool();
+
+            _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
         }
         //--------------------------------------------------------------------------
 
@@ -66,6 +70,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            _bufferCreatorDelegate.reset();
             _pipelines.clear();
             _DeleteDescriptorPool();
             _DeletePipelineCache();
@@ -206,6 +211,12 @@ namespace Kmplete
         const VulkanImageCreatorDelegate& VulkanLogicalDevice::GetVulkanImageCreatorDelegate() const noexcept
         {
             return *_imageCreatorDelegate.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const VulkanBufferCreatorDelegate& VulkanLogicalDevice::GetVulkanBufferCreatorDelegate() const noexcept
+        {
+            return *_bufferCreatorDelegate.get();
         }
         //--------------------------------------------------------------------------
 
@@ -674,54 +685,6 @@ namespace Kmplete
             }
 
             return nullptr;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanBuffer VulkanLogicalDevice::CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return VulkanBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanVertexBuffer VulkanLogicalDevice::CreateVertexBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return VulkanVertexBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanUniformBuffer VulkanLogicalDevice::CreateUniformBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return VulkanUniformBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, _descriptorPool, descriptorSetLayouts, binding);
-        }
-        //--------------------------------------------------------------------------
-
-        Nullable<VulkanBuffer*> VulkanLogicalDevice::CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return new VulkanBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
-        }
-        //--------------------------------------------------------------------------
-
-        Nullable<VulkanVertexBuffer*> VulkanLogicalDevice::CreateVertexBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return new VulkanVertexBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size);
-        }
-        //--------------------------------------------------------------------------
-
-        Nullable<VulkanUniformBuffer*> VulkanLogicalDevice::CreateUniformBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return new VulkanUniformBuffer(_memoryTypeDelegate, _device, usageFlags, memoryPropertyFlags, size, _descriptorPool, descriptorSetLayouts, binding);
         }
         //--------------------------------------------------------------------------
 

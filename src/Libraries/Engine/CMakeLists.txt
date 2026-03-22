@@ -136,9 +136,11 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Delegates"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Delegates/vulkan_buffer_creator_delegate.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_format_delegate.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Delegates/vulkan_buffer_creator_delegate.cpp
 )
 AddTargetSourcesGroup(Kmplete "Localization"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Localization/localization_base.h
