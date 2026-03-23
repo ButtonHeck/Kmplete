@@ -86,10 +86,18 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+        const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
+        if (!settings)
+        {
+            KMP_LOG_WARN("failed to get settings entry for loading");
+        }
+
         _windowBackend = WindowBackend::Create();
         KMP_ASSERT(_windowBackend);
-
-        _LoadSettings();
+        if (settings.has_value())
+        {
+            _LoadWindowBackendSettings(*settings);
+        }
 
         auto& mainWindow = _windowBackend->CreateMainWindow();
         mainWindow.SetIcon(defaultWindowIcon);
@@ -98,6 +106,10 @@ namespace Kmplete
 
         _graphicsBackend = Graphics::GraphicsBackend::Create(mainWindow);
         KMP_ASSERT(_graphicsBackend);
+        if (settings.has_value())
+        {
+            _LoadGraphicsBackendSettings(*settings);
+        }
 
         _inputManager = CreateUPtr<Input::InputManager>();
         KMP_ASSERT(_inputManager);
@@ -115,6 +127,11 @@ namespace Kmplete
             return true;
         });
 #endif
+
+        if (settings.has_value())
+        {
+            _LoadSettings(*settings);
+        }
 
         _frameClock.Mark();
     }
@@ -218,28 +235,36 @@ namespace Kmplete
         settings.value().get().SaveUInt(IconifiedFPSStr, _iconifiedFPS);
         
         _windowBackend->SaveSettings(*settings);
+        _graphicsBackend->SaveSettings(*settings);
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_LoadSettings()
+    void WindowApplication::_LoadWindowBackendSettings(SettingsDocument& settingsDocument)
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-        const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
-        if (!settings)
-        {
-            KMP_LOG_WARN("failed to get settings entry for loading");
-            return;
-        }
+        _windowBackend->LoadSettings(settingsDocument);
+    }
+    //--------------------------------------------------------------------------
 
-        _iconifiedFPS = settings.value().get().GetUInt(IconifiedFPSStr, IconifiedFPSMin);
+    void WindowApplication::_LoadGraphicsBackendSettings(SettingsDocument& settingsDocument)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        _graphicsBackend->LoadSettings(settingsDocument);
+    }
+    //--------------------------------------------------------------------------
+
+    void WindowApplication::_LoadSettings(SettingsDocument& settingsDocument)
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+        _iconifiedFPS = settingsDocument.GetUInt(IconifiedFPSStr, IconifiedFPSMin);
         if (_iconifiedFPS < IconifiedFPSMin || _iconifiedFPS > IconifiedFPSMax)
         {
             KMP_LOG_WARN("iconified FPS ({} from settings) required to be in range from 10 to 60, value will be clamped", _iconifiedFPS);
             _iconifiedFPS = Math::Clamp(_iconifiedFPS, IconifiedFPSMin, IconifiedFPSMax);
         }
-
-        _windowBackend->LoadSettings(*settings);
     }
     //--------------------------------------------------------------------------
 }

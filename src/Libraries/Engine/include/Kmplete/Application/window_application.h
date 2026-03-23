@@ -69,7 +69,9 @@ namespace Kmplete
         void _IconifiedSleep();
 
         void _SaveSettings() const;
-        void _LoadSettings();
+        void _LoadWindowBackendSettings(SettingsDocument& settingsDocument);
+        void _LoadGraphicsBackendSettings(SettingsDocument& settingsDocument);
+        void _LoadSettings(SettingsDocument& settingsDocument);
 
     protected:
         UPtr<WindowBackend> _windowBackend;

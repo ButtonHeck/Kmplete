@@ -32,6 +32,9 @@
                 "AlwaysOnTop": false
             },
             "AuxWindows": []
+        },
+        "GraphicsBackend": {
+            "MSAAsamples": 1
         }
     }
 }
