@@ -21,8 +21,8 @@ namespace Kmplete
             KMP_DISABLE_COPY(VulkanUniformBuffer)
 
         public:
-            KMP_API VulkanUniformBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags,
-                                        VkDeviceSize size, VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding);
+            KMP_API VulkanUniformBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters, 
+                                        VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding);
             KMP_API VulkanUniformBuffer(VulkanUniformBuffer&& other) noexcept;
             KMP_API VulkanUniformBuffer& operator=(VulkanUniformBuffer&& other) noexcept;
 

@@ -153,7 +153,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize());
+            auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, {VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize()});
 
             auto result = buffer.Map();
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to map texture buffer");

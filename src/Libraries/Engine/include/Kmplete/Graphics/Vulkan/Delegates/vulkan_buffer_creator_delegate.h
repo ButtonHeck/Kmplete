@@ -25,14 +25,14 @@ namespace Kmplete
         public:
             KMP_API VulkanBufferCreatorDelegate(VkDevice device, VkDescriptorPool descriptorPool, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
+            KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(const VulkanBufferParameters& parameters) const;
 
-            KMP_NODISCARD KMP_API VulkanVertexBuffer CreateVertexBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> CreateVertexBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size) const;
+            KMP_NODISCARD KMP_API VulkanVertexBuffer CreateVertexBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const;
 
-            KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
+            KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
 
         private:
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;

@@ -8,9 +8,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanVertexBuffer::VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, 
-                                               VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size)
-            : VulkanBuffer(memoryTypeDelegate, device, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | usageFlags, memoryPropertyFlags, size)
+        VulkanVertexBuffer::VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters)
+            : VulkanBuffer(memoryTypeDelegate, device, parameters)
             , _layouts()
         {}
         //--------------------------------------------------------------------------

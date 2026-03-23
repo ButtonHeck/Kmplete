@@ -9,15 +9,15 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanUniformBuffer::VulkanUniformBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags,
-                                                 VkDeviceSize size, VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding)
-            : VulkanBuffer(memoryTypeDelegate, device, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | usageFlags, memoryPropertyFlags, size)
+        VulkanUniformBuffer::VulkanUniformBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters, 
+                                                 VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding)
+            : VulkanBuffer(memoryTypeDelegate, device, parameters)
             , _descriptorSet(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _AllocateDescriptorSet(descriptorPool, descriptorSetLayouts);
-            _UpdateDescriptorSet(binding, size);
+            _UpdateDescriptorSet(binding, parameters.size);
         }
         //--------------------------------------------------------------------------
 

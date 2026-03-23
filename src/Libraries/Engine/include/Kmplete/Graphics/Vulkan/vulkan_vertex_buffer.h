@@ -22,8 +22,7 @@ namespace Kmplete
             KMP_DISABLE_COPY(VulkanVertexBuffer)
 
         public:
-            KMP_API VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, 
-                                       VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size);
+            KMP_API VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
             KMP_API VulkanVertexBuffer(VulkanVertexBuffer&& other) noexcept;
             KMP_API VulkanVertexBuffer& operator=(VulkanVertexBuffer&& other) noexcept;
 

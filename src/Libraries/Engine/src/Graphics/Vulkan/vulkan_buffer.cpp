@@ -10,13 +10,13 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size)
+        VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters)
             : _device(device)
             , _buffer(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
-            , _size(size)
+            , _size(parameters.size)
             , _mapped(nullptr)
-            , _usageFlags(usageFlags)
+            , _usageFlags(parameters.usageFlags)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -25,7 +25,7 @@ namespace Kmplete
             auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
             VulkanUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
 
-            auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, memoryPropertyFlags);
+            auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, parameters.memoryPropertyFlags);
             VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::InitVkMemoryAllocateFlagsInfoKHR();
             if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
             {

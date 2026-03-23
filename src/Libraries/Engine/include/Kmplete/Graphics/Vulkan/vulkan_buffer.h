@@ -15,12 +15,22 @@ namespace Kmplete
 
 
         //TODO: comments
+        struct VulkanBufferParameters
+        {
+            VkBufferUsageFlags usageFlags;
+            VkMemoryPropertyFlags memoryPropertyFlags;
+            VkDeviceSize size;
+        };
+        //--------------------------------------------------------------------------
+
+
+        //TODO: comments
         class VulkanBuffer
         {
             KMP_DISABLE_COPY(VulkanBuffer)
 
         public:
-            KMP_API VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, VkBufferUsageFlags usageFlags, VkMemoryPropertyFlags memoryPropertyFlags, VkDeviceSize size);
+            KMP_API VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
             KMP_API VulkanBuffer(VulkanBuffer&& other) noexcept;
             KMP_API VulkanBuffer& operator=(VulkanBuffer&& other) noexcept;
             KMP_API virtual ~VulkanBuffer();
