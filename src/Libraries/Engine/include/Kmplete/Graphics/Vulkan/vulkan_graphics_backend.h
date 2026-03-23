@@ -11,6 +11,7 @@
 namespace Kmplete
 {
     class Window;
+    class SettingsDocument;
 
 
     namespace Graphics
@@ -34,6 +35,12 @@ namespace Kmplete
             KMP_API void HandleWindowResize() override;
 
             KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) override;
+
+            KMP_NODISCARD KMP_API virtual UInt32 GetMultisampling() const override;
+            KMP_API virtual void SetMultisampling(UInt32 samples) override;
+
+            KMP_API virtual void SaveSettings(SettingsDocument& settings) const override;
+            KMP_API virtual void LoadSettings(SettingsDocument& settings) override;
 
             KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
             KMP_NODISCARD KMP_API UInt32 GetCurrentBufferIndex() const noexcept;

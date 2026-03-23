@@ -476,6 +476,7 @@ namespace Kmplete
             _drawCommandBuffers[_currentBufferIndex].Reset();
             _drawCommandBuffers[_currentBufferIndex].Begin();
         }
+        //--------------------------------------------------------------------------
 
         void VulkanLogicalDevice::_StartFrameTransitionColorAndDepthStencilImages()
         {

@@ -2,7 +2,9 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
+#include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Window/window.h"
+#include "Kmplete/Math/math.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -129,6 +131,51 @@ namespace Kmplete
         Nullable<Texture*> VulkanGraphicsBackend::CreateTexture(const Image& image)
         {
             return _physicalDevice->GetLogicalDevice().CreateTexture(image);
+        }
+        //--------------------------------------------------------------------------
+
+        UInt32 VulkanGraphicsBackend::GetMultisampling() const
+        {
+            return UInt32(_physicalDevice->GetLogicalDevice().GetMultisampling());
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsBackend::SetMultisampling(UInt32 samples)
+        {
+            if (!Math::IsPowerOf2(samples))
+            {
+                KMP_LOG_WARN("samples value (given {}) will be converted to nearest power of two", samples);
+                samples = Math::NearestPowerOf2(samples);
+            }
+
+            if (GetMultisampling() == samples)
+            {
+                return;
+            }
+
+            _physicalDevice->GetLogicalDevice().SetMultisampling(VkSampleCountFlagBits(samples));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsBackend::SaveSettings(SettingsDocument& settings) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            settings.StartSaveObject(SettingsEntryName);
+            settings.SaveUInt(MSAAsamplesStr, GetMultisampling());
+            settings.EndSaveObject();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsBackend::LoadSettings(SettingsDocument& settings)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            settings.StartLoadObject(SettingsEntryName);
+            const UInt32 msaaSamples = settings.GetUInt(MSAAsamplesStr, 1);
+            SetMultisampling(msaaSamples);
+
+            settings.EndLoadObject();
         }
         //--------------------------------------------------------------------------
 

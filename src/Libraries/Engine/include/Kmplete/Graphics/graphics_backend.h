@@ -14,6 +14,7 @@
 namespace Kmplete
 {
     class Window;
+    class SettingsDocument;
 
 
     namespace Graphics
@@ -27,6 +28,10 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(GraphicsBackend)
             KMP_LOG_CLASSNAME(GraphicsBackend)
+
+        protected:
+            static constexpr auto SettingsEntryName = "GraphicsBackend";
+            static constexpr auto MSAAsamplesStr = "MSAAsamples";
 
         public:
             KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(Window& window);
@@ -47,6 +52,12 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, bool flipVertically = false);
             KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Image& image) = 0;
+
+            KMP_NODISCARD KMP_API virtual UInt32 GetMultisampling() const = 0;
+            KMP_API virtual void SetMultisampling(UInt32 samples) = 0;
+
+            KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
+            KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
 
         protected:
             Window& _window;

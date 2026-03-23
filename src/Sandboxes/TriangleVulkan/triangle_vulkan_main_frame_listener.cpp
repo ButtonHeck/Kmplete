@@ -258,8 +258,7 @@ namespace Kmplete
 
     bool MainFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
     {
-        Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
-        vulkanDevice.SetMultisampling(VkSampleCountFlagBits(evt.msaaSamples));
+        _graphicsBackend.SetMultisampling(evt.msaaSamples);
         return true;
     }
     //--------------------------------------------------------------------------
