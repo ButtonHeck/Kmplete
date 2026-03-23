@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/integer.hpp>
 
+#include <bit>
+
 
 namespace Kmplete
 {
@@ -57,6 +59,28 @@ namespace Kmplete
         KMP_NODISCARD ValueType Ceil(ValueType value)
         {
             return ValueType(glm::ceil(value));
+        }
+        //--------------------------------------------------------------------------
+
+        template<typename ValueType> requires (IsIntegral<ValueType>::value)
+        KMP_NODISCARD bool IsPowerOf2(ValueType value)
+        {
+            return (value == 0) || std::popcount(value) == 1;
+        }
+        //--------------------------------------------------------------------------
+
+        template<typename ValueType> requires (IsIntegral<ValueType>::value)
+        KMP_NODISCARD ValueType NearestPowerOf2(ValueType value)
+        {
+            if (IsPowerOf2(value))
+            {
+                return value;
+            }
+
+            ValueType lower = std::bit_floor(value);
+            ValueType higher = std::bit_ceil(value);
+
+            return (value - lower < higher - value) ? lower : higher;
         }
         //--------------------------------------------------------------------------
     }
