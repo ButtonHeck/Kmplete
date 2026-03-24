@@ -550,7 +550,7 @@ namespace Kmplete
             auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };
             renderingInfo.layerCount = 1;
-            renderingInfo.colorAttachmentCount = 1;
+            renderingInfo.colorAttachmentCount = 1; //TODO: should match the number of color attachments of currently bound pipeline
             renderingInfo.pColorAttachments = &colorAttachmentInfo;
             renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
             renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;

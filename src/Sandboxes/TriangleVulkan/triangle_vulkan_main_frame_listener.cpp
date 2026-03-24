@@ -161,7 +161,7 @@ namespace Kmplete
         VkPipelineColorBlendAttachmentState blendAttachmentState{};
         blendAttachmentState.colorWriteMask = 0xf;
         blendAttachmentState.blendEnable = VK_FALSE;
-        pipeline.AddColorBlendAttachment(blendAttachmentState);
+        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, blendAttachmentState);
 
         pipeline.SetupDepthTest(true);
         pipeline.SetupDepthWrite(true);
@@ -170,7 +170,6 @@ namespace Kmplete
         pipeline.SetupStencilTest(false);
         pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
         pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipeline.AddRenderingColorAttachment(vulkanContext.surfaceFormat.format);
 
         VkStencilOpState back{};
         back.failOp = VK_STENCIL_OP_KEEP;

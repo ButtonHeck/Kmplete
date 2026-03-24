@@ -33,7 +33,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& SetupRasterizerDiscard(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetupLineWidth(float lineWidth);
             KMP_API VulkanGraphicsPipeline& SetupColorBlendConstants(Array<float, 4> constants);
-            KMP_API VulkanGraphicsPipeline& AddColorBlendAttachment(VkPipelineColorBlendAttachmentState colorBlendAttachment);
+            KMP_API VulkanGraphicsPipeline& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
             KMP_API VulkanGraphicsPipeline& AddDynamicState(VkDynamicState dynamicState);
             KMP_API VulkanGraphicsPipeline& AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates);
             KMP_API VulkanGraphicsPipeline& SetupDepthTest(bool enabled);
@@ -47,7 +47,6 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& AddVertexInputBindings(Vector<VkVertexInputBindingDescription>&& inputBindingDescriptions);
             KMP_API VulkanGraphicsPipeline& AddVertexAttributesDescriptions(Vector<VkVertexInputAttributeDescription>&& attributesDescriptions);
             KMP_API VulkanGraphicsPipeline& AddShaderStages(Vector<VkPipelineShaderStageCreateInfo>&& shaderStages);
-            KMP_API VulkanGraphicsPipeline& AddRenderingColorAttachment(VkFormat attachmentFormat);
             KMP_API VulkanGraphicsPipeline& SetupRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
 
             KMP_NODISCARD KMP_API VkPipeline GetVkPipeline() const noexcept;

@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Math/math.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -82,6 +83,9 @@ namespace Kmplete
 
             _colorBlendStateCreateInfo.attachmentCount = UInt32(_colorBlendAttachments.size());
             _colorBlendStateCreateInfo.pAttachments = _colorBlendAttachments.data();
+            _renderingCreateInfo.colorAttachmentCount = UInt32(_renderingColorAttachmentsFormats.size());
+            _renderingCreateInfo.pColorAttachmentFormats = _renderingColorAttachmentsFormats.data();
+            KMP_ASSERT(_renderingCreateInfo.colorAttachmentCount == _colorBlendStateCreateInfo.attachmentCount);
 
             _dynamicStateCreateInfo.dynamicStateCount = UInt32(_dynamicStates.size());
             _dynamicStateCreateInfo.pDynamicStates = _dynamicStates.data();
@@ -90,9 +94,6 @@ namespace Kmplete
             _vertexInputStateCreateInfo.pVertexBindingDescriptions = _vertexInputBindings.data();
             _vertexInputStateCreateInfo.vertexAttributeDescriptionCount = UInt32(_vertexAttributesDescriptions.size());
             _vertexInputStateCreateInfo.pVertexAttributeDescriptions = _vertexAttributesDescriptions.data();
-
-            _renderingCreateInfo.colorAttachmentCount = UInt32(_renderingColorAttachmentsFormats.size());
-            _renderingCreateInfo.pColorAttachmentFormats = _renderingColorAttachmentsFormats.data();
 
             auto pipelineCI = Graphics::VulkanUtils::InitVkGraphicsPipelineCreateInfo();
             pipelineCI.layout = _pipelineLayout;
@@ -192,8 +193,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddColorBlendAttachment(VkPipelineColorBlendAttachmentState colorBlendAttachment)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment)
         {
+            _renderingColorAttachmentsFormats.push_back(attachmentFormat);
             _colorBlendAttachments.push_back(colorBlendAttachment);
             return *this;
         }
@@ -304,13 +306,6 @@ namespace Kmplete
             return *this;
         }
         //--------------------------------------------------------------------------
-
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddRenderingColorAttachment(VkFormat attachmentFormat)
-        {
-            _renderingColorAttachmentsFormats.push_back(attachmentFormat);
-            return *this;
-        }
-        //--------------------------------------------------------------------------
         
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat)
         {
@@ -377,7 +372,11 @@ namespace Kmplete
             _multisamplingStateCreateInfo.alphaToCoverageEnable = VK_FALSE;
             _multisamplingStateCreateInfo.alphaToOneEnable = VK_FALSE;
 
-            AddDynamicStates({ VK_DYNAMIC_STATE_VIEWPORT, VK_DYNAMIC_STATE_SCISSOR, VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT });
+            AddDynamicStates({ 
+                VK_DYNAMIC_STATE_VIEWPORT, 
+                VK_DYNAMIC_STATE_SCISSOR, 
+                VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT
+            });
         }
         //--------------------------------------------------------------------------
     }
