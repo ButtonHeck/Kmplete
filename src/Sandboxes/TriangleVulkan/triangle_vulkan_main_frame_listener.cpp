@@ -81,14 +81,11 @@ namespace Kmplete
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
-
         const Vector<UInt32> indices{ 0, 1, 2 };
         _indexCount = UInt32(indices.size());
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
-
         Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + indexBufferSize});
-
 
         auto result = stagingBuffer.Map();
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to map texture buffer");
@@ -98,7 +95,6 @@ namespace Kmplete
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to flush texture buffer");
         stagingBuffer.Unmap();
 
-
         const auto vertexBufferLayout = Graphics::BufferLayout({
             Graphics::BufferElement{Graphics::ShaderDataType::Float2, 0},
             Graphics::BufferElement{Graphics::ShaderDataType::Float3, 1}
@@ -106,9 +102,7 @@ namespace Kmplete
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize}));
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
-
         _indexBuffer.reset(vulkanBufferCreator.CreateBufferPtr({VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize}));
-
 
         {
             Graphics::VulkanCommandBuffer copyCmd = vulkanDevice.CreateCommandBuffer();
@@ -129,7 +123,6 @@ namespace Kmplete
             fence.Wait();
         }
 
-
         const auto shaderUniformVariableBinding = 3;
         VkDescriptorSetLayoutBinding layoutBinding{};
         layoutBinding.binding = shaderUniformVariableBinding;
@@ -148,6 +141,24 @@ namespace Kmplete
             _uniformBuffers[i]->Map();
         }
 
+        VkPipelineColorBlendAttachmentState blendAttachmentState{};
+        blendAttachmentState.colorWriteMask = 0xf;
+        blendAttachmentState.blendEnable = VK_FALSE;
+
+        VkStencilOpState back{};
+        back.failOp = VK_STENCIL_OP_KEEP;
+        back.passOp = VK_STENCIL_OP_KEEP;
+        back.compareOp = VK_COMPARE_OP_ALWAYS;
+
+        auto [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
+
+        const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
+        const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
+        auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
+            vertexShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
+            fragmentShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
+        };
+
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
@@ -157,12 +168,7 @@ namespace Kmplete
         pipeline.SetupDepthClamping(false);
         pipeline.SetupRasterizerDiscard(false);
         pipeline.SetupDepthBiasParameters(false, 0.0f, 0.0f, 0.0f);
-
-        VkPipelineColorBlendAttachmentState blendAttachmentState{};
-        blendAttachmentState.colorWriteMask = 0xf;
-        blendAttachmentState.blendEnable = VK_FALSE;
         pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, blendAttachmentState);
-
         pipeline.SetupDepthTest(true);
         pipeline.SetupDepthWrite(true);
         pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
@@ -170,23 +176,9 @@ namespace Kmplete
         pipeline.SetupStencilTest(false);
         pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
         pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-
-        VkStencilOpState back{};
-        back.failOp = VK_STENCIL_OP_KEEP;
-        back.passOp = VK_STENCIL_OP_KEEP;
-        back.compareOp = VK_COMPARE_OP_ALWAYS;
         pipeline.SetupStencilStates(back, back);
-
-        auto [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
         pipeline.AddVertexInputBindings(std::move(inputDescriptions));
         pipeline.AddVertexAttributesDescriptions(std::move(attributeDescriptions));
-
-        const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
-        const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
-        auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
-            fragmentShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
-        };
         pipeline.AddShaderStages(std::move(shaderStages));
 
         pipeline.Build();
