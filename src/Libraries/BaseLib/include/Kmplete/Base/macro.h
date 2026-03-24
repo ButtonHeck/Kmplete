@@ -64,3 +64,16 @@
     #define KMP_BEGIN_PACKED_STRUCT(name)   struct __attribute__((packed)) name
     #define KMP_END_PACKED_STRUCT
 #endif
+
+
+//! Compiler abstraction for debug break directive
+//! @see log.h in LoggerLib for example usage
+#if defined (KMP_CONFIG_TYPE_DEBUG)
+    #if defined (KMP_COMPILER_MSVC) || defined (KMP_COMPILER_MINGW)
+        #define KMP_DEBUGBREAK __debugbreak()
+    #elif defined (KMP_COMPILER_CLANG) || defined (KMP_COMPILER_GCC)
+        #define KMP_DEBUGBREAK __builtin_debugtrap()
+    #endif
+#else
+    #define KMP_DEBUGBREAK
+#endif
