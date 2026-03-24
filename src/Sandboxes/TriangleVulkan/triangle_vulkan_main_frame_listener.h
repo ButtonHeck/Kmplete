@@ -63,8 +63,6 @@ namespace Kmplete
         Vector<UPtr<Graphics::VulkanUniformBuffer>> _uniformBuffers;
         UInt32 _indexCount;
         VkDevice _device;
-        VkDescriptorSetLayout _descriptorSetLayout0;
-        VkDescriptorSetLayout _descriptorSetLayout1;
         VkCommandBuffer _commandBuffer;
 
         Assets::AssetsManager& _assetsManager;

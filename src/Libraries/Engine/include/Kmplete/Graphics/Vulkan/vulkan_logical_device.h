@@ -68,6 +68,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
             KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
 
+            KMP_API bool AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
+            KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID sid) const noexcept;
+
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
@@ -135,6 +138,7 @@ namespace Kmplete
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
             HashMap<StringID, UPtr<VulkanGraphicsPipeline>> _pipelines;
+            HashMap<StringID, VkDescriptorSetLayout> _descriptorSetLayouts;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
 
             VkExtent2D _currentExtent;

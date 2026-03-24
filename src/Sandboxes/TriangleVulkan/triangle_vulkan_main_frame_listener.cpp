@@ -43,8 +43,6 @@ namespace Kmplete
         , _uniformBuffers()
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
-        , _descriptorSetLayout0(VK_NULL_HANDLE)
-        , _descriptorSetLayout1(VK_NULL_HANDLE)
         , _commandBuffer(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
@@ -133,31 +131,26 @@ namespace Kmplete
 
 
         const auto shaderUniformVariableBinding = 3;
-        auto descriptorSetLayout0CI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
-        descriptorSetLayout0CI.bindingCount = 0;
-        descriptorSetLayout0CI.pBindings = nullptr;
-        result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayout0CI, nullptr, &_descriptorSetLayout0);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout 0");
         VkDescriptorSetLayoutBinding layoutBinding{};
         layoutBinding.binding = shaderUniformVariableBinding;
         layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         layoutBinding.descriptorCount = 1;
         layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        auto descriptorSetLayout1CI = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
-        descriptorSetLayout1CI.bindingCount = 1;
-        descriptorSetLayout1CI.pBindings = &layoutBinding;
-        result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayout1CI, nullptr, &_descriptorSetLayout1);
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to create descriptor set layout 1");
+        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_0"_sid, {});
+        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_1"_sid, { layoutBinding });
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
-            _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData)}, { _descriptorSetLayout1 }, shaderUniformVariableBinding));
+            _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
+                {VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData)}, 
+                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid) }, 
+                shaderUniformVariableBinding));
             _uniformBuffers[i]->Map();
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
-        pipeline.AddDescriptorSetLayout(_descriptorSetLayout0);
-        pipeline.AddDescriptorSetLayout(_descriptorSetLayout1);
+        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
+        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
         pipeline.SetupInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, false);
         pipeline.SetupPolygonMode(VK_POLYGON_MODE_FILL);
         pipeline.SetupCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
@@ -245,8 +238,6 @@ namespace Kmplete
         _uniformBuffers.clear();
         _vertexBuffer.reset();
         _indexBuffer.reset();
-        vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout1, nullptr);
-        vkDestroyDescriptorSetLayout(_device, _descriptorSetLayout0, nullptr);
     }
     //--------------------------------------------------------------------------
 

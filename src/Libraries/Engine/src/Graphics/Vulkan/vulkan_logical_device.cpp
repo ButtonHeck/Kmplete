@@ -44,6 +44,7 @@ namespace Kmplete
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
             , _pipelines()
+            , _descriptorSetLayouts()
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
@@ -71,6 +72,13 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _bufferCreatorDelegate.reset();
+
+            for (const auto& [sid, descriptorSetLayout] : _descriptorSetLayouts)
+            {
+                vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
+            }
+            _descriptorSetLayouts.clear();
+
             _pipelines.clear();
             _DeleteDescriptorPool();
             _DeletePipelineCache();
@@ -649,6 +657,48 @@ namespace Kmplete
             
             KMP_LOG_ERROR("graphics pipeline with sid '{}' not found", sid);
             return std::nullopt;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanLogicalDevice::AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            if (_descriptorSetLayouts.contains(sid))
+            {
+                KMP_LOG_WARN("descriptor set layout with sid '{}' has already been created", sid);
+                return true;
+            }
+
+            try
+            {
+                auto descriptorSetLayoutCreateInfo = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
+                descriptorSetLayoutCreateInfo.bindingCount = UInt32(bindings.size());
+                descriptorSetLayoutCreateInfo.pBindings = bindings.empty() ? nullptr : bindings.data();
+                VkDescriptorSetLayout layout = nullptr;
+                const auto result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCreateInfo, nullptr, &layout);
+                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create descriptor set layout");
+
+                const auto [iterator, hasEmplaced] = _descriptorSetLayouts.emplace(sid, layout);
+                return iterator->second != nullptr;
+            }
+            catch (KMP_MB_UNUSED const std::runtime_error& er)
+            {
+                KMP_LOG_ERROR("failed to create descriptor set layout '{}'", sid);
+                return false;
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        VkDescriptorSetLayout VulkanLogicalDevice::GetDescriptorSetLayout(StringID sid) const noexcept
+        {
+            if (_descriptorSetLayouts.contains(sid))
+            {
+                return _descriptorSetLayouts.at(sid);
+            }
+
+            KMP_LOG_ERROR("descriptor set layout with sid '{}' not found", sid);
+            return VK_NULL_HANDLE;
         }
         //--------------------------------------------------------------------------
 
