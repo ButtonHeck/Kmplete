@@ -141,8 +141,6 @@ namespace Kmplete
             _uniformBuffers[i]->Map();
         }
 
-        auto [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
-
         const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
         const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
         auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
@@ -168,8 +166,7 @@ namespace Kmplete
         pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
         pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.SetupStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
-        pipeline.AddVertexInputBindings(std::move(inputDescriptions));
-        pipeline.AddVertexAttributesDescriptions(std::move(attributeDescriptions));
+        pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddShaderStages(std::move(shaderStages));
 
         pipeline.Build();

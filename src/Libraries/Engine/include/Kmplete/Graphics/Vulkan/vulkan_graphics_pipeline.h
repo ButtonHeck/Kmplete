@@ -12,6 +12,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanVertexBuffer;
+
+
         //TODO: comments
         class VulkanGraphicsPipeline
         {
@@ -46,6 +49,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& SetupMultisamplingSampleShading(bool enabled, float minSampleShading);
             KMP_API VulkanGraphicsPipeline& AddVertexInputBindings(Vector<VkVertexInputBindingDescription>&& inputBindingDescriptions);
             KMP_API VulkanGraphicsPipeline& AddVertexAttributesDescriptions(Vector<VkVertexInputAttributeDescription>&& attributesDescriptions);
+            KMP_API VulkanGraphicsPipeline& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
             KMP_API VulkanGraphicsPipeline& AddShaderStages(Vector<VkPipelineShaderStageCreateInfo>&& shaderStages);
             KMP_API VulkanGraphicsPipeline& SetupRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
 

@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Math/math.h"
@@ -296,6 +297,15 @@ namespace Kmplete
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddVertexAttributesDescriptions(Vector<VkVertexInputAttributeDescription>&& attributesDescriptions)
         {
             Utils::MergeVectors(attributesDescriptions, _vertexAttributesDescriptions);
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding)
+        {
+            auto [inputDescriptions, attributeDescriptions] = vertexBuffer.GetBindingsDescriptions(baseBinding);
+            AddVertexInputBindings(std::move(inputDescriptions));
+            AddVertexAttributesDescriptions(std::move(attributeDescriptions));
             return *this;
         }
         //--------------------------------------------------------------------------
