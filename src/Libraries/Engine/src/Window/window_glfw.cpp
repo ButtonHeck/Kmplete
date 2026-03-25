@@ -1,5 +1,6 @@
 #include "Kmplete/Window/window_glfw.h"
 #include "Kmplete/Window/window_cursor_glfw.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Event/window_events.h"
@@ -43,7 +44,7 @@ namespace Kmplete
                     const auto monitorRectangle = _GetMonitorRectangle(monitor);
                     if (monitorRectangle.ContainsPoint(windowCenter))
                     {
-                        return { true, monitor };
+                        return { "suitable"_true, monitor };
                     }
                 }
             }
@@ -51,7 +52,7 @@ namespace Kmplete
 
         KMP_LOG_WARN("cannot get window's current monitor, primary monitor will be used");
 
-        return { false, glfwGetPrimaryMonitor() };
+        return { "suitable"_false, glfwGetPrimaryMonitor() };
     }
     //--------------------------------------------------------------------------
 
@@ -676,7 +677,7 @@ namespace Kmplete
                 {
                 case GLFW_PRESS:
                 {
-                    Events::KeyPressEvent event(key, mods, false);
+                    Events::KeyPressEvent event(key, mods, "repeat"_false);
                     userData->eventCallback(event);
                     break;
                 }
@@ -688,7 +689,7 @@ namespace Kmplete
                 }
                 case GLFW_REPEAT:
                 {
-                    Events::KeyPressEvent event(key, mods, true);
+                    Events::KeyPressEvent event(key, mods, "repeat"_true);
                     userData->eventCallback(event);
                     break;
                 }

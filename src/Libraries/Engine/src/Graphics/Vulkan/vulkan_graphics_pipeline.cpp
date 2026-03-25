@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/vector_utils.h"
@@ -76,7 +77,7 @@ namespace Kmplete
             _layoutCreateInfo.pSetLayouts = _descriptorSetLayouts.data();
 
             auto result = vkCreatePipelineLayout(_device, &_layoutCreateInfo, nullptr, &_pipelineLayout);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline layout", false);
+            VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline layout", "throw exception"_false);
             if (result != VK_SUCCESS)
             {
                 return false;
@@ -111,7 +112,7 @@ namespace Kmplete
             pipelineCI.pNext = &_renderingCreateInfo;
 
             result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline", false);
+            VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline", "throw exception"_false);
             
             return result == VK_SUCCESS;
         }

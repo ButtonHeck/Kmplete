@@ -13,6 +13,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
 #include "Kmplete/ImGui/context_vulkan.h"
@@ -118,7 +119,7 @@ namespace Kmplete
             vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
             copyCmd.End();
 
-            Graphics::VulkanFence fence = vulkanDevice.CreateFence(false);
+            Graphics::VulkanFence fence = vulkanDevice.CreateFence("signaled"_false);
             vulkanDevice.GetGraphicsQueue().Submit(copyCmd, fence.GetVkFence());
             fence.Wait();
         }
@@ -151,12 +152,12 @@ namespace Kmplete
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
-        pipeline.SetupInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, false);
+        pipeline.SetupInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, "primitive restart"_false);
         pipeline.SetupPolygonMode(VK_POLYGON_MODE_FILL);
         pipeline.SetupCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
         pipeline.SetupDepthClamping(false);
         pipeline.SetupRasterizerDiscard(false);
-        pipeline.SetupDepthBiasParameters(false, 0.0f, 0.0f, 0.0f);
+        pipeline.SetupDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
         pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_NoBlend);
         pipeline.SetupDepthTest(true);
         pipeline.SetupDepthWrite(true);
@@ -200,7 +201,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), true, true, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewports"_true, initInfo);
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 

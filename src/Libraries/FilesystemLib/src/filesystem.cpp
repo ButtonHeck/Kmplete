@@ -1,4 +1,5 @@
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -138,7 +139,7 @@ namespace Kmplete
                 return true;
             }
 
-            if (!CreateDirectories(filepath, true))
+            if (!CreateDirectories(filepath, "path is file"_true))
             {
                 KMP_LOG_ERROR_FN("Filesystem::CreateFile - cannot create directories for file '{}'", filepath);
                 return false;

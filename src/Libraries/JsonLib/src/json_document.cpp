@@ -1,4 +1,5 @@
 #include "Kmplete/Json/json_document.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 
@@ -526,7 +527,7 @@ namespace Kmplete
     {
         KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
-        if (!Filesystem::CreateDirectories(_filepath, true))
+        if (!Filesystem::CreateDirectories(_filepath, "is file"_true))
         {
             KMP_LOG_WARN("failed to create directories for '{}'", _filepath);
             _error = true;

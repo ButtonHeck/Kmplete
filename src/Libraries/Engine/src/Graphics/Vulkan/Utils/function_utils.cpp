@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -104,29 +105,29 @@ namespace Kmplete
                 const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
                 if (!queueFamiliesIndices.IsValid())
                 {
-                    return { false, {} };
+                    return { "device suitable"_false, {} };
                 }
 
                 const auto extensionsSupported = QueryDeviceExtensionSupport(device, enabledExtensions);
                 if (!extensionsSupported)
                 {
-                    return { false, {} };
+                    return { "device suitable"_false, {} };
                 }
 
                 const auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(device, surface);
                 if (!surfaceAndPresentModeProperties.IsValid())
                 {
-                    return { false, {} };
+                    return { "device suitable"_false, {} };
                 }
 
                 VkPhysicalDeviceFeatures supportedFeatures;
                 vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
                 if (!supportedFeatures.samplerAnisotropy)
                 {
-                    return { false, {} };
+                    return { "device suitable"_false, {} };
                 }
 
-                return { true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
+                return { "device suitable"_true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
             }
             //--------------------------------------------------------------------------
 

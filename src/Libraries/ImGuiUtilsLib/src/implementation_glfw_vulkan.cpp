@@ -1,4 +1,5 @@
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
+#include "Kmplete/Base/named_bool.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -62,7 +63,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             const auto window = reinterpret_cast<GLFWwindow*>(_context->window);
-            ImGui_ImplGlfw_InitForVulkan(window, true);
+            ImGui_ImplGlfw_InitForVulkan(window, "install callbacks"_true);
 
             const auto contextVulkan = dynamic_cast<ContextVulkan*>(_context.get());
             ImGui_ImplVulkan_InitInfo initInfo = contextVulkan->initInfo;

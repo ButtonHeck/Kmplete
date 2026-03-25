@@ -3,6 +3,7 @@
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Event/key_events.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Log/log.h"
 
@@ -310,7 +311,7 @@ namespace Kmplete
 
             _controlStates[mouseButton] = ButtonPressedValue;
 
-            _UpdateActionEvents(mouseButton, ButtonPressedValue, true);
+            _UpdateActionEvents(mouseButton, ButtonPressedValue, "activation"_true);
         }
         //--------------------------------------------------------------------------
 
@@ -320,7 +321,7 @@ namespace Kmplete
 
             _controlStates[mouseButton] = ButtonReleasedValue;
 
-            _UpdateActionEvents(mouseButton, ButtonReleasedValue, false);
+            _UpdateActionEvents(mouseButton, ButtonReleasedValue, "activation"_false);
         }
         //--------------------------------------------------------------------------
 
@@ -334,7 +335,7 @@ namespace Kmplete
 
             if (!keyPressEvent.IsRepeat())
             {
-                _UpdateActionEvents(keyCode, ButtonPressedValue, true);
+                _UpdateActionEvents(keyCode, ButtonPressedValue, "activation"_true);
             }
         }
         //--------------------------------------------------------------------------
@@ -347,7 +348,7 @@ namespace Kmplete
             _controlStates[keyCode] = ButtonReleasedValue;
             _modifiersMask = modifiers;
 
-            _UpdateActionEvents(keyCode, ButtonReleasedValue, false);
+            _UpdateActionEvents(keyCode, ButtonReleasedValue, "activation"_false);
         }
         //--------------------------------------------------------------------------
 

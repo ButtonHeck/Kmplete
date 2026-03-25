@@ -7,6 +7,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
@@ -272,7 +273,7 @@ namespace Kmplete
 
             const auto graphicsQueueSupportPresentation = (_vulkanContext.graphicsFamilyIndex == _vulkanContext.presentFamilyIndex);
             _graphicsQueue.reset(new VulkanQueue(_device, _vulkanContext.graphicsFamilyIndex, graphicsQueueSupportPresentation));
-            _presentQueue.reset(new VulkanQueue(_device, _vulkanContext.presentFamilyIndex, true));
+            _presentQueue.reset(new VulkanQueue(_device, _vulkanContext.presentFamilyIndex, "support presentation"_true));
         }
         //--------------------------------------------------------------------------
 
@@ -298,7 +299,7 @@ namespace Kmplete
                 result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
                 VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
 
-                _waitFences.emplace_back(_device, true);
+                _waitFences.emplace_back(_device, "signaled"_true);
             }
         }
         //--------------------------------------------------------------------------
@@ -725,7 +726,7 @@ namespace Kmplete
 
                 commandBuffer.End();
 
-                auto fence = CreateFence(false);
+                auto fence = CreateFence("signaled"_false);
                 _graphicsQueue->Submit(commandBuffer, fence.GetVkFence());
                 fence.Wait();
 
