@@ -11,6 +11,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
@@ -117,7 +118,6 @@ namespace Kmplete
             vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
             copyCmd.End();
 
-
             Graphics::VulkanFence fence = vulkanDevice.CreateFence(false);
             vulkanDevice.GetGraphicsQueue().Submit(copyCmd, fence.GetVkFence());
             fence.Wait();
@@ -135,20 +135,11 @@ namespace Kmplete
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
-                {VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData)}, 
-                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid) }, 
+                { VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) },
+                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid) },
                 shaderUniformVariableBinding));
             _uniformBuffers[i]->Map();
         }
-
-        VkPipelineColorBlendAttachmentState blendAttachmentState{};
-        blendAttachmentState.colorWriteMask = 0xf;
-        blendAttachmentState.blendEnable = VK_FALSE;
-
-        VkStencilOpState back{};
-        back.failOp = VK_STENCIL_OP_KEEP;
-        back.passOp = VK_STENCIL_OP_KEEP;
-        back.compareOp = VK_COMPARE_OP_ALWAYS;
 
         auto [inputDescriptions, attributeDescriptions] = _vertexBuffer->GetBindingsDescriptions(0);
 
@@ -168,7 +159,7 @@ namespace Kmplete
         pipeline.SetupDepthClamping(false);
         pipeline.SetupRasterizerDiscard(false);
         pipeline.SetupDepthBiasParameters(false, 0.0f, 0.0f, 0.0f);
-        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, blendAttachmentState);
+        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_NoBlend);
         pipeline.SetupDepthTest(true);
         pipeline.SetupDepthWrite(true);
         pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
@@ -176,7 +167,7 @@ namespace Kmplete
         pipeline.SetupStencilTest(false);
         pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
         pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipeline.SetupStencilStates(back, back);
+        pipeline.SetupStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
         pipeline.AddVertexInputBindings(std::move(inputDescriptions));
         pipeline.AddVertexAttributesDescriptions(std::move(attributeDescriptions));
         pipeline.AddShaderStages(std::move(shaderStages));
