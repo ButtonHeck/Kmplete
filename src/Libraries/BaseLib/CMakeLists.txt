@@ -17,6 +17,7 @@ AddTargetSourcesGroup(BaseLib "Base"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/type_traits.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/string_id.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/functional.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Base/named_bool.h
 )
 
 target_include_directories(BaseLib
