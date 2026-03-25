@@ -100,7 +100,7 @@ namespace Kmplete
             Graphics::BufferElement{Graphics::ShaderDataType::Float2, 0},
             Graphics::BufferElement{Graphics::ShaderDataType::Float3, 1}
         });
-        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize}));
+        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize }));
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
         _indexBuffer.reset(vulkanBufferCreator.CreateBufferPtr({VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize}));
@@ -135,7 +135,7 @@ namespace Kmplete
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
-                { VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) },
+                { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) },
                 { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid) },
                 shaderUniformVariableBinding));
             _uniformBuffers[i]->Map();

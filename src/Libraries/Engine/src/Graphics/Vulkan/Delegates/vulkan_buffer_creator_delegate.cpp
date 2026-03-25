@@ -36,7 +36,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return VulkanVertexBuffer(_memoryTypeDelegate, _device, parameters);
+            return VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            });
         }
         //--------------------------------------------------------------------------
 
@@ -44,7 +48,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return new VulkanVertexBuffer(_memoryTypeDelegate, _device, parameters);
+            return new VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            });
         }
         //--------------------------------------------------------------------------
 
@@ -53,7 +61,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return VulkanUniformBuffer(_memoryTypeDelegate, _device, parameters, _descriptorPool, descriptorSetLayouts, binding);
+            return VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            }, _descriptorPool, descriptorSetLayouts, binding);
         }
         //--------------------------------------------------------------------------
 
@@ -61,7 +73,11 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            return new VulkanUniformBuffer(_memoryTypeDelegate, _device, parameters, _descriptorPool, descriptorSetLayouts, binding);
+            return new VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            }, _descriptorPool, descriptorSetLayouts, binding);
         }
         //--------------------------------------------------------------------------
     }
