@@ -1,6 +1,8 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log.h"
 
+#include <algorithm>
+
 
 namespace Kmplete
 {
@@ -103,6 +105,10 @@ namespace Kmplete
 
         void BufferLayout::_CalculateLayout()
         {
+            std::sort(_elements.begin(), _elements.end(), [](const BufferElement& element1, const BufferElement& element2) {
+                return element1.location < element2.location;
+            });
+
             size_t offset = 0;
             _stride = 0;
 
