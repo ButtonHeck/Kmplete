@@ -31,6 +31,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanVertexBuffer CreateVertexBuffer(const VulkanBufferParameters& parameters) const;
             KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const;
 
+            KMP_NODISCARD KMP_API VulkanBuffer CreateIndexBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const;
+
             KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
             KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
 

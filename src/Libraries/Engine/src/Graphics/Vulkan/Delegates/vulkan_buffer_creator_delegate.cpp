@@ -57,6 +57,31 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        VulkanBuffer VulkanBufferCreatorDelegate::CreateIndexBuffer(const VulkanBufferParameters& parameters) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            });
+        }
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            });
+        }
+        //--------------------------------------------------------------------------
+
+
         VulkanUniformBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
