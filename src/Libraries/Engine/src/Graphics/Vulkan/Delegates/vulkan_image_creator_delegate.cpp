@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -40,16 +41,9 @@ namespace Kmplete
         VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                   VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
-            creationParameters.imageType = VK_IMAGE_TYPE_2D;
-            creationParameters.extent.width = width;
-            creationParameters.extent.height = height;
-            creationParameters.extent.depth = 1;
-            creationParameters.mipLevels = mipLevels;
-            creationParameters.arrayLayers = 1;
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(VkExtent3D{.width = width, .height = height, .depth = 1}, mipLevels, numSamples);
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            creationParameters.samples = numSamples;
             creationParameters.format = format;
             creationParameters.tiling = tiling;
             creationParameters.usage = usage;
@@ -78,16 +72,9 @@ namespace Kmplete
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                                 VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
-            creationParameters.imageType = VK_IMAGE_TYPE_2D;
-            creationParameters.extent.width = width;
-            creationParameters.extent.height = height;
-            creationParameters.extent.depth = 1;
-            creationParameters.mipLevels = mipLevels;
-            creationParameters.arrayLayers = 1;
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(VkExtent3D{ .width = width, .height = height, .depth = 1 }, mipLevels, numSamples);
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            creationParameters.samples = numSamples;
             creationParameters.format = format;
             creationParameters.tiling = tiling;
             creationParameters.usage = usage;

@@ -275,28 +275,16 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto colorCreationParameters = VulkanUtils::InitVkImageCreateInfo();
-            colorCreationParameters.imageType = VK_IMAGE_TYPE_2D;
-            colorCreationParameters.extent = extent;
-            colorCreationParameters.mipLevels = 1;
-            colorCreationParameters.arrayLayers = 1;
-            colorCreationParameters.samples = _msaaSamples;
+            auto colorCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(extent, 1, _msaaSamples);
             colorCreationParameters.format = _swapchainImageFormat;
-            colorCreationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
             colorCreationParameters.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             colorCreationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             colorCreationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             colorCreationParameters.flags = 0;
             _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
-            auto depthCreationParameters = VulkanUtils::InitVkImageCreateInfo();
-            depthCreationParameters.imageType = VK_IMAGE_TYPE_2D;
-            depthCreationParameters.extent = extent;
-            depthCreationParameters.mipLevels = 1;
-            depthCreationParameters.arrayLayers = 1;
-            depthCreationParameters.samples = _msaaSamples;
+            auto depthCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(extent, 1, _msaaSamples);
             depthCreationParameters.format = _vulkanContext.defaultDepthFormat;
-            depthCreationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
             depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 

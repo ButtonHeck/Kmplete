@@ -3,6 +3,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -58,16 +59,10 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto creationParameters = VulkanUtils::InitVkImageCreateInfo();
-            creationParameters.imageType = VK_IMAGE_TYPE_2D;
-            creationParameters.extent = extent;
-            creationParameters.mipLevels = mipLevels;
-            creationParameters.arrayLayers = 1;
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(extent, mipLevels, VK_SAMPLE_COUNT_1_BIT);
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
             creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-            creationParameters.samples = VK_SAMPLE_COUNT_1_BIT;
             creationParameters.format = format;
-            creationParameters.tiling = VK_IMAGE_TILING_OPTIMAL;
             creationParameters.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
             creationParameters.flags = 0;
 
