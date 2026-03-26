@@ -41,9 +41,14 @@ namespace Kmplete
         VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                   VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(VkExtent3D{.width = width, .height = height, .depth = 1}, mipLevels, numSamples);
+            const auto extent = VkExtent3D{
+                .width = width,
+                .height = height,
+                .depth = 1
+            };
+
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, mipLevels, numSamples);
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             creationParameters.format = format;
             creationParameters.tiling = tiling;
             creationParameters.usage = usage;
@@ -72,9 +77,14 @@ namespace Kmplete
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                                 VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(VkExtent3D{ .width = width, .height = height, .depth = 1 }, mipLevels, numSamples);
+            const auto extent = VkExtent3D{
+                .width = width,
+                .height = height,
+                .depth = 1
+            };
+
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, mipLevels, numSamples);
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             creationParameters.format = format;
             creationParameters.tiling = tiling;
             creationParameters.usage = usage;

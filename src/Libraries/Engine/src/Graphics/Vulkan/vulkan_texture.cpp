@@ -59,9 +59,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(extent, mipLevels, VK_SAMPLE_COUNT_1_BIT);
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, mipLevels, VK_SAMPLE_COUNT_1_BIT);
             creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            creationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             creationParameters.format = format;
             creationParameters.usage = VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
             creationParameters.flags = 0;

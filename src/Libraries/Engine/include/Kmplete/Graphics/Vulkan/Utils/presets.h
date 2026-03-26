@@ -55,17 +55,18 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
-            static constexpr VkImageCreateInfo ImageCI_2D_OptimalTiling_Layer1{
+            static constexpr VkImageCreateInfo ImageCI_2D_OptimalTiling_QueueExclusive_Layer1{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                 .imageType = VK_IMAGE_TYPE_2D,
                 .arrayLayers = 1,
-                .tiling = VK_IMAGE_TILING_OPTIMAL
+                .tiling = VK_IMAGE_TILING_OPTIMAL,
+                .sharingMode = VK_SHARING_MODE_EXCLUSIVE
             };
             //--------------------------------------------------------------------------
 
-            KMP_NODISCARD constexpr VkImageCreateInfo GetImageCI_2D_OptimalTiling_Layer1(const VkExtent3D& extent, UInt32 mipLevels, VkSampleCountFlagBits samples)
+            KMP_NODISCARD constexpr VkImageCreateInfo GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(const VkExtent3D& extent, UInt32 mipLevels, VkSampleCountFlagBits samples)
             {
-                auto imageCI = ImageCI_2D_OptimalTiling_Layer1;
+                auto imageCI = ImageCI_2D_OptimalTiling_QueueExclusive_Layer1;
                 imageCI.extent = extent;
                 imageCI.mipLevels = mipLevels;
                 imageCI.samples = samples;

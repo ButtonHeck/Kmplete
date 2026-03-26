@@ -219,6 +219,7 @@ namespace Kmplete
             UInt32 indicesArray[] = { _vulkanContext.graphicsFamilyIndex, _vulkanContext.presentFamilyIndex };
             if (_vulkanContext.graphicsFamilyIndex != _vulkanContext.presentFamilyIndex)
             {
+                KMP_LOG_WARN("due to different indices of graphics and presentation queues, image sharing mode set to concurrent");
                 swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
                 swapchainCreateInfo.queueFamilyIndexCount = 2;
                 swapchainCreateInfo.pQueueFamilyIndices = indicesArray;
@@ -275,15 +276,14 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto colorCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(extent, 1, _msaaSamples);
+            auto colorCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, 1, _msaaSamples);
             colorCreationParameters.format = _swapchainImageFormat;
             colorCreationParameters.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
             colorCreationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorCreationParameters.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
             colorCreationParameters.flags = 0;
             _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
-            auto depthCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_Layer1(extent, 1, _msaaSamples);
+            auto depthCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, 1, _msaaSamples);
             depthCreationParameters.format = _vulkanContext.defaultDepthFormat;
             depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
