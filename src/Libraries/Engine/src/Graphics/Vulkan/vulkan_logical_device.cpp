@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Window/window.h"
@@ -501,7 +502,7 @@ namespace Kmplete
                 .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
                 .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                 .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+                .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
 
@@ -514,7 +515,7 @@ namespace Kmplete
                 .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
                 .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
                 .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT, 0, 1, 0, 1 }
+                .subresourceRange = VulkanPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
             };
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
         }
@@ -601,7 +602,7 @@ namespace Kmplete
                 .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                 .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                 .dstStageMask = VK_PIPELINE_STAGE_2_NONE,
-                .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 }
+                .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
         }

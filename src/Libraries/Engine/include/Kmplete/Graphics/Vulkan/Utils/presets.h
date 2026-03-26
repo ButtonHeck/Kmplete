@@ -30,6 +30,22 @@ namespace Kmplete
                 .passOp = VK_STENCIL_OP_KEEP,
                 .compareOp = VK_COMPARE_OP_NEVER
             };
+
+            static constexpr VkImageSubresourceRange ImageSubresourceRange_Color_Layer1_Level1{
+                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                .baseMipLevel = 0,
+                .levelCount = 1,
+                .baseArrayLayer = 0,
+                .layerCount = 1
+            };
+
+            static constexpr VkImageSubresourceRange ImageSubresourceRange_DepthStencil_Layer1_Level1{ 
+                .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT,
+                .baseMipLevel = 0,
+                .levelCount = 1,
+                .baseArrayLayer = 0,
+                .layerCount = 1
+            };
         }
     }
 }

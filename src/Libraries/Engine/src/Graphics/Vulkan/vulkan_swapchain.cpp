@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -258,13 +259,7 @@ namespace Kmplete
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
-                VkImageSubresourceRange subresourceRange = {
-                    .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                    .baseMipLevel = 0,
-                    .levelCount = 1,
-                    .baseArrayLayer = 0,
-                    .layerCount = 1
-                };
+                const auto& subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1;
                 _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, subresourceRange);
             }
         }
@@ -305,26 +300,10 @@ namespace Kmplete
             depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
-            VkImageSubresourceRange colorSubresourceRange = {
-                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                .baseMipLevel = 0,
-                .levelCount = 1,
-                .baseArrayLayer = 0,
-                .layerCount = 1
-            };
+            const auto& colorSubresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1;
             _multisampledColorImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledColorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange);
 
-            VkImageSubresourceRange depthSubresourceRange = {
-                .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT,
-                .baseMipLevel = 0,
-                .levelCount = 1,
-                .baseArrayLayer = 0,
-                .layerCount = 1
-            };
-            if (_vulkanContext.defaultDepthFormat >= VK_FORMAT_D16_UNORM_S8_UINT)
-            {
-                depthSubresourceRange.aspectMask |= VK_IMAGE_ASPECT_STENCIL_BIT;
-            }
+            const auto& depthSubresourceRange = VulkanPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1;
             _multisampledDepthImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledDepthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange);
         }
         //--------------------------------------------------------------------------
