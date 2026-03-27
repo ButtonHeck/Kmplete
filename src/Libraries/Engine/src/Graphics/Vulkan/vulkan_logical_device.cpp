@@ -134,13 +134,11 @@ namespace Kmplete
 
             WaitIdle();
 
-            _DeleteCommandBuffers();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
 
             _CreateSynchronizationObjects();
             _CreateSwapchain();
-            _CreateCommandBuffers();
         }
         //--------------------------------------------------------------------------
 
