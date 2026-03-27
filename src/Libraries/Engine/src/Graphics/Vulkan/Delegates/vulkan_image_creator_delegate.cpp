@@ -47,12 +47,8 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, mipLevels, numSamples);
-            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            creationParameters.format = format;
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
             creationParameters.tiling = tiling;
-            creationParameters.usage = usage;
-            creationParameters.flags = 0;
 
             return CreateVulkanImage(creationParameters, memoryProperties);
         }
@@ -83,12 +79,8 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, mipLevels, numSamples);
-            creationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            creationParameters.format = format;
+            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
             creationParameters.tiling = tiling;
-            creationParameters.usage = usage;
-            creationParameters.flags = 0;
 
             return CreateVulkanImagePtr(creationParameters, memoryProperties);
         }

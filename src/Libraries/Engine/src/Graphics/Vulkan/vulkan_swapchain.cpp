@@ -276,16 +276,10 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto colorCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, 1, _msaaSamples);
-            colorCreationParameters.format = _swapchainImageFormat;
-            colorCreationParameters.usage = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-            colorCreationParameters.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-            colorCreationParameters.flags = 0;
+            const auto colorCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_swapchainImageFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
             _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
-            auto depthCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1(extent, 1, _msaaSamples);
-            depthCreationParameters.format = _vulkanContext.defaultDepthFormat;
-            depthCreationParameters.usage = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT;
+            const auto depthCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
             const auto& colorSubresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1;
