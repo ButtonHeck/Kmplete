@@ -249,7 +249,7 @@ namespace Kmplete
         if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
             auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend->GetPhysicalDevice().GetLogicalDevice());
-            auto commandBuffer = vulkanLogicalDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
+            auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
             auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
             vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
             vulkanImGuiUtils->Render();

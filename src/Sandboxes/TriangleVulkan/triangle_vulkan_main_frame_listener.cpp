@@ -252,7 +252,7 @@ namespace Kmplete
         auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
         auto pipeline = pipelineOpt.value().get().GetVkPipeline();
         auto pipelineLayout = pipelineOpt.value().get().GetVkPipelineLayout();
-        _commandBuffer = vulkanDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
+        _commandBuffer = vulkanDevice.GetRenderer().GetCurrentCommandBuffer();
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
 
         VkDeviceSize offsets[1]{ 0 };
@@ -295,7 +295,7 @@ namespace Kmplete
         ImGui::End();
 
         auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
-        auto commandBuffer = vulkanLogicalDevice.GetCurrentCommandBuffer().GetVkCommandBuffer();
+        auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
         auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
         vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
         vulkanImGuiUtils->Render();

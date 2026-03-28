@@ -6,11 +6,11 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -61,9 +61,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetPresentationQueue() const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanCommandBuffer& GetCurrentCommandBuffer() const noexcept;
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanBufferCreatorDelegate& GetVulkanBufferCreatorDelegate() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
 
             KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
             KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
@@ -90,9 +90,6 @@ namespace Kmplete
             void _CreateSwapchain();
             void _DeleteSwapchain();
 
-            void _CreateCommandBuffers();
-            void _DeleteCommandBuffers();
-
             void _CreatePipelineCache();
             void _DeletePipelineCache();
 
@@ -103,7 +100,6 @@ namespace Kmplete
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
             void _StartFrameRestartFence();
-            void _StartFrameRestartCommandBuffer();
             void _StartFrameTransitionColorAndDepthStencilImages();
             void _StartFrameBeginRendering();
             void _StartFrameSetupViewportAndScissor();
@@ -111,7 +107,6 @@ namespace Kmplete
 
             void _EndFrameEndRendering();
             void _EndFrameTransitionColorAndDepthStencilImages();
-            void _EndFrameEndCommandBuffer();
             void _EndFrameQueueSubmit();
 
         private:
@@ -134,15 +129,14 @@ namespace Kmplete
             Vector<VulkanFence> _waitFences;
             UPtr<VulkanCommandPool> _commandPool;
             UPtr<VulkanSwapchain> _swapchain;
-            Vector<VulkanCommandBuffer> _drawCommandBuffers;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
             HashMap<StringID, UPtr<VulkanGraphicsPipeline>> _pipelines;
             HashMap<StringID, VkDescriptorSetLayout> _descriptorSetLayouts;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
-
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
+            UPtr<VulkanRenderer> _renderer;
         };
         //--------------------------------------------------------------------------
     }
