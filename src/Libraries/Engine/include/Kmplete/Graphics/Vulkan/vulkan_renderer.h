@@ -2,7 +2,11 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
 
@@ -14,9 +18,10 @@ namespace Kmplete
         class VulkanRenderer
         {
             KMP_DISABLE_COPY_MOVE(VulkanRenderer)
+            KMP_LOG_CLASSNAME(VulkanRenderer)
 
         public:
-            KMP_API VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex);
+            KMP_API VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines);
             KMP_API ~VulkanRenderer();
 
             KMP_API void StartFrame();
@@ -32,10 +37,13 @@ namespace Kmplete
             KMP_API void SetScissor(const VkRect2D& scissorRect) const;
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
 
+            KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;
+
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;
 
         private:
             const UInt32& _currentBufferIndex;
+            const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& _pipelines;
 
             Vector<VulkanCommandBuffer> _drawCommandBuffers;
             VkCommandBuffer _currentCommandBuffer;

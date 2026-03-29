@@ -65,7 +65,7 @@ namespace Kmplete
             _CreateDescriptorPool();
 
             _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
-            _renderer.reset(new VulkanRenderer(_device, _commandPool->GetVkCommandPool(), _currentBufferIndex));
+            _renderer.reset(new VulkanRenderer(_device, _commandPool->GetVkCommandPool(), _currentBufferIndex, _pipelines));
         }
         //--------------------------------------------------------------------------
 

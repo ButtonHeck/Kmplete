@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
@@ -249,8 +250,8 @@ namespace Kmplete
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
         auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
-        auto pipeline = pipelineOpt.value().get().GetVkPipeline();
         auto pipelineLayout = pipelineOpt.value().get().GetVkPipelineLayout();
         _commandBuffer = vulkanDevice.GetRenderer().GetCurrentCommandBuffer();
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
@@ -263,7 +264,7 @@ namespace Kmplete
         _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
         vkCmdBindDescriptorSets(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, descriptorSetIndex, 1, &_uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), 0, nullptr);
 
-        vkCmdBindPipeline(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipeline);
+        vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);
         vkCmdBindIndexBuffer(_commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
         vkCmdDrawIndexed(_commandBuffer, _indexCount, 1, 0, 0, 0);

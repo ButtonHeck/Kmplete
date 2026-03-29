@@ -4,14 +4,16 @@
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanRenderer::VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex)
+        VulkanRenderer::VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines)
             : _currentBufferIndex(currentBufferIndex)
+            , _pipelines(pipelines)
             , _currentCommandBuffer(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -138,6 +140,21 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanRenderer::BindGraphicsPipeline(StringID pipelineSid) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            if (!_pipelines.contains(pipelineSid))
+            {
+                KMP_LOG_ERROR("cannot bind pipeline with sid '{}' - pipeline not found", pipelineSid);
+                return false;
+            }
+
+            vkCmdBindPipeline(_currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipelines.at(pipelineSid)->GetVkPipeline());
+            return true;
         }
         //--------------------------------------------------------------------------
 
