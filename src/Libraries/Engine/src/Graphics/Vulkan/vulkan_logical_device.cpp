@@ -463,11 +463,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            auto colorAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
-            colorAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
-            colorAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            colorAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
-            colorAttachmentInfo.clearValue.color = { 0.0f, 0.0f, 0.0f, 0.0f };
+            auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
             if (_swapchain->GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
             {
                 colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
@@ -480,12 +476,8 @@ namespace Kmplete
                 colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
             }
 
-            auto depthStencilAttachmentInfo = VulkanUtils::InitVkRenderingAttachmentInfo();
+            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
             depthStencilAttachmentInfo.imageView = _swapchain->GetMultisampledDepthStencilImageView();
-            depthStencilAttachmentInfo.imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL;
-            depthStencilAttachmentInfo.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
-            depthStencilAttachmentInfo.storeOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
-            depthStencilAttachmentInfo.clearValue.depthStencil = { 1.0f, 0 };
 
             auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };

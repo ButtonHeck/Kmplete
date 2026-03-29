@@ -76,6 +76,24 @@ namespace Kmplete
                 return imageCI;
             }
             //--------------------------------------------------------------------------
+
+            static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_Color_ClearStore{
+                .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+                .imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
+                .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f }}
+            };
+            //--------------------------------------------------------------------------
+
+            static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_DepthStencil_ClearStore{
+                .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+                .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
+                .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 }}
+            };
+            //--------------------------------------------------------------------------
         }
     }
 }
