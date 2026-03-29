@@ -16,25 +16,29 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(VulkanRenderer)
 
         public:
-            KMP_API VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex, const VkExtent2D& currentExtent);
+            KMP_API VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex);
             KMP_API ~VulkanRenderer();
 
             KMP_API void StartFrame();
-            KMP_API void BeginRendering(const VkRenderingInfo& renderingInfo);
-            KMP_API void EndRendering();
-            KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage);
-            KMP_API void SetViewportAndScissorFullExtent();
-            KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples);
-            KMP_API void TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage);
             KMP_API void EndFrame();
+
+            KMP_API void BeginRendering(const VkRenderingInfo& renderingInfo) const;
+            KMP_API void EndRendering() const;
+
+            KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const;
+            KMP_API void TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const;
+
+            KMP_API void SetViewport(const VkViewport& viewport) const;
+            KMP_API void SetScissor(const VkRect2D& scissorRect) const;
+            KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
 
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;
 
         private:
             const UInt32& _currentBufferIndex;
-            const VkExtent2D& _currentExtent;
 
             Vector<VulkanCommandBuffer> _drawCommandBuffers;
+            VkCommandBuffer _currentCommandBuffer;
         };
         //--------------------------------------------------------------------------
     }

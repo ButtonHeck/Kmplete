@@ -10,9 +10,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanRenderer::VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex, const VkExtent2D& currentExtent)
+        VulkanRenderer::VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex)
             : _currentBufferIndex(currentBufferIndex)
-            , _currentExtent(currentExtent)
+            , _currentCommandBuffer(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
@@ -38,31 +38,40 @@ namespace Kmplete
 
             _drawCommandBuffers[_currentBufferIndex].Reset();
             _drawCommandBuffers[_currentBufferIndex].Begin();
+            _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(const VkRenderingInfo& renderingInfo)
+        void VulkanRenderer::EndFrame()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            vkCmdBeginRendering(GetCurrentCommandBuffer(), &renderingInfo);
+            _drawCommandBuffers[_currentBufferIndex].End();
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::EndRendering()
+        void VulkanRenderer::BeginRendering(const VkRenderingInfo& renderingInfo) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            vkCmdEndRendering(GetCurrentCommandBuffer());
+            vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage)
+        void VulkanRenderer::EndRendering() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            vkCmdEndRendering(_currentCommandBuffer);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VulkanUtils::MemoryBarrierParameters colorImageBarrierParameters = {
-                .cmdbuffer = GetCurrentCommandBuffer(),
+                .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
                 .srcAccessMask = VK_ACCESS_NONE,
                 .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
@@ -75,7 +84,7 @@ namespace Kmplete
             VulkanUtils::InsertImageMemoryBarrier(colorImageBarrierParameters);
 
             VulkanUtils::MemoryBarrierParameters depthStencilImageBarrierParameters = {
-                .cmdbuffer = GetCurrentCommandBuffer(),
+                .cmdbuffer = _currentCommandBuffer,
                 .image = depthStencilImage,
                 .srcAccessMask = VK_ACCESS_NONE,
                 .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
@@ -89,32 +98,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetViewportAndScissorFullExtent()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VkViewport viewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) };
-            vkCmdSetViewport(GetCurrentCommandBuffer(), 0, 1, &viewport);
-
-            VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
-            vkCmdSetScissor(GetCurrentCommandBuffer(), 0, 1, &scissor);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VulkanCommands::CmdSetRasterizationSamplesEXT(GetCurrentCommandBuffer(), samples);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage)
+        void VulkanRenderer::TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = GetCurrentCommandBuffer(),
+                .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
                 .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
                 .dstAccessMask = VK_ACCESS_NONE,
@@ -128,17 +117,33 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::EndFrame()
+        void VulkanRenderer::SetViewport(const VkViewport& viewport) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
-            _drawCommandBuffers[_currentBufferIndex].End();
+            vkCmdSetViewport(_currentCommandBuffer, 0, 1, &viewport);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetScissor(const VkRect2D& scissorRect) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            vkCmdSetScissor(_currentCommandBuffer, 0, 1, &scissorRect);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
         }
         //--------------------------------------------------------------------------
 
         VkCommandBuffer VulkanRenderer::GetCurrentCommandBuffer() const noexcept
         {
-            return _drawCommandBuffers.at(_currentBufferIndex).GetVkCommandBuffer();
+            return _currentCommandBuffer;
         }
         //--------------------------------------------------------------------------
     }

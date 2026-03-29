@@ -65,7 +65,7 @@ namespace Kmplete
             _CreateDescriptorPool();
 
             _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
-            _renderer.reset(new VulkanRenderer(_device, _commandPool->GetVkCommandPool(), _currentBufferIndex, _currentExtent));
+            _renderer.reset(new VulkanRenderer(_device, _commandPool->GetVkCommandPool(), _currentBufferIndex));
         }
         //--------------------------------------------------------------------------
 
@@ -108,7 +108,8 @@ namespace Kmplete
             _renderer->StartFrame();
             _renderer->TransitionColorAndDepthStencilImagesToWrite(_swapchain->GetCurrentImage(), _swapchain->GetMultisampledDepthStencilImage());
             _StartFrameBeginRendering();
-            _renderer->SetViewportAndScissorFullExtent();
+            _renderer->SetViewport(VkViewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) });
+            _renderer->SetScissor(VkRect2D{ 0, 0, _currentExtent.width, _currentExtent.height });
             _renderer->SetRasterizationSamples(GetMultisampling());
         }
         //--------------------------------------------------------------------------
