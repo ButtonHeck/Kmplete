@@ -100,13 +100,8 @@ namespace Kmplete
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
             void _StartFrameRestartFence();
-            void _StartFrameTransitionColorAndDepthStencilImages();
             void _StartFrameBeginRendering();
-            void _StartFrameSetupViewportAndScissor();
-            void _StartFrameSetupRasterizationSamples();
 
-            void _EndFrameEndRendering();
-            void _EndFrameTransitionColorAndDepthStencilImages();
             void _EndFrameQueueSubmit();
 
         private:

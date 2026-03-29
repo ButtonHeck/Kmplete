@@ -20,6 +20,12 @@ namespace Kmplete
             KMP_API ~VulkanRenderer();
 
             KMP_API void StartFrame();
+            KMP_API void BeginRendering(const VkRenderingInfo& renderingInfo);
+            KMP_API void EndRendering();
+            KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage);
+            KMP_API void SetViewportAndScissorFullExtent();
+            KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples);
+            KMP_API void TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage);
             KMP_API void EndFrame();
 
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;

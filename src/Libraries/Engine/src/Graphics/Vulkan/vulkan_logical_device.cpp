@@ -106,10 +106,10 @@ namespace Kmplete
             _swapchain->StartFrame(frameTimestep);
 
             _renderer->StartFrame();
-            _StartFrameTransitionColorAndDepthStencilImages();
+            _renderer->TransitionColorAndDepthStencilImagesToWrite(_swapchain->GetCurrentImage(), _swapchain->GetMultisampledDepthStencilImage());
             _StartFrameBeginRendering();
-            _StartFrameSetupViewportAndScissor();
-            _StartFrameSetupRasterizationSamples();
+            _renderer->SetViewportAndScissorFullExtent();
+            _renderer->SetRasterizationSamples(GetMultisampling());
         }
         //--------------------------------------------------------------------------
 
@@ -117,8 +117,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _EndFrameEndRendering();
-            _EndFrameTransitionColorAndDepthStencilImages();
+            _renderer->EndRendering();
+            _renderer->TransitionColorAndDepthStencilImagesToPresent(_swapchain->GetCurrentImage());
             _renderer->EndFrame();
             _EndFrameQueueSubmit();
 
@@ -458,38 +458,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_StartFrameTransitionColorAndDepthStencilImages()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _renderer->GetCurrentCommandBuffer(),
-                .image = _swapchain->GetCurrentImage(),
-                .srcAccessMask = VK_ACCESS_NONE,
-                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-
-            barrierParameters = {
-                .cmdbuffer = _renderer->GetCurrentCommandBuffer(),
-                .image = _swapchain->GetMultisampledDepthStencilImage(),
-                .srcAccessMask = VK_ACCESS_NONE,
-                .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .subresourceRange = VulkanPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
-            };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-        }
-        //--------------------------------------------------------------------------
-
         void VulkanLogicalDevice::_StartFrameBeginRendering()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
@@ -526,54 +494,7 @@ namespace Kmplete
             renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
             renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
 
-            vkCmdBeginRendering(_renderer->GetCurrentCommandBuffer(), &renderingInfo);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_StartFrameSetupViewportAndScissor()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VkViewport viewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) };
-            vkCmdSetViewport(_renderer->GetCurrentCommandBuffer(), 0, 1, &viewport);
-
-            VkRect2D scissor{ 0, 0, _currentExtent.width, _currentExtent.height };
-            vkCmdSetScissor(_renderer->GetCurrentCommandBuffer(), 0, 1, &scissor);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_StartFrameSetupRasterizationSamples()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VulkanCommands::CmdSetRasterizationSamplesEXT(_renderer->GetCurrentCommandBuffer(), GetMultisampling());
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_EndFrameEndRendering()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            vkCmdEndRendering(_renderer->GetCurrentCommandBuffer());
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_EndFrameTransitionColorAndDepthStencilImages()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            VulkanUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _renderer->GetCurrentCommandBuffer(),
-                .image = _swapchain->GetCurrentImage(),
-                .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .dstAccessMask = VK_ACCESS_NONE,
-                .oldImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_2_NONE,
-                .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+            _renderer->BeginRendering(renderingInfo);
         }
         //--------------------------------------------------------------------------
 
