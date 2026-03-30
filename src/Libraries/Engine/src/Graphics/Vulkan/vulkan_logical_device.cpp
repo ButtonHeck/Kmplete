@@ -101,7 +101,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _StartFrameRestartFence();
+            _waitFences[_currentBufferIndex].Wait();
+            _waitFences[_currentBufferIndex].Reset();
 
             _swapchain->StartFrame(frameTimestep);
 
@@ -447,15 +448,6 @@ namespace Kmplete
             };
 
             return actualExtent;
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_StartFrameRestartFence()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            _waitFences[_currentBufferIndex].Wait();
-            _waitFences[_currentBufferIndex].Reset();
         }
         //--------------------------------------------------------------------------
 
