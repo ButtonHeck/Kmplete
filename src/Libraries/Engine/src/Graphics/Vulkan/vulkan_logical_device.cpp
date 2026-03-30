@@ -533,9 +533,6 @@ namespace Kmplete
 
             try
             {
-                auto commandBuffer = _renderer->CreateCommandBuffer();
-                commandBuffer.Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
-
                 const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
                 const auto mipLevels = _formatDelegate.IsMipmapCompatible(textureVkFormat) ? image.GetMipLevels() : 1;
                 auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
@@ -545,8 +542,9 @@ namespace Kmplete
                     .depth = 1
                 };
 
+                auto commandBuffer = _renderer->CreateCommandBuffer();
+                commandBuffer.Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
                 auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer.GetVkCommandBuffer(), imageBuffer, extent, *_imageCreatorDelegate.get());
-
                 commandBuffer.End();
 
                 auto fence = CreateFence("signaled"_false);
