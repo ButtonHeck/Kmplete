@@ -6,6 +6,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -36,6 +37,7 @@ namespace Kmplete
             KMP_API void SetViewport(const VkViewport& viewport) const;
             KMP_API void SetScissor(const VkRect2D& scissorRect) const;
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
+            KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
             KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;
             KMP_API bool BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets = Vector<UInt32>()) const;

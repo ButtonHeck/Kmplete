@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -140,6 +141,24 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            submitInfo.pWaitDstStageMask = &waitStageMask;
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &_currentCommandBuffer;
+            submitInfo.waitSemaphoreCount = UInt32(waitSemaphores.size());
+            submitInfo.pWaitSemaphores = waitSemaphores.data();
+            submitInfo.signalSemaphoreCount = UInt32(signalSemaphores.size());
+            submitInfo.pSignalSemaphores = signalSemaphores.data();
+
+            queue.Submit({ submitInfo }, fence);
         }
         //--------------------------------------------------------------------------
 

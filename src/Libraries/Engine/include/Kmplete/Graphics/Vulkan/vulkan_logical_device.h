@@ -102,8 +102,6 @@ namespace Kmplete
             void _StartFrameRestartFence();
             void _StartFrameBeginRendering();
 
-            void _EndFrameQueueSubmit();
-
         private:
             const VulkanContext& _vulkanContext;
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;

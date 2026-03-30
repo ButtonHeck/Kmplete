@@ -121,7 +121,7 @@ namespace Kmplete
             _renderer->EndRendering();
             _renderer->TransitionColorAndDepthStencilImagesToPresent(_swapchain->GetCurrentImage());
             _renderer->EndFrame();
-            _EndFrameQueueSubmit();
+            _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
 
             _swapchain->EndFrame();
 
@@ -488,26 +488,6 @@ namespace Kmplete
             renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
 
             _renderer->BeginRendering(renderingInfo);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_EndFrameQueueSubmit()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            const auto commandBuffer = _renderer->GetCurrentCommandBuffer();
-
-            VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
-            submitInfo.pWaitDstStageMask = &waitStageMask;
-            submitInfo.pCommandBuffers = &commandBuffer;
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pWaitSemaphores = &_presentCompleteSemaphores[_currentBufferIndex];
-            submitInfo.waitSemaphoreCount = 1;
-            submitInfo.pSignalSemaphores = &_renderCompleteSemaphores[_currentBufferIndex];
-            submitInfo.signalSemaphoreCount = 1;
-
-            _graphicsQueue->Submit({submitInfo}, _waitFences[_currentBufferIndex].GetVkFence());
         }
         //--------------------------------------------------------------------------
 
