@@ -40,7 +40,6 @@ namespace Kmplete
             , _presentCompleteSemaphores()
             , _renderCompleteSemaphores()
             , _waitFences()
-            , _commandPool(nullptr)
             , _swapchain(nullptr)
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
@@ -59,13 +58,12 @@ namespace Kmplete
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
 
             _CreateSynchronizationObjects();
-            _CreateCommandPool();
             _CreateSwapchain();
             _CreatePipelineCache();
             _CreateDescriptorPool();
 
             _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
-            _renderer.reset(new VulkanRenderer(_device, _commandPool->GetVkCommandPool(), _currentBufferIndex, _pipelines));
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex));
         }
         //--------------------------------------------------------------------------
 
@@ -86,7 +84,6 @@ namespace Kmplete
             _DeleteDescriptorPool();
             _DeletePipelineCache();
             _DeleteSwapchain();
-            _DeleteCommandPool();
             _DeleteSyncronizationObjects();
 
             _imageCreatorDelegate.reset();
@@ -173,12 +170,6 @@ namespace Kmplete
             }
 
             _swapchain->SetMultisampling(_msaaSamples);
-        }
-        //--------------------------------------------------------------------------
-
-        const CommandPool& VulkanLogicalDevice::GetCommandPool() const noexcept
-        {
-            return *_commandPool.get();
         }
         //--------------------------------------------------------------------------
 
@@ -316,22 +307,6 @@ namespace Kmplete
                 vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
                 vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
             }
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_CreateCommandPool()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            _commandPool.reset(new VulkanCommandPool(_device, _vulkanContext.graphicsFamilyIndex));
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteCommandPool()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            _commandPool.reset();
         }
         //--------------------------------------------------------------------------
 
@@ -558,7 +533,7 @@ namespace Kmplete
 
             try
             {
-                auto commandBuffer = CreateCommandBuffer();
+                auto commandBuffer = _renderer->CreateCommandBuffer();
                 commandBuffer.Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
 
                 const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
@@ -586,14 +561,6 @@ namespace Kmplete
             }
 
             return nullptr;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanCommandBuffer VulkanLogicalDevice::CreateCommandBuffer() const
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
-
-            return VulkanCommandBuffer(_device, _commandPool->GetVkCommandPool());
         }
         //--------------------------------------------------------------------------
 

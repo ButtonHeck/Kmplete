@@ -3,7 +3,6 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
@@ -55,7 +54,6 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkSampleCountFlagBits GetMultisampling() const noexcept;
             KMP_API void SetMultisampling(VkSampleCountFlagBits samples);
 
-            KMP_NODISCARD KMP_API const CommandPool& GetCommandPool() const noexcept override;
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
@@ -72,7 +70,6 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID sid) const noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
-            KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
             KMP_NODISCARD KMP_API VulkanShader CreateShader(const Filepath& filepath) const;
 
@@ -83,9 +80,6 @@ namespace Kmplete
 
             void _CreateSynchronizationObjects();
             void _DeleteSyncronizationObjects();
-
-            void _CreateCommandPool();
-            void _DeleteCommandPool();
 
             void _CreateSwapchain();
             void _DeleteSwapchain();
@@ -119,7 +113,6 @@ namespace Kmplete
             Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
             Vector<VulkanFence> _waitFences;
-            UPtr<VulkanCommandPool> _commandPool;
             UPtr<VulkanSwapchain> _swapchain;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;

@@ -12,17 +12,22 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanRenderer::VulkanRenderer(VkDevice device, VkCommandPool commandPool, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines)
+        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, UInt32 graphicsFamilyIndex)
             : _currentBufferIndex(currentBufferIndex)
             , _pipelines(pipelines)
+            , _device(device)
+            , _commandPool(nullptr)
+            , _drawCommandBuffers()
             , _currentCommandBuffer(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
+            _commandPool.reset(new VulkanCommandPool(device, graphicsFamilyIndex));
+
             _drawCommandBuffers.reserve(NumConcurrentFrames);
             for (size_t i = 0; i < NumConcurrentFrames; i++)
             {
-                _drawCommandBuffers.emplace_back(device, commandPool);
+                _drawCommandBuffers.emplace_back(device, _commandPool->GetVkCommandPool());
             }
         }
         //--------------------------------------------------------------------------
@@ -32,6 +37,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             _drawCommandBuffers.clear();
+            _commandPool.reset();
         }
         //--------------------------------------------------------------------------
 
@@ -227,6 +233,14 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             vkCmdDrawIndexed(_currentCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanCommandBuffer VulkanRenderer::CreateCommandBuffer() const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            return VulkanCommandBuffer(_device, _commandPool->GetVkCommandPool());
         }
         //--------------------------------------------------------------------------
 

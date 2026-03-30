@@ -28,7 +28,6 @@ namespace Kmplete
             KMP_API virtual void EndFrame() {};
             KMP_API virtual void HandleWindowResize() {};
 
-            KMP_NODISCARD KMP_API virtual const CommandPool& GetCommandPool() const noexcept = 0;
             KMP_NODISCARD KMP_API virtual const Swapchain& GetSwapchain() const noexcept = 0;
 
             KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Image& image) const = 0;

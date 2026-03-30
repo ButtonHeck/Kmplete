@@ -76,6 +76,7 @@ namespace Kmplete
         const Graphics::VulkanContext& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
         _device = vulkanDevice.GetVkDevice();
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
+        const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
 
         const Vector<Vertex> vertices{
             {{ 0.95f,  0.95f}, {1.0f, 0.0f, 0.0f}},
@@ -108,7 +109,7 @@ namespace Kmplete
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize }));
 
         {
-            Graphics::VulkanCommandBuffer copyCmd = vulkanDevice.CreateCommandBuffer();
+            Graphics::VulkanCommandBuffer copyCmd = vulkanRenderer.CreateCommandBuffer();
             VkCommandBuffer commandBuffer = copyCmd.GetVkCommandBuffer();
             copyCmd.Begin();
 
