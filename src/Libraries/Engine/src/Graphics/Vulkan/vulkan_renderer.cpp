@@ -180,6 +180,37 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        bool VulkanRenderer::BindVertexBuffers(UInt32 firstBinding, const Vector<VkBuffer>& vertexBuffers, const Vector<VkDeviceSize>& offsets) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            if (vertexBuffers.size() != offsets.size() || vertexBuffers.empty())
+            {
+                KMP_LOG_ERROR("failed to bind vertex buffers - vertex buffers size doesn't match size of the offsets or vertex buffers are empty");
+                return false;
+            }
+
+            vkCmdBindVertexBuffers(_currentCommandBuffer, firstBinding, UInt32(vertexBuffers.size()), vertexBuffers.data(), offsets.data());
+            return true;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_INDEX_TYPE_UINT32*/) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            vkCmdBindIndexBuffer(_currentCommandBuffer, indexBuffer, offset, indexType);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            vkCmdDrawIndexed(_currentCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+        }
+        //--------------------------------------------------------------------------
+
         VkCommandBuffer VulkanRenderer::GetCurrentCommandBuffer() const noexcept
         {
             return _currentCommandBuffer;
