@@ -1,7 +1,9 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -79,8 +81,7 @@ namespace Kmplete
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
 
-            const auto result = vkQueueSubmit(_queue, 1, &submitInfo, fence);
-            VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
+            Submit({ submitInfo }, fence);
         }
         //--------------------------------------------------------------------------
 
@@ -90,6 +91,30 @@ namespace Kmplete
 
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence);
             VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanQueue::SyncSubmit(const VulkanCommandBuffer& commandBuffer) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            const auto buffer = commandBuffer.GetVkCommandBuffer();
+            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &buffer;
+
+            SyncSubmit({ submitInfo });
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanQueue::SyncSubmit(const Vector<VkSubmitInfo>& submits) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            VulkanFence fence(_device, "signaled"_false);
+            const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence.GetVkFence());
+            VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
+            fence.Wait();
         }
         //--------------------------------------------------------------------------
 

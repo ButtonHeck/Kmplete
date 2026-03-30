@@ -121,9 +121,7 @@ namespace Kmplete
             vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
             copyCmd.End();
 
-            Graphics::VulkanFence fence = vulkanDevice.CreateFence("signaled"_false);
-            vulkanDevice.GetGraphicsQueue().Submit(copyCmd, fence.GetVkFence());
-            fence.Wait();
+            vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
 
         const auto shaderUniformVariableBinding = 3;

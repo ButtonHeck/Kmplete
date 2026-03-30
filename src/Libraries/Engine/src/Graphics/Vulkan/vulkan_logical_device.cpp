@@ -547,9 +547,7 @@ namespace Kmplete
                 auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer.GetVkCommandBuffer(), imageBuffer, extent, *_imageCreatorDelegate.get());
                 commandBuffer.End();
 
-                auto fence = CreateFence("signaled"_false);
-                _graphicsQueue->Submit(commandBuffer, fence.GetVkFence());
-                fence.Wait();
+                _graphicsQueue->SyncSubmit(commandBuffer);
 
                 return texture;
             }
