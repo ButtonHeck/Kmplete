@@ -109,18 +109,11 @@ namespace Kmplete
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize }));
 
         {
-            Graphics::VulkanCommandBuffer copyCmd = vulkanRenderer.CreateCommandBuffer();
-            VkCommandBuffer commandBuffer = copyCmd.GetVkCommandBuffer();
+            const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
             copyCmd.Begin();
-
-            VkBufferCopy copyRegion{};
-            copyRegion.size = vertexBufferSize;
-            vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _vertexBuffer->GetVkBuffer(), 1, &copyRegion);
-            copyRegion.size = indexBufferSize;
-            copyRegion.srcOffset = vertexBufferSize;
-            vkCmdCopyBuffer(commandBuffer, stagingBuffer.GetVkBuffer(), _indexBuffer->GetVkBuffer(), 1, &copyRegion);
+            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), { VkBufferCopy{.size = vertexBufferSize} });
+            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), { VkBufferCopy{.srcOffset = vertexBufferSize, .size = indexBufferSize}});
             copyCmd.End();
-
             vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
 
@@ -164,7 +157,6 @@ namespace Kmplete
         pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
         pipeline.SetupDepthBoundsTest(false);
         pipeline.SetupStencilTest(false);
-        pipeline.SetupMultisamplingSamples(VK_SAMPLE_COUNT_1_BIT);
         pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.SetupStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
