@@ -38,6 +38,7 @@ namespace Kmplete
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
 
             KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;
+            KMP_API bool BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets = Vector<UInt32>()) const;
 
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;
 

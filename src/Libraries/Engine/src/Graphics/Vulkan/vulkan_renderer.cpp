@@ -158,6 +158,28 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        bool VulkanRenderer::BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets /*= Vector<UInt32>()*/) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            if (!_pipelines.contains(pipelineSid))
+            {
+                KMP_LOG_ERROR("cannot bind descriptor sets with pipeline's sid '{}' - pipeline not found", pipelineSid);
+                return false;
+            }
+
+            vkCmdBindDescriptorSets(
+                _currentCommandBuffer, 
+                VK_PIPELINE_BIND_POINT_GRAPHICS, 
+                _pipelines.at(pipelineSid)->GetVkPipelineLayout(),
+                firstSetIndex, 
+                UInt32(descriptorSets.size()), descriptorSets.empty() ? nullptr : descriptorSets.data(),
+                UInt32(dynamicOffsets.size()), dynamicOffsets.empty() ? nullptr : dynamicOffsets.data());
+
+            return true;
+        }
+        //--------------------------------------------------------------------------
+
         VkCommandBuffer VulkanRenderer::GetCurrentCommandBuffer() const noexcept
         {
             return _currentCommandBuffer;

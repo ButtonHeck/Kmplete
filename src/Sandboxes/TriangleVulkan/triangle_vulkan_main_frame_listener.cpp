@@ -251,8 +251,6 @@ namespace Kmplete
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
-        auto pipelineOpt = vulkanDevice.GetGraphicsPipeline("VulkanTriangle"_sid);
-        auto pipelineLayout = pipelineOpt.value().get().GetVkPipelineLayout();
         _commandBuffer = vulkanDevice.GetRenderer().GetCurrentCommandBuffer();
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
 
@@ -262,8 +260,8 @@ namespace Kmplete
 
         const auto descriptorSetIndex = 1; // should match with triangle.frag "layout (set = 1, binding = ...)"
         _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
-        vkCmdBindDescriptorSets(_commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, descriptorSetIndex, 1, &_uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), 0, nullptr);
 
+        vulkanRenderer.BindDescriptorSets("VulkanTriangle"_sid, descriptorSetIndex, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
         vkCmdBindVertexBuffers(_commandBuffer, 0, 1, &vertexBuffer, offsets);
         vkCmdBindIndexBuffer(_commandBuffer, indexBuffer, 0, VK_INDEX_TYPE_UINT32);
