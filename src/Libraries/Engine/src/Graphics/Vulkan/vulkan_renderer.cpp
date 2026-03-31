@@ -12,9 +12,10 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, UInt32 graphicsFamilyIndex)
+        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
             : _currentBufferIndex(currentBufferIndex)
             , _pipelines(pipelines)
+            , _swapchain(swapchain)
             , _device(device)
             , _commandPool(nullptr)
             , _drawCommandBuffers()

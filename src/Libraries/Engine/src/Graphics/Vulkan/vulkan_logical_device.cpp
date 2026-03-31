@@ -63,7 +63,7 @@ namespace Kmplete
             _CreateDescriptorPool();
 
             _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex));
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
         }
         //--------------------------------------------------------------------------
 
@@ -133,11 +133,13 @@ namespace Kmplete
 
             WaitIdle();
 
+            _renderer.reset();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
 
             _CreateSynchronizationObjects();
             _CreateSwapchain();
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
         }
         //--------------------------------------------------------------------------
 

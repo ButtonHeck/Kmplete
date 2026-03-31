@@ -338,6 +338,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        UInt32 VulkanGraphicsPipeline::GetColorAttachmentsCount() const noexcept
+        {
+            return _renderingCreateInfo.colorAttachmentCount;
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanGraphicsPipeline::_SetDefaults() noexcept
         {
             _inputAssemblyCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
