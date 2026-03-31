@@ -48,7 +48,7 @@ namespace Kmplete
             _vertexInputStateCreateInfo = VulkanUtils::InitVkPipelineVertexInputStateCreateInfo();
             _renderingCreateInfo = VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
 
-            _SetupDefault();
+            _SetDefaults();
         }
         //--------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable)
         {
             _inputAssemblyCreateInfo.topology = topology;
             _inputAssemblyCreateInfo.primitiveRestartEnable = primitiveRestartEnable;
@@ -133,14 +133,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupPolygonMode(VkPolygonMode polygonMode)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetPolygonMode(VkPolygonMode polygonMode)
         {
             _rasterizationStateCreateInfo.polygonMode = polygonMode;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupCulling(VkCullModeFlags cullMode, VkFrontFace frontFace)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetCulling(VkCullModeFlags cullMode, VkFrontFace frontFace)
         {
             _rasterizationStateCreateInfo.cullMode = cullMode;
             _rasterizationStateCreateInfo.frontFace = frontFace;
@@ -148,14 +148,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthClamping(bool enabled)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthClamping(bool enabled)
         {
             _rasterizationStateCreateInfo.depthClampEnable = enabled;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthBiasParameters(bool biasEnabled, float constantFactor, float clamp, float slopeFactor)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthBiasParameters(bool biasEnabled, float constantFactor, float clamp, float slopeFactor)
         {
             _rasterizationStateCreateInfo.depthBiasEnable = biasEnabled;
             _rasterizationStateCreateInfo.depthBiasConstantFactor = constantFactor;
@@ -165,14 +165,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupRasterizerDiscard(bool enabled)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetRasterizerDiscard(bool enabled)
         {
             _rasterizationStateCreateInfo.rasterizerDiscardEnable = enabled;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupLineWidth(float lineWidth)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetLineWidth(float lineWidth)
         {
             if (lineWidth <= 0.0f)
             {
@@ -185,7 +185,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupColorBlendConstants(Array<float, 4> constants)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetColorBlendConstants(Array<float, 4> constants)
         {
             _colorBlendStateCreateInfo.blendConstants[0] = constants[0];
             _colorBlendStateCreateInfo.blendConstants[1] = constants[1];
@@ -228,28 +228,28 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthTest(bool enabled)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthTest(bool enabled)
         {
             _depthStencilStateCreateInfo.depthTestEnable = enabled;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthWrite(bool enabled)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthWrite(bool enabled)
         {
             _depthStencilStateCreateInfo.depthWriteEnable = enabled;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthComparison(VkCompareOp compareOp)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthComparison(VkCompareOp compareOp)
         {
             _depthStencilStateCreateInfo.depthCompareOp = compareOp;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupDepthBoundsTest(bool enabled, float min /*= 0.0f*/, float max /*= 1.0f*/)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthBoundsTest(bool enabled, float min /*= 0.0f*/, float max /*= 1.0f*/)
         {
             _depthStencilStateCreateInfo.depthBoundsTestEnable = enabled;
             _depthStencilStateCreateInfo.minDepthBounds = min;
@@ -258,14 +258,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupStencilTest(bool enabled)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetStencilTest(bool enabled)
         {
             _depthStencilStateCreateInfo.stencilTestEnable = enabled;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupStencilStates(VkStencilOpState frontFaceState, VkStencilOpState backFaceState)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetStencilStates(VkStencilOpState frontFaceState, VkStencilOpState backFaceState)
         {
             _depthStencilStateCreateInfo.front = frontFaceState;
             _depthStencilStateCreateInfo.back = backFaceState;
@@ -273,14 +273,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupMultisamplingSamples(VkSampleCountFlagBits samples)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetMultisamplingSamples(VkSampleCountFlagBits samples)
         {
             _multisamplingStateCreateInfo.rasterizationSamples = samples;
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupMultisamplingSampleShading(bool enabled, float minSampleShading)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetMultisamplingSampleShading(bool enabled, float minSampleShading)
         {
             _multisamplingStateCreateInfo.sampleShadingEnable = enabled;
             _multisamplingStateCreateInfo.minSampleShading = minSampleShading;
@@ -318,7 +318,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
         
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetupRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat)
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat)
         {
             _renderingCreateInfo.depthAttachmentFormat = depthFormat;
             _renderingCreateInfo.stencilAttachmentFormat = stencilFormat;
@@ -338,7 +338,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsPipeline::_SetupDefault() noexcept
+        void VulkanGraphicsPipeline::_SetDefaults() noexcept
         {
             _inputAssemblyCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
             _inputAssemblyCreateInfo.primitiveRestartEnable = VK_FALSE;

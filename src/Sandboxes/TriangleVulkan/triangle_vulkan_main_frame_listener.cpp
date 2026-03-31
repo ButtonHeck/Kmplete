@@ -143,22 +143,22 @@ namespace Kmplete
         };
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
+        pipeline.SetInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, "primitive restart"_false);
+        pipeline.SetPolygonMode(VK_POLYGON_MODE_FILL);
+        pipeline.SetCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        pipeline.SetDepthClamping(false);
+        pipeline.SetRasterizerDiscard(false);
+        pipeline.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
+        pipeline.SetDepthTest(true);
+        pipeline.SetDepthWrite(true);
+        pipeline.SetDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
+        pipeline.SetDepthBoundsTest(false);
+        pipeline.SetStencilTest(false);
+        pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipeline.SetStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
+        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_NoBlend);
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
-        pipeline.SetupInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, "primitive restart"_false);
-        pipeline.SetupPolygonMode(VK_POLYGON_MODE_FILL);
-        pipeline.SetupCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        pipeline.SetupDepthClamping(false);
-        pipeline.SetupRasterizerDiscard(false);
-        pipeline.SetupDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
-        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_NoBlend);
-        pipeline.SetupDepthTest(true);
-        pipeline.SetupDepthWrite(true);
-        pipeline.SetupDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
-        pipeline.SetupDepthBoundsTest(false);
-        pipeline.SetupStencilTest(false);
-        pipeline.SetupRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipeline.SetupStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddShaderStages(std::move(shaderStages));
 
