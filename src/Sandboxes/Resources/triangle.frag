@@ -1,6 +1,6 @@
 #version 450
 
-layout (location = 0) in vec3 inColor;
+layout (location = 0) in vec4 inColor;
 
 layout (set = 1, binding = 3) uniform UBO 
 {
@@ -11,5 +11,5 @@ layout (location = 0) out vec4 outFragColor;
 
 void main() 
 {
-    outFragColor = vec4(inColor * ubo.colorMultiplier, 1.0);
+    outFragColor = vec4(inColor.rgb * ubo.colorMultiplier, inColor.a);
 }

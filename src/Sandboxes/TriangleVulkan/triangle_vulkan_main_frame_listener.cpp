@@ -30,8 +30,8 @@ namespace Kmplete
     {
         struct Vertex
         {
-            float position[2];
-            float color[3];
+            float position[3];
+            float color[4];
         };
         //--------------------------------------------------------------------------
     }
@@ -79,31 +79,54 @@ namespace Kmplete
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
 
         const Vector<Vertex> vertices{
-            {{ 0.95f,  0.95f}, {1.0f, 0.0f, 0.0f}},
-            {{-0.95f,  0.97f}, {0.0f, 1.0f, 0.0f}},
-            {{-0.92f, -0.95f}, {0.0f, 0.0f, 1.0f}}
+            // main RGB triangle
+            {{-0.95f,  0.97f, 0.2f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+            {{ 0.95f,  0.95f, 0.2f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+            {{-0.92f, -0.95f, 0.2f}, {0.0f, 0.0f, 1.0f, 1.0f}}
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
+
+        const Vector<Vertex> vertices2{
+            // grey-to-white triangle above main RGB triangle
+            {{-0.50f, -0.90f, 0.1f}, {0.3f, 0.3f, 0.3f, 1.0f}},
+            {{-0.75f, -0.25f, 0.1f}, {0.6f, 0.6f, 0.6f, 1.0f}},
+            {{-0.25f, -0.25f, 0.1f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+
+            // reddish triangle below main RGB triangle
+            {{-0.00f, -0.40f, 0.3f}, {1.0f, 0.3f, 0.3f, 1.0f}},
+            {{-0.25f,  0.25f, 0.3f}, {1.0f, 0.6f, 0.6f, 1.0f}},
+            {{ 0.25f,  0.25f, 0.3f}, {1.0f, 0.9f, 0.9f, 1.0f}},
+
+            // half-transparent quad above everything
+            {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+        };
+        const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
         const Vector<UInt32> indices{ 0, 1, 2 };
         _indexCount = UInt32(indices.size());
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
-        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + indexBufferSize });
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + vertex2BufferSize + indexBufferSize });
 
         auto result = stagingBuffer.Map();
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to map texture buffer");
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)indices.data(), indexBufferSize);
+        stagingBuffer.CopyToMappedMemory(vertexBufferSize + indexBufferSize, (char*)vertices2.data(), vertex2BufferSize);
         result = stagingBuffer.Flush();
         Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to flush texture buffer");
         stagingBuffer.Unmap();
 
         const auto vertexBufferLayout = Graphics::BufferLayout({
-            Graphics::BufferElement{Graphics::ShaderDataType::Float2, 0},
-            Graphics::BufferElement{Graphics::ShaderDataType::Float3, 1}
+            Graphics::BufferElement{Graphics::ShaderDataType::Float3, 0},
+            Graphics::BufferElement{Graphics::ShaderDataType::Float4, 1}
         });
-        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize }));
+        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, vertexBufferSize + vertex2BufferSize }));
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, indexBufferSize }));
@@ -113,6 +136,7 @@ namespace Kmplete
             copyCmd.Begin();
             vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), { VkBufferCopy{.size = vertexBufferSize} });
             vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), { VkBufferCopy{.srcOffset = vertexBufferSize, .size = indexBufferSize}});
+            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), { VkBufferCopy{.srcOffset = vertexBufferSize + indexBufferSize, .dstOffset = vertexBufferSize, .size = vertex2BufferSize}});
             copyCmd.End();
             vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
@@ -145,7 +169,7 @@ namespace Kmplete
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
         pipeline.SetInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, "primitive restart"_false);
         pipeline.SetPolygonMode(VK_POLYGON_MODE_FILL);
-        pipeline.SetCulling(VK_CULL_MODE_NONE, VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        pipeline.SetCulling(VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
         pipeline.SetDepthClamping(false);
         pipeline.SetRasterizerDiscard(false);
         pipeline.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
@@ -156,7 +180,7 @@ namespace Kmplete
         pipeline.SetStencilTest(false);
         pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.SetStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
-        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_NoBlend);
+        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
@@ -253,6 +277,7 @@ namespace Kmplete
         vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
+        vulkanRenderer.Draw(12, 1, 3, 0);
         vulkanRenderer.EndRendering();
     }
     //--------------------------------------------------------------------------
