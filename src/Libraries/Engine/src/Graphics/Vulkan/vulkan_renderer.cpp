@@ -173,7 +173,7 @@ namespace Kmplete
                 .oldImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
                 .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                 .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_2_NONE,
+                .dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
                 .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
@@ -287,6 +287,14 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
 
             vkCmdDrawIndexed(_currentCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            vkCmdDraw(_currentCommandBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
         }
         //--------------------------------------------------------------------------
 
