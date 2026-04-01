@@ -72,21 +72,8 @@ namespace Kmplete
 
             const auto& swapchain = _swapchain.get();
 
-            auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
-            if (swapchain.GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
-            {
-                colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
-            }
-            else
-            {
-                colorAttachmentInfo.imageView = swapchain.GetMultisampledColorImageView();
-                colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
-                colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
-                colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
-            }
-
-            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
-            depthStencilAttachmentInfo.imageView = swapchain.GetMultisampledDepthStencilImageView();
+            const auto colorAttachmentInfo = swapchain.GetRenderingColorAttachmentInfo();
+            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo();
 
             auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = renderArea;
@@ -110,32 +97,17 @@ namespace Kmplete
                 return;
             }
 
-            const auto& pipeline = _pipelines.at(pipelineSid);
-            const auto colorAttachmentsCount = pipeline->GetColorAttachmentsCount();
+            const auto colorAttachmentsCount = _pipelines.at(pipelineSid)->GetColorAttachmentsCount();
             const auto& swapchain = _swapchain.get();
 
             Vector<VkRenderingAttachmentInfo> colorAttachmentsInfos;
             colorAttachmentsInfos.reserve(colorAttachmentsCount);
             for (UInt32 i = 0; i < colorAttachmentsCount; i++)
             {
-                auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
-                if (swapchain.GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
-                {
-                    colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
-                }
-                else
-                {
-                    colorAttachmentInfo.imageView = swapchain.GetMultisampledColorImageView();
-                    colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
-                    colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
-                    colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
-                }
-
-                colorAttachmentsInfos.push_back(colorAttachmentInfo);
+                colorAttachmentsInfos.push_back(swapchain.GetRenderingColorAttachmentInfo());
             }
 
-            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
-            depthStencilAttachmentInfo.imageView = swapchain.GetMultisampledDepthStencilImageView();
+            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo();
 
             auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = renderArea;

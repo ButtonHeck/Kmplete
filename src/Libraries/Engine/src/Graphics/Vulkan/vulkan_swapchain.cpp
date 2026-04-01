@@ -180,6 +180,34 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo() const
+        {
+            auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
+            if (GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
+            {
+                colorAttachmentInfo.imageView = GetCurrentImageView();
+            }
+            else
+            {
+                colorAttachmentInfo.imageView = GetMultisampledColorImageView();
+                colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
+                colorAttachmentInfo.resolveImageView = GetCurrentImageView();
+                colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
+            }
+
+            return colorAttachmentInfo;
+        }
+        //--------------------------------------------------------------------------
+
+        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingDepthStencilAttachmentInfo() const
+        {
+            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+            depthStencilAttachmentInfo.imageView = GetMultisampledDepthStencilImageView();
+
+            return depthStencilAttachmentInfo;
+        }
+        //--------------------------------------------------------------------------
+
         VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const
         {
             if (presentModes.empty())
