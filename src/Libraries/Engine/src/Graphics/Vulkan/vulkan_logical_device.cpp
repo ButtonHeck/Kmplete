@@ -105,7 +105,6 @@ namespace Kmplete
 
             _renderer->StartFrame();
             _renderer->TransitionColorAndDepthStencilImagesToWrite(_swapchain->GetCurrentImage(), _swapchain->GetMultisampledDepthStencilImage());
-            _StartFrameBeginRendering();
             _renderer->SetViewport(VkViewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height) });
             _renderer->SetScissor(VkRect2D{ 0, 0, _currentExtent.width, _currentExtent.height });
             _renderer->SetRasterizationSamples(GetMultisampling());
@@ -116,7 +115,6 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            _renderer->EndRendering();
             _renderer->TransitionColorAndDepthStencilImagesToPresent(_swapchain->GetCurrentImage());
             _renderer->EndFrame();
             _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
@@ -133,13 +131,12 @@ namespace Kmplete
 
             WaitIdle();
 
-            _renderer.reset();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
 
             _CreateSynchronizationObjects();
             _CreateSwapchain();
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+            _renderer->SetSwapchain(*_swapchain.get());
         }
         //--------------------------------------------------------------------------
 
@@ -220,6 +217,12 @@ namespace Kmplete
         const VulkanRenderer& VulkanLogicalDevice::GetRenderer() const noexcept
         {
             return *_renderer.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const VkExtent2D& VulkanLogicalDevice::GetCurrentExtent() const noexcept
+        {
+            return _currentExtent;
         }
         //--------------------------------------------------------------------------
 
@@ -425,38 +428,6 @@ namespace Kmplete
             };
 
             return actualExtent;
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_StartFrameBeginRendering()
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
-            if (_swapchain->GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
-            {
-                colorAttachmentInfo.imageView = _swapchain->GetCurrentImageView();
-            }
-            else
-            {
-                colorAttachmentInfo.imageView = _swapchain->GetMultisampledColorImageView();
-                colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
-                colorAttachmentInfo.resolveImageView = _swapchain->GetCurrentImageView();
-                colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
-            }
-
-            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
-            depthStencilAttachmentInfo.imageView = _swapchain->GetMultisampledDepthStencilImageView();
-
-            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
-            renderingInfo.renderArea = { 0, 0, _currentExtent.width, _currentExtent.height };
-            renderingInfo.layerCount = 1;
-            renderingInfo.colorAttachmentCount = 1; //TODO: should match the number of color attachments of currently bound pipeline
-            renderingInfo.pColorAttachments = &colorAttachmentInfo;
-            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
-            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
-
-            _renderer->BeginRendering(renderingInfo);
         }
         //--------------------------------------------------------------------------
 

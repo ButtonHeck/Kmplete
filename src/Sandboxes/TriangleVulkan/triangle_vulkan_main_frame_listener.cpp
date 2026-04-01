@@ -247,11 +247,13 @@ namespace Kmplete
         const auto descriptorSetIndex = 1; // should match with triangle.frag "layout (set = 1, binding = ...)"
         _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
 
+        vulkanRenderer.BeginRendering("VulkanTriangle"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
         vulkanRenderer.BindDescriptorSets("VulkanTriangle"_sid, descriptorSetIndex, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
         vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
+        vulkanRenderer.EndRendering();
     }
     //--------------------------------------------------------------------------
 

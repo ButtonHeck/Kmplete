@@ -74,6 +74,7 @@ namespace Kmplete
         KMP_NODISCARD bool _OnEditorFullscreenEvent(Events::EditorFullscreenEvent& event);
 
         void _AddImGuiFonts(float scale);
+        void _RenderImGui();
 
     private:
         SystemMetricsManager& _systemMetricsManager;

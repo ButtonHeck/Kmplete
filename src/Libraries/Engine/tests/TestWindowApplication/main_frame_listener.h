@@ -130,6 +130,10 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnCustomEvent(Events::CustomEvent&) { _customEventInvokedCount++; return true; }
 
     private:
+        void _InitializeImGui();
+        void _RenderImGui();
+
+    private:
         SharedState& _sharedState;
         Window& _mainWindow;
         FrameListenerManager& _frameListenerManager;

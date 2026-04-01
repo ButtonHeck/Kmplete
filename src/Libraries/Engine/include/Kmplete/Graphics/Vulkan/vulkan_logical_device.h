@@ -62,6 +62,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanBufferCreatorDelegate& GetVulkanBufferCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
+            KMP_NODISCARD KMP_API const VkExtent2D& GetCurrentExtent() const noexcept;
 
             KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
             KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
@@ -92,8 +93,6 @@ namespace Kmplete
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
-
-            void _StartFrameBeginRendering();
 
         private:
             const VulkanContext& _vulkanContext;

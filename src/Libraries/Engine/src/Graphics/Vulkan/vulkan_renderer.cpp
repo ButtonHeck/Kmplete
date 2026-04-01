@@ -15,7 +15,7 @@ namespace Kmplete
         VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
             : _currentBufferIndex(currentBufferIndex)
             , _pipelines(pipelines)
-            , _swapchain(swapchain)
+            , _swapchain(std::cref(swapchain))
             , _device(device)
             , _commandPool(nullptr)
             , _drawCommandBuffers()
@@ -60,9 +60,90 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(const VkRenderingInfo& renderingInfo) const
+        void VulkanRenderer::SetSwapchain(const VulkanSwapchain& swapchain)
+        {
+            _swapchain = std::cref(swapchain);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            const auto& swapchain = _swapchain.get();
+
+            auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
+            if (swapchain.GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
+            {
+                colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
+            }
+            else
+            {
+                colorAttachmentInfo.imageView = swapchain.GetMultisampledColorImageView();
+                colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
+                colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
+                colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
+            }
+
+            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+            depthStencilAttachmentInfo.imageView = swapchain.GetMultisampledDepthStencilImageView();
+
+            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
+            renderingInfo.renderArea = renderArea;
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = 1;
+            renderingInfo.pColorAttachments = &colorAttachmentInfo;
+            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
+            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
+
+            vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::BeginRendering(StringID pipelineSid, const VkRect2D& renderArea) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            if (!_pipelines.contains(pipelineSid))
+            {
+                KMP_LOG_ERROR("cannot begin rendering - pipeline with sid '{}' not found", pipelineSid);
+                return;
+            }
+
+            const auto& pipeline = _pipelines.at(pipelineSid);
+            const auto colorAttachmentsCount = pipeline->GetColorAttachmentsCount();
+            const auto& swapchain = _swapchain.get();
+
+            Vector<VkRenderingAttachmentInfo> colorAttachmentsInfos;
+            colorAttachmentsInfos.reserve(colorAttachmentsCount);
+            for (UInt32 i = 0; i < colorAttachmentsCount; i++)
+            {
+                auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
+                if (swapchain.GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
+                {
+                    colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
+                }
+                else
+                {
+                    colorAttachmentInfo.imageView = swapchain.GetMultisampledColorImageView();
+                    colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
+                    colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
+                    colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
+                }
+
+                colorAttachmentsInfos.push_back(colorAttachmentInfo);
+            }
+
+            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+            depthStencilAttachmentInfo.imageView = swapchain.GetMultisampledDepthStencilImageView();
+
+            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
+            renderingInfo.renderArea = renderArea;
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = colorAttachmentsCount;
+            renderingInfo.pColorAttachments = colorAttachmentsInfos.data();
+            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
+            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
 
             vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
         }

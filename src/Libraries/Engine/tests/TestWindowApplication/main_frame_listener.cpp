@@ -61,38 +61,7 @@ namespace Kmplete
 
     void MainFrameListener::Initialize()
     {
-        ImGuiUtils::Context* context = nullptr;
-        if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
-        {
-            const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(*_graphicsBackend);
-            const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend->GetPhysicalDevice());
-            const auto& logicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
-
-            ImGui_ImplVulkan_InitInfo initInfo{};
-            initInfo.Instance = vulkanBackend.GetVkInstance();
-            initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
-            initInfo.Device = logicalDevice.GetVkDevice();
-            initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
-            initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
-            initInfo.PipelineCache = VK_NULL_HANDLE;
-            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
-            initInfo.Allocator = VK_NULL_HANDLE;
-            initInfo.MinImageCount = Graphics::NumConcurrentFrames;
-            initInfo.ImageCount = Graphics::NumConcurrentFrames;
-            initInfo.CheckVkResultFn = nullptr;
-            initInfo.UseDynamicRendering = true;
-            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
-            initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
-            initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, initInfo);
-        }
-        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
-        
-        const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
-        _imguiImpl->Stylize(_mainWindow.GetDPIScale());
+        _InitializeImGui();
 
         _inputManager->MapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
         _inputManager->MapInputToAction({Input::Code::Key_S, Input::PressNoModsCondition}, "move_backward"_sid);
@@ -246,18 +215,7 @@ namespace Kmplete
 
         ImGui::End(); //Id_Dockspace
 
-        if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
-        {
-            auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend->GetPhysicalDevice().GetLogicalDevice());
-            auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
-            auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
-            vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
-            vulkanImGuiUtils->Render();
-        }
-        else
-        {
-            _imguiImpl->Render();
-        }
+        _RenderImGui();
 
         ImGui::EndFrame();
 
@@ -957,7 +915,20 @@ namespace Kmplete
         const auto scale = evt.GetScale();
 
         _imguiImpl.reset();
+        _InitializeImGui();
 
+        return true;
+    }
+
+    bool MainFrameListener::OnWindowCloseEvent(Events::WindowCloseEvent&)
+    {
+        _mainWindow.SetShouldClose(true);
+        _windowCloseEventInvokedCount++;
+        return true;
+    }
+
+    void MainFrameListener::_InitializeImGui()
+    {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
@@ -978,6 +949,7 @@ namespace Kmplete
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
             initInfo.CheckVkResultFn = nullptr;
             initInfo.UseDynamicRendering = true;
+            initInfo.MSAASamples = logicalDevice.GetMultisampling();
             initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
@@ -988,16 +960,27 @@ namespace Kmplete
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale, 15);
-        _imguiImpl->Stylize(scale);
-
-        return true;
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
+        _imguiImpl->Stylize(_mainWindow.GetDPIScale());
     }
 
-    bool MainFrameListener::OnWindowCloseEvent(Events::WindowCloseEvent&)
+    void MainFrameListener::_RenderImGui()
     {
-        _mainWindow.SetShouldClose(true);
-        _windowCloseEventInvokedCount++;
-        return true;
+        if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend->GetPhysicalDevice().GetLogicalDevice());
+            const auto& vulkanRenderer = vulkanLogicalDevice.GetRenderer();
+            auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
+            auto* vulkanImGuiImpl = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+
+            vulkanRenderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
+            vulkanImGuiImpl->SetCommandBuffer(commandBuffer);
+            vulkanImGuiImpl->Render();
+            vulkanRenderer.EndRendering();
+        }
+        else
+        {
+            _imguiImpl->Render();
+        }
     }
 }

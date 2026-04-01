@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/string_id.h"
+#include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
@@ -31,7 +32,10 @@ namespace Kmplete
             KMP_API void StartFrame();
             KMP_API void EndFrame();
 
-            KMP_API void BeginRendering(const VkRenderingInfo& renderingInfo) const;
+            KMP_API void SetSwapchain(const VulkanSwapchain& swapchain);
+
+            KMP_API void BeginRendering(const VkRect2D& renderArea) const;
+            KMP_API void BeginRendering(StringID pipelineSid, const VkRect2D& renderArea) const;
             KMP_API void EndRendering() const;
 
             KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const;
@@ -55,7 +59,7 @@ namespace Kmplete
         private:
             const UInt32& _currentBufferIndex;
             const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& _pipelines;
-            const VulkanSwapchain& _swapchain;
+            Ref<const VulkanSwapchain> _swapchain;
 
             VkDevice _device;
             UPtr<VulkanCommandPool> _commandPool;

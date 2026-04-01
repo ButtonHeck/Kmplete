@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Assets/assets_manager.h"
@@ -91,6 +92,7 @@ namespace Kmplete
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
             initInfo.CheckVkResultFn = nullptr;
             initInfo.UseDynamicRendering = true;
+            initInfo.MSAASamples = logicalDevice.GetMultisampling();
             initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
@@ -158,19 +160,7 @@ namespace Kmplete
             _EndApplicationArea();
         }
 
-        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
-        {
-            auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
-            auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
-            auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
-            vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
-            vulkanImGuiUtils->Render();
-        }
-        else
-        {
-            _imguiImpl->Render();
-        }
-
+        _RenderImGui();
         _EndFrame();
     }
     //--------------------------------------------------------------------------
@@ -210,6 +200,29 @@ namespace Kmplete
 
         const auto& iconsFontAsset = _assetsManager.GetFontAssetManager().GetAsset("forkawesome-webfont.ttf"_sid);
         _imguiImpl->AddIconsFont(iconsFontAsset.GetFont().GetBuffer(), scale);
+    }
+    //--------------------------------------------------------------------------
+
+    void EditorFrameListener::_RenderImGui()
+    {
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+            const auto& vulkanRenderer = vulkanLogicalDevice.GetRenderer();
+            auto commandBuffer = vulkanRenderer.GetCurrentCommandBuffer();
+            auto* vulkanImGuiImpl = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+
+            vulkanRenderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
+            vulkanImGuiImpl->SetCommandBuffer(commandBuffer);
+            vulkanImGuiImpl->Render();
+            vulkanRenderer.EndRendering();
+        }
+        else
+        {
+            _imguiImpl->Render();
+        }
     }
     //--------------------------------------------------------------------------
 
