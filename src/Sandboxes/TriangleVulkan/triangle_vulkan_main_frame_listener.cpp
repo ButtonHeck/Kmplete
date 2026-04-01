@@ -92,10 +92,10 @@ namespace Kmplete
             {{-0.75f, -0.25f, 0.1f}, {0.6f, 0.6f, 0.6f, 1.0f}},
             {{-0.25f, -0.25f, 0.1f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
-            // reddish triangle below main RGB triangle
-            {{-0.00f, -0.40f, 0.3f}, {1.0f, 0.3f, 0.3f, 1.0f}},
-            {{-0.25f,  0.25f, 0.3f}, {1.0f, 0.6f, 0.6f, 1.0f}},
-            {{ 0.25f,  0.25f, 0.3f}, {1.0f, 0.9f, 0.9f, 1.0f}},
+            // reddish triangle below main RGB triangle (depth is outside of range, but it will be clamped due to DepthClamping option)
+            {{-0.00f, -0.40f, 1.3f}, {1.0f, 0.3f, 0.3f, 1.0f}},
+            {{-0.25f,  0.25f, 1.3f}, {1.0f, 0.6f, 0.6f, 1.0f}},
+            {{ 0.25f,  0.25f, 1.3f}, {1.0f, 0.9f, 0.9f, 1.0f}},
 
             // half-transparent quad above everything
             {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
@@ -170,7 +170,7 @@ namespace Kmplete
         pipeline.SetInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, "primitive restart"_false);
         pipeline.SetPolygonMode(VK_POLYGON_MODE_FILL);
         pipeline.SetCulling(VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        pipeline.SetDepthClamping(false);
+        pipeline.SetDepthClamping(true);
         pipeline.SetRasterizerDiscard(false);
         pipeline.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
         pipeline.SetDepthTest(true);

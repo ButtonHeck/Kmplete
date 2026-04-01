@@ -239,6 +239,7 @@ namespace Kmplete
             VkPhysicalDeviceFeatures features{};
             features.samplerAnisotropy = VK_TRUE;
             features.independentBlend = VK_TRUE;
+            features.depthClamp = VK_TRUE;
 
             auto features13 = VulkanUtils::InitVkPhysicalDeviceVulkan13Features();
             features13.dynamicRendering = VK_TRUE;
