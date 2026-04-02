@@ -321,7 +321,7 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _surface, _vulkanContext, _currentExtent, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _vulkanContext, _currentExtent, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
         }
         //--------------------------------------------------------------------------
 

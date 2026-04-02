@@ -19,6 +19,7 @@ namespace Kmplete
         public:
             VkInstance instance;
             VkPhysicalDevice physicalDevice;
+            VkSurfaceKHR surface;
 
             UInt32 graphicsFamilyIndex{};
             UInt32 presentFamilyIndex{};
@@ -37,7 +38,7 @@ namespace Kmplete
             VkSurfaceFormatKHR surfaceFormat{};
 
         public:
-            KMP_API void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
+            KMP_API void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                                   const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
 
         private:

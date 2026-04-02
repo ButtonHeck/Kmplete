@@ -14,7 +14,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                          VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
@@ -46,7 +46,7 @@ namespace Kmplete
                 _imageCount = _vulkanContext.surfaceCapabilities.maxImageCount;
             }
 
-            _CreateSwapchainObject(surface);
+            _CreateSwapchainObject(vulkanContext.surface);
 
             _CreateSwapchainImages();
             _CreateSwapchainImageViews();

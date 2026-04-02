@@ -176,6 +176,7 @@ namespace Kmplete
                     _vulkanContext.Populate(
                         _instance,
                         _physicalDevice,
+                        _surface,
                         defaultDepthFormat,
                         queueFamilyIndices.graphicsFamilyIndex.value(),
                         queueFamilyIndices.presentFamilyIndex.value(),
