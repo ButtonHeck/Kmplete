@@ -54,16 +54,13 @@ namespace Kmplete
 
             _CreateLogicalDeviceObject();
             _CreateDeviceQueues();
-
-            _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
-
+            _CreateImageCreatorDelegate();
             _CreateSynchronizationObjects();
             _CreateSwapchain();
             _CreatePipelineCache();
             _CreateDescriptorPool();
-
-            _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+            _CreateBufferCreatorDelegate();
+            _CreateRenderer();
         }
         //--------------------------------------------------------------------------
 
@@ -71,25 +68,16 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _renderer.reset();
-            _bufferCreatorDelegate.reset();
-
-            for (const auto& [sid, descriptorSetLayout] : _descriptorSetLayouts)
-            {
-                vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
-            }
-            _descriptorSetLayouts.clear();
-
-            _pipelines.clear();
+            _DeleteRenderer();
+            _DeleteBufferCreatorDelegate();
+            _DeleteDescriptorSetsLayouts();
+            _DeletePipelines();
             _DeleteDescriptorPool();
             _DeletePipelineCache();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
-
-            _imageCreatorDelegate.reset();
-            _graphicsQueue.reset();
-            _presentQueue.reset();
-
+            _DeleteImageCreatorDelegate();
+            _DeleteDeviceQueues();
             _DeleteLogicalDeviceObject();
         }
         //--------------------------------------------------------------------------
@@ -265,6 +253,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanLogicalDevice::_DeleteLogicalDeviceObject()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            vkDestroyDevice(_device, nullptr);
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateDeviceQueues()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
@@ -275,11 +271,28 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteLogicalDeviceObject()
+        void VulkanLogicalDevice::_DeleteDeviceQueues()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
-            vkDestroyDevice(_device, nullptr);
+            _graphicsQueue.reset();
+            _presentQueue.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateImageCreatorDelegate()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteImageCreatorDelegate()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _imageCreatorDelegate.reset();
         }
         //--------------------------------------------------------------------------
 
@@ -385,6 +398,58 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
 
             vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteDescriptorSetsLayouts()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            for (const auto& [sid, descriptorSetLayout] : _descriptorSetLayouts)
+            {
+                vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
+            }
+            _descriptorSetLayouts.clear();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeletePipelines()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _pipelines.clear();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateBufferCreatorDelegate()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteBufferCreatorDelegate()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _bufferCreatorDelegate.reset();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateRenderer()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteRenderer()
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+
+            _renderer.reset();
         }
         //--------------------------------------------------------------------------
 

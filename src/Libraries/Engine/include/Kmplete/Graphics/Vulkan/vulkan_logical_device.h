@@ -76,8 +76,13 @@ namespace Kmplete
 
         private:
             void _CreateLogicalDeviceObject();
-            void _CreateDeviceQueues();
             void _DeleteLogicalDeviceObject();
+
+            void _CreateDeviceQueues();
+            void _DeleteDeviceQueues();
+
+            void _CreateImageCreatorDelegate();
+            void _DeleteImageCreatorDelegate();
 
             void _CreateSynchronizationObjects();
             void _DeleteSyncronizationObjects();
@@ -90,6 +95,15 @@ namespace Kmplete
 
             void _CreateDescriptorPool();
             void _DeleteDescriptorPool();
+
+            void _DeleteDescriptorSetsLayouts();
+            void _DeletePipelines();
+
+            void _CreateBufferCreatorDelegate();
+            void _DeleteBufferCreatorDelegate();
+
+            void _CreateRenderer();
+            void _DeleteRenderer();
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
@@ -108,7 +122,6 @@ namespace Kmplete
             UPtr<VulkanQueue> _graphicsQueue;
             UPtr<VulkanQueue> _presentQueue;
             UPtr<VulkanImageCreatorDelegate> _imageCreatorDelegate;
-
             Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
             Vector<VulkanFence> _waitFences;
