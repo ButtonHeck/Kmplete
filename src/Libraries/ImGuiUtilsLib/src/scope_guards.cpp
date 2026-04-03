@@ -11,7 +11,7 @@ namespace Kmplete
         DisableGuard::DisableGuard(bool condition)
             : _condition(condition)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             if (_condition)
             {
@@ -22,7 +22,7 @@ namespace Kmplete
 
         DisableGuard::~DisableGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             if (_condition)
             {
@@ -34,7 +34,7 @@ namespace Kmplete
 
         ItemWidthGuard::ItemWidthGuard(float width)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::PushItemWidth(width);
         }
@@ -42,7 +42,7 @@ namespace Kmplete
 
         ItemWidthGuard::~ItemWidthGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::PopItemWidth();
         }
@@ -52,7 +52,7 @@ namespace Kmplete
         StyleColorGuard::StyleColorGuard(std::initializer_list<std::pair<ImGuiCol_, ImVec4>>&& colors)
             : _count(static_cast<int>(colors.size()))
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             for (const auto& value : colors)
             {
@@ -63,7 +63,7 @@ namespace Kmplete
 
         StyleColorGuard::~StyleColorGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::PopStyleColor(_count);
         }
@@ -73,7 +73,7 @@ namespace Kmplete
         StyleVarGuard::StyleVarGuard(std::initializer_list<std::pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables)
             : _count(static_cast<int>(variables.size()))
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             for (const auto& value : variables)
             {
@@ -93,7 +93,7 @@ namespace Kmplete
 
         StyleVarGuard::~StyleVarGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::PopStyleVar(_count);
         }
@@ -103,7 +103,7 @@ namespace Kmplete
         IDGuard::IDGuard(int id)
             : _id(id)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::PushID(_id);
         }
@@ -111,7 +111,7 @@ namespace Kmplete
 
         IDGuard::~IDGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::PopID();
         }
@@ -120,7 +120,7 @@ namespace Kmplete
 
         GroupGuard::GroupGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::BeginGroup();
         }
@@ -128,7 +128,7 @@ namespace Kmplete
 
         GroupGuard::~GroupGuard()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             ImGui::EndGroup();
         }

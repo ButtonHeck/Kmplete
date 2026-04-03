@@ -49,7 +49,7 @@ namespace Kmplete
 
         std::pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> VulkanVertexBuffer::GetBindingsDescriptions(UInt32 baseBinding) const noexcept
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             Vector<VkVertexInputBindingDescription> inputBindingsDescriptions(_layouts.size());
             Vector<VkVertexInputAttributeDescription> attributeDescriptions;

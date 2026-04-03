@@ -50,7 +50,7 @@ namespace Kmplete
 
         static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             auto debugMessengerCreateInfo = VulkanUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
@@ -159,7 +159,7 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::SaveSettings(SettingsDocument& settings) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             settings.StartSaveObject(SettingsEntryName);
             settings.SaveUInt(MSAAsamplesStr, GetMultisampling());
@@ -169,7 +169,7 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::LoadSettings(SettingsDocument& settings)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             settings.StartLoadObject(SettingsEntryName);
             const UInt32 msaaSamples = settings.GetUInt(MSAAsamplesStr, 1);
@@ -248,7 +248,7 @@ namespace Kmplete
 
         VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto applicationInfo = VulkanUtils::InitVkApplicationInfo();
             applicationInfo.pApplicationName = "Kmplete Application";
@@ -263,7 +263,7 @@ namespace Kmplete
 
         VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo(applicationInfo);
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
@@ -276,7 +276,7 @@ namespace Kmplete
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         bool VulkanGraphicsBackend::_CheckValidationLayerSupport() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             UInt32 layerCount;
             vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
@@ -333,7 +333,7 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::_InitializeDebugMessenger()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
             const auto result = VulkanCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
@@ -344,7 +344,7 @@ namespace Kmplete
 
         Vector<const char*> VulkanGraphicsBackend::_GetRequiredExtensionsNames() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
             UInt32 extensionsCount = 0;

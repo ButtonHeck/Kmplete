@@ -17,7 +17,7 @@ namespace Kmplete
     {
         String RegexReplace(const String& source, const char* regexp, const char* replacement)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             if (regexp == nullptr || replacement == nullptr)
             {
@@ -46,7 +46,7 @@ namespace Kmplete
 
         String StringVectorToString(const StringVector& stringVector, const String& delimiter, bool startWithDelimiter /*= true*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             if (stringVector.empty())
             {
@@ -73,7 +73,7 @@ namespace Kmplete
 
         WString NarrowToWide(const String& str)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto length = MultiByteToWideChar(CP_ACP, 0, str.c_str(), static_cast<int>(str.size()), 0, 0);
@@ -94,7 +94,7 @@ namespace Kmplete
 
         String WideToNarrow(const WString& wstr)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto length = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.size()), nullptr, 0, nullptr, nullptr);
@@ -115,7 +115,7 @@ namespace Kmplete
 
         String NarrowToUtf8(const String& str)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(), static_cast<int>(str.length()), nullptr, 0);
@@ -134,7 +134,7 @@ namespace Kmplete
 
         String Utf8ToNarrow(const String& str)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto u16Size = MultiByteToWideChar(CP_UTF8, 0, &str[0], static_cast<int>(str.size()), nullptr, 0);

@@ -71,7 +71,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::StartFrame(float frameTimestep)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             _logicalDevice->StartFrame(frameTimestep);
         }
@@ -79,7 +79,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::EndFrame()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             _logicalDevice->EndFrame();
         }
@@ -87,7 +87,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::HandleWindowResize()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             _UpdateSurfaceInfo();
             _logicalDevice->HandleWindowResize();
@@ -132,7 +132,7 @@ namespace Kmplete
 
         Vector<VkPhysicalDevice> VulkanPhysicalDevice::_GetListOfPhysicalDevices() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             UInt32 deviceCount = 0;
             vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
@@ -151,7 +151,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_PickSuitablePhysicalDevice(const Vector<VkPhysicalDevice>& physicalDevices)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             for (const auto& device : physicalDevices)
             {
@@ -191,7 +191,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_UpdateSurfaceInfo()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             auto surfaceAndPresentModeProperties = VulkanUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
@@ -202,7 +202,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_QueryGPUInfo()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto propertiesVersion12 = VulkanUtils::InitVkPhysicalDeviceVulkan12Properties();
             propertiesVersion12.pNext = nullptr;

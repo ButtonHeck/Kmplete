@@ -50,7 +50,7 @@ namespace Kmplete
 
         VkSurfaceFormatKHR VulkanContext::_FindSurfaceFormat() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             if (surfaceFormats.empty())
             {

@@ -18,7 +18,7 @@ namespace Kmplete
         //! Utility function to fetch available monitor modes for a given monitor (if any)
         Vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             Vector<WindowBackend::MonitorVideoMode> outputModes;
 
@@ -159,7 +159,7 @@ namespace Kmplete
 
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (!_IsAuxWindowNameAcceptable(windowName))
         {
@@ -191,7 +191,7 @@ namespace Kmplete
 
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const Window::WindowSettings& windowSettings)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         const auto& windowName = windowSettings.name;
         if (!_IsAuxWindowNameAcceptable(windowName))
@@ -224,7 +224,7 @@ namespace Kmplete
 
     Nullable<Window*> WindowBackendGlfw::GetAuxWindow(const String& windowName) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (_auxWindows.contains(windowName))
         {
@@ -238,7 +238,7 @@ namespace Kmplete
 
     bool WindowBackendGlfw::DestroyAuxWindow(const String& windowName)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_auxWindows.contains(windowName))
         {
@@ -253,7 +253,7 @@ namespace Kmplete
 
     int WindowBackendGlfw::GetMonitorCount() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         int count = 0;
         glfwGetMonitors(&count);
@@ -263,7 +263,7 @@ namespace Kmplete
 
     StringVector WindowBackendGlfw::GetMonitorNames() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
@@ -288,7 +288,7 @@ namespace Kmplete
 
     Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         const auto monitor = glfwGetPrimaryMonitor();
         return GetVideoModes(monitor);
@@ -297,7 +297,7 @@ namespace Kmplete
 
     Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(unsigned int index) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         if (index == 0)
         {
@@ -318,7 +318,7 @@ namespace Kmplete
 
     float WindowBackendGlfw::GetPrimaryMonitorDPIScale() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         const auto monitor = glfwGetPrimaryMonitor();
         float scale = 1.0f;
@@ -329,7 +329,7 @@ namespace Kmplete
 
     OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot /*= Math::Point2I()*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (_cursors.contains(name))
         {
@@ -353,7 +353,7 @@ namespace Kmplete
 
     OptionalRef<const WindowCursor> WindowBackendGlfw::GetCursor(const String& name) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         if (!_cursors.contains(name))
         {
@@ -367,7 +367,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::SaveSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveString(GraphicsBackendTypeStr, Graphics::GraphicsBackendTypeToString(_graphicsBackendType));
@@ -381,7 +381,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::_SaveMainWindowSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartSaveObject(MainWindowStr);
         _mainWindowSettings->SaveSettings(settings);
@@ -391,7 +391,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::_SaveAuxWindowsSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartSaveArray(AuxWindowsStr);
         int index = 0;
@@ -413,7 +413,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::LoadSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartLoadObject(SettingsEntryName);
         _graphicsBackendType = Graphics::StringToGraphicsBackendType(settings.GetString(GraphicsBackendTypeStr, Graphics::DefaultAPIStr));
@@ -427,7 +427,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::_LoadMainWindowSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         KMP_ASSERT(_mainWindowSettings);
 
@@ -446,7 +446,7 @@ namespace Kmplete
 
     void WindowBackendGlfw::_LoadAuxWindowsSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         const auto windowsCount = settings.StartLoadArray(AuxWindowsStr);
         for (auto i = 0; i < windowsCount; i++)

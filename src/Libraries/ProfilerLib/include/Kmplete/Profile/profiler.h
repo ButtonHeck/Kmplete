@@ -256,15 +256,15 @@ namespace Kmplete
     //! Enumeration of the profiling levels from the most important (0) to the least (4).
     //! There is no strict rule which level in which function should be used, but the common
     //! rule in this project is to use ProfileLevelAlways in constructors/destructors and functions
-    //! like Initialize/Finalize, ProfileLevelImportantFunctions(Verbose) for somewhat "heavy" and
-    //! important functions, and ProfileLevelMinorFunctions(Verbose) for any other functions
+    //! like Initialize/Finalize, ProfileLevelImportant(Verbose) for somewhat "heavy" and
+    //! important functions, and ProfileLevelMinor(Verbose) for any other functions
     enum ProfileLevel : unsigned int
     {
         ProfileLevelAlways = 0,
-        ProfileLevelImportantFunctions = 1,
-        ProfileLevelImportantFunctionsVerbose = 2,
-        ProfileLevelMinorFunctions = 3,
-        ProfileLevelMinorFunctionsVerbose = 4
+        ProfileLevelImportant = 1,
+        ProfileLevelImportantVerbose = 2,
+        ProfileLevelMinor = 3,
+        ProfileLevelMinorVerbose = 4
     };
     //--------------------------------------------------------------------------
 }

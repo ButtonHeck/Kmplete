@@ -85,7 +85,7 @@ namespace Kmplete
 
         VkPipelineShaderStageCreateInfo VulkanShader::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             auto shaderStageCreateInfo = VulkanUtils::InitVkPipelineShaderStageCreateInfo(stage);
             shaderStageCreateInfo.module = _shaderModule;

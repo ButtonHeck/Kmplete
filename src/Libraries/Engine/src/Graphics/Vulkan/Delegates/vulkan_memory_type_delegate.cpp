@@ -15,7 +15,7 @@ namespace Kmplete
 
         VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             MemoryContext context{};
             vkGetBufferMemoryRequirements(device, buffer, &context.requirements);
@@ -30,7 +30,7 @@ namespace Kmplete
 
         VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             MemoryContext context{};
             vkGetImageMemoryRequirements(device, image, &context.requirements);
@@ -45,7 +45,7 @@ namespace Kmplete
 
         UInt32 VulkanMemoryTypeDelegate::FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             for (UInt32 i = 0; i < _memoryProperties.memoryTypeCount; i++)
             {

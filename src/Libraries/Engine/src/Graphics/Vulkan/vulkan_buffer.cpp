@@ -112,7 +112,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Map(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             return vkMapMemory(_device, _memory, offset, size, 0, &_mapped);
         }
@@ -120,7 +120,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Unmap(bool flush /*= false*/, VkDeviceSize size/* = VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             auto result = VK_SUCCESS;
             if (flush)
@@ -140,7 +140,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Bind(VkDeviceSize offset /*= 0*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             return vkBindBufferMemory(_device, _buffer, _memory, offset);
         }
@@ -148,7 +148,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
@@ -159,7 +159,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
@@ -170,7 +170,7 @@ namespace Kmplete
 
         void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             KMP_ASSERT(_mapped);
             memcpy((char*)_mapped + mappedOffset, data, size);

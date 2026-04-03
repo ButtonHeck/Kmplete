@@ -37,7 +37,7 @@ namespace Kmplete
 
         void ImGuiImplementationGlfwVulkan::AddTexture(StringID sid, void* sampler, void* view)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             VkSampler vulkanSampler = reinterpret_cast<VkSampler>(sampler);
             VkImageView vulkanImageView = reinterpret_cast<VkImageView>(view);
@@ -83,7 +83,7 @@ namespace Kmplete
 
         void ImGuiImplementationGlfwVulkan::_NewFrameImpl() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             ImGui_ImplVulkan_NewFrame();
             ImGui_ImplGlfw_NewFrame();

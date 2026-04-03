@@ -66,7 +66,7 @@ namespace Kmplete
 
         void VulkanQueue::WaitIdle() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             vkQueueWaitIdle(_queue);
         }
@@ -74,7 +74,7 @@ namespace Kmplete
 
         void VulkanQueue::Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto buffer = commandBuffer.GetVkCommandBuffer();
             auto submitInfo = VulkanUtils::InitVkSubmitInfo();
@@ -87,7 +87,7 @@ namespace Kmplete
 
         void VulkanQueue::Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence);
             VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
@@ -96,7 +96,7 @@ namespace Kmplete
 
         void VulkanQueue::SyncSubmit(const VulkanCommandBuffer& commandBuffer) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto buffer = commandBuffer.GetVkCommandBuffer();
             auto submitInfo = VulkanUtils::InitVkSubmitInfo();
@@ -109,7 +109,7 @@ namespace Kmplete
 
         void VulkanQueue::SyncSubmit(const Vector<VkSubmitInfo>& submits) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             VulkanFence fence(_device, "signaled"_false);
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence.GetVkFence());
@@ -120,7 +120,7 @@ namespace Kmplete
 
         void VulkanQueue::Present(const VkPresentInfoKHR& presentationInfo) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             if (!_supportPresentation)
             {

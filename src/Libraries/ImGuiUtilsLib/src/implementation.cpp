@@ -76,7 +76,7 @@ namespace Kmplete
 
         bool ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             auto& io = ImGui::GetIO();
             const auto fontSizeScaled = fontSize * dpiScale;
@@ -93,7 +93,7 @@ namespace Kmplete
 
         bool ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             auto& io = ImGui::GetIO();
             const auto fontSizeScaled = fontSize * dpiScale;
@@ -107,7 +107,7 @@ namespace Kmplete
 
         bool ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             auto& io = ImGui::GetIO();
             const auto fontSizeScaled = fontSize * dpiScale;
@@ -129,7 +129,7 @@ namespace Kmplete
 
         bool ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= DefaultFontSize*/) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             auto& io = ImGui::GetIO();
             const auto fontSizeScaled = fontSize * dpiScale;
@@ -149,7 +149,7 @@ namespace Kmplete
 
         void ImGuiImplementation::Stylize(float dpiScale) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             ImGui::GetStyle() = ImGuiStyle();
 

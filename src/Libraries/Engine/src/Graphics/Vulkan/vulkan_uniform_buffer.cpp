@@ -54,7 +54,7 @@ namespace Kmplete
 
         void VulkanUniformBuffer::_AllocateDescriptorSet(VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
             descriptorSetAllocateInfo.descriptorPool = descriptorPool;
@@ -68,7 +68,7 @@ namespace Kmplete
 
         void VulkanUniformBuffer::_UpdateDescriptorSet(UInt32 binding, VkDeviceSize size)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = _buffer;

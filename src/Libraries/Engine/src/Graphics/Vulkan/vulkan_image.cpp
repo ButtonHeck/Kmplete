@@ -53,7 +53,7 @@ namespace Kmplete
 
         void VulkanImage::_CreateImageObject(const VkImageCreateInfo& creationParameters)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto result = vkCreateImage(_device, &creationParameters, nullptr, &_image);
             VulkanUtils::CheckResult(result, "VulkanImage: failed to create image");
@@ -62,7 +62,7 @@ namespace Kmplete
 
         void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, memoryProperties);
 

@@ -67,7 +67,7 @@ namespace Kmplete
 
         void VulkanCommandBuffer::Begin(VkCommandBufferUsageFlags flags /*= 0*/) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
             commandBufferBeginInfo.flags |= flags;
@@ -79,7 +79,7 @@ namespace Kmplete
 
         void VulkanCommandBuffer::End() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             const auto result = vkEndCommandBuffer(_commandBuffer);
             VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to end command buffer");
@@ -88,7 +88,7 @@ namespace Kmplete
 
         void VulkanCommandBuffer::Reset() const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             const auto result = vkResetCommandBuffer(_commandBuffer, 0);
             VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to reset command buffer");

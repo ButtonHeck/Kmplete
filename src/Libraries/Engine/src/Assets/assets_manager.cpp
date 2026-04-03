@@ -63,7 +63,7 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto fullPath = _dataPath / filepath;
             if (!Filesystem::FilepathExists(fullPath))
@@ -96,7 +96,7 @@ namespace Kmplete
 
         bool AssetsManager::LoadAssets(const Vector<StringID>& assetsSids)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto lookupVector = _GetSortedByFileAssetsInfos(assetsSids);
             if (lookupVector.empty())
@@ -111,7 +111,7 @@ namespace Kmplete
 
         bool AssetsManager::UnloadAssets(const Vector<StringID>& assetsSids)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             Vector<StringID> textureSidsToRemove;
             Vector<StringID> fontsSidsToRemove;
@@ -175,7 +175,7 @@ namespace Kmplete
 
         void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             for (AssetCount i = 0; i < assetCount; i++)
             {
@@ -197,7 +197,7 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto loadedOk = true;
             for (AssetCount i = 0; i < assetCount; i++)
@@ -214,7 +214,7 @@ namespace Kmplete
 
         Vector<AssetLookupInfo> AssetsManager::_GetSortedByFileAssetsInfos(const Vector<StringID>& assetsSids) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             Vector<AssetLookupInfo> lookupVector;
             lookupVector.reserve(assetsSids.size());
@@ -238,7 +238,7 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto currentFilepath = Filepath();
             auto fileBuffer = BinaryBuffer();
@@ -267,7 +267,7 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             if (fileBuffer.size() < assetHeader.bufferOffset + assetHeader.bufferSize) {
                 KMP_LOG_ERROR("asset buffer overflow - file too small for asset data");

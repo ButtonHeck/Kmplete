@@ -60,7 +60,7 @@ namespace Kmplete
 
     void EditorApplication::_SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -75,7 +75,7 @@ namespace Kmplete
 
     void EditorApplication::_LoadSettings()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)

@@ -123,7 +123,7 @@ namespace Kmplete
 
     void EditorFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_metricsTimer.ReachedTimeout())
         {
@@ -167,7 +167,7 @@ namespace Kmplete
 
     bool EditorFrameListener::_OnWindowCloseEvent(Events::WindowCloseEvent& event)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         return _uiCompositor->OnWindowCloseEvent(event);
     }
@@ -175,7 +175,7 @@ namespace Kmplete
 
     bool EditorFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         const auto scale = event.GetScale();
 
@@ -205,7 +205,7 @@ namespace Kmplete
 
     void EditorFrameListener::_RenderImGui()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
@@ -228,7 +228,7 @@ namespace Kmplete
 
     void EditorFrameListener::SaveSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveUInt(MetricsTimeoutStr, _metricsTimer.GetTimeout());
@@ -239,7 +239,7 @@ namespace Kmplete
 
     void EditorFrameListener::LoadSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartLoadObject(SettingsEntryName);
         _metricsTimer.SetTimeout(settings.GetUInt(MetricsTimeoutStr, 1000));
@@ -250,7 +250,7 @@ namespace Kmplete
 
     void EditorFrameListener::_NewFrame()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         _imguiImpl->NewFrame();
     }
@@ -258,7 +258,7 @@ namespace Kmplete
 
     void EditorFrameListener::_BeginApplicationArea() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -282,7 +282,7 @@ namespace Kmplete
 
     void EditorFrameListener::_BeginMainWorkingArea() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         const auto viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
@@ -315,7 +315,7 @@ namespace Kmplete
 
     void EditorFrameListener::_ComposeMainArea()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _uiCompositor->ComposeMainArea();
     }
@@ -323,7 +323,7 @@ namespace Kmplete
 
     void EditorFrameListener::_EndMainWorkingArea() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         ImGui::EndChild(); // IdApp_MainWorkingArea
     }
@@ -331,7 +331,7 @@ namespace Kmplete
 
     void EditorFrameListener::_BeginStatusBarArea() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         ImGuiUtils::StyleVarGuard styleVarGuard({
             {ImGuiStyleVar_WindowRounding, 0.0f},
@@ -348,7 +348,7 @@ namespace Kmplete
 
     void EditorFrameListener::_ComposeStatusBar()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _uiCompositor->ComposeStatusBar(_metricsTimer);
     }
@@ -356,7 +356,7 @@ namespace Kmplete
 
     void EditorFrameListener::_EndStatusBarArea() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         ImGui::EndChild(); // IdApp_StatusBar
     }
@@ -364,7 +364,7 @@ namespace Kmplete
 
     void EditorFrameListener::_EndApplicationArea() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         ImGui::End(); // IdApp_ApplicationWindow
     }
@@ -372,7 +372,7 @@ namespace Kmplete
 
     void EditorFrameListener::_EndFrame() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         ImGui::EndFrame();
     }

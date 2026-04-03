@@ -18,7 +18,7 @@ namespace Kmplete
 
     void LocalizationLibrary::SetLocale(const LocaleStrSID& localeSid) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_currentLocaleSid != localeSid)
         {
@@ -33,7 +33,7 @@ namespace Kmplete
 
     void LocalizationLibrary::SetLocale(const LocaleStr& locale) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         SetLocale(ToStringID(KMP_SID_PARAM(locale)));
     }
@@ -41,7 +41,7 @@ namespace Kmplete
 
     bool LocalizationLibrary::AddDictionary(const DomainStrSID& domainSid)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -56,7 +56,7 @@ namespace Kmplete
 
     bool LocalizationLibrary::AddDictionary(const DomainStr& domain)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         const auto domainSid = ToStringID(KMP_SID_PARAM(domain));
         if (_dictionaryMap.contains(domainSid))
@@ -71,7 +71,7 @@ namespace Kmplete
 
     bool LocalizationLibrary::RemoveDictionary(const DomainStrSID& domainSid) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -85,7 +85,7 @@ namespace Kmplete
 
     bool LocalizationLibrary::RemoveDictionary(const DomainStr& domain) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         return RemoveDictionary(ToStringID(KMP_SID_PARAM(domain)));
     }
@@ -93,7 +93,7 @@ namespace Kmplete
 
     void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& translation)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -105,7 +105,7 @@ namespace Kmplete
     void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
                                   PluralityForm pluralityForm, const TranslationStr& translation)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -116,7 +116,7 @@ namespace Kmplete
 
     void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -128,7 +128,7 @@ namespace Kmplete
     void LocalizationLibrary::Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
                                   PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -139,7 +139,7 @@ namespace Kmplete
 
     const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -153,7 +153,7 @@ namespace Kmplete
     const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                    const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -166,7 +166,7 @@ namespace Kmplete
 
     const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {
@@ -180,7 +180,7 @@ namespace Kmplete
     const TranslationStr& LocalizationLibrary::Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
                                                    PluralityForm pluralityForm, const ContextStrSID& contextSid) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_dictionaryMap.contains(domainSid))
         {

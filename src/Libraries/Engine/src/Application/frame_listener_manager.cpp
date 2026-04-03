@@ -38,7 +38,7 @@ namespace Kmplete
 
     bool FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
         KMP_ASSERT(frameListener);
 
         if (_FindFrameListener(frameListener->GetSID()) != nullptr)
@@ -68,7 +68,7 @@ namespace Kmplete
 
     bool FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
         KMP_ASSERT(frameListener);
 
         for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
@@ -94,7 +94,7 @@ namespace Kmplete
 
     void FrameListenerManager::_UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         for (const auto& [priority, listener] : _listeners)
         {
@@ -108,7 +108,7 @@ namespace Kmplete
 
     void FrameListenerManager::_RenderFrameListeners()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         for (const auto& [priority, listener] : _listeners)
         {
@@ -122,7 +122,7 @@ namespace Kmplete
 
     void FrameListenerManager::_DispatchEventToFrameListeners(Events::Event& event)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
@@ -142,7 +142,7 @@ namespace Kmplete
 
     void FrameListenerManager::_DispatchQueuedEventsToFrameListeners()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         auto& eventQueue = Events::EventQueue::Get().GetEvents();
         for (auto eventIter = eventQueue.begin(); eventIter != eventQueue.end();)
@@ -156,7 +156,7 @@ namespace Kmplete
 
     void FrameListenerManager::_ProcessFrameListenersCommands()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_commandBuffer.empty())
         {

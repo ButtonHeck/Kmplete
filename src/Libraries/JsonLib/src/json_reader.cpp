@@ -18,7 +18,7 @@ namespace Kmplete
 
     bool JsonReader::StartObject(const char* objectName)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject)
         {
@@ -53,7 +53,7 @@ namespace Kmplete
 
     bool JsonReader::StartObject(int index)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -75,7 +75,7 @@ namespace Kmplete
 
     bool JsonReader::EndObject()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (_scope.Pop())
         {
@@ -89,7 +89,7 @@ namespace Kmplete
 
     int JsonReader::StartArray(const char* arrayName)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject)
         {
@@ -124,7 +124,7 @@ namespace Kmplete
 
     int JsonReader::StartArray(int index)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -146,7 +146,7 @@ namespace Kmplete
 
     bool JsonReader::EndArray()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject)
         {
@@ -166,7 +166,7 @@ namespace Kmplete
 
     bool JsonReader::GetBool(int index, bool defaultValue /*= false*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -185,7 +185,7 @@ namespace Kmplete
 
     bool JsonReader::GetBool(const char* name, bool defaultValue /*= false*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -205,7 +205,7 @@ namespace Kmplete
 
     int JsonReader::GetInt(int index, int defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -224,7 +224,7 @@ namespace Kmplete
 
     int JsonReader::GetInt(const char* name, int defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -244,7 +244,7 @@ namespace Kmplete
 
     unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -263,7 +263,7 @@ namespace Kmplete
 
     unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -283,7 +283,7 @@ namespace Kmplete
 
     Int64 JsonReader::GetInt64(int index, Int64 defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -302,7 +302,7 @@ namespace Kmplete
 
     Int64 JsonReader::GetInt64(const char* name, Int64 defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -322,7 +322,7 @@ namespace Kmplete
 
     UInt64 JsonReader::GetUInt64(int index, UInt64 defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -341,7 +341,7 @@ namespace Kmplete
 
     UInt64 JsonReader::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -361,7 +361,7 @@ namespace Kmplete
 
     double JsonReader::GetDouble(int index, double defaultValue /*= 0.0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -380,7 +380,7 @@ namespace Kmplete
 
     double JsonReader::GetDouble(const char* name, double defaultValue /*= 0.0*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -400,7 +400,7 @@ namespace Kmplete
 
     String JsonReader::GetString(int index, const String& defaultValue /*= ""*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_ValidToGetFromArray(index))
         {
@@ -419,7 +419,7 @@ namespace Kmplete
 
     String JsonReader::GetString(const char* name, const String& defaultValue /*= ""*/)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject || !_currentObject->IsObject())
         {
@@ -439,7 +439,7 @@ namespace Kmplete
 
     bool JsonReader::_ValidToGetFromArray(int index) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         if (!_currentObject)
         {

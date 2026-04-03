@@ -66,7 +66,7 @@ namespace Kmplete
             template<typename ValueType> requires (IsAnyOfType<ValueType, int, float, Math::Point2I>)
             KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
                 if (!_actionToInputCodesMap.contains(actionId))
                 {
@@ -100,7 +100,7 @@ namespace Kmplete
             template<>
             KMP_NODISCARD Math::Point2I GetActionValue<Math::Point2I>(ActionIdentifier actionId)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
                 if (!_actionToInputCodesMap.contains(actionId))
                 {

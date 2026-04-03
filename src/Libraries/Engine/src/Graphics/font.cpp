@@ -53,7 +53,7 @@ namespace Kmplete
 
         bool Font::SetPointSize(UInt8 size, UInt32 dpi)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             const auto setSizeError = FT_Set_Char_Size(_freetypeFace, size * 64, 0, dpi, dpi);
             if (setSizeError)
@@ -69,7 +69,7 @@ namespace Kmplete
 
         bool Font::SetPixelSize(UInt8 size)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
             const auto setSizeError = FT_Set_Pixel_Sizes(_freetypeFace, size, 0);
             if (setSizeError)

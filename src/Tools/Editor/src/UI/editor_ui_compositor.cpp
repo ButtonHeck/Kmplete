@@ -59,7 +59,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeMainArea()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_needCheckImguiIniFile)
         {
@@ -78,13 +78,13 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeDefaultLayout()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
     }
     //--------------------------------------------------------------------------
 
     void EditorUICompositor::_ComposeMenu()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (ImGui::BeginMenuBar())
         {
@@ -99,7 +99,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuLanguage()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         const auto dpiScale = _mainWindow.GetDPIScale();
         const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
@@ -150,7 +150,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuFile()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (ImGui::BeginMenu(_localizationManager.Translation(SidTrDomainEditor, "File"_sid).c_str()))
         {
@@ -165,7 +165,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuView()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (ImGui::BeginMenu(_localizationManager.Translation(SidTrDomainEditor, "View"_sid).c_str()))
         {
@@ -178,7 +178,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuFileQuit()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Quit"_sid).c_str(), "Ctrl+Q"))
         {
@@ -189,7 +189,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuViewFullscreen()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         auto isWindowedFullscreen = _mainWindow.IsWindowedFullscreen();
         if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), "Alt+Enter", &isWindowedFullscreen))
@@ -201,7 +201,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuViewAlwaysOnTop()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         const auto isWindowed = _mainWindow.IsWindowed();
         auto isAlwaysOnTop = _mainWindow.IsAlwaysOnTop();
@@ -214,7 +214,7 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposePopups()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         if (_popups.quit)
         {
@@ -225,7 +225,7 @@ namespace Kmplete
 
     void EditorUICompositor::_PopupQuit()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (false /*future logic*/)
         {
@@ -240,7 +240,7 @@ namespace Kmplete
 
     void EditorUICompositor::_SwitchFullscreen()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         _mainWindow.SetScreenMode(!_mainWindow.IsWindowedFullscreen() ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
     }
@@ -248,7 +248,7 @@ namespace Kmplete
 
     void EditorUICompositor::_SwitchAlwaysOnTop()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         _mainWindow.SetAlwaysOnTop(!_mainWindow.IsAlwaysOnTop());
     }
@@ -256,7 +256,7 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeStatusBar(Time::Timer& metricsTimer)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         const auto dpiScale = _mainWindow.GetDPIScale();
         const auto buttonSize = ImVec2(24 * dpiScale, 24 * dpiScale);
@@ -317,7 +317,7 @@ namespace Kmplete
 
     bool EditorUICompositor::OnWindowCloseEvent(Events::WindowCloseEvent&)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         _popups.quit = true;
         return true;
@@ -326,7 +326,7 @@ namespace Kmplete
 
     void EditorUICompositor::SaveSettings(SettingsDocument& settings) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveBool(MetricsFractionalStr, _state.metricsFractional);
@@ -336,7 +336,7 @@ namespace Kmplete
 
     void EditorUICompositor::LoadSettings(SettingsDocument& settings)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         settings.StartLoadObject(SettingsEntryName);
         _state.metricsFractional = settings.GetBool(MetricsFractionalStr, true);
@@ -346,7 +346,7 @@ namespace Kmplete
 
     void EditorUICompositor::_FillDictionary()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "File");
         _localizationManager.Translate(KMP_TR_DOMAIN_EDITOR, "View");

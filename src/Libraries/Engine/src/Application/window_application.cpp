@@ -195,7 +195,7 @@ namespace Kmplete
 
     void WindowApplication::_ProcessEvents(Window& window, float frameTimestep)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _inputManager->ResetMouseMove();
         _inputManager->UpdateTimerActions(frameTimestep);
@@ -209,7 +209,7 @@ namespace Kmplete
 
     void WindowApplication::_IconifiedSleep()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         const auto iconifiedSleepTimeMs = 1000.0f / float(_iconifiedFPS);
         const auto elapsedTimeThisFrame = _frameClock.Peek();
@@ -223,7 +223,7 @@ namespace Kmplete
 
     void WindowApplication::_SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -241,7 +241,7 @@ namespace Kmplete
 
     void WindowApplication::_LoadWindowBackendSettings(SettingsDocument& settingsDocument)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _windowBackend->LoadSettings(settingsDocument);
     }
@@ -249,7 +249,7 @@ namespace Kmplete
 
     void WindowApplication::_LoadGraphicsBackendSettings(SettingsDocument& settingsDocument)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _graphicsBackend->LoadSettings(settingsDocument);
     }
@@ -257,7 +257,7 @@ namespace Kmplete
 
     void WindowApplication::_LoadSettings(SettingsDocument& settingsDocument)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _iconifiedFPS = settingsDocument.GetUInt(IconifiedFPSStr, IconifiedFPSMin);
         if (_iconifiedFPS < IconifiedFPSMin || _iconifiedFPS > IconifiedFPSMax)

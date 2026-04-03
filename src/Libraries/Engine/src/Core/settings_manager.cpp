@@ -16,7 +16,7 @@ namespace Kmplete
 
     OptionalRef<SettingsDocument> SettingsManager::PutSettingsDocument(const String& name)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (_namedSettingsDocuments.contains(name))
         {
@@ -30,7 +30,7 @@ namespace Kmplete
 
     OptionalRef<SettingsDocument> SettingsManager::GetSettingsDocument(const String& name) const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (_namedSettingsDocuments.contains(name))
         {
@@ -43,7 +43,7 @@ namespace Kmplete
 
     bool SettingsManager::LoadSettings()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         JsonDocument document(_filepath);
         if (document.HasError())
@@ -71,7 +71,7 @@ namespace Kmplete
 
     bool SettingsManager::SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         JsonDocument summaryDocument;
 

@@ -34,7 +34,7 @@ namespace Kmplete
 
         bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             if (fontSid == DefaultFontSID)
             {
@@ -60,7 +60,7 @@ namespace Kmplete
 
         const Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             if (!_fonts.contains(fontSid))
             {
@@ -74,7 +74,7 @@ namespace Kmplete
 
         Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             if (!_fonts.contains(fontSid))
             {
@@ -88,7 +88,7 @@ namespace Kmplete
 
         void FontAssetManager::RemoveAssets(const Vector<StringID>& sids)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto ok = true;
             for (const auto& sid : sids)
@@ -105,7 +105,7 @@ namespace Kmplete
 
         bool FontAssetManager::RemoveAsset(StringID sid)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             if (sid == DefaultFontSID)
             {
@@ -172,7 +172,7 @@ namespace Kmplete
 
         bool FontAssetManager::_CreateDefaultFontAsset()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             static constexpr auto DefaultFontSize = 18;
 
@@ -288,7 +288,7 @@ namespace Kmplete
 
         bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Assets::FontAsset>(sid, *_freetypeLibInstance, std::move(fontData)));
             return hasEmplaced;

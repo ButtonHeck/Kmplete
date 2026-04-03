@@ -16,7 +16,7 @@ namespace Kmplete
 {
     Filepath Filesystem::GetCurrentFilepath() noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         try
         {
@@ -32,7 +32,7 @@ namespace Kmplete
 
     bool Filesystem::FilepathExists(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         try
         {
@@ -48,7 +48,7 @@ namespace Kmplete
 
     bool Filesystem::FilepathIsValid(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         return !filepath.empty() && filepath.has_filename();
     }
@@ -56,7 +56,7 @@ namespace Kmplete
 
     bool Filesystem::CreateDirectories(const Filepath& filepath, bool pathIsFile /*= false*/) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         try
         {
@@ -73,7 +73,7 @@ namespace Kmplete
 
     bool Filesystem::RemoveDirectories(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         try
         {
@@ -89,7 +89,7 @@ namespace Kmplete
 
     bool Filesystem::CopyDirectories(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::recursive*/) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (!IsDirectory(from))
         {
@@ -113,7 +113,7 @@ namespace Kmplete
 
     bool Filesystem::IsDirectory(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         try
         {
@@ -129,7 +129,7 @@ namespace Kmplete
 
     bool Filesystem::CreateFile(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         try
         {
@@ -158,7 +158,7 @@ namespace Kmplete
 
     bool Filesystem::RemoveFile(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         try
         {
@@ -174,7 +174,7 @@ namespace Kmplete
 
     bool Filesystem::CopyFile(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::skip_existing*/) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         try
         {
@@ -190,7 +190,7 @@ namespace Kmplete
 
     bool Filesystem::IsFile(const Filepath& filepath) noexcept
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         try
         {
@@ -206,7 +206,7 @@ namespace Kmplete
 
     String Filesystem::ToGenericU8String(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         return filepath.generic_u8string();
     }
@@ -214,7 +214,7 @@ namespace Kmplete
 
     String Filesystem::ToGenericString(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         return filepath.generic_string();
     }
@@ -222,7 +222,7 @@ namespace Kmplete
 
     String Filesystem::ToNativeU8String(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         return filepath.u8string();
     }
@@ -230,7 +230,7 @@ namespace Kmplete
 
     String Filesystem::ToNativeString(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
 
         return filepath.string();
     }
@@ -238,7 +238,7 @@ namespace Kmplete
 
     String Filesystem::ReadFileAsText(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (!FilepathExists(filepath))
         {
@@ -259,7 +259,7 @@ namespace Kmplete
 
     BinaryBuffer Filesystem::ReadFileAsBinary(const Filepath& filepath)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
         if (!FilepathExists(filepath))
         {

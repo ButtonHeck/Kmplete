@@ -69,7 +69,7 @@ namespace Kmplete
 
         const Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             if (!_textures.contains(textureSid))
             {
@@ -83,7 +83,7 @@ namespace Kmplete
 
         Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             if (!_textures.contains(textureSid))
             {
@@ -97,7 +97,7 @@ namespace Kmplete
 
         void TextureAssetManager::RemoveAssets(const Vector<StringID>& sids)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto ok = true;
             for (const auto& sid : sids)
@@ -114,7 +114,7 @@ namespace Kmplete
 
         bool TextureAssetManager::RemoveAsset(StringID sid)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             if (sid == ErrorTextureSID)
             {
@@ -140,7 +140,7 @@ namespace Kmplete
 
         bool TextureAssetManager::_CreateErrorTextureAsset()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             if (_textures.contains(ErrorTextureSID))
             {

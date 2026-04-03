@@ -109,7 +109,7 @@ namespace Kmplete
 
     void Application::_SaveSettings() const
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -140,7 +140,7 @@ namespace Kmplete
 
     void Application::_LoadSettings()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
         _settingsManager->LoadSettings();
 
@@ -174,7 +174,7 @@ namespace Kmplete
 
     void Application::_FillDictionary()
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");

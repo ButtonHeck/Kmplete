@@ -71,7 +71,7 @@ namespace Kmplete
 
         bool VulkanGraphicsPipeline::Build()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             _layoutCreateInfo.setLayoutCount = UInt32(_descriptorSetLayouts.size());
             _layoutCreateInfo.pSetLayouts = _descriptorSetLayouts.data();

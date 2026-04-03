@@ -72,7 +72,7 @@ namespace Kmplete
 
         void VulkanSwapchain::StartFrame(float /*frameTimestep*/)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const auto result = AcquireNextImage();
             VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
@@ -81,7 +81,7 @@ namespace Kmplete
 
         void VulkanSwapchain::EndFrame()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             QueuePresent();
         }
@@ -89,7 +89,7 @@ namespace Kmplete
 
         VkResult VulkanSwapchain::AcquireNextImage()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             return vkAcquireNextImageKHR(_device, _swapchain, UINT64_MAX, _presentCompleteSemaphores[_currentBufferIndex], nullptr, &_imageIndex);
         }
@@ -97,7 +97,7 @@ namespace Kmplete
 
         void VulkanSwapchain::QueuePresent()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             auto presentInfo = VulkanUtils::InitVkPresentInfoKHR();
             presentInfo.swapchainCount = 1;
@@ -118,7 +118,7 @@ namespace Kmplete
 
         void VulkanSwapchain::SetMultisampling(VkSampleCountFlagBits samples)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             _msaaSamples = samples;
             if (_msaaSamples > _vulkanContext.supportedSampleCounts.top())
@@ -228,7 +228,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             auto swapchainCreateInfo = VulkanUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = surface;
@@ -264,7 +264,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainImages()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             vkGetSwapchainImagesKHR(_device, _swapchain, &_imageCount, nullptr);
             _swapchainImages.resize(_imageCount);
@@ -283,7 +283,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainImageViews()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
@@ -296,7 +296,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateMultisampledAttachments()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             const VkExtent3D extent{
                 .width = _swapchainExtent.width,
@@ -320,7 +320,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_DestroyMultisamplingAttachments()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
 
             if (_multisampledColorImageView != VK_NULL_HANDLE)
             {

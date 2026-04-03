@@ -13,7 +13,7 @@ namespace Kmplete
         {
             SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
                 SurfaceAndPresentModeProperties properties;
                 vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &properties.surfaceCapabilities);
@@ -40,7 +40,7 @@ namespace Kmplete
 
             QueueFamilyIndices QueryQueueFamiliesIndices(VkPhysicalDevice device, VkSurfaceKHR surface)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
                 QueueFamilyIndices indices;
 
@@ -79,7 +79,7 @@ namespace Kmplete
 
             bool QueryDeviceExtensionSupport(VkPhysicalDevice device, const Vector<const char*>& enabledExtensions)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
                 UInt32 extensionCount;
                 vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -100,7 +100,7 @@ namespace Kmplete
 
             std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
                 const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
                 if (!queueFamiliesIndices.IsValid())
@@ -133,7 +133,7 @@ namespace Kmplete
 
             void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
                 auto imageMemoryBarrier = InitVkImageMemoryBarrier();
                 imageMemoryBarrier.srcAccessMask = barrierParameters.srcAccessMask;

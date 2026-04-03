@@ -14,7 +14,7 @@ namespace Kmplete
 
         VkFormatProperties VulkanFormatDelegate::GetFormatProperties(VkFormat format) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
 
             VkFormatProperties formatProperties;
             vkGetPhysicalDeviceFormatProperties(_physicalDevice, format, &formatProperties);
@@ -24,7 +24,7 @@ namespace Kmplete
 
         VkFormat VulkanFormatDelegate::FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctions);
+            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
 
             for (auto format : candidates)
             {
