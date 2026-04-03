@@ -46,10 +46,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    String Window::ScreenModeToString(ScreenMode screenMode) noexcept
+    String Window::ScreenModeToString(ScreenMode screenMode) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         switch (screenMode)
         {
         case ScreenMode::Fullscreen:
@@ -67,13 +65,11 @@ namespace Kmplete
             return String("Unknown");
         }
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Window::ScreenMode Window::StringToScreenMode(const String& screenModeStr) noexcept
+    Window::ScreenMode Window::StringToScreenMode(const String& screenModeStr) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (screenModeStr == FullscreenModeStr)
         {
             return Window::ScreenMode::Fullscreen;
@@ -91,7 +87,7 @@ namespace Kmplete
             KMP_LOG_WARN("StringToScreenMode unknown mode '{}', return Windowed as default", screenModeStr);
             return Window::ScreenMode::Windowed;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
     bool Window::IsFullscreen() const noexcept
@@ -131,10 +127,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Window::WindowSettings::SaveSettings(SettingsDocument& settings) const
+    void Window::WindowSettings::SaveSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         settings.SaveString(NameStr, name);
         settings.SaveInt(XStr, position.x);
         settings.SaveInt(YStr, position.y);
@@ -146,13 +140,11 @@ namespace Kmplete
         settings.SaveBool(VSyncStr, vSync);
         settings.SaveBool(UpdateContinuouslyStr, updateContinuously);
         settings.SaveBool(AlwaysOnTopStr, alwaysOnTop);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void Window::WindowSettings::LoadSettings(SettingsDocument& settings)
+    void Window::WindowSettings::LoadSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         name = settings.GetString(NameStr, "");
         position.x = settings.GetInt(XStr, DefaultX);
         position.y = settings.GetInt(YStr, DefaultY);
@@ -164,6 +156,6 @@ namespace Kmplete
         vSync = settings.GetBool(VSyncStr, true);
         updateContinuously = settings.GetBool(UpdateContinuouslyStr, true);
         alwaysOnTop = settings.GetBool(AlwaysOnTopStr, false);
-    }
+    }}
     //--------------------------------------------------------------------------
 }

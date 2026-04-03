@@ -59,39 +59,31 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanPhysicalDevice::~VulkanPhysicalDevice()
+        VulkanPhysicalDevice::~VulkanPhysicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _logicalDevice.reset();
             _memoryTypeDelegate.reset();
             _formatDelegate.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::StartFrame(float frameTimestep)
+        void VulkanPhysicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _logicalDevice->StartFrame(frameTimestep);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::EndFrame()
+        void VulkanPhysicalDevice::EndFrame() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _logicalDevice->EndFrame();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::HandleWindowResize()
+        void VulkanPhysicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             _UpdateSurfaceInfo();
             _logicalDevice->HandleWindowResize();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         const VulkanLogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() const noexcept
@@ -130,10 +122,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Vector<VkPhysicalDevice> VulkanPhysicalDevice::_GetListOfPhysicalDevices() const
+        Vector<VkPhysicalDevice> VulkanPhysicalDevice::_GetListOfPhysicalDevices() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             UInt32 deviceCount = 0;
             vkEnumeratePhysicalDevices(_instance, &deviceCount, nullptr);
             if (deviceCount == 0)
@@ -146,13 +136,11 @@ namespace Kmplete
             vkEnumeratePhysicalDevices(_instance, &deviceCount, devices.data());
 
             return devices;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::_PickSuitablePhysicalDevice(const Vector<VkPhysicalDevice>& physicalDevices)
+        void VulkanPhysicalDevice::_PickSuitablePhysicalDevice(const Vector<VkPhysicalDevice>& physicalDevices) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             for (const auto& device : physicalDevices)
             {
                 auto deviceCheck = VulkanUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
@@ -186,24 +174,20 @@ namespace Kmplete
                     );
                 }
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::_UpdateSurfaceInfo()
+        void VulkanPhysicalDevice::_UpdateSurfaceInfo() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             auto surfaceAndPresentModeProperties = VulkanUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
             _vulkanContext.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
             _vulkanContext.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::_QueryGPUInfo()
+        void VulkanPhysicalDevice::_QueryGPUInfo() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto propertiesVersion12 = VulkanUtils::InitVkPhysicalDeviceVulkan12Properties();
             propertiesVersion12.pNext = nullptr;
 
@@ -217,7 +201,7 @@ namespace Kmplete
             _gpuInfo.vendor = propertiesVersion12.driverName;
             _gpuInfo.name = properties2.properties.deviceName;
             _gpuInfo.driverVersion = propertiesVersion12.driverInfo;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

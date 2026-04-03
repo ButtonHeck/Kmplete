@@ -11,10 +11,8 @@ namespace Kmplete
     {
         namespace VulkanUtils
         {
-            SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface)
+            SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
                 SurfaceAndPresentModeProperties properties;
                 vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &properties.surfaceCapabilities);
 
@@ -35,13 +33,11 @@ namespace Kmplete
                 }
 
                 return properties;
-            }
+            }}
             //--------------------------------------------------------------------------
 
-            QueueFamilyIndices QueryQueueFamiliesIndices(VkPhysicalDevice device, VkSurfaceKHR surface)
+            QueueFamilyIndices QueryQueueFamiliesIndices(VkPhysicalDevice device, VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
                 QueueFamilyIndices indices;
 
                 UInt32 queueFamilyCount = 0;
@@ -74,13 +70,11 @@ namespace Kmplete
                 }
 
                 return indices;
-            }
+            }}
             //--------------------------------------------------------------------------
 
-            bool QueryDeviceExtensionSupport(VkPhysicalDevice device, const Vector<const char*>& enabledExtensions)
+            bool QueryDeviceExtensionSupport(VkPhysicalDevice device, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
                 UInt32 extensionCount;
                 vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
 
@@ -95,13 +89,11 @@ namespace Kmplete
                 }
 
                 return requiredExtensions.empty();
-            }
+            }}
             //--------------------------------------------------------------------------
 
-            std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions)
+            std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
                 const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
                 if (!queueFamiliesIndices.IsValid())
                 {
@@ -128,13 +120,11 @@ namespace Kmplete
                 }
 
                 return { "device suitable"_true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
-            }
+            }}
             //--------------------------------------------------------------------------
 
-            void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters)
+            void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters) KMP_PROFILING(ProfileLevelImportant)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
                 auto imageMemoryBarrier = InitVkImageMemoryBarrier();
                 imageMemoryBarrier.srcAccessMask = barrierParameters.srcAccessMask;
                 imageMemoryBarrier.dstAccessMask = barrierParameters.dstAccessMask;
@@ -151,7 +141,7 @@ namespace Kmplete
                     0, nullptr,
                     0, nullptr,
                     1, &imageMemoryBarrier);
-            }
+            }}
             //--------------------------------------------------------------------------
         }
     }

@@ -36,15 +36,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    WindowCursorGlfw::~WindowCursorGlfw()
+    WindowCursorGlfw::~WindowCursorGlfw() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         if (_cursor)
         {
             glfwDestroyCursor(_cursor);
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
     NonNull<void*> WindowCursorGlfw::GetImplPointer() const noexcept

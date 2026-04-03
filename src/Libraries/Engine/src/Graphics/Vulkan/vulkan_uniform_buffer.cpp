@@ -52,10 +52,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanUniformBuffer::_AllocateDescriptorSet(VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts)
+        void VulkanUniformBuffer::_AllocateDescriptorSet(VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
             descriptorSetAllocateInfo.descriptorPool = descriptorPool;
             descriptorSetAllocateInfo.descriptorSetCount = UInt32(descriptorSetLayouts.size());
@@ -63,13 +61,11 @@ namespace Kmplete
 
             const auto result = vkAllocateDescriptorSets(_device, &descriptorSetAllocateInfo, &_descriptorSet);
             VulkanUtils::CheckResult(result, "VulkanUniformBuffer: failed to allocate descriptor set");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanUniformBuffer::_UpdateDescriptorSet(UInt32 binding, VkDeviceSize size)
+        void VulkanUniformBuffer::_UpdateDescriptorSet(UInt32 binding, VkDeviceSize size) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = _buffer;
             bufferInfo.range = size;
@@ -81,7 +77,7 @@ namespace Kmplete
             writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             writeDescriptorSet.pBufferInfo = &bufferInfo;
             vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

@@ -126,12 +126,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Image::~Image()
+        Image::~Image() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _DeleteData();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         Image::Image(Image&& rhs) noexcept
@@ -147,10 +145,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Image& Image::operator=(Image&& rhs) noexcept
+        Image& Image::operator=(Image&& rhs) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (this == &rhs)
             {
                 return *this;
@@ -169,7 +165,7 @@ namespace Kmplete
             rhs._dataSize = 0;
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         int Image::GetWidth() const noexcept

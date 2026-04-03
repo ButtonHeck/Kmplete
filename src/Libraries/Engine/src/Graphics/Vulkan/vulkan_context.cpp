@@ -8,10 +8,8 @@ namespace Kmplete
     namespace Graphics
     {
         void VulkanContext::Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
-                                     const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam)
+                                     const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             this->instance = vkInstance;
             this->physicalDevice = physDevice;
             this->surface = surfaceParam;
@@ -45,13 +43,11 @@ namespace Kmplete
             defaultDepthFormat = depthFormat;
 
             surfaceFormat = _FindSurfaceFormat();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkSurfaceFormatKHR VulkanContext::_FindSurfaceFormat() const
+        VkSurfaceFormatKHR VulkanContext::_FindSurfaceFormat() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (surfaceFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");
@@ -68,7 +64,7 @@ namespace Kmplete
             }
 
             return surfaceFormats[0];
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

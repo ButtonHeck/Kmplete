@@ -5,10 +5,8 @@
 
 namespace Kmplete
 {
-    UPtr<Application> CreateApplication(const ProgramOptions& programOptions)
+    UPtr<Application> CreateApplication(const ProgramOptions& programOptions) KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
@@ -27,6 +25,6 @@ namespace Kmplete
             KMP_LOG_CRITICAL_FN("CreateApplication: failed to create sandbox instance");
             return nullptr;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 }

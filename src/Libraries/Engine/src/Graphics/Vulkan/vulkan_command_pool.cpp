@@ -27,12 +27,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanCommandPool::~VulkanCommandPool()
+        VulkanCommandPool::~VulkanCommandPool() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             vkDestroyCommandPool(_device, _commandPool, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkCommandPool VulkanCommandPool::GetVkCommandPool() const noexcept

@@ -64,64 +64,52 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanQueue::WaitIdle() const
+        void VulkanQueue::WaitIdle() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             vkQueueWaitIdle(_queue);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanQueue::Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const
+        void VulkanQueue::Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto buffer = commandBuffer.GetVkCommandBuffer();
             auto submitInfo = VulkanUtils::InitVkSubmitInfo();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
 
             Submit({ submitInfo }, fence);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanQueue::Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const
+        void VulkanQueue::Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence);
             VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanQueue::SyncSubmit(const VulkanCommandBuffer& commandBuffer) const
+        void VulkanQueue::SyncSubmit(const VulkanCommandBuffer& commandBuffer) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto buffer = commandBuffer.GetVkCommandBuffer();
             auto submitInfo = VulkanUtils::InitVkSubmitInfo();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
 
             SyncSubmit({ submitInfo });
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanQueue::SyncSubmit(const Vector<VkSubmitInfo>& submits) const
+        void VulkanQueue::SyncSubmit(const Vector<VkSubmitInfo>& submits) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             VulkanFence fence(_device, "signaled"_false);
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence.GetVkFence());
             VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
             fence.Wait();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanQueue::Present(const VkPresentInfoKHR& presentationInfo) const
+        void VulkanQueue::Present(const VkPresentInfoKHR& presentationInfo) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (!_supportPresentation)
             {
                 KMP_LOG_ERROR("current queue does not support presentation");
@@ -130,7 +118,7 @@ namespace Kmplete
 
             const auto result = vkQueuePresentKHR(_queue, &presentationInfo);
             VulkanUtils::CheckResult(result, "VulkanQueue: failed to present");
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool VulkanQueue::SupportsPresentation() const noexcept

@@ -5,16 +5,14 @@
 
 namespace Kmplete
 {
-    UPtr<WindowBackend> WindowBackend::Create()
+    UPtr<WindowBackend> WindowBackend::Create() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
 #if defined (KMP_WINDOW_BACKEND_GLFW)
         return CreateUPtr<WindowBackendGlfw>();
 #else
     #error "No window backend is provided!"
 #endif
-    }
+    }}
     //--------------------------------------------------------------------------
 
     WindowBackend::WindowBackend()

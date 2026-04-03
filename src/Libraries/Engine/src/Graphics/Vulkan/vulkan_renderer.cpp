@@ -21,7 +21,7 @@ namespace Kmplete
             , _drawCommandBuffers()
             , _currentCommandBuffer(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _commandPool.reset(new VulkanCommandPool(device, graphicsFamilyIndex));
 
@@ -33,31 +33,25 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanRenderer::~VulkanRenderer()
+        VulkanRenderer::~VulkanRenderer() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _drawCommandBuffers.clear();
             _commandPool.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::StartFrame()
+        void VulkanRenderer::StartFrame() KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             _drawCommandBuffers[_currentBufferIndex].Reset();
             _drawCommandBuffers[_currentBufferIndex].Begin();
             _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::EndFrame()
+        void VulkanRenderer::EndFrame() KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             _drawCommandBuffers[_currentBufferIndex].End();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetSwapchain(const VulkanSwapchain& swapchain)
@@ -66,10 +60,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea) const
+        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             const auto& swapchain = _swapchain.get();
 
             const auto colorAttachmentInfo = swapchain.GetRenderingColorAttachmentInfo();
@@ -84,13 +76,11 @@ namespace Kmplete
             renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
 
             vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(StringID pipelineSid, const VkRect2D& renderArea) const
+        void VulkanRenderer::BeginRendering(StringID pipelineSid, const VkRect2D& renderArea) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             if (!_pipelines.contains(pipelineSid))
             {
                 KMP_LOG_ERROR("cannot begin rendering - pipeline with sid '{}' not found", pipelineSid);
@@ -118,21 +108,17 @@ namespace Kmplete
             renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
 
             vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::EndRendering() const
+        void VulkanRenderer::EndRendering() const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             vkCmdEndRendering(_currentCommandBuffer);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const
+        void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VulkanUtils::MemoryBarrierParameters colorImageBarrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
@@ -158,13 +144,11 @@ namespace Kmplete
                 .subresourceRange = VulkanPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
             };
             VulkanUtils::InsertImageMemoryBarrier(depthStencilImageBarrierParameters);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const
+        void VulkanRenderer::TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VulkanUtils::MemoryBarrierParameters barrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
@@ -177,37 +161,29 @@ namespace Kmplete
                 .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetViewport(const VkViewport& viewport) const
+        void VulkanRenderer::SetViewport(const VkViewport& viewport) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             vkCmdSetViewport(_currentCommandBuffer, 0, 1, &viewport);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetScissor(const VkRect2D& scissorRect) const
+        void VulkanRenderer::SetScissor(const VkRect2D& scissorRect) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             vkCmdSetScissor(_currentCommandBuffer, 0, 1, &scissorRect);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const
+        void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence)
+        void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
             auto submitInfo = VulkanUtils::InitVkSubmitInfo();
             submitInfo.pWaitDstStageMask = &waitStageMask;
@@ -219,13 +195,11 @@ namespace Kmplete
             submitInfo.pSignalSemaphores = signalSemaphores.data();
 
             queue.Submit({ submitInfo }, fence);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool VulkanRenderer::BindGraphicsPipeline(StringID pipelineSid) const
+        bool VulkanRenderer::BindGraphicsPipeline(StringID pipelineSid) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (!_pipelines.contains(pipelineSid))
             {
                 KMP_LOG_ERROR("cannot bind pipeline with sid '{}' - pipeline not found", pipelineSid);
@@ -234,13 +208,11 @@ namespace Kmplete
 
             vkCmdBindPipeline(_currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipelines.at(pipelineSid)->GetVkPipeline());
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool VulkanRenderer::BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets /*= Vector<UInt32>()*/) const
+        bool VulkanRenderer::BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets /*= Vector<UInt32>()*/) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (!_pipelines.contains(pipelineSid))
             {
                 KMP_LOG_ERROR("cannot bind descriptor sets with pipeline's sid '{}' - pipeline not found", pipelineSid);
@@ -256,13 +228,11 @@ namespace Kmplete
                 UInt32(dynamicOffsets.size()), dynamicOffsets.empty() ? nullptr : dynamicOffsets.data());
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool VulkanRenderer::BindVertexBuffers(UInt32 firstBinding, const Vector<VkBuffer>& vertexBuffers, const Vector<VkDeviceSize>& offsets) const
+        bool VulkanRenderer::BindVertexBuffers(UInt32 firstBinding, const Vector<VkBuffer>& vertexBuffers, const Vector<VkDeviceSize>& offsets) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (vertexBuffers.size() != offsets.size() || vertexBuffers.empty())
             {
                 KMP_LOG_ERROR("failed to bind vertex buffers - vertex buffers size doesn't match size of the offsets or vertex buffers are empty");
@@ -271,68 +241,54 @@ namespace Kmplete
 
             vkCmdBindVertexBuffers(_currentCommandBuffer, firstBinding, UInt32(vertexBuffers.size()), vertexBuffers.data(), offsets.data());
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_INDEX_TYPE_UINT32*/) const
+        void VulkanRenderer::BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_INDEX_TYPE_UINT32*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             vkCmdBindIndexBuffer(_currentCommandBuffer, indexBuffer, offset, indexType);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const
+        void VulkanRenderer::DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             vkCmdDrawIndexed(_currentCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const
+        void VulkanRenderer::Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             vkCmdDraw(_currentCommandBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const
+        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             VkBufferCopy copyRegion{
                 .srcOffset = srcOffset,
                 .dstOffset = dstOffset,
                 .size = size
             };
             vkCmdCopyBuffer(commandBuffer.GetVkCommandBuffer(), sourceBuffer.GetVkBuffer(), destinationBuffer.GetVkBuffer(), 1, &copyRegion);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const
+        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             vkCmdCopyBuffer(commandBuffer.GetVkCommandBuffer(), sourceBuffer.GetVkBuffer(), destinationBuffer.GetVkBuffer(), 1, &copyRegion);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const
+        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             vkCmdCopyBuffer(commandBuffer.GetVkCommandBuffer(), sourceBuffer.GetVkBuffer(), destinationBuffer.GetVkBuffer(), UInt32(copyRegions.size()), copyRegions.data());
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VulkanCommandBuffer VulkanRenderer::CreateCommandBuffer() const
+        VulkanCommandBuffer VulkanRenderer::CreateCommandBuffer() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanCommandBuffer(_device, _commandPool->GetVkCommandPool());
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkCommandBuffer VulkanRenderer::GetCurrentCommandBuffer() const noexcept

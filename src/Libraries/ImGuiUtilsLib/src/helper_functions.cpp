@@ -7,10 +7,8 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags /*= ImGuiHoveredFlags_AllowWhenDisabled*/)
+        void SetItemTooltip(const char* text, ImGuiHoveredFlags_ flags /*= ImGuiHoveredFlags_AllowWhenDisabled*/) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             if (ImGui::IsItemHovered(flags))
             {
 #if !defined (KMP_COMPILER_MSVC)
@@ -22,7 +20,7 @@ namespace Kmplete
                 ImGui::SetTooltip(text);
 #endif
             }
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

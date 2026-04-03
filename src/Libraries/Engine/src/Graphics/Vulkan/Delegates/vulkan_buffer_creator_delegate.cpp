@@ -15,95 +15,79 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferCreatorDelegate::CreateBuffer(const VulkanBufferParameters& parameters) const
+        VulkanBuffer VulkanBufferCreatorDelegate::CreateBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanBuffer(_memoryTypeDelegate, _device, parameters);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateBufferPtr(const VulkanBufferParameters& parameters) const
+        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return new VulkanBuffer(_memoryTypeDelegate, _device, parameters);
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
-        VulkanVertexBuffer VulkanBufferCreatorDelegate::CreateVertexBuffer(const VulkanBufferParameters& parameters) const
+        VulkanVertexBuffer VulkanBufferCreatorDelegate::CreateVertexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanVertexBuffer*> VulkanBufferCreatorDelegate::CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const
+        Nullable<VulkanVertexBuffer*> VulkanBufferCreatorDelegate::CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return new VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferCreatorDelegate::CreateIndexBuffer(const VulkanBufferParameters& parameters) const
+        VulkanBuffer VulkanBufferCreatorDelegate::CreateIndexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const
+        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
-        VulkanUniformBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
+        VulkanUniformBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             }, _descriptorPool, descriptorSetLayouts, binding);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanUniformBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const
+        Nullable<VulkanUniformBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return new VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             }, _descriptorPool, descriptorSetLayouts, binding);
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

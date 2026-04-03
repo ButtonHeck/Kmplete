@@ -6,36 +6,28 @@ namespace Kmplete
 {
     namespace Localization
     {
-        TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale /*= std::locale()*/)
+        TranslationStr Translate(const DomainStr& domain, const SourceStr& source, const std::locale& locale /*= std::locale()*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return boost::locale::translate(source).str(locale, domain);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const std::locale& locale /*= std::locale()*/)
+        TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const std::locale& locale /*= std::locale()*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return boost::locale::translate(sourceSingular, sourcePlural, count).str(locale, domain);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const std::locale& locale /*= std::locale()*/)
+        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const std::locale& locale /*= std::locale()*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return boost::locale::translate(context, source).str(locale, domain);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const std::locale& locale /*= std::locale()*/)
+        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const std::locale& locale /*= std::locale()*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return boost::locale::translate(context, sourceSingular, sourcePlural, count).str(locale, domain);
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

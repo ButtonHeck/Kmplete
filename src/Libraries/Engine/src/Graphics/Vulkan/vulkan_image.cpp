@@ -24,13 +24,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage::~VulkanImage()
+        VulkanImage::~VulkanImage() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             vkDestroyImage(_device, _image, nullptr);
             vkFreeMemory(_device, _imageMemory, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkImage VulkanImage::GetVkImage() const noexcept
@@ -51,19 +49,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_CreateImageObject(const VkImageCreateInfo& creationParameters)
+        void VulkanImage::_CreateImageObject(const VkImageCreateInfo& creationParameters) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto result = vkCreateImage(_device, &creationParameters, nullptr, &_image);
             VulkanUtils::CheckResult(result, "VulkanImage: failed to create image");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties)
+        void VulkanImage::_AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto imageMemoryContext = memoryTypeDelegate.GetImageMemoryContext(_device, _image, memoryProperties);
 
             auto result = vkAllocateMemory(_device, &imageMemoryContext.allocateInfo, nullptr, &_imageMemory);
@@ -82,7 +76,7 @@ namespace Kmplete
             }
 
             _memorySize = imageMemoryContext.allocateInfo.allocationSize;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

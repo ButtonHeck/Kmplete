@@ -48,10 +48,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo()
+        static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             auto debugMessengerCreateInfo = VulkanUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
@@ -64,7 +62,7 @@ namespace Kmplete
             debugMessengerCreateInfo.pfnUserCallback = DebugCallback;
 
             return debugMessengerCreateInfo;
-        }
+        }}
         //--------------------------------------------------------------------------
 #endif
 
@@ -140,7 +138,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::SetMultisampling(UInt32 samples)
+        void VulkanGraphicsBackend::SetMultisampling(UInt32 samples) KMP_PROFILING(ProfileLevelImportant)
         {
             if (!Math::IsPowerOf2(samples))
             {
@@ -154,29 +152,25 @@ namespace Kmplete
             }
 
             _physicalDevice->GetLogicalDevice().SetMultisampling(VkSampleCountFlagBits(samples));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::SaveSettings(SettingsDocument& settings) const
+        void VulkanGraphicsBackend::SaveSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             settings.StartSaveObject(SettingsEntryName);
             settings.SaveUInt(MSAAsamplesStr, GetMultisampling());
             settings.EndSaveObject();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::LoadSettings(SettingsDocument& settings)
+        void VulkanGraphicsBackend::LoadSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             settings.StartLoadObject(SettingsEntryName);
             const UInt32 msaaSamples = settings.GetUInt(MSAAsamplesStr, 1);
             SetMultisampling(msaaSamples);
 
             settings.EndLoadObject();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkInstance VulkanGraphicsBackend::GetVkInstance() const noexcept
@@ -191,10 +185,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::_Initialize()
+        void VulkanGraphicsBackend::_Initialize() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             if (!_CheckValidationLayerSupport())
             {
@@ -228,13 +220,11 @@ namespace Kmplete
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
             _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::_Finalize()
+        void VulkanGraphicsBackend::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             VulkanCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
 #endif
@@ -243,13 +233,11 @@ namespace Kmplete
             _surface.reset();
 
             vkDestroyInstance(_instance, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const
+        VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto applicationInfo = VulkanUtils::InitVkApplicationInfo();
             applicationInfo.pApplicationName = "Kmplete Application";
             applicationInfo.applicationVersion = VK_MAKE_VERSION(GetKmpleteVersionMajor(), GetKmpleteVersionMinor(), GetKmpleteVersionPatch());
@@ -258,26 +246,22 @@ namespace Kmplete
             applicationInfo.apiVersion = VK_API_VERSION_1_4;
 
             return applicationInfo;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const
+        VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo(applicationInfo);
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
             instanceCreateInfo.ppEnabledExtensionNames = extensionsNames.data();
 
             return instanceCreateInfo;
-        }
+        }}
         //--------------------------------------------------------------------------
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-        bool VulkanGraphicsBackend::_CheckValidationLayerSupport() const
+        bool VulkanGraphicsBackend::_CheckValidationLayerSupport() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             UInt32 layerCount;
             vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
 
@@ -302,7 +286,7 @@ namespace Kmplete
             }
 
             return false;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::_AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const
@@ -331,21 +315,17 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::_InitializeDebugMessenger()
+        void VulkanGraphicsBackend::_InitializeDebugMessenger() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
             const auto result = VulkanCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
             VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
-        }
+        }}
         //--------------------------------------------------------------------------
 #endif
 
-        Vector<const char*> VulkanGraphicsBackend::_GetRequiredExtensionsNames() const
+        Vector<const char*> VulkanGraphicsBackend::_GetRequiredExtensionsNames() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
 #if defined (KMP_WINDOW_BACKEND_GLFW)
             UInt32 extensionsCount = 0;
             const char** extensionsStrings = glfwGetRequiredInstanceExtensions(&extensionsCount);
@@ -360,7 +340,7 @@ namespace Kmplete
 #else
             return Vector<const char*>();
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

@@ -64,10 +64,8 @@ namespace Kmplete
             KMP_API void UpdateTimerActions(float frameTimestep);
 
             template<typename ValueType> requires (IsAnyOfType<ValueType, int, float, Math::Point2I>)
-            KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId)
+            KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
                 if (!_actionToInputCodesMap.contains(actionId))
                 {
                     return ValueType();
@@ -94,14 +92,12 @@ namespace Kmplete
                 }
 
                 return std::get<ValueType>(resultValue);
-            }
+            }}
             //--------------------------------------------------------------------------
 
             template<>
-            KMP_NODISCARD Math::Point2I GetActionValue<Math::Point2I>(ActionIdentifier actionId)
+            KMP_NODISCARD Math::Point2I GetActionValue<Math::Point2I>(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
             {
-                KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
                 if (!_actionToInputCodesMap.contains(actionId))
                 {
                     return Math::Point2I();
@@ -128,7 +124,7 @@ namespace Kmplete
                 }
 
                 return std::get<Math::Point2I>(resultValue);
-            }
+            }}
             //--------------------------------------------------------------------------
 
         private:

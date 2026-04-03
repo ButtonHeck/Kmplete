@@ -10,10 +10,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        UPtr<GraphicsBackend> GraphicsBackend::Create(Window& window)
+        UPtr<GraphicsBackend> GraphicsBackend::Create(Window& window) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             const auto graphicsBackendType = window.GetGraphicsBackendType();
 
             switch (graphicsBackendType)
@@ -24,7 +22,7 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("cannot create graphics backend instance for graphics backend '{}'", GraphicsBackendTypeToString(graphicsBackendType));
                 return nullptr;
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
         GraphicsBackend::GraphicsBackend(Window& window)
@@ -38,10 +36,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<Texture*> GraphicsBackend::CreateTexture(const Filepath& filepath, bool flipVertically /*= false*/)
+        Nullable<Texture*> GraphicsBackend::CreateTexture(const Filepath& filepath, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             try
             {
                 Image image(filepath, flipVertically);
@@ -53,7 +49,7 @@ namespace Kmplete
             }
 
             return nullptr;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

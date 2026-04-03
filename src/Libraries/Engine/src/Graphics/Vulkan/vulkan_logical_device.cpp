@@ -64,10 +64,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanLogicalDevice::~VulkanLogicalDevice()
+        VulkanLogicalDevice::~VulkanLogicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
             _DeleteDescriptorSetsLayouts();
@@ -79,13 +77,11 @@ namespace Kmplete
             _DeleteImageCreatorDelegate();
             _DeleteDeviceQueues();
             _DeleteLogicalDeviceObject();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::StartFrame(float frameTimestep)
+        void VulkanLogicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _waitFences[_currentBufferIndex].Wait();
             _waitFences[_currentBufferIndex].Reset();
 
@@ -96,13 +92,11 @@ namespace Kmplete
             _renderer->SetViewport(VkViewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height), 0.0f, 1.0f });
             _renderer->SetScissor(VkRect2D{ 0, 0, _currentExtent.width, _currentExtent.height });
             _renderer->SetRasterizationSamples(GetMultisampling());
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::EndFrame()
+        void VulkanLogicalDevice::EndFrame() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _renderer->TransitionColorAndDepthStencilImagesToPresent(_swapchain->GetCurrentImage());
             _renderer->EndFrame();
             _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
@@ -110,13 +104,11 @@ namespace Kmplete
             _swapchain->EndFrame();
 
             WaitIdle();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::HandleWindowResize()
+        void VulkanLogicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             WaitIdle();
 
             _DeleteSwapchain();
@@ -125,18 +117,16 @@ namespace Kmplete
             _CreateSynchronizationObjects();
             _CreateSwapchain();
             _renderer->SetSwapchain(*_swapchain.get());
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::WaitIdle() const
+        void VulkanLogicalDevice::WaitIdle() const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (_device != VK_NULL_HANDLE)
             {
                 vkDeviceWaitIdle(_device);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkSampleCountFlagBits VulkanLogicalDevice::GetMultisampling() const noexcept
@@ -145,10 +135,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::SetMultisampling(VkSampleCountFlagBits samples)
+        void VulkanLogicalDevice::SetMultisampling(VkSampleCountFlagBits samples) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _msaaSamples = samples;
             if (_msaaSamples > _vulkanContext.supportedSampleCounts.top())
             {
@@ -157,7 +145,7 @@ namespace Kmplete
             }
 
             _swapchain->SetMultisampling(_msaaSamples);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         const Swapchain& VulkanLogicalDevice::GetSwapchain() const noexcept
@@ -214,10 +202,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateLogicalDeviceObject()
+        void VulkanLogicalDevice::_CreateLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
             auto dynamicStateFeatures3 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
@@ -250,56 +236,44 @@ namespace Kmplete
 
             const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteLogicalDeviceObject()
+        void VulkanLogicalDevice::_DeleteLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             vkDestroyDevice(_device, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateDeviceQueues()
+        void VulkanLogicalDevice::_CreateDeviceQueues() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto graphicsQueueSupportPresentation = (_vulkanContext.graphicsFamilyIndex == _vulkanContext.presentFamilyIndex);
             _graphicsQueue.reset(new VulkanQueue(_device, _vulkanContext.graphicsFamilyIndex, graphicsQueueSupportPresentation));
             _presentQueue.reset(new VulkanQueue(_device, _vulkanContext.presentFamilyIndex, "support presentation"_true));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteDeviceQueues()
+        void VulkanLogicalDevice::_DeleteDeviceQueues() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _graphicsQueue.reset();
             _presentQueue.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateImageCreatorDelegate()
+        void VulkanLogicalDevice::_CreateImageCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _imageCreatorDelegate.reset(new VulkanImageCreatorDelegate(_device, _memoryTypeDelegate));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteImageCreatorDelegate()
+        void VulkanLogicalDevice::_DeleteImageCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _imageCreatorDelegate.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateSynchronizationObjects()
+        void VulkanLogicalDevice::_CreateSynchronizationObjects() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto semaphoreCreateInfo = VulkanUtils::InitVkSemaphoreCreateInfo();
 
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
@@ -312,13 +286,11 @@ namespace Kmplete
 
                 _waitFences.emplace_back(_device, "signaled"_true);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteSyncronizationObjects()
+        void VulkanLogicalDevice::_DeleteSyncronizationObjects() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _waitFences.clear();
 
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
@@ -326,49 +298,39 @@ namespace Kmplete
                 vkDestroySemaphore(_device, _presentCompleteSemaphores[i], nullptr);
                 vkDestroySemaphore(_device, _renderCompleteSemaphores[i], nullptr);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateSwapchain()
+        void VulkanLogicalDevice::_CreateSwapchain() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _currentExtent = _UpdateExtent();
             _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _vulkanContext, _currentExtent, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteSwapchain()
+        void VulkanLogicalDevice::_DeleteSwapchain() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _swapchain.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreatePipelineCache()
+        void VulkanLogicalDevice::_CreatePipelineCache() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto pipelineCacheCreateInfo = VulkanUtils::InitVkPipelineCacheCreateInfo();
 
             const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeletePipelineCache()
+        void VulkanLogicalDevice::_DeletePipelineCache() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateDescriptorPool()
+        void VulkanLogicalDevice::_CreateDescriptorPool() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             //TODO: fix numbers
             VkDescriptorPoolSize poolSizes[] = { 
                 { VK_DESCRIPTOR_TYPE_SAMPLER, 100 },
@@ -390,73 +352,57 @@ namespace Kmplete
 
             const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
             VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create descriptor pool");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteDescriptorPool()
+        void VulkanLogicalDevice::_DeleteDescriptorPool() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteDescriptorSetsLayouts()
+        void VulkanLogicalDevice::_DeleteDescriptorSetsLayouts() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             for (const auto& [sid, descriptorSetLayout] : _descriptorSetLayouts)
             {
                 vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
             }
             _descriptorSetLayouts.clear();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeletePipelines()
+        void VulkanLogicalDevice::_DeletePipelines() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _pipelines.clear();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateBufferCreatorDelegate()
+        void VulkanLogicalDevice::_CreateBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteBufferCreatorDelegate()
+        void VulkanLogicalDevice::_DeleteBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _bufferCreatorDelegate.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateRenderer()
+        void VulkanLogicalDevice::_CreateRenderer() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteRenderer()
+        void VulkanLogicalDevice::_DeleteRenderer() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _renderer.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Vector<VkDeviceQueueCreateInfo> VulkanLogicalDevice::_CreateQueueCreateInfos() const
+        Vector<VkDeviceQueueCreateInfo> VulkanLogicalDevice::_CreateQueueCreateInfos() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             Vector<VkDeviceQueueCreateInfo> queueCreateInfos;
             Set<UInt32> queueFamiliesIndicesSet = {
                 _vulkanContext.graphicsFamilyIndex,
@@ -474,13 +420,11 @@ namespace Kmplete
             }
 
             return queueCreateInfos;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkExtent2D VulkanLogicalDevice::_UpdateExtent() const
+        VkExtent2D VulkanLogicalDevice::_UpdateExtent() const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             const auto& capabilities = _vulkanContext.surfaceCapabilities;
             if (capabilities.currentExtent.width != std::numeric_limits<UInt32>::max())
             {
@@ -494,13 +438,11 @@ namespace Kmplete
             };
 
             return actualExtent;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanLogicalDevice::AddGraphicsPipeline(StringID sid)
+        VulkanGraphicsPipeline& VulkanLogicalDevice::AddGraphicsPipeline(StringID sid) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (_pipelines.contains(sid))
             {
                 KMP_LOG_WARN("pipeline with sid '{}' has already been created", sid);
@@ -509,7 +451,7 @@ namespace Kmplete
 
             const auto [iterator, hasEmplaced] = _pipelines.emplace(sid, CreateUPtr<VulkanGraphicsPipeline>(_device, sid));
             return *iterator->second.get();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         OptionalRef<VulkanGraphicsPipeline> VulkanLogicalDevice::GetGraphicsPipeline(StringID sid) const
@@ -524,10 +466,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanLogicalDevice::AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings)
+        bool VulkanLogicalDevice::AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (_descriptorSetLayouts.contains(sid))
             {
                 KMP_LOG_WARN("descriptor set layout with sid '{}' has already been created", sid);
@@ -551,7 +491,7 @@ namespace Kmplete
                 KMP_LOG_ERROR("failed to create descriptor set layout '{}'", sid);
                 return false;
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkDescriptorSetLayout VulkanLogicalDevice::GetDescriptorSetLayout(StringID sid) const noexcept
@@ -566,10 +506,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image) const
+        Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             try
             {
                 const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
@@ -596,23 +534,19 @@ namespace Kmplete
             }
 
             return nullptr;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VulkanFence VulkanLogicalDevice::CreateFence(bool signaled /*= true*/) const
+        VulkanFence VulkanLogicalDevice::CreateFence(bool signaled /*= true*/) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanFence(_device, signaled);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VulkanShader VulkanLogicalDevice::CreateShader(const Filepath& filepath) const
+        VulkanShader VulkanLogicalDevice::CreateShader(const Filepath& filepath) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             return VulkanShader(_device, filepath);
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

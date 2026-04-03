@@ -12,20 +12,16 @@ namespace Kmplete
         {}
         //--------------------------------------------------------------------------
 
-        VkFormatProperties VulkanFormatDelegate::GetFormatProperties(VkFormat format) const
+        VkFormatProperties VulkanFormatDelegate::GetFormatProperties(VkFormat format) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VkFormatProperties formatProperties;
             vkGetPhysicalDeviceFormatProperties(_physicalDevice, format, &formatProperties);
             return formatProperties;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkFormat VulkanFormatDelegate::FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
+        VkFormat VulkanFormatDelegate::FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             for (auto format : candidates)
             {
                 auto formatProperties = GetFormatProperties(format);
@@ -42,7 +38,7 @@ namespace Kmplete
 
             KMP_LOG_CRITICAL("failed to find supported format");
             throw std::runtime_error("VulkanFormatDelegate: failed to find supported format");
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool VulkanFormatDelegate::IsMipmapCompatible(VkFormat format) const

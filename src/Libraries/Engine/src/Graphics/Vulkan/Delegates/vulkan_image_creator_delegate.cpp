@@ -18,16 +18,14 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VkImage VulkanImageCreatorDelegate::CreateVkImage(const VkImageCreateInfo& creationParameters) const
+        VkImage VulkanImageCreatorDelegate::CreateVkImage(const VkImageCreateInfo& creationParameters) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VkImage image;
             const auto result = vkCreateImage(_device, &creationParameters, nullptr, &image);
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create image");
 
             return image;
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
@@ -54,12 +52,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
+        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return VulkanImage(_device, creationParameters, _memoryTypeDelegate, memoryProperties);
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
@@ -86,12 +82,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return new VulkanImage(_device, creationParameters, _memoryTypeDelegate, memoryProperties);
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
@@ -113,35 +107,29 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanImageCreatorDelegate::CreateVkImageView(const VkImageViewCreateInfo& creationParameters) const
+        VkImageView VulkanImageCreatorDelegate::CreateVkImageView(const VkImageViewCreateInfo& creationParameters) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VkImageView imageView;
             const auto result = vkCreateImageView(_device, &creationParameters, nullptr, &imageView);
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create texture image view");
 
             return imageView;
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
-        VkSampler VulkanImageCreatorDelegate::CreateVkSampler(const VkSamplerCreateInfo& creationParameters) const
+        VkSampler VulkanImageCreatorDelegate::CreateVkSampler(const VkSamplerCreateInfo& creationParameters) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             VkSampler sampler;
             const auto result = vkCreateSampler(_device, &creationParameters, nullptr, &sampler);
             VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
 
             return sampler;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VulkanBuffer VulkanImageCreatorDelegate::CreateStagingImageBuffer(const Image& image) const
+        VulkanBuffer VulkanImageCreatorDelegate::CreateStagingImageBuffer(const Image& image) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, {VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize()});
 
             auto result = buffer.Map();
@@ -155,7 +143,7 @@ namespace Kmplete
             buffer.Unmap();
 
             return buffer;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

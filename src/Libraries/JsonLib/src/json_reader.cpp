@@ -16,10 +16,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonReader::StartObject(const char* objectName)
+    bool JsonReader::StartObject(const char* objectName) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject)
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object is null", objectName);
@@ -48,13 +46,11 @@ namespace Kmplete
         _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::StartObject(int index)
+    bool JsonReader::StartObject(int index) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return false;
@@ -70,13 +66,11 @@ namespace Kmplete
         _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::EndObject()
+    bool JsonReader::EndObject() KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (_scope.Pop())
         {
             _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
@@ -84,13 +78,11 @@ namespace Kmplete
         }
 
         return false;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    int JsonReader::StartArray(const char* arrayName)
+    int JsonReader::StartArray(const char* arrayName) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject)
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object is null", arrayName);
@@ -119,13 +111,11 @@ namespace Kmplete
         _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
 
         return (*_currentObject).GetArray().Size();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    int JsonReader::StartArray(int index)
+    int JsonReader::StartArray(int index) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return 0;
@@ -141,13 +131,11 @@ namespace Kmplete
         _currentObject = rapidjson::Pointer(_scope.scopeString.c_str()).Get(_document);
 
         return (*_currentObject).GetArray().Size();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::EndArray()
+    bool JsonReader::EndArray() KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject)
         {
             KMP_LOG_ERROR("cannot end array - current object is null");
@@ -161,13 +149,11 @@ namespace Kmplete
         }
 
         return EndObject();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::GetBool(int index, bool defaultValue /*= false*/)
+    bool JsonReader::GetBool(int index, bool defaultValue /*= false*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -180,13 +166,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetBool();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::GetBool(const char* name, bool defaultValue /*= false*/)
+    bool JsonReader::GetBool(const char* name, bool defaultValue /*= false*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get bool '{}' - current object is null or is not of object type", name);
@@ -200,13 +184,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetBool();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    int JsonReader::GetInt(int index, int defaultValue /*= 0*/)
+    int JsonReader::GetInt(int index, int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -219,13 +201,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetInt();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    int JsonReader::GetInt(const char* name, int defaultValue /*= 0*/)
+    int JsonReader::GetInt(const char* name, int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get int '{}' - current object is null or is not of object type", name);
@@ -239,13 +219,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetInt();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue /*= 0*/)
+    unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -258,13 +236,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetUint();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue /*= 0*/)
+    unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get unsigned int '{}' - current object is null or is not of object type", name);
@@ -278,13 +254,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetUint();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Int64 JsonReader::GetInt64(int index, Int64 defaultValue /*= 0*/)
+    Int64 JsonReader::GetInt64(int index, Int64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -297,13 +271,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetInt64();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Int64 JsonReader::GetInt64(const char* name, Int64 defaultValue /*= 0*/)
+    Int64 JsonReader::GetInt64(const char* name, Int64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get int64 '{}' - current object is null or is not of object type", name);
@@ -317,13 +289,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetInt64();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    UInt64 JsonReader::GetUInt64(int index, UInt64 defaultValue /*= 0*/)
+    UInt64 JsonReader::GetUInt64(int index, UInt64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -336,13 +306,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetUint64();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    UInt64 JsonReader::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/)
+    UInt64 JsonReader::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get unsigned int64 '{}' - current object is null or is not of object type", name);
@@ -356,13 +324,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetUint64();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    double JsonReader::GetDouble(int index, double defaultValue /*= 0.0*/)
+    double JsonReader::GetDouble(int index, double defaultValue /*= 0.0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -375,13 +341,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetDouble();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    double JsonReader::GetDouble(const char* name, double defaultValue /*= 0.0*/)
+    double JsonReader::GetDouble(const char* name, double defaultValue /*= 0.0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get double '{}' - current object is null or is not of object type", name);
@@ -395,13 +359,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetDouble();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    String JsonReader::GetString(int index, const String& defaultValue /*= ""*/)
+    String JsonReader::GetString(int index, const String& defaultValue /*= ""*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_ValidToGetFromArray(index))
         {
             return defaultValue;
@@ -414,13 +376,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[index].GetString();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    String JsonReader::GetString(const char* name, const String& defaultValue /*= ""*/)
+    String JsonReader::GetString(const char* name, const String& defaultValue /*= ""*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject || !_currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get string '{}' - current object is null or is not of object type", name);
@@ -434,13 +394,11 @@ namespace Kmplete
         }
 
         return (*_currentObject)[name].GetString();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonReader::_ValidToGetFromArray(int index) const
+    bool JsonReader::_ValidToGetFromArray(int index) const KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!_currentObject)
         {
             return false;
@@ -459,6 +417,6 @@ namespace Kmplete
         }
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 }

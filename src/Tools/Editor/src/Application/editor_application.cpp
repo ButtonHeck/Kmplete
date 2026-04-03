@@ -21,18 +21,14 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    EditorApplication::~EditorApplication()
+    EditorApplication::~EditorApplication() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _Finalize();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void EditorApplication::_Initialize()
+    void EditorApplication::_Initialize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _mainWindow.SetTitle(_applicationName.c_str());
 
         if (!_assetsManager->LoadAssetFile("editor_assets.kmpdata"))
@@ -45,23 +41,19 @@ namespace Kmplete
         _uiFrameListener.reset(new EditorFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager, *_inputManager));
 
         _LoadSettings();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void EditorApplication::_Finalize()
+    void EditorApplication::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _SaveSettings();
 
         _uiFrameListener.reset();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void EditorApplication::_SaveSettings() const
+    void EditorApplication::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -70,13 +62,11 @@ namespace Kmplete
         }
 
         _uiFrameListener->SaveSettings(*settings);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void EditorApplication::_LoadSettings()
+    void EditorApplication::_LoadSettings() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -85,6 +75,6 @@ namespace Kmplete
         }
 
         _uiFrameListener->LoadSettings(*settings);
-    }
+    }}
     //--------------------------------------------------------------------------
 }

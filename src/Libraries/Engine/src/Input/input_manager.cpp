@@ -26,10 +26,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::ProcessInputEvents(Events::Event& event)
+        void InputManager::ProcessInputEvents(Events::Event& event) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             const auto eventTypeID = event.GetTypeID();
 
             if (eventTypeID == Events::MouseMoveEventTypeID)
@@ -54,13 +52,11 @@ namespace Kmplete
             {
                 _ProcessKeyReleaseEvent(static_cast<Events::KeyReleaseEvent&>(event));
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void InputManager::PropagateActionEvents()
+        void InputManager::PropagateActionEvents() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             for (const auto& actionEvent : _actionEvents)
             {
                 if (_actionCallbacks[actionEvent.id].empty())
@@ -72,7 +68,7 @@ namespace Kmplete
             }
 
             _actionEvents.clear();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void InputManager::_PropagateSingleActionEvent(const ActionEvent& actionEvent)
@@ -120,10 +116,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void InputManager::UpdateTimerActions(float frameTimestep)
+        void InputManager::UpdateTimerActions(float frameTimestep) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             for (auto& [code, timerCondition] : _inputCodeToTimedConditionsMap)
             {
                 if (timerCondition.active && _controlStates[code] == ButtonPressedValue)
@@ -139,7 +133,7 @@ namespace Kmplete
                     }
                 }
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool InputManager::MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback)
@@ -153,10 +147,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        bool InputManager::MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (_actionCallbacks.contains(actionId) && _ContainsTaggedCallback(_actionCallbacks[actionId], taggedCallback))
             {
                 KMP_LOG_WARN("already contains callback with same action ID '{}' and callback tag '{}'", actionId, taggedCallback.tag);
@@ -165,13 +157,11 @@ namespace Kmplete
 
             _actionCallbacks[actionId].emplace_back(taggedCallback);
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag)
+        bool InputManager::UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             const auto erasedCount = std::erase_if(_actionCallbacks[actionId], [callbackTag](const TaggedActionCallback& taggedCallback) {
                 return taggedCallback.tag == callbackTag;
             });
@@ -183,7 +173,7 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
@@ -192,10 +182,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId)
+        bool InputManager::MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             const auto inputCode = codeWithCondition.code;
             if (_inputCodeToActionsMap.contains(inputCode) && _ContainsActionIdentifier(_inputCodeToActionsMap[inputCode], actionId))
             {
@@ -212,13 +200,11 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool InputManager::UnmapInputFromAction(InputCode code, ActionIdentifier actionId)
+        bool InputManager::UnmapInputFromAction(InputCode code, ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             const auto actionsErased = std::erase_if(_inputCodeToActionsMap[code], [actionId](const ActionIdentifier& actionInMap) {
                 return actionInMap == actionId;
             });
@@ -236,13 +222,11 @@ namespace Kmplete
             _inputCodeToTimedConditionsMap.erase(code);
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool InputManager::RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId)
+        bool InputManager::RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (!_actionToInputCodesMap.contains(actionId))
             {
                 KMP_LOG_WARN("action '{}' is not registered", actionId);
@@ -257,13 +241,11 @@ namespace Kmplete
 
             UnmapInputFromAction(_actionToInputCodesMap[actionId].front().code, actionId);
             return MapInputToAction(codeWithCondition, actionId);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback)
+        bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
             if (!inputMapped)
             {
@@ -271,13 +253,11 @@ namespace Kmplete
             }
 
             return MapActionToCallback(actionId, callback);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
             if (!inputMapped)
             {
@@ -285,7 +265,7 @@ namespace Kmplete
             }
 
             return MapActionToCallback(actionId, taggedCallback);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void InputManager::_ProcessMouseMoveEvent(const Events::MouseMoveEvent& mouseMoveEvent)
@@ -366,10 +346,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Vector<ActionEvent> InputManager::_CreateActionEvents(InputCode code, InputControlValue value) const
+        Vector<ActionEvent> InputManager::_CreateActionEvents(InputCode code, InputControlValue value) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             Vector<ActionEvent> actionEvents;
             if (!_inputCodeToActionsMap.contains(code))
             {
@@ -396,7 +374,7 @@ namespace Kmplete
             }
 
             return actionEvents;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool InputManager::_ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const

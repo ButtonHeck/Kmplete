@@ -203,6 +203,7 @@ namespace Kmplete
 #define KMP_PROFILE_SCOPE(name, level) _KMP_PROFILE_SCOPE_LINE(name, __LINE__, level)
 #define KMP_PROFILE_FUNCTION(level) KMP_PROFILE_SCOPE(KMP_FUNC_SIG, level)
 
+#define KMP_PROFILING(level) { KMP_PROFILE_FUNCTION(level);
 
 //! Shortcut macros for profiling objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE() \
@@ -242,6 +243,7 @@ namespace Kmplete
 
 #define KMP_PROFILE_SCOPE(name, level)
 #define KMP_PROFILE_FUNCTION(level)
+#define KMP_PROFILING(level) {
 
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE()
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()

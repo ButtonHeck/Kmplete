@@ -26,10 +26,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const TranslationStr& translation)
+    void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const TranslationStr& translation) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         auto& currentLocaleTranslations = _translationMap[_currentLocaleSid];
         if (currentLocaleTranslations.contains(sourceSid))
@@ -43,13 +41,11 @@ namespace Kmplete
         {
             currentLocaleTranslations.insert(std::make_pair(sourceSid, translation));
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation)
+    void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const TranslationStr& translation) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const PluralSource&& pluralSource = PluralSource{ sourceSidSingular, sourceSidPlural };
         auto& currentLocaleTranslations = _translationPluralMap[_currentLocaleSid]; 
@@ -73,13 +69,11 @@ namespace Kmplete
         {
             currentLocaleTranslations[pluralSource][pluralityForm] = translation;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation)
+    void LocalizationDictionary::Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedSource&& contextedSource = ContextedSource{ sourceSid, contextSid };
         auto& currentLocaleTranslations = _translationCtxMap[_currentLocaleSid]; 
@@ -94,14 +88,12 @@ namespace Kmplete
         {
             currentLocaleTranslations.insert(std::make_pair(contextedSource, translation));
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
     void LocalizationDictionary::Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm,
-                                     const ContextStrSID& contextSid, const TranslationStr& translation)
+                                     const ContextStrSID& contextSid, const TranslationStr& translation) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         const ContextedPluralSource&& contextedPluralSource = ContextedPluralSource{ sourceSidSingular, sourceSidPlural, contextSid };
         auto& currentLocaleTranslations = _translationCtxPluralMap[_currentLocaleSid];
@@ -125,43 +117,35 @@ namespace Kmplete
         {
             currentLocaleTranslations[contextedPluralSource][pluralityForm] = translation;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid)
+    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         return _translationMap[_currentLocaleSid][sourceSid];
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm)
+    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         return _translationPluralMap[_currentLocaleSid][PluralSource{sourceSidSingular, sourceSidPlural}][pluralityForm];
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid)
+    const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         return _translationCtxMap[_currentLocaleSid][ContextedSource{sourceSid, contextSid}];
-    }
+    }}
     //--------------------------------------------------------------------------
 
     const TranslationStr& LocalizationDictionary::Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural,
-                                                      PluralityForm pluralityForm, const ContextStrSID& contextSid)
+                                                      PluralityForm pluralityForm, const ContextStrSID& contextSid) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
         return _translationCtxPluralMap[_currentLocaleSid][ContextedPluralSource{sourceSidSingular, sourceSidPlural, contextSid}][pluralityForm];
-    }
+    }}
     //--------------------------------------------------------------------------
 }

@@ -28,12 +28,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Application::~Application()
+    Application::~Application() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _Finalize();
-    }
+    }}
     //--------------------------------------------------------------------------
 
     const String& Application::GetApplicationName() const noexcept
@@ -42,10 +40,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::_Initialize(const ApplicationParameters& parameters)
+    void Application::_Initialize(const ApplicationParameters& parameters) KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger boot", ProfileLevelAlways);
@@ -85,13 +81,11 @@ namespace Kmplete
 
         _FillDictionary();
         _localizationManager->AddLocaleChangedCallback(KMP_BIND(Application::_FillDictionary));
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void Application::_Finalize()
+    void Application::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _SaveSettings();
 
         _settingsManager.reset();
@@ -104,13 +98,11 @@ namespace Kmplete
             Log::Finalize();
         }
 #endif
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void Application::_SaveSettings() const
+    void Application::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -135,13 +127,11 @@ namespace Kmplete
         _localizationManager->SaveSettings(*settings);
 
         _settingsManager->SaveSettings();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void Application::_LoadSettings()
+    void Application::_LoadSettings() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         _settingsManager->LoadSettings();
 
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
@@ -169,15 +159,13 @@ namespace Kmplete
 #endif
 
         _localizationManager->LoadSettings(*settings);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void Application::_FillDictionary()
+    void Application::_FillDictionary() KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");
-    }
+    }}
     //--------------------------------------------------------------------------
 }

@@ -35,10 +35,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::Update(SystemMetricsUpdateMode updateMode)
+    bool SystemMetricsManager::Update(SystemMetricsUpdateMode updateMode) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         if (!_windowsProcessHandle)
         {
@@ -84,7 +82,7 @@ namespace Kmplete
         }
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
     const SystemMetricsManager::SystemMetrics& SystemMetricsManager::GetMetrics() const noexcept
@@ -93,10 +91,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SystemMetricsManager::_Initialize()
+    void SystemMetricsManager::_Initialize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         static_assert(sizeof(ULARGE_INTEGER) == sizeof(decltype(_lastCPUTimestamp)));
 #endif
@@ -129,13 +125,11 @@ namespace Kmplete
         KMP_ASSERT(_systemMetrics.numProcessors);
         KMP_ASSERT(_systemMetrics.totalVirtualMemoryMib);
         KMP_ASSERT(_systemMetrics.totalPhysicalMemoryMib);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_InitializeProcessId()
+    bool SystemMetricsManager::_InitializeProcessId() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         _currentProcessId = GetCurrentProcessId();
 #else
@@ -143,13 +137,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_InitializeTotalMemory()
+    bool SystemMetricsManager::_InitializeTotalMemory() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         static constexpr auto MibDivisor = 1024.0 * 1024.0;
         
 #if defined (KMP_PLATFORM_WINDOWS)
@@ -184,13 +176,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_InitializeNumProcessors()
+    bool SystemMetricsManager::_InitializeNumProcessors() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         SYSTEM_INFO systemInfo;
         GetSystemInfo(&systemInfo);
@@ -201,13 +191,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_InitializeWindowsProcessHandle()
+    bool SystemMetricsManager::_InitializeWindowsProcessHandle() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         _windowsProcessHandle = GetCurrentProcess();
         if (!_windowsProcessHandle)
@@ -219,13 +207,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_InitializeCPUTimestamps()
+    bool SystemMetricsManager::_InitializeCPUTimestamps() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         FILETIME fTime, fSystem, fUser;
         const auto filetimeSize = sizeof(FILETIME);
@@ -249,13 +235,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_UpdateNumThreads()
+    bool SystemMetricsManager::_UpdateNumThreads() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         HANDLE threadSnapHandle = INVALID_HANDLE_VALUE;
         unsigned int numThreads = 0;
@@ -322,13 +306,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_UpdateMemoryUsed()
+    bool SystemMetricsManager::_UpdateMemoryUsed() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         static constexpr auto MibDivisor = 1024.0 * 1024.0;
         PROCESS_MEMORY_COUNTERS_EX pmc;
@@ -380,13 +362,11 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_UpdateCPUUsed()
+    bool SystemMetricsManager::_UpdateCPUUsed() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (_systemMetrics.numProcessors == 0)
         {
             return false;
@@ -453,13 +433,11 @@ namespace Kmplete
 
         _systemMetrics.cpuUsagePercent = static_cast<float>(cpuPercent);
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SystemMetricsManager::_UpdateCurrentThreadStackUsed()
+    bool SystemMetricsManager::_UpdateCurrentThreadStackUsed() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
 #if defined (KMP_PLATFORM_WINDOWS)
         static constexpr auto KibDivisor = 1024.0f;
 
@@ -485,6 +463,6 @@ namespace Kmplete
 #endif
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 }

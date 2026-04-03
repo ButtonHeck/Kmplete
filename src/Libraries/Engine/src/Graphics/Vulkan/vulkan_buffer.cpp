@@ -94,10 +94,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanBuffer::~VulkanBuffer()
+        VulkanBuffer::~VulkanBuffer() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (_buffer)
             {
                 vkDestroyBuffer(_device, _buffer, nullptr);
@@ -107,21 +105,17 @@ namespace Kmplete
             {
                 vkFreeMemory(_device, _memory, nullptr);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkResult VulkanBuffer::Map(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
+        VkResult VulkanBuffer::Map(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return vkMapMemory(_device, _memory, offset, size, 0, &_mapped);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkResult VulkanBuffer::Unmap(bool flush /*= false*/, VkDeviceSize size/* = VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
+        VkResult VulkanBuffer::Unmap(bool flush /*= false*/, VkDeviceSize size/* = VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             auto result = VK_SUCCESS;
             if (flush)
             {
@@ -135,46 +129,38 @@ namespace Kmplete
             }
 
             return result;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkResult VulkanBuffer::Bind(VkDeviceSize offset /*= 0*/)
+        VkResult VulkanBuffer::Bind(VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             return vkBindBufferMemory(_device, _buffer, _memory, offset);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
+        VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
             return vkFlushMappedMemoryRanges(_device, 1, &mappedRange);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
+        VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size)
+        void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             KMP_ASSERT(_mapped);
             memcpy((char*)_mapped + mappedOffset, data, size);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkBuffer VulkanBuffer::GetVkBuffer() const noexcept

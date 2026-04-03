@@ -7,12 +7,10 @@
 
 namespace Kmplete
 {
-    FrameListenerManager::~FrameListenerManager()
+    FrameListenerManager::~FrameListenerManager() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _listeners.clear();
-    }
+    }}
     //--------------------------------------------------------------------------
 
     void FrameListenerManager::SetCreateDeleteCommandBufferHandler(const FrameCreateDeleteListenerCommandBufferHandler& commandBufferHandler)
@@ -36,9 +34,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener)
+    bool FrameListenerManager::AddFrameListener(NonNull<FrameListener*> frameListener) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
         KMP_ASSERT(frameListener);
 
         if (_FindFrameListener(frameListener->GetSID()) != nullptr)
@@ -63,12 +60,11 @@ namespace Kmplete
             KMP_LOG_ERROR("failed to add frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
             return false;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener)
+    bool FrameListenerManager::RemoveFrameListener(NonNull<FrameListener*> frameListener) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
         KMP_ASSERT(frameListener);
 
         for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
@@ -83,7 +79,7 @@ namespace Kmplete
 
         KMP_LOG_WARN("failed to remove listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
         return false;
-    }
+    }}
     //--------------------------------------------------------------------------
 
     size_t FrameListenerManager::FrameListenersCount() const noexcept
@@ -92,10 +88,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified)
+    void FrameListenerManager::_UpdateFrameListeners(float frameTimestep, bool mainWindowIsIconified) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         for (const auto& [priority, listener] : _listeners)
         {
             if (listener->IsActive())
@@ -103,13 +97,11 @@ namespace Kmplete
                 listener->Update(frameTimestep, mainWindowIsIconified);
             }
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_RenderFrameListeners()
+    void FrameListenerManager::_RenderFrameListeners() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         for (const auto& [priority, listener] : _listeners)
         {
             if (listener->IsActive())
@@ -117,13 +109,11 @@ namespace Kmplete
                 listener->Render();
             }
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_DispatchEventToFrameListeners(Events::Event& event)
+    void FrameListenerManager::_DispatchEventToFrameListeners(Events::Event& event) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
             auto& listener = iter->second;
@@ -137,13 +127,11 @@ namespace Kmplete
                 listener->OnEvent(event);
             }
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_DispatchQueuedEventsToFrameListeners()
+    void FrameListenerManager::_DispatchQueuedEventsToFrameListeners() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         auto& eventQueue = Events::EventQueue::Get().GetEvents();
         for (auto eventIter = eventQueue.begin(); eventIter != eventQueue.end();)
         {
@@ -151,13 +139,11 @@ namespace Kmplete
             _DispatchEventToFrameListeners(event);
             eventIter = eventQueue.erase(eventIter);
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void FrameListenerManager::_ProcessFrameListenersCommands()
+    void FrameListenerManager::_ProcessFrameListenersCommands() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         if (_commandBuffer.empty())
         {
             return;
@@ -189,7 +175,7 @@ namespace Kmplete
         }
 
         _commandBuffer.clear();
-    }
+    }}
     //--------------------------------------------------------------------------
 
     Nullable<FrameListener*> FrameListenerManager::_FindFrameListener(StringID sid)

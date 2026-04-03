@@ -72,27 +72,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanShader::~VulkanShader()
+        VulkanShader::~VulkanShader() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (_device != VK_NULL_HANDLE && _shaderModule != VK_NULL_HANDLE)
             {
                 vkDestroyShaderModule(_device, _shaderModule, nullptr);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VkPipelineShaderStageCreateInfo VulkanShader::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept
+        VkPipelineShaderStageCreateInfo VulkanShader::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             auto shaderStageCreateInfo = VulkanUtils::InitVkPipelineShaderStageCreateInfo(stage);
             shaderStageCreateInfo.module = _shaderModule;
             shaderStageCreateInfo.pName = entryPointName;
 
             return shaderStageCreateInfo;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

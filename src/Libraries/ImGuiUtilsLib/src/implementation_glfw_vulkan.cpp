@@ -21,29 +21,25 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        ImGuiImplementationGlfwVulkan::~ImGuiImplementationGlfwVulkan()
+        ImGuiImplementationGlfwVulkan::~ImGuiImplementationGlfwVulkan() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Finalize();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::CreateFontsTexture() const
+        void ImGuiImplementationGlfwVulkan::CreateFontsTexture() const KMP_PROFILING(ProfileLevelImportant)
         {
             ImGui_ImplVulkan_CreateFontsTexture();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::AddTexture(StringID sid, void* sampler, void* view)
+        void ImGuiImplementationGlfwVulkan::AddTexture(StringID sid, void* sampler, void* view) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             VkSampler vulkanSampler = reinterpret_cast<VkSampler>(sampler);
             VkImageView vulkanImageView = reinterpret_cast<VkImageView>(view);
 
             _textureMap[sid] = ImGui_ImplVulkan_AddTexture(vulkanSampler, vulkanImageView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void ImGuiImplementationGlfwVulkan::RemoveTexture(StringID sid)
@@ -58,10 +54,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_Initialize() const
+        void ImGuiImplementationGlfwVulkan::_Initialize() const KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             const auto window = reinterpret_cast<GLFWwindow*>(_context->window);
             ImGui_ImplGlfw_InitForVulkan(window, "install callbacks"_true);
 
@@ -69,31 +63,27 @@ namespace Kmplete
             ImGui_ImplVulkan_InitInfo initInfo = contextVulkan->initInfo;
 
             ImGui_ImplVulkan_Init(&initInfo);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_Finalize()
+        void ImGuiImplementationGlfwVulkan::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
             _textureMap.clear();
 
             ImGui_ImplVulkan_Shutdown();
             ImGui_ImplGlfw_Shutdown();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_NewFrameImpl() const
+        void ImGuiImplementationGlfwVulkan::_NewFrameImpl() const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             ImGui_ImplVulkan_NewFrame();
             ImGui_ImplGlfw_NewFrame();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_RenderImpl() const
+        void ImGuiImplementationGlfwVulkan::_RenderImpl() const KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), _commandBuffer);
 
             const auto& io = ImGui::GetIO();
@@ -102,7 +92,7 @@ namespace Kmplete
                 ImGui::UpdatePlatformWindows();
                 ImGui::RenderPlatformWindowsDefault();
             }
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

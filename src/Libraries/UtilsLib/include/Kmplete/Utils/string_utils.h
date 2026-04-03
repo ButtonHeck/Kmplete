@@ -13,24 +13,20 @@ namespace Kmplete
     namespace Utils
     {
         template<typename... Ts>
-        KMP_NODISCARD String Concatenate(Ts&&... args)
+        KMP_NODISCARD String Concatenate(Ts&&... args) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             std::ostringstream oss;
             (oss << ... << std::forward<Ts>(args));
             return oss.str();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         template<typename... Ts>
-        std::ostringstream& ToSStream(std::ostringstream& oss, Ts&&... args)
+        std::ostringstream& ToSStream(std::ostringstream& oss, Ts&&... args) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             (oss << ... << std::forward<Ts>(args));
             return oss;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         KMP_NODISCARD KMP_API String RegexReplace(const String& source, const char* regexp, const char* replacement);

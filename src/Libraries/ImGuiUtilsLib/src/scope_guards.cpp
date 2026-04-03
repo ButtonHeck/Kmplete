@@ -20,32 +20,26 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        DisableGuard::~DisableGuard()
+        DisableGuard::~DisableGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             if (_condition)
             {
                 ImGui::EndDisabled();
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
-        ItemWidthGuard::ItemWidthGuard(float width)
+        ItemWidthGuard::ItemWidthGuard(float width) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::PushItemWidth(width);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        ItemWidthGuard::~ItemWidthGuard()
+        ItemWidthGuard::~ItemWidthGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::PopItemWidth();
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
@@ -61,12 +55,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        StyleColorGuard::~StyleColorGuard()
+        StyleColorGuard::~StyleColorGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::PopStyleColor(_count);
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
@@ -91,12 +83,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        StyleVarGuard::~StyleVarGuard()
+        StyleVarGuard::~StyleVarGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::PopStyleVar(_count);
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
@@ -109,29 +99,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        IDGuard::~IDGuard()
+        IDGuard::~IDGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::PopID();
-        }
+        }}
         //--------------------------------------------------------------------------
 
 
-        GroupGuard::GroupGuard()
+        GroupGuard::GroupGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::BeginGroup();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        GroupGuard::~GroupGuard()
+        GroupGuard::~GroupGuard() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             ImGui::EndGroup();
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

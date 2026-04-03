@@ -24,10 +24,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/)
+        bool TextureAssetManager::CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (!_TextureSidIsValid(textureSid))
             {
                 return false;
@@ -42,12 +40,11 @@ namespace Kmplete
 
             const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture));
             return hasEmplaced;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::CreateAsset(StringID textureSid, const Graphics::Image& image)
+        bool TextureAssetManager::CreateAsset(StringID textureSid, const Graphics::Image& image) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
             KMP_ASSERT(image.GetPixels());
 
             if (!_TextureSidIsValid(textureSid))
@@ -64,13 +61,11 @@ namespace Kmplete
 
             const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture));
             return hasEmplaced;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        const Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid) const
+        const Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid) const KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (!_textures.contains(textureSid))
             {
                 KMP_LOG_WARN("texture '{}' not found", textureSid);
@@ -78,13 +73,11 @@ namespace Kmplete
             }
 
             return *_textures.at(textureSid);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid)
+        Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (!_textures.contains(textureSid))
             {
                 KMP_LOG_WARN("texture '{}' not found", textureSid);
@@ -92,13 +85,11 @@ namespace Kmplete
             }
 
             return *_textures.at(textureSid);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void TextureAssetManager::RemoveAssets(const Vector<StringID>& sids)
+        void TextureAssetManager::RemoveAssets(const Vector<StringID>& sids) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto ok = true;
             for (const auto& sid : sids)
             {
@@ -109,13 +100,11 @@ namespace Kmplete
             {
                 KMP_LOG_WARN("some textures were not removed");
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::RemoveAsset(StringID sid)
+        bool TextureAssetManager::RemoveAsset(StringID sid) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (sid == ErrorTextureSID)
             {
                 KMP_LOG_WARN("cannot remove texture with reserved sid 0");
@@ -129,7 +118,7 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         UInt64 TextureAssetManager::GetAssetsCount() const noexcept
@@ -138,10 +127,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::_CreateErrorTextureAsset()
+        bool TextureAssetManager::_CreateErrorTextureAsset() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (_textures.contains(ErrorTextureSID))
             {
                 KMP_LOG_WARN("error texture already created");
@@ -157,7 +144,7 @@ namespace Kmplete
 
             const auto [iterator, hasEmplaced] = _textures.emplace(ErrorTextureSID, CreateUPtr<Assets::TextureAsset>(ErrorTextureSID, texture));
             return hasEmplaced;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool TextureAssetManager::_TextureSidIsValid(StringID textureSid)

@@ -54,45 +54,37 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanCommandBuffer::~VulkanCommandBuffer()
+        VulkanCommandBuffer::~VulkanCommandBuffer() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (_device && _commandPool && _commandBuffer)
             {
                 vkFreeCommandBuffers(_device, _commandPool, 1, &_commandBuffer);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanCommandBuffer::Begin(VkCommandBufferUsageFlags flags /*= 0*/) const
+        void VulkanCommandBuffer::Begin(VkCommandBufferUsageFlags flags /*= 0*/) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
             commandBufferBeginInfo.flags |= flags;
 
             const auto result = vkBeginCommandBuffer(_commandBuffer, &commandBufferBeginInfo);
             VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to begin command buffer");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanCommandBuffer::End() const
+        void VulkanCommandBuffer::End() const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             const auto result = vkEndCommandBuffer(_commandBuffer);
             VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to end command buffer");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanCommandBuffer::Reset() const
+        void VulkanCommandBuffer::Reset() const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             const auto result = vkResetCommandBuffer(_commandBuffer, 0);
             VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to reset command buffer");
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkCommandBuffer VulkanCommandBuffer::GetVkCommandBuffer() const noexcept

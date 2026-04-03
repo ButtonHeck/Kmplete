@@ -36,12 +36,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    WindowApplication::~WindowApplication()
+    WindowApplication::~WindowApplication() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _Finalize();
-    }
+    }}
     //--------------------------------------------------------------------------
 
     void WindowApplication::Run()
@@ -82,10 +80,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_Initialize(const WindowApplicationParameters& parameters)
+    void WindowApplication::_Initialize(const WindowApplicationParameters& parameters) KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -134,13 +130,11 @@ namespace Kmplete
         }
 
         _frameClock.Mark();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_Finalize()
+    void WindowApplication::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _SaveSettings();
 
         _frameListenerManager.reset();
@@ -148,13 +142,11 @@ namespace Kmplete
         _inputManager.reset();
         _graphicsBackend.reset();
         _windowBackend.reset();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool WindowApplication::_RunFrameIteration(Window& window)
+    bool WindowApplication::_RunFrameIteration(Window& window) KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         const auto frameTimestep = Math::Clamp(_frameClock.Mark(), 0.0f, 100.0f);
 
         _ProcessEvents(window, frameTimestep);
@@ -190,13 +182,11 @@ namespace Kmplete
         }
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_ProcessEvents(Window& window, float frameTimestep)
+    void WindowApplication::_ProcessEvents(Window& window, float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         _inputManager->ResetMouseMove();
         _inputManager->UpdateTimerActions(frameTimestep);
 
@@ -204,13 +194,11 @@ namespace Kmplete
 
         _inputManager->PropagateActionEvents();
         _frameListenerManager->_DispatchQueuedEventsToFrameListeners();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_IconifiedSleep()
+    void WindowApplication::_IconifiedSleep() KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         const auto iconifiedSleepTimeMs = 1000.0f / float(_iconifiedFPS);
         const auto elapsedTimeThisFrame = _frameClock.Peek();
 
@@ -218,13 +206,11 @@ namespace Kmplete
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(UInt32(iconifiedSleepTimeMs - elapsedTimeThisFrame)));
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_SaveSettings() const
+    void WindowApplication::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -236,35 +222,29 @@ namespace Kmplete
         
         _windowBackend->SaveSettings(*settings);
         _graphicsBackend->SaveSettings(*settings);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_LoadWindowBackendSettings(SettingsDocument& settingsDocument)
+    void WindowApplication::_LoadWindowBackendSettings(SettingsDocument& settingsDocument) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         _windowBackend->LoadSettings(settingsDocument);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_LoadGraphicsBackendSettings(SettingsDocument& settingsDocument)
+    void WindowApplication::_LoadGraphicsBackendSettings(SettingsDocument& settingsDocument) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         _graphicsBackend->LoadSettings(settingsDocument);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_LoadSettings(SettingsDocument& settingsDocument)
+    void WindowApplication::_LoadSettings(SettingsDocument& settingsDocument) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         _iconifiedFPS = settingsDocument.GetUInt(IconifiedFPSStr, IconifiedFPSMin);
         if (_iconifiedFPS < IconifiedFPSMin || _iconifiedFPS > IconifiedFPSMax)
         {
             KMP_LOG_WARN("iconified FPS ({} from settings) required to be in range from 10 to 60, value will be clamped", _iconifiedFPS);
             _iconifiedFPS = Math::Clamp(_iconifiedFPS, IconifiedFPSMin, IconifiedFPSMax);
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 }

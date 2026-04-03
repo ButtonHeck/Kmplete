@@ -26,12 +26,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsSurface::~VulkanGraphicsSurface()
+        VulkanGraphicsSurface::~VulkanGraphicsSurface() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             vkDestroySurfaceKHR(_instance, _surface, nullptr);
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkSurfaceKHR VulkanGraphicsSurface::GetVkSurface() const noexcept

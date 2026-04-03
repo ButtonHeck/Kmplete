@@ -47,10 +47,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> VulkanVertexBuffer::GetBindingsDescriptions(UInt32 baseBinding) const noexcept
+        std::pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> VulkanVertexBuffer::GetBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             Vector<VkVertexInputBindingDescription> inputBindingsDescriptions(_layouts.size());
             Vector<VkVertexInputAttributeDescription> attributeDescriptions;
 
@@ -76,7 +74,7 @@ namespace Kmplete
             }
 
             return { inputBindingsDescriptions, attributeDescriptions };
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

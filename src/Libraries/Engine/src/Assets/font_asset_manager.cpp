@@ -32,10 +32,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData)
+        bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             if (fontSid == DefaultFontSID)
             {
                 KMP_LOG_ERROR("cannot create font with zero id");
@@ -49,7 +47,7 @@ namespace Kmplete
             }
 
             return _AddFontToStorage(fontSid, std::move(fontData));
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool FontAssetManager::CreateAsset(StringID fontSid, const Filepath& filepath)
@@ -58,10 +56,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        const Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) const
+        const Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             if (!_fonts.contains(fontSid))
             {
                 KMP_LOG_ERROR("font '{}' not found", fontSid);
@@ -69,13 +65,11 @@ namespace Kmplete
             }
 
             return *_fonts.at(fontSid);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid)
+        Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             if (!_fonts.contains(fontSid))
             {
                 KMP_LOG_ERROR("font '{}' not found", fontSid);
@@ -83,13 +77,11 @@ namespace Kmplete
             }
 
             return *_fonts.at(fontSid);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::RemoveAssets(const Vector<StringID>& sids)
+        void FontAssetManager::RemoveAssets(const Vector<StringID>& sids) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto ok = true;
             for (const auto& sid : sids)
             {
@@ -100,13 +92,11 @@ namespace Kmplete
             {
                 KMP_LOG_WARN("some fonts were not removed");
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::RemoveAsset(StringID sid)
+        bool FontAssetManager::RemoveAsset(StringID sid) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (sid == DefaultFontSID)
             {
                 KMP_LOG_WARN("cannot remove font with reserved sid 0");
@@ -120,7 +110,7 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         UInt64 FontAssetManager::GetAssetsCount() const noexcept
@@ -129,10 +119,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::_Initialize()
+        void FontAssetManager::_Initialize() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             const auto freetypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
             if (freetypeInitError)
             {
@@ -153,13 +141,11 @@ namespace Kmplete
             FT_Library_Version(_freetypeLibInstance, &freetypeVersionMajor, &freetypeVersionMinor, &freetypeVersionPatch);
             KMP_LOG_INFO("use FreeType version {}.{}.{}", freetypeVersionMajor, freetypeVersionMinor, freetypeVersionPatch);
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::_Finalize()
+        void FontAssetManager::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _fonts.clear();
 
             const auto freetypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
@@ -167,13 +153,11 @@ namespace Kmplete
             {
                 KMP_LOG_ERROR("failed to shutdown FreeType library instance");
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::_CreateDefaultFontAsset()
+        bool FontAssetManager::_CreateDefaultFontAsset() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             static constexpr auto DefaultFontSize = 18;
 
             if (_fonts.contains(DefaultFontSID))
@@ -283,16 +267,14 @@ namespace Kmplete
 
             return _AddFontToStorage(DefaultFontSID, std::move(fontData));
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData)
+        bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Assets::FontAsset>(sid, *_freetypeLibInstance, std::move(fontData)));
             return hasEmplaced;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

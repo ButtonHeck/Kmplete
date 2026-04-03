@@ -46,15 +46,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanFence::~VulkanFence()
+        VulkanFence::~VulkanFence() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (_device && _fence)
             {
                 vkDestroyFence(_device, _fence, nullptr);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanFence::Wait() const
@@ -63,22 +61,18 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanFence::Wait(UInt64 timeout) const
+        void VulkanFence::Wait(UInt64 timeout) const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             const auto result = vkWaitForFences(_device, 1, &_fence, VK_TRUE, timeout);
             VulkanUtils::CheckResult(result, "VulkanFence: failed to wait for fence");
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void VulkanFence::Reset() const
+        void VulkanFence::Reset() const KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
             const auto result = vkResetFences(_device, 1, &_fence);
             VulkanUtils::CheckResult(result, "VulkanFence: failed to reset fence");
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VkFence VulkanFence::GetVkFence() const noexcept

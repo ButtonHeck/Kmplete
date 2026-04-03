@@ -25,12 +25,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        AssetsManager::~AssetsManager()
+        AssetsManager::~AssetsManager() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Finalize();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         const TextureAssetManager& AssetsManager::GetTextureAssetManager() const noexcept
@@ -61,10 +59,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/)
+        bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto fullPath = _dataPath / filepath;
             if (!Filesystem::FilepathExists(fullPath))
             {
@@ -91,13 +87,11 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::LoadAssets(const Vector<StringID>& assetsSids)
+        bool AssetsManager::LoadAssets(const Vector<StringID>& assetsSids) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             const auto lookupVector = _GetSortedByFileAssetsInfos(assetsSids);
             if (lookupVector.empty())
             {
@@ -106,13 +100,11 @@ namespace Kmplete
             }
 
             return _LoadAssetsEntriesBinaries(lookupVector);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::UnloadAssets(const Vector<StringID>& assetsSids)
+        bool AssetsManager::UnloadAssets(const Vector<StringID>& assetsSids) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             Vector<StringID> textureSidsToRemove;
             Vector<StringID> fontsSidsToRemove;
 
@@ -146,13 +138,11 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_Initialize()
+        void AssetsManager::_Initialize() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (!Filesystem::FilepathExists(_dataPath))
             {
                 KMP_LOG_CRITICAL("cannot create due to data path '{}' does not exist", _dataPath);
@@ -161,22 +151,18 @@ namespace Kmplete
 
             _textureAssetManager.reset(new TextureAssetManager(_graphicsBackend));
             _fontAssetManager.reset(new FontAssetManager());
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_Finalize()
+        void AssetsManager::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _fontAssetManager.reset();
             _textureAssetManager.reset();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath)
+        void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             for (AssetCount i = 0; i < assetCount; i++)
             {
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetEntryHeaderStructSize;
@@ -192,13 +178,11 @@ namespace Kmplete
                     KMP_LOG_ERROR("Asset SID duplication detected - file '{}' already registered asset with SID '{}' as currently processed file '{}'", _lookupMap[assetHeader.sid].filepath, assetHeader.sid, filepath);
                 }
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::_LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount)
+        bool AssetsManager::_LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto loadedOk = true;
             for (AssetCount i = 0; i < assetCount; i++)
             {
@@ -209,13 +193,11 @@ namespace Kmplete
             }
 
             return loadedOk;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Vector<AssetLookupInfo> AssetsManager::_GetSortedByFileAssetsInfos(const Vector<StringID>& assetsSids) const
+        Vector<AssetLookupInfo> AssetsManager::_GetSortedByFileAssetsInfos(const Vector<StringID>& assetsSids) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             Vector<AssetLookupInfo> lookupVector;
             lookupVector.reserve(assetsSids.size());
 
@@ -233,13 +215,11 @@ namespace Kmplete
             std::sort(lookupVector.begin(), lookupVector.end(), [](const AssetLookupInfo& info1, const AssetLookupInfo& info2) { return info1.filepath < info2.filepath; });
 
             return lookupVector;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::_LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector)
+        bool AssetsManager::_LoadAssetsEntriesBinaries(const Vector<AssetLookupInfo>& sortedLookupVector) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             auto currentFilepath = Filepath();
             auto fileBuffer = BinaryBuffer();
             auto loadedOk = true;
@@ -262,13 +242,11 @@ namespace Kmplete
             }
 
             return loadedOk;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool AssetsManager::_LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader)
+        bool AssetsManager::_LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
             if (fileBuffer.size() < assetHeader.bufferOffset + assetHeader.bufferSize) {
                 KMP_LOG_ERROR("asset buffer overflow - file too small for asset data");
                 return false;
@@ -295,7 +273,7 @@ namespace Kmplete
             KMP_LOG_ERROR("unknown asset type '{}'", assetHeader.type);
 
             return false;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

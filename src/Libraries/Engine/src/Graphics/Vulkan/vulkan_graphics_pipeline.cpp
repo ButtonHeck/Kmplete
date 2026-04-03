@@ -69,10 +69,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanGraphicsPipeline::Build()
+        bool VulkanGraphicsPipeline::Build() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
             _layoutCreateInfo.setLayoutCount = UInt32(_descriptorSetLayouts.size());
             _layoutCreateInfo.pSetLayouts = _descriptorSetLayouts.data();
 
@@ -115,7 +113,7 @@ namespace Kmplete
             VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline", "throw exception"_false);
             
             return result == VK_SUCCESS;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable)

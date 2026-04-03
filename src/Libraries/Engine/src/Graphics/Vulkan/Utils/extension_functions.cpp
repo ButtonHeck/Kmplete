@@ -14,10 +14,8 @@ namespace Kmplete
         PFN_vkCmdSetRasterizationSamplesEXT VulkanCommands::CmdSetRasterizationSamplesEXT = nullptr;
 
 
-        bool VulkanCommands::LoadExtensionFunctions(VkInstance instance)
+        bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             CreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
             if (CreateDebugUtilsMessengerEXT == nullptr)
@@ -42,7 +40,7 @@ namespace Kmplete
             }
 
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

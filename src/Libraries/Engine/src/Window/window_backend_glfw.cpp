@@ -16,10 +16,8 @@ namespace Kmplete
     namespace
     {
         //! Utility function to fetch available monitor modes for a given monitor (if any)
-        Vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor)
+        Vector<WindowBackend::MonitorVideoMode> GetVideoModes(Nullable<GLFWmonitor*> monitor) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             Vector<WindowBackend::MonitorVideoMode> outputModes;
 
             if (!monitor)
@@ -40,7 +38,7 @@ namespace Kmplete
             }
 
             return outputModes;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 
@@ -48,26 +46,20 @@ namespace Kmplete
     static constexpr auto MainWindowName = "Main";
 
 
-    WindowBackendGlfw::WindowBackendGlfw()
+    WindowBackendGlfw::WindowBackendGlfw() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _Initialize();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    WindowBackendGlfw::~WindowBackendGlfw()
+    WindowBackendGlfw::~WindowBackendGlfw() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _Finalize();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Window& WindowBackendGlfw::CreateMainWindow()
+    Window& WindowBackendGlfw::CreateMainWindow() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         if (_mainWindow)
         {
             KMP_LOG_WARN("main window already created!");
@@ -84,7 +76,7 @@ namespace Kmplete
         }
 
         return *_mainWindow;
-    }
+    }}
     //--------------------------------------------------------------------------
 
     Window& WindowBackendGlfw::GetMainWindow()
@@ -94,10 +86,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_Initialize()
+    void WindowBackendGlfw::_Initialize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         int glfwInitExitCode = GLFW_FALSE;
         {
             KMP_PROFILE_SCOPE("GLFW initialization", ProfileLevelAlways);
@@ -115,7 +105,7 @@ namespace Kmplete
         _InitializeCallbacks();
 
         _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
-    }
+    }}
     //--------------------------------------------------------------------------
 
     void WindowBackendGlfw::_InitializeCallbacks() const
@@ -133,10 +123,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_Finalize()
+    void WindowBackendGlfw::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
         _mainWindow.reset();
         _mainWindowSettings.reset();
 
@@ -154,13 +142,11 @@ namespace Kmplete
             KMP_PROFILE_SCOPE("GLFW termination", ProfileLevelAlways);
             glfwTerminate();
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName)
+    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         if (!_IsAuxWindowNameAcceptable(windowName))
         {
             return nullptr;
@@ -186,13 +172,11 @@ namespace Kmplete
             KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
             return nullptr;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const Window::WindowSettings& windowSettings)
+    Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const Window::WindowSettings& windowSettings) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         const auto& windowName = windowSettings.name;
         if (!_IsAuxWindowNameAcceptable(windowName))
         {
@@ -219,13 +203,11 @@ namespace Kmplete
             KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
             return nullptr;
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Nullable<Window*> WindowBackendGlfw::GetAuxWindow(const String& windowName) const
+    Nullable<Window*> WindowBackendGlfw::GetAuxWindow(const String& windowName) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (_auxWindows.contains(windowName))
         {
             return _auxWindows.at(windowName).get();
@@ -233,13 +215,11 @@ namespace Kmplete
 
         KMP_LOG_WARN("cannot find aux window '{}'", windowName);
         return nullptr;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool WindowBackendGlfw::DestroyAuxWindow(const String& windowName)
+    bool WindowBackendGlfw::DestroyAuxWindow(const String& windowName) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         if (_auxWindows.contains(windowName))
         {
             _auxWindows.erase(windowName);
@@ -248,23 +228,19 @@ namespace Kmplete
         
         KMP_LOG_WARN("cannot find aux window '{}'", windowName);
         return false;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    int WindowBackendGlfw::GetMonitorCount() const
+    int WindowBackendGlfw::GetMonitorCount() const KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         int count = 0;
         glfwGetMonitors(&count);
         return count;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    StringVector WindowBackendGlfw::GetMonitorNames() const
+    StringVector WindowBackendGlfw::GetMonitorNames() const KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         int count = 0;
         const auto monitors = glfwGetMonitors(&count);
 
@@ -283,22 +259,18 @@ namespace Kmplete
         }
 
         return names;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const
+    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetPrimaryMonitorVideoModes() const KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         const auto monitor = glfwGetPrimaryMonitor();
         return GetVideoModes(monitor);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(unsigned int index) const
+    Vector<WindowBackend::MonitorVideoMode> WindowBackendGlfw::GetMonitorVideoModes(unsigned int index) const KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         if (index == 0)
         {
             return GetPrimaryMonitorVideoModes();
@@ -313,24 +285,20 @@ namespace Kmplete
         }
 
         return Vector<WindowBackend::MonitorVideoMode>();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    float WindowBackendGlfw::GetPrimaryMonitorDPIScale() const
+    float WindowBackendGlfw::GetPrimaryMonitorDPIScale() const KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         const auto monitor = glfwGetPrimaryMonitor();
         float scale = 1.0f;
         glfwGetMonitorContentScale(monitor, &scale, &scale);
         return scale;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot /*= Math::Point2I()*/)
+    OptionalRef<const WindowCursor> WindowBackendGlfw::AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot /*= Math::Point2I()*/) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (_cursors.contains(name))
         {
             KMP_LOG_WARN("cursor named '{}' already added", name);
@@ -348,13 +316,11 @@ namespace Kmplete
         }
 
         return std::cref(*_cursors.at(name).get());
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    OptionalRef<const WindowCursor> WindowBackendGlfw::GetCursor(const String& name) const
+    OptionalRef<const WindowCursor> WindowBackendGlfw::GetCursor(const String& name) const KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         if (!_cursors.contains(name))
         {
             KMP_LOG_WARN("cannot find cursor named '{}'", name);
@@ -362,13 +328,11 @@ namespace Kmplete
         }
 
         return std::cref(*_cursors.at(name).get());
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::SaveSettings(SettingsDocument& settings) const
+    void WindowBackendGlfw::SaveSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         settings.StartSaveObject(SettingsEntryName);
         settings.SaveString(GraphicsBackendTypeStr, Graphics::GraphicsBackendTypeToString(_graphicsBackendType));
 
@@ -376,23 +340,19 @@ namespace Kmplete
         _SaveAuxWindowsSettings(settings);
 
         settings.EndSaveObject();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_SaveMainWindowSettings(SettingsDocument& settings) const
+    void WindowBackendGlfw::_SaveMainWindowSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         settings.StartSaveObject(MainWindowStr);
         _mainWindowSettings->SaveSettings(settings);
         settings.EndSaveObject();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_SaveAuxWindowsSettings(SettingsDocument& settings) const
+    void WindowBackendGlfw::_SaveAuxWindowsSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         settings.StartSaveArray(AuxWindowsStr);
         int index = 0;
         for (const auto& windowEntry : _auxWindowsSettings)
@@ -408,13 +368,11 @@ namespace Kmplete
         }
 
         settings.EndSaveArray();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::LoadSettings(SettingsDocument& settings)
+    void WindowBackendGlfw::LoadSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         settings.StartLoadObject(SettingsEntryName);
         _graphicsBackendType = Graphics::StringToGraphicsBackendType(settings.GetString(GraphicsBackendTypeStr, Graphics::DefaultAPIStr));
 
@@ -422,13 +380,11 @@ namespace Kmplete
         _LoadAuxWindowsSettings(settings);
 
         settings.EndLoadObject();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_LoadMainWindowSettings(SettingsDocument& settings)
+    void WindowBackendGlfw::_LoadMainWindowSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         KMP_ASSERT(_mainWindowSettings);
 
         if (!settings.StartLoadObject(MainWindowStr))
@@ -441,13 +397,11 @@ namespace Kmplete
         }
 
         settings.EndLoadObject();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_LoadAuxWindowsSettings(SettingsDocument& settings)
+    void WindowBackendGlfw::_LoadAuxWindowsSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         const auto windowsCount = settings.StartLoadArray(AuxWindowsStr);
         for (auto i = 0; i < windowsCount; i++)
         {
@@ -467,7 +421,7 @@ namespace Kmplete
         }
 
         settings.EndLoadArray();
-    }
+    }}
     //--------------------------------------------------------------------------
 
     bool WindowBackendGlfw::_IsAuxWindowNameAcceptable(const String& name) const noexcept

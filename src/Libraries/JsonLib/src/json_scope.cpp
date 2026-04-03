@@ -6,19 +6,15 @@
 
 namespace Kmplete
 {
-    void JsonScope::Push(const String& entry)
+    void JsonScope::Push(const String& entry) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         scope.push_back(entry);
         scopeString = Utils::StringVectorToString(scope, '/');
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonScope::Pop()
+    bool JsonScope::Pop() KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         if (!scope.empty())
         {
             scope.pop_back();
@@ -28,6 +24,6 @@ namespace Kmplete
 
         KMP_LOG_ERROR("cannot pop from empty scope");
         return false;
-    }
+    }}
     //--------------------------------------------------------------------------
 }

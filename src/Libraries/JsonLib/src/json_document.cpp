@@ -62,17 +62,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void JsonDocument::SetFilepath(const Filepath& filepath) noexcept
+    void JsonDocument::SetFilepath(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
         _filepath = filepath;
 
         if (!Filesystem::FilepathIsValid(_filepath))
         {
             KMP_LOG_WARN("invalid filepath was set '{}'", _filepath);
         }
-    }
+    }}
     //--------------------------------------------------------------------------
 
     const Filepath& JsonDocument::GetFilepath() const noexcept
@@ -81,19 +79,15 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Load(const Filepath& filepath)
+    bool JsonDocument::Load(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         SetFilepath(filepath);
         return Load();
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Load()
+    bool JsonDocument::Load() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         _error = false;
         if (!Filesystem::FilepathExists(_filepath))
         {
@@ -129,22 +123,18 @@ namespace Kmplete
 
         _error = false;
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(const Filepath& filepath, bool pretty /*= true*/)
+    bool JsonDocument::Save(const Filepath& filepath, bool pretty /*= true*/) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         SetFilepath(filepath);
         return Save(pretty);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::Save(bool pretty /*= true*/)
+    bool JsonDocument::Save(bool pretty /*= true*/) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         _error = false;
         rapidjson::StringBuffer buffer;
 
@@ -168,13 +158,11 @@ namespace Kmplete
         KMP_LOG_WARN("failed to write document in '{}'", _filepath);
         _error = true;
         return false;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    String JsonDocument::ToString(bool pretty /*= true*/)
+    String JsonDocument::ToString(bool pretty /*= true*/) KMP_PROFILING(ProfileLevelMinor)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
         _error = false;
         rapidjson::StringBuffer buffer;
 
@@ -200,7 +188,7 @@ namespace Kmplete
         KMP_LOG_WARN("failed to write document to string");
         _error = true;
         return String("");
-    }
+    }}
     //--------------------------------------------------------------------------
 
     bool JsonDocument::HasError() const noexcept
@@ -220,10 +208,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite /*= true*/)
+    bool JsonDocument::AddChildDocument(const String& name, const JsonDocument& child, bool overwrite /*= true*/) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (name.empty())
         {
             KMP_LOG_ERROR("cannot add child document - name is empty");
@@ -255,13 +241,11 @@ namespace Kmplete
         _document.AddMember(rapidjson::Value(name.c_str(), static_cast<rapidjson::SizeType>(name.length()), thisAllocator).Move(), childDeepCopy, thisAllocator);
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    Vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const
+    Vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         Vector<std::pair<String, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
@@ -279,7 +263,7 @@ namespace Kmplete
         }
 
         return children;
-    }
+    }}
     //--------------------------------------------------------------------------
 
     bool JsonDocument::StartSetObject(const char* objectName)
@@ -523,10 +507,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool JsonDocument::_SaveToFile(const rapidjson::StringBuffer& buffer)
+    bool JsonDocument::_SaveToFile(const rapidjson::StringBuffer& buffer) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (!Filesystem::CreateDirectories(_filepath, "is file"_true))
         {
             KMP_LOG_WARN("failed to create directories for '{}'", _filepath);
@@ -548,7 +530,7 @@ namespace Kmplete
         KMP_LOG_INFO("document written successfully in '{}'", _filepath);
         _error = false;
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 }
 

@@ -15,10 +15,8 @@ namespace Kmplete
 {
     namespace Utils
     {
-        String RegexReplace(const String& source, const char* regexp, const char* replacement)
+        String RegexReplace(const String& source, const char* regexp, const char* replacement) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             if (regexp == nullptr || replacement == nullptr)
             {
                 KMP_LOG_WARN_FN("Utils: RegexReplace - either regexp or replacement string is nullptr");
@@ -35,7 +33,7 @@ namespace Kmplete
                 KMP_LOG_ERROR_FN("Utils: regex '{}' error for string '{}': '{}'", regexp, source, re.what());
                 return source;
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
         String StringVectorToString(const StringVector& stringVector, char delimiter, bool startWithDelimiter /*= true*/)
@@ -44,10 +42,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        String StringVectorToString(const StringVector& stringVector, const String& delimiter, bool startWithDelimiter /*= true*/)
+        String StringVectorToString(const StringVector& stringVector, const String& delimiter, bool startWithDelimiter /*= true*/) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             if (stringVector.empty())
             {
                 KMP_LOG_WARN_FN("Utils: StringVectorToString - stringVector is empty");
@@ -68,13 +64,11 @@ namespace Kmplete
                         return b.empty() ? a : (a + delimiter + b);
                     });
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        WString NarrowToWide(const String& str)
+        WString NarrowToWide(const String& str) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto length = MultiByteToWideChar(CP_ACP, 0, str.c_str(), static_cast<int>(str.size()), 0, 0);
             WString wide(length, L'\0');
@@ -89,13 +83,11 @@ namespace Kmplete
             const ssize_t res = std::mbsrtowcs(&buf[0], &ptr, bufSize, &st);
             return (res >= 0) ? WString(buf.begin(), buf.begin() + res) : L"?";
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        String WideToNarrow(const WString& wstr)
+        String WideToNarrow(const WString& wstr) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto length = WideCharToMultiByte(CP_ACP, 0, wstr.c_str(), static_cast<int>(wstr.size()), nullptr, 0, nullptr, nullptr);
             String narrow(length, '\0');
@@ -110,13 +102,11 @@ namespace Kmplete
             const ssize_t res = std::wcsrtombs(&buf[0], &wptr, bufSize, &st);
             return (res >= 0) ? String(buf.begin(), buf.begin() + res) : "?";
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        String NarrowToUtf8(const String& str)
+        String NarrowToUtf8(const String& str) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto size = MultiByteToWideChar(CP_ACP, MB_COMPOSITE, str.c_str(), static_cast<int>(str.length()), nullptr, 0);
             WString u16Str(size, L'\0');
@@ -129,13 +119,11 @@ namespace Kmplete
 #else
             return str;
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        String Utf8ToNarrow(const String& str)
+        String Utf8ToNarrow(const String& str) KMP_PROFILING(ProfileLevelMinor)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinor);
-
 #if defined (KMP_PLATFORM_WINDOWS)
             const auto u16Size = MultiByteToWideChar(CP_UTF8, 0, &str[0], static_cast<int>(str.size()), nullptr, 0);
             if (u16Size > 0)
@@ -149,7 +137,7 @@ namespace Kmplete
 #else
             return str;
 #endif
-        }
+        }}
         //--------------------------------------------------------------------------
 
         Filepath::string_type NarrowToFilepath(const String& str)

@@ -14,10 +14,8 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    OptionalRef<SettingsDocument> SettingsManager::PutSettingsDocument(const String& name)
+    OptionalRef<SettingsDocument> SettingsManager::PutSettingsDocument(const String& name) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (_namedSettingsDocuments.contains(name))
         {
             _namedSettingsDocuments.erase(name);
@@ -25,26 +23,22 @@ namespace Kmplete
 
         _namedSettingsDocuments.emplace(name, CreateUPtr<SettingsDocument>(name));
         return GetSettingsDocument(name);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    OptionalRef<SettingsDocument> SettingsManager::GetSettingsDocument(const String& name) const
+    OptionalRef<SettingsDocument> SettingsManager::GetSettingsDocument(const String& name) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportantVerbose);
-
         if (_namedSettingsDocuments.contains(name))
         {
             return std::ref(*_namedSettingsDocuments.at(name).get());
         }
 
         return std::nullopt;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SettingsManager::LoadSettings()
+    bool SettingsManager::LoadSettings() KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         JsonDocument document(_filepath);
         if (document.HasError())
         {
@@ -66,13 +60,11 @@ namespace Kmplete
         KMP_LOG_INFO("settings successfully loaded from '{}'", _filepath);
 
         return true;
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    bool SettingsManager::SaveSettings() const
+    bool SettingsManager::SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
-        KMP_PROFILE_FUNCTION(ProfileLevelImportant);
-
         JsonDocument summaryDocument;
 
         for (const auto& [settingsEntryName, settingsEntry] : _namedSettingsDocuments)
@@ -91,7 +83,7 @@ namespace Kmplete
         }
 
         return ok;
-    }
+    }}
     //--------------------------------------------------------------------------
 
     void SettingsManager::SetFilepath(const Filepath& filepath) noexcept

@@ -39,22 +39,18 @@ namespace Kmplete
         {}
         //--------------------------------------------------------------------------
 
-        Font::~Font()
+        Font::~Font() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             const auto freetypeFontDoneError = FT_Done_Face(_freetypeFace);
             if (freetypeFontDoneError)
             {
                 KMP_LOG_ERROR("failed to destroy FreeType font instance");
             }
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool Font::SetPointSize(UInt8 size, UInt32 dpi)
+        bool Font::SetPointSize(UInt8 size, UInt32 dpi) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             const auto setSizeError = FT_Set_Char_Size(_freetypeFace, size * 64, 0, dpi, dpi);
             if (setSizeError)
             {
@@ -64,13 +60,11 @@ namespace Kmplete
 
             _UpdateSizeMetrics();
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        bool Font::SetPixelSize(UInt8 size)
+        bool Font::SetPixelSize(UInt8 size) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
-
             const auto setSizeError = FT_Set_Pixel_Sizes(_freetypeFace, size, 0);
             if (setSizeError)
             {
@@ -80,7 +74,7 @@ namespace Kmplete
 
             _UpdateSizeMetrics();
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         const BinaryBuffer& Font::GetBuffer() const noexcept
