@@ -27,7 +27,6 @@ namespace Kmplete
 
             KMP_API bool Build();
 
-            KMP_API VulkanGraphicsPipeline& AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout);
             KMP_API VulkanGraphicsPipeline& SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable);
             KMP_API VulkanGraphicsPipeline& SetPolygonMode(VkPolygonMode polygonMode);
             KMP_API VulkanGraphicsPipeline& SetCulling(VkCullModeFlags cullMode, VkFrontFace frontFace);
@@ -36,9 +35,6 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& SetRasterizerDiscard(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetLineWidth(float lineWidth);
             KMP_API VulkanGraphicsPipeline& SetColorBlendConstants(Array<float, 4> constants);
-            KMP_API VulkanGraphicsPipeline& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
-            KMP_API VulkanGraphicsPipeline& AddDynamicState(VkDynamicState dynamicState);
-            KMP_API VulkanGraphicsPipeline& AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates);
             KMP_API VulkanGraphicsPipeline& SetDepthTest(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetDepthWrite(bool enabled);
             KMP_API VulkanGraphicsPipeline& SetDepthComparison(VkCompareOp compareOp);
@@ -47,11 +43,16 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipeline& SetStencilStates(VkStencilOpState frontFaceState, VkStencilOpState backFaceState);
             KMP_API VulkanGraphicsPipeline& SetMultisamplingSamples(VkSampleCountFlagBits samples);
             KMP_API VulkanGraphicsPipeline& SetMultisamplingSampleShading(bool enabled, float minSampleShading);
+            KMP_API VulkanGraphicsPipeline& SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
+
+            KMP_API VulkanGraphicsPipeline& AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout);
+            KMP_API VulkanGraphicsPipeline& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
+            KMP_API VulkanGraphicsPipeline& AddDynamicState(VkDynamicState dynamicState);
+            KMP_API VulkanGraphicsPipeline& AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates);
             KMP_API VulkanGraphicsPipeline& AddVertexInputBindings(Vector<VkVertexInputBindingDescription>&& inputBindingDescriptions);
             KMP_API VulkanGraphicsPipeline& AddVertexAttributesDescriptions(Vector<VkVertexInputAttributeDescription>&& attributesDescriptions);
             KMP_API VulkanGraphicsPipeline& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
             KMP_API VulkanGraphicsPipeline& AddShaderStages(Vector<VkPipelineShaderStageCreateInfo>&& shaderStages);
-            KMP_API VulkanGraphicsPipeline& SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
 
             KMP_NODISCARD KMP_API VkPipeline GetVkPipeline() const noexcept;
             KMP_NODISCARD KMP_API VkPipelineLayout GetVkPipelineLayout() const noexcept;

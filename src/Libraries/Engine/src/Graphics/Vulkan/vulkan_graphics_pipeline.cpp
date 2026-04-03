@@ -118,13 +118,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout)
-        {
-            _descriptorSetLayouts.push_back(descriptorSetLayout);
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable)
         {
             _inputAssemblyCreateInfo.topology = topology;
@@ -195,39 +188,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment)
-        {
-            _renderingColorAttachmentsFormats.push_back(attachmentFormat);
-            _colorBlendAttachments.push_back(colorBlendAttachment);
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicState(VkDynamicState dynamicState)
-        {
-            if (!Utils::VectorContains(_dynamicStates, dynamicState))
-            {
-                _dynamicStates.push_back(dynamicState);
-            }
-
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates)
-        {
-            for (const auto& state : dynamicStates)
-            {
-                if (!Utils::VectorContains(_dynamicStates, state))
-                {
-                    _dynamicStates.push_back(state);
-                }
-            }
-
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetDepthTest(bool enabled)
         {
             _depthStencilStateCreateInfo.depthTestEnable = enabled;
@@ -288,6 +248,54 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat)
+        {
+            _renderingCreateInfo.depthAttachmentFormat = depthFormat;
+            _renderingCreateInfo.stencilAttachmentFormat = stencilFormat;
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout)
+        {
+            _descriptorSetLayouts.push_back(descriptorSetLayout);
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment)
+        {
+            _renderingColorAttachmentsFormats.push_back(attachmentFormat);
+            _colorBlendAttachments.push_back(colorBlendAttachment);
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicState(VkDynamicState dynamicState)
+        {
+            if (!Utils::VectorContains(_dynamicStates, dynamicState))
+            {
+                _dynamicStates.push_back(dynamicState);
+            }
+
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates)
+        {
+            for (const auto& state : dynamicStates)
+            {
+                if (!Utils::VectorContains(_dynamicStates, state))
+                {
+                    _dynamicStates.push_back(state);
+                }
+            }
+
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddVertexInputBindings(Vector<VkVertexInputBindingDescription>&& inputBindingDescriptions)
         {
             Utils::MergeVectors(inputBindingDescriptions, _vertexInputBindings);
@@ -314,14 +322,6 @@ namespace Kmplete
         VulkanGraphicsPipeline& VulkanGraphicsPipeline::AddShaderStages(Vector<VkPipelineShaderStageCreateInfo>&& shaderStages)
         {
             Utils::MergeVectors(shaderStages, _shadersStages);
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-        
-        VulkanGraphicsPipeline& VulkanGraphicsPipeline::SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat)
-        {
-            _renderingCreateInfo.depthAttachmentFormat = depthFormat;
-            _renderingCreateInfo.stencilAttachmentFormat = stencilFormat;
             return *this;
         }
         //--------------------------------------------------------------------------
