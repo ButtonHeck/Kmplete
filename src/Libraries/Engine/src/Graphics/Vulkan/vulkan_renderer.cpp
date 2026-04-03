@@ -298,6 +298,27 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            VkBufferCopy copyRegion{
+                .srcOffset = srcOffset,
+                .dstOffset = dstOffset,
+                .size = size
+            };
+            vkCmdCopyBuffer(commandBuffer.GetVkCommandBuffer(), sourceBuffer.GetVkBuffer(), destinationBuffer.GetVkBuffer(), 1, &copyRegion);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);
+
+            vkCmdCopyBuffer(commandBuffer.GetVkCommandBuffer(), sourceBuffer.GetVkBuffer(), destinationBuffer.GetVkBuffer(), 1, &copyRegion);
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const
         {
             KMP_PROFILE_FUNCTION(ProfileLevelImportantFunctionsVerbose);

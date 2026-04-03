@@ -10,7 +10,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
-#include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Base/types_aliases.h"
@@ -114,12 +113,10 @@ namespace Kmplete
         Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + vertex2BufferSize + indexBufferSize });
 
         auto result = stagingBuffer.Map();
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to map texture buffer");
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + indexBufferSize, (char*)vertices2.data(), vertex2BufferSize);
         result = stagingBuffer.Flush();
-        Graphics::VulkanUtils::CheckResult(result, "MainFrameListener: failed to flush texture buffer");
         stagingBuffer.Unmap();
 
         const auto vertexBufferLayout = Graphics::BufferLayout({
@@ -134,9 +131,9 @@ namespace Kmplete
         {
             const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
             copyCmd.Begin();
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), { VkBufferCopy{.size = vertexBufferSize} });
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), { VkBufferCopy{.srcOffset = vertexBufferSize, .size = indexBufferSize}});
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), { VkBufferCopy{.srcOffset = vertexBufferSize + indexBufferSize, .dstOffset = vertexBufferSize, .size = vertex2BufferSize}});
+            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
+            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
+            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), vertexBufferSize + indexBufferSize, vertexBufferSize, vertex2BufferSize);
             copyCmd.End();
             vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
