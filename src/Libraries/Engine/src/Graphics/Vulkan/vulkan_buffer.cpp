@@ -118,15 +118,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanBuffer::Unmap()
+        VkResult VulkanBuffer::Unmap(bool flush /*= false*/, VkDeviceSize size/* = VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            auto result = VK_SUCCESS;
+            if (flush)
+            {
+                result = Flush(size, offset);
+            }
 
             if (_mapped)
             {
                 vkUnmapMemory(_device, _memory);
                 _mapped = nullptr;
             }
+
+            return result;
         }
         //--------------------------------------------------------------------------
 
@@ -135,15 +143,6 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
 
             return vkBindBufferMemory(_device, _buffer, _memory, offset);
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size)
-        {
-            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
-
-            KMP_ASSERT(_mapped);
-            memcpy((char*)_mapped + mappedOffset, data, size);
         }
         //--------------------------------------------------------------------------
 
@@ -166,6 +165,15 @@ namespace Kmplete
             mappedRange.memory = _memory;
 
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size)
+        {
+            KMP_PROFILE_FUNCTION(ProfileLevelMinorFunctions);
+
+            KMP_ASSERT(_mapped);
+            memcpy((char*)_mapped + mappedOffset, data, size);
         }
         //--------------------------------------------------------------------------
 

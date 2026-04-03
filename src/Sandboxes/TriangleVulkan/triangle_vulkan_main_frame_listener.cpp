@@ -111,13 +111,11 @@ namespace Kmplete
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
         Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, vertexBufferSize + vertex2BufferSize + indexBufferSize });
-
-        auto result = stagingBuffer.Map();
+        stagingBuffer.Map();
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + indexBufferSize, (char*)vertices2.data(), vertex2BufferSize);
-        result = stagingBuffer.Flush();
-        stagingBuffer.Unmap();
+        stagingBuffer.Unmap("flush"_true);
 
         const auto vertexBufferLayout = Graphics::BufferLayout({
             Graphics::BufferElement{Graphics::ShaderDataType::Float3, 0},

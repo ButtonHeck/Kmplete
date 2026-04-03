@@ -36,11 +36,11 @@ namespace Kmplete
             KMP_API virtual ~VulkanBuffer();
 
             KMP_API VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-            KMP_API void Unmap();
+            KMP_API VkResult Unmap(bool flush = false, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_API VkResult Bind(VkDeviceSize offset = 0);
-            KMP_API void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);
             KMP_API VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_API VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+            KMP_API void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);
 
             KMP_NODISCARD KMP_API VkBuffer GetVkBuffer() const noexcept;
             KMP_NODISCARD KMP_API void* GetMappedPtr() const noexcept;
