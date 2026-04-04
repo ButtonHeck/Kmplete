@@ -114,7 +114,10 @@ namespace Kmplete
 
                 VkPhysicalDeviceFeatures supportedFeatures;
                 vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-                if (!supportedFeatures.samplerAnisotropy)
+                if (!supportedFeatures.samplerAnisotropy ||
+                    !supportedFeatures.independentBlend ||
+                    !supportedFeatures.depthClamp ||
+                    !supportedFeatures.depthBounds)
                 {
                     return { "device suitable"_false, {} };
                 }
