@@ -8,6 +8,7 @@
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Core/memory_checker.h"
+#include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -72,6 +73,11 @@ int main(int argc, char** argv)
 #endif
 //--------------------------------------------------------------------------
 
+namespace Kmplete
+{
+    const char* ApplicationProfileSessionPrefix();
+}
+
 int Main(const Kmplete::ProgramOptions& programOptions)
 {
     Kmplete::MemoryChecker::Prepare();
@@ -82,7 +88,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
 #endif
 
     KMP_MB_UNUSED const auto startupSessionCapacity = 400;
-    KMP_PROFILE_BEGIN_SESSION("Startup", "KmpleteProfile-Startup.json", startupSessionCapacity);
+    KMP_PROFILE_BEGIN_SESSION("Startup", Kmplete::Utils::Concatenate(Kmplete::ApplicationProfileSessionPrefix(), "-Profile-Startup.json"), startupSessionCapacity);
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();
 
@@ -92,12 +98,12 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     }
 
     KMP_MB_UNUSED const auto runtimeSessionCapacity = 10'000;
-    KMP_PROFILE_BEGIN_SESSION("Runtime", "KmpleteProfile-Runtime.json", runtimeSessionCapacity);
+    KMP_PROFILE_BEGIN_SESSION("Runtime", Kmplete::Utils::Concatenate(Kmplete::ApplicationProfileSessionPrefix(), "-Profile-Runtime.json"), runtimeSessionCapacity);
     app->Run();
     KMP_PROFILE_END_SESSION();
 
     KMP_MB_UNUSED const auto shutdownSessionCapacity = 200;
-    KMP_PROFILE_BEGIN_SESSION("Shutdown", "KmpleteProfile-Shutdown.json", shutdownSessionCapacity);
+    KMP_PROFILE_BEGIN_SESSION("Shutdown", Kmplete::Utils::Concatenate(Kmplete::ApplicationProfileSessionPrefix(), "-Profile-Shutdown.json"), shutdownSessionCapacity);
     app.reset();
     KMP_PROFILE_END_SESSION();
 

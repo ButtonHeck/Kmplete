@@ -5,6 +5,13 @@
 
 namespace Kmplete
 {
+    const char* ApplicationProfileSessionPrefix()
+    {
+        return "Editor";
+    }
+    //--------------------------------------------------------------------------
+
+
     UPtr<Application> CreateApplication(const ProgramOptions& programOptions) KMP_PROFILING(ProfileLevelAlways)
     {
         try
@@ -12,7 +19,8 @@ namespace Kmplete
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters = 
                     {.applicationName = "Kmplete Editor",
-                     .settingsFilepath = programOptions.GetSettingsFilepath()
+                     .settingsFilepath = programOptions.GetSettingsFilepath(),
+                     .defaultSettingsFileName = "Editor_settings.json"
                     },
                 .resizable = true
             };
