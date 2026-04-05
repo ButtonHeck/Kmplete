@@ -182,6 +182,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetDepthTestEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthTestEnable(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthWriteEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthWriteEnable(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthCompareOp(VkCompareOp comparison) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthCompareOp(_currentCommandBuffer, comparison);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SetDepthBiasEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetDepthBiasEnable(_currentCommandBuffer, enabled);
@@ -203,6 +221,24 @@ namespace Kmplete
         void VulkanRenderer::SetDepthBounds(float min, float max) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetDepthBounds(_currentCommandBuffer, min, max);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthClampEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetDepthClampEnableEXT(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthClampRange(VkDepthClampModeEXT depthClampMode, const VkDepthClampRangeEXT& depthClampRange) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetDepthClampRangeEXT(_currentCommandBuffer, depthClampMode, &depthClampRange);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthClipEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetDepthClipEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 

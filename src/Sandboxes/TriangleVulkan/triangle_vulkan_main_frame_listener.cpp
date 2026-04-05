@@ -182,12 +182,18 @@ namespace Kmplete
         pipeline.AddShaderStages(std::move(shaderStages));
         pipeline.AddDynamicStates(Graphics::VulkanPresets::DynamicStates_Default);
         // additional dynamic states for testing
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE); //renderer.SetDepthTestEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE); //renderer.SetDepthWriteEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_COMPARE_OP); //renderer.SetDepthCompareOp(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE); //renderer.SetDepthBoundsEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BOUNDS); //renderer.SetDepthBounds(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BIAS_ENABLE); //renderer.SetDepthBiasEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BIAS); //renderer.SetDepthBias(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_ENABLE_EXT); //renderer.SetDepthClampEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_RANGE_EXT); //renderer.SetDepthClampRange(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLIP_ENABLE_EXT); //renderer.SetDepthClipEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK); //renderer.SetStencilCompareMask(...)
@@ -287,12 +293,19 @@ namespace Kmplete
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
 
         // dynamic rendering functions tests
-        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        vulkanRenderer.SetDepthTestEnabled(true);
+        vulkanRenderer.SetDepthWriteEnabled(true);
+        vulkanRenderer.SetDepthCompareOp(VK_COMPARE_OP_LESS_OR_EQUAL);
         vulkanRenderer.SetDepthBoundsEnabled(false);
         vulkanRenderer.SetDepthBounds(0.0f, 1.0f);
-        vulkanRenderer.SetLineWidth(1.0f);
         vulkanRenderer.SetDepthBiasEnabled(true);
         vulkanRenderer.SetDepthBias(0.0f, 0.0f, 0.0f);
+        vulkanRenderer.SetDepthClampEnabled(true);
+        VkDepthClampRangeEXT depthClampRange{ .minDepthClamp = 0.0f, .maxDepthClamp = 1.0f };
+        vulkanRenderer.SetDepthClampRange(VK_DEPTH_CLAMP_MODE_VIEWPORT_RANGE_EXT, depthClampRange);
+        vulkanRenderer.SetDepthClipEnabled(false);
+        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        vulkanRenderer.SetLineWidth(1.0f);
         vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         vulkanRenderer.SetStencilCompareMask(VK_STENCIL_FACE_FRONT_BIT, 0);

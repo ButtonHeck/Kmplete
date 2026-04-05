@@ -206,9 +206,15 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
+            auto depthClipEnableFeatures = VulkanUtils::InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
+            depthClipEnableFeatures.depthClipEnable = VK_TRUE;
+
             auto dynamicStateFeatures3 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
             dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3DepthClipEnable = VK_TRUE;
+            dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
 
             VkPhysicalDeviceFeatures features{};
             features.samplerAnisotropy = VK_TRUE;

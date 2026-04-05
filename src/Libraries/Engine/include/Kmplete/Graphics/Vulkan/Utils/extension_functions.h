@@ -17,6 +17,9 @@ namespace Kmplete
             static PFN_vkDestroyDebugUtilsMessengerEXT DestroyDebugUtilsMessengerEXT;
 #endif
             static PFN_vkCmdSetRasterizationSamplesEXT CmdSetRasterizationSamplesEXT;
+            static PFN_vkCmdSetDepthClampEnableEXT CmdSetDepthClampEnableEXT;
+            static PFN_vkCmdSetDepthClipEnableEXT CmdSetDepthClipEnableEXT;
+            static PFN_vkCmdSetDepthClampRangeEXT CmdSetDepthClampRangeEXT;
 
             KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };

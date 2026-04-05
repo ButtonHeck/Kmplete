@@ -44,10 +44,16 @@ namespace Kmplete
             KMP_API void SetViewport(const VkViewport& viewport) const;
             KMP_API void SetScissor(const VkRect2D& scissorRect) const;
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
+            KMP_API void SetDepthTestEnabled(bool enabled) const;
+            KMP_API void SetDepthWriteEnabled(bool enabled) const;
+            KMP_API void SetDepthCompareOp(VkCompareOp comparison) const;
             KMP_API void SetDepthBiasEnabled(bool enabled) const;
             KMP_API void SetDepthBias(float constantFactor, float clamp, float slopeFactor) const;
             KMP_API void SetDepthBoundsEnabled(bool enabled) const;
             KMP_API void SetDepthBounds(float min, float max) const;
+            KMP_API void SetDepthClampEnabled(bool enabled) const;
+            KMP_API void SetDepthClampRange(VkDepthClampModeEXT depthClampMode, const VkDepthClampRangeEXT& depthClampRange) const;
+            KMP_API void SetDepthClipEnabled(bool enabled) const;
             KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
             KMP_API void SetLineWidth(float lineWidth) const;
             KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
