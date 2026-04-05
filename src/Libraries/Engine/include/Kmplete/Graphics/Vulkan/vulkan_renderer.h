@@ -44,6 +44,8 @@ namespace Kmplete
             KMP_API void SetViewport(const VkViewport& viewport) const;
             KMP_API void SetScissor(const VkRect2D& scissorRect) const;
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
+            KMP_API void SetDepthBounds(bool enabled, float min = 0.0f, float max = 1.0f) const;
+            KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
             KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;

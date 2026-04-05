@@ -182,6 +182,22 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetDepthBounds(bool enabled, float min /*= 0.0f*/, float max /*= 1.0f*/) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthBoundsTestEnable(_currentCommandBuffer, enabled);
+            if (enabled)
+            {
+                vkCmdSetDepthBounds(_currentCommandBuffer, min, max);
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetPrimitiveTopology(VkPrimitiveTopology topology) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetPrimitiveTopology(_currentCommandBuffer, topology);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;

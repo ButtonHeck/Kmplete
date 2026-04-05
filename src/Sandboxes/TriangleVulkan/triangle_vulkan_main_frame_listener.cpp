@@ -181,6 +181,9 @@ namespace Kmplete
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddShaderStages(std::move(shaderStages));
         pipeline.AddDynamicStates(Graphics::VulkanPresets::DynamicStates_Default);
+        // additional dynamic states for testing
+        pipeline.AddDynamicStates({ VK_DYNAMIC_STATE_DEPTH_BOUNDS, VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE }); //renderer.SetDepthBounds(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
 
         pipeline.Build();
     }
@@ -272,6 +275,8 @@ namespace Kmplete
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
         vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
+        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        vulkanRenderer.SetDepthBounds(false);
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
         vulkanRenderer.Draw(12, 1, 3, 0);
         vulkanRenderer.EndRendering();
