@@ -196,6 +196,8 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE); //renderer.SetStencilTestEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_OP); //renderer.SetStencilOp(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK); //renderer.SetStencilCompareMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_WRITE_MASK); //renderer.SetStencilWriteMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_REFERENCE); //renderer.SetStencilReference(...)
@@ -308,6 +310,8 @@ namespace Kmplete
         vulkanRenderer.SetLineWidth(1.0f);
         vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        vulkanRenderer.SetStencilTestEnabled(true);
+        vulkanRenderer.SetStencilOp(VK_STENCIL_FACE_FRONT_BIT, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS);
         vulkanRenderer.SetStencilCompareMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilWriteMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilReference(VK_STENCIL_FACE_FRONT_BIT, 0);

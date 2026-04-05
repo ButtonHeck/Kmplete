@@ -58,6 +58,8 @@ namespace Kmplete
             KMP_API void SetLineWidth(float lineWidth) const;
             KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
             KMP_API void SetFrontFace(VkFrontFace frontFace) const;
+            KMP_API void SetStencilTestEnabled(bool enabled) const;
+            KMP_API void SetStencilOp(VkStencilFaceFlags faceMask, VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp comparison) const;
             KMP_API void SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const;
             KMP_API void SetStencilWriteMask(VkStencilFaceFlags faceMask, UInt32 writeMask) const;
             KMP_API void SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const;

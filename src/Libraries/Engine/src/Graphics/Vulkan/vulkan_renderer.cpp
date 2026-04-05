@@ -266,6 +266,18 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetStencilTestEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetStencilTestEnable(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetStencilOp(VkStencilFaceFlags faceMask, VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp comparison) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetStencilOp(_currentCommandBuffer, faceMask, failOp, passOp, depthFailOp, comparison);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetStencilCompareMask(_currentCommandBuffer, faceMask, compareMask);
