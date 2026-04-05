@@ -180,6 +180,7 @@ namespace Kmplete
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddShaderStages(std::move(shaderStages));
+        pipeline.AddDynamicStates(Graphics::VulkanPresets::DynamicStates_Default);
 
         pipeline.Build();
     }

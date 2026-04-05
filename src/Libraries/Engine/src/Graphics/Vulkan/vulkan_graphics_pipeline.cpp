@@ -386,12 +386,6 @@ namespace Kmplete
             _multisamplingStateCreateInfo.pSampleMask = nullptr;
             _multisamplingStateCreateInfo.alphaToCoverageEnable = VK_FALSE;
             _multisamplingStateCreateInfo.alphaToOneEnable = VK_FALSE;
-
-            AddDynamicStates({ 
-                VK_DYNAMIC_STATE_VIEWPORT, 
-                VK_DYNAMIC_STATE_SCISSOR, 
-                VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT
-            });
         }
         //--------------------------------------------------------------------------
     }
