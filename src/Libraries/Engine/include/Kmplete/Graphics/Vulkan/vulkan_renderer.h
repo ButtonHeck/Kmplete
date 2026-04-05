@@ -44,8 +44,19 @@ namespace Kmplete
             KMP_API void SetViewport(const VkViewport& viewport) const;
             KMP_API void SetScissor(const VkRect2D& scissorRect) const;
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
-            KMP_API void SetDepthBounds(bool enabled, float min = 0.0f, float max = 1.0f) const;
+            KMP_API void SetDepthBiasEnabled(bool enabled) const;
+            KMP_API void SetDepthBias(float constantFactor, float clamp, float slopeFactor) const;
+            KMP_API void SetDepthBoundsEnabled(bool enabled) const;
+            KMP_API void SetDepthBounds(float min, float max) const;
             KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
+            KMP_API void SetLineWidth(float lineWidth) const;
+            KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
+            KMP_API void SetFrontFace(VkFrontFace frontFace) const;
+            KMP_API void SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const;
+            KMP_API void SetStencilWriteMask(VkStencilFaceFlags faceMask, UInt32 writeMask) const;
+            KMP_API void SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const;
+            KMP_API void SetBlendConstants(const Array<float, 4> constants) const;
+
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
             KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;

@@ -182,19 +182,75 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetDepthBounds(bool enabled, float min /*= 0.0f*/, float max /*= 1.0f*/) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::SetDepthBiasEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthBiasEnable(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthBias(float constantFactor, float clamp, float slopeFactor) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthBias(_currentCommandBuffer, constantFactor, clamp, slopeFactor);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthBoundsEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetDepthBoundsTestEnable(_currentCommandBuffer, enabled);
-            if (enabled)
-            {
-                vkCmdSetDepthBounds(_currentCommandBuffer, min, max);
-            }
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDepthBounds(float min, float max) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetDepthBounds(_currentCommandBuffer, min, max);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetPrimitiveTopology(VkPrimitiveTopology topology) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetPrimitiveTopology(_currentCommandBuffer, topology);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetLineWidth(float lineWidth) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetLineWidth(_currentCommandBuffer, lineWidth);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetCullMode(VkCullModeFlags cullMode) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetCullMode(_currentCommandBuffer, cullMode);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetFrontFace(VkFrontFace frontFace) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetFrontFace(_currentCommandBuffer, frontFace);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetStencilCompareMask(_currentCommandBuffer, faceMask, compareMask);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetStencilWriteMask(VkStencilFaceFlags faceMask, UInt32 writeMask) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetStencilWriteMask(_currentCommandBuffer, faceMask, writeMask);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetStencilReference(_currentCommandBuffer, faceMask, reference);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetBlendConstants(const Array<float, 4> constants) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetBlendConstants(_currentCommandBuffer, constants.data());
         }}
         //--------------------------------------------------------------------------
 
