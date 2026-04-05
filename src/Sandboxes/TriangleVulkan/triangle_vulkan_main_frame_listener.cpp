@@ -192,15 +192,17 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_ENABLE_EXT); //renderer.SetDepthClampEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_RANGE_EXT); //renderer.SetDepthClampRange(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLIP_ENABLE_EXT); //renderer.SetDepthClipEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
+
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE); //renderer.SetStencilTestEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_OP); //renderer.SetStencilOp(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK); //renderer.SetStencilCompareMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_WRITE_MASK); //renderer.SetStencilWriteMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_REFERENCE); //renderer.SetStencilReference(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS); //renderer.SetBlendConstants(...)
 
         pipeline.Build();
@@ -303,20 +305,22 @@ namespace Kmplete
         vulkanRenderer.SetDepthBiasEnabled(true);
         vulkanRenderer.SetDepthBias(0.0f, 0.0f, 0.0f);
         vulkanRenderer.SetDepthClampEnabled(true);
-        VkDepthClampRangeEXT depthClampRange{ .minDepthClamp = 0.0f, .maxDepthClamp = 1.0f };
-        vulkanRenderer.SetDepthClampRange(VK_DEPTH_CLAMP_MODE_VIEWPORT_RANGE_EXT, depthClampRange);
+        vulkanRenderer.SetDepthClampRange(VK_DEPTH_CLAMP_MODE_VIEWPORT_RANGE_EXT, 0.0f, 1.0f);
         vulkanRenderer.SetDepthClipEnabled(false);
-        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
-        vulkanRenderer.SetLineWidth(1.0f);
-        vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
-        vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
+
         vulkanRenderer.SetStencilTestEnabled(true);
         vulkanRenderer.SetStencilOp(VK_STENCIL_FACE_FRONT_BIT, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS);
         vulkanRenderer.SetStencilCompareMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilWriteMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilReference(VK_STENCIL_FACE_FRONT_BIT, 0);
+
+        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        vulkanRenderer.SetLineWidth(1.0f);
+        vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
+        vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
 
+        // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
         vulkanRenderer.Draw(12, 1, 3, 0);
         vulkanRenderer.EndRendering();

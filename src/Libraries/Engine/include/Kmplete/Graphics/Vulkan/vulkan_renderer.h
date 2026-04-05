@@ -52,7 +52,7 @@ namespace Kmplete
             KMP_API void SetDepthBoundsEnabled(bool enabled) const;
             KMP_API void SetDepthBounds(float min, float max) const;
             KMP_API void SetDepthClampEnabled(bool enabled) const;
-            KMP_API void SetDepthClampRange(VkDepthClampModeEXT depthClampMode, const VkDepthClampRangeEXT& depthClampRange) const;
+            KMP_API void SetDepthClampRange(VkDepthClampModeEXT depthClampMode, float min, float max) const;
             KMP_API void SetDepthClipEnabled(bool enabled) const;
             KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
             KMP_API void SetLineWidth(float lineWidth) const;
