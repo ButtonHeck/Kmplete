@@ -209,6 +209,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS); //renderer.SetBlendConstants(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE); //renderer.SetRasterizerDiscardEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_ENABLE_EXT); //renderer.SetDiscardRectangleEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT); //renderer.SetDiscardRectangle(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_MODE_EXT); //renderer.SetDiscardRectangleMode(...)
 
         pipeline.Build();
     }
@@ -329,6 +332,17 @@ namespace Kmplete
         vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
         vulkanRenderer.SetRasterizerDiscardEnabled(false);
         vulkanRenderer.SetPrimitiveRestartEnabled(false);
+        vulkanRenderer.SetDiscardRectangleEnabled(true);
+        vulkanRenderer.SetDiscardRectangle(0, 8, 
+           {VkRect2D{.offset = VkOffset2D{.x = 1000, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1030, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1060, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1090, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1120, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1150, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1180, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+            VkRect2D{.offset = VkOffset2D{.x = 1210, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}}});
+        vulkanRenderer.SetDiscardRectangleMode(VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

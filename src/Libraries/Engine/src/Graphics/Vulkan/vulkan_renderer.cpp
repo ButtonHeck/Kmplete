@@ -333,6 +333,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetDiscardRectangleEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetDiscardRectangleEnableEXT(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDiscardRectangle(UInt32 firstDiscardRectangle, UInt32 count, const Vector<VkRect2D>& discardRectangles) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetDiscardRectangleEXT(_currentCommandBuffer, firstDiscardRectangle, count, discardRectangles.data());
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetDiscardRectangleMode(VkDiscardRectangleModeEXT mode) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetDiscardRectangleModeEXT(_currentCommandBuffer, mode);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;

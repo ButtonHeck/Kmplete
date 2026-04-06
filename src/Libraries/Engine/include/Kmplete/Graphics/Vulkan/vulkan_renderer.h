@@ -69,6 +69,9 @@ namespace Kmplete
             KMP_API void SetFrontFace(VkFrontFace frontFace) const;
             KMP_API void SetBlendConstants(const Array<float, 4> constants) const;
             KMP_API void SetRasterizerDiscardEnabled(bool enabled) const;
+            KMP_API void SetDiscardRectangleEnabled(bool enabled) const;
+            KMP_API void SetDiscardRectangle(UInt32 firstDiscardRectangle, UInt32 count, const Vector<VkRect2D>& discardRectangles) const;
+            KMP_API void SetDiscardRectangleMode(VkDiscardRectangleModeEXT mode) const;
 
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 

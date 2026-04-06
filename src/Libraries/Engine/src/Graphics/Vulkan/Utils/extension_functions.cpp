@@ -17,6 +17,9 @@ namespace Kmplete
         PFN_vkCmdSetDepthClampRangeEXT VulkanCommands::CmdSetDepthClampRangeEXT = nullptr;
         PFN_vkCmdSetLineStippleEnableEXT VulkanCommands::CmdSetLineStippleEnableEXT = nullptr;
         PFN_vkCmdSetLineRasterizationModeEXT VulkanCommands::CmdSetLineRasterizationModeEXT = nullptr;
+        PFN_vkCmdSetDiscardRectangleEnableEXT VulkanCommands::CmdSetDiscardRectangleEnableEXT = nullptr;
+        PFN_vkCmdSetDiscardRectangleEXT VulkanCommands::CmdSetDiscardRectangleEXT = nullptr;
+        PFN_vkCmdSetDiscardRectangleModeEXT VulkanCommands::CmdSetDiscardRectangleModeEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -76,6 +79,27 @@ namespace Kmplete
             if (CmdSetLineRasterizationModeEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetLineRasterizationModeEXT function");
+                return false;
+            }
+
+            CmdSetDiscardRectangleEnableEXT = (PFN_vkCmdSetDiscardRectangleEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDiscardRectangleEnableEXT");
+            if (CmdSetDiscardRectangleEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetDiscardRectangleEnableEXT function");
+                return false;
+            }
+
+            CmdSetDiscardRectangleEXT = (PFN_vkCmdSetDiscardRectangleEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDiscardRectangleEXT");
+            if (CmdSetDiscardRectangleEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetDiscardRectangleEXT function");
+                return false;
+            }
+
+            CmdSetDiscardRectangleModeEXT = (PFN_vkCmdSetDiscardRectangleModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDiscardRectangleModeEXT");
+            if (CmdSetDiscardRectangleModeEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetDiscardRectangleModeEXT function");
                 return false;
             }
 
