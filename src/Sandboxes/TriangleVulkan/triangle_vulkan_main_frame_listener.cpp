@@ -217,6 +217,8 @@ namespace Kmplete
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT); //renderer.SetSampleMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR); //renderer.SetFragmentShadingRate(...)
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT); //renderer.SetColorWriteEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_ENABLE_EXT); //renderer.SetColorBlendEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_EQUATION_EXT); //renderer.SetColorBlendEquation(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT); //renderer.SetPolygonMode(...)
 
         pipeline.Build();
@@ -351,6 +353,8 @@ namespace Kmplete
         vulkanRenderer.SetDiscardRectangleMode(VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT);
         //vulkanRenderer.SetSampleLocationsEnabled(false);
         vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
+        vulkanRenderer.SetColorBlendEnabled(0, 1, {VK_TRUE});
+        vulkanRenderer.SetColorBlendEquation(0, 1, { Graphics::VulkanPresets::ColorBlendEquation_AlphaBlending });
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

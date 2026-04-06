@@ -381,6 +381,18 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetColorBlendEnabled(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkBool32>& colorBlendsEnables) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetColorBlendEnableEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEnables.data());
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetColorBlendEquation(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorBlendEquationEXT>& colorBlendsEquations) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetColorBlendEquationEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEquations.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SetPolygonMode(VkPolygonMode polygonMode) const KMP_PROFILING(ProfileLevelMinor)
         {
             VulkanCommands::CmdSetPolygonModeEXT(_currentCommandBuffer, polygonMode);
