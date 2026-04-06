@@ -25,6 +25,7 @@ namespace Kmplete
         PFN_vkCmdSetSampleMaskEXT VulkanCommands::CmdSetSampleMaskEXT = nullptr;
         PFN_vkCmdSetFragmentShadingRateKHR VulkanCommands::CmdSetFragmentShadingRateKHR = nullptr;
         PFN_vkCmdSetColorWriteEnableEXT VulkanCommands::CmdSetColorWriteEnableEXT = nullptr;
+        PFN_vkCmdSetPolygonModeEXT VulkanCommands::CmdSetPolygonModeEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -140,6 +141,13 @@ namespace Kmplete
             if (CmdSetColorWriteEnableEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetColorWriteEnableEXT function");
+                return false;
+            }
+
+            CmdSetPolygonModeEXT = (PFN_vkCmdSetPolygonModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetPolygonModeEXT");
+            if (CmdSetPolygonModeEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetPolygonModeEXT function");
                 return false;
             }
 

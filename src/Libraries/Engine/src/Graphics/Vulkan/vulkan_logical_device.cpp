@@ -222,6 +222,7 @@ namespace Kmplete
             dynamicStateFeatures3.extendedDynamicState3LineRasterizationMode = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3SampleLocationsEnable = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3SampleMask = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
             dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
 
             VkPhysicalDeviceFeatures features{};
@@ -229,6 +230,7 @@ namespace Kmplete
             features.independentBlend = VK_TRUE;
             features.depthClamp = VK_TRUE;
             features.depthBounds = VK_TRUE;
+            features.fillModeNonSolid = VK_TRUE;
 
             auto features13 = VulkanUtils::InitVkPhysicalDeviceVulkan13Features();
             features13.dynamicRendering = VK_TRUE;

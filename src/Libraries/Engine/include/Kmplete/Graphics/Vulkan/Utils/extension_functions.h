@@ -30,6 +30,7 @@ namespace Kmplete
             static PFN_vkCmdSetSampleMaskEXT CmdSetSampleMaskEXT;
             static PFN_vkCmdSetFragmentShadingRateKHR CmdSetFragmentShadingRateKHR;
             static PFN_vkCmdSetColorWriteEnableEXT CmdSetColorWriteEnableEXT;
+            static PFN_vkCmdSetPolygonModeEXT CmdSetPolygonModeEXT;
 
             KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };

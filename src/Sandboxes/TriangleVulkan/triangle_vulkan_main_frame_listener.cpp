@@ -217,6 +217,7 @@ namespace Kmplete
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT); //renderer.SetSampleMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR); //renderer.SetFragmentShadingRate(...)
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT); //renderer.SetColorWriteEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT); //renderer.SetPolygonMode(...)
 
         pipeline.Build();
     }
@@ -349,6 +350,7 @@ namespace Kmplete
             VkRect2D{.offset = VkOffset2D{.x = 1210, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}}});
         vulkanRenderer.SetDiscardRectangleMode(VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT);
         //vulkanRenderer.SetSampleLocationsEnabled(false);
+        vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
