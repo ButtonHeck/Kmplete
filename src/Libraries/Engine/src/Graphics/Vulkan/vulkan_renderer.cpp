@@ -291,6 +291,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetLineStippleEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetLineStippleEnableEXT(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetLineStipple(UInt32 lineStippleFactor, UInt16 lineStipplePattern) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetLineStipple(_currentCommandBuffer, lineStippleFactor, lineStipplePattern);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetLineRasterizationMode(VkLineRasterizationModeEXT lineRasterizationMode) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetLineRasterizationModeEXT(_currentCommandBuffer, lineRasterizationMode);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SetCullMode(VkCullModeFlags cullMode) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetCullMode(_currentCommandBuffer, cullMode);

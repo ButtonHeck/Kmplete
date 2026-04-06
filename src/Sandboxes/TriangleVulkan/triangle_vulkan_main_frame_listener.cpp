@@ -202,6 +202,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE); //renderer.SetPrimitiveRestartEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE_ENABLE_EXT); //renderer.SetLineStippleEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE); //renderer.SetLineStipple(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_RASTERIZATION_MODE_EXT); //renderer.SetLineRasterizationMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS); //renderer.SetBlendConstants(...)
@@ -318,6 +321,9 @@ namespace Kmplete
 
         vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
         vulkanRenderer.SetLineWidth(1.0f);
+        vulkanRenderer.SetLineStippleEnabled(false);
+        vulkanRenderer.SetLineStipple(1, 1);
+        vulkanRenderer.SetLineRasterizationMode(VK_LINE_RASTERIZATION_MODE_DEFAULT);
         vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         vulkanRenderer.SetBlendConstants({1, 1, 1, 1});

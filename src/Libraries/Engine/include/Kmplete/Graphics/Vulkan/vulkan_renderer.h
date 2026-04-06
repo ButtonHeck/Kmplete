@@ -62,6 +62,9 @@ namespace Kmplete
             KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
             KMP_API void SetPrimitiveRestartEnabled(bool enabled) const;
             KMP_API void SetLineWidth(float lineWidth) const;
+            KMP_API void SetLineStippleEnabled(bool enabled) const;
+            KMP_API void SetLineStipple(UInt32 lineStippleFactor, UInt16 lineStipplePattern) const;
+            KMP_API void SetLineRasterizationMode(VkLineRasterizationModeEXT lineRasterizationMode) const;
             KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
             KMP_API void SetFrontFace(VkFrontFace frontFace) const;
             KMP_API void SetBlendConstants(const Array<float, 4> constants) const;

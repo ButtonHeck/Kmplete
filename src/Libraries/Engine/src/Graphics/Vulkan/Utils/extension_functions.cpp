@@ -15,6 +15,8 @@ namespace Kmplete
         PFN_vkCmdSetDepthClampEnableEXT VulkanCommands::CmdSetDepthClampEnableEXT = nullptr;
         PFN_vkCmdSetDepthClipEnableEXT VulkanCommands::CmdSetDepthClipEnableEXT = nullptr;
         PFN_vkCmdSetDepthClampRangeEXT VulkanCommands::CmdSetDepthClampRangeEXT = nullptr;
+        PFN_vkCmdSetLineStippleEnableEXT VulkanCommands::CmdSetLineStippleEnableEXT = nullptr;
+        PFN_vkCmdSetLineRasterizationModeEXT VulkanCommands::CmdSetLineRasterizationModeEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -60,6 +62,20 @@ namespace Kmplete
             if (CmdSetDepthClampRangeEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetDepthClampRangeEXT function");
+                return false;
+            }
+
+            CmdSetLineStippleEnableEXT = (PFN_vkCmdSetLineStippleEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLineStippleEnableEXT");
+            if (CmdSetLineStippleEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetLineStippleEnableEXT function");
+                return false;
+            }
+
+            CmdSetLineRasterizationModeEXT = (PFN_vkCmdSetLineRasterizationModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLineRasterizationModeEXT");
+            if (CmdSetLineRasterizationModeEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetLineRasterizationModeEXT function");
                 return false;
             }
 

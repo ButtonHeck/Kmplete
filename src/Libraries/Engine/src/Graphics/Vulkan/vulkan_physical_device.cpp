@@ -24,7 +24,8 @@ namespace Kmplete
                 VK_KHR_DEPTH_STENCIL_RESOLVE_EXTENSION_NAME,
                 VK_EXT_DEPTH_CLIP_ENABLE_EXTENSION_NAME,
                 VK_EXT_DEPTH_CLAMP_CONTROL_EXTENSION_NAME,
-                VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME
+                VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
+                VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME
             };
 
             return deviceExtensions;

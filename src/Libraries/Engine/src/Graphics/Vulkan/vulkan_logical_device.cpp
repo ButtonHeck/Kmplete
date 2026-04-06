@@ -214,6 +214,8 @@ namespace Kmplete
             dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3DepthClipEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3LineStippleEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3LineRasterizationMode = VK_TRUE;
             dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
 
             VkPhysicalDeviceFeatures features{};
