@@ -200,6 +200,7 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_REFERENCE); //renderer.SetStencilReference(...)
 
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE); //renderer.SetPrimitiveRestartEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
@@ -321,6 +322,7 @@ namespace Kmplete
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
         vulkanRenderer.SetRasterizerDiscardEnabled(false);
+        vulkanRenderer.SetPrimitiveRestartEnabled(false);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

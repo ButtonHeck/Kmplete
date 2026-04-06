@@ -41,9 +41,6 @@ namespace Kmplete
             KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const;
             KMP_API void TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const;
 
-            KMP_API void SetViewport(const VkViewport& viewport) const;
-            KMP_API void SetScissor(const VkRect2D& scissorRect) const;
-            KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
             KMP_API void SetDepthTestEnabled(bool enabled) const;
             KMP_API void SetDepthWriteEnabled(bool enabled) const;
             KMP_API void SetDepthCompareOp(VkCompareOp comparison) const;
@@ -54,15 +51,19 @@ namespace Kmplete
             KMP_API void SetDepthClampEnabled(bool enabled) const;
             KMP_API void SetDepthClampRange(VkDepthClampModeEXT depthClampMode, float min, float max) const;
             KMP_API void SetDepthClipEnabled(bool enabled) const;
-            KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
-            KMP_API void SetLineWidth(float lineWidth) const;
-            KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
-            KMP_API void SetFrontFace(VkFrontFace frontFace) const;
             KMP_API void SetStencilTestEnabled(bool enabled) const;
             KMP_API void SetStencilOp(VkStencilFaceFlags faceMask, VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp comparison) const;
             KMP_API void SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const;
             KMP_API void SetStencilWriteMask(VkStencilFaceFlags faceMask, UInt32 writeMask) const;
             KMP_API void SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const;
+            KMP_API void SetViewport(const VkViewport& viewport) const;
+            KMP_API void SetScissor(const VkRect2D& scissorRect) const;
+            KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
+            KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
+            KMP_API void SetPrimitiveRestartEnabled(bool enabled) const;
+            KMP_API void SetLineWidth(float lineWidth) const;
+            KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
+            KMP_API void SetFrontFace(VkFrontFace frontFace) const;
             KMP_API void SetBlendConstants(const Array<float, 4> constants) const;
             KMP_API void SetRasterizerDiscardEnabled(bool enabled) const;
 

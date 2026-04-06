@@ -164,24 +164,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetViewport(const VkViewport& viewport) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            vkCmdSetViewport(_currentCommandBuffer, 0, 1, &viewport);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetScissor(const VkRect2D& scissorRect) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            vkCmdSetScissor(_currentCommandBuffer, 0, 1, &scissorRect);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanRenderer::SetDepthTestEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetDepthTestEnable(_currentCommandBuffer, enabled);
@@ -232,7 +214,7 @@ namespace Kmplete
 
         void VulkanRenderer::SetDepthClampRange(VkDepthClampModeEXT depthClampMode, float min, float max) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VkDepthClampRangeEXT depthClampRange{ .minDepthClamp = min, .maxDepthClamp = max }; 
+            VkDepthClampRangeEXT depthClampRange{ .minDepthClamp = min, .maxDepthClamp = max };
             VulkanCommands::CmdSetDepthClampRangeEXT(_currentCommandBuffer, depthClampMode, &depthClampRange);
         }}
         //--------------------------------------------------------------------------
@@ -240,30 +222,6 @@ namespace Kmplete
         void VulkanRenderer::SetDepthClipEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
             VulkanCommands::CmdSetDepthClipEnableEXT(_currentCommandBuffer, enabled);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetPrimitiveTopology(VkPrimitiveTopology topology) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            vkCmdSetPrimitiveTopology(_currentCommandBuffer, topology);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetLineWidth(float lineWidth) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            vkCmdSetLineWidth(_currentCommandBuffer, lineWidth);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetCullMode(VkCullModeFlags cullMode) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            vkCmdSetCullMode(_currentCommandBuffer, cullMode);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetFrontFace(VkFrontFace frontFace) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            vkCmdSetFrontFace(_currentCommandBuffer, frontFace);
         }}
         //--------------------------------------------------------------------------
 
@@ -294,6 +252,54 @@ namespace Kmplete
         void VulkanRenderer::SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const KMP_PROFILING(ProfileLevelMinor)
         {
             vkCmdSetStencilReference(_currentCommandBuffer, faceMask, reference);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetViewport(const VkViewport& viewport) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetViewport(_currentCommandBuffer, 0, 1, &viewport);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetScissor(const VkRect2D& scissorRect) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetScissor(_currentCommandBuffer, 0, 1, &scissorRect);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetPrimitiveTopology(VkPrimitiveTopology topology) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetPrimitiveTopology(_currentCommandBuffer, topology);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetPrimitiveRestartEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetPrimitiveRestartEnable(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetLineWidth(float lineWidth) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetLineWidth(_currentCommandBuffer, lineWidth);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetCullMode(VkCullModeFlags cullMode) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetCullMode(_currentCommandBuffer, cullMode);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetFrontFace(VkFrontFace frontFace) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetFrontFace(_currentCommandBuffer, frontFace);
         }}
         //--------------------------------------------------------------------------
 
