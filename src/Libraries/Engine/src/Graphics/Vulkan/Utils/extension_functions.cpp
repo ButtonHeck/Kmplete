@@ -20,6 +20,9 @@ namespace Kmplete
         PFN_vkCmdSetDiscardRectangleEnableEXT VulkanCommands::CmdSetDiscardRectangleEnableEXT = nullptr;
         PFN_vkCmdSetDiscardRectangleEXT VulkanCommands::CmdSetDiscardRectangleEXT = nullptr;
         PFN_vkCmdSetDiscardRectangleModeEXT VulkanCommands::CmdSetDiscardRectangleModeEXT = nullptr;
+        PFN_vkCmdSetSampleLocationsEnableEXT VulkanCommands::CmdSetSampleLocationsEnableEXT = nullptr;
+        PFN_vkCmdSetSampleLocationsEXT VulkanCommands::CmdSetSampleLocationsEXT = nullptr;
+        PFN_vkCmdSetSampleMaskEXT VulkanCommands::CmdSetSampleMaskEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -100,6 +103,27 @@ namespace Kmplete
             if (CmdSetDiscardRectangleModeEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetDiscardRectangleModeEXT function");
+                return false;
+            }
+
+            CmdSetSampleLocationsEnableEXT = (PFN_vkCmdSetSampleLocationsEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleLocationsEnableEXT");
+            if (CmdSetSampleLocationsEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetSampleLocationsEnableEXT function");
+                return false;
+            }
+
+            CmdSetSampleLocationsEXT = (PFN_vkCmdSetSampleLocationsEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleLocationsEXT");
+            if (CmdSetSampleLocationsEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetSampleLocationsEXT function");
+                return false;
+            }
+
+            CmdSetSampleMaskEXT = (PFN_vkCmdSetSampleMaskEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleMaskEXT");
+            if (CmdSetSampleMaskEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetSampleMaskEXT function");
                 return false;
             }
 

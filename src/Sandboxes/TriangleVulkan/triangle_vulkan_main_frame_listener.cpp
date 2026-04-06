@@ -212,6 +212,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_ENABLE_EXT); //renderer.SetDiscardRectangleEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT); //renderer.SetDiscardRectangle(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_MODE_EXT); //renderer.SetDiscardRectangleMode(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_ENABLE_EXT); //renderer.SetSampleLocationsEnabled(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT); //renderer.SetSampleLocations(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT); //renderer.SetSampleMask(...)
 
         pipeline.Build();
     }
@@ -343,6 +346,7 @@ namespace Kmplete
             VkRect2D{.offset = VkOffset2D{.x = 1180, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
             VkRect2D{.offset = VkOffset2D{.x = 1210, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}}});
         vulkanRenderer.SetDiscardRectangleMode(VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT);
+        //vulkanRenderer.SetSampleLocationsEnabled(false);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

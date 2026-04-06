@@ -351,6 +351,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetSampleLocationsEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetSampleLocationsEnableEXT(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetSampleLocations(const Vector<VkSampleLocationsInfoEXT>& sampleLocationInfos) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetSampleLocationsEXT(_currentCommandBuffer, sampleLocationInfos.data());
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetSampleMask(VkSampleCountFlagBits samples, const Vector<VkSampleMask>& sampleMasks) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetSampleMaskEXT(_currentCommandBuffer, samples, sampleMasks.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;

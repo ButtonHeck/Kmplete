@@ -26,7 +26,8 @@ namespace Kmplete
                 VK_EXT_DEPTH_CLAMP_CONTROL_EXTENSION_NAME,
                 VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
                 VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME,
-                VK_EXT_DISCARD_RECTANGLES_EXTENSION_NAME
+                VK_EXT_DISCARD_RECTANGLES_EXTENSION_NAME,
+                VK_EXT_SAMPLE_LOCATIONS_EXTENSION_NAME
             };
 
             return deviceExtensions;

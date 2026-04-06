@@ -25,6 +25,9 @@ namespace Kmplete
             static PFN_vkCmdSetDiscardRectangleEnableEXT CmdSetDiscardRectangleEnableEXT;
             static PFN_vkCmdSetDiscardRectangleEXT CmdSetDiscardRectangleEXT;
             static PFN_vkCmdSetDiscardRectangleModeEXT CmdSetDiscardRectangleModeEXT;
+            static PFN_vkCmdSetSampleLocationsEnableEXT CmdSetSampleLocationsEnableEXT;
+            static PFN_vkCmdSetSampleLocationsEXT CmdSetSampleLocationsEXT;
+            static PFN_vkCmdSetSampleMaskEXT CmdSetSampleMaskEXT;
 
             KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };
