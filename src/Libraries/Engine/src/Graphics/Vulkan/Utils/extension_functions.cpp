@@ -23,6 +23,8 @@ namespace Kmplete
         PFN_vkCmdSetSampleLocationsEnableEXT VulkanCommands::CmdSetSampleLocationsEnableEXT = nullptr;
         PFN_vkCmdSetSampleLocationsEXT VulkanCommands::CmdSetSampleLocationsEXT = nullptr;
         PFN_vkCmdSetSampleMaskEXT VulkanCommands::CmdSetSampleMaskEXT = nullptr;
+        PFN_vkCmdSetFragmentShadingRateKHR VulkanCommands::CmdSetFragmentShadingRateKHR = nullptr;
+        PFN_vkCmdSetColorWriteEnableEXT VulkanCommands::CmdSetColorWriteEnableEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -124,6 +126,20 @@ namespace Kmplete
             if (CmdSetSampleMaskEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetSampleMaskEXT function");
+                return false;
+            }
+
+            CmdSetFragmentShadingRateKHR = (PFN_vkCmdSetFragmentShadingRateKHR)vkGetInstanceProcAddr(instance, "vkCmdSetFragmentShadingRateKHR");
+            if (CmdSetFragmentShadingRateKHR == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetFragmentShadingRateKHR function");
+                return false;
+            }
+
+            CmdSetColorWriteEnableEXT = (PFN_vkCmdSetColorWriteEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetColorWriteEnableEXT");
+            if (CmdSetColorWriteEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetColorWriteEnableEXT function");
                 return false;
             }
 

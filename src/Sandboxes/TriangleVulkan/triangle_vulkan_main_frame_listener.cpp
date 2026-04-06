@@ -215,6 +215,8 @@ namespace Kmplete
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_ENABLE_EXT); //renderer.SetSampleLocationsEnabled(...)
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT); //renderer.SetSampleLocations(...)
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT); //renderer.SetSampleMask(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR); //renderer.SetFragmentShadingRate(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT); //renderer.SetColorWriteEnabled(...)
 
         pipeline.Build();
     }

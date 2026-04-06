@@ -27,7 +27,9 @@ namespace Kmplete
                 VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME,
                 VK_EXT_LINE_RASTERIZATION_EXTENSION_NAME,
                 VK_EXT_DISCARD_RECTANGLES_EXTENSION_NAME,
-                VK_EXT_SAMPLE_LOCATIONS_EXTENSION_NAME
+                VK_EXT_SAMPLE_LOCATIONS_EXTENSION_NAME,
+                VK_KHR_FRAGMENT_SHADING_RATE_EXTENSION_NAME,
+                VK_EXT_COLOR_WRITE_ENABLE_EXTENSION_NAME
             };
 
             return deviceExtensions;

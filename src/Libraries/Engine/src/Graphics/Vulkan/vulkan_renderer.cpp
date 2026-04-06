@@ -369,6 +369,18 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetFragmentShadingRate(const VkExtent2D& fragmentSize, const Array<VkFragmentShadingRateCombinerOpKHR, 2>& combinerOps) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetFragmentShadingRateKHR(_currentCommandBuffer, &fragmentSize, combinerOps.data());
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetColorWriteEnabled(UInt32 attachmentCount, const Vector<VkBool32>& colorWritesEnables) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetColorWriteEnableEXT(_currentCommandBuffer, attachmentCount, colorWritesEnables.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;

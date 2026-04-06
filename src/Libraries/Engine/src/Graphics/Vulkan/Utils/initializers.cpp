@@ -90,6 +90,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceColorWriteEnableFeaturesEXT InitVkPhysicalDeviceColorWriteEnableFeaturesEXT()
+            {
+                return VkPhysicalDeviceColorWriteEnableFeaturesEXT{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COLOR_WRITE_ENABLE_FEATURES_EXT
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {

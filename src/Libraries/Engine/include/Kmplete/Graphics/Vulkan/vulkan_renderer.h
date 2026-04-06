@@ -75,6 +75,8 @@ namespace Kmplete
             KMP_API void SetSampleLocationsEnabled(bool enabled) const;
             KMP_API void SetSampleLocations(const Vector<VkSampleLocationsInfoEXT>& sampleLocationInfos) const;
             KMP_API void SetSampleMask(VkSampleCountFlagBits samples, const Vector<VkSampleMask>& sampleMasks) const;
+            KMP_API void SetFragmentShadingRate(const VkExtent2D& fragmentSize, const Array<VkFragmentShadingRateCombinerOpKHR, 2>& combinerOps) const;
+            KMP_API void SetColorWriteEnabled(UInt32 attachmentCount, const Vector<VkBool32>& colorWritesEnables) const;
 
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
