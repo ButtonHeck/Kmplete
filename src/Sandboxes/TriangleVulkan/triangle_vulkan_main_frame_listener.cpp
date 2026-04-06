@@ -204,6 +204,7 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS); //renderer.SetBlendConstants(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE); //renderer.SetRasterizerDiscardEnabled(...)
 
         pipeline.Build();
     }
@@ -319,6 +320,7 @@ namespace Kmplete
         vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
+        vulkanRenderer.SetRasterizerDiscardEnabled(false);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
