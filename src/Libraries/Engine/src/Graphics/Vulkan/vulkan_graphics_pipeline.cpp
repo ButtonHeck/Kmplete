@@ -276,6 +276,15 @@ namespace Kmplete
                 _dynamicStates.push_back(dynamicState);
             }
 
+            if (dynamicState == VK_DYNAMIC_STATE_VIEWPORT_WITH_COUNT)
+            {
+                _viewportStateCreateInfo.viewportCount = 0;
+            }
+            else if (dynamicState == VK_DYNAMIC_STATE_SCISSOR_WITH_COUNT)
+            {
+                _viewportStateCreateInfo.scissorCount = 0;
+            }
+
             return *this;
         }
         //--------------------------------------------------------------------------

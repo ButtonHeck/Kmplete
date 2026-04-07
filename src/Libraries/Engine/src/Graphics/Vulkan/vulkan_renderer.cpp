@@ -267,6 +267,18 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetViewportWithCount(const Vector<VkViewport>& viewports) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetViewportWithCount(_currentCommandBuffer, UInt32(viewports.size()), viewports.data());
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetScissorWithCount(const Vector<VkRect2D>& scissors) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            vkCmdSetScissorWithCount(_currentCommandBuffer, UInt32(scissors.size()), scissors.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const KMP_PROFILING(ProfileLevelMinor)
         {
             VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);

@@ -58,6 +58,8 @@ namespace Kmplete
             KMP_API void SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const;
             KMP_API void SetViewport(const VkViewport& viewport) const;
             KMP_API void SetScissor(const VkRect2D& scissorRect) const;
+            KMP_API void SetViewportWithCount(const Vector<VkViewport>& viewports) const;
+            KMP_API void SetScissorWithCount(const Vector<VkRect2D>& scissors) const;
             KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
             KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
             KMP_API void SetPrimitiveRestartEnabled(bool enabled) const;

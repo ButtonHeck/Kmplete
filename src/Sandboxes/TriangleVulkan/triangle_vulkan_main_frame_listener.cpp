@@ -180,7 +180,6 @@ namespace Kmplete
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddShaderStages(std::move(shaderStages));
-        pipeline.AddDynamicStates(Graphics::VulkanPresets::DynamicStates_Default);
 
         // additional dynamic states for testing
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE);           //renderer.SetDepthTestEnabled(...)
@@ -199,6 +198,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK);    //renderer.SetStencilCompareMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_WRITE_MASK);      //renderer.SetStencilWriteMask(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_REFERENCE);       //renderer.SetStencilReference(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VIEWPORT_WITH_COUNT); //renderer.SetViewportWithCount(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_SCISSOR_WITH_COUNT);  //renderer.SetScissorWithCount(...)
 
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH);                  //renderer.SetLineWidth(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE_ENABLE_EXT);     //renderer.SetLineStippleEnabled(...)
@@ -234,6 +236,7 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE);                  //renderer.SetFrontFace(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS);             //renderer.SetBlendConstants(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE);   //renderer.SetRasterizerDiscardEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT);   //renderer.SetRasterizationSamples(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);   //renderer.SetFragmentShadingRate(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT);   //renderer.SetProvokingVertexMode(...)
@@ -346,6 +349,9 @@ namespace Kmplete
         vulkanRenderer.SetStencilCompareMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilWriteMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilReference(VK_STENCIL_FACE_FRONT_BIT, 0);
+
+        vulkanRenderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f}});
+        vulkanRenderer.SetScissorWithCount({ VkRect2D{ .offset = VkOffset2D{.x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() }});
 
         vulkanRenderer.SetLineWidth(1.0f);
         vulkanRenderer.SetLineStippleEnabled(false);
