@@ -89,8 +89,6 @@ namespace Kmplete
 
             _renderer->StartFrame();
             _renderer->TransitionColorAndDepthStencilImagesToWrite(_swapchain->GetCurrentImage(), _swapchain->GetMultisampledDepthStencilImage());
-            _renderer->SetViewport(VkViewport{ 0.0f, 0.0f, float(_currentExtent.width), float(_currentExtent.height), 0.0f, 1.0f });
-            _renderer->SetScissor(VkRect2D{ 0, 0, _currentExtent.width, _currentExtent.height });
             _renderer->SetRasterizationSamples(GetMultisampling());
         }}
         //--------------------------------------------------------------------------
