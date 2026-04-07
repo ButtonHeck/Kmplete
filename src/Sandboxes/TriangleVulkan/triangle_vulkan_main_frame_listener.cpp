@@ -181,52 +181,62 @@ namespace Kmplete
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddShaderStages(std::move(shaderStages));
         pipeline.AddDynamicStates(Graphics::VulkanPresets::DynamicStates_Default);
+
         // additional dynamic states for testing
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE); //renderer.SetDepthTestEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE); //renderer.SetDepthWriteEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_COMPARE_OP); //renderer.SetDepthCompareOp(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE); //renderer.SetDepthBoundsEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BOUNDS); //renderer.SetDepthBounds(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BIAS_ENABLE); //renderer.SetDepthBiasEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BIAS); //renderer.SetDepthBias(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_ENABLE_EXT); //renderer.SetDepthClampEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_RANGE_EXT); //renderer.SetDepthClampRange(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLIP_ENABLE_EXT); //renderer.SetDepthClipEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE);           //renderer.SetDepthTestEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE);          //renderer.SetDepthWriteEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_COMPARE_OP);            //renderer.SetDepthCompareOp(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BOUNDS_TEST_ENABLE);    //renderer.SetDepthBoundsEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BOUNDS);                //renderer.SetDepthBounds(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BIAS_ENABLE);           //renderer.SetDepthBiasEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_BIAS);                  //renderer.SetDepthBias(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_ENABLE_EXT);      //renderer.SetDepthClampEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLAMP_RANGE_EXT);       //renderer.SetDepthClampRange(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_CLIP_ENABLE_EXT);       //renderer.SetDepthClipEnabled(...)
 
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE); //renderer.SetStencilTestEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_OP); //renderer.SetStencilOp(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK); //renderer.SetStencilCompareMask(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_WRITE_MASK); //renderer.SetStencilWriteMask(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_REFERENCE); //renderer.SetStencilReference(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_TEST_ENABLE);     //renderer.SetStencilTestEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_OP);              //renderer.SetStencilOp(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_COMPARE_MASK);    //renderer.SetStencilCompareMask(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_WRITE_MASK);      //renderer.SetStencilWriteMask(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_STENCIL_REFERENCE);       //renderer.SetStencilReference(...)
 
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY); //renderer.SetPrimitiveTopology(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE); //renderer.SetPrimitiveRestartEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH); //renderer.SetLineWidth(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE_ENABLE_EXT); //renderer.SetLineStippleEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE); //renderer.SetLineStipple(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_WIDTH);                  //renderer.SetLineWidth(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE_ENABLE_EXT);     //renderer.SetLineStippleEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_STIPPLE);                //renderer.SetLineStipple(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LINE_RASTERIZATION_MODE_EXT); //renderer.SetLineRasterizationMode(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE); //renderer.SetCullMode(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE); //renderer.SetFrontFace(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS); //renderer.SetBlendConstants(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE); //renderer.SetRasterizerDiscardEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_ENABLE_EXT); //renderer.SetDiscardRectangleEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT); //renderer.SetDiscardRectangle(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_MODE_EXT); //renderer.SetDiscardRectangleMode(...)
-        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_ENABLE_EXT); //renderer.SetSampleLocationsEnabled(...)
-        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT); //renderer.SetSampleLocations(...)
-        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT); //renderer.SetSampleMask(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR); //renderer.SetFragmentShadingRate(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT); //renderer.SetColorWriteEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT); //renderer.SetColorWriteMask(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_ENABLE_EXT); //renderer.SetColorBlendEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_EQUATION_EXT); //renderer.SetColorBlendEquation(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT); //renderer.SetPolygonMode(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_COVERAGE_ENABLE_EXT); //renderer.SetAlphaToCoverageEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_ONE_ENABLE_EXT); //renderer.SetAlphaToOneEnabled(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT);      //renderer.SetColorWriteEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_WRITE_MASK_EXT);        //renderer.SetColorWriteMask(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_ENABLE_EXT);      //renderer.SetColorBlendEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_EQUATION_EXT);    //renderer.SetColorBlendEquation(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_TOPOLOGY);          //renderer.SetPrimitiveTopology(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PRIMITIVE_RESTART_ENABLE);    //renderer.SetPrimitiveRestartEnabled(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_ENABLE_EXT);    //renderer.SetDiscardRectangleEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT);           //renderer.SetDiscardRectangle(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_MODE_EXT);      //renderer.SetDiscardRectangleMode(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_ENABLE_EXT); //renderer.SetSampleLocationsEnabled(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT);      //renderer.SetSampleLocations(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT);           //renderer.SetSampleMask(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_COVERAGE_ENABLE_EXT);    //renderer.SetAlphaToCoverageEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_ONE_ENABLE_EXT);         //renderer.SetAlphaToOneEnabled(...)
+
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LOGIC_OP_ENABLE_EXT); //renderer.SetLogicOpEnabled(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LOGIC_OP_EXT); //renderer.SetLogicOp(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT); //renderer.SetProvokingVertexMode(...)
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VERTEX_INPUT_EXT); //renderer.SetVertexInput(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_LOGIC_OP_EXT);        //renderer.SetLogicOp(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VERTEX_INPUT_EXT);            //renderer.SetVertexInput(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VERTEX_INPUT_BINDING_STRIDE); //renderer.BindVertexBuffers2(...)
+
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_CULL_MODE);                   //renderer.SetCullMode(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRONT_FACE);                  //renderer.SetFrontFace(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_BLEND_CONSTANTS);             //renderer.SetBlendConstants(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZER_DISCARD_ENABLE);   //renderer.SetRasterizerDiscardEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);   //renderer.SetFragmentShadingRate(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT);   //renderer.SetProvokingVertexMode(...)
 
         pipeline.Build();
     }
@@ -316,7 +326,7 @@ namespace Kmplete
         vulkanRenderer.BeginRendering("VulkanTriangle"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
         vulkanRenderer.BindDescriptorSets("VulkanTriangle"_sid, descriptorSetIndex, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
-        vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
+        //vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
 
         // dynamic rendering functions tests
@@ -337,40 +347,48 @@ namespace Kmplete
         vulkanRenderer.SetStencilWriteMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilReference(VK_STENCIL_FACE_FRONT_BIT, 0);
 
-        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
         vulkanRenderer.SetLineWidth(1.0f);
         vulkanRenderer.SetLineStippleEnabled(false);
         vulkanRenderer.SetLineStipple(1, 1);
         vulkanRenderer.SetLineRasterizationMode(VK_LINE_RASTERIZATION_MODE_DEFAULT);
-        vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
-        vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
-        vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
-        vulkanRenderer.SetRasterizerDiscardEnabled(false);
-        vulkanRenderer.SetPrimitiveRestartEnabled(false);
-        vulkanRenderer.SetDiscardRectangleEnabled(true);
-        vulkanRenderer.SetDiscardRectangle(0, 8, 
-           {VkRect2D{.offset = VkOffset2D{.x = 1000, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1030, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1060, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1090, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1120, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1150, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1180, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-            VkRect2D{.offset = VkOffset2D{.x = 1210, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}}});
-        vulkanRenderer.SetDiscardRectangleMode(VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT);
-        //vulkanRenderer.SetSampleLocationsEnabled(false);
-        vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
+
         vulkanRenderer.SetColorWriteEnabled(1, { VK_TRUE });
         vulkanRenderer.SetColorWriteMask(0, 1, { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT });
         vulkanRenderer.SetColorBlendEnabled(0, 1, { VK_TRUE });
         vulkanRenderer.SetColorBlendEquation(0, 1, { Graphics::VulkanPresets::ColorBlendEquation_AlphaBlending });
+
+        vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
+        vulkanRenderer.SetPrimitiveRestartEnabled(false);
+
+        vulkanRenderer.SetDiscardRectangleEnabled(true);
+        vulkanRenderer.SetDiscardRectangle(0, 8,
+            { VkRect2D{.offset = VkOffset2D{.x = 1000, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1030, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1060, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1090, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1120, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1150, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1180, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
+             VkRect2D{.offset = VkOffset2D{.x = 1210, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}} });
+        vulkanRenderer.SetDiscardRectangleMode(VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT);
+
         vulkanRenderer.SetAlphaToCoverageEnabled(false);
         vulkanRenderer.SetAlphaToOneEnabled(false);
+
         vulkanRenderer.SetLogicOpEnabled(false);
         vulkanRenderer.SetLogicOp(VK_LOGIC_OP_COPY);
-        vulkanRenderer.SetProvokingVertexMode(VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT);
+
         const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(0);
         vulkanRenderer.SetVertexInput(inputBindingsDescriptions, attributeDescriptions);
+        vulkanRenderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} }, { VkDeviceSize{420} }, { VkDeviceSize{sizeof(Vertex)}});
+
+        vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
+        vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
+        vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
+        vulkanRenderer.SetRasterizerDiscardEnabled(false);
+        vulkanRenderer.SetSampleLocationsEnabled(false);
+        vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
+        vulkanRenderer.SetProvokingVertexMode(VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

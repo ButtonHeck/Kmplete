@@ -441,6 +441,21 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            if (buffers.size() != offsets.size() || 
+                ((buffers.size() != sizes.size()) && !sizes.empty() ) || 
+                ((buffers.size() != strides.size()) && !strides.empty() ) || 
+                buffers.empty())
+            {
+                KMP_LOG_ERROR("failed to bind vertex buffers - vertex buffers size doesn't match size of the offsets/sizes/strides or vertex buffers are empty");
+                return;
+            }
+
+            vkCmdBindVertexBuffers2(_currentCommandBuffer, firstBinding, UInt32(buffers.size()), buffers.data(), offsets.data(), sizes.data(), strides.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
