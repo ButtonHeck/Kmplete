@@ -89,7 +89,6 @@ namespace Kmplete
 
             _renderer->StartFrame();
             _renderer->TransitionColorAndDepthStencilImagesToWrite(_swapchain->GetCurrentImage(), _swapchain->GetMultisampledDepthStencilImage());
-            _renderer->SetRasterizationSamples(GetMultisampling());
         }}
         //--------------------------------------------------------------------------
 

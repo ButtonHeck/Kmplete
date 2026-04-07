@@ -395,6 +395,7 @@ namespace Kmplete
         vulkanRenderer.SetSampleLocationsEnabled(false);
         vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
         vulkanRenderer.SetProvokingVertexMode(VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT);
+        vulkanRenderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
