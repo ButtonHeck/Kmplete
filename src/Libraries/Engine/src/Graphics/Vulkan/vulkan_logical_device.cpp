@@ -206,12 +206,12 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
-            auto dynamicState2Features = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
-            dynamicState2Features.extendedDynamicState2LogicOp = VK_TRUE;
+            auto dynamicStateFeatures2 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
+            dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
 
             auto colorWriteEnableFeatures = VulkanUtils::InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
             colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;
-            colorWriteEnableFeatures.pNext = &dynamicState2Features;
+            colorWriteEnableFeatures.pNext = &dynamicStateFeatures2;
 
             auto depthClipEnableFeatures = VulkanUtils::InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
             depthClipEnableFeatures.depthClipEnable = VK_TRUE;
@@ -232,6 +232,7 @@ namespace Kmplete
             dynamicStateFeatures3.extendedDynamicState3AlphaToCoverageEnable = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3AlphaToOneEnable = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3LogicOpEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3ProvokingVertexMode = VK_TRUE;
             dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
 
             VkPhysicalDeviceFeatures features{};

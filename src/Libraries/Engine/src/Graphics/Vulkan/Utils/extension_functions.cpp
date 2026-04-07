@@ -33,6 +33,7 @@ namespace Kmplete
         PFN_vkCmdSetAlphaToOneEnableEXT VulkanCommands::CmdSetAlphaToOneEnableEXT = nullptr;
         PFN_vkCmdSetLogicOpEnableEXT VulkanCommands::CmdSetLogicOpEnableEXT = nullptr;
         PFN_vkCmdSetLogicOpEXT VulkanCommands::CmdSetLogicOpEXT = nullptr;
+        PFN_vkCmdSetProvokingVertexModeEXT VulkanCommands::CmdSetProvokingVertexModeEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -204,6 +205,13 @@ namespace Kmplete
             if (CmdSetLogicOpEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetLogicOpEXT function");
+                return false;
+            }
+
+            CmdSetProvokingVertexModeEXT = (PFN_vkCmdSetProvokingVertexModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetProvokingVertexModeEXT");
+            if (CmdSetProvokingVertexModeEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetProvokingVertexModeEXT function");
                 return false;
             }
 

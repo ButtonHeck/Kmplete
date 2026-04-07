@@ -429,6 +429,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetProvokingVertexMode(VkProvokingVertexModeEXT mode) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetProvokingVertexModeEXT(_currentCommandBuffer, mode);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
