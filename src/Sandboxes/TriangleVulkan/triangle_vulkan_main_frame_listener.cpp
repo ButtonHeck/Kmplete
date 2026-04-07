@@ -226,6 +226,7 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LOGIC_OP_ENABLE_EXT); //renderer.SetLogicOpEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_LOGIC_OP_EXT); //renderer.SetLogicOp(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT); //renderer.SetProvokingVertexMode(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VERTEX_INPUT_EXT); //renderer.SetVertexInput(...)
 
         pipeline.Build();
     }
@@ -368,6 +369,8 @@ namespace Kmplete
         vulkanRenderer.SetLogicOpEnabled(false);
         vulkanRenderer.SetLogicOp(VK_LOGIC_OP_COPY);
         vulkanRenderer.SetProvokingVertexMode(VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT);
+        const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(0);
+        vulkanRenderer.SetVertexInput(inputBindingsDescriptions, attributeDescriptions);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

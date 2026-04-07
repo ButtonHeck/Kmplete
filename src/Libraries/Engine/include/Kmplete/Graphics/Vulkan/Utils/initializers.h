@@ -24,6 +24,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPhysicalDeviceExtendedDynamicState3FeaturesEXT InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
             KMP_NODISCARD KMP_API VkPhysicalDeviceDepthClipEnableFeaturesEXT InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
             KMP_NODISCARD KMP_API VkPhysicalDeviceColorWriteEnableFeaturesEXT InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
 
             KMP_NODISCARD KMP_API VkDeviceCreateInfo InitVkDeviceCreateInfo();
             KMP_NODISCARD KMP_API VkSemaphoreCreateInfo InitVkSemaphoreCreateInfo();
@@ -68,6 +69,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkBufferCreateInfo InitVkBufferCreateInfo(VkDeviceSize size, VkBufferUsageFlags usageFlags);
 
             KMP_NODISCARD KMP_API VkShaderModuleCreateInfo InitVkShaderModuleCreateInfo();
+
+            KMP_NODISCARD KMP_API VkVertexInputBindingDescription2EXT InitVkVertexInputBindingDescription2EXT();
+            KMP_NODISCARD KMP_API VkVertexInputAttributeDescription2EXT InitVkVertexInputAttributeDescription2EXT();
         }
     }
 }

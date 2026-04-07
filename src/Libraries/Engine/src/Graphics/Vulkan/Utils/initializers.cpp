@@ -106,6 +106,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT()
+            {
+                return VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_INPUT_DYNAMIC_STATE_FEATURES_EXT
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {
@@ -423,6 +431,25 @@ namespace Kmplete
             {
                 return VkShaderModuleCreateInfo{
                     .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO
+                };
+            }
+            //--------------------------------------------------------------------------
+
+
+            VkVertexInputBindingDescription2EXT InitVkVertexInputBindingDescription2EXT()
+            {
+                return VkVertexInputBindingDescription2EXT{
+                    .sType = VK_STRUCTURE_TYPE_VERTEX_INPUT_BINDING_DESCRIPTION_2_EXT,
+                    .pNext = nullptr
+                };
+            }
+            //--------------------------------------------------------------------------
+
+            VkVertexInputAttributeDescription2EXT InitVkVertexInputAttributeDescription2EXT()
+            {
+                return VkVertexInputAttributeDescription2EXT{
+                    .sType = VK_STRUCTURE_TYPE_VERTEX_INPUT_ATTRIBUTE_DESCRIPTION_2_EXT,
+                    .pNext = nullptr
                 };
             }
             //--------------------------------------------------------------------------

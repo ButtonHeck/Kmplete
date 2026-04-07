@@ -206,8 +206,12 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
+            auto vertexInputDynamicStateFeatures = VulkanUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
+            vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
+
             auto dynamicStateFeatures2 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
             dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
+            dynamicStateFeatures2.pNext = &vertexInputDynamicStateFeatures;
 
             auto colorWriteEnableFeatures = VulkanUtils::InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
             colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;

@@ -39,6 +39,7 @@ namespace Kmplete
             static PFN_vkCmdSetLogicOpEnableEXT CmdSetLogicOpEnableEXT;
             static PFN_vkCmdSetLogicOpEXT CmdSetLogicOpEXT;
             static PFN_vkCmdSetProvokingVertexModeEXT CmdSetProvokingVertexModeEXT;
+            static PFN_vkCmdSetVertexInputEXT CmdSetVertexInputEXT;
 
             KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };
