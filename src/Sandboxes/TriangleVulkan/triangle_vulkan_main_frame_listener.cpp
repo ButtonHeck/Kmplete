@@ -221,6 +221,8 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_ENABLE_EXT); //renderer.SetColorBlendEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_COLOR_BLEND_EQUATION_EXT); //renderer.SetColorBlendEquation(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT); //renderer.SetPolygonMode(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_COVERAGE_ENABLE_EXT); //renderer.SetAlphaToCoverageEnabled(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_ONE_ENABLE_EXT); //renderer.SetAlphaToOneEnabled(...)
 
         pipeline.Build();
     }
@@ -358,6 +360,8 @@ namespace Kmplete
         vulkanRenderer.SetColorWriteMask(0, 1, { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT });
         vulkanRenderer.SetColorBlendEnabled(0, 1, { VK_TRUE });
         vulkanRenderer.SetColorBlendEquation(0, 1, { Graphics::VulkanPresets::ColorBlendEquation_AlphaBlending });
+        vulkanRenderer.SetAlphaToCoverageEnabled(false);
+        vulkanRenderer.SetAlphaToOneEnabled(false);
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);

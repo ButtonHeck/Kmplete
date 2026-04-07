@@ -29,6 +29,8 @@ namespace Kmplete
         PFN_vkCmdSetColorBlendEnableEXT VulkanCommands::CmdSetColorBlendEnableEXT = nullptr;
         PFN_vkCmdSetColorBlendEquationEXT VulkanCommands::CmdSetColorBlendEquationEXT = nullptr;
         PFN_vkCmdSetPolygonModeEXT VulkanCommands::CmdSetPolygonModeEXT = nullptr;
+        PFN_vkCmdSetAlphaToCoverageEnableEXT VulkanCommands::CmdSetAlphaToCoverageEnableEXT = nullptr;
+        PFN_vkCmdSetAlphaToOneEnableEXT VulkanCommands::CmdSetAlphaToOneEnableEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -172,6 +174,20 @@ namespace Kmplete
             if (CmdSetPolygonModeEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetPolygonModeEXT function");
+                return false;
+            }
+
+            CmdSetAlphaToCoverageEnableEXT = (PFN_vkCmdSetAlphaToCoverageEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetAlphaToCoverageEnableEXT");
+            if (CmdSetAlphaToCoverageEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetAlphaToCoverageEnableEXT function");
+                return false;
+            }
+
+            CmdSetAlphaToOneEnableEXT = (PFN_vkCmdSetAlphaToOneEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetAlphaToOneEnableEXT");
+            if (CmdSetAlphaToOneEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetAlphaToOneEnableEXT function");
                 return false;
             }
 

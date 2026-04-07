@@ -225,6 +225,8 @@ namespace Kmplete
             dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3ColorBlendEquation = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3ColorWriteMask = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3AlphaToCoverageEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3AlphaToOneEnable = VK_TRUE;
             dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
 
             VkPhysicalDeviceFeatures features{};
@@ -233,6 +235,7 @@ namespace Kmplete
             features.depthClamp = VK_TRUE;
             features.depthBounds = VK_TRUE;
             features.fillModeNonSolid = VK_TRUE;
+            features.alphaToOne = VK_TRUE;
 
             auto features13 = VulkanUtils::InitVkPhysicalDeviceVulkan13Features();
             features13.dynamicRendering = VK_TRUE;

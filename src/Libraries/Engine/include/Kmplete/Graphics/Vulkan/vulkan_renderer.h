@@ -81,6 +81,8 @@ namespace Kmplete
             KMP_API void SetColorBlendEnabled(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkBool32>& colorBlendsEnables) const;
             KMP_API void SetColorBlendEquation(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorBlendEquationEXT>& colorBlendsEquations) const;
             KMP_API void SetPolygonMode(VkPolygonMode polygonMode) const;
+            KMP_API void SetAlphaToCoverageEnabled(bool enabled) const;
+            KMP_API void SetAlphaToOneEnabled(bool enabled) const;
 
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
