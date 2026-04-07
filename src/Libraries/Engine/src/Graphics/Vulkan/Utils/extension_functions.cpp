@@ -31,6 +31,8 @@ namespace Kmplete
         PFN_vkCmdSetPolygonModeEXT VulkanCommands::CmdSetPolygonModeEXT = nullptr;
         PFN_vkCmdSetAlphaToCoverageEnableEXT VulkanCommands::CmdSetAlphaToCoverageEnableEXT = nullptr;
         PFN_vkCmdSetAlphaToOneEnableEXT VulkanCommands::CmdSetAlphaToOneEnableEXT = nullptr;
+        PFN_vkCmdSetLogicOpEnableEXT VulkanCommands::CmdSetLogicOpEnableEXT = nullptr;
+        PFN_vkCmdSetLogicOpEXT VulkanCommands::CmdSetLogicOpEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -188,6 +190,20 @@ namespace Kmplete
             if (CmdSetAlphaToOneEnableEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetAlphaToOneEnableEXT function");
+                return false;
+            }
+
+            CmdSetLogicOpEnableEXT = (PFN_vkCmdSetLogicOpEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLogicOpEnableEXT");
+            if (CmdSetLogicOpEnableEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetLogicOpEnableEXT function");
+                return false;
+            }
+
+            CmdSetLogicOpEXT = (PFN_vkCmdSetLogicOpEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLogicOpEXT");
+            if (CmdSetLogicOpEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetLogicOpEXT function");
                 return false;
             }
 

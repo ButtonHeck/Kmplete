@@ -36,6 +36,8 @@ namespace Kmplete
             static PFN_vkCmdSetPolygonModeEXT CmdSetPolygonModeEXT;
             static PFN_vkCmdSetAlphaToCoverageEnableEXT CmdSetAlphaToCoverageEnableEXT;
             static PFN_vkCmdSetAlphaToOneEnableEXT CmdSetAlphaToOneEnableEXT;
+            static PFN_vkCmdSetLogicOpEnableEXT CmdSetLogicOpEnableEXT;
+            static PFN_vkCmdSetLogicOpEXT CmdSetLogicOpEXT;
 
             KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };

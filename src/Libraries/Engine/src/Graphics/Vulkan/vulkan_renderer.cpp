@@ -417,6 +417,18 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetLogicOpEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetLogicOpEnableEXT(_currentCommandBuffer, enabled);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::SetLogicOp(VkLogicOp logicOp) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetLogicOpEXT(_currentCommandBuffer, logicOp);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;

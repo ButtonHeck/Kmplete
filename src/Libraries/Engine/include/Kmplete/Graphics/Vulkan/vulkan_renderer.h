@@ -83,6 +83,8 @@ namespace Kmplete
             KMP_API void SetPolygonMode(VkPolygonMode polygonMode) const;
             KMP_API void SetAlphaToCoverageEnabled(bool enabled) const;
             KMP_API void SetAlphaToOneEnabled(bool enabled) const;
+            KMP_API void SetLogicOpEnabled(bool enabled) const;
+            KMP_API void SetLogicOp(VkLogicOp logicOp) const;
 
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
