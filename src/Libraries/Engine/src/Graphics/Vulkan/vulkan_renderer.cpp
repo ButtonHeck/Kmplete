@@ -381,6 +381,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SetColorWriteMask(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorComponentFlags>& colorWritesMasks) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            VulkanCommands::CmdSetColorWriteMaskEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorWritesMasks.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::SetColorBlendEnabled(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkBool32>& colorBlendsEnables) const KMP_PROFILING(ProfileLevelMinor)
         {
             VulkanCommands::CmdSetColorBlendEnableEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEnables.data());

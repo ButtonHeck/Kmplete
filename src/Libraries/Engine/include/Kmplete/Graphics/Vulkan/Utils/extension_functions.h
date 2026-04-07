@@ -30,6 +30,7 @@ namespace Kmplete
             static PFN_vkCmdSetSampleMaskEXT CmdSetSampleMaskEXT;
             static PFN_vkCmdSetFragmentShadingRateKHR CmdSetFragmentShadingRateKHR;
             static PFN_vkCmdSetColorWriteEnableEXT CmdSetColorWriteEnableEXT;
+            static PFN_vkCmdSetColorWriteMaskEXT CmdSetColorWriteMaskEXT;
             static PFN_vkCmdSetColorBlendEnableEXT CmdSetColorBlendEnableEXT;
             static PFN_vkCmdSetColorBlendEquationEXT CmdSetColorBlendEquationEXT;
             static PFN_vkCmdSetPolygonModeEXT CmdSetPolygonModeEXT;

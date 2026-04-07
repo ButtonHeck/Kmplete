@@ -224,6 +224,7 @@ namespace Kmplete
             dynamicStateFeatures3.extendedDynamicState3SampleMask = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3ColorBlendEquation = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3ColorWriteMask = VK_TRUE;
             dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
 
             VkPhysicalDeviceFeatures features{};
