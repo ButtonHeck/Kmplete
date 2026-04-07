@@ -104,13 +104,6 @@ namespace Kmplete
                 .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 }}
             };
             //--------------------------------------------------------------------------
-
-            static constexpr std::initializer_list<VkDynamicState> DynamicStates_Default{
-                VK_DYNAMIC_STATE_VIEWPORT,
-                VK_DYNAMIC_STATE_SCISSOR,
-                VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT
-            };
-            //--------------------------------------------------------------------------
         }
     }
 }
