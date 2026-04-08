@@ -203,8 +203,12 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
+            auto shaderObjectFeatures = VulkanUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
+            shaderObjectFeatures.shaderObject = VK_TRUE;
+
             auto vertexInputDynamicStateFeatures = VulkanUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
             vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
+            vertexInputDynamicStateFeatures.pNext = &shaderObjectFeatures;
 
             auto dynamicStateFeatures2 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
             dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;

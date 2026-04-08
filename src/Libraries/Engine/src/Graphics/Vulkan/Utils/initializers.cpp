@@ -114,6 +114,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceShaderObjectFeaturesEXT InitVkPhysicalDeviceShaderObjectFeaturesEXT()
+            {
+                return VkPhysicalDeviceShaderObjectFeaturesEXT{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_OBJECT_FEATURES_EXT
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {
@@ -431,6 +439,14 @@ namespace Kmplete
             {
                 return VkShaderModuleCreateInfo{
                     .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO
+                };
+            }
+            //--------------------------------------------------------------------------
+
+            VkShaderCreateInfoEXT InitVkShaderCreateInfoEXT()
+            {
+                return VkShaderCreateInfoEXT{
+                    .sType = VK_STRUCTURE_TYPE_SHADER_CREATE_INFO_EXT
                 };
             }
             //--------------------------------------------------------------------------
