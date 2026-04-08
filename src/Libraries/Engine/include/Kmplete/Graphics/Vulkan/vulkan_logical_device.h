@@ -77,6 +77,8 @@ namespace Kmplete
 
             KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                         const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
             KMP_NODISCARD KMP_API VkShaderEXT GetShaderObject(StringID sid) const noexcept;
 
         private:

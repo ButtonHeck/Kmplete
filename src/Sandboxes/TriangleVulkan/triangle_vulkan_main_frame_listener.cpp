@@ -252,12 +252,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT);   //renderer.SetProvokingVertexMode(...)
 
-        const Vector<VkDescriptorSetLayout> descriptorSetLayouts{
-            vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid),
-            vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid)
-        };
-        vulkanDevice.AddShaderObject("TriangleVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, descriptorSetLayouts);
-        vulkanDevice.AddShaderObject("TriangleVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, descriptorSetLayouts);
+        const Vector<StringID> descriptorSetsLayoutsSids = { "TriangleVulkan_0"_sid, "TriangleVulkan_1"_sid };
+        vulkanDevice.AddShaderObject("TriangleVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, descriptorSetsLayoutsSids);
+        vulkanDevice.AddShaderObject("TriangleVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
 
         pipeline.Build();
