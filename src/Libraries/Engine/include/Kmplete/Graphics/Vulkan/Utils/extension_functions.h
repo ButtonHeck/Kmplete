@@ -40,6 +40,9 @@ namespace Kmplete
             static PFN_vkCmdSetLogicOpEXT CmdSetLogicOpEXT;
             static PFN_vkCmdSetProvokingVertexModeEXT CmdSetProvokingVertexModeEXT;
             static PFN_vkCmdSetVertexInputEXT CmdSetVertexInputEXT;
+            static PFN_vkCreateShadersEXT CreateShadersEXT;
+            static PFN_vkDestroyShaderEXT DestroyShaderEXT;
+            static PFN_vkCmdBindShadersEXT CmdBindShadersEXT;
 
             KMP_NODISCARD static bool LoadExtensionFunctions(VkInstance instance);
         };

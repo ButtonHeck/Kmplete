@@ -35,6 +35,9 @@ namespace Kmplete
         PFN_vkCmdSetLogicOpEXT VulkanCommands::CmdSetLogicOpEXT = nullptr;
         PFN_vkCmdSetProvokingVertexModeEXT VulkanCommands::CmdSetProvokingVertexModeEXT = nullptr;
         PFN_vkCmdSetVertexInputEXT VulkanCommands::CmdSetVertexInputEXT = nullptr;
+        PFN_vkCreateShadersEXT VulkanCommands::CreateShadersEXT = nullptr;
+        PFN_vkDestroyShaderEXT VulkanCommands::DestroyShaderEXT = nullptr;
+        PFN_vkCmdBindShadersEXT VulkanCommands::CmdBindShadersEXT = nullptr;
 
 
         bool VulkanCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
@@ -220,6 +223,27 @@ namespace Kmplete
             if (CmdSetVertexInputEXT == nullptr)
             {
                 KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdSetVertexInputEXT function");
+                return false;
+            }
+
+            CreateShadersEXT = (PFN_vkCreateShadersEXT)vkGetInstanceProcAddr(instance, "vkCreateShadersEXT");
+            if (CreateShadersEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCreateShadersEXT function");
+                return false;
+            }
+
+            DestroyShaderEXT = (PFN_vkDestroyShaderEXT)vkGetInstanceProcAddr(instance, "vkDestroyShaderEXT");
+            if (DestroyShaderEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCreateShadersEXT function");
+                return false;
+            }
+
+            CmdBindShadersEXT = (PFN_vkCmdBindShadersEXT)vkGetInstanceProcAddr(instance, "vkCmdBindShadersEXT");
+            if (CmdBindShadersEXT == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VulkanCommands: failed to load vkCmdBindShadersEXT function");
                 return false;
             }
 

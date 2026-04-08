@@ -37,12 +37,12 @@ namespace Kmplete
                 throw std::runtime_error("VulkanShaderModule: shader binary size is not multiple of 4");
             }
 
-            auto shaderModuleCreateInfo = Graphics::VulkanUtils::InitVkShaderModuleCreateInfo();
+            auto shaderModuleCreateInfo = VulkanUtils::InitVkShaderModuleCreateInfo();
             shaderModuleCreateInfo.codeSize = shaderBinary.size();
             shaderModuleCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
 
             auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
-            Graphics::VulkanUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
+            VulkanUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
         }
         //--------------------------------------------------------------------------
 
