@@ -433,7 +433,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateRenderer() KMP_PROFILING(ProfileLevelImportant)
         {
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _shaderObjects, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
         }}
         //--------------------------------------------------------------------------
 

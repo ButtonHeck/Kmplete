@@ -418,8 +418,8 @@ namespace Kmplete
         vulkanRenderer.SetSampleMask(vulkanDevice.GetMultisampling(), {0xFF});
         vulkanRenderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} }, { VkDeviceSize{420} }, { VkDeviceSize{sizeof(Vertex)} });
         vulkanRenderer.BindShaderObjects(
-            { VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT }, 
-            { vulkanDevice.GetShaderObject("TriangleVulkan_vertex"_sid), vulkanDevice.GetShaderObject("TriangleVulkan_fragment"_sid) }
+            { VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT },
+            { "TriangleVulkan_vertex"_sid, "TriangleVulkan_fragment"_sid }
         );
 #endif
 

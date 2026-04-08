@@ -12,9 +12,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
+        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, 
+                                       const HashMap<StringID, UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
             : _currentBufferIndex(currentBufferIndex)
             , _pipelines(pipelines)
+            , _shaderObjects(shaderObjects)
             , _swapchain(std::cref(swapchain))
             , _device(device)
             , _commandPool(nullptr)
@@ -468,8 +470,21 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<VkShaderEXT>& shaders) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const KMP_PROFILING(ProfileLevelMinor)
         {
+            Vector<VkShaderEXT> shaders;
+            shaders.reserve(shadersSids.size());
+            for (const auto& shaderSid : shadersSids)
+            {
+                if (_shaderObjects.contains(shaderSid))
+                {
+                    shaders.push_back(_shaderObjects.at(shaderSid)->GetVkShader());
+                    continue;
+                }
+
+                KMP_LOG_ERROR("cannot bind shader with sid '{}' - not found", shaderSid);
+            }
+
             VulkanCommands::CmdBindShadersEXT(_currentCommandBuffer, UInt32(stages.size()), stages.data(), shaders.data());
         }}
         //--------------------------------------------------------------------------

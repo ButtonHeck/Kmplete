@@ -11,6 +11,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -26,7 +27,8 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanRenderer)
 
         public:
-            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
+            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, 
+                                   const HashMap<StringID, UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
             KMP_API ~VulkanRenderer();
 
             KMP_API void StartFrame();
@@ -90,7 +92,7 @@ namespace Kmplete
             KMP_API void SetProvokingVertexMode(VkProvokingVertexModeEXT mode) const;
             KMP_API void SetVertexInput(const Vector<VkVertexInputBindingDescription2EXT>& vertexBindingsDescriptions, const Vector<VkVertexInputAttributeDescription2EXT>& vertexAttributeDescriptions) const;
             KMP_API void BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const;
-            KMP_API void BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<VkShaderEXT>& shaders) const;
+            KMP_API void BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const;
 
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
@@ -110,6 +112,7 @@ namespace Kmplete
         private:
             const UInt32& _currentBufferIndex;
             const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& _pipelines;
+            const HashMap<StringID, UPtr<VulkanShaderObject>>& _shaderObjects;
             Ref<const VulkanSwapchain> _swapchain;
 
             VkDevice _device;
