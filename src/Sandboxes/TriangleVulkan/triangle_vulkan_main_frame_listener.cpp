@@ -157,18 +157,21 @@ namespace Kmplete
             _uniformBuffers[i]->Map();
         }
 
-        const auto vertexShaderModule = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
-        const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
-        auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderModule.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
-            fragmentShaderModule.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
-        };
-
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
         pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
         pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
+
+        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
+        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
+
+        const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
+        const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
+        auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
+            vertexShaderModule.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
+            fragmentShaderModule.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
+        };
         pipeline.AddShaderStages(std::move(shaderStages));
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
@@ -227,9 +230,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_EXT);           //renderer.SetDiscardRectangle(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DISCARD_RECTANGLE_MODE_EXT);      //renderer.SetDiscardRectangleMode(...)
 
-        pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_ENABLE_EXT); //renderer.SetSampleLocationsEnabled(...)
+        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_ENABLE_EXT); //renderer.SetSampleLocationsEnabled(...)
         //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT);      //renderer.SetSampleLocations(...)
-        //pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT);           //renderer.SetSampleMask(...)
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_SAMPLE_MASK_EXT);           //renderer.SetSampleMask(...)
 
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_COVERAGE_ENABLE_EXT);    //renderer.SetAlphaToCoverageEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_ALPHA_TO_ONE_ENABLE_EXT);         //renderer.SetAlphaToOneEnabled(...)
@@ -248,6 +251,13 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);   //renderer.SetFragmentShadingRate(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT);   //renderer.SetProvokingVertexMode(...)
+
+        const Vector<VkDescriptorSetLayout> descriptorSetLayouts{
+            vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid),
+            vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid)
+        };
+        vulkanDevice.AddShaderObject("TriangleVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, descriptorSetLayouts);
+        vulkanDevice.AddShaderObject("TriangleVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, descriptorSetLayouts);
 #endif
 
         pipeline.Build();
@@ -408,7 +418,12 @@ namespace Kmplete
         vulkanRenderer.SetSampleLocationsEnabled(false);
         vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
         vulkanRenderer.SetProvokingVertexMode(VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT);
+        vulkanRenderer.SetSampleMask(vulkanDevice.GetMultisampling(), {0xFF});
         vulkanRenderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} }, { VkDeviceSize{420} }, { VkDeviceSize{sizeof(Vertex)} });
+        vulkanRenderer.BindShaderObjects(
+            { VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT }, 
+            { vulkanDevice.GetShaderObject("TriangleVulkan_vertex"_sid), vulkanDevice.GetShaderObject("TriangleVulkan_fragment"_sid) }
+        );
 #endif
 
         // drawing

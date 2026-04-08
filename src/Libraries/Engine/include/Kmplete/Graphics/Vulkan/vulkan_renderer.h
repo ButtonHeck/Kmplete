@@ -90,6 +90,7 @@ namespace Kmplete
             KMP_API void SetProvokingVertexMode(VkProvokingVertexModeEXT mode) const;
             KMP_API void SetVertexInput(const Vector<VkVertexInputBindingDescription2EXT>& vertexBindingsDescriptions, const Vector<VkVertexInputAttributeDescription2EXT>& vertexAttributeDescriptions) const;
             KMP_API void BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const;
+            KMP_API void BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<VkShaderEXT>& shaders) const;
 
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
