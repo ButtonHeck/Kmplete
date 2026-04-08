@@ -577,9 +577,9 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VulkanShader VulkanLogicalDevice::CreateShader(const Filepath& filepath) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanShaderModule VulkanLogicalDevice::CreateShaderModule(const Filepath& filepath) const KMP_PROFILING(ProfileLevelImportant)
         {
-            return VulkanShader(_device, filepath);
+            return VulkanShaderModule(_device, filepath);
         }}
         //--------------------------------------------------------------------------
     }

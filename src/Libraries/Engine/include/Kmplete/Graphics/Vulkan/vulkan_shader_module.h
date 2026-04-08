@@ -13,16 +13,16 @@ namespace Kmplete
     namespace Graphics
     {
         //TODO: comments
-        class VulkanShader
+        class VulkanShaderModule
         {
-            KMP_DISABLE_COPY(VulkanShader)
-            KMP_LOG_CLASSNAME(VulkanShader)
+            KMP_DISABLE_COPY(VulkanShaderModule)
+            KMP_LOG_CLASSNAME(VulkanShaderModule)
 
         public:
-            KMP_API VulkanShader(VkDevice device, const Filepath& filepath);
-            KMP_API VulkanShader(VulkanShader&& other) noexcept;
-            KMP_API VulkanShader& operator=(VulkanShader&& other) noexcept;
-            KMP_API ~VulkanShader();
+            KMP_API VulkanShaderModule(VkDevice device, const Filepath& filepath);
+            KMP_API VulkanShaderModule(VulkanShaderModule&& other) noexcept;
+            KMP_API VulkanShaderModule& operator=(VulkanShaderModule&& other) noexcept;
+            KMP_API ~VulkanShaderModule();
 
             KMP_NODISCARD KMP_API VkPipelineShaderStageCreateInfo GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName = "main") const noexcept;
 
@@ -32,7 +32,7 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
-        static_assert(IsMoveConstructible<VulkanShader>::value);
-        static_assert(IsMoveAssignable<VulkanShader>::value);
+        static_assert(IsMoveConstructible<VulkanShaderModule>::value);
+        static_assert(IsMoveAssignable<VulkanShaderModule>::value);
     }
 }

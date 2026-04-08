@@ -157,11 +157,11 @@ namespace Kmplete
             _uniformBuffers[i]->Map();
         }
 
-        const auto vertexShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
-        const auto fragmentShader = vulkanDevice.CreateShader(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
+        const auto vertexShaderModule = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv"));
+        const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv"));
         auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
-            fragmentShader.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
+            vertexShaderModule.GetShaderStageCreateInfo(VK_SHADER_STAGE_VERTEX_BIT, "main"),
+            fragmentShaderModule.GetShaderStageCreateInfo(VK_SHADER_STAGE_FRAGMENT_BIT, "main")
         };
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);

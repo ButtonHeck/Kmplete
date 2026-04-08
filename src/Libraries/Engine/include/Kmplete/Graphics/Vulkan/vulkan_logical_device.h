@@ -7,7 +7,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_shader.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_shader_module.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
@@ -72,7 +72,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
-            KMP_NODISCARD KMP_API VulkanShader CreateShader(const Filepath& filepath) const;
+            KMP_NODISCARD KMP_API VulkanShaderModule CreateShaderModule(const Filepath& filepath) const;
 
         private:
             void _CreateLogicalDeviceObject();

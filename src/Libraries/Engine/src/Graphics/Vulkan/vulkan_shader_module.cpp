@@ -1,4 +1,4 @@
-#include "Kmplete/Graphics/Vulkan/vulkan_shader.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_shader_module.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Filesystem/filesystem.h"
@@ -12,7 +12,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanShader::VulkanShader(VkDevice device, const Filepath& filepath)
+        VulkanShaderModule::VulkanShaderModule(VkDevice device, const Filepath& filepath)
             : _device(device)
             , _shaderModule(VK_NULL_HANDLE)
         {
@@ -21,20 +21,20 @@ namespace Kmplete
             if (!Filesystem::FilepathExists(filepath))
             {
                 KMP_LOG_ERROR("shader file not found '{}'", filepath);
-                throw std::runtime_error("VulkanShader: shader file not found");
+                throw std::runtime_error("VulkanShaderModule: shader file not found");
             }
 
             const auto shaderBinary = Filesystem::ReadFileAsBinary(filepath);
             if (shaderBinary.empty())
             {
                 KMP_LOG_ERROR("failed to load shader binary from '{}'", filepath);
-                throw std::runtime_error("VulkanShader: failed to load shader binary");
+                throw std::runtime_error("VulkanShaderModule: failed to load shader binary");
             }
 
             if (shaderBinary.size() % 4 != 0)
             {
                 KMP_LOG_ERROR("shader binary size is not multiple of 4 '{}'", filepath);
-                throw std::runtime_error("VulkanShader: shader binary size is not multiple of 4");
+                throw std::runtime_error("VulkanShaderModule: shader binary size is not multiple of 4");
             }
 
             auto shaderModuleCreateInfo = Graphics::VulkanUtils::InitVkShaderModuleCreateInfo();
@@ -42,11 +42,11 @@ namespace Kmplete
             shaderModuleCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
 
             auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
-            Graphics::VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create shader module");
+            Graphics::VulkanUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
         }
         //--------------------------------------------------------------------------
 
-        VulkanShader::VulkanShader(VulkanShader&& other) noexcept
+        VulkanShaderModule::VulkanShaderModule(VulkanShaderModule&& other) noexcept
             : _device(other._device)
             , _shaderModule(other._shaderModule)
         {
@@ -55,7 +55,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanShader& VulkanShader::operator=(VulkanShader&& other) noexcept
+        VulkanShaderModule& VulkanShaderModule::operator=(VulkanShaderModule&& other) noexcept
         {
             if (this == &other)
             {
@@ -72,7 +72,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanShader::~VulkanShader() KMP_PROFILING(ProfileLevelAlways)
+        VulkanShaderModule::~VulkanShaderModule() KMP_PROFILING(ProfileLevelAlways)
         {
             if (_device != VK_NULL_HANDLE && _shaderModule != VK_NULL_HANDLE)
             {
@@ -81,7 +81,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VkPipelineShaderStageCreateInfo VulkanShader::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept KMP_PROFILING(ProfileLevelMinor)
+        VkPipelineShaderStageCreateInfo VulkanShaderModule::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
             auto shaderStageCreateInfo = VulkanUtils::InitVkPipelineShaderStageCreateInfo(stage);
             shaderStageCreateInfo.module = _shaderModule;
