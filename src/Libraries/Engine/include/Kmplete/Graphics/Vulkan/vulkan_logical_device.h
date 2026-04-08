@@ -136,13 +136,13 @@ namespace Kmplete
             UPtr<VulkanSwapchain> _swapchain;
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
-            HashMap<StringID, UPtr<VulkanGraphicsPipeline>> _pipelines;
-            HashMap<StringID, VkDescriptorSetLayout> _descriptorSetLayouts;
+            StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
+            StringIDHashMap<VkDescriptorSetLayout> _descriptorSetLayouts;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
             UPtr<VulkanRenderer> _renderer;
-            HashMap<StringID, UPtr<VulkanShaderObject>> _shaderObjects;
+            StringIDHashMap<UPtr<VulkanShaderObject>> _shaderObjects;
         };
         //--------------------------------------------------------------------------
     }

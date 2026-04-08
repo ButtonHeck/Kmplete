@@ -51,7 +51,7 @@ namespace Kmplete
 
         private:
             FT_LibraryRec_* _freetypeLibInstance;
-            HashMap<StringID, UPtr<Assets::FontAsset>> _fonts;
+            StringIDHashMap<UPtr<Assets::FontAsset>> _fonts;
         };
         //--------------------------------------------------------------------------
     }

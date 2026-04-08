@@ -27,8 +27,8 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanRenderer)
 
         public:
-            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& pipelines, 
-                                   const HashMap<StringID, UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
+            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const StringIDHashMap<UPtr<VulkanGraphicsPipeline>>& pipelines, 
+                                   const StringIDHashMap<UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
             KMP_API ~VulkanRenderer();
 
             KMP_API void StartFrame();
@@ -111,8 +111,8 @@ namespace Kmplete
 
         private:
             const UInt32& _currentBufferIndex;
-            const HashMap<StringID, UPtr<VulkanGraphicsPipeline>>& _pipelines;
-            const HashMap<StringID, UPtr<VulkanShaderObject>>& _shaderObjects;
+            const StringIDHashMap<UPtr<VulkanGraphicsPipeline>>& _pipelines;
+            const StringIDHashMap<UPtr<VulkanShaderObject>>& _shaderObjects;
             Ref<const VulkanSwapchain> _swapchain;
 
             VkDevice _device;

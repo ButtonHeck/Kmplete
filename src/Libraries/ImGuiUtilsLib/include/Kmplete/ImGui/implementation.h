@@ -51,7 +51,7 @@ namespace Kmplete
 
         protected:
             UPtr<Context> _context;
-            HashMap<StringID, ImTextureID> _textureMap;
+            StringIDHashMap<ImTextureID> _textureMap;
         };
         //--------------------------------------------------------------------------
     }

@@ -55,7 +55,7 @@ namespace Kmplete
             Graphics::GraphicsBackend& _graphicsBackend;
             UPtr<TextureAssetManager> _textureAssetManager;
             UPtr<FontAssetManager> _fontAssetManager;
-            HashMap<StringID, AssetLookupInfo> _lookupMap;
+            StringIDHashMap<AssetLookupInfo> _lookupMap;
         };
         //--------------------------------------------------------------------------
     }

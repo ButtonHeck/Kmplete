@@ -14,6 +14,10 @@ namespace Kmplete
     //! 2) auto playerID = "player"_sid;
     using StringID = UInt64;
 
+    //! Shortcut alias for an unordered map with StringID as key
+    template<typename Value>
+    using StringIDHashMap = HashMap<StringID, Value>;
+
 
     KMP_NODISCARD constexpr StringID ToStringID(const char* cstr)
     {

@@ -52,7 +52,7 @@ namespace Kmplete
 
         private:
             Graphics::GraphicsBackend& _graphicsBackend;
-            HashMap<StringID, UPtr<Assets::TextureAsset>> _textures;
+            StringIDHashMap<UPtr<Assets::TextureAsset>> _textures;
         };
         //--------------------------------------------------------------------------
     }
