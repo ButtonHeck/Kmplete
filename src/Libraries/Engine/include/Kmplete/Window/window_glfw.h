@@ -34,6 +34,7 @@ namespace Kmplete
 
         KMP_API void SetTitle(const char* title) override;
         KMP_API void SetIcon(const Graphics::Image& image) override;
+        KMP_API void SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) override;
 
         KMP_API void SetPosition(int x, int y) override;
         KMP_NODISCARD KMP_API Math::Point2I GetPosition() const override;

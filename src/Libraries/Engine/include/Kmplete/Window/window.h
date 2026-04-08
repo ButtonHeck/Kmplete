@@ -101,6 +101,7 @@ namespace Kmplete
 
         KMP_API virtual void SetTitle(const char* title) = 0;
         KMP_API virtual void SetIcon(const Graphics::Image& image) = 0;
+        KMP_API virtual void SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) = 0;
 
         KMP_API virtual void SetPosition(int x, int y) = 0;
         KMP_NODISCARD KMP_API virtual Math::Point2I GetPosition() const = 0;

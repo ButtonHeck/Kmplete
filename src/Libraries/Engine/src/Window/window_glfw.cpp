@@ -251,6 +251,17 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
+    void WindowGlfw::SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) KMP_PROFILING(ProfileLevelMinor)
+    {
+        glfwSetWindowSizeLimits(_window, 
+            minSize.x > 0 ? minSize.x : GLFW_DONT_CARE, 
+            minSize.y > 0 ? minSize.y : GLFW_DONT_CARE,
+            maxSize.x > 0 ? maxSize.x : GLFW_DONT_CARE,
+            maxSize.y > 0 ? maxSize.y : GLFW_DONT_CARE
+        );
+    }}
+    //--------------------------------------------------------------------------
+
     void WindowGlfw::SetPosition(int x, int y) KMP_PROFILING(ProfileLevelMinor)
     {
         glfwSetWindowPos(_window, x, y);
