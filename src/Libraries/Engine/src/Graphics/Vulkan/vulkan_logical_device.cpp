@@ -49,6 +49,7 @@ namespace Kmplete
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
             , _renderer(nullptr)
+            , _shaderObjects()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -66,6 +67,7 @@ namespace Kmplete
 
         VulkanLogicalDevice::~VulkanLogicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
+            _DeleteShaderObjects();
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
             _DeleteDescriptorSetsLayouts();
@@ -411,6 +413,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanLogicalDevice::_DeleteShaderObjects() KMP_PROFILING(ProfileLevelImportant)
+        {
+            _shaderObjects.clear();
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
             _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
@@ -581,6 +589,40 @@ namespace Kmplete
         {
             return VulkanShaderModule(_device, filepath);
         }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanLogicalDevice::AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
+                                                  const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name) KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (_shaderObjects.contains(sid))
+            {
+                KMP_LOG_WARN("shader object with sid '{}' has already been created", sid);
+                return true;
+            }
+
+            try
+            {
+                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(sid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
+                return hasEmplaced;
+            }
+            catch (KMP_MB_UNUSED const std::runtime_error& er)
+            {
+                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", sid, filepath);
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        VkShaderEXT VulkanLogicalDevice::GetShaderObject(StringID sid) const noexcept
+        {
+            if (_shaderObjects.contains(sid))
+            {
+                return _shaderObjects.at(sid)->GetVkShader();
+            }
+
+            KMP_LOG_ERROR("shader object with sid '{}' not found", sid);
+            return VK_NULL_HANDLE;
+        }
         //--------------------------------------------------------------------------
     }
 }

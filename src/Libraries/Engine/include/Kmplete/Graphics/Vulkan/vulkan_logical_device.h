@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_fence.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_queue.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_module.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
@@ -74,6 +75,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
             KMP_NODISCARD KMP_API VulkanShaderModule CreateShaderModule(const Filepath& filepath) const;
 
+            KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                         const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            KMP_NODISCARD KMP_API VkShaderEXT GetShaderObject(StringID sid) const noexcept;
+
         private:
             void _CreateLogicalDeviceObject();
             void _DeleteLogicalDeviceObject();
@@ -98,6 +103,7 @@ namespace Kmplete
 
             void _DeleteDescriptorSetsLayouts();
             void _DeletePipelines();
+            void _DeleteShaderObjects();
 
             void _CreateBufferCreatorDelegate();
             void _DeleteBufferCreatorDelegate();
@@ -134,6 +140,7 @@ namespace Kmplete
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
             UPtr<VulkanRenderer> _renderer;
+            HashMap<StringID, UPtr<VulkanShaderObject>> _shaderObjects;
         };
         //--------------------------------------------------------------------------
     }
