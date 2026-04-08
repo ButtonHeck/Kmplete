@@ -36,6 +36,9 @@ namespace Kmplete
     }
 
 
+#define TRIANGLE_VULKAN_DYNAMIC_RENDERING true
+
+
     MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
@@ -162,6 +165,13 @@ namespace Kmplete
         };
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
+        pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
+        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
+        pipeline.AddShaderStages(std::move(shaderStages));
+
+#if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
         pipeline.SetInputAssembly(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST, "primitive restart"_false);
         pipeline.SetPolygonMode(VK_POLYGON_MODE_FILL);
         pipeline.SetCulling(VK_CULL_MODE_BACK_BIT, VK_FRONT_FACE_COUNTER_CLOCKWISE);
@@ -173,14 +183,12 @@ namespace Kmplete
         pipeline.SetDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
         pipeline.SetDepthBoundsTest(false);
         pipeline.SetStencilTest(true);
-        pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.SetStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
-        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
-        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
-        pipeline.AddShaderStages(std::move(shaderStages));
-
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_VIEWPORT);
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_SCISSOR);
+        pipeline.AddDynamicState(VK_DYNAMIC_STATE_RASTERIZATION_SAMPLES_EXT);
+#else
         // additional dynamic states for testing
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_TEST_ENABLE);           //renderer.SetDepthTestEnabled(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_DEPTH_WRITE_ENABLE);          //renderer.SetDepthWriteEnabled(...)
@@ -240,6 +248,7 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);   //renderer.SetFragmentShadingRate(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT);   //renderer.SetProvokingVertexMode(...)
+#endif
 
         pipeline.Build();
     }
@@ -329,9 +338,14 @@ namespace Kmplete
         vulkanRenderer.BeginRendering("VulkanTriangle"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
         vulkanRenderer.BindDescriptorSets("VulkanTriangle"_sid, descriptorSetIndex, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
-        //vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
+        vulkanRenderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
+#if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
+        vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
+        vulkanRenderer.SetViewport(VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f });
+        vulkanRenderer.SetScissor(VkRect2D{ .offset = VkOffset2D{.x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() });
+#else
         // dynamic rendering functions tests
         vulkanRenderer.SetDepthTestEnabled(true);
         vulkanRenderer.SetDepthWriteEnabled(true);
@@ -386,7 +400,6 @@ namespace Kmplete
 
         const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(0);
         vulkanRenderer.SetVertexInput(inputBindingsDescriptions, attributeDescriptions);
-        vulkanRenderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} }, { VkDeviceSize{420} }, { VkDeviceSize{sizeof(Vertex)}});
 
         vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
@@ -395,7 +408,8 @@ namespace Kmplete
         vulkanRenderer.SetSampleLocationsEnabled(false);
         vulkanRenderer.SetPolygonMode(VK_POLYGON_MODE_FILL);
         vulkanRenderer.SetProvokingVertexMode(VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT);
-        vulkanRenderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
+        vulkanRenderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} }, { VkDeviceSize{420} }, { VkDeviceSize{sizeof(Vertex)} });
+#endif
 
         // drawing
         vulkanRenderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
