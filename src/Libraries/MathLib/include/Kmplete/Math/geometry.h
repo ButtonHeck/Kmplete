@@ -3,10 +3,12 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/type_traits.h"
 
-#include <glm/vec2.hpp>
-#include <glm/vec3.hpp>
-#include <glm/vec4.hpp>
+#define GLM_FORCE_RADIANS
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE
+#include <glm/glm.hpp>
 #include <glm/geometric.hpp>
+#include <glm/matrix.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include <algorithm>
 
@@ -30,7 +32,20 @@ namespace Kmplete
 
         using Size3I = glm::ivec3;
         using Size3F = glm::vec3;
+
+        using Vec2I = glm::ivec2;
+        using Vec2F = glm::vec2;
+
+        using Vec3I = glm::ivec3;
+        using Vec3F = glm::vec3;
         //--------------------------------------------------------------------------
+
+        static constexpr Vec3F UnitVectorX =        Vec3F{  1.0f,  0.0f,  0.0f };
+        static constexpr Vec3F UnitVectorMinusX =   Vec3F{ -1.0f,  0.0f,  0.0f };
+        static constexpr Vec3F UnitVectorY =        Vec3F{  0.0f,  1.0f,  0.0f };
+        static constexpr Vec3F UnitVectorMinusY =   Vec3F{  0.0f, -1.0f,  0.0f };
+        static constexpr Vec3F UnitVectorZ =        Vec3F{  0.0f,  0.0f,  1.0f };
+        static constexpr Vec3F UnitVectorMinusZ =   Vec3F{  0.0f,  0.0f, -1.0f };
 
     
         //! Two-dimensional rectangle defined by a position vector and a size vector,
@@ -116,6 +131,11 @@ namespace Kmplete
 
         using Rect3I = Rect3<Point3I, Size3I>;
         using Rect3F = Rect3<Point3F, Size3F>;
+        //--------------------------------------------------------------------------
+
+
+        using Mat3 = glm::mat3;
+        using Mat4 = glm::mat4;
         //--------------------------------------------------------------------------
     }
 }
