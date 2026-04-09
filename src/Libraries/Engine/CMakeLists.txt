@@ -76,6 +76,8 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/camera.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/orthographic_camera.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_surface.cpp
@@ -83,6 +85,8 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/swapchain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/camera.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/orthographic_camera.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/vulkan_graphics_base.h
