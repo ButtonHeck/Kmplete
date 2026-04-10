@@ -39,20 +39,24 @@ namespace Kmplete
 #define TRIANGLE_VULKAN_DYNAMIC_RENDERING true
 
 
-    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager)
+    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _inputManager(inputManager)
         , _vertexBuffer(nullptr)
         , _indexBuffer(nullptr)
         , _uniformBuffers()
+        , _matrixUniformBuffers()
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
         , _commandBuffer(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
+        , _matrixShaderData()
         , _shaderData(ShaderData{.colorMultiplier = 1.0f})
+        , _camera({0.0f, 0.0f, 0.0f}, Graphics::Camera::Type::FirstPerson)
     {
         _Initialize();
     }
@@ -66,6 +70,50 @@ namespace Kmplete
 
     void MainFrameListener::_Initialize()
     {
+        _camera.SetTranslation(Math::Vec3F(0.0f, 0.0f, 0.0f));
+        _camera.SetRotation(Math::Vec3F(0.0f, 0.0f, 0.0f));
+        _camera.SetMovementSpeed(0.4f);
+        _camera.SetOrthographicParameters(
+            -float(_mainWindow.GetSize().x) * 0.5f, 
+             float(_mainWindow.GetSize().x) * 0.5f, 
+            -float(_mainWindow.GetSize().y) * 0.5f, 
+             float(_mainWindow.GetSize().y) * 0.5f
+        );
+        _camera.SetZNear(0.1f);
+        _camera.SetZFar(100.0f);
+        _camera.SetFlipY(true);
+
+        _inputManager->MapInputToCallback({ Input::Code::Key_W, Input::NoCondition }, "move_up"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveUp, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_S, Input::NoCondition }, "move_down"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveDown, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_A, Input::NoCondition }, "move_left"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveLeft, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_D, Input::NoCondition }, "move_right"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveRight, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_Q, Input::PressNoModsCondition }, "rotate_left"_sid, [this](Input::InputControlValue) {
+            _camera.Rotate(Math::Vec3F{0.0f, 5.0f, 0.0f});
+            KMP_LOG_INFO("ROT: x={} y={} z={}, FRONT: x={} y={} z={}", 
+                _camera.GetRotation().x, _camera.GetRotation().y, _camera.GetRotation().z,
+                _camera.GetFront().x, _camera.GetFront().y, _camera.GetFront().z);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_E, Input::PressNoModsCondition }, "rotate_right"_sid, [this](Input::InputControlValue) {
+            _camera.Rotate(Math::Vec3F{ 0.0f, -5.0f, 0.0f });
+            KMP_LOG_INFO("ROT: x={} y={} z={}, FRONT: x={} y={} z={}",
+                _camera.GetRotation().x, _camera.GetRotation().y, _camera.GetRotation().z,
+                _camera.GetFront().x, _camera.GetFront().y, _camera.GetFront().z);
+            return true;
+        });
+
         _InitializeTriangle();
         _InitializeImGui(_mainWindow.GetDPIScale());
     }
@@ -82,30 +130,30 @@ namespace Kmplete
 
         const Vector<Vertex> vertices{
             // main RGB triangle
-            {{-0.95f,  0.97f, 0.2f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-            {{ 0.95f,  0.95f, 0.2f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-            {{-0.92f, -0.95f, 0.2f}, {0.0f, 0.0f, 1.0f, 1.0f}}
+            {{-0.95f * 128, -0.97f * 128, 0.2f * 128}, {1.0f, 0.0f, 0.0f, 1.0f}},
+            {{ 0.95f * 128, -0.95f * 128, 0.2f * 128}, {0.0f, 1.0f, 0.0f, 1.0f}},
+            {{-0.92f * 128,  0.95f * 128, 0.2f * 128}, {0.0f, 0.0f, 1.0f, 1.0f}}
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
         const Vector<Vertex> vertices2{
             // grey-to-white triangle above main RGB triangle
-            {{-0.50f, -0.90f, 0.1f}, {0.3f, 0.3f, 0.3f, 1.0f}},
-            {{-0.75f, -0.25f, 0.1f}, {0.6f, 0.6f, 0.6f, 1.0f}},
-            {{-0.25f, -0.25f, 0.1f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+            {{-0.50f * 128,  0.90f * 128, 0.1f * 128}, {0.3f, 0.3f, 0.3f, 1.0f}},
+            {{-0.75f * 128,  0.25f * 128, 0.1f * 128}, {0.6f, 0.6f, 0.6f, 1.0f}},
+            {{-0.25f * 128,  0.25f * 128, 0.1f * 128}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
             // reddish triangle below main RGB triangle (depth is outside of range, but it will be clamped due to DepthClamping option)
-            {{-0.00f, -0.40f, 1.3f}, {1.0f, 0.3f, 0.3f, 1.0f}},
-            {{-0.25f,  0.25f, 1.3f}, {1.0f, 0.6f, 0.6f, 1.0f}},
-            {{ 0.25f,  0.25f, 1.3f}, {1.0f, 0.9f, 0.9f, 1.0f}},
+            {{-0.00f * 128,  0.40f * 128, 0.8f * 128}, {1.0f, 0.3f, 0.3f, 1.0f}},
+            {{-0.25f * 128, -0.25f * 128, 0.8f * 128}, {1.0f, 0.6f, 0.6f, 1.0f}},
+            {{ 0.25f * 128, -0.25f * 128, 0.8f * 128}, {1.0f, 0.9f, 0.9f, 1.0f}},
 
             // half-transparent quad above everything
-            {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{-0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{-0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f * 128, -0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f * 128, -0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f * 128,  0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f * 128,  0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f * 128, -0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f * 128,  0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
         };
         const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
@@ -139,29 +187,42 @@ namespace Kmplete
             vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
 
-        const auto shaderUniformVariableBinding = 3;
-        VkDescriptorSetLayoutBinding layoutBinding{};
-        layoutBinding.binding = shaderUniformVariableBinding;
-        layoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        layoutBinding.descriptorCount = 1;
-        layoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_0"_sid, {});
-        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_1"_sid, { layoutBinding });
+        const auto matricesUniformBindingNumber = 0;
+        VkDescriptorSetLayoutBinding matricesLayoutBinding{};
+        matricesLayoutBinding.binding = matricesUniformBindingNumber;
+        matricesLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        matricesLayoutBinding.descriptorCount = 1;
+        matricesLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid, { matricesLayoutBinding });
+
+        const auto colorMultiplierUniformBindingNumber = 3;
+        VkDescriptorSetLayoutBinding colorMultiplierLayoutBinding{};
+        colorMultiplierLayoutBinding.binding = colorMultiplierUniformBindingNumber;
+        colorMultiplierLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+        colorMultiplierLayoutBinding.descriptorCount = 1;
+        colorMultiplierLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid, { colorMultiplierLayoutBinding });
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
                 { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) },
-                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid) },
-                shaderUniformVariableBinding));
+                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid) },
+                colorMultiplierUniformBindingNumber));
             _uniformBuffers[i]->Map();
+
+            _matrixUniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
+                { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(MatrixShaderData) },
+                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid) },
+                matricesUniformBindingNumber));
+            _matrixUniformBuffers[i]->Map();
         }
 
-        auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle"_sid);
+        auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
         pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_0"_sid));
-        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_1"_sid));
+        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid));
+        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid));
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
@@ -252,7 +313,7 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_PROVOKING_VERTEX_MODE_EXT);   //renderer.SetProvokingVertexMode(...)
 
-        const Vector<StringID> descriptorSetsLayoutsSids = { "TriangleVulkan_0"_sid, "TriangleVulkan_1"_sid };
+        const Vector<StringID> descriptorSetsLayoutsSids = { "TriangleVulkan_DS_Matrix"_sid, "TriangleVulkan_DS_ColorMultiplier"_sid };
         vulkanDevice.AddShaderObject("TriangleVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, descriptorSetsLayoutsSids);
         vulkanDevice.AddShaderObject("TriangleVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
@@ -302,6 +363,7 @@ namespace Kmplete
     {
         _imguiImpl.reset();
 
+        _matrixUniformBuffers.clear();
         _uniformBuffers.clear();
         _vertexBuffer.reset();
         _indexBuffer.reset();
@@ -321,8 +383,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
-    {}
+    void MainFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    {
+        _camera.Update(frameTimestep);
+    }
     //--------------------------------------------------------------------------
 
     void MainFrameListener::Render()
@@ -339,12 +403,16 @@ namespace Kmplete
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
 
-        const auto descriptorSetIndex = 1; // should match with triangle.frag "layout (set = 1, binding = ...)"
-        _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
+        _matrixShaderData.viewMatrix = _camera.GetViewMatrix();
+        _matrixShaderData.projectionMatrix = _camera.GetProjectionMatrix();
+        _matrixShaderData.modelMatrix = Math::Mat4(1.0f);
 
-        vulkanRenderer.BeginRendering("VulkanTriangle"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
-        vulkanRenderer.BindDescriptorSets("VulkanTriangle"_sid, descriptorSetIndex, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
-        vulkanRenderer.BindGraphicsPipeline("VulkanTriangle"_sid);
+        _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
+        _matrixUniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
+
+        vulkanRenderer.BeginRendering("VulkanTriangle_Pipeline"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
+        vulkanRenderer.BindDescriptorSets("VulkanTriangle_Pipeline"_sid, 0, { _matrixUniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
+        vulkanRenderer.BindGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
         vulkanRenderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
@@ -365,7 +433,7 @@ namespace Kmplete
         vulkanRenderer.SetDepthClampRange(VK_DEPTH_CLAMP_MODE_VIEWPORT_RANGE_EXT, 0.0f, 1.0f);
         vulkanRenderer.SetDepthClipEnabled(false);
 
-        vulkanRenderer.SetStencilTestEnabled(true);
+        vulkanRenderer.SetStencilTestEnabled(false);
         vulkanRenderer.SetStencilOp(VK_STENCIL_FACE_FRONT_BIT, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS);
         vulkanRenderer.SetStencilCompareMask(VK_STENCIL_FACE_FRONT_BIT, 0);
         vulkanRenderer.SetStencilWriteMask(VK_STENCIL_FACE_FRONT_BIT, 0);
@@ -387,7 +455,7 @@ namespace Kmplete
         vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
         vulkanRenderer.SetPrimitiveRestartEnabled(false);
 
-        vulkanRenderer.SetDiscardRectangleEnabled(true);
+        vulkanRenderer.SetDiscardRectangleEnabled(false);
         vulkanRenderer.SetDiscardRectangle(0, 8,
             { VkRect2D{.offset = VkOffset2D{.x = 1000, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
              VkRect2D{.offset = VkOffset2D{.x = 1030, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},

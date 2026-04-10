@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Math/geometry.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 
 namespace Kmplete
@@ -12,6 +13,8 @@ namespace Kmplete
         //TODO: comments
         class Camera
         {
+            KMP_LOG_CLASSNAME(Camera)
+
         public:
             using MovementMask = UInt8;
             using MovementMaskBits = UInt8;
@@ -40,7 +43,6 @@ namespace Kmplete
             KMP_API virtual ~Camera() = default;
 
             KMP_API virtual void Update(float delta);
-            KMP_API virtual void UpdateViewMatrix() = 0;
 
             KMP_API void Move(MovementMaskBits direction, bool moving) noexcept;
             KMP_NODISCARD KMP_API bool IsMoving() const noexcept;
@@ -67,6 +69,8 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API const Math::Mat4& GetViewMatrix() const noexcept;
             KMP_NODISCARD KMP_API const Math::Mat4& GetProjectionMatrix() const noexcept;
+
+            KMP_NODISCARD KMP_API const Math::Vec3F& GetFront() const noexcept;
 
         protected:
             virtual void _UpdateProjectionMatrix() = 0;

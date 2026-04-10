@@ -6,11 +6,13 @@
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/orthographic_camera.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Event/event_handler_guard.h"
+#include "Kmplete/Input/input_manager.h"
 
 #include <vulkan/vulkan.h>
 
@@ -29,7 +31,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(MainFrameListener)
 
     public:
-        MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager);
+        MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager);
         ~MainFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
@@ -48,19 +50,27 @@ namespace Kmplete
         bool _OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent&);
 
     private:
+        struct MatrixShaderData
+        {
+            Math::Mat4 projectionMatrix;
+            Math::Mat4 viewMatrix;
+            Math::Mat4 modelMatrix;
+        };
+
         struct ShaderData
         {
             float colorMultiplier;
         };
-        //--------------------------------------------------------------------------
 
     private:
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
+        Input::InputManager* _inputManager;
 
         UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
         Vector<UPtr<Graphics::VulkanUniformBuffer>> _uniformBuffers;
+        Vector<UPtr<Graphics::VulkanUniformBuffer>> _matrixUniformBuffers;
         UInt32 _indexCount;
         VkDevice _device;
         VkCommandBuffer _commandBuffer;
@@ -69,7 +79,9 @@ namespace Kmplete
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
+        MatrixShaderData _matrixShaderData;
         ShaderData _shaderData;
+        Graphics::OrthographicCamera _camera;
     };
     //--------------------------------------------------------------------------
 }

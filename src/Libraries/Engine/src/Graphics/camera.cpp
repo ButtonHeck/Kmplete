@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/camera.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -14,14 +15,14 @@ namespace Kmplete
             : _type(type)
             , _projection(projection)
             , _position(position)
-            , _rotation(Math::Vec3F(0.0f, 90.0f, 0.0f))
+            , _rotation(Math::Vec3F(0.0f, 0.0f, 0.0f))
             , _movementSpeed(1.0f)
             , _rotationSpeed(1.0f)
             , _flipY(false)
             , _movementMask(NotMoving)
             , _zNear(0.0f)
             , _zFar(1.0f)
-            , _front(Math::UnitVectorMinusZ)
+            , _front(Math::UnitVectorZ)
             , _right(Math::UnitVectorX)
             , _up(Math::UnitVectorY)
             , _viewMatrix(Math::Mat4())
@@ -59,6 +60,8 @@ namespace Kmplete
                 {
                     _position -= _up * moveSpeed;
                 }
+
+                KMP_LOG_DEBUG("position - x:{} y:{} z:{}", int(_position.x), int(_position.y), int(_position.z));
             }
 
             _UpdateViewMatrix();
@@ -189,41 +192,27 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const Math::Vec3F& Camera::GetFront() const noexcept
+        {
+            return _front;
+        }
+        //--------------------------------------------------------------------------
+
         void Camera::_UpdateViewMatrix()
         {
-            Math::Mat4 rotationMatrix = Math::Mat4(1.0f);
-            rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.x * (_flipY ? -1.0f : 1.0f)), Math::UnitVectorX);
-            rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.y), Math::UnitVectorY);
-            rotationMatrix = glm::rotate(rotationMatrix, glm::radians(_rotation.z), Math::UnitVectorZ);
-
-            Math::Vec3F translation = _position;
-            if (_flipY)
-            {
-                translation.y *= -1.0f;
-            }
-
-            Math::Mat4 translationMatrix = glm::translate(Math::Mat4(1.0f), translation);
-
-            if (_type == Type::FirstPerson)
-            {
-                _viewMatrix = rotationMatrix * translationMatrix;
-            }
-            else
-            {
-                _viewMatrix = translationMatrix * rotationMatrix;
-            }
+            _viewMatrix = glm::lookAtLH(_position, _position + _front, _up);
         }
         //--------------------------------------------------------------------------
 
         void Camera::_UpdateViewVectors()
         {
-            _front.x = -glm::cos(glm::radians(_rotation.x)) * glm::sin(glm::radians(_rotation.y));
+            _front.x = glm::cos(glm::radians(_rotation.x)) * glm::sin(glm::radians(_rotation.y));
             _front.y = glm::sin(glm::radians(_rotation.x));
             _front.z = glm::cos(glm::radians(_rotation.x)) * glm::cos(glm::radians(_rotation.y));
             _front = glm::normalize(_front);
 
-            _right = glm::normalize(glm::cross(_front, Math::UnitVectorY));
-            _up = glm::normalize(glm::cross(_right, _front));
+            _right = glm::normalize(glm::cross(Math::UnitVectorY, _front));
+            _up = glm::normalize(glm::cross(_front, _right));
         }
         //--------------------------------------------------------------------------
     }

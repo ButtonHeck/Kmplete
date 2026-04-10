@@ -26,7 +26,7 @@ namespace Kmplete
         void OrthographicCamera::SetOrthographicParameters(float left, float right, float top, float bottom) noexcept
         {
             _left = left;
-            _right=  right;
+            _right = right;
             _top = top;
             _bottom = bottom;
             _UpdateProjectionMatrix();
@@ -63,11 +63,7 @@ namespace Kmplete
 
         void OrthographicCamera::_UpdateProjectionMatrix()
         {
-            _projectionMatrix = glm::ortho(_left, _right, _top, _bottom, _zNear, _zFar);
-            if (_flipY)
-            {
-                _projectionMatrix[1][1] *= -1.0f;
-            }
+            _projectionMatrix = glm::orthoLH(_left, _right, _bottom, _top, _zNear, _zFar);
         }
         //--------------------------------------------------------------------------
     }
