@@ -54,6 +54,7 @@ namespace Kmplete
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
         , _matrixShaderData()
         , _shaderData(ShaderData{.colorMultiplier = 1.0f})
         , _camera({0.0f, 0.0f, 0.0f}, Graphics::Camera::Type::FirstPerson)
@@ -70,18 +71,13 @@ namespace Kmplete
 
     void MainFrameListener::_Initialize()
     {
-        _camera.SetTranslation(Math::Vec3F(0.0f, 0.0f, 0.0f));
+        _camera.SetTranslation(Math::Vec3F(0.0f, 0.0f, -2.0f));
         _camera.SetRotation(Math::Vec3F(0.0f, 0.0f, 0.0f));
-        _camera.SetMovementSpeed(0.4f);
-        _camera.SetOrthographicParameters(
-            -float(_mainWindow.GetSize().x) * 0.5f, 
-             float(_mainWindow.GetSize().x) * 0.5f, 
-            -float(_mainWindow.GetSize().y) * 0.5f, 
-             float(_mainWindow.GetSize().y) * 0.5f
-        );
-        _camera.SetZNear(0.1f);
-        _camera.SetZFar(100.0f);
-        _camera.SetFlipY(true);
+        _camera.SetMovementSpeed(0.01f);
+        _camera.SetScale(4.0f);
+        _camera.SetOrthographicParameters(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
+        _camera.SetAspectRatio(float(_mainWindow.GetSize().x) / float(_mainWindow.GetSize().y));
+        _camera.SetApplyAspectRatioFix(true);
 
         _inputManager->MapInputToCallback({ Input::Code::Key_W, Input::NoCondition }, "move_up"_sid, [this](Input::InputControlValue value) {
             _camera.Move(Graphics::Camera::MoveUp, std::get<int>(value) != 0);
@@ -130,30 +126,30 @@ namespace Kmplete
 
         const Vector<Vertex> vertices{
             // main RGB triangle
-            {{-0.95f * 128, -0.97f * 128, 0.2f * 128}, {1.0f, 0.0f, 0.0f, 1.0f}},
-            {{ 0.95f * 128, -0.95f * 128, 0.2f * 128}, {0.0f, 1.0f, 0.0f, 1.0f}},
-            {{-0.92f * 128,  0.95f * 128, 0.2f * 128}, {0.0f, 0.0f, 1.0f, 1.0f}}
+            {{-0.95f, -0.97f, 0.2f}, {1.0f, 0.0f, 0.0f, 1.0f}},
+            {{ 0.95f, -0.95f, 0.2f}, {0.0f, 1.0f, 0.0f, 1.0f}},
+            {{-0.92f,  0.95f, 0.2f}, {0.0f, 0.0f, 1.0f, 1.0f}}
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
         const Vector<Vertex> vertices2{
             // grey-to-white triangle above main RGB triangle
-            {{-0.50f * 128,  0.90f * 128, 0.1f * 128}, {0.3f, 0.3f, 0.3f, 1.0f}},
-            {{-0.75f * 128,  0.25f * 128, 0.1f * 128}, {0.6f, 0.6f, 0.6f, 1.0f}},
-            {{-0.25f * 128,  0.25f * 128, 0.1f * 128}, {1.0f, 1.0f, 1.0f, 1.0f}},
+            {{-0.50f,  0.90f, 0.1f}, {0.3f, 0.3f, 0.3f, 1.0f}},
+            {{-0.75f,  0.25f, 0.1f}, {0.6f, 0.6f, 0.6f, 1.0f}},
+            {{-0.25f,  0.25f, 0.1f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
             // reddish triangle below main RGB triangle (depth is outside of range, but it will be clamped due to DepthClamping option)
-            {{-0.00f * 128,  0.40f * 128, 0.8f * 128}, {1.0f, 0.3f, 0.3f, 1.0f}},
-            {{-0.25f * 128, -0.25f * 128, 0.8f * 128}, {1.0f, 0.6f, 0.6f, 1.0f}},
-            {{ 0.25f * 128, -0.25f * 128, 0.8f * 128}, {1.0f, 0.9f, 0.9f, 1.0f}},
+            {{-0.00f,  0.40f, 0.8f}, {1.0f, 0.3f, 0.3f, 1.0f}},
+            {{-0.25f, -0.25f, 0.8f}, {1.0f, 0.6f, 0.6f, 1.0f}},
+            {{ 0.25f, -0.25f, 0.8f}, {1.0f, 0.9f, 0.9f, 1.0f}},
 
             // half-transparent quad above everything
-            {{-0.80f * 128, -0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f * 128, -0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{-0.80f * 128,  0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{-0.80f * 128,  0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f * 128, -0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f * 128,  0.80f * 128, 0.0f * 128}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            {{ 0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
         };
         const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
@@ -383,6 +379,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool MainFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    {
+        _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
     void MainFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
@@ -476,7 +479,7 @@ namespace Kmplete
         const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(0);
         vulkanRenderer.SetVertexInput(inputBindingsDescriptions, attributeDescriptions);
 
-        vulkanRenderer.SetCullMode(VK_CULL_MODE_BACK_BIT);
+        vulkanRenderer.SetCullMode(VK_CULL_MODE_NONE);
         vulkanRenderer.SetFrontFace(VK_FRONT_FACE_COUNTER_CLOCKWISE);
         vulkanRenderer.SetBlendConstants({1, 1, 1, 1});
         vulkanRenderer.SetRasterizerDiscardEnabled(false);

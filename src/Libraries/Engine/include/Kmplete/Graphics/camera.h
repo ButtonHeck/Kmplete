@@ -58,19 +58,21 @@ namespace Kmplete
             KMP_API void SetMovementSpeed(float movementSpeed) noexcept;
             KMP_API void SetRotationSpeed(float rotationSpeed) noexcept;
 
-            KMP_API void SetFlipY(bool flipY) noexcept;
-            KMP_NODISCARD KMP_API bool IsFlipY() const noexcept;
-
             KMP_API void SetZNear(float zNear) noexcept;
             KMP_NODISCARD KMP_API float GetZNear() const noexcept;
 
             KMP_API void SetZFar(float zFar) noexcept;
             KMP_NODISCARD KMP_API float GetZFar() const noexcept;
 
+            KMP_API void SetAspectRatio(float aspectRatio) noexcept;
+            KMP_NODISCARD KMP_API float GetAspectRatio() const noexcept;
+
             KMP_NODISCARD KMP_API const Math::Mat4& GetViewMatrix() const noexcept;
             KMP_NODISCARD KMP_API const Math::Mat4& GetProjectionMatrix() const noexcept;
 
             KMP_NODISCARD KMP_API const Math::Vec3F& GetFront() const noexcept;
+            KMP_NODISCARD KMP_API const Math::Vec3F& GetRight() const noexcept;
+            KMP_NODISCARD KMP_API const Math::Vec3F& GetUp() const noexcept;
 
         protected:
             virtual void _UpdateProjectionMatrix() = 0;
@@ -87,10 +89,10 @@ namespace Kmplete
             Math::Vec3F _rotation;
             float _movementSpeed;
             float _rotationSpeed;
-            bool _flipY;
             MovementMask _movementMask;
             float _zNear;
             float _zFar;
+            float _aspectRatio;
 
             Math::Vec3F _front;
             Math::Vec3F _right;

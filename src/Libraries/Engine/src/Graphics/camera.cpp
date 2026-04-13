@@ -18,10 +18,10 @@ namespace Kmplete
             , _rotation(Math::Vec3F(0.0f, 0.0f, 0.0f))
             , _movementSpeed(1.0f)
             , _rotationSpeed(1.0f)
-            , _flipY(false)
             , _movementMask(NotMoving)
             , _zNear(0.0f)
             , _zFar(1.0f)
+            , _aspectRatio(1.0f)
             , _front(Math::UnitVectorZ)
             , _right(Math::UnitVectorX)
             , _up(Math::UnitVectorY)
@@ -141,19 +141,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void Camera::SetFlipY(bool flipY) noexcept
-        {
-            _flipY = flipY;
-            _UpdateProjectionMatrix();
-        }
-        //--------------------------------------------------------------------------
-
-        bool Camera::IsFlipY() const noexcept
-        {
-            return _flipY;
-        }
-        //--------------------------------------------------------------------------
-
         void Camera::SetZNear(float zNear) noexcept
         {
             _zNear = zNear;
@@ -180,6 +167,25 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void Camera::SetAspectRatio(float aspectRatio) noexcept
+        {
+            if (aspectRatio == 0.0f)
+            {
+                KMP_LOG_WARN("aspect ration cannot be set to 0.0, will be set to 1.0");
+                aspectRatio = 1.0f;
+            }
+
+            _aspectRatio = aspectRatio;
+            _UpdateProjectionMatrix();
+        }
+        //--------------------------------------------------------------------------
+
+        float Camera::GetAspectRatio() const noexcept
+        {
+            return _aspectRatio;
+        }
+        //--------------------------------------------------------------------------
+
         const Math::Mat4& Camera::GetViewMatrix() const noexcept
         {
             return _viewMatrix;
@@ -195,6 +201,18 @@ namespace Kmplete
         const Math::Vec3F& Camera::GetFront() const noexcept
         {
             return _front;
+        }
+        //--------------------------------------------------------------------------
+
+        const Math::Vec3F& Camera::GetRight() const noexcept
+        {
+            return _right;
+        }
+        //--------------------------------------------------------------------------
+
+        const Math::Vec3F& Camera::GetUp() const noexcept
+        {
+            return _up;
         }
         //--------------------------------------------------------------------------
 

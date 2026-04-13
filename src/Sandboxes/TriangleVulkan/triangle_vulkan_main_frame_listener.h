@@ -12,6 +12,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Event/event_handler_guard.h"
+#include "Kmplete/Event/window_events.h"
 #include "Kmplete/Input/input_manager.h"
 
 #include <vulkan/vulkan.h>
@@ -47,7 +48,8 @@ namespace Kmplete
         void _RenderImGui();
 
         void _SetMultisampling(UInt32 samples);
-        bool _OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent&);
+        bool _OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt);
+        bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
 
     private:
         struct MatrixShaderData
@@ -79,6 +81,7 @@ namespace Kmplete
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
         MatrixShaderData _matrixShaderData;
         ShaderData _shaderData;
         Graphics::OrthographicCamera _camera;
