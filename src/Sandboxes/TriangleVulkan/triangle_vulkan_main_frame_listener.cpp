@@ -104,20 +104,6 @@ namespace Kmplete
             _camera.Move(Graphics::Camera::MoveRight, std::get<int>(value) != 0);
             return true;
         });
-        _inputManager->MapInputToCallback({ Input::Code::Key_Q, Input::PressNoModsCondition }, "rotate_left"_sid, [this](Input::InputControlValue) {
-            _camera.Rotate(Math::Vec3F{0.0f, 5.0f, 0.0f});
-            KMP_LOG_INFO("ROT: x={} y={} z={}, FRONT: x={} y={} z={}", 
-                _camera.GetRotation().x, _camera.GetRotation().y, _camera.GetRotation().z,
-                _camera.GetFront().x, _camera.GetFront().y, _camera.GetFront().z);
-            return true;
-        });
-        _inputManager->MapInputToCallback({ Input::Code::Key_E, Input::PressNoModsCondition }, "rotate_right"_sid, [this](Input::InputControlValue) {
-            _camera.Rotate(Math::Vec3F{ 0.0f, -5.0f, 0.0f });
-            KMP_LOG_INFO("ROT: x={} y={} z={}, FRONT: x={} y={} z={}",
-                _camera.GetRotation().x, _camera.GetRotation().y, _camera.GetRotation().z,
-                _camera.GetFront().x, _camera.GetFront().y, _camera.GetFront().z);
-            return true;
-        });
 #else
         _inputManager->MapInputToCallback({ Input::Code::Key_W, Input::NoCondition }, "move_forward"_sid, [this](Input::InputControlValue value) {
             _camera.Move(Graphics::Camera::MoveForward, std::get<int>(value) != 0);

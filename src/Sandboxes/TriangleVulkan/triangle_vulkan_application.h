@@ -22,9 +22,6 @@ namespace Kmplete
         void _Initialize();
         void _Finalize();
 
-        void _SaveSettings() const;
-        void _LoadSettings();
-
     private:
         Window& _mainWindow;
         UPtr<MainFrameListener> _mainFrameListener;
