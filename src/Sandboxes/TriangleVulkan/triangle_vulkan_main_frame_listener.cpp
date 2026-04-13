@@ -437,7 +437,7 @@ namespace Kmplete
         {
             if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
             {
-                _mainWindow.SetCursorMode(Window::CursorMode::Hidden);
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
             }
             else
             {

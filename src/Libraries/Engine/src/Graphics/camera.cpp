@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/camera.h"
+#include "Kmplete/Math/math.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -96,8 +97,7 @@ namespace Kmplete
 
         void Camera::Translate(const Math::Point3F& delta) noexcept
         {
-            _position += delta;
-            _UpdateViewMatrix();
+            SetTranslation(_position + delta);
         }
         //--------------------------------------------------------------------------
 
@@ -110,6 +110,8 @@ namespace Kmplete
         void Camera::SetRotation(const Math::Vec3F& rotation) noexcept
         {
             _rotation = rotation;
+            _rotation.x = Math::Clamp(_rotation.x, -89.0f, 89.0f);
+
             _UpdateViewVectors();
             _UpdateViewMatrix();
         }
@@ -117,9 +119,7 @@ namespace Kmplete
 
         void Camera::Rotate(const Math::Vec3F& delta) noexcept
         {
-            _rotation += delta;
-            _UpdateViewVectors();
-            _UpdateViewMatrix();
+            SetRotation(_rotation + delta);
         }
         //--------------------------------------------------------------------------
 
