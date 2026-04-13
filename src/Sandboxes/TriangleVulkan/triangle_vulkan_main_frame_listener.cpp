@@ -57,6 +57,7 @@ namespace Kmplete
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
         , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
         , _shaderData(ShaderData{.colorMultiplier = 1.0f})
 #if USE_ORTHOGRAPHIC_CAMERA
@@ -444,6 +445,17 @@ namespace Kmplete
             }
         }
 
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool MainFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    {
+#if USE_ORTHOGRAPHIC_CAMERA
+        _camera.SetScaleDelta(evt.GetYOffset());
+#else
+        _camera.SetFOVDelta(evt.GetYOffset());
+#endif
         return true;
     }
     //--------------------------------------------------------------------------

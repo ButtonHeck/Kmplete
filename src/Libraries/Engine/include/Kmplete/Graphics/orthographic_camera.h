@@ -24,6 +24,7 @@ namespace Kmplete
             KMP_API void SetBottom(float bottom) noexcept;
 
             KMP_API void SetScale(float scale) noexcept;
+            KMP_API void SetScaleDelta(float delta) noexcept;
             KMP_NODISCARD KMP_API float GetScale() const noexcept;
 
             KMP_API void SetApplyAspectRatioFix(bool applyAspect) noexcept;

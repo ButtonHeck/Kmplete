@@ -81,6 +81,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void OrthographicCamera::SetScaleDelta(float delta) noexcept
+        {
+            SetScale(_scale + delta);
+        }
+        //--------------------------------------------------------------------------
+
         float OrthographicCamera::GetScale() const noexcept
         {
             return _scale;

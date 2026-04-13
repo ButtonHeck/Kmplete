@@ -28,6 +28,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void PerspectiveCamera::SetFOVDelta(float delta) noexcept
+        {
+            SetFOV(_fov + delta);
+        }
+        //--------------------------------------------------------------------------
+
         float PerspectiveCamera::GetFOV() const noexcept
         {
             return _fov;
