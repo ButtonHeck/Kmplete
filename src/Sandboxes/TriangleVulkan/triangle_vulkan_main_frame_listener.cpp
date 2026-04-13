@@ -56,6 +56,7 @@ namespace Kmplete
         , _assetsManager(assetsManager)
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseButtonPressedEvent))
         , _matrixShaderData()
         , _shaderData(ShaderData{.colorMultiplier = 1.0f})
 #if USE_ORTHOGRAPHIC_CAMERA
@@ -76,8 +77,8 @@ namespace Kmplete
 
     void MainFrameListener::_Initialize()
     {
-        _camera.SetRotation(Math::Vec3F(0.0f, 0.0f, 0.0f));
-        _camera.SetMovementSpeed(0.01f);
+        _camera.SetMovementSpeed(0.0025f);
+        _camera.SetRotationSpeed(0.1f);
         _camera.SetAspectRatio(float(_mainWindow.GetSize().x) / float(_mainWindow.GetSize().y));
         _camera.SetZNear(0.1f);
         _camera.SetZFar(10.0f);
@@ -139,6 +140,16 @@ namespace Kmplete
         });
         _inputManager->MapInputToCallback({ Input::Code::Key_LeftShift, Input::NoCondition }, "move_down"_sid, [this](Input::InputControlValue value) {
             _camera.Move(Graphics::Camera::MoveDown, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Mouse_Move, Input::NoCondition }, "rotate"_sid, [this](Input::InputControlValue value) {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                return true;
+            }
+
+            const auto rotationValue = std::get<Math::Point2I>(value);
+            _camera.Rotate(Math::Vec3F(-rotationValue.y * _camera.GetRotationSpeed(), rotationValue.x * _camera.GetRotationSpeed(), 0.0f));
             return true;
         });
 #endif
@@ -415,6 +426,24 @@ namespace Kmplete
     bool MainFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
     {
         _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool MainFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    {
+        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
+        {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Hidden);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+        }
+
         return true;
     }
     //--------------------------------------------------------------------------

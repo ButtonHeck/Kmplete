@@ -14,6 +14,7 @@
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Event/window_events.h"
+#include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Input/input_manager.h"
 
 #include <vulkan/vulkan.h>
@@ -53,6 +54,7 @@ namespace Kmplete
         void _SetMultisampling(UInt32 samples);
         bool _OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt);
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
+        bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
 
     private:
         struct MatrixShaderData
@@ -85,6 +87,7 @@ namespace Kmplete
 
         Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
         Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
         MatrixShaderData _matrixShaderData;
         ShaderData _shaderData;
 

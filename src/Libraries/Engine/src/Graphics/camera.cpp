@@ -135,9 +135,21 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        float Camera::GetMovementSpeed() const noexcept
+        {
+            return _movementSpeed;
+        }
+        //--------------------------------------------------------------------------
+
         void Camera::SetRotationSpeed(float rotationSpeed) noexcept
         {
             _rotationSpeed = rotationSpeed;
+        }
+        //--------------------------------------------------------------------------
+
+        float Camera::GetRotationSpeed() const noexcept
+        {
+            return _rotationSpeed;
         }
         //--------------------------------------------------------------------------
 

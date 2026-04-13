@@ -56,7 +56,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const Math::Vec3F& GetRotation() const noexcept;
 
             KMP_API void SetMovementSpeed(float movementSpeed) noexcept;
+            KMP_NODISCARD KMP_API float GetMovementSpeed() const noexcept;
+
             KMP_API void SetRotationSpeed(float rotationSpeed) noexcept;
+            KMP_NODISCARD KMP_API float GetRotationSpeed() const noexcept;
 
             KMP_API void SetZNear(float zNear) noexcept;
             KMP_NODISCARD KMP_API float GetZNear() const noexcept;
