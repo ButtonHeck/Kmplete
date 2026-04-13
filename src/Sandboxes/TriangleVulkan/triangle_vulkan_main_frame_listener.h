@@ -7,6 +7,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/orthographic_camera.h"
+#include "Kmplete/Graphics/perspective_camera.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
@@ -25,6 +26,8 @@ namespace Kmplete
         class AssetsManager;
     }
 
+
+#define USE_ORTHOGRAPHIC_CAMERA false
 
     class MainFrameListener : public FrameListener
     {
@@ -84,7 +87,12 @@ namespace Kmplete
         Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
         MatrixShaderData _matrixShaderData;
         ShaderData _shaderData;
+
+#if USE_ORTHOGRAPHIC_CAMERA
         Graphics::OrthographicCamera _camera;
+#else
+        Graphics::PerspectiveCamera _camera;
+#endif
     };
     //--------------------------------------------------------------------------
 }

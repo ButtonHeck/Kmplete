@@ -37,6 +37,7 @@ namespace Kmplete
 
 
 #define TRIANGLE_VULKAN_DYNAMIC_RENDERING true
+#define USE_ORTHOGRAPHIC_CAMERA false
 
 
     MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
@@ -57,7 +58,11 @@ namespace Kmplete
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
         , _matrixShaderData()
         , _shaderData(ShaderData{.colorMultiplier = 1.0f})
-        , _camera({0.0f, 0.0f, 0.0f}, Graphics::Camera::Type::FirstPerson)
+#if USE_ORTHOGRAPHIC_CAMERA
+        , _camera({0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
+#else
+        , _camera({0.0f, 0.0f, -2.0f}, Graphics::Camera::Type::FirstPerson, 75.0f)
+#endif
     {
         _Initialize();
     }
@@ -71,12 +76,14 @@ namespace Kmplete
 
     void MainFrameListener::_Initialize()
     {
-        _camera.SetTranslation(Math::Vec3F(0.0f, 0.0f, -2.0f));
         _camera.SetRotation(Math::Vec3F(0.0f, 0.0f, 0.0f));
         _camera.SetMovementSpeed(0.01f);
-        _camera.SetScale(4.0f);
-        _camera.SetOrthographicParameters(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 100.0f);
         _camera.SetAspectRatio(float(_mainWindow.GetSize().x) / float(_mainWindow.GetSize().y));
+        _camera.SetZNear(0.1f);
+        _camera.SetZFar(10.0f);
+#if USE_ORTHOGRAPHIC_CAMERA
+        _camera.SetScale(4.0f);
+        _camera.SetOrthographicParameters(-1.0f, 1.0f, -1.0f, 1.0f, 0.1f, 10.0f);
         _camera.SetApplyAspectRatioFix(true);
 
         _inputManager->MapInputToCallback({ Input::Code::Key_W, Input::NoCondition }, "move_up"_sid, [this](Input::InputControlValue value) {
@@ -109,6 +116,32 @@ namespace Kmplete
                 _camera.GetFront().x, _camera.GetFront().y, _camera.GetFront().z);
             return true;
         });
+#else
+        _inputManager->MapInputToCallback({ Input::Code::Key_W, Input::NoCondition }, "move_forward"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveForward, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_S, Input::NoCondition }, "move_backward"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveBackward, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_A, Input::NoCondition }, "move_left"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveLeft, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_D, Input::NoCondition }, "move_right"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveRight, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_Space, Input::NoCondition }, "move_up"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveUp, std::get<int>(value) != 0);
+            return true;
+        });
+        _inputManager->MapInputToCallback({ Input::Code::Key_LeftShift, Input::NoCondition }, "move_down"_sid, [this](Input::InputControlValue value) {
+            _camera.Move(Graphics::Camera::MoveDown, std::get<int>(value) != 0);
+            return true;
+        });
+#endif
 
         _InitializeTriangle();
         _InitializeImGui(_mainWindow.GetDPIScale());
@@ -434,7 +467,7 @@ namespace Kmplete
         vulkanRenderer.SetDepthBias(0.0f, 0.0f, 0.0f);
         vulkanRenderer.SetDepthClampEnabled(true);
         vulkanRenderer.SetDepthClampRange(VK_DEPTH_CLAMP_MODE_VIEWPORT_RANGE_EXT, 0.0f, 1.0f);
-        vulkanRenderer.SetDepthClipEnabled(false);
+        vulkanRenderer.SetDepthClipEnabled(true);
 
         vulkanRenderer.SetStencilTestEnabled(false);
         vulkanRenderer.SetStencilOp(VK_STENCIL_FACE_FRONT_BIT, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_STENCIL_OP_KEEP, VK_COMPARE_OP_ALWAYS);
