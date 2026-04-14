@@ -19,7 +19,6 @@
 #include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Assets/assets_manager.h"
-#include "Kmplete/Event/event_queue.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -56,12 +55,6 @@ namespace Kmplete
         , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
-        , _textureMetalImage(String(KMP_SANDBOX_RESOURCES_FOLDER).append("metal.jpg"), Graphics::ImageChannels::RGBAlpha, "flip_vertically"_true)
-        , _textureMarbleImage(String(KMP_SANDBOX_RESOURCES_FOLDER).append("marble.jpg"), Graphics::ImageChannels::RGBAlpha, "flip_vertically"_true)
-        , _textureExampleImage(String(KMP_SANDBOX_RESOURCES_FOLDER).append("example.png"), Graphics::ImageChannels::RGBAlpha, "flip_vertically"_true)
-        , _textureMetal(nullptr)
-        , _textureMarble(nullptr)
-        , _textureExample(nullptr)
 #if USE_ORTHOGRAPHIC_CAMERA
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
 #else
@@ -158,10 +151,10 @@ namespace Kmplete
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
 
         const Vector<Vertex> vertices{
-            { {  1.0f,  1.0f, 0.0f }, { 1.0f, 1.0f } },
-            { { -1.0f,  1.0f, 0.0f }, { 0.0f, 1.0f } },
-            { { -1.0f, -1.0f, 0.0f }, { 0.0f, 0.0f } },
-            { {  1.0f, -1.0f, 0.0f }, { 1.0f, 0.0f } }
+            { {  1.0f,  1.0f, 0.0f }, { 1.0f, 0.0f } },
+            { { -1.0f,  1.0f, 0.0f }, { 0.0f, 0.0f } },
+            { { -1.0f, -1.0f, 0.0f }, { 0.0f, 1.0f } },
+            { {  1.0f, -1.0f, 0.0f }, { 1.0f, 1.0f } }
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
@@ -193,10 +186,6 @@ namespace Kmplete
             vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
 
-        _textureMetal.reset(vulkanDevice.CreateTexture(_textureMetalImage));
-        _textureMarble.reset(vulkanDevice.CreateTexture(_textureMarbleImage));
-        _textureExample.reset(vulkanDevice.CreateTexture(_textureExampleImage));
-
         const auto matricesUniformBindingNumber = 0;
         VkDescriptorSetLayoutBinding matricesLayoutBinding{};
         matricesLayoutBinding.binding = 0;
@@ -217,7 +206,7 @@ namespace Kmplete
                 { vulkanDevice.GetDescriptorSetLayout("TextureVulkan_DS"_sid) },
                 matricesUniformBindingNumber));
             _uniformBuffers[i]->Map();
-            _uniformBuffers[i]->SetTextureDescriptor(*_textureMetal.get(), 1);
+            _uniformBuffers[i]->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_metal"_sid).GetTexture()), 1);
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("TextureVulkan_Pipeline"_sid);
@@ -287,9 +276,8 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);   //renderer.SetFragmentShadingRate(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
 
-        const Vector<StringID> descriptorSetsLayoutsSids = { "TextureVulkan_DS"_sid };
-        vulkanDevice.AddShaderObject("TextureVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, descriptorSetsLayoutsSids);
-        vulkanDevice.AddShaderObject("TextureVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, descriptorSetsLayoutsSids);
+        vulkanDevice.AddShaderObject("TextureVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, { "TextureVulkan_DS"_sid });
+        vulkanDevice.AddShaderObject("TextureVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, { "TextureVulkan_DS"_sid });
 
         pipeline.Build();
     }
@@ -481,21 +469,21 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetTextureDescriptor(*_textureMetal.get(), 1);
+                uniformBuffer->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_metal"_sid).GetTexture()), 1);
             }
         }
         if (ImGui::Button("Marble"))
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetTextureDescriptor(*_textureMarble.get(), 1);
+                uniformBuffer->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_marble"_sid).GetTexture()), 1);
             }
         }
         if (ImGui::Button("Example"))
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetTextureDescriptor(*_textureExample.get(), 1);
+                uniformBuffer->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_example"_sid).GetTexture()), 1);
             }
         }
         ImGui::SliderFloat("LOD bias", &_matrixShaderData.lodBias, -8.0f, 8.0f);

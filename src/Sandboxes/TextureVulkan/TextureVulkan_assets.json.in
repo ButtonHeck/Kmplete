@@ -1,0 +1,19 @@
+{
+    "Assets": [
+        {
+            "File": "@path_metal@",
+            "Type": 0,
+            "Sid": 15483150532131265019
+        },
+        {
+            "File": "@path_marble@",
+            "Type": 0,
+            "Sid": 1027503403731565447
+        },
+        {
+            "File": "@path_example@",
+            "Type": 0,
+            "Sid": 1124137468291452664
+        }
+    ]
+}

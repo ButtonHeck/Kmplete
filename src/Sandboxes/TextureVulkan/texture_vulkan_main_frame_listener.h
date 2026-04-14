@@ -3,7 +3,6 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
-#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/orthographic_camera.h"
 #include "Kmplete/Graphics/perspective_camera.h"
@@ -84,13 +83,6 @@ namespace Kmplete
         Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
         Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         MatrixShaderData _matrixShaderData;
-
-        Graphics::Image _textureMetalImage;
-        Graphics::Image _textureMarbleImage;
-        Graphics::Image _textureExampleImage;
-        UPtr<Graphics::VulkanTexture> _textureMetal;
-        UPtr<Graphics::VulkanTexture> _textureMarble;
-        UPtr<Graphics::VulkanTexture> _textureExample;
 
 #if USE_ORTHOGRAPHIC_CAMERA
         Graphics::OrthographicCamera _camera;
