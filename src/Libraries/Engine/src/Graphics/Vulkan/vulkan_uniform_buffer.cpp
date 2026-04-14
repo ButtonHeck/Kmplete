@@ -52,6 +52,23 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanUniformBuffer::SetTextureDescriptor(const VulkanTexture& texture, UInt32 binding) KMP_PROFILING(ProfileLevelImportant)
+        {
+            VkDescriptorImageInfo textureDescriptor{};
+            textureDescriptor.imageView = texture.GetVkImageView();
+            textureDescriptor.sampler = texture.GetVkSampler();
+            textureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
+            writeDescriptorSet.dstSet = _descriptorSet;
+            writeDescriptorSet.dstBinding = binding;
+            writeDescriptorSet.descriptorCount = 1;
+            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+            writeDescriptorSet.pImageInfo = &textureDescriptor;
+            vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanUniformBuffer::_AllocateDescriptorSet(VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts) KMP_PROFILING(ProfileLevelImportant)
         {
             auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
