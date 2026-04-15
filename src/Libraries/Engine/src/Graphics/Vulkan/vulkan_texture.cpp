@@ -183,14 +183,15 @@ namespace Kmplete
         void VulkanTexture::_InitializeSampler(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
         {
             auto samplerParameters = VulkanUtils::InitVkSamplerCreateInfo();
-            samplerParameters.magFilter = VK_FILTER_LINEAR;
-            samplerParameters.minFilter = VK_FILTER_LINEAR;
-            samplerParameters.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+            samplerParameters.magFilter = VK_FILTER_NEAREST;
+            samplerParameters.minFilter = VK_FILTER_NEAREST;
+            samplerParameters.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
             samplerParameters.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
             samplerParameters.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
             samplerParameters.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
             samplerParameters.minLod = 0.0f;
             samplerParameters.maxLod = float(mipLevels);
+            samplerParameters.anisotropyEnable = VK_TRUE;
             samplerParameters.maxAnisotropy = 1.0f;
 
             _sampler = imageCreatorDelegate.CreateVkSampler(samplerParameters);
