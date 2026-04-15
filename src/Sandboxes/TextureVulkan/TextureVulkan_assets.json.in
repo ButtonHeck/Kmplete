@@ -3,17 +3,17 @@
         {
             "File": "@path_metal@",
             "Type": 0,
-            "Sid": 15483150532131265019
+            "Name": "texture_metal"
         },
         {
             "File": "@path_marble@",
             "Type": 0,
-            "Sid": 1027503403731565447
+            "Name": "texture_marble"
         },
         {
             "File": "@path_example@",
             "Type": 0,
-            "Sid": 1124137468291452664
+            "Name": "texture_example"
         }
     ]
 }

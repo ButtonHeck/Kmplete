@@ -276,8 +276,9 @@ namespace Kmplete
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR);   //renderer.SetFragmentShadingRate(...)
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_POLYGON_MODE_EXT);            //renderer.SetPolygonMode(...)
 
-        vulkanDevice.AddShaderObject("TextureVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, { "TextureVulkan_DS"_sid });
-        vulkanDevice.AddShaderObject("TextureVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, { "TextureVulkan_DS"_sid });
+        const Vector<StringID> descriptorSetsLayoutsSids = { "TextureVulkan_DS"_sid };
+        vulkanDevice.AddShaderObject("TextureVulkan_vertex"_sid, vertexShaderPath, VK_SHADER_STAGE_VERTEX_BIT, VK_SHADER_STAGE_FRAGMENT_BIT, "linked"_true, descriptorSetsLayoutsSids);
+        vulkanDevice.AddShaderObject("TextureVulkan_fragment"_sid, fragmentShaderPath, VK_SHADER_STAGE_FRAGMENT_BIT, 0, "linked"_true, descriptorSetsLayoutsSids);
 
         pipeline.Build();
     }

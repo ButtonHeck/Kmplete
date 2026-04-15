@@ -3,22 +3,22 @@
         {
             "File": "@Editor_path_flag_russian@",
             "Type": 0,
-            "Sid": 10106586484732293905
+            "Name": "_flag_russian"
         },
         {
             "File": "@Editor_path_flag_usa@",
             "Type": 0,
-            "Sid": 5842094581160485
+            "Name": "_flag_usa"
         },
         {
             "File": "@Editor_path_font_opensans_regular@",
             "Type": 1,
-            "Sid": 5443282125540987398
+            "Name": "OpenSans-Regular.ttf"
         },
         {
             "File": "@Editor_path_font_forkawesome_webfont@",
             "Type": 1,
-            "Sid": 10402757747795465949
+            "Name": "forkawesome-webfont.ttf"
         }
     ]
 }

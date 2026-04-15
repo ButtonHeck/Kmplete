@@ -11,7 +11,7 @@ namespace Kmplete
             static constexpr auto JsonConfigurationTopLevelName = "Assets";
             static constexpr auto JsonConfigurationFileStr = "File";
             static constexpr auto JsonConfigurationTypeStr = "Type";
-            static constexpr auto JsonConfigurationSidStr = "Sid";
+            static constexpr auto JsonConfigurationNameStr = "Name";
 
             static constexpr auto CompilerArgumentLogging = "logging";
             static constexpr auto CompilerArgumentLoggingShort = "L";

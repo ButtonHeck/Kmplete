@@ -133,7 +133,14 @@ namespace Kmplete
                     return ReturnCode::InputFileFormatError;
                 }
 
-                const auto assetSid = sourceJson.GetUInt64(JsonConfigurationSidStr);
+                const auto assetName = sourceJson.GetString(JsonConfigurationNameStr);
+                if (assetName.empty())
+                {
+                    KMP_LOG_ERROR("failed to get asset's name at index {}", assetIndex);
+                    return ReturnCode::InputFileFormatError;
+                }
+
+                const auto assetSid = ToStringID(assetName);
                 if (assetSid == 0)
                 {
                     KMP_LOG_ERROR("failed to get asset's sid at index {}", assetIndex);
