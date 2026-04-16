@@ -474,7 +474,7 @@ namespace Kmplete
         _matrixUniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
         vulkanRenderer.BeginRendering("VulkanTriangle_Pipeline"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
-        vulkanRenderer.BindDescriptorSets("VulkanTriangle_Pipeline"_sid, 0, { _matrixUniformBuffers[currentBufferIndex]->GetVkDescriptorSet(), _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
+        vulkanRenderer.BindDescriptorSets("VulkanTriangle_Pipeline"_sid, 0, { _matrixUniformBuffers[currentBufferIndex]->GetVkDescriptorSet(0), _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(0) });
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
         vulkanRenderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());

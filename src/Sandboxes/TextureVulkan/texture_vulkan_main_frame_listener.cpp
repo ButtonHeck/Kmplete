@@ -213,8 +213,8 @@ namespace Kmplete
                 0));
             _uniformBuffers[i]->Map();
 
-            _uniformBuffers[i]->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 1);
-            _uniformBuffers[i]->SetSamplerDescriptor(vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid), 2);
+            _uniformBuffers[i]->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 0, 1);
+            _uniformBuffers[i]->SetSamplerDescriptor(vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid), 0, 2);
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("TextureVulkan_Pipeline"_sid);
@@ -402,7 +402,7 @@ namespace Kmplete
         _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
         vulkanRenderer.BeginRendering("TextureVulkan_Pipeline"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
-        vulkanRenderer.BindDescriptorSets("TextureVulkan_Pipeline"_sid, 0, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet() });
+        vulkanRenderer.BindDescriptorSets("TextureVulkan_Pipeline"_sid, 0, { _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(0) });
         vulkanRenderer.BindGraphicsPipeline("TextureVulkan_Pipeline"_sid);
         vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} });
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
@@ -482,7 +482,7 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 1);
+                uniformBuffer->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 0, 1);
             }
         }
         ImGui::SameLine();
@@ -490,7 +490,7 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_marble"_sid).GetTexture()).GetVkImageView(), 1);
+                uniformBuffer->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_marble"_sid).GetTexture()).GetVkImageView(), 0, 1);
             }
         }
         ImGui::SameLine();
@@ -498,7 +498,7 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_example"_sid).GetTexture()).GetVkImageView(), 1);
+                uniformBuffer->SetSampledImageDescriptor(dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_example"_sid).GetTexture()).GetVkImageView(), 0, 1);
             }
         }
         ImGui::SliderFloat("LOD bias", &_matrixShaderData.lodBias, -8.0f, 8.0f);
@@ -508,7 +508,7 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetSamplerDescriptor(vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid), 2);
+                uniformBuffer->SetSamplerDescriptor(vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid), 0, 2);
             }
         }
         ImGui::SameLine();
@@ -516,7 +516,7 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetSamplerDescriptor(vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), 2);
+                uniformBuffer->SetSamplerDescriptor(vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), 0, 2);
             }
         }
 
