@@ -1,7 +1,7 @@
 #version 450
 
-layout (binding = 1) uniform texture2D _texture;
-layout (binding = 2) uniform sampler _sampler;
+layout (set = 0, binding = 1) uniform texture2D _texture;
+layout (set = 1, binding = 0) uniform sampler _sampler;
 
 layout (location = 0) in vec2 inUV;
 layout (location = 1) in float inLodBias;
