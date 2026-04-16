@@ -50,6 +50,7 @@ namespace Kmplete
             , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
             , _renderer(nullptr)
             , _shaderObjects()
+            , _samplersStorage(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -62,11 +63,13 @@ namespace Kmplete
             _CreateDescriptorPool();
             _CreateBufferCreatorDelegate();
             _CreateRenderer();
+            _CreateSamplersStorage();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
+            _DeleteSamplersStorage();
             _DeleteShaderObjects();
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
@@ -198,6 +201,12 @@ namespace Kmplete
         const VkExtent2D& VulkanLogicalDevice::GetCurrentExtent() const noexcept
         {
             return _currentExtent;
+        }
+        //--------------------------------------------------------------------------
+
+        const VulkanSamplersStorage& VulkanLogicalDevice::GetSamplersStorage() const noexcept
+        {
+            return *_samplersStorage.get();
         }
         //--------------------------------------------------------------------------
 
@@ -440,6 +449,32 @@ namespace Kmplete
         void VulkanLogicalDevice::_DeleteRenderer() KMP_PROFILING(ProfileLevelImportant)
         {
             _renderer.reset();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateSamplersStorage() KMP_PROFILING(ProfileLevelImportant)
+        {
+            _samplersStorage.reset(new VulkanSamplersStorage(_device, *_imageCreatorDelegate.get()));
+
+            auto sampler = _samplersStorage->AddSampler(SamplerDefaultNearestSid, VulkanPresets::SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy);
+            if (sampler == VK_NULL_HANDLE)
+            {
+                KMP_LOG_CRITICAL("failed to create default nearest filtering sampler");
+                throw std::runtime_error("failed to create default nearest filtering sampler");
+            }
+
+            sampler = _samplersStorage->AddSampler(SamplerDefaultLinearSid, VulkanPresets::SamplerCreateInfo_Linear_MipLinear_Repeat_NoAnisotropy);
+            if (sampler == VK_NULL_HANDLE)
+            {
+                KMP_LOG_CRITICAL("failed to create default linear filtering sampler");
+                throw std::runtime_error("failed to create default linear filtering sampler");
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteSamplersStorage() KMP_PROFILING(ProfileLevelImportant)
+        {
+            _samplersStorage.reset();
         }}
         //--------------------------------------------------------------------------
 

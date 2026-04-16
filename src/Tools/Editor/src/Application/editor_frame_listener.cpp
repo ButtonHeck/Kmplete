@@ -4,6 +4,7 @@
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
@@ -100,8 +101,8 @@ namespace Kmplete
 
             auto& flagUSATexture = dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_usa"_sid).GetTexture());
             auto& flagRussiaTexture = dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("_flag_russian"_sid).GetTexture());
-            _imguiImpl->AddTexture("_flag_usa"_sid, flagUSATexture.GetVkSampler(), flagUSATexture.GetVkImageView());
-            _imguiImpl->AddTexture("_flag_russian"_sid, flagRussiaTexture.GetVkSampler(), flagRussiaTexture.GetVkImageView());
+            _imguiImpl->AddTexture("_flag_usa"_sid, logicalDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), flagUSATexture.GetVkImageView());
+            _imguiImpl->AddTexture("_flag_russian"_sid, logicalDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), flagRussiaTexture.GetVkImageView());
         }
 
         _AddImGuiFonts(dpiScale);

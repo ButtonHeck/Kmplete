@@ -4,7 +4,6 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 
 #include <vulkan/vulkan.h>
 
@@ -29,7 +28,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API const VkDescriptorSet& GetVkDescriptorSet() const noexcept;
 
-            KMP_API void SetTextureDescriptor(const VulkanTexture& texture, UInt32 binding);
+            KMP_API void SetCombinedImageSamplerDescriptor(VkImageView imageView, VkSampler sampler, UInt32 binding, UInt32 count = 1);
 
         private:
             void _AllocateDescriptorSet(VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts);

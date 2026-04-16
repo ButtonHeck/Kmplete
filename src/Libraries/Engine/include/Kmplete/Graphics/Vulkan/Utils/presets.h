@@ -104,6 +104,34 @@ namespace Kmplete
                 .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 }}
             };
             //--------------------------------------------------------------------------
+
+            static constexpr VkSamplerCreateInfo SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy{
+                .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                .magFilter = VK_FILTER_NEAREST,
+                .minFilter = VK_FILTER_NEAREST,
+                .mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
+                .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .anisotropyEnable = VK_FALSE,
+                .minLod = 0.0f,
+                .maxLod = VK_LOD_CLAMP_NONE
+            };
+            //--------------------------------------------------------------------------
+
+            static constexpr VkSamplerCreateInfo SamplerCreateInfo_Linear_MipLinear_Repeat_NoAnisotropy{
+                .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                .magFilter = VK_FILTER_LINEAR,
+                .minFilter = VK_FILTER_LINEAR,
+                .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+                .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .anisotropyEnable = VK_FALSE,
+                .minLod = 0.0f,
+                .maxLod = VK_LOD_CLAMP_NONE
+            };
+            //--------------------------------------------------------------------------
         }
     }
 }

@@ -11,6 +11,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -64,6 +65,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanBufferCreatorDelegate& GetVulkanBufferCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
             KMP_NODISCARD KMP_API const VkExtent2D& GetCurrentExtent() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
 
             KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
             KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
@@ -113,6 +115,9 @@ namespace Kmplete
             void _CreateRenderer();
             void _DeleteRenderer();
 
+            void _CreateSamplersStorage();
+            void _DeleteSamplersStorage();
+
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
 
@@ -143,6 +148,7 @@ namespace Kmplete
             VkSampleCountFlagBits _msaaSamples;
             UPtr<VulkanRenderer> _renderer;
             StringIDHashMap<UPtr<VulkanShaderObject>> _shaderObjects;
+            UPtr<VulkanSamplersStorage> _samplersStorage;
         };
         //--------------------------------------------------------------------------
     }

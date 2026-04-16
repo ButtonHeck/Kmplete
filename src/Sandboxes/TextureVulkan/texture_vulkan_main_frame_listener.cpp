@@ -1,6 +1,7 @@
 #include "texture_vulkan_main_frame_listener.h"
 
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_logical_device.h"
@@ -206,7 +207,11 @@ namespace Kmplete
                 { vulkanDevice.GetDescriptorSetLayout("TextureVulkan_DS"_sid) },
                 matricesUniformBindingNumber));
             _uniformBuffers[i]->Map();
-            _uniformBuffers[i]->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_metal"_sid).GetTexture()), 1);
+            _uniformBuffers[i]->SetCombinedImageSamplerDescriptor(
+                dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 
+                vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid),
+                1
+            );
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("TextureVulkan_Pipeline"_sid);
@@ -462,6 +467,9 @@ namespace Kmplete
     {
         _imguiImpl->NewFrame();
 
+        Graphics::VulkanPhysicalDevice& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+        Graphics::VulkanLogicalDevice& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+
         static constexpr auto applicationWindowFlags =
             ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
@@ -470,21 +478,33 @@ namespace Kmplete
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_metal"_sid).GetTexture()), 1);
+                uniformBuffer->SetCombinedImageSamplerDescriptor(
+                    dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(),
+                    vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid),
+                    1
+                );
             }
         }
         if (ImGui::Button("Marble"))
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_marble"_sid).GetTexture()), 1);
+                uniformBuffer->SetCombinedImageSamplerDescriptor(
+                    dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_marble"_sid).GetTexture()).GetVkImageView(),
+                    vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid),
+                    1
+                );
             }
         }
         if (ImGui::Button("Example"))
         {
             for (auto& uniformBuffer : _uniformBuffers)
             {
-                uniformBuffer->SetTextureDescriptor(dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_example"_sid).GetTexture()), 1);
+                uniformBuffer->SetCombinedImageSamplerDescriptor(
+                    dynamic_cast<Graphics::VulkanTexture&>(_assetsManager.GetTextureAssetManager().GetAsset("texture_example"_sid).GetTexture()).GetVkImageView(),
+                    vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid),
+                    1
+                );
             }
         }
         ImGui::SliderFloat("LOD bias", &_matrixShaderData.lodBias, -8.0f, 8.0f);

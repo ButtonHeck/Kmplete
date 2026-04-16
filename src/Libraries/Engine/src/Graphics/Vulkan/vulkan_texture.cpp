@@ -7,8 +7,6 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
-#include <stdexcept>
-
 
 namespace Kmplete
 {
@@ -19,7 +17,6 @@ namespace Kmplete
             : _logicalDevice(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
-            , _sampler(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -28,13 +25,11 @@ namespace Kmplete
             _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
             _GenerateMipmaps(extent, mipLevels, commandBuffer);
             _InitializeImageView(mipLevels, imageCreatorDelegate);
-            _InitializeSampler(mipLevels, imageCreatorDelegate);
         }
         //--------------------------------------------------------------------------
 
         VulkanTexture::~VulkanTexture() KMP_PROFILING(ProfileLevelAlways)
         {
-            vkDestroySampler(_logicalDevice, _sampler, nullptr);
             vkDestroyImageView(_logicalDevice, _imageView, nullptr);
 
             _image.reset();
@@ -44,12 +39,6 @@ namespace Kmplete
         VkImageView VulkanTexture::GetVkImageView() const noexcept
         {
             return _imageView;
-        }
-        //--------------------------------------------------------------------------
-
-        VkSampler VulkanTexture::GetVkSampler() const noexcept
-        {
-            return _sampler;
         }
         //--------------------------------------------------------------------------
 
@@ -177,24 +166,6 @@ namespace Kmplete
             imageViewParameters.subresourceRange.layerCount = 1;
 
             _imageView = imageCreatorDelegate.CreateVkImageView(imageViewParameters);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanTexture::_InitializeSampler(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
-        {
-            auto samplerParameters = VulkanUtils::InitVkSamplerCreateInfo();
-            samplerParameters.magFilter = VK_FILTER_NEAREST;
-            samplerParameters.minFilter = VK_FILTER_NEAREST;
-            samplerParameters.mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST;
-            samplerParameters.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            samplerParameters.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            samplerParameters.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-            samplerParameters.minLod = 0.0f;
-            samplerParameters.maxLod = float(mipLevels);
-            samplerParameters.anisotropyEnable = VK_TRUE;
-            samplerParameters.maxAnisotropy = 1.0f;
-
-            _sampler = imageCreatorDelegate.CreateVkSampler(samplerParameters);
         }}
         //--------------------------------------------------------------------------
     }

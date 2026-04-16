@@ -29,7 +29,6 @@ namespace Kmplete
             KMP_API ~VulkanTexture();
 
             KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
-            KMP_NODISCARD KMP_API VkSampler GetVkSampler() const noexcept;
 
         private:
             void _InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
@@ -37,13 +36,11 @@ namespace Kmplete
             void _CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, VkCommandBuffer commandBuffer);
             void _GenerateMipmaps(const VkExtent3D& extent, UInt32 mipLevels, VkCommandBuffer commandBuffer);
             void _InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
-            void _InitializeSampler(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         private:
             VkDevice _logicalDevice;
             UPtr<VulkanImage> _image;
             VkImageView _imageView;
-            VkSampler _sampler;
         };
         //--------------------------------------------------------------------------
     }
