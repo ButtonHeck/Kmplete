@@ -29,10 +29,13 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VkDescriptorSet& GetVkDescriptorSet() const noexcept;
 
             KMP_API void SetCombinedImageSamplerDescriptor(VkImageView imageView, VkSampler sampler, UInt32 binding, UInt32 count = 1);
+            KMP_API void SetSampledImageDescriptor(VkImageView imageView, UInt32 binding, UInt32 count = 1);
+            KMP_API void SetSamplerDescriptor(VkSampler sampler, UInt32 binding, UInt32 count = 1);
 
         private:
             void _AllocateDescriptorSet(VkDescriptorPool descriptorPool, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts);
-            void _UpdateDescriptorSet(UInt32 binding, VkDeviceSize size);
+            void _UpdateDescriptorSet(const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding, UInt32 count = 1);
+            void _UpdateDescriptorSet(const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding, UInt32 count = 1);
 
         private:
             VkDescriptorSet _descriptorSet;

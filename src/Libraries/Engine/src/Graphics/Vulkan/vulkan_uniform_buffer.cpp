@@ -17,7 +17,12 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _AllocateDescriptorSet(descriptorPool, descriptorSetLayouts);
-            _UpdateDescriptorSet(binding, parameters.size);
+
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = _buffer;
+            bufferInfo.range = parameters.size;
+
+            _UpdateDescriptorSet(bufferInfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding);
         }
         //--------------------------------------------------------------------------
 
@@ -54,18 +59,31 @@ namespace Kmplete
 
         void VulkanUniformBuffer::SetCombinedImageSamplerDescriptor(VkImageView imageView, VkSampler sampler, UInt32 binding, UInt32 count /*= 1*/) KMP_PROFILING(ProfileLevelImportant)
         {
-            VkDescriptorImageInfo textureDescriptor{};
-            textureDescriptor.imageView = imageView;
-            textureDescriptor.sampler = sampler;
-            textureDescriptor.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            VkDescriptorImageInfo descriptorInfo{};
+            descriptorInfo.imageView = imageView;
+            descriptorInfo.sampler = sampler;
+            descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
-            writeDescriptorSet.dstSet = _descriptorSet;
-            writeDescriptorSet.dstBinding = binding;
-            writeDescriptorSet.descriptorCount = count;
-            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            writeDescriptorSet.pImageInfo = &textureDescriptor;
-            vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
+            _UpdateDescriptorSet(descriptorInfo, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding, count);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanUniformBuffer::SetSampledImageDescriptor(VkImageView imageView, UInt32 binding, UInt32 count /*= 1*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            VkDescriptorImageInfo descriptorInfo{};
+            descriptorInfo.imageView = imageView;
+            descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+
+            _UpdateDescriptorSet(descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding, count);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanUniformBuffer::SetSamplerDescriptor(VkSampler sampler, UInt32 binding, UInt32 count /*= 1*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            VkDescriptorImageInfo descriptorInfo{};
+            descriptorInfo.sampler = sampler;
+
+            _UpdateDescriptorSet(descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLER, binding, count);
         }}
         //--------------------------------------------------------------------------
 
@@ -81,18 +99,26 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanUniformBuffer::_UpdateDescriptorSet(UInt32 binding, VkDeviceSize size) KMP_PROFILING(ProfileLevelImportant)
+        void VulkanUniformBuffer::_UpdateDescriptorSet(const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding, UInt32 count /*= 1*/) KMP_PROFILING(ProfileLevelImportant)
         {
-            VkDescriptorBufferInfo bufferInfo{};
-            bufferInfo.buffer = _buffer;
-            bufferInfo.range = size;
-
             auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
             writeDescriptorSet.dstSet = _descriptorSet;
             writeDescriptorSet.dstBinding = binding;
-            writeDescriptorSet.descriptorCount = 1;
-            writeDescriptorSet.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+            writeDescriptorSet.descriptorCount = count;
+            writeDescriptorSet.descriptorType = type;
             writeDescriptorSet.pBufferInfo = &bufferInfo;
+            vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanUniformBuffer::_UpdateDescriptorSet(const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding, UInt32 count /*= 1*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
+            writeDescriptorSet.dstSet = _descriptorSet;
+            writeDescriptorSet.dstBinding = binding;
+            writeDescriptorSet.descriptorCount = count;
+            writeDescriptorSet.descriptorType = type;
+            writeDescriptorSet.pImageInfo = &imageInfo;
             vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
         }}
         //--------------------------------------------------------------------------
