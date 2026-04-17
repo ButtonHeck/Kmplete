@@ -121,60 +121,18 @@ namespace Kmplete
             {
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
-                    auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
-                    descriptorSetAllocateInfo.descriptorPool = _descriptorPool;
-                    descriptorSetAllocateInfo.descriptorSetCount = setsCount;
-                    descriptorSetAllocateInfo.pSetLayouts = layouts.data();
-
-                    Vector<VkDescriptorSet> newDesriptorSets(setsCount, VK_NULL_HANDLE);
-                    const auto result = vkAllocateDescriptorSets(_device, &descriptorSetAllocateInfo, newDesriptorSets.data());
-                    if (result != VK_SUCCESS)
+                    if (!_AllocateDescriptorSets(layouts, setSid, setsCount, descriptors))
                     {
-                        VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to allocate descriptor sets", "throw exception"_false);
                         return false;
                     }
-
-                    if (!descriptors.contains(setSid))
-                    {
-                        descriptors.emplace(setSid, newDesriptorSets);
-                    }
-                    else
-                    {
-                        KMP_LOG_WARN("'{}' new descriptors with sid '{}' will be appended to already existing descriptor set vector with the same sid", setsCount, setSid);
-                        auto& previouslyAddedSets = descriptors[setSid];
-                        Vector<VkDescriptorSet> newDescriptorSetsCopy = newDesriptorSets;
-                        Utils::MergeVectors(newDescriptorSetsCopy, previouslyAddedSets);
-                    }
                 }
+
+                return true;
             }
             else
             {
-                auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
-                descriptorSetAllocateInfo.descriptorPool = _descriptorPool;
-                descriptorSetAllocateInfo.descriptorSetCount = setsCount;
-                descriptorSetAllocateInfo.pSetLayouts = layouts.data();
-
-                Vector<VkDescriptorSet> newDesriptorSets(setsCount, VK_NULL_HANDLE);
-                const auto result = vkAllocateDescriptorSets(_device, &descriptorSetAllocateInfo, newDesriptorSets.data());
-                if (result != VK_SUCCESS)
-                {
-                    VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to allocate descriptor sets", "throw exception"_false);
-                    return false;
-                }
-
-                if (!_descriptors.contains(setSid))
-                {
-                    _descriptors.emplace(setSid, newDesriptorSets);
-                }
-                else
-                {
-                    KMP_LOG_WARN("'{}' new descriptors with sid '{}' will be appended to already existing descriptor set vector with the same sid", setsCount, setSid);
-                    auto& previouslyAddedSets = _descriptors[setSid];
-                    Utils::MergeVectors(newDesriptorSets, previouslyAddedSets);
-                }
+                return _AllocateDescriptorSets(layouts, setSid, setsCount, _descriptors);
             }
-
-            return true;
         }}
         //--------------------------------------------------------------------------
 
@@ -340,6 +298,35 @@ namespace Kmplete
             _descriptorSetLayouts.clear();
 
             vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::_AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, StringIDHashMap<Vector<VkDescriptorSet>>& storage) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
+            descriptorSetAllocateInfo.descriptorPool = _descriptorPool;
+            descriptorSetAllocateInfo.descriptorSetCount = setsCount;
+            descriptorSetAllocateInfo.pSetLayouts = layouts.data();
+
+            Vector<VkDescriptorSet> newDesriptorSets(setsCount, VK_NULL_HANDLE);
+            const auto result = vkAllocateDescriptorSets(_device, &descriptorSetAllocateInfo, newDesriptorSets.data());
+            if (result != VK_SUCCESS)
+            {
+                VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to allocate descriptor sets", "throw exception"_false);
+                return false;
+            }
+
+            if (!storage.contains(setSid))
+            {
+                storage.emplace(setSid, newDesriptorSets);
+            }
+            else
+            {
+                KMP_LOG_WARN("'{}' new descriptors with sid '{}' will be appended to already existing descriptor set vector with the same sid", setsCount, setSid);
+                Utils::MergeVectors(newDesriptorSets, storage[setSid]);
+            }
+
+            return true;
         }}
         //--------------------------------------------------------------------------
 
