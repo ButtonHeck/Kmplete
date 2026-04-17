@@ -200,16 +200,16 @@ namespace Kmplete
         textureLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE;
         textureLayoutBinding.descriptorCount = 1;
         textureLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        descriptorSetManager.AddDescriptorSetLayout("TextureVulkan_DS"_sid, { matricesLayoutBinding, textureLayoutBinding });
-        descriptorSetManager.AllocateDescriptorSets("TextureVulkan_DS"_sid, "MatrixAndTexture_Set"_sid, 1, "per frame"_true);
+        const auto matrixAndTextureLayout = descriptorSetManager.AddDescriptorSetLayout("TextureVulkan_DS"_sid, { matricesLayoutBinding, textureLayoutBinding });
+        descriptorSetManager.AllocateDescriptorSets(matrixAndTextureLayout, "MatrixAndTexture_Set"_sid, 1, "per frame"_true);
 
         VkDescriptorSetLayoutBinding samplerLayoutBinding{};
         samplerLayoutBinding.binding = 0;
         samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_SAMPLER;
         samplerLayoutBinding.descriptorCount = 1;
         samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        descriptorSetManager.AddDescriptorSetLayout("TextureVulkan_DS_sampler"_sid, { samplerLayoutBinding });
-        descriptorSetManager.AllocateDescriptorSets("TextureVulkan_DS_sampler"_sid, "Sampler_Set"_sid, 1, "per frame"_true);
+        const auto samplerLayout = descriptorSetManager.AddDescriptorSetLayout("TextureVulkan_DS_sampler"_sid, { samplerLayoutBinding });
+        descriptorSetManager.AllocateDescriptorSets(samplerLayout, "Sampler_Set"_sid, 1, "per frame"_true);
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {

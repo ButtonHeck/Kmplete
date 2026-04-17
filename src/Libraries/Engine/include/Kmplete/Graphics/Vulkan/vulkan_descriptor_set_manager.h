@@ -28,11 +28,12 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
 
-            KMP_API bool AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
+            KMP_API VkDescriptorSetLayout AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
             KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID layoutSid) const noexcept;
             KMP_NODISCARD KMP_API Vector<VkDescriptorSetLayout> GetDescriptorSetLayouts(const Vector<StringID>& sids) const noexcept;
 
             KMP_API bool AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame);
+            KMP_API bool AllocateDescriptorSets(VkDescriptorSetLayout layout, StringID setSid, UInt32 setsCount, bool perFrame);
             KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept;
 
             KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const;

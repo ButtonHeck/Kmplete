@@ -222,8 +222,8 @@ namespace Kmplete
         matricesLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         matricesLayoutBinding.descriptorCount = 1;
         matricesLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid, {matricesLayoutBinding});
-        descriptorSetManager.AllocateDescriptorSets("TriangleVulkan_DS_Matrix"_sid, "Matrices_Set"_sid, 1, "per frame"_true);
+        const auto matricesLayout = descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid, {matricesLayoutBinding});
+        descriptorSetManager.AllocateDescriptorSets(matricesLayout, "Matrices_Set"_sid, 1, "per frame"_true);
 
         const auto colorMultiplierUniformBindingNumber = 3;
         VkDescriptorSetLayoutBinding colorMultiplierLayoutBinding{};
@@ -231,8 +231,8 @@ namespace Kmplete
         colorMultiplierLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         colorMultiplierLayoutBinding.descriptorCount = 1;
         colorMultiplierLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid, { colorMultiplierLayoutBinding });
-        descriptorSetManager.AllocateDescriptorSets("TriangleVulkan_DS_ColorMultiplier"_sid, "ColorMultipler_Set"_sid, 1, "per frame"_true);
+        const auto colorMultiplierLayout = descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid, { colorMultiplierLayoutBinding });
+        descriptorSetManager.AllocateDescriptorSets(colorMultiplierLayout, "ColorMultipler_Set"_sid, 1, "per frame"_true);
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {

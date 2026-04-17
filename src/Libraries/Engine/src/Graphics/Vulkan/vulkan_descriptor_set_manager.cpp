@@ -36,12 +36,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings) KMP_PROFILING(ProfileLevelImportant)
+        VkDescriptorSetLayout VulkanDescriptorSetManager::AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings) KMP_PROFILING(ProfileLevelImportant)
         {
             if (_descriptorSetLayouts.contains(layoutSid))
             {
                 KMP_LOG_WARN("descriptor set layout with sid '{}' has already been created", layoutSid);
-                return true;
+                return _descriptorSetLayouts[layoutSid];
             }
 
             try
@@ -54,12 +54,18 @@ namespace Kmplete
                 VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor set layout");
 
                 const auto [iterator, hasEmplaced] = _descriptorSetLayouts.emplace(layoutSid, layout);
-                return iterator->second != nullptr;
+                if (!hasEmplaced)
+                {
+                    KMP_LOG_ERROR("failed to emplace descriptor set layout to the storage");
+                    return VK_NULL_HANDLE;
+                }
+                
+                return layout;
             }
             catch (KMP_MB_UNUSED const std::runtime_error& er)
             {
                 KMP_LOG_ERROR("failed to create descriptor set layout '{}'", layoutSid);
-                return false;
+                return VK_NULL_HANDLE;
             }
         }}
         //--------------------------------------------------------------------------
@@ -89,7 +95,19 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame) 
+        {
+            if (!_descriptorSetLayouts.contains(layoutSid))
+            {
+                KMP_LOG_ERROR("cannot allocate '{}' descriptor sets with sid '{}' for layout '{}' - layout with given sid not found", setsCount, setSid, layoutSid);
+                return false;
+            }
+
+            return AllocateDescriptorSets(_descriptorSetLayouts.at(layoutSid), setSid, setsCount, perFrame);
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::AllocateDescriptorSets(VkDescriptorSetLayout layout, StringID setSid, UInt32 setsCount, bool perFrame) KMP_PROFILING(ProfileLevelImportant)
         {
             if (setsCount == 0)
             {
@@ -97,13 +115,6 @@ namespace Kmplete
                 return false;
             }
 
-            if (!_descriptorSetLayouts.contains(layoutSid))
-            {
-                KMP_LOG_ERROR("cannot allocate '{}' descriptor sets with sid '{}' for layout '{}' - layout with given sid not found", setsCount, setSid, layoutSid);
-                return false;
-            }
-
-            auto layout = _descriptorSetLayouts.at(layoutSid);
             const Vector<VkDescriptorSetLayout> layouts(setsCount, layout);
 
             if (perFrame)
