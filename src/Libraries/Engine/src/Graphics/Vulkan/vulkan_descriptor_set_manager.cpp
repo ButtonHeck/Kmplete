@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_descriptor_set_manager.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Base/named_bool.h"
@@ -209,6 +210,12 @@ namespace Kmplete
 
             return VK_NULL_HANDLE;
         }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const
+        {
+            return SetUniformBufferDescriptor(setSid, setIndex, perFrame, frameIndex, buffer.GetVkBuffer(), buffer.GetSize(), binding);
+        }
         //--------------------------------------------------------------------------
 
         bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)

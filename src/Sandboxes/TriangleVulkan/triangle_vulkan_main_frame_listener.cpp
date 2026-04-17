@@ -238,11 +238,11 @@ namespace Kmplete
         {
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) }));
             _uniformBuffers[i]->Map();
-            descriptorSetManager.SetUniformBufferDescriptor("ColorMultipler_Set"_sid, 0, "per frame"_true, i, _uniformBuffers[i]->GetVkBuffer(), _uniformBuffers[i]->GetSize(), colorMultiplierUniformBindingNumber);
+            descriptorSetManager.SetUniformBufferDescriptor("ColorMultipler_Set"_sid, 0, "per frame"_true, i, *_uniformBuffers[i].get(), colorMultiplierUniformBindingNumber);
 
             _matrixUniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(MatrixShaderData) }));
             _matrixUniformBuffers[i]->Map();
-            descriptorSetManager.SetUniformBufferDescriptor("Matrices_Set"_sid, 0, "per frame"_true, i, _matrixUniformBuffers[i]->GetVkBuffer(), _matrixUniformBuffers[i]->GetSize(), matricesUniformBindingNumber);
+            descriptorSetManager.SetUniformBufferDescriptor("Matrices_Set"_sid, 0, "per frame"_true, i, *_matrixUniformBuffers[i].get(), matricesUniformBindingNumber);
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
