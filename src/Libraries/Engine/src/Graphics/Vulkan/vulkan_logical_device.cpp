@@ -44,13 +44,13 @@ namespace Kmplete
             , _pipelineCache(VK_NULL_HANDLE)
             , _descriptorPool(VK_NULL_HANDLE)
             , _pipelines()
-            , _descriptorSetLayouts()
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
             , _renderer(nullptr)
             , _shaderObjects()
             , _samplersStorage(nullptr)
+            , _descriptorSetManager(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -64,16 +64,17 @@ namespace Kmplete
             _CreateBufferCreatorDelegate();
             _CreateRenderer();
             _CreateSamplersStorage();
+            _CreateDescriptorSetManager();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice::~VulkanLogicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
+            _DeleteDescriptorSetManager();
             _DeleteSamplersStorage();
             _DeleteShaderObjects();
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
-            _DeleteDescriptorSetsLayouts();
             _DeletePipelines();
             _DeleteDescriptorPool();
             _DeletePipelineCache();
@@ -207,6 +208,12 @@ namespace Kmplete
         const VulkanSamplersStorage& VulkanLogicalDevice::GetSamplersStorage() const noexcept
         {
             return *_samplersStorage.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanDescriptorSetManager& VulkanLogicalDevice::GetDescriptorSetManager() noexcept
+        {
+            return *_descriptorSetManager.get();
         }
         //--------------------------------------------------------------------------
 
@@ -406,16 +413,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteDescriptorSetsLayouts() KMP_PROFILING(ProfileLevelImportant)
-        {
-            for (const auto& [sid, descriptorSetLayout] : _descriptorSetLayouts)
-            {
-                vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
-            }
-            _descriptorSetLayouts.clear();
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanLogicalDevice::_DeletePipelines() KMP_PROFILING(ProfileLevelImportant)
         {
             _pipelines.clear();
@@ -475,6 +472,18 @@ namespace Kmplete
         void VulkanLogicalDevice::_DeleteSamplersStorage() KMP_PROFILING(ProfileLevelImportant)
         {
             _samplersStorage.reset();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateDescriptorSetManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            _descriptorSetManager.reset(new VulkanDescriptorSetManager(_device, _currentBufferIndex));
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteDescriptorSetManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            _descriptorSetManager.reset();
         }}
         //--------------------------------------------------------------------------
 
@@ -540,46 +549,6 @@ namespace Kmplete
             
             KMP_LOG_ERROR("graphics pipeline with sid '{}' not found", sid);
             return std::nullopt;
-        }
-        //--------------------------------------------------------------------------
-
-        bool VulkanLogicalDevice::AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings) KMP_PROFILING(ProfileLevelImportant)
-        {
-            if (_descriptorSetLayouts.contains(sid))
-            {
-                KMP_LOG_WARN("descriptor set layout with sid '{}' has already been created", sid);
-                return true;
-            }
-
-            try
-            {
-                auto descriptorSetLayoutCreateInfo = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
-                descriptorSetLayoutCreateInfo.bindingCount = UInt32(bindings.size());
-                descriptorSetLayoutCreateInfo.pBindings = bindings.empty() ? nullptr : bindings.data();
-                VkDescriptorSetLayout layout = nullptr;
-                const auto result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCreateInfo, nullptr, &layout);
-                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create descriptor set layout");
-
-                const auto [iterator, hasEmplaced] = _descriptorSetLayouts.emplace(sid, layout);
-                return iterator->second != nullptr;
-            }
-            catch (KMP_MB_UNUSED const std::runtime_error& er)
-            {
-                KMP_LOG_ERROR("failed to create descriptor set layout '{}'", sid);
-                return false;
-            }
-        }}
-        //--------------------------------------------------------------------------
-
-        VkDescriptorSetLayout VulkanLogicalDevice::GetDescriptorSetLayout(StringID sid) const noexcept
-        {
-            if (_descriptorSetLayouts.contains(sid))
-            {
-                return _descriptorSetLayouts.at(sid);
-            }
-
-            KMP_LOG_ERROR("descriptor set layout with sid '{}' not found", sid);
-            return VK_NULL_HANDLE;
         }
         //--------------------------------------------------------------------------
 
@@ -659,13 +628,7 @@ namespace Kmplete
 
             try
             {
-                Vector<VkDescriptorSetLayout> descriptorSetsLayouts;
-                descriptorSetsLayouts.reserve(descriptorSetsLayoutsSids.size());
-                for (const auto& descriptorSetLayoutSid : descriptorSetsLayoutsSids)
-                {
-                    descriptorSetsLayouts.push_back(GetDescriptorSetLayout(descriptorSetLayoutSid));
-                }
-
+                const auto descriptorSetsLayouts = _descriptorSetManager->GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
                 const auto [iterator, hasEmplaced] = _shaderObjects.emplace(sid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
                 return hasEmplaced;
             }

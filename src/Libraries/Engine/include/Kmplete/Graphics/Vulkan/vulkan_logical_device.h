@@ -12,6 +12,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_samplers_storage.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_descriptor_set_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -66,12 +67,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
             KMP_NODISCARD KMP_API const VkExtent2D& GetCurrentExtent() const noexcept;
             KMP_NODISCARD KMP_API const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
+            KMP_NODISCARD KMP_API VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
 
             KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
             KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
-
-            KMP_API bool AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
-            KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID sid) const noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
@@ -105,7 +104,6 @@ namespace Kmplete
             void _CreateDescriptorPool();
             void _DeleteDescriptorPool();
 
-            void _DeleteDescriptorSetsLayouts();
             void _DeletePipelines();
             void _DeleteShaderObjects();
 
@@ -117,6 +115,9 @@ namespace Kmplete
 
             void _CreateSamplersStorage();
             void _DeleteSamplersStorage();
+
+            void _CreateDescriptorSetManager();
+            void _DeleteDescriptorSetManager();
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
@@ -142,13 +143,13 @@ namespace Kmplete
             VkPipelineCache _pipelineCache;
             VkDescriptorPool _descriptorPool;
             StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
-            StringIDHashMap<VkDescriptorSetLayout> _descriptorSetLayouts;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
             UPtr<VulkanRenderer> _renderer;
             StringIDHashMap<UPtr<VulkanShaderObject>> _shaderObjects;
             UPtr<VulkanSamplersStorage> _samplersStorage;
+            UPtr<VulkanDescriptorSetManager> _descriptorSetManager;
         };
         //--------------------------------------------------------------------------
     }

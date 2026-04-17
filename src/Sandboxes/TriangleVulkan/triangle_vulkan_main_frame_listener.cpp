@@ -7,6 +7,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_descriptor_set_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
@@ -154,6 +155,7 @@ namespace Kmplete
         _device = vulkanDevice.GetVkDevice();
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
+        Graphics::VulkanDescriptorSetManager& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
 
         const Vector<Vertex> vertices{
             // main RGB triangle
@@ -220,7 +222,7 @@ namespace Kmplete
         matricesLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         matricesLayoutBinding.descriptorCount = 1;
         matricesLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid, { matricesLayoutBinding });
+        descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid, {matricesLayoutBinding});
 
         const auto colorMultiplierUniformBindingNumber = 3;
         VkDescriptorSetLayoutBinding colorMultiplierLayoutBinding{};
@@ -228,19 +230,19 @@ namespace Kmplete
         colorMultiplierLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
         colorMultiplierLayoutBinding.descriptorCount = 1;
         colorMultiplierLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-        vulkanDevice.AddDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid, { colorMultiplierLayoutBinding });
+        descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid, { colorMultiplierLayoutBinding });
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
                 { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) },
-                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid) },
+                { descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid) },
                 colorMultiplierUniformBindingNumber));
             _uniformBuffers[i]->Map();
 
             _matrixUniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
                 { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(MatrixShaderData) },
-                { vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid) },
+                { descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid) },
                 matricesUniformBindingNumber));
             _matrixUniformBuffers[i]->Map();
         }
@@ -248,8 +250,8 @@ namespace Kmplete
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
         pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid));
-        pipeline.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid));
+        pipeline.AddDescriptorSetLayout(descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid));
+        pipeline.AddDescriptorSetLayout(descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid));
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
