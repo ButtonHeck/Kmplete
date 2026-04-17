@@ -48,6 +48,7 @@ namespace Kmplete
             void _Finalize();
 
             KMP_NODISCARD bool _AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, StringIDHashMap<Vector<VkDescriptorSet>>& storage) const;
+            KMP_NODISCARD VkDescriptorSet _GetDescriptorSet(const StringIDHashMap<Vector<VkDescriptorSet>>& storage, StringID setSid, UInt32 setIndex) const;
 
             void _UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding) const;
             void _UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding) const;

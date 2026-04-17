@@ -142,7 +142,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkDescriptorSet VulkanDescriptorSetManager::GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
+        VkDescriptorSet VulkanDescriptorSetManager::GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept
         {
             if (perFrame)
             {
@@ -152,39 +152,13 @@ namespace Kmplete
                     return VK_NULL_HANDLE;
                 }
 
-                if (!_descriptorsPerFrame[frameIndex].contains(setSid))
-                {
-                    KMP_LOG_ERROR("cannot find per-frame descriptor set with sid '{}' - sid not found", setSid);
-                    return VK_NULL_HANDLE;
-                }
-                const auto& descriptors = _descriptorsPerFrame[frameIndex].at(setSid);
-
-                if (setIndex >= UInt32(descriptors.size()))
-                {
-                    KMP_LOG_ERROR("cannot find per-frame descriptor set with sid '{}' and index '{}' - out of range", setSid, setIndex);
-                    return VK_NULL_HANDLE;
-                }
-                return descriptors.at(setIndex);
+                return _GetDescriptorSet(_descriptorsPerFrame[frameIndex], setSid, setIndex);
             }
             else
             {
-                if (!_descriptors.contains(setSid))
-                {
-                    KMP_LOG_ERROR("cannot find descriptor set with sid '{}' - sid not found", setSid);
-                    return VK_NULL_HANDLE;
-                }
-                const auto& descriptorsForSid = _descriptors.at(setSid);
-
-                if (setIndex >= UInt32(descriptorsForSid.size()))
-                {
-                    KMP_LOG_ERROR("cannot find descriptor set with sid '{}' and index '{}' - out of range", setSid, setIndex);
-                    return VK_NULL_HANDLE;
-                }
-                return descriptorsForSid.at(setIndex);
+                return _GetDescriptorSet(_descriptors, setSid, setIndex);
             }
-
-            return VK_NULL_HANDLE;
-        }}
+        }
         //--------------------------------------------------------------------------
 
         bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const
@@ -333,6 +307,25 @@ namespace Kmplete
             }
 
             return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        VkDescriptorSet VulkanDescriptorSetManager::_GetDescriptorSet(const StringIDHashMap<Vector<VkDescriptorSet>>& storage, StringID setSid, UInt32 setIndex) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (!storage.contains(setSid))
+            {
+                KMP_LOG_ERROR("cannot find descriptor set with sid '{}' - sid not found", setSid);
+                return VK_NULL_HANDLE;
+            }
+            const auto& descriptors = storage.at(setSid);
+
+            if (setIndex >= UInt32(descriptors.size()))
+            {
+                KMP_LOG_ERROR("cannot find descriptor set with sid '{}' and index '{}' - out of range", setSid, setIndex);
+                return VK_NULL_HANDLE;
+            }
+
+            return descriptors.at(setIndex);
         }}
         //--------------------------------------------------------------------------
 
