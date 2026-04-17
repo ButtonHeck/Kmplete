@@ -47,6 +47,7 @@ namespace Kmplete
 
             void _UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding) const;
             void _UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding) const;
+            KMP_NODISCARD VkWriteDescriptorSet _GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept;
 
         private:
             const UInt32& _currentBufferIndex;

@@ -334,11 +334,7 @@ namespace Kmplete
 
         void VulkanDescriptorSetManager::_UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
-            writeDescriptorSet.dstSet = descriptorSet;
-            writeDescriptorSet.dstBinding = binding;
-            writeDescriptorSet.descriptorCount = 1;
-            writeDescriptorSet.descriptorType = type;
+            auto writeDescriptorSet = _GetWriteDescriptorSetTemplate(descriptorSet, type, binding);
             writeDescriptorSet.pBufferInfo = &bufferInfo;
             vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
         }}
@@ -346,14 +342,22 @@ namespace Kmplete
 
         void VulkanDescriptorSetManager::_UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
+            auto writeDescriptorSet = _GetWriteDescriptorSetTemplate(descriptorSet, type, binding);
+            writeDescriptorSet.pImageInfo = &imageInfo;
+            vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
+        }}
+        //--------------------------------------------------------------------------
+
+        VkWriteDescriptorSet VulkanDescriptorSetManager::_GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept
+        {
             auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
             writeDescriptorSet.dstSet = descriptorSet;
             writeDescriptorSet.dstBinding = binding;
             writeDescriptorSet.descriptorCount = 1;
             writeDescriptorSet.descriptorType = type;
-            writeDescriptorSet.pImageInfo = &imageInfo;
-            vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
-        }}
+
+            return writeDescriptorSet;
+        }
         //--------------------------------------------------------------------------
     }
 }
