@@ -943,7 +943,7 @@ namespace Kmplete
             initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
             initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
-            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
+            initInfo.DescriptorPool = logicalDevice.GetDescriptorSetManager().GetVkDescriptorPool();
             initInfo.Allocator = VK_NULL_HANDLE;
             initInfo.MinImageCount = Graphics::NumConcurrentFrames;
             initInfo.ImageCount = Graphics::NumConcurrentFrames;

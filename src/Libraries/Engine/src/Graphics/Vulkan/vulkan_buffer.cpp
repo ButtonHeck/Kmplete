@@ -169,6 +169,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkDeviceSize VulkanBuffer::GetSize() const noexcept
+        {
+            return _size;
+        }
+        //--------------------------------------------------------------------------
+
         void* VulkanBuffer::GetMappedPtr() const noexcept
         {
             return _mapped;

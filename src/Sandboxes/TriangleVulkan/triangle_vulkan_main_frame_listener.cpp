@@ -223,6 +223,7 @@ namespace Kmplete
         matricesLayoutBinding.descriptorCount = 1;
         matricesLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
         descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid, {matricesLayoutBinding});
+        descriptorSetManager.AllocateDescriptorSets("TriangleVulkan_DS_Matrix"_sid, "Matrices_Set"_sid, 1, "per frame"_true);
 
         const auto colorMultiplierUniformBindingNumber = 3;
         VkDescriptorSetLayoutBinding colorMultiplierLayoutBinding{};
@@ -231,20 +232,17 @@ namespace Kmplete
         colorMultiplierLayoutBinding.descriptorCount = 1;
         colorMultiplierLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
         descriptorSetManager.AddDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid, { colorMultiplierLayoutBinding });
+        descriptorSetManager.AllocateDescriptorSets("TriangleVulkan_DS_ColorMultiplier"_sid, "ColorMultipler_Set"_sid, 1, "per frame"_true);
 
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
-            _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
-                { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) },
-                { descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid) },
-                colorMultiplierUniformBindingNumber));
+            _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(ShaderData) }));
             _uniformBuffers[i]->Map();
+            descriptorSetManager.SetUniformBufferDescriptor("ColorMultipler_Set"_sid, 0, "per frame"_true, i, _uniformBuffers[i]->GetVkBuffer(), _uniformBuffers[i]->GetSize(), colorMultiplierUniformBindingNumber);
 
-            _matrixUniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr(
-                { 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(MatrixShaderData) },
-                { descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid) },
-                matricesUniformBindingNumber));
+            _matrixUniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, sizeof(MatrixShaderData) }));
             _matrixUniformBuffers[i]->Map();
+            descriptorSetManager.SetUniformBufferDescriptor("Matrices_Set"_sid, 0, "per frame"_true, i, _matrixUniformBuffers[i]->GetVkBuffer(), _matrixUniformBuffers[i]->GetSize(), matricesUniformBindingNumber);
         }
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
@@ -367,7 +365,7 @@ namespace Kmplete
             initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
             initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
-            initInfo.DescriptorPool = logicalDevice.GetVkDescriptorPool();
+            initInfo.DescriptorPool = logicalDevice.GetDescriptorSetManager().GetVkDescriptorPool();
             initInfo.Allocator = VK_NULL_HANDLE;
             initInfo.MinImageCount = Graphics::NumConcurrentFrames;
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
@@ -467,6 +465,7 @@ namespace Kmplete
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
+        const Graphics::VulkanDescriptorSetManager& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
 
         _matrixShaderData.viewMatrix = _camera.GetViewMatrix();
         _matrixShaderData.projectionMatrix = _camera.GetProjectionMatrix();
@@ -476,7 +475,10 @@ namespace Kmplete
         _matrixUniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
         vulkanRenderer.BeginRendering("VulkanTriangle_Pipeline"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
-        vulkanRenderer.BindDescriptorSets("VulkanTriangle_Pipeline"_sid, 0, { _matrixUniformBuffers[currentBufferIndex]->GetVkDescriptorSet(0), _uniformBuffers[currentBufferIndex]->GetVkDescriptorSet(0) });
+        vulkanRenderer.BindDescriptorSets("VulkanTriangle_Pipeline"_sid, 0, { 
+            descriptorSetManager.GetDescriptorSet("Matrices_Set"_sid, 0, "per frame"_true, currentBufferIndex), 
+            descriptorSetManager.GetDescriptorSet("ColorMultipler_Set"_sid, 0, "per frame"_true, currentBufferIndex)
+        });
         vulkanRenderer.BindGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
         vulkanRenderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
         vulkanRenderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());

@@ -7,10 +7,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanBufferCreatorDelegate::VulkanBufferCreatorDelegate(VkDevice device, VkDescriptorPool descriptorPool, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
+        VulkanBufferCreatorDelegate::VulkanBufferCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
             : _memoryTypeDelegate(memoryTypeDelegate)
             , _device(device)
-            , _descriptorPool(descriptorPool)
         {}
         //--------------------------------------------------------------------------
 
@@ -70,23 +69,23 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanUniformBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanUniformBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
-            }, _descriptorPool, descriptorSetLayouts, binding);
+            });
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanUniformBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanUniformBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return new VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
-            }, _descriptorPool, descriptorSetLayouts, binding);
+            });
         }}
         //--------------------------------------------------------------------------
     }

@@ -61,12 +61,12 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetPresentationQueue() const noexcept;
-            KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanBufferCreatorDelegate& GetVulkanBufferCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
             KMP_NODISCARD KMP_API const VkExtent2D& GetCurrentExtent() const noexcept;
             KMP_NODISCARD KMP_API const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
+            KMP_NODISCARD KMP_API const VulkanDescriptorSetManager& GetDescriptorSetManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
 
             KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
@@ -100,9 +100,6 @@ namespace Kmplete
 
             void _CreatePipelineCache();
             void _DeletePipelineCache();
-
-            void _CreateDescriptorPool();
-            void _DeleteDescriptorPool();
 
             void _DeletePipelines();
             void _DeleteShaderObjects();
@@ -141,7 +138,6 @@ namespace Kmplete
             Vector<VulkanFence> _waitFences;
             UPtr<VulkanSwapchain> _swapchain;
             VkPipelineCache _pipelineCache;
-            VkDescriptorPool _descriptorPool;
             StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             VkExtent2D _currentExtent;

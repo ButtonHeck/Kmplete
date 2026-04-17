@@ -23,7 +23,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(VulkanBufferCreatorDelegate)
 
         public:
-            KMP_API VulkanBufferCreatorDelegate(VkDevice device, VkDescriptorPool descriptorPool, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
+            KMP_API VulkanBufferCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
 
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(const VulkanBufferParameters& parameters) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(const VulkanBufferParameters& parameters) const;
@@ -34,14 +34,13 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanBuffer CreateIndexBuffer(const VulkanBufferParameters& parameters) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const;
 
-            KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(const VulkanBufferParameters& parameters, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, UInt32 binding) const;
+            KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const;
 
         private:
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
 
             VkDevice _device;
-            VkDescriptorPool _descriptorPool;
         };
         //--------------------------------------------------------------------------
     }

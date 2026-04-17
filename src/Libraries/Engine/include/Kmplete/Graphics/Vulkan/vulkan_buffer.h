@@ -43,6 +43,7 @@ namespace Kmplete
             KMP_API void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);
 
             KMP_NODISCARD KMP_API VkBuffer GetVkBuffer() const noexcept;
+            KMP_NODISCARD KMP_API VkDeviceSize GetSize() const noexcept;
             KMP_NODISCARD KMP_API void* GetMappedPtr() const noexcept;
 
         protected:

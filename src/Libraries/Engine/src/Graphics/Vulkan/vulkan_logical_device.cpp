@@ -42,7 +42,6 @@ namespace Kmplete
             , _waitFences()
             , _swapchain(nullptr)
             , _pipelineCache(VK_NULL_HANDLE)
-            , _descriptorPool(VK_NULL_HANDLE)
             , _pipelines()
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
@@ -60,7 +59,6 @@ namespace Kmplete
             _CreateSynchronizationObjects();
             _CreateSwapchain();
             _CreatePipelineCache();
-            _CreateDescriptorPool();
             _CreateBufferCreatorDelegate();
             _CreateRenderer();
             _CreateSamplersStorage();
@@ -76,7 +74,6 @@ namespace Kmplete
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
             _DeletePipelines();
-            _DeleteDescriptorPool();
             _DeletePipelineCache();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
@@ -175,12 +172,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkDescriptorPool VulkanLogicalDevice::GetVkDescriptorPool() const noexcept
-        {
-            return _descriptorPool;
-        }
-        //--------------------------------------------------------------------------
-
         const VulkanImageCreatorDelegate& VulkanLogicalDevice::GetVulkanImageCreatorDelegate() const noexcept
         {
             return *_imageCreatorDelegate.get();
@@ -208,6 +199,12 @@ namespace Kmplete
         const VulkanSamplersStorage& VulkanLogicalDevice::GetSamplersStorage() const noexcept
         {
             return *_samplersStorage.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const VulkanDescriptorSetManager& VulkanLogicalDevice::GetDescriptorSetManager() const noexcept
+        {
+            return *_descriptorSetManager.get();
         }
         //--------------------------------------------------------------------------
 
@@ -381,38 +378,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateDescriptorPool() KMP_PROFILING(ProfileLevelImportant)
-        {
-            //TODO: fix numbers
-            VkDescriptorPoolSize poolSizes[] = { 
-                { VK_DESCRIPTOR_TYPE_SAMPLER, 100 },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 100 },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 100 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 100 },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 100 } };
-
-            auto poolInfo = VulkanUtils::InitVkDescriptorPoolCreateInfo();
-            poolInfo.maxSets = 100;
-            poolInfo.poolSizeCount = UInt32(std::size(poolSizes));
-            poolInfo.pPoolSizes = poolSizes;
-
-            const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create descriptor pool");
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteDescriptorPool() KMP_PROFILING(ProfileLevelImportant)
-        {
-            vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanLogicalDevice::_DeletePipelines() KMP_PROFILING(ProfileLevelImportant)
         {
             _pipelines.clear();
@@ -427,7 +392,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
-            _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _descriptorPool, _memoryTypeDelegate));
+            _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _memoryTypeDelegate));
         }}
         //--------------------------------------------------------------------------
 
