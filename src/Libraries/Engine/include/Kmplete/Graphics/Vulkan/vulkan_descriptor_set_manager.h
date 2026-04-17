@@ -22,13 +22,19 @@ namespace Kmplete
             KMP_API VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex);
             KMP_API ~VulkanDescriptorSetManager();
 
+            KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
             KMP_API bool AddDescriptorSetLayout(StringID sid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
             KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID sid) const noexcept;
             KMP_NODISCARD KMP_API Vector<VkDescriptorSetLayout> GetDescriptorSetLayouts(const Vector<StringID>& sids) const noexcept;
 
         private:
+            void _Initialize();
+            void _Finalize();
+
+        private:
             const UInt32& _currentBufferIndex;
             VkDevice _device;
+            VkDescriptorPool _descriptorPool;
             StringIDHashMap<VkDescriptorSetLayout> _descriptorSetLayouts;
         };
         //--------------------------------------------------------------------------
