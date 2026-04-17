@@ -136,6 +136,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        VkDescriptorSet VulkanDescriptorSetManager::GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame) const noexcept
+        {
+            return GetDescriptorSet(setSid, setIndex, perFrame, _currentBufferIndex);
+        }
+        //--------------------------------------------------------------------------
+
         VkDescriptorSet VulkanDescriptorSetManager::GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             if (perFrame)

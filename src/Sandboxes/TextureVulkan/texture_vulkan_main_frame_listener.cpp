@@ -406,19 +406,18 @@ namespace Kmplete
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const Graphics::VulkanLogicalDevice& vulkanDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         const Graphics::VulkanRenderer& vulkanRenderer = vulkanDevice.GetRenderer();
-        const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
         const Graphics::VulkanDescriptorSetManager& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
 
         _matrixShaderData.viewMatrix = _camera.GetViewMatrix();
         _matrixShaderData.projectionMatrix = _camera.GetProjectionMatrix();
         _matrixShaderData.modelMatrix = Math::Mat4(1.0f);
 
-        _uniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
+        _uniformBuffers[vulkanGraphicsBackend.GetCurrentBufferIndex()]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
         vulkanRenderer.BeginRendering("TextureVulkan_Pipeline"_sid, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
         vulkanRenderer.BindDescriptorSets("TextureVulkan_Pipeline"_sid, 0, { 
-            descriptorSetManager.GetDescriptorSet("MatrixAndTexture_Set"_sid, 0, "per frame"_true, currentBufferIndex),
-            descriptorSetManager.GetDescriptorSet("Sampler_Set"_sid, 0, "per frame"_true, currentBufferIndex)
+            descriptorSetManager.GetDescriptorSet("MatrixAndTexture_Set"_sid, 0, "per frame"_true),
+            descriptorSetManager.GetDescriptorSet("Sampler_Set"_sid, 0, "per frame"_true)
         });
         vulkanRenderer.BindGraphicsPipeline("TextureVulkan_Pipeline"_sid);
         vulkanRenderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} });

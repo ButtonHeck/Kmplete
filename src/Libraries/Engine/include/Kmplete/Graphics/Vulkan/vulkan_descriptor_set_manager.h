@@ -34,6 +34,7 @@ namespace Kmplete
 
             KMP_API bool AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame);
             KMP_API bool AllocateDescriptorSets(VkDescriptorSetLayout layout, StringID setSid, UInt32 setsCount, bool perFrame);
+            KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame) const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept;
 
             KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const;
