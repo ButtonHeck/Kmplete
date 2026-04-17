@@ -69,9 +69,9 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanUniformBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            return VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+            return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
@@ -79,9 +79,9 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanUniformBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
-            return new VulkanUniformBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+            return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size

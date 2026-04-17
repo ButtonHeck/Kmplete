@@ -5,7 +5,6 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
 
 #include <vulkan/vulkan.h>
 
@@ -34,8 +33,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanBuffer CreateIndexBuffer(const VulkanBufferParameters& parameters) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const;
 
-            KMP_NODISCARD KMP_API VulkanUniformBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanUniformBuffer*> CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API VulkanBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const;
 
         private:
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;

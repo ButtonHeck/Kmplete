@@ -9,7 +9,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_uniform_buffer.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Event/window_events.h"
@@ -71,7 +70,7 @@ namespace Kmplete
 
         UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
-        Vector<UPtr<Graphics::VulkanUniformBuffer>> _uniformBuffers;
+        Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffers;
         UInt32 _indexCount;
         VkDevice _device;
         VkCommandBuffer _commandBuffer;
