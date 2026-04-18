@@ -412,7 +412,10 @@ namespace Kmplete
 
     bool MainFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
     {
-        _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        if (evt.GetWidth() > 0 && evt.GetHeight())
+        {
+            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        }
         return true;
     }
     //--------------------------------------------------------------------------
