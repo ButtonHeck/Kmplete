@@ -23,6 +23,9 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanDescriptorSetManager)
 
         public:
+            using DescriptorSetStorage = StringIDHashMap<Vector<VkDescriptorSet>>;
+
+        public:
             KMP_API VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex);
             KMP_API ~VulkanDescriptorSetManager();
 
@@ -39,30 +42,30 @@ namespace Kmplete
 
             KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const;
             KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDescriptor(VkDescriptorSet set, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const;
+            KMP_API bool SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const;
 
             KMP_API bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
             KMP_API bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
-            KMP_API bool SetCombinedImageSamplerDescriptor(VkDescriptorSet set, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
+            KMP_API bool SetCombinedImageSamplerDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
 
             KMP_API bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, UInt32 binding) const;
             KMP_API bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, UInt32 binding) const;
-            KMP_API bool SetSampledImageDescriptor(VkDescriptorSet set, VkImageView imageView, UInt32 binding) const;
+            KMP_API bool SetSampledImageDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, UInt32 binding) const;
 
             KMP_API bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkSampler sampler, UInt32 binding) const;
             KMP_API bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkSampler sampler, UInt32 binding) const;
-            KMP_API bool SetSamplerDescriptor(VkDescriptorSet set, VkSampler sampler, UInt32 binding) const;
+            KMP_API bool SetSamplerDescriptor(VkDescriptorSet descriptorSet, VkSampler sampler, UInt32 binding) const;
 
         private:
             void _Initialize();
             void _Finalize();
 
-            KMP_NODISCARD bool _AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, StringIDHashMap<Vector<VkDescriptorSet>>& storage) const;
-            KMP_NODISCARD VkDescriptorSet _GetDescriptorSet(const StringIDHashMap<Vector<VkDescriptorSet>>& storage, StringID setSid, UInt32 setIndex) const;
+            KMP_NODISCARD bool _AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, DescriptorSetStorage& storage) const;
+            KMP_NODISCARD VkDescriptorSet _GetDescriptorSet(const DescriptorSetStorage& storage, StringID setSid, UInt32 setIndex) const noexcept;
+            KMP_NODISCARD VkWriteDescriptorSet _GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept;
 
             void _UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding) const;
             void _UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding) const;
-            KMP_NODISCARD VkWriteDescriptorSet _GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept;
 
         private:
             const UInt32& _currentBufferIndex;
@@ -70,8 +73,8 @@ namespace Kmplete
             VkDescriptorPool _descriptorPool;
             StringIDHashMap<VkDescriptorSetLayout> _descriptorSetLayouts;
 
-            Array<StringIDHashMap<Vector<VkDescriptorSet>>, NumConcurrentFrames> _descriptorsPerFrame;
-            StringIDHashMap<Vector<VkDescriptorSet>> _descriptors;
+            Array<DescriptorSetStorage, NumConcurrentFrames> _descriptorsPerFrame;
+            DescriptorSetStorage _descriptors;
         };
         //--------------------------------------------------------------------------
     }

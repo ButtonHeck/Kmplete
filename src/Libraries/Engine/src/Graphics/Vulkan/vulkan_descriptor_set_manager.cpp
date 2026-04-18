@@ -119,9 +119,9 @@ namespace Kmplete
 
             if (perFrame)
             {
-                for (auto& descriptors : _descriptorsPerFrame)
+                for (auto& descriptorsPerFrameStorage : _descriptorsPerFrame)
                 {
-                    if (!_AllocateDescriptorSets(layouts, setSid, setsCount, descriptors))
+                    if (!_AllocateDescriptorSets(layouts, setSid, setsCount, descriptorsPerFrameStorage))
                     {
                         return false;
                     }
@@ -146,7 +146,7 @@ namespace Kmplete
         {
             if (perFrame)
             {
-                if (frameIndex >= NumConcurrentFrames)
+                if (frameIndex >= _descriptorsPerFrame.size())
                 {
                     KMP_LOG_ERROR("cannot find per-frame descriptor set with sid '{}' - frame index '{}' is out of range", setSid, frameIndex);
                     return VK_NULL_HANDLE;
@@ -169,14 +169,14 @@ namespace Kmplete
 
         bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            auto descriptor = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetUniformBufferDescriptor(descriptor, buffer, size, binding);
+            auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
+            return SetUniformBufferDescriptor(descriptorSet, buffer, size, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(VkDescriptorSet set, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
-            if (set == VK_NULL_HANDLE)
+            if (descriptorSet == VK_NULL_HANDLE)
             {
                 KMP_LOG_ERROR("failed to set uniform buffer descriptor - set is null");
                 return false;
@@ -186,7 +186,7 @@ namespace Kmplete
             bufferInfo.buffer = buffer;
             bufferInfo.range = size;
 
-            _UpdateDescriptorSet(set, bufferInfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding);
+            _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding);
 
             return true;
         }}
@@ -198,8 +198,8 @@ namespace Kmplete
             {
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
-                    const auto descriptor = _GetDescriptorSet(descriptors, setSid, setIndex);
-                    if (!SetCombinedImageSamplerDescriptor(descriptor, imageView, sampler, binding))
+                    const auto descriptorSet = _GetDescriptorSet(descriptors, setSid, setIndex);
+                    if (!SetCombinedImageSamplerDescriptor(descriptorSet, imageView, sampler, binding))
                     {
                         return false;
                     }
@@ -209,22 +209,22 @@ namespace Kmplete
             }
             else
             {
-                const auto descriptor = _GetDescriptorSet(_descriptors, setSid, setIndex);
-                return SetCombinedImageSamplerDescriptor(descriptor, imageView, sampler, binding);
+                const auto descriptorSet = _GetDescriptorSet(_descriptors, setSid, setIndex);
+                return SetCombinedImageSamplerDescriptor(descriptorSet, imageView, sampler, binding);
             }
         }}
         //--------------------------------------------------------------------------
 
         bool VulkanDescriptorSetManager::SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            auto descriptor = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetCombinedImageSamplerDescriptor(descriptor, imageView, sampler, binding);
+            auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
+            return SetCombinedImageSamplerDescriptor(descriptorSet, imageView, sampler, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetCombinedImageSamplerDescriptor(VkDescriptorSet set, VkImageView imageView, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetCombinedImageSamplerDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
-            if (set == VK_NULL_HANDLE)
+            if (descriptorSet == VK_NULL_HANDLE)
             {
                 KMP_LOG_ERROR("failed to set combined image sampler descriptor - set is null");
                 return false;
@@ -235,7 +235,7 @@ namespace Kmplete
             descriptorInfo.sampler = sampler;
             descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            _UpdateDescriptorSet(set, descriptorInfo, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding);
+            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding);
 
             return true;
         }}
@@ -247,8 +247,8 @@ namespace Kmplete
             {
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
-                    const auto descriptor = _GetDescriptorSet(descriptors, setSid, setIndex);
-                    if (!SetSampledImageDescriptor(descriptor, imageView, binding))
+                    const auto descriptorSet = _GetDescriptorSet(descriptors, setSid, setIndex);
+                    if (!SetSampledImageDescriptor(descriptorSet, imageView, binding))
                     {
                         return false;
                     }
@@ -258,22 +258,22 @@ namespace Kmplete
             }
             else
             {
-                const auto descriptor = _GetDescriptorSet(_descriptors, setSid, setIndex);
-                return SetSampledImageDescriptor(descriptor, imageView, binding);
+                const auto descriptorSet = _GetDescriptorSet(_descriptors, setSid, setIndex);
+                return SetSampledImageDescriptor(descriptorSet, imageView, binding);
             }
         }}
         //--------------------------------------------------------------------------
 
         bool VulkanDescriptorSetManager::SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            auto descriptor = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetSampledImageDescriptor(descriptor, imageView, binding);
+            auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
+            return SetSampledImageDescriptor(descriptorSet, imageView, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetSampledImageDescriptor(VkDescriptorSet set, VkImageView imageView, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetSampledImageDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
-            if (set == VK_NULL_HANDLE)
+            if (descriptorSet == VK_NULL_HANDLE)
             {
                 KMP_LOG_ERROR("failed to set sampled image descriptor - set is null");
                 return false;
@@ -283,7 +283,7 @@ namespace Kmplete
             descriptorInfo.imageView = imageView;
             descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
 
-            _UpdateDescriptorSet(set, descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding);
+            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding);
 
             return true;
         }}
@@ -295,8 +295,8 @@ namespace Kmplete
             {
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
-                    const auto descriptor = _GetDescriptorSet(descriptors, setSid, setIndex);
-                    if (!SetSamplerDescriptor(descriptor, sampler, binding))
+                    const auto descriptorSet = _GetDescriptorSet(descriptors, setSid, setIndex);
+                    if (!SetSamplerDescriptor(descriptorSet, sampler, binding))
                     {
                         return false;
                     }
@@ -306,22 +306,22 @@ namespace Kmplete
             }
             else
             {
-                const auto descriptor = _GetDescriptorSet(_descriptors, setSid, setIndex);
-                return SetSamplerDescriptor(descriptor, sampler, binding);
+                const auto descriptorSet = _GetDescriptorSet(_descriptors, setSid, setIndex);
+                return SetSamplerDescriptor(descriptorSet, sampler, binding);
             }
         }}
         //--------------------------------------------------------------------------
 
         bool VulkanDescriptorSetManager::SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            auto descriptor = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetSamplerDescriptor(descriptor, sampler, binding);
+            auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
+            return SetSamplerDescriptor(descriptorSet, sampler, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetSamplerDescriptor(VkDescriptorSet set, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetSamplerDescriptor(VkDescriptorSet descriptorSet, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
-            if (set == VK_NULL_HANDLE)
+            if (descriptorSet == VK_NULL_HANDLE)
             {
                 KMP_LOG_ERROR("failed to set sampler descriptor - set is null");
                 return false;
@@ -330,7 +330,7 @@ namespace Kmplete
             VkDescriptorImageInfo descriptorInfo{};
             descriptorInfo.sampler = sampler;
 
-            _UpdateDescriptorSet(set, descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLER, binding);
+            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLER, binding);
 
             return true;
         }}
@@ -374,7 +374,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::_AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, StringIDHashMap<Vector<VkDescriptorSet>>& storage) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::_AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, DescriptorSetStorage& storage) const KMP_PROFILING(ProfileLevelImportant)
         {
             auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
             descriptorSetAllocateInfo.descriptorPool = _descriptorPool;
@@ -403,23 +403,35 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VkDescriptorSet VulkanDescriptorSetManager::_GetDescriptorSet(const StringIDHashMap<Vector<VkDescriptorSet>>& storage, StringID setSid, UInt32 setIndex) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        VkDescriptorSet VulkanDescriptorSetManager::_GetDescriptorSet(const DescriptorSetStorage& storage, StringID setSid, UInt32 setIndex) const noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             if (!storage.contains(setSid))
             {
                 KMP_LOG_ERROR("cannot find descriptor set with sid '{}' - sid not found", setSid);
                 return VK_NULL_HANDLE;
             }
-            const auto& descriptors = storage.at(setSid);
+            const auto& descriptorSets = storage.at(setSid);
 
-            if (setIndex >= UInt32(descriptors.size()))
+            if (setIndex >= UInt32(descriptorSets.size()))
             {
                 KMP_LOG_ERROR("cannot find descriptor set with sid '{}' and index '{}' - out of range", setSid, setIndex);
                 return VK_NULL_HANDLE;
             }
 
-            return descriptors.at(setIndex);
+            return descriptorSets.at(setIndex);
         }}
+        //--------------------------------------------------------------------------
+
+        VkWriteDescriptorSet VulkanDescriptorSetManager::_GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept
+        {
+            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
+            writeDescriptorSet.dstSet = descriptorSet;
+            writeDescriptorSet.dstBinding = binding;
+            writeDescriptorSet.descriptorCount = 1;
+            writeDescriptorSet.descriptorType = type;
+
+            return writeDescriptorSet;
+        }
         //--------------------------------------------------------------------------
 
         void VulkanDescriptorSetManager::_UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
@@ -436,18 +448,6 @@ namespace Kmplete
             writeDescriptorSet.pImageInfo = &imageInfo;
             vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
         }}
-        //--------------------------------------------------------------------------
-
-        VkWriteDescriptorSet VulkanDescriptorSetManager::_GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept
-        {
-            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
-            writeDescriptorSet.dstSet = descriptorSet;
-            writeDescriptorSet.dstBinding = binding;
-            writeDescriptorSet.descriptorCount = 1;
-            writeDescriptorSet.descriptorType = type;
-
-            return writeDescriptorSet;
-        }
         //--------------------------------------------------------------------------
     }
 }
