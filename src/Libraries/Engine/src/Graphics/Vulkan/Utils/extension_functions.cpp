@@ -7,6 +7,20 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        template<typename FunctionType>
+        KMP_NODISCARD static bool LoadExtensionFunction(FunctionType& functionPointer, VkInstance instance, const char* functionName)
+        {
+            functionPointer = (FunctionType)vkGetInstanceProcAddr(instance, functionName);
+            if (functionPointer == nullptr)
+            {
+                KMP_LOG_CRITICAL_FN("VKCommands: failed to load {} function", functionName);
+                return false;
+            }
+            return true;
+        }
+        //--------------------------------------------------------------------------
+
+
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         PFN_vkCreateDebugUtilsMessengerEXT VKCommands::CreateDebugUtilsMessengerEXT = nullptr;
         PFN_vkDestroyDebugUtilsMessengerEXT VKCommands::DestroyDebugUtilsMessengerEXT = nullptr;
@@ -43,207 +57,41 @@ namespace Kmplete
         bool VKCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
-            CreateDebugUtilsMessengerEXT = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
-            if (CreateDebugUtilsMessengerEXT == nullptr)
+            if (!LoadExtensionFunction<PFN_vkCreateDebugUtilsMessengerEXT>(CreateDebugUtilsMessengerEXT, instance, "vkCreateDebugUtilsMessengerEXT") ||
+                !LoadExtensionFunction<PFN_vkDestroyDebugUtilsMessengerEXT>(DestroyDebugUtilsMessengerEXT, instance, "vkDestroyDebugUtilsMessengerEXT"))
             {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCreateDebugUtilsMessengerEXT function");
-                return false;
-            }
-
-            DestroyDebugUtilsMessengerEXT = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
-            if (DestroyDebugUtilsMessengerEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkDestroyDebugUtilsMessengerEXT function");
                 return false;
             }
 #endif
 
-            CmdSetRasterizationSamplesEXT = (PFN_vkCmdSetRasterizationSamplesEXT)vkGetInstanceProcAddr(instance, "vkCmdSetRasterizationSamplesEXT");
-            if (CmdSetRasterizationSamplesEXT == nullptr)
+            if (!LoadExtensionFunction<PFN_vkCmdSetRasterizationSamplesEXT>(CmdSetRasterizationSamplesEXT, instance, "vkCmdSetRasterizationSamplesEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetDepthClampEnableEXT>(CmdSetDepthClampEnableEXT, instance, "vkCmdSetDepthClampEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetDepthClipEnableEXT>(CmdSetDepthClipEnableEXT, instance, "vkCmdSetDepthClipEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetDepthClampRangeEXT>(CmdSetDepthClampRangeEXT, instance, "vkCmdSetDepthClampRangeEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetLineStippleEnableEXT>(CmdSetLineStippleEnableEXT, instance, "vkCmdSetLineStippleEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetLineRasterizationModeEXT>(CmdSetLineRasterizationModeEXT, instance, "vkCmdSetLineRasterizationModeEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleEnableEXT>(CmdSetDiscardRectangleEnableEXT, instance, "vkCmdSetDiscardRectangleEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleEXT>(CmdSetDiscardRectangleEXT, instance, "vkCmdSetDiscardRectangleEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleModeEXT>(CmdSetDiscardRectangleModeEXT, instance, "vkCmdSetDiscardRectangleModeEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetSampleLocationsEnableEXT>(CmdSetSampleLocationsEnableEXT, instance, "vkCmdSetSampleLocationsEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetSampleLocationsEXT>(CmdSetSampleLocationsEXT, instance, "vkCmdSetSampleLocationsEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetSampleMaskEXT>(CmdSetSampleMaskEXT, instance, "vkCmdSetSampleMaskEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetFragmentShadingRateKHR>(CmdSetFragmentShadingRateKHR, instance, "vkCmdSetFragmentShadingRateKHR") ||
+                !LoadExtensionFunction<PFN_vkCmdSetColorWriteEnableEXT>(CmdSetColorWriteEnableEXT, instance, "vkCmdSetColorWriteEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetColorWriteMaskEXT>(CmdSetColorWriteMaskEXT, instance, "vkCmdSetColorWriteMaskEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetColorBlendEnableEXT>(CmdSetColorBlendEnableEXT, instance, "vkCmdSetColorBlendEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetColorBlendEquationEXT>(CmdSetColorBlendEquationEXT, instance, "vkCmdSetColorBlendEquationEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetPolygonModeEXT>(CmdSetPolygonModeEXT, instance, "vkCmdSetPolygonModeEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetAlphaToCoverageEnableEXT>(CmdSetAlphaToCoverageEnableEXT, instance, "vkCmdSetAlphaToCoverageEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetAlphaToOneEnableEXT>(CmdSetAlphaToOneEnableEXT, instance, "vkCmdSetAlphaToOneEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetLogicOpEnableEXT>(CmdSetLogicOpEnableEXT, instance, "vkCmdSetLogicOpEnableEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetLogicOpEXT>(CmdSetLogicOpEXT, instance, "vkCmdSetLogicOpEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetProvokingVertexModeEXT>(CmdSetProvokingVertexModeEXT, instance, "vkCmdSetProvokingVertexModeEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdSetVertexInputEXT>(CmdSetVertexInputEXT, instance, "vkCmdSetVertexInputEXT") ||
+                !LoadExtensionFunction<PFN_vkCreateShadersEXT>(CreateShadersEXT, instance, "vkCreateShadersEXT") ||
+                !LoadExtensionFunction<PFN_vkDestroyShaderEXT>(DestroyShaderEXT, instance, "vkDestroyShaderEXT") ||
+                !LoadExtensionFunction<PFN_vkCmdBindShadersEXT>(CmdBindShadersEXT, instance, "vkCmdBindShadersEXT"))
             {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetRasterizationSamplesEXT function");
-                return false;
-            }
-
-            CmdSetDepthClampEnableEXT = (PFN_vkCmdSetDepthClampEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDepthClampEnableEXT");
-            if (CmdSetDepthClampEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetDepthClampEnableEXT function");
-                return false;
-            }
-
-            CmdSetDepthClipEnableEXT = (PFN_vkCmdSetDepthClipEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDepthClipEnableEXT");
-            if (CmdSetDepthClipEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetDepthClipEnableEXT function");
-                return false;
-            }
-
-            CmdSetDepthClampRangeEXT = (PFN_vkCmdSetDepthClampRangeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDepthClampRangeEXT");
-            if (CmdSetDepthClampRangeEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetDepthClampRangeEXT function");
-                return false;
-            }
-
-            CmdSetLineStippleEnableEXT = (PFN_vkCmdSetLineStippleEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLineStippleEnableEXT");
-            if (CmdSetLineStippleEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetLineStippleEnableEXT function");
-                return false;
-            }
-
-            CmdSetLineRasterizationModeEXT = (PFN_vkCmdSetLineRasterizationModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLineRasterizationModeEXT");
-            if (CmdSetLineRasterizationModeEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetLineRasterizationModeEXT function");
-                return false;
-            }
-
-            CmdSetDiscardRectangleEnableEXT = (PFN_vkCmdSetDiscardRectangleEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDiscardRectangleEnableEXT");
-            if (CmdSetDiscardRectangleEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetDiscardRectangleEnableEXT function");
-                return false;
-            }
-
-            CmdSetDiscardRectangleEXT = (PFN_vkCmdSetDiscardRectangleEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDiscardRectangleEXT");
-            if (CmdSetDiscardRectangleEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetDiscardRectangleEXT function");
-                return false;
-            }
-
-            CmdSetDiscardRectangleModeEXT = (PFN_vkCmdSetDiscardRectangleModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetDiscardRectangleModeEXT");
-            if (CmdSetDiscardRectangleModeEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetDiscardRectangleModeEXT function");
-                return false;
-            }
-
-            CmdSetSampleLocationsEnableEXT = (PFN_vkCmdSetSampleLocationsEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleLocationsEnableEXT");
-            if (CmdSetSampleLocationsEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetSampleLocationsEnableEXT function");
-                return false;
-            }
-
-            CmdSetSampleLocationsEXT = (PFN_vkCmdSetSampleLocationsEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleLocationsEXT");
-            if (CmdSetSampleLocationsEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetSampleLocationsEXT function");
-                return false;
-            }
-
-            CmdSetSampleMaskEXT = (PFN_vkCmdSetSampleMaskEXT)vkGetInstanceProcAddr(instance, "vkCmdSetSampleMaskEXT");
-            if (CmdSetSampleMaskEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetSampleMaskEXT function");
-                return false;
-            }
-
-            CmdSetFragmentShadingRateKHR = (PFN_vkCmdSetFragmentShadingRateKHR)vkGetInstanceProcAddr(instance, "vkCmdSetFragmentShadingRateKHR");
-            if (CmdSetFragmentShadingRateKHR == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetFragmentShadingRateKHR function");
-                return false;
-            }
-
-            CmdSetColorWriteEnableEXT = (PFN_vkCmdSetColorWriteEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetColorWriteEnableEXT");
-            if (CmdSetColorWriteEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetColorWriteEnableEXT function");
-                return false;
-            }
-
-            CmdSetColorWriteMaskEXT = (PFN_vkCmdSetColorWriteMaskEXT)vkGetInstanceProcAddr(instance, "vkCmdSetColorWriteMaskEXT");
-            if (CmdSetColorWriteMaskEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetColorWriteMaskEXT function");
-                return false;
-            }
-
-            CmdSetColorBlendEnableEXT = (PFN_vkCmdSetColorBlendEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetColorBlendEnableEXT");
-            if (CmdSetColorBlendEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetColorBlendEnableEXT function");
-                return false;
-            }
-
-            CmdSetColorBlendEquationEXT = (PFN_vkCmdSetColorBlendEquationEXT)vkGetInstanceProcAddr(instance, "vkCmdSetColorBlendEquationEXT");
-            if (CmdSetColorBlendEquationEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetColorBlendEquationEXT function");
-                return false;
-            }
-
-            CmdSetPolygonModeEXT = (PFN_vkCmdSetPolygonModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetPolygonModeEXT");
-            if (CmdSetPolygonModeEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetPolygonModeEXT function");
-                return false;
-            }
-
-            CmdSetAlphaToCoverageEnableEXT = (PFN_vkCmdSetAlphaToCoverageEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetAlphaToCoverageEnableEXT");
-            if (CmdSetAlphaToCoverageEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetAlphaToCoverageEnableEXT function");
-                return false;
-            }
-
-            CmdSetAlphaToOneEnableEXT = (PFN_vkCmdSetAlphaToOneEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetAlphaToOneEnableEXT");
-            if (CmdSetAlphaToOneEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetAlphaToOneEnableEXT function");
-                return false;
-            }
-
-            CmdSetLogicOpEnableEXT = (PFN_vkCmdSetLogicOpEnableEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLogicOpEnableEXT");
-            if (CmdSetLogicOpEnableEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetLogicOpEnableEXT function");
-                return false;
-            }
-
-            CmdSetLogicOpEXT = (PFN_vkCmdSetLogicOpEXT)vkGetInstanceProcAddr(instance, "vkCmdSetLogicOpEXT");
-            if (CmdSetLogicOpEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetLogicOpEXT function");
-                return false;
-            }
-
-            CmdSetProvokingVertexModeEXT = (PFN_vkCmdSetProvokingVertexModeEXT)vkGetInstanceProcAddr(instance, "vkCmdSetProvokingVertexModeEXT");
-            if (CmdSetProvokingVertexModeEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetProvokingVertexModeEXT function");
-                return false;
-            }
-
-            CmdSetVertexInputEXT = (PFN_vkCmdSetVertexInputEXT)vkGetInstanceProcAddr(instance, "vkCmdSetVertexInputEXT");
-            if (CmdSetVertexInputEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdSetVertexInputEXT function");
-                return false;
-            }
-
-            CreateShadersEXT = (PFN_vkCreateShadersEXT)vkGetInstanceProcAddr(instance, "vkCreateShadersEXT");
-            if (CreateShadersEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCreateShadersEXT function");
-                return false;
-            }
-
-            DestroyShaderEXT = (PFN_vkDestroyShaderEXT)vkGetInstanceProcAddr(instance, "vkDestroyShaderEXT");
-            if (DestroyShaderEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCreateShadersEXT function");
-                return false;
-            }
-
-            CmdBindShadersEXT = (PFN_vkCmdBindShadersEXT)vkGetInstanceProcAddr(instance, "vkCmdBindShadersEXT");
-            if (CmdBindShadersEXT == nullptr)
-            {
-                KMP_LOG_CRITICAL_FN("VKCommands: failed to load vkCmdBindShadersEXT function");
                 return false;
             }
 
