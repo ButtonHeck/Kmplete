@@ -37,36 +37,16 @@ namespace Kmplete
             , _renderingCreateInfo()
             , _renderingColorAttachmentsFormats()
         {
-            _layoutCreateInfo = VKUtils::InitVkPipelineLayoutCreateInfo();
-            _inputAssemblyCreateInfo = VKUtils::InitVkPipelineInputAssemblyStateCreateInfo();
-            _rasterizationStateCreateInfo = VKUtils::InitVkPipelineRasterizationStateCreateInfo();
-            _colorBlendStateCreateInfo = VKUtils::InitVkPipelineColorBlendStateCreateInfo();
-            _viewportStateCreateInfo = VKUtils::InitVkPipelineViewportStateCreateInfo();
-            _dynamicStateCreateInfo = VKUtils::InitVkPipelineDynamicStateCreateInfo();
-            _depthStencilStateCreateInfo = VKUtils::InitVkPipelineDepthStencilStateCreateInfo();
-            _multisamplingStateCreateInfo = VKUtils::InitVkPipelineMultisampleStateCreateInfo();
-            _vertexInputStateCreateInfo = VKUtils::InitVkPipelineVertexInputStateCreateInfo();
-            _renderingCreateInfo = VKUtils::InitVkPipelineRenderingCreateInfoKHR();
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _SetDefaults();
+            _Initialize();
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline::~VulkanGraphicsPipeline()
+        VulkanGraphicsPipeline::~VulkanGraphicsPipeline() KMP_PROFILING(ProfileLevelAlways)
         {
-            if (_device != VK_NULL_HANDLE)
-            {
-                if (_pipeline != VK_NULL_HANDLE)
-                {
-                    vkDestroyPipeline(_device, _pipeline, nullptr);
-                }
-
-                if (_pipelineLayout != VK_NULL_HANDLE)
-                {
-                    vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
-                }
-            }
-        }
+            _Finalize();
+        }}
         //--------------------------------------------------------------------------
 
         bool VulkanGraphicsPipeline::Build() KMP_PROFILING(ProfileLevelImportant)
@@ -348,6 +328,40 @@ namespace Kmplete
         UInt32 VulkanGraphicsPipeline::GetColorAttachmentsCount() const noexcept
         {
             return _renderingCreateInfo.colorAttachmentCount;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsPipeline::_Initialize()
+        {
+            _layoutCreateInfo = VKUtils::InitVkPipelineLayoutCreateInfo();
+            _inputAssemblyCreateInfo = VKUtils::InitVkPipelineInputAssemblyStateCreateInfo();
+            _rasterizationStateCreateInfo = VKUtils::InitVkPipelineRasterizationStateCreateInfo();
+            _colorBlendStateCreateInfo = VKUtils::InitVkPipelineColorBlendStateCreateInfo();
+            _viewportStateCreateInfo = VKUtils::InitVkPipelineViewportStateCreateInfo();
+            _dynamicStateCreateInfo = VKUtils::InitVkPipelineDynamicStateCreateInfo();
+            _depthStencilStateCreateInfo = VKUtils::InitVkPipelineDepthStencilStateCreateInfo();
+            _multisamplingStateCreateInfo = VKUtils::InitVkPipelineMultisampleStateCreateInfo();
+            _vertexInputStateCreateInfo = VKUtils::InitVkPipelineVertexInputStateCreateInfo();
+            _renderingCreateInfo = VKUtils::InitVkPipelineRenderingCreateInfoKHR();
+
+            _SetDefaults();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsPipeline::_Finalize()
+        {
+            if (_device != VK_NULL_HANDLE)
+            {
+                if (_pipeline != VK_NULL_HANDLE)
+                {
+                    vkDestroyPipeline(_device, _pipeline, nullptr);
+                }
+
+                if (_pipelineLayout != VK_NULL_HANDLE)
+                {
+                    vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
+                }
+            }
         }
         //--------------------------------------------------------------------------
 

@@ -59,6 +59,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
 
         private:
+            void _Initialize();
+            void _Finalize();
             void _SetDefaults() noexcept;
 
         private:
