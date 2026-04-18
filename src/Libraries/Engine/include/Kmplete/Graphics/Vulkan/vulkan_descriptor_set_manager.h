@@ -39,9 +39,19 @@ namespace Kmplete
 
             KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const;
             KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const;
+            KMP_API bool SetUniformBufferDescriptor(VkDescriptorSet set, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const;
+
+            KMP_API bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
             KMP_API bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
+            KMP_API bool SetCombinedImageSamplerDescriptor(VkDescriptorSet set, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
+
+            KMP_API bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, UInt32 binding) const;
             KMP_API bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, UInt32 binding) const;
+            KMP_API bool SetSampledImageDescriptor(VkDescriptorSet set, VkImageView imageView, UInt32 binding) const;
+
+            KMP_API bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkSampler sampler, UInt32 binding) const;
             KMP_API bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkSampler sampler, UInt32 binding) const;
+            KMP_API bool SetSamplerDescriptor(VkDescriptorSet set, VkSampler sampler, UInt32 binding) const;
 
         private:
             void _Initialize();

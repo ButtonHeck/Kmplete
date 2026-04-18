@@ -497,59 +497,44 @@ namespace Kmplete
         ImGui::Begin("TriangleVulkan", nullptr, applicationWindowFlags);
         if (ImGui::Button("Metal"))
         {
-            for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
-            {
-                descriptorSetManager.SetSampledImageDescriptor(
-                    "MatrixAndTexture_Set"_sid, 0, "per frame"_true, i,
-                    dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 1
-                );
-            }
+            descriptorSetManager.SetSampledImageDescriptor(
+                "MatrixAndTexture_Set"_sid, 0, "per frame"_true,
+                dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_metal"_sid).GetTexture()).GetVkImageView(), 1
+            );
         }
         ImGui::SameLine();
         if (ImGui::Button("Marble"))
         {
-            for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
-            {
-                descriptorSetManager.SetSampledImageDescriptor(
-                    "MatrixAndTexture_Set"_sid, 0, "per frame"_true, i,
-                    dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_marble"_sid).GetTexture()).GetVkImageView(), 1
-                );
-            }
+            descriptorSetManager.SetSampledImageDescriptor(
+                "MatrixAndTexture_Set"_sid, 0, "per frame"_true,
+                dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_marble"_sid).GetTexture()).GetVkImageView(), 1
+            );
         }
         ImGui::SameLine();
         if (ImGui::Button("Example"))
         {
-            for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
-            {
-                descriptorSetManager.SetSampledImageDescriptor(
-                    "MatrixAndTexture_Set"_sid, 0, "per frame"_true, i,
-                    dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_example"_sid).GetTexture()).GetVkImageView(), 1
-                );
-            }
+            descriptorSetManager.SetSampledImageDescriptor(
+                "MatrixAndTexture_Set"_sid, 0, "per frame"_true,
+                dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset("texture_example"_sid).GetTexture()).GetVkImageView(), 1
+            );
         }
         ImGui::SliderFloat("LOD bias", &_matrixShaderData.lodBias, -8.0f, 8.0f);
         ImGui::SliderInt("Tiling", &_matrixShaderData.tiling, 1, 4);
 
         if (ImGui::Button("Nearest filter"))
         {
-            for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
-            {
-                descriptorSetManager.SetSamplerDescriptor(
-                    "Sampler_Set"_sid, 0, "per frame"_true, i,
-                    vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid), 0
-                );
-            }
+            descriptorSetManager.SetSamplerDescriptor(
+                "Sampler_Set"_sid, 0, "per frame"_true,
+                vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultNearestSid), 0
+            );
         }
         ImGui::SameLine();
         if (ImGui::Button("Linear filter"))
         {
-            for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
-            {
-                descriptorSetManager.SetSamplerDescriptor(
-                    "Sampler_Set"_sid, 0, "per frame"_true, i,
-                    vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), 0
-                );
-            }
+            descriptorSetManager.SetSamplerDescriptor(
+                "Sampler_Set"_sid, 0, "per frame"_true,
+                vulkanDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), 0
+            );
         }
 
         ImGui::End();
