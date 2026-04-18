@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanUtils
+        namespace VKUtils
         {
             //TODO: comments
             struct QueueFamilyIndices

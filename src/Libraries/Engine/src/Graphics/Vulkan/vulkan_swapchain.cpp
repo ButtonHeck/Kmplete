@@ -71,7 +71,7 @@ namespace Kmplete
         void VulkanSwapchain::StartFrame(float /*frameTimestep*/) KMP_PROFILING(ProfileLevelImportant)
         {
             const auto result = AcquireNextImage();
-            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
+            VKUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
         }}
         //--------------------------------------------------------------------------
 
@@ -89,7 +89,7 @@ namespace Kmplete
 
         void VulkanSwapchain::QueuePresent() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            auto presentInfo = VulkanUtils::InitVkPresentInfoKHR();
+            auto presentInfo = VKUtils::InitVkPresentInfoKHR();
             presentInfo.swapchainCount = 1;
             presentInfo.pSwapchains = &_swapchain;
             presentInfo.pImageIndices = &_imageIndex;
@@ -170,7 +170,7 @@ namespace Kmplete
 
         VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo() const
         {
-            auto colorAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_Color_ClearStore;
+            auto colorAttachmentInfo = VKPresets::RenderingAttachmentInfo_Color_ClearStore;
             if (GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
             {
                 colorAttachmentInfo.imageView = GetCurrentImageView();
@@ -189,7 +189,7 @@ namespace Kmplete
 
         VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingDepthStencilAttachmentInfo() const
         {
-            auto depthStencilAttachmentInfo = VulkanPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+            auto depthStencilAttachmentInfo = VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
             depthStencilAttachmentInfo.imageView = GetMultisampledDepthStencilImageView();
 
             return depthStencilAttachmentInfo;
@@ -216,7 +216,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
         {
-            auto swapchainCreateInfo = VulkanUtils::InitVkSwapchainCreateInfoKHR();
+            auto swapchainCreateInfo = VKUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = surface;
             swapchainCreateInfo.minImageCount = _imageCount;
             swapchainCreateInfo.imageFormat = _vulkanContext.surfaceFormat.format;
@@ -244,7 +244,7 @@ namespace Kmplete
             }
 
             const auto result = vkCreateSwapchainKHR(_device, &swapchainCreateInfo, nullptr, &_swapchain);
-            VulkanUtils::CheckResult(result, "VulkanSwapchain: failed to create swapchain");
+            VKUtils::CheckResult(result, "VulkanSwapchain: failed to create swapchain");
         }}
         //--------------------------------------------------------------------------
 
@@ -270,7 +270,7 @@ namespace Kmplete
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
-                const auto& subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1;
+                const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
                 _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, subresourceRange);
             }
         }}
@@ -284,16 +284,16 @@ namespace Kmplete
                 .depth = 1
             };
 
-            const auto colorCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_swapchainImageFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
+            const auto colorCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_swapchainImageFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
             _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
-            const auto depthCreationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
+            const auto depthCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
 
-            const auto& colorSubresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1;
+            const auto& colorSubresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
             _multisampledColorImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledColorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange);
 
-            const auto& depthSubresourceRange = VulkanPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1;
+            const auto& depthSubresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1;
             _multisampledDepthImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledDepthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange);
         }}
         //--------------------------------------------------------------------------

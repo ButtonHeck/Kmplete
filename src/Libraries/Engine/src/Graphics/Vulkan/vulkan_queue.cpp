@@ -73,7 +73,7 @@ namespace Kmplete
         void VulkanQueue::Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const KMP_PROFILING(ProfileLevelImportant)
         {
             const auto buffer = commandBuffer.GetVkCommandBuffer();
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            auto submitInfo = VKUtils::InitVkSubmitInfo();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
 
@@ -84,14 +84,14 @@ namespace Kmplete
         void VulkanQueue::Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const KMP_PROFILING(ProfileLevelImportant)
         {
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence);
-            VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
+            VKUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
         }}
         //--------------------------------------------------------------------------
 
         void VulkanQueue::SyncSubmit(const VulkanCommandBuffer& commandBuffer) const KMP_PROFILING(ProfileLevelImportant)
         {
             const auto buffer = commandBuffer.GetVkCommandBuffer();
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            auto submitInfo = VKUtils::InitVkSubmitInfo();
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &buffer;
 
@@ -103,7 +103,7 @@ namespace Kmplete
         {
             VulkanFence fence(_device, "signaled"_false);
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence.GetVkFence());
-            VulkanUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
+            VKUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
             fence.Wait();
         }}
         //--------------------------------------------------------------------------
@@ -117,7 +117,7 @@ namespace Kmplete
             }
 
             const auto result = vkQueuePresentKHR(_queue, &presentationInfo);
-            VulkanUtils::CheckResult(result, "VulkanQueue: failed to present");
+            VKUtils::CheckResult(result, "VulkanQueue: failed to present");
         }}
         //--------------------------------------------------------------------------
 

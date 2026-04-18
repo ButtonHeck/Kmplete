@@ -69,7 +69,7 @@ namespace Kmplete
             const auto colorAttachmentInfo = swapchain.GetRenderingColorAttachmentInfo();
             const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo();
 
-            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
+            auto renderingInfo = VKUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = renderArea;
             renderingInfo.layerCount = 1;
             renderingInfo.colorAttachmentCount = 1;
@@ -101,7 +101,7 @@ namespace Kmplete
 
             const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo();
 
-            auto renderingInfo = VulkanUtils::InitVkRenderingInfo();
+            auto renderingInfo = VKUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = renderArea;
             renderingInfo.layerCount = 1;
             renderingInfo.colorAttachmentCount = colorAttachmentsCount;
@@ -121,7 +121,7 @@ namespace Kmplete
 
         void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanUtils::MemoryBarrierParameters colorImageBarrierParameters = {
+            VKUtils::MemoryBarrierParameters colorImageBarrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
                 .srcAccessMask = VK_ACCESS_NONE,
@@ -130,11 +130,11 @@ namespace Kmplete
                 .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
                 .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                 .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
+                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
-            VulkanUtils::InsertImageMemoryBarrier(colorImageBarrierParameters);
+            VKUtils::InsertImageMemoryBarrier(colorImageBarrierParameters);
 
-            VulkanUtils::MemoryBarrierParameters depthStencilImageBarrierParameters = {
+            VKUtils::MemoryBarrierParameters depthStencilImageBarrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = depthStencilImage,
                 .srcAccessMask = VK_ACCESS_NONE,
@@ -143,15 +143,15 @@ namespace Kmplete
                 .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
                 .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
                 .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .subresourceRange = VulkanPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
+                .subresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
             };
-            VulkanUtils::InsertImageMemoryBarrier(depthStencilImageBarrierParameters);
+            VKUtils::InsertImageMemoryBarrier(depthStencilImageBarrierParameters);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanUtils::MemoryBarrierParameters barrierParameters = {
+            VKUtils::MemoryBarrierParameters barrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
                 .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
@@ -160,9 +160,9 @@ namespace Kmplete
                 .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
                 .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                 .dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-                .subresourceRange = VulkanPresets::ImageSubresourceRange_Color_Layer1_Level1
+                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+            VKUtils::InsertImageMemoryBarrier(barrierParameters);
         }}
         //--------------------------------------------------------------------------
 
@@ -210,20 +210,20 @@ namespace Kmplete
 
         void VulkanRenderer::SetDepthClampEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetDepthClampEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetDepthClampEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetDepthClampRange(VkDepthClampModeEXT depthClampMode, float min, float max) const KMP_PROFILING(ProfileLevelMinor)
         {
             VkDepthClampRangeEXT depthClampRange{ .minDepthClamp = min, .maxDepthClamp = max };
-            VulkanCommands::CmdSetDepthClampRangeEXT(_currentCommandBuffer, depthClampMode, &depthClampRange);
+            VKCommands::CmdSetDepthClampRangeEXT(_currentCommandBuffer, depthClampMode, &depthClampRange);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetDepthClipEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetDepthClipEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetDepthClipEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
@@ -283,7 +283,7 @@ namespace Kmplete
 
         void VulkanRenderer::SetRasterizationSamples(VkSampleCountFlagBits samples) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
+            VKCommands::CmdSetRasterizationSamplesEXT(_currentCommandBuffer, samples);
         }}
         //--------------------------------------------------------------------------
 
@@ -307,7 +307,7 @@ namespace Kmplete
 
         void VulkanRenderer::SetLineStippleEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetLineStippleEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetLineStippleEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
@@ -319,7 +319,7 @@ namespace Kmplete
 
         void VulkanRenderer::SetLineRasterizationMode(VkLineRasterizationModeEXT lineRasterizationMode) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetLineRasterizationModeEXT(_currentCommandBuffer, lineRasterizationMode);
+            VKCommands::CmdSetLineRasterizationModeEXT(_currentCommandBuffer, lineRasterizationMode);
         }}
         //--------------------------------------------------------------------------
 
@@ -349,109 +349,109 @@ namespace Kmplete
 
         void VulkanRenderer::SetDiscardRectangleEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetDiscardRectangleEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetDiscardRectangleEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetDiscardRectangle(UInt32 firstDiscardRectangle, UInt32 count, const Vector<VkRect2D>& discardRectangles) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetDiscardRectangleEXT(_currentCommandBuffer, firstDiscardRectangle, count, discardRectangles.data());
+            VKCommands::CmdSetDiscardRectangleEXT(_currentCommandBuffer, firstDiscardRectangle, count, discardRectangles.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetDiscardRectangleMode(VkDiscardRectangleModeEXT mode) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetDiscardRectangleModeEXT(_currentCommandBuffer, mode);
+            VKCommands::CmdSetDiscardRectangleModeEXT(_currentCommandBuffer, mode);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetSampleLocationsEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetSampleLocationsEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetSampleLocationsEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetSampleLocations(const Vector<VkSampleLocationsInfoEXT>& sampleLocationInfos) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetSampleLocationsEXT(_currentCommandBuffer, sampleLocationInfos.data());
+            VKCommands::CmdSetSampleLocationsEXT(_currentCommandBuffer, sampleLocationInfos.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetSampleMask(VkSampleCountFlagBits samples, const Vector<VkSampleMask>& sampleMasks) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetSampleMaskEXT(_currentCommandBuffer, samples, sampleMasks.data());
+            VKCommands::CmdSetSampleMaskEXT(_currentCommandBuffer, samples, sampleMasks.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetFragmentShadingRate(const VkExtent2D& fragmentSize, const Array<VkFragmentShadingRateCombinerOpKHR, 2>& combinerOps) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetFragmentShadingRateKHR(_currentCommandBuffer, &fragmentSize, combinerOps.data());
+            VKCommands::CmdSetFragmentShadingRateKHR(_currentCommandBuffer, &fragmentSize, combinerOps.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetColorWriteEnabled(UInt32 attachmentCount, const Vector<VkBool32>& colorWritesEnables) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetColorWriteEnableEXT(_currentCommandBuffer, attachmentCount, colorWritesEnables.data());
+            VKCommands::CmdSetColorWriteEnableEXT(_currentCommandBuffer, attachmentCount, colorWritesEnables.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetColorWriteMask(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorComponentFlags>& colorWritesMasks) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetColorWriteMaskEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorWritesMasks.data());
+            VKCommands::CmdSetColorWriteMaskEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorWritesMasks.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetColorBlendEnabled(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkBool32>& colorBlendsEnables) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetColorBlendEnableEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEnables.data());
+            VKCommands::CmdSetColorBlendEnableEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEnables.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetColorBlendEquation(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorBlendEquationEXT>& colorBlendsEquations) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetColorBlendEquationEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEquations.data());
+            VKCommands::CmdSetColorBlendEquationEXT(_currentCommandBuffer, firstAttachment, attachmentCount, colorBlendsEquations.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetPolygonMode(VkPolygonMode polygonMode) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetPolygonModeEXT(_currentCommandBuffer, polygonMode);
+            VKCommands::CmdSetPolygonModeEXT(_currentCommandBuffer, polygonMode);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetAlphaToCoverageEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetAlphaToCoverageEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetAlphaToCoverageEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetAlphaToOneEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetAlphaToOneEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetAlphaToOneEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetLogicOpEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetLogicOpEnableEXT(_currentCommandBuffer, enabled);
+            VKCommands::CmdSetLogicOpEnableEXT(_currentCommandBuffer, enabled);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetLogicOp(VkLogicOp logicOp) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetLogicOpEXT(_currentCommandBuffer, logicOp);
+            VKCommands::CmdSetLogicOpEXT(_currentCommandBuffer, logicOp);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetProvokingVertexMode(VkProvokingVertexModeEXT mode) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetProvokingVertexModeEXT(_currentCommandBuffer, mode);
+            VKCommands::CmdSetProvokingVertexModeEXT(_currentCommandBuffer, mode);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SetVertexInput(const Vector<VkVertexInputBindingDescription2EXT>& vertexBindingsDescriptions, const Vector<VkVertexInputAttributeDescription2EXT>& vertexAttributeDescriptions) const KMP_PROFILING(ProfileLevelMinor)
         {
-            VulkanCommands::CmdSetVertexInputEXT(_currentCommandBuffer, UInt32(vertexBindingsDescriptions.size()), vertexBindingsDescriptions.data(), UInt32(vertexAttributeDescriptions.size()), vertexAttributeDescriptions.data());
+            VKCommands::CmdSetVertexInputEXT(_currentCommandBuffer, UInt32(vertexBindingsDescriptions.size()), vertexBindingsDescriptions.data(), UInt32(vertexAttributeDescriptions.size()), vertexAttributeDescriptions.data());
         }}
         //--------------------------------------------------------------------------
 
@@ -485,14 +485,14 @@ namespace Kmplete
                 KMP_LOG_ERROR("cannot bind shader with sid '{}' - not found", shaderSid);
             }
 
-            VulkanCommands::CmdBindShadersEXT(_currentCommandBuffer, UInt32(stages.size()), stages.data(), shaders.data());
+            VKCommands::CmdBindShadersEXT(_currentCommandBuffer, UInt32(stages.size()), stages.data(), shaders.data());
         }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
             VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
-            auto submitInfo = VulkanUtils::InitVkSubmitInfo();
+            auto submitInfo = VKUtils::InitVkSubmitInfo();
             submitInfo.pWaitDstStageMask = &waitStageMask;
             submitInfo.commandBufferCount = 1;
             submitInfo.pCommandBuffers = &_currentCommandBuffer;

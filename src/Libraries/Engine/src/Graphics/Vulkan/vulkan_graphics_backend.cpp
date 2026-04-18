@@ -50,7 +50,7 @@ namespace Kmplete
 
         static VkDebugUtilsMessengerCreateInfoEXT CreateDebugMessengerCreateInfo() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            auto debugMessengerCreateInfo = VulkanUtils::InitVkDebugUtilsMessengerCreateInfo();
+            auto debugMessengerCreateInfo = VKUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
                 VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
@@ -206,9 +206,9 @@ namespace Kmplete
 #endif
 
             const auto result = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
+            VKUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
 
-            if (!VulkanCommands::LoadExtensionFunctions(_instance))
+            if (!VKCommands::LoadExtensionFunctions(_instance))
             {
                 KMP_LOG_CRITICAL("extension functions failed to load");
                 throw std::runtime_error("VulkanGraphicsBackend: extension functions failed to load");
@@ -226,7 +226,7 @@ namespace Kmplete
         void VulkanGraphicsBackend::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
-            VulkanCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
+            VKCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
 #endif
 
             _physicalDevice.reset();
@@ -238,7 +238,7 @@ namespace Kmplete
 
         VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const KMP_PROFILING(ProfileLevelImportant)
         {
-            auto applicationInfo = VulkanUtils::InitVkApplicationInfo();
+            auto applicationInfo = VKUtils::InitVkApplicationInfo();
             applicationInfo.pApplicationName = "Kmplete Application";
             applicationInfo.applicationVersion = VK_MAKE_VERSION(GetKmpleteVersionMajor(), GetKmpleteVersionMinor(), GetKmpleteVersionPatch());
             applicationInfo.pEngineName = "Kmplete engine";
@@ -251,7 +251,7 @@ namespace Kmplete
 
         VkInstanceCreateInfo VulkanGraphicsBackend::_CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const KMP_PROFILING(ProfileLevelImportant)
         {
-            auto instanceCreateInfo = VulkanUtils::InitVkInstanceCreateInfo(applicationInfo);
+            auto instanceCreateInfo = VKUtils::InitVkInstanceCreateInfo(applicationInfo);
             instanceCreateInfo.enabledExtensionCount = UInt32(extensionsNames.size());
             instanceCreateInfo.ppEnabledExtensionNames = extensionsNames.data();
 
@@ -318,8 +318,8 @@ namespace Kmplete
         void VulkanGraphicsBackend::_InitializeDebugMessenger() KMP_PROFILING(ProfileLevelImportant)
         {
             auto debugMessengerCreateInfo = CreateDebugMessengerCreateInfo();
-            const auto result = VulkanCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
+            const auto result = VKCommands::CreateDebugUtilsMessengerEXT(_instance, &debugMessengerCreateInfo, nullptr, &_debugMessenger);
+            VKUtils::CheckResult(result, "VulkanGraphicsBackend: failed to setup debug messenger");
         }}
         //--------------------------------------------------------------------------
 #endif

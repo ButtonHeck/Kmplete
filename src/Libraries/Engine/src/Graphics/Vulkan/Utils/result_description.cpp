@@ -8,7 +8,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanUtils
+        namespace VKUtils
         {
             VkResult CheckResult(VkResult result, const char* message, bool throwException /*= true*/)
             {

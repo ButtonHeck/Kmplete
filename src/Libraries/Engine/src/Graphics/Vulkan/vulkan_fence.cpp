@@ -14,9 +14,9 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            auto fenceCreateInfo = VulkanUtils::InitVkFenceCreateInfo(signaled);
+            auto fenceCreateInfo = VKUtils::InitVkFenceCreateInfo(signaled);
             const auto result = vkCreateFence(_device, &fenceCreateInfo, nullptr, &_fence);
-            VulkanUtils::CheckResult(result, "VulkanFence: failed to create fence");
+            VKUtils::CheckResult(result, "VulkanFence: failed to create fence");
         }
         //--------------------------------------------------------------------------
 
@@ -64,14 +64,14 @@ namespace Kmplete
         void VulkanFence::Wait(UInt64 timeout) const KMP_PROFILING(ProfileLevelMinor)
         {
             const auto result = vkWaitForFences(_device, 1, &_fence, VK_TRUE, timeout);
-            VulkanUtils::CheckResult(result, "VulkanFence: failed to wait for fence");
+            VKUtils::CheckResult(result, "VulkanFence: failed to wait for fence");
         }}
         //--------------------------------------------------------------------------
 
         void VulkanFence::Reset() const KMP_PROFILING(ProfileLevelMinor)
         {
             const auto result = vkResetFences(_device, 1, &_fence);
-            VulkanUtils::CheckResult(result, "VulkanFence: failed to reset fence");
+            VKUtils::CheckResult(result, "VulkanFence: failed to reset fence");
         }}
         //--------------------------------------------------------------------------
 

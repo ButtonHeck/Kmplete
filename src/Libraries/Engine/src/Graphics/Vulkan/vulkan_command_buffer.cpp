@@ -15,12 +15,12 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            auto commandBufferAllocateInfo = VulkanUtils::InitVkCommandBufferAllocateInfo();
+            auto commandBufferAllocateInfo = VKUtils::InitVkCommandBufferAllocateInfo();
             commandBufferAllocateInfo.commandPool = _commandPool;
             commandBufferAllocateInfo.commandBufferCount = 1;
 
             const auto result = vkAllocateCommandBuffers(_device, &commandBufferAllocateInfo, &_commandBuffer);
-            VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to allocate command buffer");
+            VKUtils::CheckResult(result, "VulkanCommandBuffer: failed to allocate command buffer");
         }
         //--------------------------------------------------------------------------
 
@@ -65,25 +65,25 @@ namespace Kmplete
 
         void VulkanCommandBuffer::Begin(VkCommandBufferUsageFlags flags /*= 0*/) const KMP_PROFILING(ProfileLevelMinor)
         {
-            auto commandBufferBeginInfo = VulkanUtils::InitVkCommandBufferBeginInfo();
+            auto commandBufferBeginInfo = VKUtils::InitVkCommandBufferBeginInfo();
             commandBufferBeginInfo.flags |= flags;
 
             const auto result = vkBeginCommandBuffer(_commandBuffer, &commandBufferBeginInfo);
-            VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to begin command buffer");
+            VKUtils::CheckResult(result, "VulkanCommandBuffer: failed to begin command buffer");
         }}
         //--------------------------------------------------------------------------
 
         void VulkanCommandBuffer::End() const KMP_PROFILING(ProfileLevelMinor)
         {
             const auto result = vkEndCommandBuffer(_commandBuffer);
-            VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to end command buffer");
+            VKUtils::CheckResult(result, "VulkanCommandBuffer: failed to end command buffer");
         }}
         //--------------------------------------------------------------------------
 
         void VulkanCommandBuffer::Reset() const KMP_PROFILING(ProfileLevelMinor)
         {
             const auto result = vkResetCommandBuffer(_commandBuffer, 0);
-            VulkanUtils::CheckResult(result, "VulkanCommandBuffer: failed to reset command buffer");
+            VKUtils::CheckResult(result, "VulkanCommandBuffer: failed to reset command buffer");
         }}
         //--------------------------------------------------------------------------
 

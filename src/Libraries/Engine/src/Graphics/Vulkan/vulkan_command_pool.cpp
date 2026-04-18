@@ -4,8 +4,6 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
-#include <stdexcept>
-
 
 namespace Kmplete
 {
@@ -18,12 +16,12 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            auto createPoolInfo = VulkanUtils::InitVkCommandPoolCreateInfo();
+            auto createPoolInfo = VKUtils::InitVkCommandPoolCreateInfo();
             createPoolInfo.queueFamilyIndex = graphicsQueueIndex;
             createPoolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
             const auto result = vkCreateCommandPool(_device, &createPoolInfo, nullptr, &_commandPool);
-            VulkanUtils::CheckResult(result, "VulkanCommandPool: failed to create command pool");
+            VKUtils::CheckResult(result, "VulkanCommandPool: failed to create command pool");
         }
         //--------------------------------------------------------------------------
 

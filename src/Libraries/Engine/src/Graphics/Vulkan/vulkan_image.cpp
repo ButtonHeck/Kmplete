@@ -52,7 +52,7 @@ namespace Kmplete
         void VulkanImage::_CreateImageObject(const VkImageCreateInfo& creationParameters) KMP_PROFILING(ProfileLevelImportant)
         {
             const auto result = vkCreateImage(_device, &creationParameters, nullptr, &_image);
-            VulkanUtils::CheckResult(result, "VulkanImage: failed to create image");
+            VKUtils::CheckResult(result, "VulkanImage: failed to create image");
         }}
         //--------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ namespace Kmplete
             if (result != VK_SUCCESS)
             {
                 vkDestroyImage(_device, _image, nullptr);
-                VulkanUtils::CheckResult(result, "VulkanImage: failed to allocate image memory");
+                VKUtils::CheckResult(result, "VulkanImage: failed to allocate image memory");
             }
 
             result = vkBindImageMemory(_device, _image, _imageMemory, 0);
@@ -72,7 +72,7 @@ namespace Kmplete
             {
                 vkDestroyImage(_device, _image, nullptr);
                 vkFreeMemory(_device, _imageMemory, nullptr);
-                VulkanUtils::CheckResult(result, "VulkanImage: failed to bind image memory");
+                VKUtils::CheckResult(result, "VulkanImage: failed to bind image memory");
             }
 
             _memorySize = imageMemoryContext.allocateInfo.allocationSize;

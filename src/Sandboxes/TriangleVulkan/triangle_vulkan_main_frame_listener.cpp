@@ -247,7 +247,7 @@ namespace Kmplete
 
         auto& pipeline = vulkanDevice.AddGraphicsPipeline("VulkanTriangle_Pipeline"_sid);
         pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VulkanPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
         pipeline.AddDescriptorSetLayout(descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_Matrix"_sid));
         pipeline.AddDescriptorSetLayout(descriptorSetManager.GetDescriptorSetLayout("TriangleVulkan_DS_ColorMultiplier"_sid));
 
@@ -274,7 +274,7 @@ namespace Kmplete
         pipeline.SetDepthComparison(VK_COMPARE_OP_LESS_OR_EQUAL);
         pipeline.SetDepthBoundsTest(false);
         pipeline.SetStencilTest(true);
-        pipeline.SetStencilStates(Graphics::VulkanPresets::StencilOpState_Disabled, Graphics::VulkanPresets::StencilOpState_Disabled);
+        pipeline.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipeline.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_VIEWPORT);
         pipeline.AddDynamicState(VK_DYNAMIC_STATE_SCISSOR);
@@ -371,7 +371,7 @@ namespace Kmplete
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
             initInfo.CheckVkResultFn = nullptr;
             initInfo.UseDynamicRendering = true;
-            initInfo.PipelineRenderingCreateInfo = Graphics::VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
+            initInfo.PipelineRenderingCreateInfo = Graphics::VKUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
@@ -520,7 +520,7 @@ namespace Kmplete
         vulkanRenderer.SetColorWriteEnabled(1, { VK_TRUE });
         vulkanRenderer.SetColorWriteMask(0, 1, { VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT });
         vulkanRenderer.SetColorBlendEnabled(0, 1, { VK_TRUE });
-        vulkanRenderer.SetColorBlendEquation(0, 1, { Graphics::VulkanPresets::ColorBlendEquation_AlphaBlending });
+        vulkanRenderer.SetColorBlendEquation(0, 1, { Graphics::VKPresets::ColorBlendEquation_AlphaBlending });
 
         vulkanRenderer.SetPrimitiveTopology(VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST);
         vulkanRenderer.SetPrimitiveRestartEnabled(false);

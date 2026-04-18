@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanPresets
+        namespace VKPresets
         {
             static constexpr VkPipelineColorBlendAttachmentState ColorBlendAttachmentState_NoBlend{
                 .blendEnable = VK_FALSE,

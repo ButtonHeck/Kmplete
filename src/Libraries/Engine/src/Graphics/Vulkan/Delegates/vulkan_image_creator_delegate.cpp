@@ -22,7 +22,7 @@ namespace Kmplete
         {
             VkImage image;
             const auto result = vkCreateImage(_device, &creationParameters, nullptr, &image);
-            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create image");
+            VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create image");
 
             return image;
         }}
@@ -45,7 +45,7 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
+            auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
             creationParameters.tiling = tiling;
 
             return CreateVulkanImage(creationParameters, memoryProperties);
@@ -75,7 +75,7 @@ namespace Kmplete
                 .depth = 1
             };
 
-            auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
+            auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
             creationParameters.tiling = tiling;
 
             return CreateVulkanImagePtr(creationParameters, memoryProperties);
@@ -97,7 +97,7 @@ namespace Kmplete
 
         VkImageView VulkanImageCreatorDelegate::CreateVkImageView(VkImage image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const
         {
-            auto creationParameters = VulkanUtils::InitVkImageViewCreateInfo();
+            auto creationParameters = VKUtils::InitVkImageViewCreateInfo();
             creationParameters.image = image;
             creationParameters.viewType = viewType;
             creationParameters.format = format;
@@ -111,7 +111,7 @@ namespace Kmplete
         {
             VkImageView imageView;
             const auto result = vkCreateImageView(_device, &creationParameters, nullptr, &imageView);
-            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create texture image view");
+            VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create texture image view");
 
             return imageView;
         }}
@@ -122,7 +122,7 @@ namespace Kmplete
         {
             VkSampler sampler;
             const auto result = vkCreateSampler(_device, &creationParameters, nullptr, &sampler);
-            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
+            VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
 
             return sampler;
         }}
@@ -133,12 +133,12 @@ namespace Kmplete
             auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, {VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize()});
 
             auto result = buffer.Map();
-            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to map texture buffer");
+            VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to map texture buffer");
 
             buffer.CopyToMappedMemory(0, image.GetPixels(), image.GetDataSize());
 
             result = buffer.Flush();
-            VulkanUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to flush texture buffer");
+            VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to flush texture buffer");
 
             buffer.Unmap();
 

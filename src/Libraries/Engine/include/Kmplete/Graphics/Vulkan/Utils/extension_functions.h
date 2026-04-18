@@ -10,7 +10,7 @@ namespace Kmplete
     namespace Graphics
     {
         //TODO: comments
-        struct VulkanCommands
+        struct VKCommands
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             static PFN_vkCreateDebugUtilsMessengerEXT CreateDebugUtilsMessengerEXT;

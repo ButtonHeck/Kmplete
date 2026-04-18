@@ -37,16 +37,16 @@ namespace Kmplete
             , _renderingCreateInfo()
             , _renderingColorAttachmentsFormats()
         {
-            _layoutCreateInfo = VulkanUtils::InitVkPipelineLayoutCreateInfo();
-            _inputAssemblyCreateInfo = VulkanUtils::InitVkPipelineInputAssemblyStateCreateInfo();
-            _rasterizationStateCreateInfo = VulkanUtils::InitVkPipelineRasterizationStateCreateInfo();
-            _colorBlendStateCreateInfo = VulkanUtils::InitVkPipelineColorBlendStateCreateInfo();
-            _viewportStateCreateInfo = VulkanUtils::InitVkPipelineViewportStateCreateInfo();
-            _dynamicStateCreateInfo = VulkanUtils::InitVkPipelineDynamicStateCreateInfo();
-            _depthStencilStateCreateInfo = VulkanUtils::InitVkPipelineDepthStencilStateCreateInfo();
-            _multisamplingStateCreateInfo = VulkanUtils::InitVkPipelineMultisampleStateCreateInfo();
-            _vertexInputStateCreateInfo = VulkanUtils::InitVkPipelineVertexInputStateCreateInfo();
-            _renderingCreateInfo = VulkanUtils::InitVkPipelineRenderingCreateInfoKHR();
+            _layoutCreateInfo = VKUtils::InitVkPipelineLayoutCreateInfo();
+            _inputAssemblyCreateInfo = VKUtils::InitVkPipelineInputAssemblyStateCreateInfo();
+            _rasterizationStateCreateInfo = VKUtils::InitVkPipelineRasterizationStateCreateInfo();
+            _colorBlendStateCreateInfo = VKUtils::InitVkPipelineColorBlendStateCreateInfo();
+            _viewportStateCreateInfo = VKUtils::InitVkPipelineViewportStateCreateInfo();
+            _dynamicStateCreateInfo = VKUtils::InitVkPipelineDynamicStateCreateInfo();
+            _depthStencilStateCreateInfo = VKUtils::InitVkPipelineDepthStencilStateCreateInfo();
+            _multisamplingStateCreateInfo = VKUtils::InitVkPipelineMultisampleStateCreateInfo();
+            _vertexInputStateCreateInfo = VKUtils::InitVkPipelineVertexInputStateCreateInfo();
+            _renderingCreateInfo = VKUtils::InitVkPipelineRenderingCreateInfoKHR();
 
             _SetDefaults();
         }
@@ -75,7 +75,7 @@ namespace Kmplete
             _layoutCreateInfo.pSetLayouts = _descriptorSetLayouts.data();
 
             auto result = vkCreatePipelineLayout(_device, &_layoutCreateInfo, nullptr, &_pipelineLayout);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline layout", "throw exception"_false);
+            VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline layout", "throw exception"_false);
             if (result != VK_SUCCESS)
             {
                 return false;
@@ -95,7 +95,7 @@ namespace Kmplete
             _vertexInputStateCreateInfo.vertexAttributeDescriptionCount = UInt32(_vertexAttributesDescriptions.size());
             _vertexInputStateCreateInfo.pVertexAttributeDescriptions = _vertexAttributesDescriptions.data();
 
-            auto pipelineCI = Graphics::VulkanUtils::InitVkGraphicsPipelineCreateInfo();
+            auto pipelineCI = Graphics::VKUtils::InitVkGraphicsPipelineCreateInfo();
             pipelineCI.layout = _pipelineLayout;
             pipelineCI.pInputAssemblyState = &_inputAssemblyCreateInfo;
             pipelineCI.pRasterizationState = &_rasterizationStateCreateInfo;
@@ -110,7 +110,7 @@ namespace Kmplete
             pipelineCI.pNext = &_renderingCreateInfo;
 
             result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline", "throw exception"_false);
+            VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline", "throw exception"_false);
             
             return result == VK_SUCCESS;
         }}

@@ -18,7 +18,7 @@ namespace Kmplete
             MemoryContext context{};
             vkGetBufferMemoryRequirements(device, buffer, &context.requirements);
 
-            context.allocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
+            context.allocateInfo = VKUtils::InitVkMemoryAllocateInfo();
             context.allocateInfo.allocationSize = context.requirements.size;
             context.allocateInfo.memoryTypeIndex = FindMemoryType(context.requirements.memoryTypeBits, properties);
 
@@ -31,7 +31,7 @@ namespace Kmplete
             MemoryContext context{};
             vkGetImageMemoryRequirements(device, image, &context.requirements);
 
-            context.allocateInfo = VulkanUtils::InitVkMemoryAllocateInfo();
+            context.allocateInfo = VKUtils::InitVkMemoryAllocateInfo();
             context.allocateInfo.allocationSize = context.requirements.size;
             context.allocateInfo.memoryTypeIndex = FindMemoryType(context.requirements.memoryTypeBits, properties);
 

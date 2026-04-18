@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanUtils
+        namespace VKUtils
         {
             KMP_API VkResult CheckResult(VkResult result, const char* message, bool throwException = true);
             KMP_NODISCARD KMP_API String VkResultToString(VkResult result) noexcept;

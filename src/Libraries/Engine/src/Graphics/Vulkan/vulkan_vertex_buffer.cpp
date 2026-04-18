@@ -90,7 +90,7 @@ namespace Kmplete
                 const auto binding = UInt32(baseBinding + i);
                 const auto& layout = _layouts[i];
 
-                auto inputBindingDescription = VulkanUtils::InitVkVertexInputBindingDescription2EXT();
+                auto inputBindingDescription = VKUtils::InitVkVertexInputBindingDescription2EXT();
                 inputBindingDescription.stride = layout.GetStride();
                 inputBindingDescription.binding = binding;
                 inputBindingDescription.inputRate = layout.IsInstanced() ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX;
@@ -100,7 +100,7 @@ namespace Kmplete
                 const auto& elements = layout.GetElements();
                 for (const auto& element : elements)
                 {
-                    auto attributeDescription = VulkanUtils::InitVkVertexInputAttributeDescription2EXT();
+                    auto attributeDescription = VKUtils::InitVkVertexInputAttributeDescription2EXT();
                     attributeDescription.location = element.location;
                     attributeDescription.binding = binding;
                     attributeDescription.format = ShaderDataTypeToVkFormat(element.type);

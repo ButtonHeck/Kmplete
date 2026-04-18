@@ -156,7 +156,7 @@ namespace Kmplete
         {
             for (const auto& device : physicalDevices)
             {
-                auto deviceCheck = VulkanUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
+                auto deviceCheck = VKUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
                 auto deviceIsSuitable = deviceCheck.first;
                 if (deviceIsSuitable)
                 {
@@ -192,7 +192,7 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_UpdateSurfaceInfo() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            auto surfaceAndPresentModeProperties = VulkanUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
+            auto surfaceAndPresentModeProperties = VKUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
             _vulkanContext.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
             _vulkanContext.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
@@ -201,13 +201,13 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_QueryGPUInfo() KMP_PROFILING(ProfileLevelImportant)
         {
-            auto propertiesVersion12 = VulkanUtils::InitVkPhysicalDeviceVulkan12Properties();
+            auto propertiesVersion12 = VKUtils::InitVkPhysicalDeviceVulkan12Properties();
             propertiesVersion12.pNext = nullptr;
 
-            auto propertiesVersion11 = VulkanUtils::InitVkPhysicalDeviceVulkan11Properties();
+            auto propertiesVersion11 = VKUtils::InitVkPhysicalDeviceVulkan11Properties();
             propertiesVersion11.pNext = &propertiesVersion12;
 
-            auto properties2 = VulkanUtils::InitVkPhysicalDeviceProperties2();
+            auto properties2 = VKUtils::InitVkPhysicalDeviceProperties2();
             properties2.pNext = &propertiesVersion11;
             vkGetPhysicalDeviceProperties2(_physicalDevice, &properties2);
 

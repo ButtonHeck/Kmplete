@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanUtils
+        namespace VKUtils
         {
             SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
             {

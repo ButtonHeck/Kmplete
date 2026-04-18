@@ -5,7 +5,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanUtils
+        namespace VKUtils
         {
             VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo()
             {

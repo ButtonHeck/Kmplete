@@ -39,7 +39,7 @@ namespace Kmplete
                 throw std::runtime_error("VulkanShaderObject: shader binary size is not multiple of 4");
             }
 
-            auto shaderCreateInfo = VulkanUtils::InitVkShaderCreateInfoEXT();
+            auto shaderCreateInfo = VKUtils::InitVkShaderCreateInfoEXT();
             shaderCreateInfo.stage = stage;
             shaderCreateInfo.nextStage = nextStage;
             shaderCreateInfo.flags = linked ? VK_SHADER_CREATE_LINK_STAGE_BIT_EXT : 0;
@@ -50,8 +50,8 @@ namespace Kmplete
             shaderCreateInfo.codeSize = shaderBinary.size();
             shaderCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
 
-            auto result = VulkanCommands::CreateShadersEXT(_device, 1, &shaderCreateInfo, nullptr, &_shaderObject);
-            VulkanUtils::CheckResult(result, "VulkanShaderObject: failed to create shader object");
+            auto result = VKCommands::CreateShadersEXT(_device, 1, &shaderCreateInfo, nullptr, &_shaderObject);
+            VKUtils::CheckResult(result, "VulkanShaderObject: failed to create shader object");
         }
         //--------------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ namespace Kmplete
         {
             if (_device != VK_NULL_HANDLE && _shaderObject != VK_NULL_HANDLE)
             {
-                VulkanCommands::DestroyShaderEXT(_device, _shaderObject, nullptr);
+                VKCommands::DestroyShaderEXT(_device, _shaderObject, nullptr);
             }
         }}
         //--------------------------------------------------------------------------

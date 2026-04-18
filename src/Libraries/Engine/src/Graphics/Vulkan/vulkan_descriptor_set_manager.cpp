@@ -46,12 +46,12 @@ namespace Kmplete
 
             try
             {
-                auto descriptorSetLayoutCreateInfo = Graphics::VulkanUtils::InitVkDescriptorSetLayoutCreateInfo();
+                auto descriptorSetLayoutCreateInfo = Graphics::VKUtils::InitVkDescriptorSetLayoutCreateInfo();
                 descriptorSetLayoutCreateInfo.bindingCount = UInt32(bindings.size());
                 descriptorSetLayoutCreateInfo.pBindings = bindings.empty() ? nullptr : bindings.data();
                 VkDescriptorSetLayout layout = nullptr;
                 const auto result = vkCreateDescriptorSetLayout(_device, &descriptorSetLayoutCreateInfo, nullptr, &layout);
-                VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor set layout");
+                VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor set layout");
 
                 const auto [iterator, hasEmplaced] = _descriptorSetLayouts.emplace(layoutSid, layout);
                 if (!hasEmplaced)
@@ -352,13 +352,13 @@ namespace Kmplete
                 { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 100 },
                 { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 100 } };
 
-            auto poolInfo = VulkanUtils::InitVkDescriptorPoolCreateInfo();
+            auto poolInfo = VKUtils::InitVkDescriptorPoolCreateInfo();
             poolInfo.maxSets = 100;
             poolInfo.poolSizeCount = UInt32(std::size(poolSizes));
             poolInfo.pPoolSizes = poolSizes;
 
             const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
-            VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor pool");
+            VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor pool");
         }}
         //--------------------------------------------------------------------------
 
@@ -376,7 +376,7 @@ namespace Kmplete
 
         bool VulkanDescriptorSetManager::_AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, DescriptorSetStorage& storage) const KMP_PROFILING(ProfileLevelImportant)
         {
-            auto descriptorSetAllocateInfo = VulkanUtils::InitVkDescriptorSetAllocateInfo();
+            auto descriptorSetAllocateInfo = VKUtils::InitVkDescriptorSetAllocateInfo();
             descriptorSetAllocateInfo.descriptorPool = _descriptorPool;
             descriptorSetAllocateInfo.descriptorSetCount = setsCount;
             descriptorSetAllocateInfo.pSetLayouts = layouts.data();
@@ -385,7 +385,7 @@ namespace Kmplete
             const auto result = vkAllocateDescriptorSets(_device, &descriptorSetAllocateInfo, newDesriptorSets.data());
             if (result != VK_SUCCESS)
             {
-                VulkanUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to allocate descriptor sets", "throw exception"_false);
+                VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to allocate descriptor sets", "throw exception"_false);
                 return false;
             }
 
@@ -424,7 +424,7 @@ namespace Kmplete
 
         VkWriteDescriptorSet VulkanDescriptorSetManager::_GetWriteDescriptorSetTemplate(VkDescriptorSet descriptorSet, VkDescriptorType type, UInt32 binding) const noexcept
         {
-            auto writeDescriptorSet = VulkanUtils::InitVkWriteDescriptorSet();
+            auto writeDescriptorSet = VKUtils::InitVkWriteDescriptorSet();
             writeDescriptorSet.dstSet = descriptorSet;
             writeDescriptorSet.dstBinding = binding;
             writeDescriptorSet.descriptorCount = 1;

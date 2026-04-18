@@ -20,13 +20,13 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            auto bufferCreateInfo = VulkanUtils::InitVkBufferCreateInfo(_size, _usageFlags);
+            auto bufferCreateInfo = VKUtils::InitVkBufferCreateInfo(_size, _usageFlags);
 
             auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
-            VulkanUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
+            VKUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
 
             auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, parameters.memoryPropertyFlags);
-            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VulkanUtils::InitVkMemoryAllocateFlagsInfoKHR();
+            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VKUtils::InitVkMemoryAllocateFlagsInfoKHR();
             if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
             {
                 allocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
@@ -34,10 +34,10 @@ namespace Kmplete
             }
 
             result = vkAllocateMemory(_device, &bufferMemoryContext.allocateInfo, nullptr, &_memory);
-            VulkanUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
+            VKUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
 
             result = Bind();
-            VulkanUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
+            VKUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
         }
         //--------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
+            auto mappedRange = VKUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
             return vkFlushMappedMemoryRanges(_device, 1, &mappedRange);
@@ -149,7 +149,7 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
-            auto mappedRange = VulkanUtils::InitVkMappedMemoryRange(size, offset);
+            auto mappedRange = VKUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
             return vkInvalidateMappedMemoryRanges(_device, 1, &mappedRange);

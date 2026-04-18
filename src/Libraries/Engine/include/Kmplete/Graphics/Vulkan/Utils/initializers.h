@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        namespace VulkanUtils
+        namespace VKUtils
         {
             KMP_NODISCARD KMP_API VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo();
             KMP_NODISCARD KMP_API VkApplicationInfo InitVkApplicationInfo();

@@ -44,7 +44,7 @@ namespace Kmplete
 
         void VulkanTexture::_InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
         {
-            const auto creationParameters = VulkanPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
+            const auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SAMPLE_COUNT_1_BIT, VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT);
 
             _image.reset(imageCreatorDelegate.CreateVulkanImagePtr(creationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
         }}
@@ -52,7 +52,7 @@ namespace Kmplete
 
         void VulkanTexture::_TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer) KMP_PROFILING(ProfileLevelImportant)
         {
-            const VulkanUtils::MemoryBarrierParameters barrierParameters = {
+            const VKUtils::MemoryBarrierParameters barrierParameters = {
                 .cmdbuffer = commandBuffer,
                 .image = _image->GetVkImage(),
                 .srcAccessMask = VK_ACCESS_NONE,
@@ -63,7 +63,7 @@ namespace Kmplete
                 .dstStageMask = VK_PIPELINE_STAGE_TRANSFER_BIT,
                 .subresourceRange = VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, mipLevels, 0, 1 }
             };
-            VulkanUtils::InsertImageMemoryBarrier(barrierParameters);
+            VKUtils::InsertImageMemoryBarrier(barrierParameters);
         }}
         //--------------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ namespace Kmplete
         {
             auto vulkanImage = _image->GetVkImage();
 
-            auto imageBarrier = VulkanUtils::InitVkImageMemoryBarrier();
+            auto imageBarrier = VKUtils::InitVkImageMemoryBarrier();
             imageBarrier.image = vulkanImage;
             imageBarrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
             imageBarrier.subresourceRange.baseArrayLayer = 0;
@@ -155,7 +155,7 @@ namespace Kmplete
 
         void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
         {
-            auto imageViewParameters = VulkanUtils::InitVkImageViewCreateInfo();
+            auto imageViewParameters = VKUtils::InitVkImageViewCreateInfo();
             imageViewParameters.image = _image->GetVkImage();
             imageViewParameters.viewType = VK_IMAGE_VIEW_TYPE_2D;
             imageViewParameters.format = _image->GetVkFormat();

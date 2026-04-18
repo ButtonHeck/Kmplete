@@ -37,12 +37,12 @@ namespace Kmplete
                 throw std::runtime_error("VulkanShaderModule: shader binary size is not multiple of 4");
             }
 
-            auto shaderModuleCreateInfo = VulkanUtils::InitVkShaderModuleCreateInfo();
+            auto shaderModuleCreateInfo = VKUtils::InitVkShaderModuleCreateInfo();
             shaderModuleCreateInfo.codeSize = shaderBinary.size();
             shaderModuleCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
 
             auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
-            VulkanUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
+            VKUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
         }
         //--------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ namespace Kmplete
 
         VkPipelineShaderStageCreateInfo VulkanShaderModule::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
-            auto shaderStageCreateInfo = VulkanUtils::InitVkPipelineShaderStageCreateInfo(stage);
+            auto shaderStageCreateInfo = VKUtils::InitVkPipelineShaderStageCreateInfo(stage);
             shaderStageCreateInfo.module = _shaderModule;
             shaderStageCreateInfo.pName = entryPointName;
 

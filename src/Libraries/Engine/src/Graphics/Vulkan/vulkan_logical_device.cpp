@@ -218,26 +218,26 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
-            auto shaderObjectFeatures = VulkanUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
+            auto shaderObjectFeatures = VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
             shaderObjectFeatures.shaderObject = VK_TRUE;
 
-            auto vertexInputDynamicStateFeatures = VulkanUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
+            auto vertexInputDynamicStateFeatures = VKUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
             vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
             vertexInputDynamicStateFeatures.pNext = &shaderObjectFeatures;
 
-            auto dynamicStateFeatures2 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
+            auto dynamicStateFeatures2 = VKUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
             dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
             dynamicStateFeatures2.pNext = &vertexInputDynamicStateFeatures;
 
-            auto colorWriteEnableFeatures = VulkanUtils::InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
+            auto colorWriteEnableFeatures = VKUtils::InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
             colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;
             colorWriteEnableFeatures.pNext = &dynamicStateFeatures2;
 
-            auto depthClipEnableFeatures = VulkanUtils::InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
+            auto depthClipEnableFeatures = VKUtils::InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
             depthClipEnableFeatures.depthClipEnable = VK_TRUE;
             depthClipEnableFeatures.pNext = &colorWriteEnableFeatures;
 
-            auto dynamicStateFeatures3 = VulkanUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
+            auto dynamicStateFeatures3 = VKUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
             dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
             dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
@@ -264,18 +264,18 @@ namespace Kmplete
             features.alphaToOne = VK_TRUE;
             features.logicOp = VK_TRUE;
 
-            auto features13 = VulkanUtils::InitVkPhysicalDeviceVulkan13Features();
+            auto features13 = VKUtils::InitVkPhysicalDeviceVulkan13Features();
             features13.dynamicRendering = VK_TRUE;
             features13.synchronization2 = VK_TRUE;
             features13.pNext = &dynamicStateFeatures3;
 
-            auto features2 = VulkanUtils::InitVkPhysicalDeviceFeatures2();
+            auto features2 = VKUtils::InitVkPhysicalDeviceFeatures2();
             features2.features = features;
             features2.pNext = &features13;
 
             const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
 
-            auto deviceCreateInfo = VulkanUtils::InitVkDeviceCreateInfo();
+            auto deviceCreateInfo = VKUtils::InitVkDeviceCreateInfo();
             deviceCreateInfo.queueCreateInfoCount = UInt32(queueCreateInfos.size());
             deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
             deviceCreateInfo.pEnabledFeatures = nullptr;
@@ -284,7 +284,7 @@ namespace Kmplete
             deviceCreateInfo.pNext = &features2;
 
             const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
+            VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
         }}
         //--------------------------------------------------------------------------
 
@@ -323,15 +323,15 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateSynchronizationObjects() KMP_PROFILING(ProfileLevelImportant)
         {
-            auto semaphoreCreateInfo = VulkanUtils::InitVkSemaphoreCreateInfo();
+            auto semaphoreCreateInfo = VKUtils::InitVkSemaphoreCreateInfo();
 
             for (UInt32 i = 0; i < NumConcurrentFrames; i++)
             {
                 auto result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_presentCompleteSemaphores[i]);
-                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create presentation complete semaphore");
+                VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create presentation complete semaphore");
 
                 result = vkCreateSemaphore(_device, &semaphoreCreateInfo, nullptr, &_renderCompleteSemaphores[i]);
-                VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
+                VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create rendering complete semaphore");
 
                 _waitFences.emplace_back(_device, "signaled"_true);
             }
@@ -365,10 +365,10 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreatePipelineCache() KMP_PROFILING(ProfileLevelImportant)
         {
-            auto pipelineCacheCreateInfo = VulkanUtils::InitVkPipelineCacheCreateInfo();
+            auto pipelineCacheCreateInfo = VKUtils::InitVkPipelineCacheCreateInfo();
 
             const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
-            VulkanUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
+            VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
         }}
         //--------------------------------------------------------------------------
 
@@ -418,14 +418,14 @@ namespace Kmplete
         {
             _samplersStorage.reset(new VulkanSamplersStorage(_device, *_imageCreatorDelegate.get()));
 
-            auto sampler = _samplersStorage->AddSampler(SamplerDefaultNearestSid, VulkanPresets::SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy);
+            auto sampler = _samplersStorage->AddSampler(SamplerDefaultNearestSid, VKPresets::SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy);
             if (sampler == VK_NULL_HANDLE)
             {
                 KMP_LOG_CRITICAL("failed to create default nearest filtering sampler");
                 throw std::runtime_error("failed to create default nearest filtering sampler");
             }
 
-            sampler = _samplersStorage->AddSampler(SamplerDefaultLinearSid, VulkanPresets::SamplerCreateInfo_Linear_MipLinear_Repeat_NoAnisotropy);
+            sampler = _samplersStorage->AddSampler(SamplerDefaultLinearSid, VKPresets::SamplerCreateInfo_Linear_MipLinear_Repeat_NoAnisotropy);
             if (sampler == VK_NULL_HANDLE)
             {
                 KMP_LOG_CRITICAL("failed to create default linear filtering sampler");
@@ -463,7 +463,7 @@ namespace Kmplete
 
             for (auto queueFamilyIndex : queueFamiliesIndicesSet)
             {
-                auto queueCreateInfo = VulkanUtils::InitVkDeviceQueueCreateInfo();
+                auto queueCreateInfo = VKUtils::InitVkDeviceQueueCreateInfo();
                 queueCreateInfo.queueFamilyIndex = queueFamilyIndex;
                 queueCreateInfo.queueCount = 1;
                 queueCreateInfo.pQueuePriorities = &queuePriority;

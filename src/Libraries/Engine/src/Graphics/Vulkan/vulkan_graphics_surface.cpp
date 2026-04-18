@@ -22,7 +22,7 @@ namespace Kmplete
 
             GLFWwindow* windowImpl = reinterpret_cast<GLFWwindow*>(window.GetImplPointer().get());
             const auto result = glfwCreateWindowSurface(_instance, windowImpl, nullptr, &_surface);
-            VulkanUtils::CheckResult(result, "VulkanGraphicsSurface: failed to create Vulkan surface");
+            VKUtils::CheckResult(result, "VulkanGraphicsSurface: failed to create Vulkan surface");
         }
         //--------------------------------------------------------------------------
 
