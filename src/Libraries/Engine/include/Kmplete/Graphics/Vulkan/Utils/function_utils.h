@@ -45,16 +45,6 @@ namespace Kmplete
 
 
             // TODO: comments
-            struct ShaderCreateInfo
-            {
-                Filepath filepath;
-                VkShaderStageFlagBits stage;
-                const char* entryPointName;
-            };
-            //--------------------------------------------------------------------------
-
-
-            // TODO: comments
             struct MemoryBarrierParameters
             {
                 VkCommandBuffer cmdbuffer;
