@@ -235,8 +235,8 @@ namespace Kmplete
         auto& pipeline = vulkanDevice.AddGraphicsPipeline(Pipeline_SID);
         pipeline.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipeline.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipeline.AddDescriptorSetLayout(descriptorSetManager.GetDescriptorSetLayout(MatricesAndTextureDSLayout_SID));
-        pipeline.AddDescriptorSetLayout(descriptorSetManager.GetDescriptorSetLayout(SamplerDSLayout_SID));
+        pipeline.AddDescriptorSetLayout(matrixAndTextureLayout);
+        pipeline.AddDescriptorSetLayout(samplerLayout);
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.frag.spv");
