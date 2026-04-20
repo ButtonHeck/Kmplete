@@ -244,6 +244,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback)
+        {
+            return MapInputToCallback(InputCodeWithCondition{ .code = code, .condition = NoCondition }, actionId, callback);
+        }
+        //--------------------------------------------------------------------------
+
         bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
@@ -254,6 +260,12 @@ namespace Kmplete
 
             return MapActionToCallback(actionId, callback);
         }}
+        //--------------------------------------------------------------------------
+
+        bool InputManager::MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback)
+        {
+            return MapInputToCallback(InputCodeWithCondition{ .code = code, .condition = NoCondition }, actionId, taggedCallback);
+        }
         //--------------------------------------------------------------------------
 
         bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback) KMP_PROFILING(ProfileLevelImportantVerbose)

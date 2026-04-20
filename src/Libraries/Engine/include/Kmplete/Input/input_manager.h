@@ -52,7 +52,9 @@ namespace Kmplete
             KMP_API bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
             KMP_API bool RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
 
+            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
             KMP_API bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback);
+            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
             KMP_API bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
 
             KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
