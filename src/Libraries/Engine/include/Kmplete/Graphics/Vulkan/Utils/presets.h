@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 
 #include <vulkan/vulkan.h>
 
@@ -10,45 +11,48 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         namespace VKPresets
         {
             static constexpr VkPipelineColorBlendAttachmentState ColorBlendAttachmentState_NoBlend{
                 .blendEnable = VK_FALSE,
-                .colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT
+                .colorWriteMask = VK_Color_RGBA
             };
             //--------------------------------------------------------------------------
 
             static constexpr VkPipelineColorBlendAttachmentState ColorBlendAttachmentState_AlphaBlending{
                 .blendEnable = VK_TRUE,
-                .srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
-                .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                .colorBlendOp = VK_BLEND_OP_ADD,
-                .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                .dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
-                .alphaBlendOp = VK_BLEND_OP_ADD,
-                .colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT
+                .srcColorBlendFactor = VK_BlendFactor_SrcAlpha,
+                .dstColorBlendFactor = VK_BlendFactor_OneMinusSrcAlpha,
+                .colorBlendOp = VK_Blend_Add,
+                .srcAlphaBlendFactor = VK_BlendFactor_One,
+                .dstAlphaBlendFactor = VK_BlendFactor_Zero,
+                .alphaBlendOp = VK_Blend_Add,
+                .colorWriteMask = VK_Color_RGBA
             };
             //--------------------------------------------------------------------------
 
             static constexpr VkColorBlendEquationEXT ColorBlendEquation_AlphaBlending{
-                .srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA,
-                .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                .colorBlendOp = VK_BLEND_OP_ADD,
-                .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                .dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
-                .alphaBlendOp = VK_BLEND_OP_ADD,
+                .srcColorBlendFactor = VK_BlendFactor_SrcAlpha,
+                .dstColorBlendFactor = VK_BlendFactor_OneMinusSrcAlpha,
+                .colorBlendOp = VK_Blend_Add,
+                .srcAlphaBlendFactor = VK_BlendFactor_One,
+                .dstAlphaBlendFactor = VK_BlendFactor_Zero,
+                .alphaBlendOp = VK_Blend_Add,
             };
             //--------------------------------------------------------------------------
 
             static constexpr VkStencilOpState StencilOpState_Disabled{
-                .failOp = VK_STENCIL_OP_KEEP,
-                .passOp = VK_STENCIL_OP_KEEP,
-                .compareOp = VK_COMPARE_OP_ALWAYS
+                .failOp = VK_Stencil_Keep,
+                .passOp = VK_Stencil_Keep,
+                .compareOp = VK_Compare_Always
             };
             //--------------------------------------------------------------------------
 
             static constexpr VkImageSubresourceRange ImageSubresourceRange_Color_Layer1_Level1{
-                .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                .aspectMask = VK_ImageAspect_Color,
                 .baseMipLevel = 0,
                 .levelCount = 1,
                 .baseArrayLayer = 0,
@@ -57,7 +61,7 @@ namespace Kmplete
             //--------------------------------------------------------------------------
 
             static constexpr VkImageSubresourceRange ImageSubresourceRange_DepthStencil_Layer1_Level1{ 
-                .aspectMask = VK_IMAGE_ASPECT_DEPTH_BIT | VK_IMAGE_ASPECT_STENCIL_BIT,
+                .aspectMask = VK_ImageAspect_DepthStencil,
                 .baseMipLevel = 0,
                 .levelCount = 1,
                 .baseArrayLayer = 0,
@@ -67,11 +71,11 @@ namespace Kmplete
 
             static constexpr VkImageCreateInfo ImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-                .imageType = VK_IMAGE_TYPE_2D,
+                .imageType = VK_Image_2D,
                 .arrayLayers = 1,
-                .tiling = VK_IMAGE_TILING_OPTIMAL,
-                .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-                .initialLayout = VK_IMAGE_LAYOUT_UNDEFINED
+                .tiling = VK_ImageTiling_Optimal,
+                .sharingMode = VK_Sharing_Exclusive,
+                .initialLayout = VK_ImageLayout_Undefined
             };
             //--------------------------------------------------------------------------
 
@@ -89,30 +93,30 @@ namespace Kmplete
 
             static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_Color_ClearStore{
                 .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
-                .imageLayout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL,
-                .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                .imageLayout = VK_ImageLayout_ColorAttachmentOptimal,
+                .loadOp = VK_AttachmentLoad_Clear,
+                .storeOp = VK_AttachmentStore_Store,
                 .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f }}
             };
             //--------------------------------------------------------------------------
 
             static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_DepthStencil_ClearStore{
                 .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
-                .imageLayout = VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL,
-                .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
-                .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
+                .imageLayout = VK_ImageLayout_DepthStencilAttachmentOptimal,
+                .loadOp = VK_AttachmentLoad_Clear,
+                .storeOp = VK_AttachmentStore_Store,
                 .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 }}
             };
             //--------------------------------------------------------------------------
 
             static constexpr VkSamplerCreateInfo SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy{
                 .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                .magFilter = VK_FILTER_NEAREST,
-                .minFilter = VK_FILTER_NEAREST,
-                .mipmapMode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
-                .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .magFilter = VK_Filter_Nearest,
+                .minFilter = VK_Filter_Nearest,
+                .mipmapMode = VK_SamplerMipmap_Nearest,
+                .addressModeU = VK_SamplerAddress_Repeat,
+                .addressModeV = VK_SamplerAddress_Repeat,
+                .addressModeW = VK_SamplerAddress_Repeat,
                 .anisotropyEnable = VK_FALSE,
                 .minLod = 0.0f,
                 .maxLod = VK_LOD_CLAMP_NONE
@@ -121,12 +125,12 @@ namespace Kmplete
 
             static constexpr VkSamplerCreateInfo SamplerCreateInfo_Linear_MipLinear_Repeat_NoAnisotropy{
                 .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                .magFilter = VK_FILTER_LINEAR,
-                .minFilter = VK_FILTER_LINEAR,
-                .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-                .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                .magFilter = VK_Filter_Linear,
+                .minFilter = VK_Filter_Linear,
+                .mipmapMode = VK_SamplerMipmap_Linear,
+                .addressModeU = VK_SamplerAddress_Repeat,
+                .addressModeV = VK_SamplerAddress_Repeat,
+                .addressModeW = VK_SamplerAddress_Repeat,
                 .anisotropyEnable = VK_FALSE,
                 .minLod = 0.0f,
                 .maxLod = VK_LOD_CLAMP_NONE

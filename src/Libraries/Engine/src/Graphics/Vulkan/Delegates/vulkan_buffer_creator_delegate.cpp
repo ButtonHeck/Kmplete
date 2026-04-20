@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_buffer_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -7,6 +8,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanBufferCreatorDelegate::VulkanBufferCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
             : _memoryTypeDelegate(memoryTypeDelegate)
             , _device(device)
@@ -30,7 +34,7 @@ namespace Kmplete
         VulkanVertexBuffer VulkanBufferCreatorDelegate::CreateVertexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
-                .usageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | parameters.usageFlags,
+                .usageFlags = VK_BufferUsage_Vertex | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
@@ -40,7 +44,7 @@ namespace Kmplete
         Nullable<VulkanVertexBuffer*> VulkanBufferCreatorDelegate::CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return new VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
-                .usageFlags = VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | parameters.usageFlags,
+                .usageFlags = VK_BufferUsage_Vertex | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
@@ -51,7 +55,7 @@ namespace Kmplete
         VulkanBuffer VulkanBufferCreatorDelegate::CreateIndexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
-                .usageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | parameters.usageFlags,
+                .usageFlags = VK_BufferUsage_Index | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
@@ -61,7 +65,7 @@ namespace Kmplete
         Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
-                .usageFlags = VK_BUFFER_USAGE_INDEX_BUFFER_BIT | parameters.usageFlags,
+                .usageFlags = VK_BufferUsage_Index | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
@@ -72,7 +76,7 @@ namespace Kmplete
         VulkanBuffer VulkanBufferCreatorDelegate::CreateUniformBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
-                .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
+                .usageFlags = VK_BufferUsage_Uniform | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });
@@ -82,7 +86,7 @@ namespace Kmplete
         Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
-                .usageFlags = VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT | parameters.usageFlags,
+                .usageFlags = VK_BufferUsage_Uniform | parameters.usageFlags,
                 .memoryPropertyFlags = parameters.memoryPropertyFlags,
                 .size = parameters.size
             });

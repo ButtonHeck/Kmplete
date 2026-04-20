@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Core/assertion.h"
@@ -14,6 +15,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkDevice device, StringID sid)
             : _device(device)
             , _sid(sid)
@@ -256,11 +260,11 @@ namespace Kmplete
                 _dynamicStates.push_back(dynamicState);
             }
 
-            if (dynamicState == VK_DYNAMIC_STATE_VIEWPORT_WITH_COUNT)
+            if (dynamicState == VK_Dynamic_ViewportWithCount)
             {
                 _viewportStateCreateInfo.viewportCount = 0;
             }
-            else if (dynamicState == VK_DYNAMIC_STATE_SCISSOR_WITH_COUNT)
+            else if (dynamicState == VK_Dynamic_ScissorWithCount)
             {
                 _viewportStateCreateInfo.scissorCount = 0;
             }
@@ -367,12 +371,12 @@ namespace Kmplete
 
         void VulkanGraphicsPipeline::_SetDefaults() noexcept
         {
-            _inputAssemblyCreateInfo.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+            _inputAssemblyCreateInfo.topology = VK_Primitive_TriangleList;
             _inputAssemblyCreateInfo.primitiveRestartEnable = VK_FALSE;
 
-            _rasterizationStateCreateInfo.polygonMode = VK_POLYGON_MODE_FILL;
-            _rasterizationStateCreateInfo.cullMode = VK_CULL_MODE_BACK_BIT;
-            _rasterizationStateCreateInfo.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;
+            _rasterizationStateCreateInfo.polygonMode = VK_Polygon_Fill;
+            _rasterizationStateCreateInfo.cullMode = VK_Cull_Back;
+            _rasterizationStateCreateInfo.frontFace = VK_FrontFace_CounterClockwise;
             _rasterizationStateCreateInfo.depthClampEnable = VK_FALSE;
             _rasterizationStateCreateInfo.rasterizerDiscardEnable = VK_TRUE;
             _rasterizationStateCreateInfo.lineWidth = 1.0f;
@@ -382,7 +386,7 @@ namespace Kmplete
             _rasterizationStateCreateInfo.depthBiasSlopeFactor = 0.0f;
 
             _colorBlendStateCreateInfo.logicOpEnable = VK_FALSE;
-            _colorBlendStateCreateInfo.logicOp = VK_LOGIC_OP_CLEAR;
+            _colorBlendStateCreateInfo.logicOp = VK_LogicOp_Clear;
             _colorBlendStateCreateInfo.blendConstants[0] = 0.0f;
             _colorBlendStateCreateInfo.blendConstants[1] = 0.0f;
             _colorBlendStateCreateInfo.blendConstants[2] = 0.0f;
@@ -393,17 +397,17 @@ namespace Kmplete
 
             _depthStencilStateCreateInfo.depthTestEnable = VK_TRUE;
             _depthStencilStateCreateInfo.depthWriteEnable = VK_TRUE;
-            _depthStencilStateCreateInfo.depthCompareOp = VK_COMPARE_OP_LESS_OR_EQUAL;
+            _depthStencilStateCreateInfo.depthCompareOp = VK_Compare_LessOrEqual;
             _depthStencilStateCreateInfo.depthBoundsTestEnable = VK_FALSE;
             _depthStencilStateCreateInfo.minDepthBounds = 0.0f;
             _depthStencilStateCreateInfo.maxDepthBounds = 1.0f;
             _depthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
-            _depthStencilStateCreateInfo.back.failOp = VK_STENCIL_OP_KEEP;
-            _depthStencilStateCreateInfo.back.passOp = VK_STENCIL_OP_KEEP;
-            _depthStencilStateCreateInfo.back.compareOp = VK_COMPARE_OP_ALWAYS;
+            _depthStencilStateCreateInfo.back.failOp = VK_Stencil_Keep;
+            _depthStencilStateCreateInfo.back.passOp = VK_Stencil_Keep;
+            _depthStencilStateCreateInfo.back.compareOp = VK_Compare_Always;
             _depthStencilStateCreateInfo.front = _depthStencilStateCreateInfo.back;
 
-            _multisamplingStateCreateInfo.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+            _multisamplingStateCreateInfo.rasterizationSamples = VK_SampleCount_1;
             _multisamplingStateCreateInfo.sampleShadingEnable = VK_FALSE;
             _multisamplingStateCreateInfo.minSampleShading = 0.0f;
             _multisamplingStateCreateInfo.pSampleMask = nullptr;

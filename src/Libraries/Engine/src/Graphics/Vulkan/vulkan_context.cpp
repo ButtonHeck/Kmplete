@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -7,6 +8,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         void VulkanContext::Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                                      const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam) KMP_PROFILING(ProfileLevelAlways)
         {
@@ -25,20 +29,20 @@ namespace Kmplete
             const auto& properties = deviceProperties;
             sampleCountsMask = properties.limits.framebufferColorSampleCounts & properties.limits.framebufferDepthSampleCounts;
             const auto samplesCountMask = sampleCountsMask;
-            if (samplesCountMask & VK_SAMPLE_COUNT_64_BIT)
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_64_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_32_BIT)
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_32_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_16_BIT)
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_16_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_8_BIT)
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_8_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_4_BIT)
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_4_BIT);
-            if (samplesCountMask & VK_SAMPLE_COUNT_2_BIT)
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_2_BIT);
+            if (samplesCountMask & VK_SampleCount_64)
+                supportedSampleCounts.push(VK_SampleCount_64);
+            if (samplesCountMask & VK_SampleCount_32)
+                supportedSampleCounts.push(VK_SampleCount_32);
+            if (samplesCountMask & VK_SampleCount_16)
+                supportedSampleCounts.push(VK_SampleCount_16);
+            if (samplesCountMask & VK_SampleCount_8)
+                supportedSampleCounts.push(VK_SampleCount_8);
+            if (samplesCountMask & VK_SampleCount_4)
+                supportedSampleCounts.push(VK_SampleCount_4);
+            if (samplesCountMask & VK_SampleCount_2)
+                supportedSampleCounts.push(VK_SampleCount_2);
             else
-                supportedSampleCounts.push(VK_SAMPLE_COUNT_1_BIT);
+                supportedSampleCounts.push(VK_SampleCount_1);
 
             defaultDepthFormat = depthFormat;
 
@@ -57,7 +61,7 @@ namespace Kmplete
             for (const auto& surfFormat : surfaceFormats)
             {
                 //TODO: add to settings in a future, use default non-SRGB
-                if (surfFormat.format == VK_FORMAT_B8G8R8A8_UINT && surfFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                if (surfFormat.format == VK_Format_BGRA8_UInt && surfFormat.colorSpace == VK_ColorSpace_SRGB_Nonlinear)
                 {
                     return surfFormat;
                 }

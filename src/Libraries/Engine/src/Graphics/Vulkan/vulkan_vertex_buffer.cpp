@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -9,6 +10,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanVertexBuffer::VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters)
             : VulkanBuffer(memoryTypeDelegate, device, parameters)
             , _layouts()
@@ -60,7 +64,7 @@ namespace Kmplete
 
                 inputBindingsDescriptions[i].stride = layout.GetStride();
                 inputBindingsDescriptions[i].binding = binding;
-                inputBindingsDescriptions[i].inputRate = layout.IsInstanced() ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX;
+                inputBindingsDescriptions[i].inputRate = layout.IsInstanced() ? VK_VertexInputRate_Instance : VK_VertexInputRate_Vertex;
 
                 const auto& elements = layout.GetElements();
                 for (const auto& element : elements)
@@ -93,7 +97,7 @@ namespace Kmplete
                 auto inputBindingDescription = VKUtils::InitVkVertexInputBindingDescription2EXT();
                 inputBindingDescription.stride = layout.GetStride();
                 inputBindingDescription.binding = binding;
-                inputBindingDescription.inputRate = layout.IsInstanced() ? VK_VERTEX_INPUT_RATE_INSTANCE : VK_VERTEX_INPUT_RATE_VERTEX;
+                inputBindingDescription.inputRate = layout.IsInstanced() ? VK_VertexInputRate_Instance : VK_VertexInputRate_Vertex;
                 inputBindingDescription.divisor = 1;
                 inputBindingsDescriptions.push_back(inputBindingDescription);
 

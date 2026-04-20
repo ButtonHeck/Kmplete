@@ -1,10 +1,14 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 
 
 namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         namespace VKUtils
         {
             VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo()
@@ -143,7 +147,7 @@ namespace Kmplete
             {
                 return VkCommandBufferAllocateInfo{
                     .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
-                    .level = primary ? VK_COMMAND_BUFFER_LEVEL_PRIMARY : VK_COMMAND_BUFFER_LEVEL_SECONDARY
+                    .level = primary ? VK_CommandBuffer_Primary : VK_CommandBuffer_Secondary
                 };
             }
             //--------------------------------------------------------------------------
@@ -162,7 +166,7 @@ namespace Kmplete
                 fenceCreateInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
                 if (signaled)
                 {
-                    fenceCreateInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+                    fenceCreateInfo.flags = VK_FenceCreate_Signaled;
                 }
                 return fenceCreateInfo;
             }
@@ -172,7 +176,7 @@ namespace Kmplete
             {
                 return VkDescriptorPoolCreateInfo{
                     .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                    .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT
+                    .flags = VK_DescriptorPoolCreate_FreeDescriptorSet
                 };
             }
             //--------------------------------------------------------------------------

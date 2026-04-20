@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Profile/profiler.h"
@@ -12,6 +13,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanDescriptorSetManager::VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex)
             : _currentBufferIndex(currentBufferIndex)
             , _device(device)
@@ -186,7 +190,7 @@ namespace Kmplete
             bufferInfo.buffer = buffer;
             bufferInfo.range = size;
 
-            _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, binding);
+            _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DescriptorType_UniformBuffer, binding);
 
             return true;
         }}
@@ -233,9 +237,9 @@ namespace Kmplete
             VkDescriptorImageInfo descriptorInfo{};
             descriptorInfo.imageView = imageView;
             descriptorInfo.sampler = sampler;
-            descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            descriptorInfo.imageLayout = VK_ImageLayout_ShaderReadOnlyOptimal;
 
-            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, binding);
+            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DescriptorType_CombinedImageSampler, binding);
 
             return true;
         }}
@@ -281,9 +285,9 @@ namespace Kmplete
 
             VkDescriptorImageInfo descriptorInfo{};
             descriptorInfo.imageView = imageView;
-            descriptorInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+            descriptorInfo.imageLayout = VK_ImageLayout_ShaderReadOnlyOptimal;
 
-            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, binding);
+            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DescriptorType_SampledImage, binding);
 
             return true;
         }}
@@ -330,7 +334,7 @@ namespace Kmplete
             VkDescriptorImageInfo descriptorInfo{};
             descriptorInfo.sampler = sampler;
 
-            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DESCRIPTOR_TYPE_SAMPLER, binding);
+            _UpdateDescriptorSet(descriptorSet, descriptorInfo, VK_DescriptorType_Sampler, binding);
 
             return true;
         }}
@@ -340,17 +344,17 @@ namespace Kmplete
         {
             //TODO: fix numbers
             VkDescriptorPoolSize poolSizes[] = {
-                { VK_DESCRIPTOR_TYPE_SAMPLER, 100 },
-                { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 100 },
-                { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE, 100 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 100 },
-                { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC, 100 },
-                { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC, 100 },
-                { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT, 100 } };
+                { VK_DescriptorType_Sampler, 100 },
+                { VK_DescriptorType_CombinedImageSampler, 100 },
+                { VK_DescriptorType_SampledImage, 100 },
+                { VK_DescriptorType_StorageImage, 100 },
+                { VK_DescriptorType_UniformTexelBuffer, 100 },
+                { VK_DescriptorType_StorageTexelBuffer, 100 },
+                { VK_DescriptorType_UniformBuffer, 100 },
+                { VK_DescriptorType_StorageBuffer, 100 },
+                { VK_DescriptorType_UniformBufferDynamic, 100 },
+                { VK_DescriptorType_StorageBufferDynamic, 100 },
+                { VK_DescriptorType_InputAttachment, 100 } };
 
             auto poolInfo = VKUtils::InitVkDescriptorPoolCreateInfo();
             poolInfo.maxSets = 100;

@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -13,6 +14,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanShaderObject::VulkanShaderObject(VkDevice device, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                                const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/)
             : _device(device)
@@ -42,8 +46,8 @@ namespace Kmplete
             auto shaderCreateInfo = VKUtils::InitVkShaderCreateInfoEXT();
             shaderCreateInfo.stage = stage;
             shaderCreateInfo.nextStage = nextStage;
-            shaderCreateInfo.flags = linked ? VK_SHADER_CREATE_LINK_STAGE_BIT_EXT : 0;
-            shaderCreateInfo.codeType = VK_SHADER_CODE_TYPE_SPIRV_EXT;
+            shaderCreateInfo.flags = linked ? VK_ShaderCreate_LinkStage : 0;
+            shaderCreateInfo.codeType = VK_ShaderCode_SPIRV;
             shaderCreateInfo.pName = name;
             shaderCreateInfo.setLayoutCount = UInt32(descriptorSetsLayouts.size());
             shaderCreateInfo.pSetLayouts = descriptorSetsLayouts.data();

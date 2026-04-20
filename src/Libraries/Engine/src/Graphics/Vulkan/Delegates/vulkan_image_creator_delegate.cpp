@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -11,6 +12,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
             : _memoryTypeDelegate(memoryTypeDelegate)
             , _device(device)
@@ -130,7 +134,7 @@ namespace Kmplete
 
         VulkanBuffer VulkanImageCreatorDelegate::CreateStagingImageBuffer(const Image& image) const KMP_PROFILING(ProfileLevelMinor)
         {
-            auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, {VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, image.GetDataSize()});
+            auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, { VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, image.GetDataSize() });
 
             auto result = buffer.Map();
             VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to map texture buffer");

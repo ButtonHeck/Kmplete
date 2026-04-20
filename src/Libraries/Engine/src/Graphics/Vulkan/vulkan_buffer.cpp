@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -10,6 +11,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters)
             : _device(device)
             , _buffer(VK_NULL_HANDLE)
@@ -27,9 +31,9 @@ namespace Kmplete
 
             auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, parameters.memoryPropertyFlags);
             VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VKUtils::InitVkMemoryAllocateFlagsInfoKHR();
-            if (_usageFlags & VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT)
+            if (_usageFlags & VK_BufferUsage_ShaderDeviceAddress)
             {
-                allocateFlagsInfo.flags = VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT_KHR;
+                allocateFlagsInfo.flags = VK_MemoryAllocate_DeviceAddress;
                 bufferMemoryContext.allocateInfo.pNext = &allocateFlagsInfo;
             }
 

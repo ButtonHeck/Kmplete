@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
@@ -24,6 +25,9 @@ namespace Kmplete
 
     namespace Graphics
     {
+        using namespace VKBits;
+
+
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
             VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
@@ -31,15 +35,15 @@ namespace Kmplete
             KMP_MB_UNUSED const VkDebugUtilsMessengerCallbackDataEXT* callbackData,
             KMP_MB_UNUSED void* userData)
         {
-            if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT)
+            if (messageSeverity & VK_DebugUtilsMessageSeverity_Verbose)
             {
                 KMP_LOG_DEBUG_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
             }
-            else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT)
+            else if (messageSeverity & VK_DebugUtilsMessageSeverity_Warning)
             {
                 KMP_LOG_WARN_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
             }
-            else if (messageSeverity & VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT)
+            else if (messageSeverity & VK_DebugUtilsMessageSeverity_Error)
             {
                 KMP_LOG_ERROR_FN("VulkanGraphicsBackend DebugCallback: {}", callbackData->pMessage);
             }
@@ -52,13 +56,13 @@ namespace Kmplete
         {
             auto debugMessengerCreateInfo = VKUtils::InitVkDebugUtilsMessengerCreateInfo();
             debugMessengerCreateInfo.messageSeverity =
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+                VK_DebugUtilsMessageSeverity_Verbose |
+                VK_DebugUtilsMessageSeverity_Warning |
+                VK_DebugUtilsMessageSeverity_Error;
             debugMessengerCreateInfo.messageType =
-                VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT |
-                VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+                VK_DebugUtilsMessageType_General |
+                VK_DebugUtilsMessageType_Validation |
+                VK_DebugUtilsMessageType_Performance;
             debugMessengerCreateInfo.pfnUserCallback = DebugCallback;
 
             return debugMessengerCreateInfo;

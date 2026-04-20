@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
@@ -14,6 +15,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         const Vector<const char*>& VulkanPhysicalDevice::GetEnabledDeviceExtensions()
         {
             static const Vector<const char*> deviceExtensions =
@@ -165,12 +169,12 @@ namespace Kmplete
                     _formatDelegate.reset(new VulkanFormatDelegate(_physicalDevice));
                     auto defaultDepthFormat = _formatDelegate->FindImageFormat(
                         {
-                          VK_FORMAT_D32_SFLOAT_S8_UINT,
-                          VK_FORMAT_D24_UNORM_S8_UINT,
-                          VK_FORMAT_D16_UNORM_S8_UINT
+                          VK_Format_D32_SFloat_S8_UInt,
+                          VK_Format_D24_UNorm_S8_UInt,
+                          VK_Format_D16_UNorm_S8_UInt
                         },
-                        VK_IMAGE_TILING_OPTIMAL,
-                        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+                        VK_ImageTiling_Optimal,
+                        VK_FormatFeature_DepthStencilAttachment
                     );
 
                     auto& [queueFamilyIndices, surfaceAndPresentModeProperties] = deviceCheck.second;

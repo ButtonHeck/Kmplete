@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -9,6 +10,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         namespace VKUtils
         {
             SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
@@ -49,7 +53,7 @@ namespace Kmplete
                 int index = 0;
                 for (const auto& queueFamily : queueFamilies)
                 {
-                    if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+                    if (queueFamily.queueFlags & VK_Queue_Graphics)
                     {
                         indices.graphicsFamilyIndex = index;
                     }

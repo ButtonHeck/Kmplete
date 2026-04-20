@@ -12,6 +12,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const StringIDHashMap<UPtr<VulkanGraphicsPipeline>>& pipelines,
                                        const StringIDHashMap<UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
             : _currentBufferIndex(currentBufferIndex)
@@ -124,12 +127,12 @@ namespace Kmplete
             VKUtils::MemoryBarrierParameters colorImageBarrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
-                .srcAccessMask = VK_ACCESS_NONE,
-                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_ColorAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             VKUtils::InsertImageMemoryBarrier(colorImageBarrierParameters);
@@ -137,12 +140,12 @@ namespace Kmplete
             VKUtils::MemoryBarrierParameters depthStencilImageBarrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = depthStencilImage,
-                .srcAccessMask = VK_ACCESS_NONE,
-                .dstAccessMask = VK_ACCESS_DEPTH_STENCIL_ATTACHMENT_WRITE_BIT,
-                .oldImageLayout = VK_IMAGE_LAYOUT_UNDEFINED,
-                .newImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .srcStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT | VK_PIPELINE_STAGE_LATE_FRAGMENT_TESTS_BIT,
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
                 .subresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
             };
             VKUtils::InsertImageMemoryBarrier(depthStencilImageBarrierParameters);
@@ -154,12 +157,12 @@ namespace Kmplete
             VKUtils::MemoryBarrierParameters barrierParameters = {
                 .cmdbuffer = _currentCommandBuffer,
                 .image = colorImage,
-                .srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
-                .dstAccessMask = VK_ACCESS_NONE,
-                .oldImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL,
-                .newImageLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
-                .srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
-                .dstStageMask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+                .srcAccessMask = VK_Access_ColorAttachmentWrite,
+                .dstAccessMask = VK_Access_None,
+                .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .newImageLayout = VK_ImageLayout_PresentKHR,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_BottomOfPipe,
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             VKUtils::InsertImageMemoryBarrier(barrierParameters);
@@ -491,7 +494,7 @@ namespace Kmplete
 
         void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
         {
-            VkPipelineStageFlags waitStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+            VkPipelineStageFlags waitStageMask = VK_PipelineStage_ColorAttachmentOutput;
             auto submitInfo = VKUtils::InitVkSubmitInfo();
             submitInfo.pWaitDstStageMask = &waitStageMask;
             submitInfo.commandBufferCount = 1;
@@ -513,7 +516,7 @@ namespace Kmplete
                 return false;
             }
 
-            vkCmdBindPipeline(_currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, _pipelines.at(pipelineSid)->GetVkPipeline());
+            vkCmdBindPipeline(_currentCommandBuffer, VK_PipelineBindPoint_Graphics, _pipelines.at(pipelineSid)->GetVkPipeline());
             return true;
         }}
         //--------------------------------------------------------------------------
@@ -528,7 +531,7 @@ namespace Kmplete
 
             vkCmdBindDescriptorSets(
                 _currentCommandBuffer, 
-                VK_PIPELINE_BIND_POINT_GRAPHICS, 
+                VK_PipelineBindPoint_Graphics,
                 _pipelines.at(pipelineSid)->GetVkPipelineLayout(),
                 firstSetIndex, 
                 UInt32(descriptorSets.size()), descriptorSets.empty() ? nullptr : descriptorSets.data(),
@@ -551,7 +554,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_INDEX_TYPE_UINT32*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        void VulkanRenderer::BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_Index_UInt32*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             vkCmdBindIndexBuffer(_currentCommandBuffer, indexBuffer, offset, indexType);
         }}

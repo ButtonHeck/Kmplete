@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -14,6 +15,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                          VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
@@ -171,16 +175,16 @@ namespace Kmplete
         VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo() const
         {
             auto colorAttachmentInfo = VKPresets::RenderingAttachmentInfo_Color_ClearStore;
-            if (GetMultisampling() == VK_SAMPLE_COUNT_1_BIT)
+            if (GetMultisampling() == VK_SampleCount_1)
             {
                 colorAttachmentInfo.imageView = GetCurrentImageView();
             }
             else
             {
                 colorAttachmentInfo.imageView = GetMultisampledColorImageView();
-                colorAttachmentInfo.resolveMode = VK_RESOLVE_MODE_AVERAGE_BIT;
+                colorAttachmentInfo.resolveMode = VK_Resolve_Average;
                 colorAttachmentInfo.resolveImageView = GetCurrentImageView();
-                colorAttachmentInfo.resolveImageLayout = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL_KHR;
+                colorAttachmentInfo.resolveImageLayout = VK_ImageLayout_AttachmentOptimal;
             }
 
             return colorAttachmentInfo;
@@ -205,12 +209,12 @@ namespace Kmplete
             }
 
             // TODO: add presentation option in a future, use FIFO by default right now
-            //if (Utils::VectorContains(presentModes, VK_PRESENT_MODE_MAILBOX_KHR))
+            //if (Utils::VectorContains(presentModes, VK_PresentMode_Mailbox))
             //{
-            //    return VK_PRESENT_MODE_MAILBOX_KHR;
+            //    return VK_PresentMode_Mailbox;
             //}
 
-            return VK_PRESENT_MODE_FIFO_KHR;
+            return VK_PresentMode_FIFO;
         }
         //--------------------------------------------------------------------------
 
@@ -223,9 +227,9 @@ namespace Kmplete
             swapchainCreateInfo.imageColorSpace = _vulkanContext.surfaceFormat.colorSpace;
             swapchainCreateInfo.imageExtent = _swapchainExtent;
             swapchainCreateInfo.imageArrayLayers = 1;
-            swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+            swapchainCreateInfo.imageUsage = VK_ImageUsage_ColorAttachment;
             swapchainCreateInfo.preTransform = _vulkanContext.surfaceCapabilities.currentTransform;
-            swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+            swapchainCreateInfo.compositeAlpha = VK_CompositeAlpha_Opaque;
             swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes);
             swapchainCreateInfo.clipped = VK_TRUE;
             swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
@@ -234,13 +238,13 @@ namespace Kmplete
             if (_vulkanContext.graphicsFamilyIndex != _vulkanContext.presentFamilyIndex)
             {
                 KMP_LOG_WARN("due to different indices of graphics and presentation queues, image sharing mode set to concurrent");
-                swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+                swapchainCreateInfo.imageSharingMode = VK_Sharing_Concurrent;
                 swapchainCreateInfo.queueFamilyIndexCount = 2;
                 swapchainCreateInfo.pQueueFamilyIndices = indicesArray;
             }
             else
             {
-                swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+                swapchainCreateInfo.imageSharingMode = VK_Sharing_Exclusive;
             }
 
             const auto result = vkCreateSwapchainKHR(_device, &swapchainCreateInfo, nullptr, &_swapchain);
@@ -271,7 +275,7 @@ namespace Kmplete
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
                 const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, subresourceRange);
+                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormat, subresourceRange);
             }
         }}
         //--------------------------------------------------------------------------
@@ -284,17 +288,17 @@ namespace Kmplete
                 .depth = 1
             };
 
-            const auto colorCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_swapchainImageFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT);
-            _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+            const auto colorCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_swapchainImageFormat, extent, 1, _msaaSamples, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment);
+            _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_Memory_DeviceLocal));
 
-            const auto depthCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT);
-            _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT));
+            const auto depthCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_ImageUsage_DepthStencilAttachment);
+            _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_Memory_DeviceLocal));
 
             const auto& colorSubresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-            _multisampledColorImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledColorImage.get(), VK_IMAGE_VIEW_TYPE_2D, _swapchainImageFormat, colorSubresourceRange);
+            _multisampledColorImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledColorImage.get(), VK_ImageView_2D, _swapchainImageFormat, colorSubresourceRange);
 
             const auto& depthSubresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1;
-            _multisampledDepthImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledDepthImage.get(), VK_IMAGE_VIEW_TYPE_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange);
+            _multisampledDepthImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledDepthImage.get(), VK_ImageView_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange);
         }}
         //--------------------------------------------------------------------------
 

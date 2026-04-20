@@ -7,6 +7,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Window/window.h"
@@ -23,6 +24,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
                                                  const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
@@ -45,7 +49,7 @@ namespace Kmplete
             , _pipelines()
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
-            , _msaaSamples(VK_SAMPLE_COUNT_1_BIT)
+            , _msaaSamples(VK_SampleCount_1)
             , _renderer(nullptr)
             , _shaderObjects()
             , _samplersStorage(nullptr)
@@ -531,7 +535,7 @@ namespace Kmplete
                 };
 
                 auto commandBuffer = _renderer->CreateCommandBuffer();
-                commandBuffer.Begin(VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT);
+                commandBuffer.Begin(VK_CommandBufferUsage_OneTimeSubmit);
                 auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer.GetVkCommandBuffer(), imageBuffer, extent, *_imageCreatorDelegate.get());
                 commandBuffer.End();
 

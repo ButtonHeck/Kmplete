@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -7,6 +8,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanFormatDelegate::VulkanFormatDelegate(VkPhysicalDevice physicalDevice) noexcept
             : _physicalDevice(physicalDevice)
         {}
@@ -26,11 +30,11 @@ namespace Kmplete
             {
                 auto formatProperties = GetFormatProperties(format);
 
-                if (tiling == VK_IMAGE_TILING_LINEAR && (formatProperties.linearTilingFeatures & features) == features)
+                if (tiling == VK_ImageTiling_Linear && (formatProperties.linearTilingFeatures & features) == features)
                 {
                     return format;
                 }
-                else if (tiling == VK_IMAGE_TILING_OPTIMAL && (formatProperties.optimalTilingFeatures & features) == features)
+                else if (tiling == VK_ImageTiling_Optimal && (formatProperties.optimalTilingFeatures & features) == features)
                 {
                     return format;
                 }
@@ -44,7 +48,7 @@ namespace Kmplete
         bool VulkanFormatDelegate::IsMipmapCompatible(VkFormat format) const
         {
             const auto formatProperties = GetFormatProperties(format);
-            return formatProperties.optimalTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT;
+            return formatProperties.optimalTilingFeatures & VK_FormatFeature_SampledImageFilterLinear;
         }
         //--------------------------------------------------------------------------
     }
