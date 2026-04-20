@@ -163,6 +163,10 @@ namespace Kmplete
             static constexpr auto VK_Stencil_IncrementAndWrap = VK_STENCIL_OP_INCREMENT_AND_WRAP;
             static constexpr auto VK_Stencil_DecrementAndWrap = VK_STENCIL_OP_DECREMENT_AND_WRAP;
 
+            static constexpr auto VK_StencilFace_Front = VK_STENCIL_FACE_FRONT_BIT;
+            static constexpr auto VK_StencilFace_Back = VK_STENCIL_FACE_BACK_BIT;
+            static constexpr auto VK_StencilFace_FrontAndBack = VK_STENCIL_FACE_FRONT_AND_BACK;
+
             static constexpr auto VK_Compare_Never = VK_COMPARE_OP_NEVER;
             static constexpr auto VK_Compare_Less = VK_COMPARE_OP_LESS;
             static constexpr auto VK_Compare_Equal = VK_COMPARE_OP_EQUAL;
@@ -385,7 +389,7 @@ namespace Kmplete
             static constexpr auto VK_Dynamic_DiscardRectangleMode = VK_DYNAMIC_STATE_DISCARD_RECTANGLE_MODE_EXT;
             static constexpr auto VK_Dynamic_SampleLocations = VK_DYNAMIC_STATE_SAMPLE_LOCATIONS_EXT;
             static constexpr auto VK_Dynamic_FragmentShadingRate = VK_DYNAMIC_STATE_FRAGMENT_SHADING_RATE_KHR;
-            static constexpr auto VK_Dynamic_VertexInputBit = VK_DYNAMIC_STATE_VERTEX_INPUT_EXT;
+            static constexpr auto VK_Dynamic_VertexInput = VK_DYNAMIC_STATE_VERTEX_INPUT_EXT;
             static constexpr auto VK_Dynamic_PatchControlPoints = VK_DYNAMIC_STATE_PATCH_CONTROL_POINTS_EXT;
             static constexpr auto VK_Dynamic_LogicOp = VK_DYNAMIC_STATE_LOGIC_OP_EXT;
             static constexpr auto VK_Dynamic_ColorWriteEnable = VK_DYNAMIC_STATE_COLOR_WRITE_ENABLE_EXT;
@@ -529,6 +533,15 @@ namespace Kmplete
             static constexpr auto VK_ShaderCode_Binary = VK_SHADER_CODE_TYPE_BINARY_EXT;
             static constexpr auto VK_ShaderCode_SPIRV = VK_SHADER_CODE_TYPE_SPIRV_EXT;
 
+            static constexpr auto VK_ShaderStage_Vertex = VK_SHADER_STAGE_VERTEX_BIT;
+            static constexpr auto VK_ShaderStage_Fragment = VK_SHADER_STAGE_FRAGMENT_BIT;
+            static constexpr auto VK_ShaderStage_Geometry = VK_SHADER_STAGE_GEOMETRY_BIT;
+            static constexpr auto VK_ShaderStage_TesselationControl = VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+            static constexpr auto VK_ShaderStage_TesselationEvaluation = VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+            static constexpr auto VK_ShaderStage_Compute = VK_SHADER_STAGE_COMPUTE_BIT;
+            static constexpr auto VK_ShaderStage_AllGraphics = VK_SHADER_STAGE_ALL_GRAPHICS;
+            static constexpr auto VK_ShaderStage_All = VK_SHADER_STAGE_ALL;
+
             static constexpr auto VK_Resolve_None = VK_RESOLVE_MODE_NONE;
             static constexpr auto VK_Resolve_SampleZero = VK_RESOLVE_MODE_SAMPLE_ZERO_BIT;
             static constexpr auto VK_Resolve_Average = VK_RESOLVE_MODE_AVERAGE_BIT;
@@ -550,6 +563,20 @@ namespace Kmplete
 
             static constexpr auto VK_VertexInputRate_Vertex = VK_VERTEX_INPUT_RATE_VERTEX;
             static constexpr auto VK_VertexInputRate_Instance = VK_VERTEX_INPUT_RATE_INSTANCE;
+
+            static constexpr auto VK_DepthClamp_ViewportRange = VK_DEPTH_CLAMP_MODE_VIEWPORT_RANGE_EXT;
+            static constexpr auto VK_DepthClamp_UserDefinedRange = VK_DEPTH_CLAMP_MODE_USER_DEFINED_RANGE_EXT;
+
+            static constexpr auto VK_LineRasterization_Default = VK_LINE_RASTERIZATION_MODE_DEFAULT;
+            static constexpr auto VK_LineRasterization_Rectangular = VK_LINE_RASTERIZATION_MODE_RECTANGULAR;
+            static constexpr auto VK_LineRasterization_Bresenham = VK_LINE_RASTERIZATION_MODE_BRESENHAM;
+            static constexpr auto VK_LineRasterization_RectangularSmooth = VK_LINE_RASTERIZATION_MODE_RECTANGULAR_SMOOTH;
+
+            static constexpr auto VK_DiscardRectangle_Inclusive = VK_DISCARD_RECTANGLE_MODE_INCLUSIVE_EXT;
+            static constexpr auto VK_DiscardRectangle_Exclusive = VK_DISCARD_RECTANGLE_MODE_EXCLUSIVE_EXT;
+
+            static constexpr auto VK_ProvokingVertexMode_FirstVertex = VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT;
+            static constexpr auto VK_ProvokingVertexMode_LastVertex = VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT;
         }
     }
 }
