@@ -287,7 +287,7 @@ namespace Kmplete
 
             const auto& entryPath = directoryEntry.path();
             const auto entryExtension = entryPath.extension().string();
-            return Utils::VectorContainsIf(filesExtensions, [entryExtension](const String& enabledExtension) { return enabledExtension == entryExtension; });
+            return Utils::VectorContains(filesExtensions, entryExtension);
         }
         //--------------------------------------------------------------------------
 
