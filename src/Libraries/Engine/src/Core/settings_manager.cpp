@@ -69,7 +69,14 @@ namespace Kmplete
 
         for (const auto& [settingsEntryName, settingsEntry] : _namedSettingsDocuments)
         {
-            summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
+            if (!settingsEntry)
+            {
+                KMP_LOG_ERROR("settings entry named '{}' is nullptr - save settings will be incompleted", settingsEntryName);
+            }
+            else
+            {
+                summaryDocument.AddChildDocument(settingsEntryName, settingsEntry->GetDocument());
+            }
         }
 
         const auto ok = summaryDocument.Save(_filepath);

@@ -122,9 +122,10 @@ namespace Kmplete
             return;
         }
 
-        KMP_ASSERT(_systemMetrics.numProcessors);
-        KMP_ASSERT(_systemMetrics.totalVirtualMemoryMib);
-        KMP_ASSERT(_systemMetrics.totalPhysicalMemoryMib);
+        KMP_ASSERT(_currentProcessId != 0);
+        KMP_ASSERT(_systemMetrics.numProcessors != 0);
+        KMP_ASSERT(_systemMetrics.totalVirtualMemoryMib != 0.0f);
+        KMP_ASSERT(_systemMetrics.totalPhysicalMemoryMib != 0.0f);
     }}
     //--------------------------------------------------------------------------
 
@@ -203,7 +204,6 @@ namespace Kmplete
             KMP_LOG_ERROR("initialization failed on GetCurrentProcess handle");
             return false;
         }
-#else
 #endif
 
         return true;
@@ -454,6 +454,8 @@ namespace Kmplete
         ULONG_PTR threadStackLowLimit = 0ULL;
         ULONG_PTR threadStackHighLimit = 0ULL;
         GetCurrentThreadStackLimits(&threadStackLowLimit, &threadStackHighLimit);
+
+        KMP_ASSERT(threadStackHighLimit != threadStackLowLimit);
 
         _systemMetrics.currentThreadStackTotal = static_cast<float>(threadStackHighLimit - threadStackLowLimit) / KibDivisor;
         _systemMetrics.currentThreadStackOverallUsed = static_cast<float>(overallUsed) / KibDivisor;
