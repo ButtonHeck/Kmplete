@@ -14,235 +14,242 @@
 
 namespace Kmplete
 {
-    Filepath Filesystem::GetCurrentFilepath() noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
+    namespace Filesystem
     {
-        try
-        {
-            return std::filesystem::current_path();
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: failed to get current filepath: '{}'", fe.what());
-            return Filepath{};
-        }
-    }}
-    //--------------------------------------------------------------------------
+        //! Codestyle friendly alias for filesystem error
+        using FilesystemError = std::filesystem::filesystem_error;
 
-    bool Filesystem::FilepathExists(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        try
-        {
-            return std::filesystem::exists(filepath);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: exists failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
 
-    bool Filesystem::FilepathIsValid(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        return !filepath.empty() && filepath.has_filename();
-    }}
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::CreateDirectories(const Filepath& filepath, bool pathIsFile /*= false*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        try
+        Filepath GetCurrentFilepath() noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            std::filesystem::create_directories(pathIsFile ? filepath.parent_path() : filepath);
-            return FilepathExists(pathIsFile ? filepath.parent_path() : filepath);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: create directories failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::RemoveDirectories(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        try
-        {
-            return std::filesystem::remove_all(filepath) != 0;
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: remove directories failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::CopyDirectories(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::recursive*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        if (!IsDirectory(from))
-        {
-            KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}' is not a directory", from);
-            return false;
-        }
-
-        try
-        {
-            std::filesystem::copy(from, to, copyOptions);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}'", fe.what());
-            return false;
-        }
-
-        return true;
-    }}
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::IsDirectory(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        try
-        {
-            return std::filesystem::is_directory(filepath);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
-        {
-            KMP_LOG_ERROR_FN("Filesystem: 'isDirectory' failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::CreateFile(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        try
-        {
-            if (FilepathExists(filepath))
+            try
             {
-                KMP_LOG_INFO_FN("Filesystem::CreateFile - file '{}' already exists", filepath);
-                return true;
+                return std::filesystem::current_path();
             }
-
-            if (!CreateDirectories(filepath, "path is file"_true))
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
             {
-                KMP_LOG_ERROR_FN("Filesystem::CreateFile - cannot create directories for file '{}'", filepath);
+                KMP_LOG_ERROR_FN("Filesystem: failed to get current filepath: '{}'", fe.what());
+                return Filepath{};
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool FilepathExists(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
+        {
+            try
+            {
+                return std::filesystem::exists(filepath);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: exists failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool FilepathIsValid(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
+        {
+            return !filepath.empty() && filepath.has_filename();
+        }}
+        //--------------------------------------------------------------------------
+
+        bool CreateDirectories(const Filepath& filepath, bool pathIsFile /*= false*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            try
+            {
+                std::filesystem::create_directories(pathIsFile ? filepath.parent_path() : filepath);
+                return FilepathExists(pathIsFile ? filepath.parent_path() : filepath);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: create directories failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool RemoveDirectories(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            try
+            {
+                return std::filesystem::remove_all(filepath) != 0;
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: remove directories failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool CopyDirectories(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::recursive*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (!IsDirectory(from))
+            {
+                KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}' is not a directory", from);
                 return false;
             }
 
-            std::ofstream(filepath).flush();
-        }
-        catch (KMP_MB_UNUSED const std::ios_base::failure& e)
+            try
+            {
+                std::filesystem::copy(from, to, copyOptions);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}'", fe.what());
+                return false;
+            }
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        bool IsDirectory(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: failed to create [{}]: '{}'", filepath, e.what());
-        }
+            try
+            {
+                return std::filesystem::is_directory(filepath);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: 'isDirectory' failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
 
-        return FilepathExists(filepath);
-    }}
-    //--------------------------------------------------------------------------
-
-    bool Filesystem::RemoveFile(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        try
+        bool CreateFile(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            return std::filesystem::remove(filepath);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+            try
+            {
+                if (FilepathExists(filepath))
+                {
+                    KMP_LOG_INFO_FN("CreateFile - file '{}' already exists", filepath);
+                    return true;
+                }
+
+                if (!CreateDirectories(filepath, "path is file"_true))
+                {
+                    KMP_LOG_ERROR_FN("CreateFile - cannot create directories for file '{}'", filepath);
+                    return false;
+                }
+
+                std::ofstream(filepath).flush();
+            }
+            catch (KMP_MB_UNUSED const std::ios_base::failure& e)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: failed to create [{}]: '{}'", filepath, e.what());
+            }
+
+            return FilepathExists(filepath);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool RemoveFile(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: remove file failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
+            try
+            {
+                return std::filesystem::remove(filepath);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: remove file failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
 
-    bool Filesystem::CopyFile(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::skip_existing*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        try
+        bool CopyFile(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::skip_existing*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            return std::filesystem::copy_file(from, to, copyOptions);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+            try
+            {
+                return std::filesystem::copy_file(from, to, copyOptions);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: copy file failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool IsFile(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: copy file failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
+            try
+            {
+                return std::filesystem::is_regular_file(filepath);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: 'isFile' failed: '{}'", fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
 
-    bool Filesystem::IsFile(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        try
+        String ToGenericU8String(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            return std::filesystem::is_regular_file(filepath);
-        }
-        catch (KMP_MB_UNUSED const std::filesystem::filesystem_error& fe)
+            return filepath.generic_u8string();
+        }}
+        //--------------------------------------------------------------------------
+
+        String ToGenericString(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: 'isFile' failed: '{}'", fe.what());
-            return false;
-        }
-    }}
-    //--------------------------------------------------------------------------
+            return filepath.generic_string();
+        }}
+        //--------------------------------------------------------------------------
 
-    String Filesystem::ToGenericU8String(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        return filepath.generic_u8string();
-    }}
-    //--------------------------------------------------------------------------
-
-    String Filesystem::ToGenericString(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        return filepath.generic_string();
-    }}
-    //--------------------------------------------------------------------------
-
-    String Filesystem::ToNativeU8String(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        return filepath.u8string();
-    }}
-    //--------------------------------------------------------------------------
-
-    String Filesystem::ToNativeString(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
-    {
-        return filepath.string();
-    }}
-    //--------------------------------------------------------------------------
-
-    String Filesystem::ReadFileAsText(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        if (!FilepathExists(filepath))
+        String ToNativeU8String(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
-            return String();
-        }
+            return filepath.u8string();
+        }}
+        //--------------------------------------------------------------------------
 
-        std::ifstream fileStream(filepath);
-        if (!fileStream.is_open() || !fileStream.good())
+        String ToNativeString(const Filepath& filepath) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
-            return String();
-        }
+            return filepath.string();
+        }}
+        //--------------------------------------------------------------------------
 
-        return String((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
-    }}
-    //--------------------------------------------------------------------------
-
-    BinaryBuffer Filesystem::ReadFileAsBinary(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
-    {
-        if (!FilepathExists(filepath))
+        String ReadFileAsText(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
-            return BinaryBuffer();
-        }
+            if (!FilepathExists(filepath))
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
+                return String();
+            }
 
-        std::ifstream fileStream(filepath, std::ios::binary);
-        if (!fileStream.is_open() || !fileStream.good())
+            std::ifstream fileStream(filepath);
+            if (!fileStream.is_open() || !fileStream.good())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
+                return String();
+            }
+
+            return String((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
+        }}
+        //--------------------------------------------------------------------------
+
+        BinaryBuffer ReadFileAsBinary(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
-            return BinaryBuffer();
-        }
+            if (!FilepathExists(filepath))
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
+                return BinaryBuffer();
+            }
 
-        return BinaryBuffer((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
-    }}
-    //--------------------------------------------------------------------------
+            std::ifstream fileStream(filepath, std::ios::binary);
+            if (!fileStream.is_open() || !fileStream.good())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
+                return BinaryBuffer();
+            }
+
+            return BinaryBuffer((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
+        }}
+        //--------------------------------------------------------------------------
+    }
 }
 
 #if defined (KMP_UNDEF_CreateFile)
