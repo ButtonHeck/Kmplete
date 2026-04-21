@@ -26,7 +26,7 @@ TEST_CASE("Image from valid filepath", "[graphics][image]")
     REQUIRE_NOTHROW(pixels = image->GetPixels());
     REQUIRE(width != 0);
     REQUIRE(height != 0);
-    REQUIRE(channels != 0);
+    REQUIRE(channels != 0); // test icon contains 3 channels
     REQUIRE(pixels != nullptr);
 
     REQUIRE_NOTHROW(image = CreateUPtr<Image>(Filepath(KMP_TEST_ICON_PATH), ImageChannels::Unknown));
@@ -37,7 +37,18 @@ TEST_CASE("Image from valid filepath", "[graphics][image]")
     REQUIRE_NOTHROW(pixels = image->GetPixels());
     REQUIRE(width != 0);
     REQUIRE(height != 0);
-    REQUIRE(channels != 0);
+    REQUIRE(channels != 0); // test icon should still contains 3 channels (Unknown - should be set from actual data)
+    REQUIRE(pixels != nullptr);
+
+    REQUIRE_NOTHROW(image = CreateUPtr<Image>(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha));
+    REQUIRE(image);
+    REQUIRE_NOTHROW(width = image->GetWidth());
+    REQUIRE_NOTHROW(height = image->GetHeight());
+    REQUIRE_NOTHROW(channels = image->GetChannels());
+    REQUIRE_NOTHROW(pixels = image->GetPixels());
+    REQUIRE(width != 0);
+    REQUIRE(height != 0);
+    REQUIRE(channels == 4); // force test icon to be 4 channels
     REQUIRE(pixels != nullptr);
 }
 //--------------------------------------------------------------------------
