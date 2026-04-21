@@ -1,11 +1,10 @@
 #include "Kmplete/Graphics/font.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -24,7 +23,7 @@ namespace Kmplete
             if (freetypeFontInitError)
             {
                 KMP_LOG_ERROR("failed to load FreeType font from buffer");
-                throw std::runtime_error("Font: failed to load FreeType font from buffer");
+                throw RuntimeError("Font: failed to load FreeType font from buffer");
             }
 
             _UpdateParameters();

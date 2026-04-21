@@ -2,6 +2,7 @@
 
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 
 #include <fstream>
@@ -245,7 +246,7 @@ namespace Kmplete
     
                     return ReturnCode::Ok;
                 }
-                catch (KMP_MB_UNUSED const std::exception& e)
+                catch (KMP_MB_UNUSED const Exception& e)
                 {
                     KMP_LOG_ERROR("failed to write '{}' data from '{}': {}", assetTypeName, filepath, e.what());
                     return ReturnCode::OutputFileWritingFailed;

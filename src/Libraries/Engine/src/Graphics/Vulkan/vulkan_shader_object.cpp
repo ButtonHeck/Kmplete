@@ -4,10 +4,9 @@
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -27,20 +26,20 @@ namespace Kmplete
             if (!Filesystem::FilepathExists(filepath))
             {
                 KMP_LOG_ERROR("shader file not found '{}'", filepath);
-                throw std::runtime_error("VulkanShaderObject: shader file not found");
+                throw RuntimeError("VulkanShaderObject: shader file not found");
             }
 
             const auto shaderBinary = Filesystem::ReadFileAsBinary(filepath);
             if (shaderBinary.empty())
             {
                 KMP_LOG_ERROR("failed to load shader binary from '{}'", filepath);
-                throw std::runtime_error("VulkanShaderObject: failed to load shader binary");
+                throw RuntimeError("VulkanShaderObject: failed to load shader binary");
             }
 
             if (shaderBinary.size() % 4 != 0)
             {
                 KMP_LOG_ERROR("shader binary size is not multiple of 4 '{}'", filepath);
-                throw std::runtime_error("VulkanShaderObject: shader binary size is not multiple of 4");
+                throw RuntimeError("VulkanShaderObject: shader binary size is not multiple of 4");
             }
 
             auto shaderCreateInfo = VKUtils::InitVkShaderCreateInfoEXT();

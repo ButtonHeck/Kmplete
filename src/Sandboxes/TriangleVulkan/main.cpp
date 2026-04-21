@@ -1,6 +1,7 @@
 #include "triangle_vulkan_application.h"
 
 #include "Kmplete/Core/main.h"
+#include "Kmplete/Base/exception.h"
 
 
 namespace Kmplete
@@ -27,7 +28,7 @@ namespace Kmplete
 
             return CreateUPtr<TriangleVulkanApplication>(parameters);
         }
-        catch (const std::exception&)
+        catch (const Exception&)
         {
             KMP_LOG_CRITICAL_FN("CreateApplication: failed to create sandbox instance");
             return nullptr;

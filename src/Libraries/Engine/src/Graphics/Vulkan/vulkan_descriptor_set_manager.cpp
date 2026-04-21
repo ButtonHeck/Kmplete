@@ -4,6 +4,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -66,7 +67,7 @@ namespace Kmplete
                 
                 return layout;
             }
-            catch (KMP_MB_UNUSED const std::runtime_error& er)
+            catch (KMP_MB_UNUSED const RuntimeError& er)
             {
                 KMP_LOG_ERROR("failed to create descriptor set layout '{}'", layoutSid);
                 return VK_NULL_HANDLE;

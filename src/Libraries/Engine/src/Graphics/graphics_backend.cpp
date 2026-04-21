@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Window/window.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -43,7 +44,7 @@ namespace Kmplete
                 Image image(filepath, flipVertically);
                 return CreateTexture(image);
             }
-            catch (const std::exception&)
+            catch (const Exception&)
             {
                 KMP_LOG_ERROR("failed to create texture '{}'", filepath);
             }

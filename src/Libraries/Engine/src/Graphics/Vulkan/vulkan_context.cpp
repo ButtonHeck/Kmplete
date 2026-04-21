@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -55,7 +56,7 @@ namespace Kmplete
             if (surfaceFormats.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available surface format");
-                throw std::runtime_error("VulkanContext: unable to get available surface format");
+                throw RuntimeError("VulkanContext: unable to get available surface format");
             }
 
             for (const auto& surfFormat : surfaceFormats)

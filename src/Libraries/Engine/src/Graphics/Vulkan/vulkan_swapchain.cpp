@@ -4,11 +4,11 @@
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Utils/vector_utils.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
 #include <algorithm>
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -205,7 +205,7 @@ namespace Kmplete
             if (presentModes.empty())
             {
                 KMP_LOG_CRITICAL("unable to get available present mode");
-                throw std::runtime_error("VulkanSwapchain: unable to get available present mode");
+                throw RuntimeError("VulkanSwapchain: unable to get available present mode");
             }
 
             // TODO: add presentation option in a future, use FIFO by default right now
@@ -263,7 +263,7 @@ namespace Kmplete
                 if (swapchainImage == VK_NULL_HANDLE)
                 {
                     KMP_LOG_CRITICAL("one of the swapchain images is invalid");
-                    throw std::runtime_error("VulkanSwapchain: one of the swapchain images is invalid");
+                    throw RuntimeError("VulkanSwapchain: one of the swapchain images is invalid");
                 }
             }
         }}

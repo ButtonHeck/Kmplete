@@ -1,5 +1,6 @@
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Application/frame_listener_manager.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -14,7 +15,7 @@ namespace Kmplete
         if (!_frameListenerManager.AddFrameListener(this))
         {
             KMP_LOG_ERROR("failed to attach frame listener '{}' to manager", sid);
-            throw std::runtime_error("FrameListener: failed to attach to frame listener manager");
+            throw RuntimeError("FrameListener: failed to attach to frame listener manager");
         }
     }
     //--------------------------------------------------------------------------

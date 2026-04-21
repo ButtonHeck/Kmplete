@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -50,7 +51,7 @@ namespace Kmplete
             }
 
             KMP_LOG_CRITICAL("failed to find suitable memory type");
-            throw std::runtime_error("VulkanMemoryTypeDelegate: failed to find suitable memory type");
+            throw RuntimeError("VulkanMemoryTypeDelegate: failed to find suitable memory type");
         }}
         //--------------------------------------------------------------------------
     }

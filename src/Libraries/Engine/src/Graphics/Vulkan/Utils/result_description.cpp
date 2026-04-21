@@ -1,7 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -18,7 +17,7 @@ namespace Kmplete
                     KMP_LOG_CRITICAL_FN("{}: {}", message, resultDescription);
                     if (throwException)
                     {
-                        throw std::runtime_error(String(message).append(": ").append(resultDescription));
+                        throw RuntimeError(String(message).append(": ").append(resultDescription));
                     }
                 }
 

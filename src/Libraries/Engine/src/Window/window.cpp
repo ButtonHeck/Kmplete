@@ -1,6 +1,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Core/settings_document.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 
 
@@ -27,7 +28,7 @@ namespace Kmplete
         if (settings.name.empty())
         {
             KMP_LOG_ERROR("cannot create window with empty name");
-            throw std::exception();
+            throw RuntimeError("Window: cannot create window with empty name");
         }
 
         KMP_PROFILE_CONSTRUCTOR_END()

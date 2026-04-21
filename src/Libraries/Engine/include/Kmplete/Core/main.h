@@ -7,12 +7,11 @@
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/memory_checker.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-
-#include <exception>
 
 
 //! Wrapper function that tries to flush all the profiler data
@@ -31,7 +30,7 @@ void TerminationHandler()
             std::rethrow_exception(exception);
         }
     }
-    catch (KMP_MB_UNUSED const std::exception& e)
+    catch (KMP_MB_UNUSED const Kmplete::Exception& e)
     {
         KMP_LOG_CRITICAL_FN("Uncaught exception: '{}'", e.what());
     }

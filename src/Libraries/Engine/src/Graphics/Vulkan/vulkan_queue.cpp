@@ -4,10 +4,9 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -27,7 +26,7 @@ namespace Kmplete
             if (_queue == nullptr)
             {
                 KMP_LOG_CRITICAL("failed to get queue handle from logical device");
-                throw std::runtime_error("VulkanQueue: failed to get queue handle from logical device");
+                throw RuntimeError("VulkanQueue: failed to get queue handle from logical device");
             }
         }
         //--------------------------------------------------------------------------

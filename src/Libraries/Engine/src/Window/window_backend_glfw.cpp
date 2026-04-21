@@ -3,12 +3,11 @@
 #include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -99,7 +98,7 @@ namespace Kmplete
             KMP_MB_UNUSED const char* description;
             KMP_MB_UNUSED const auto errorCode = glfwGetError(&description);
             KMP_LOG_CRITICAL("initialization error: code '{}', description '{}'", errorCode, description ? description : "");
-            throw std::runtime_error("WindowBackendGlfw initialization failed");
+            throw RuntimeError("WindowBackendGlfw initialization failed");
         }
 
         _InitializeCallbacks();
@@ -167,7 +166,7 @@ namespace Kmplete
             _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType));
             return GetAuxWindow(windowName);
         }
-        catch (KMP_MB_UNUSED const std::exception& e)
+        catch (KMP_MB_UNUSED const Exception& e)
         {
             KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
             return nullptr;
@@ -198,7 +197,7 @@ namespace Kmplete
             _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType));
             return GetAuxWindow(windowName);
         }
-        catch (KMP_MB_UNUSED const std::exception& e)
+        catch (KMP_MB_UNUSED const Exception& e)
         {
             KMP_LOG_ERROR("error creating window '{}', message: '{}'", windowName, e.what());
             return nullptr;
@@ -309,7 +308,7 @@ namespace Kmplete
         {
             _cursors.emplace(name, CreateUPtr<WindowCursorGlfw>(filepath, hotspot));
         }
-        catch (KMP_MB_UNUSED const std::runtime_error& error)
+        catch (KMP_MB_UNUSED const RuntimeError& error)
         {
             KMP_LOG_ERROR("failed to add cursor '{}' from '{}' - {}", name, filepath, error.what());
             return std::nullopt;

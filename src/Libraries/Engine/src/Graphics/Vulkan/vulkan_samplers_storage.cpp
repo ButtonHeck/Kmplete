@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -40,7 +41,7 @@ namespace Kmplete
                 _samplers[sid] = sampler;
                 return sampler;
             }
-            catch (KMP_MB_UNUSED const std::runtime_error& er)
+            catch (KMP_MB_UNUSED const RuntimeError& er)
             {
                 KMP_LOG_ERROR("failed to create sampler with sid '{}' - {}", sid, er.what());
             }

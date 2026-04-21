@@ -1,13 +1,13 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Math/math.h"
 
 #include <stb_image.h>
 
 #include <cstring>
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -37,7 +37,7 @@ namespace Kmplete
             if (!_pixels)
             {
                 KMP_LOG_ERROR("'{}' loading error", filepath);
-                throw std::runtime_error("Image: failed to load from file");
+                throw RuntimeError("Image: failed to load from file");
             }
 
             _FixChannels(desiredChannels, channelsInFile);
@@ -61,19 +61,19 @@ namespace Kmplete
             if (pixelBuffer == nullptr)
             {
                 KMP_LOG_ERROR("given pixel buffer is nullptr");
-                throw std::runtime_error("Image: given pixel buffer is nullptr");
+                throw RuntimeError("Image: given pixel buffer is nullptr");
             }
 
             if (size.x <= 0 || size.y <= 0 || bufferSize <= 0)
             {
                 KMP_LOG_ERROR("image size dimensions or buffer size should not be negative, {}x{}", size.x, size.y);
-                throw std::runtime_error("Image: size dimensions or buffer size should not be negative");
+                throw RuntimeError("Image: size dimensions or buffer size should not be negative");
             }
 
             if (bufferSize != size.x * size.y * channels)
             {
                 KMP_LOG_ERROR("buffer size {} mismatch with other parameters, {}x{} ({} channels)", bufferSize, size.x, size.y, static_cast<int>(_channels));
-                throw std::runtime_error("Image: buffer size mismatch with other parameters");
+                throw RuntimeError("Image: buffer size mismatch with other parameters");
             }
 
             _pixels = new UByte[bufferSize];
@@ -98,13 +98,13 @@ namespace Kmplete
             if (fileBuffer == nullptr)
             {
                 KMP_LOG_ERROR("given file buffer is nullptr");
-                throw std::runtime_error("Image: given file buffer is nullptr");
+                throw RuntimeError("Image: given file buffer is nullptr");
             }
 
             if (bufferSize <= 0)
             {
                 KMP_LOG_ERROR("file buffer size should not be negative");
-                throw std::runtime_error("Image: file buffer size should not be negative");
+                throw RuntimeError("Image: file buffer size should not be negative");
             }
 
             stbi_set_flip_vertically_on_load(flipVertically);
@@ -115,7 +115,7 @@ namespace Kmplete
             if (!_pixels)
             {
                 KMP_LOG_ERROR("file buffer loading error");
-                throw std::runtime_error("Image: failed to load from file buffer");
+                throw RuntimeError("Image: failed to load from file buffer");
             }
 
             _FixChannels(desiredChannels, channelsInFile);

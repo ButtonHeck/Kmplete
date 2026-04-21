@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -41,7 +42,7 @@ namespace Kmplete
             }
 
             KMP_LOG_CRITICAL("failed to find supported format");
-            throw std::runtime_error("VulkanFormatDelegate: failed to find supported format");
+            throw RuntimeError("VulkanFormatDelegate: failed to find supported format");
         }}
         //--------------------------------------------------------------------------
 

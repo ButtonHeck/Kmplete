@@ -1,9 +1,10 @@
 #include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Localization/localization_translator.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/exception.h"
+#include "Kmplete/Log/log.h"
 
 #include <iostream>
 
@@ -48,7 +49,7 @@ namespace Kmplete
             KMP_LOG_INFO("set locale '{}'", _currentLocale);
             return true;
         }
-        catch (KMP_MB_UNUSED const std::exception& e)
+        catch (KMP_MB_UNUSED const Exception& e)
         {
             KMP_LOG_ERROR("cannot set locale '{}' - {}", localeString, e.what());
             return false;

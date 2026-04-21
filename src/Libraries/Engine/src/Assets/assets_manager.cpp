@@ -3,9 +3,8 @@
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -146,7 +145,7 @@ namespace Kmplete
             if (!Filesystem::FilepathExists(_dataPath))
             {
                 KMP_LOG_CRITICAL("cannot create due to data path '{}' does not exist", _dataPath);
-                throw std::runtime_error("AssetsManager: cannot create due to data path does not exist");
+                throw RuntimeError("AssetsManager: cannot create due to data path does not exist");
             }
 
             _textureAssetManager.reset(new TextureAssetManager(_graphicsBackend));
@@ -259,7 +258,7 @@ namespace Kmplete
                     const auto assetImage = Graphics::Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), Graphics::ImageChannels::RGBAlpha);
                     return _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
                 }
-                catch (KMP_MB_UNUSED const std::exception& e)
+                catch (KMP_MB_UNUSED const Exception& e)
                 {
                     KMP_LOG_ERROR("failed to create texture: {}", e.what());
                     return false;

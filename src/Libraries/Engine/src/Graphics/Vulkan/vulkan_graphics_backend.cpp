@@ -6,6 +6,7 @@
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Version/kmplete_version.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -15,7 +16,6 @@
 #endif
 
 #include <cstring>
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -195,7 +195,7 @@ namespace Kmplete
             if (!_CheckValidationLayerSupport())
             {
                 KMP_LOG_CRITICAL("{} layer requested but not found", ValidationLayerName);
-                throw std::runtime_error("VulkanGraphicsBackend: failed to initialize");
+                throw RuntimeError("VulkanGraphicsBackend: failed to initialize");
             }
 #endif
 
@@ -215,7 +215,7 @@ namespace Kmplete
             if (!VKCommands::LoadExtensionFunctions(_instance))
             {
                 KMP_LOG_CRITICAL("extension functions failed to load");
-                throw std::runtime_error("VulkanGraphicsBackend: extension functions failed to load");
+                throw RuntimeError("VulkanGraphicsBackend: extension functions failed to load");
             }
 
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)

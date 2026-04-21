@@ -1,5 +1,6 @@
 #include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Graphics/image.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -25,13 +26,13 @@ namespace Kmplete
             else
             {
                 KMP_LOG_WARN("cannot create cursor object from '{}'", filepath);
-                throw std::runtime_error("WindowCursorGlfw object creation failed");
+                throw RuntimeError("WindowCursorGlfw object creation failed");
             }
         }
-        catch (const std::exception&)
+        catch (const Exception&)
         {
             KMP_LOG_WARN("cannot create cursor image from '{}'", filepath);
-            throw std::runtime_error("WindowCursorGlfw image creation failed");
+            throw RuntimeError("WindowCursorGlfw image creation failed");
         }
     }
     //--------------------------------------------------------------------------

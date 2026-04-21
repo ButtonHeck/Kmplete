@@ -5,8 +5,7 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Core/assertion.h"
-
-#include <stdexcept>
+#include "Kmplete/Base/exception.h"
 
 
 namespace Kmplete
@@ -19,7 +18,7 @@ namespace Kmplete
             if (!_CreateErrorTextureAsset())
             {
                 KMP_LOG_CRITICAL("error texture loading failed");
-                throw std::runtime_error("TextureAssetManager: error texture loading failed");
+                throw RuntimeError("TextureAssetManager: error texture loading failed");
             }
         }
         //--------------------------------------------------------------------------

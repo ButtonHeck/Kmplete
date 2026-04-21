@@ -3,11 +3,11 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/optional.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
-#include <stdexcept>
 #include <utility>
 
 
@@ -65,7 +65,7 @@ namespace Kmplete
             if (_physicalDevice == VK_NULL_HANDLE)
             {
                 KMP_LOG_CRITICAL("failed to find a suitable GPU");
-                throw std::runtime_error("VulkanPhysicalDevice: failed to find a suitable GPU");
+                throw RuntimeError("VulkanPhysicalDevice: failed to find a suitable GPU");
             }
 
             _QueryGPUInfo();
@@ -146,7 +146,7 @@ namespace Kmplete
             if (deviceCount == 0)
             {
                 KMP_LOG_CRITICAL("failed to find GPUs with Vulkan support");
-                throw std::runtime_error("VulkanPhysicalDevice: failed to find GPUs with Vulkan support");
+                throw RuntimeError("VulkanPhysicalDevice: failed to find GPUs with Vulkan support");
             }
 
             Vector<VkPhysicalDevice> devices(deviceCount);

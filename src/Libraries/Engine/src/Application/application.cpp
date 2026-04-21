@@ -4,8 +4,7 @@
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
-
-#include <stdexcept>
+#include "Kmplete/Base/exception.h"
 
 
 namespace Kmplete
@@ -51,7 +50,7 @@ namespace Kmplete
 
         if (!Filesystem::FilepathExists(_applicationPath))
         {
-            throw std::runtime_error("Application filepath initialization failed");
+            throw RuntimeError("Application filepath initialization failed");
         }
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();

@@ -1,6 +1,7 @@
 #include "Kmplete/Window/window_glfw.h"
 #include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Event/window_events.h"
@@ -10,8 +11,6 @@
 #include "Kmplete/Math/geometry.h"
 
 #include <GLFW/glfw3.h>
-
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -170,7 +169,7 @@ namespace Kmplete
         if (!_window)
         {
             KMP_LOG_ERROR("creation failed");
-            throw std::runtime_error("WindowGlfw creation failed");
+            throw RuntimeError("WindowGlfw creation failed");
         }
 
         _InitializeUserPointer();

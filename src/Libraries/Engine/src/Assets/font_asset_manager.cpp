@@ -1,12 +1,12 @@
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Base/platform.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <stdexcept>
 
 #if defined (KMP_PLATFORM_WINDOWS)
     #include <windows.h>
@@ -125,13 +125,13 @@ namespace Kmplete
             if (freetypeInitError)
             {
                 KMP_LOG_CRITICAL("failed to initialize FreeType library instance");
-                throw std::runtime_error("FontAssetManager: failed to initialize FreeType library instance");
+                throw RuntimeError("FontAssetManager: failed to initialize FreeType library instance");
             }
 
             if (!_CreateDefaultFontAsset())
             {
                 KMP_LOG_CRITICAL("default font loading failed");
-                throw std::runtime_error("FontAssetManager: default font loading failed");
+                throw RuntimeError("FontAssetManager: default font loading failed");
             }
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)

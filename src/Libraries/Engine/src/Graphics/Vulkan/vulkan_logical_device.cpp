@@ -10,6 +10,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Base/exception.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Math/geometry.h"
@@ -17,7 +18,6 @@
 #include "Kmplete/Log/log.h"
 
 #include <limits>
-#include <stdexcept>
 
 
 namespace Kmplete
@@ -426,14 +426,14 @@ namespace Kmplete
             if (sampler == VK_NULL_HANDLE)
             {
                 KMP_LOG_CRITICAL("failed to create default nearest filtering sampler");
-                throw std::runtime_error("failed to create default nearest filtering sampler");
+                throw RuntimeError("failed to create default nearest filtering sampler");
             }
 
             sampler = _samplersStorage->AddSampler(SamplerDefaultLinearSid, VKPresets::SamplerCreateInfo_Linear_MipLinear_Repeat_NoAnisotropy);
             if (sampler == VK_NULL_HANDLE)
             {
                 KMP_LOG_CRITICAL("failed to create default linear filtering sampler");
-                throw std::runtime_error("failed to create default linear filtering sampler");
+                throw RuntimeError("failed to create default linear filtering sampler");
             }
         }}
         //--------------------------------------------------------------------------
@@ -543,7 +543,7 @@ namespace Kmplete
 
                 return texture;
             }
-            catch (KMP_MB_UNUSED const std::runtime_error& e)
+            catch (KMP_MB_UNUSED const RuntimeError& e)
             {
                 KMP_LOG_ERROR("failed to create a texture - {}", e.what());
             }
@@ -578,7 +578,7 @@ namespace Kmplete
                 const auto [iterator, hasEmplaced] = _shaderObjects.emplace(sid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
                 return hasEmplaced;
             }
-            catch (KMP_MB_UNUSED const std::runtime_error& er)
+            catch (KMP_MB_UNUSED const RuntimeError& er)
             {
                 KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", sid, filepath);
                 return false;
@@ -601,7 +601,7 @@ namespace Kmplete
                 const auto [iterator, hasEmplaced] = _shaderObjects.emplace(sid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
                 return hasEmplaced;
             }
-            catch (KMP_MB_UNUSED const std::runtime_error& er)
+            catch (KMP_MB_UNUSED const RuntimeError& er)
             {
                 KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", sid, filepath);
                 return false;
