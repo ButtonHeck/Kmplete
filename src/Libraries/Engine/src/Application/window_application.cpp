@@ -28,7 +28,7 @@ namespace Kmplete
         , _assetsManager(nullptr)
         , _frameListenerManager(nullptr)
         , _frameClock()
-        , _iconifiedFPS(10)
+        , _iconifiedFPS(IconifiedFPSMin)
     {
         _Initialize(parameters);
 
@@ -44,6 +44,7 @@ namespace Kmplete
 
     void WindowApplication::Run()
     {
+        KMP_ASSERT(!_running && _windowBackend);
         KMP_LOG_INFO_FN("'{}' main loop started...", _applicationName);
 
         _running = true;
@@ -70,6 +71,8 @@ namespace Kmplete
 
     void WindowApplication::OnEvent(Events::Event& event)
     {
+        KMP_ASSERT(_inputManager && _frameListenerManager && _graphicsBackend);
+
         _inputManager->ProcessInputEvents(event);
         _frameListenerManager->_DispatchEventToFrameListeners(event);
 
@@ -135,6 +138,8 @@ namespace Kmplete
 
     void WindowApplication::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
+        KMP_ASSERT(_frameListenerManager && _assetsManager && _inputManager && _graphicsBackend && _windowBackend);
+
         _SaveSettings();
 
         _frameListenerManager.reset();
@@ -147,6 +152,8 @@ namespace Kmplete
 
     bool WindowApplication::_RunFrameIteration(Window& window) KMP_PROFILING(ProfileLevelAlways)
     {
+        KMP_ASSERT(_frameListenerManager && _graphicsBackend);
+
         const auto frameTimestep = Math::Clamp(_frameClock.Mark(), 0.0f, 100.0f);
 
         _ProcessEvents(window, frameTimestep);
@@ -187,6 +194,8 @@ namespace Kmplete
 
     void WindowApplication::_ProcessEvents(Window& window, float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_inputManager && _frameListenerManager);
+
         _inputManager->ResetMouseMove();
         _inputManager->UpdateTimerActions(frameTimestep);
 
@@ -199,6 +208,8 @@ namespace Kmplete
 
     void WindowApplication::_IconifiedSleep() KMP_PROFILING(ProfileLevelMinor)
     {
+        KMP_ASSERT(_iconifiedFPS > 0.0f);
+
         const auto iconifiedSleepTimeMs = 1000.0f / float(_iconifiedFPS);
         const auto elapsedTimeThisFrame = _frameClock.Peek();
 
@@ -211,6 +222,8 @@ namespace Kmplete
 
     void WindowApplication::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_settingsManager && _windowBackend && _graphicsBackend);
+
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -227,12 +240,16 @@ namespace Kmplete
 
     void WindowApplication::_LoadWindowBackendSettings(SettingsDocument& settingsDocument) KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_windowBackend);
+
         _windowBackend->LoadSettings(settingsDocument);
     }}
     //--------------------------------------------------------------------------
 
     void WindowApplication::_LoadGraphicsBackendSettings(SettingsDocument& settingsDocument) KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_graphicsBackend);
+
         _graphicsBackend->LoadSettings(settingsDocument);
     }}
     //--------------------------------------------------------------------------

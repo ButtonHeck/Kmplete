@@ -62,7 +62,8 @@ namespace Kmplete
         const auto defaultTranslationsPath = Filesystem::ToGenericU8String(_applicationPath / LocalesDirectory);
         KMP_ASSERT(defaultTranslationsPath != LocalesDirectory);
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
-        _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
+        const auto engineDomainAdded = _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
+        KMP_ASSERT(engineDomainAdded);
 
         _settingsManager = CreateUPtr<SettingsManager>(parameters.settingsFilepath.empty()
             ? _applicationPath / parameters.defaultSettingsFileName
@@ -85,6 +86,8 @@ namespace Kmplete
 
     void Application::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
+        KMP_ASSERT(_settingsManager && _localizationManager && _systemMetricsManager);
+
         _SaveSettings();
 
         _settingsManager.reset();
@@ -102,6 +105,8 @@ namespace Kmplete
 
     void Application::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_settingsManager && _localizationManager);
+
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
         if (!settings)
         {
@@ -131,6 +136,8 @@ namespace Kmplete
 
     void Application::_LoadSettings() KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_settingsManager && _localizationManager);
+
         _settingsManager->LoadSettings();
 
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
@@ -163,6 +170,8 @@ namespace Kmplete
 
     void Application::_FillDictionary() KMP_PROFILING(ProfileLevelMinor)
     {
+        KMP_ASSERT(_localizationManager);
+
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "English");
         _localizationManager->Translate(KMP_TR_DOMAIN_ENGINE, "Russian");
     }}

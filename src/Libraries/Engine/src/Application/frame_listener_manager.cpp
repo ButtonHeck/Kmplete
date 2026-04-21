@@ -69,7 +69,7 @@ namespace Kmplete
 
         for (auto iter = _listeners.begin(); iter != _listeners.end(); iter++)
         {
-            if (iter->second->GetSID() == frameListener->GetSID())
+            if (iter->second && (iter->second->GetSID() == frameListener->GetSID()))
             {
                 _listeners.erase(iter);
                 KMP_LOG_INFO("removed frame listener '{}' priority {}", frameListener->GetSID(), frameListener->GetPriority());
@@ -92,7 +92,7 @@ namespace Kmplete
     {
         for (const auto& [priority, listener] : _listeners)
         {
-            if (listener->IsActive())
+            if (listener && listener->IsActive())
             {
                 listener->Update(frameTimestep, mainWindowIsIconified);
             }
@@ -104,7 +104,7 @@ namespace Kmplete
     {
         for (const auto& [priority, listener] : _listeners)
         {
-            if (listener->IsActive())
+            if (listener && listener->IsActive())
             {
                 listener->Render();
             }
@@ -117,7 +117,7 @@ namespace Kmplete
         for (auto iter = _listeners.rbegin(); iter != _listeners.rend(); ++iter)
         {
             auto& listener = iter->second;
-            if (listener->IsActive())
+            if (listener && listener->IsActive())
             {
                 if (event.handled)
                 {
@@ -182,7 +182,7 @@ namespace Kmplete
     {
         for (auto& [priority, listener] : _listeners)
         {
-            if (listener->GetSID() == sid)
+            if (listener && listener->GetSID() == sid)
             {
                 return listener;
             }
