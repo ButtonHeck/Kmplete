@@ -33,6 +33,7 @@ namespace Kmplete
         const TextureAssetManager& AssetsManager::GetTextureAssetManager() const noexcept
         {
             KMP_ASSERT(_textureAssetManager);
+
             return *_textureAssetManager;
         }
         //--------------------------------------------------------------------------
@@ -40,6 +41,7 @@ namespace Kmplete
         TextureAssetManager& AssetsManager::GetTextureAssetManager() noexcept
         {
             KMP_ASSERT(_textureAssetManager);
+
             return *_textureAssetManager;
         }
         //--------------------------------------------------------------------------
@@ -47,6 +49,7 @@ namespace Kmplete
         const FontAssetManager& AssetsManager::GetFontAssetManager() const noexcept
         {
             KMP_ASSERT(_fontAssetManager);
+
             return *_fontAssetManager;
         }
         //--------------------------------------------------------------------------
@@ -54,6 +57,7 @@ namespace Kmplete
         FontAssetManager& AssetsManager::GetFontAssetManager() noexcept
         {
             KMP_ASSERT(_fontAssetManager);
+
             return *_fontAssetManager;
         }
         //--------------------------------------------------------------------------
@@ -104,6 +108,8 @@ namespace Kmplete
 
         bool AssetsManager::UnloadAssets(const Vector<StringID>& assetsSids) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_textureAssetManager && _fontAssetManager);
+
             Vector<StringID> textureSidsToRemove;
             Vector<StringID> fontsSidsToRemove;
 
@@ -149,12 +155,17 @@ namespace Kmplete
             }
 
             _textureAssetManager.reset(new TextureAssetManager(_graphicsBackend));
+            KMP_ASSERT(_textureAssetManager);
+
             _fontAssetManager.reset(new FontAssetManager());
+            KMP_ASSERT(_fontAssetManager);
         }}
         //--------------------------------------------------------------------------
 
         void AssetsManager::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_fontAssetManager && _textureAssetManager);
+
             _fontAssetManager.reset();
             _textureAssetManager.reset();
         }}
@@ -162,6 +173,8 @@ namespace Kmplete
 
         void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(!fileBuffer.empty());
+
             for (AssetCount i = 0; i < assetCount; i++)
             {
                 const auto headerStructBufferOffset = sizeof(assetCount) + i * AssetEntryHeaderStructSize;
@@ -182,6 +195,8 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(!fileBuffer.empty());
+
             auto loadedOk = true;
             for (AssetCount i = 0; i < assetCount; i++)
             {
@@ -246,6 +261,8 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
+            KMP_ASSERT(_textureAssetManager && _fontAssetManager && !fileBuffer.empty());
+
             if (fileBuffer.size() < assetHeader.bufferOffset + assetHeader.bufferSize) {
                 KMP_LOG_ERROR("asset buffer overflow - file too small for asset data");
                 return false;

@@ -1,6 +1,7 @@
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Base/platform.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -127,6 +128,7 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("failed to initialize FreeType library instance");
                 throw RuntimeError("FontAssetManager: failed to initialize FreeType library instance");
             }
+            KMP_ASSERT(_freetypeLibInstance);
 
             if (!_CreateDefaultFontAsset())
             {
@@ -146,6 +148,8 @@ namespace Kmplete
 
         void FontAssetManager::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_freetypeLibInstance);
+
             _fonts.clear();
 
             const auto freetypeDoneError = FT_Done_FreeType(_freetypeLibInstance);
@@ -272,6 +276,8 @@ namespace Kmplete
 
         bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_freetypeLibInstance);
+
             const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Assets::FontAsset>(sid, *_freetypeLibInstance, std::move(fontData)));
             return hasEmplaced;
         }}

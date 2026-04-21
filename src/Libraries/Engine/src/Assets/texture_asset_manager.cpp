@@ -15,6 +15,8 @@ namespace Kmplete
         TextureAssetManager::TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend)
             : _graphicsBackend(graphicsBackend)
         {
+            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
             if (!_CreateErrorTextureAsset())
             {
                 KMP_LOG_CRITICAL("error texture loading failed");
