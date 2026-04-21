@@ -46,3 +46,84 @@ TEST_CASE("MergeVectors default", "[utils][vector]")
     REQUIRE(dst[7] == 13);
 }
 //--------------------------------------------------------------------------
+
+
+TEST_CASE("VectorContains empty vector", "[utils][vector]")
+{
+    Vector<int> vec{};
+
+    auto found = false;
+    REQUIRE_NOTHROW(found = Utils::VectorContains(vec, 1));
+    REQUIRE_FALSE(found);
+}
+
+TEST_CASE("VectorContains not found", "[utils][vector]")
+{
+    Vector<int> vec{ 1, 2, 3, 4, 5 };
+
+    auto found = false;
+    REQUIRE_NOTHROW(found = Utils::VectorContains(vec, 10));
+    REQUIRE_FALSE(found);
+}
+
+TEST_CASE("VectorContains found", "[utils][vector]")
+{
+    Vector<int> vec{ 1, 2, 3, 4, 5 };
+
+    auto found = false;
+    REQUIRE_NOTHROW(found = Utils::VectorContains(vec, 5));
+    REQUIRE(found);
+}
+//--------------------------------------------------------------------------
+
+
+TEST_CASE("VectorContainsIf empty vector", "[utils][vector]")
+{
+    Vector<int> vec{};
+
+    auto found = false;
+    const auto lambda = [](int value) { return value == 0; };
+    REQUIRE_NOTHROW(found = Utils::VectorContainsIf(vec, lambda));
+    REQUIRE_FALSE(found);
+}
+
+TEST_CASE("VectorContainsIf not found", "[utils][vector]")
+{
+    Vector<int> vec{ 1, 2, 3, 4, 5 };
+
+    auto found = false;
+    const auto lambda = [](int value) { return value == 0; };
+    REQUIRE_NOTHROW(found = Utils::VectorContainsIf(vec, lambda));
+    REQUIRE_FALSE(found);
+}
+
+TEST_CASE("VectorContainsIf found", "[utils][vector]")
+{
+    Vector<int> vec{ 1, 2, 3, 4, 5 };
+
+    auto found = false;
+    const auto lambda = [](int value) { return value == 5; };
+    REQUIRE_NOTHROW(found = Utils::VectorContainsIf(vec, lambda));
+    REQUIRE(found);
+}
+
+TEST_CASE("VectorContainsIf empty vector with true predicate", "[utils][vector]")
+{
+    Vector<int> vec{};
+
+    auto found = false;
+    const auto lambda = [](int) { return true; };
+    REQUIRE_NOTHROW(found = Utils::VectorContainsIf(vec, lambda));
+    REQUIRE_FALSE(found);
+}
+
+TEST_CASE("VectorContainsIf non-empty vector with true predicate", "[utils][vector]")
+{
+    Vector<int> vec{ 1, 2, 3, 4, 5 };
+
+    auto found = false;
+    const auto lambda = [](int) { return true; };
+    REQUIRE_NOTHROW(found = Utils::VectorContainsIf(vec, lambda));
+    REQUIRE(found);
+}
+//--------------------------------------------------------------------------

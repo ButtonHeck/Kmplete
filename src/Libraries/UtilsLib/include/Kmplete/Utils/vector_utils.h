@@ -17,6 +17,7 @@ namespace Kmplete
                 return;
             }
 
+            destination.reserve(destination.size() + source.size());
             std::move(source.begin(), source.end(), std::back_inserter(destination));
         }
         //--------------------------------------------------------------------------
