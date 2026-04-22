@@ -4,6 +4,7 @@
 #include "Kmplete/Event/key_events.h"
 #include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Log/log.h"
 
@@ -94,7 +95,13 @@ namespace Kmplete
 
         bool InputManager::IsMouseButtonPressed(InputCode mouseCode) const
         {
-            return _controlStates[mouseCode] == ButtonPressedValue;
+            if (_IsValidMouseButtonCode(mouseCode))
+            {
+                return _controlStates[mouseCode] == ButtonPressedValue;
+            }
+
+            KMP_LOG_WARN("IsMouseButtonPressed function accepts only codes in range [ Mouse_Button0 (0) ; Mouse_Button7 (7) ], but given value is '{}'", mouseCode);
+            return false;
         }
         //--------------------------------------------------------------------------
 
@@ -106,7 +113,13 @@ namespace Kmplete
 
         bool InputManager::IsKeyButtonPressed(InputCode keyCode) const
         {
-            return _controlStates[keyCode] == ButtonPressedValue;
+            if (_IsValidKeyboardCode(keyCode))
+            {
+                return _controlStates[keyCode] == ButtonPressedValue;
+            }
+
+            KMP_LOG_WARN("IsKeyButtonPressed function accepts only codes in range [ Key_Space (32) ; Key_Menu (348) ], but given value is '{}'", keyCode);
+            return false;
         }
         //--------------------------------------------------------------------------
 
@@ -120,6 +133,12 @@ namespace Kmplete
         {
             for (auto& [code, timerCondition] : _inputCodeToTimedConditionsMap)
             {
+                if (!_IsValidInputCode(code))
+                {
+                    KMP_LOG_WARN("UpdateTimerActions accepts only codes in range [ Mouse_Button0 (0) ; Key_Menu (348) ], but given value is '{}'", code);
+                    continue;
+                }
+
                 if (timerCondition.active && _controlStates[code] == ButtonPressedValue)
                 {
                     timerCondition.currentMs += frameTimestep;
@@ -300,6 +319,7 @@ namespace Kmplete
         void InputManager::_ProcessMouseButtonPressEvent(const Events::MouseButtonPressEvent& mouseButtonPressEvent)
         {
             const auto mouseButton = mouseButtonPressEvent.GetMouseButton();
+            KMP_ASSERT(_IsValidMouseButtonCode(mouseButton));
 
             _controlStates[mouseButton] = ButtonPressedValue;
 
@@ -310,6 +330,7 @@ namespace Kmplete
         void InputManager::_ProcessMouseButtonReleaseEvent(const Events::MouseButtonReleaseEvent& mouseButtonReleaseEvent)
         {
             const auto mouseButton = mouseButtonReleaseEvent.GetMouseButton();
+            KMP_ASSERT(_IsValidMouseButtonCode(mouseButton));
 
             _controlStates[mouseButton] = ButtonReleasedValue;
 
@@ -321,6 +342,7 @@ namespace Kmplete
         {
             const auto keyCode = keyPressEvent.GetKeyCode();
             const auto modifiers = keyPressEvent.GetMods();
+            KMP_ASSERT(_IsValidKeyboardCode(keyCode));
 
             _controlStates[keyCode] = ButtonPressedValue;
             _modifiersMask = modifiers;
@@ -336,6 +358,7 @@ namespace Kmplete
         {
             const auto keyCode = keyReleaseEvent.GetKeyCode();
             const auto modifiers = keyReleaseEvent.GetMods();
+            KMP_ASSERT(_IsValidKeyboardCode(keyCode));
 
             _controlStates[keyCode] = ButtonReleasedValue;
             _modifiersMask = modifiers;
@@ -398,6 +421,24 @@ namespace Kmplete
         bool InputManager::_ContainsActionIdentifier(const Vector<ActionIdentifier>& actionsIdentifiers, ActionIdentifier actionId) const
         {
             return Utils::VectorContains(actionsIdentifiers, actionId);
+        }
+        //--------------------------------------------------------------------------
+
+        bool InputManager::_IsValidMouseButtonCode(InputCode code) const noexcept
+        {
+            return (code >= Code::Mouse_Button0 && code <= Code::Mouse_Button7);
+        }
+        //--------------------------------------------------------------------------
+
+        bool InputManager::_IsValidKeyboardCode(InputCode code) const noexcept
+        {
+            return (code >= Code::Key_Space && code <= Code::Key_Menu);
+        }
+        //--------------------------------------------------------------------------
+
+        bool InputManager::_IsValidInputCode(InputCode code) const noexcept
+        {
+            return (code >= Code::Mouse_Button0 && code < Code::NumCodes);
         }
         //--------------------------------------------------------------------------
     }

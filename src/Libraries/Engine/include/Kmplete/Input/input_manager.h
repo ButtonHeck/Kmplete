@@ -78,7 +78,7 @@ namespace Kmplete
                 for (const auto& codeWithCondition : codes)
                 {
                     const auto& code = codeWithCondition.code;
-                    if (code < 0 || code >= static_cast<InputCode>(Code::NumCodes))
+                    if (!_IsValidInputCode(code))
                     {
                         continue;
                     }
@@ -110,7 +110,7 @@ namespace Kmplete
                 for (const auto& codeWithCondition : codes)
                 {
                     const auto code = codeWithCondition.code;
-                    if (code < 0 || code >= static_cast<InputCode>(Code::NumCodes))
+                    if (!_IsValidInputCode(code))
                     {
                         continue;
                     }
@@ -141,6 +141,10 @@ namespace Kmplete
             void _PropagateSingleActionEvent(const ActionEvent& actionEvent);
             KMP_NODISCARD bool _ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const;
             KMP_NODISCARD bool _ContainsActionIdentifier(const Vector<ActionIdentifier>& actionsIdentifiers, ActionIdentifier actionId) const;
+
+            KMP_NODISCARD KMP_API bool _IsValidMouseButtonCode(InputCode code) const noexcept;
+            KMP_NODISCARD KMP_API bool _IsValidKeyboardCode(InputCode code) const noexcept;
+            KMP_NODISCARD KMP_API bool _IsValidInputCode(InputCode code) const noexcept;
 
         private:
             Math::Point2I _mousePosition;
