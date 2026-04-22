@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/font.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 
 #include <ft2build.h>
@@ -30,6 +31,8 @@ namespace Kmplete
             SetPixelSize(DefaultFontPixelSize);
 
             KMP_PROFILE_CONSTRUCTOR_END()
+
+            KMP_ASSERT(_freetypeFace);
         }
         //--------------------------------------------------------------------------
 
@@ -40,6 +43,8 @@ namespace Kmplete
 
         Font::~Font() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_freetypeFace);
+
             const auto freetypeFontDoneError = FT_Done_Face(_freetypeFace);
             if (freetypeFontDoneError)
             {
@@ -50,6 +55,8 @@ namespace Kmplete
 
         bool Font::SetPointSize(UInt8 size, UInt32 dpi) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
+            KMP_ASSERT(_freetypeFace);
+
             const auto setSizeError = FT_Set_Char_Size(_freetypeFace, size * 64, 0, dpi, dpi);
             if (setSizeError)
             {
@@ -64,6 +71,8 @@ namespace Kmplete
 
         bool Font::SetPixelSize(UInt8 size) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
+            KMP_ASSERT(_freetypeFace);
+
             const auto setSizeError = FT_Set_Pixel_Sizes(_freetypeFace, size, 0);
             if (setSizeError)
             {
@@ -96,6 +105,8 @@ namespace Kmplete
 
         void Font::_UpdateParameters() noexcept
         {
+            KMP_ASSERT(_freetypeFace);
+
             _parameters.familyName = _freetypeFace->family_name;
 
             const auto style = _freetypeFace->style_flags;
@@ -123,6 +134,8 @@ namespace Kmplete
 
         void Font::_UpdateSizeMetrics() noexcept
         {
+            KMP_ASSERT(_freetypeFace);
+
             _parameters.sizeMetrics.xPixelsPerEM = _freetypeFace->size->metrics.x_ppem;
             _parameters.sizeMetrics.yPixelsPerEM = _freetypeFace->size->metrics.y_ppem;
             _parameters.sizeMetrics.xScale = _freetypeFace->size->metrics.x_scale >> 16;

@@ -2,6 +2,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Math/math.h"
 
@@ -44,6 +45,8 @@ namespace Kmplete
 
             _dataSize = _width * _height * static_cast<int>(_channels);
 
+            KMP_ASSERT(_channels != ImageChannels::Unknown);
+
             KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
         }
         //--------------------------------------------------------------------------
@@ -80,6 +83,8 @@ namespace Kmplete
             std::memcpy(_pixels, pixelBuffer, bufferSize);
 
             _dataSize = bufferSize;
+
+            KMP_ASSERT(_channels != ImageChannels::Unknown);
 
             KMP_LOG_INFO("created [{}x{}] ({} channels) from pixel buffer", _width, _height, static_cast<int>(_channels));
         }
@@ -122,6 +127,8 @@ namespace Kmplete
 
             _dataSize = _width * _height * static_cast<int>(_channels);
 
+            KMP_ASSERT(_channels != ImageChannels::Unknown);
+
             KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
         }
         //--------------------------------------------------------------------------
@@ -142,6 +149,8 @@ namespace Kmplete
         {
             rhs._pixels = nullptr;
             rhs._dataSize = 0;
+
+            KMP_ASSERT(_channels != ImageChannels::Unknown);
         }
         //--------------------------------------------------------------------------
 
@@ -163,6 +172,8 @@ namespace Kmplete
 
             rhs._pixels = nullptr;
             rhs._dataSize = 0;
+
+            KMP_ASSERT(_channels != ImageChannels::Unknown);
 
             return *this;
         }}

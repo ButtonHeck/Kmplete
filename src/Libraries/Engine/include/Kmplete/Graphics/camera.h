@@ -19,13 +19,13 @@ namespace Kmplete
             using MovementMask = UInt8;
             using MovementMaskBits = UInt8;
 
-            static constexpr MovementMaskBits NotMoving =    0b0000'0000;
-            static constexpr MovementMaskBits MoveLeft =     0b0000'0001;
-            static constexpr MovementMaskBits MoveRight =    0b0000'0010;
-            static constexpr MovementMaskBits MoveUp =       0b0000'0100;
-            static constexpr MovementMaskBits MoveDown =     0b0000'1000;
-            static constexpr MovementMaskBits MoveForward =  0b0001'0000;
-            static constexpr MovementMaskBits MoveBackward = 0b0010'0000;
+            static constexpr MovementMaskBits NotMoving =    0;
+            static constexpr MovementMaskBits MoveLeft =     1 << 0;
+            static constexpr MovementMaskBits MoveRight =    1 << 1;
+            static constexpr MovementMaskBits MoveUp =       1 << 2;
+            static constexpr MovementMaskBits MoveDown =     1 << 3;
+            static constexpr MovementMaskBits MoveForward =  1 << 4;
+            static constexpr MovementMaskBits MoveBackward = 1 << 5;
 
             enum class Type {
                 FirstPerson,

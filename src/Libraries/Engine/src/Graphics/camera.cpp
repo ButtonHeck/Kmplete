@@ -8,7 +8,7 @@ namespace Kmplete
     namespace Graphics
     {
         Camera::Camera(Type type, Projection projection) noexcept
-            : Camera({0.0f, 0.0f, 0.0f}, type, projection)
+            : Camera({ 0.0f, 0.0f, 0.0f }, type, projection)
         {}
         //--------------------------------------------------------------------------
 
