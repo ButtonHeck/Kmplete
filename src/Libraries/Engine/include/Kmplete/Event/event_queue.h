@@ -38,7 +38,7 @@ namespace Kmplete
 
             friend class ::Kmplete::FrameListenerManager;
 
-            KMP_NODISCARD Vector<UPtr<Event>>& GetEvents();
+            KMP_NODISCARD Vector<UPtr<Event>> GetEvents();
 
         private:
             Vector<UPtr<Event>> _events;

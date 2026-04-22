@@ -1,4 +1,5 @@
 #include "Kmplete/Event/event_queue.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -12,18 +13,24 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void EventQueue::QueueEvent(UPtr<Event>&& event)
+        void EventQueue::QueueEvent(UPtr<Event>&& event) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             std::lock_guard<std::mutex> lock(_mutex);
             _events.emplace_back(std::move(event));
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        Vector<UPtr<Event>>& EventQueue::GetEvents()
+        Vector<UPtr<Event>> EventQueue::GetEvents() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            //! No need to use mutex as it is called only from FrameListenerManager
-            return _events;
-        }
+            Vector<UPtr<Event>> events;
+            {
+                std::lock_guard<std::mutex> lock(_mutex);
+                events = std::move(_events);
+                _events.clear();
+            }
+            
+            return events;
+        }}
         //--------------------------------------------------------------------------
     }
 }

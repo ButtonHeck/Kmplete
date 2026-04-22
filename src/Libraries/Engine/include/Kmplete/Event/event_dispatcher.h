@@ -67,7 +67,8 @@ namespace Kmplete
                 const auto handlerTypeName = handler.target_type().name();
                 for (auto handlerIter = handlers.begin(); handlerIter != handlers.end(); handlerIter++)
                 {
-                    if (handlerIter->get()->GetTypeName() == handlerTypeName)
+                    const EventHandlerWrapper* handlerPtr = handlerIter->get();
+                    if (handlerPtr && handlerPtr->GetTypeName() == handlerTypeName)
                     {
                         KMP_LOG_DEBUG("removed handler for '{}' - {}", EventClass::TypeName, Utils::PrettifyFunctionName(handlerTypeName));
                         handlers.erase(handlerIter);
@@ -91,7 +92,14 @@ namespace Kmplete
                 for (size_t handlerIndex = 0; handlerIndex < handlers.size(); handlerIndex++)
                 {
                     const auto& handler = handlers[handlerIndex];
-                    event.handled |= handler->ProcessEvent(event);
+                    if (handler)
+                    {
+                        event.handled |= handler->ProcessEvent(event);
+                    }
+                    else
+                    {
+                        KMP_LOG_ERROR("handler under index '{}' is nullptr and cannot dispatch event '{}'", handlerIndex, event.GetName());
+                    }
 
                     if (event.handled)
                     {
