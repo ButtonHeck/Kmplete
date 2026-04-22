@@ -81,6 +81,7 @@ namespace Kmplete
     Window& WindowBackendGlfw::GetMainWindow()
     {
         KMP_ASSERT(_mainWindow);
+
         return *_mainWindow;
     }
     //--------------------------------------------------------------------------
@@ -124,6 +125,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
+        KMP_ASSERT(_mainWindow && _mainWindowSettings);
+
         _mainWindow.reset();
         _mainWindowSettings.reset();
 
@@ -209,7 +212,14 @@ namespace Kmplete
     {
         if (_auxWindows.contains(windowName))
         {
-            return _auxWindows.at(windowName).get();
+            const auto& auxWindow = _auxWindows.at(windowName);
+            if (auxWindow)
+            {
+                return auxWindow.get();
+            }
+
+            KMP_LOG_WARN("aux window '{}' found, but it is nullptr", windowName);
+            return nullptr;
         }
 
         KMP_LOG_WARN("cannot find aux window '{}'", windowName);
@@ -344,6 +354,8 @@ namespace Kmplete
 
     void WindowBackendGlfw::_SaveMainWindowSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_mainWindowSettings);
+
         settings.StartSaveObject(MainWindowStr);
         _mainWindowSettings->SaveSettings(settings);
         settings.EndSaveObject();
@@ -357,6 +369,7 @@ namespace Kmplete
         for (const auto& windowEntry : _auxWindowsSettings)
         {
             KMP_ASSERT(windowEntry.second);
+
             const auto& windowSettings = *windowEntry.second;
 
             settings.StartSaveObject(index);

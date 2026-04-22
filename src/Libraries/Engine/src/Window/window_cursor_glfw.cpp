@@ -1,6 +1,7 @@
 #include "Kmplete/Window/window_cursor_glfw.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -34,6 +35,8 @@ namespace Kmplete
             KMP_LOG_WARN("cannot create cursor image from '{}'", filepath);
             throw RuntimeError("WindowCursorGlfw image creation failed");
         }
+
+        KMP_ASSERT(_cursor);
     }
     //--------------------------------------------------------------------------
 
@@ -48,6 +51,8 @@ namespace Kmplete
 
     NonNull<void*> WindowCursorGlfw::GetImplPointer() const noexcept
     {
+        KMP_ASSERT(_cursor);
+
         return _cursor;
     }
     //--------------------------------------------------------------------------

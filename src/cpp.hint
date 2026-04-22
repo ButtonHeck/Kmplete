@@ -5,3 +5,4 @@
 #define KMP_API
 #define KMP_NODISCARD
 #define KMP_MB_UNUSED
+#define KMP_ASSERT assert
