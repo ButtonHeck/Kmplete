@@ -29,6 +29,8 @@ namespace Kmplete
 
     bool LocalizationManager::SetLocale(const LocaleStr& localeString) KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_library);
+
         if (_currentLocale == localeString)
         {
             KMP_LOG_INFO("locale '{}' already set", localeString);
@@ -71,6 +73,8 @@ namespace Kmplete
 
     bool LocalizationManager::AddMessagesDomain(const DomainStr& domain) KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_library);
+
         _localeGenerator.add_messages_domain(domain);
         _ImbueLocale();
 
@@ -80,6 +84,8 @@ namespace Kmplete
 
     bool LocalizationManager::RemoveMessagesDomain(const DomainStr& domain) KMP_PROFILING(ProfileLevelImportant)
     {
+        KMP_ASSERT(_library);
+
         return _library->RemoveDictionary(domain);
     }}
     //--------------------------------------------------------------------------
@@ -109,6 +115,8 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& source) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         const auto translation = Localization::Translate(domain, source);
         const auto domainSid = ToStringID(KMP_SID_PARAM(domain));
         const auto sourceSid = ToStringID(KMP_SID_PARAM(source));
@@ -120,6 +128,8 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         const auto translation = Localization::Translate(domain, sourceSingular, sourcePlural, count);
         const auto domainSid = ToStringID(KMP_SID_PARAM(domain));
         const auto sourceSingularSid = ToStringID(KMP_SID_PARAM(sourceSingular));
@@ -133,6 +143,8 @@ namespace Kmplete
 
     TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         const auto translation = Localization::TranslateCtx(domain, source, context);
         const auto domainSid = ToStringID(KMP_SID_PARAM(domain));
         const auto sourceSid = ToStringID(KMP_SID_PARAM(source));
@@ -146,6 +158,8 @@ namespace Kmplete
     TranslationStr LocalizationManager::TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, 
                                                      int count, const ContextStr& context) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         const auto translation = Localization::TranslateCtx(domain, sourceSingular, sourcePlural, count, context);
         const auto domainSid = ToStringID(KMP_SID_PARAM(domain));
         const auto sourceSingularSid = ToStringID(KMP_SID_PARAM(sourceSingular));
@@ -160,6 +174,8 @@ namespace Kmplete
 
     const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         return _library->Get(domainSid, sourceSid);
     }}
     //--------------------------------------------------------------------------
@@ -167,6 +183,8 @@ namespace Kmplete
     const TranslationStr& LocalizationManager::Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                            const SourceStrSID& sourceSidPlural, int count) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count));
     }}
@@ -182,6 +200,8 @@ namespace Kmplete
     const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
                                                               const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         const auto& pluralityDispatcher = GetPluralityDispatcher(_currentLocale);
         return _library->Get(domainSid, sourceSidSingular, sourceSidPlural, pluralityDispatcher.GetPluralityForm(count), contextSid);
     }}
@@ -196,6 +216,8 @@ namespace Kmplete
 
     const TranslationStr& LocalizationManager::TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        KMP_ASSERT(_library);
+
         return _library->Get(domainSid, sourceSid, contextSid);
     }}
     //--------------------------------------------------------------------------

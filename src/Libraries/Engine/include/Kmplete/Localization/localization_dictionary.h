@@ -26,8 +26,8 @@ namespace Kmplete
         KMP_API explicit LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid = SidTrInvalidLocale) noexcept;
         ~LocalizationDictionary() = default;
 
-        KMP_NODISCARD KMP_API const DomainStrSID& GetDomain() const;
-        KMP_API void SetLocale(const LocaleStrSID& localeSid);
+        KMP_NODISCARD KMP_API const DomainStrSID& GetDomain() const noexcept;
+        KMP_API void SetLocale(const LocaleStrSID& localeSid) noexcept;
 
         KMP_API void Add(const SourceStrSID& sourceSid, const TranslationStr& translation);
         KMP_API void Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 

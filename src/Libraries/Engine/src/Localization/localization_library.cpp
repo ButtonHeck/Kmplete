@@ -23,7 +23,10 @@ namespace Kmplete
             _currentLocaleSid = localeSid;
             for (auto& [domain, dictionary] : _dictionaryMap)
             {
-                dictionary->SetLocale(localeSid);
+                if (dictionary)
+                {
+                    dictionary->SetLocale(localeSid);
+                }
             }
         }
     }}
@@ -83,7 +86,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            _dictionaryMap.at(domainSid)->Add(sourceSid, translation);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                dictionary->Add(sourceSid, translation);
+            }
         }
     }}
     //--------------------------------------------------------------------------
@@ -93,7 +100,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            _dictionaryMap.at(domainSid)->Add(sourceSidSingular, sourceSidPlural, pluralityForm, translation);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                dictionary->Add(sourceSidSingular, sourceSidPlural, pluralityForm, translation);
+            }
         }
     }}
     //--------------------------------------------------------------------------
@@ -102,7 +113,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            _dictionaryMap.at(domainSid)->Add(sourceSid, contextSid, translation);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                dictionary->Add(sourceSid, contextSid, translation);
+            }
         }
     }}
     //--------------------------------------------------------------------------
@@ -112,7 +127,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            _dictionaryMap.at(domainSid)->Add(sourceSidSingular, sourceSidPlural, pluralityForm, contextSid, translation);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                dictionary->Add(sourceSidSingular, sourceSidPlural, pluralityForm, contextSid, translation);
+            }
         }
     }}
     //--------------------------------------------------------------------------
@@ -121,7 +140,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            return _dictionaryMap.at(domainSid)->Get(sourceSid);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                return dictionary->Get(sourceSid);
+            }
         }
 
         return NoTranslation;
@@ -133,7 +156,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            return _dictionaryMap.at(domainSid)->Get(sourceSidSingular, sourceSidPlural, pluralityForm);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                return dictionary->Get(sourceSidSingular, sourceSidPlural, pluralityForm);
+            }
         }
 
         return NoTranslation;
@@ -144,7 +171,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            return _dictionaryMap.at(domainSid)->Get(sourceSid, contextSid);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                return dictionary->Get(sourceSid, contextSid);
+            }
         }
 
         return NoTranslation;
@@ -156,7 +187,11 @@ namespace Kmplete
     {
         if (_dictionaryMap.contains(domainSid))
         {
-            return _dictionaryMap.at(domainSid)->Get(sourceSidSingular, sourceSidPlural, pluralityForm, contextSid);
+            auto& dictionary = _dictionaryMap.at(domainSid);
+            if (dictionary)
+            {
+                return dictionary->Get(sourceSidSingular, sourceSidPlural, pluralityForm, contextSid);
+            }
         }
 
         return NoTranslation;
