@@ -4,6 +4,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -59,6 +60,8 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            KMP_ASSERT(_instance && _surface);
+
             Vector<VkPhysicalDevice> devices = _GetListOfPhysicalDevices();
             _PickSuitablePhysicalDevice(devices);
 
@@ -72,12 +75,17 @@ namespace Kmplete
             PrintGPUInfo();
 
             _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_vulkanContext.memoryProperties));
+            KMP_ASSERT(_memoryTypeDelegate);
+
             _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
+            KMP_ASSERT(_logicalDevice);
         }
         //--------------------------------------------------------------------------
 
         VulkanPhysicalDevice::~VulkanPhysicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_logicalDevice && _memoryTypeDelegate && _formatDelegate);
+
             _logicalDevice.reset();
             _memoryTypeDelegate.reset();
             _formatDelegate.reset();
@@ -86,18 +94,24 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_logicalDevice);
+
             _logicalDevice->StartFrame(frameTimestep);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanPhysicalDevice::EndFrame() KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_logicalDevice);
+
             _logicalDevice->EndFrame();
         }}
         //--------------------------------------------------------------------------
 
         void VulkanPhysicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelMinor)
         {
+            KMP_ASSERT(_logicalDevice);
+
             _UpdateSurfaceInfo();
             _logicalDevice->HandleWindowResize();
         }}
@@ -105,18 +119,24 @@ namespace Kmplete
 
         const VulkanLogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() const noexcept
         {
+            KMP_ASSERT(_logicalDevice);
+
             return *_logicalDevice.get();
         }
         //--------------------------------------------------------------------------
 
         VulkanLogicalDevice& VulkanPhysicalDevice::GetLogicalDevice() noexcept
         {
+            KMP_ASSERT(_logicalDevice);
+
             return *_logicalDevice.get();
         }
         //--------------------------------------------------------------------------
 
         VkPhysicalDevice VulkanPhysicalDevice::GetVkPhysicalDevice() const noexcept
         {
+            KMP_ASSERT(_physicalDevice);
+
             return _physicalDevice;
         }
         //--------------------------------------------------------------------------
@@ -129,12 +149,16 @@ namespace Kmplete
 
         const VulkanFormatDelegate& VulkanPhysicalDevice::GetVulkanFormatDelegate() const noexcept
         {
+            KMP_ASSERT(_formatDelegate);
+
             return *_formatDelegate.get();
         }
         //--------------------------------------------------------------------------
 
         const VulkanMemoryTypeDelegate& VulkanPhysicalDevice::GetVulkanMemoryTypeDelegate() const noexcept
         {
+            KMP_ASSERT(_memoryTypeDelegate);
+
             return *_memoryTypeDelegate.get();
         }
         //--------------------------------------------------------------------------
@@ -167,6 +191,8 @@ namespace Kmplete
                     _physicalDevice = device;
 
                     _formatDelegate.reset(new VulkanFormatDelegate(_physicalDevice));
+                    KMP_ASSERT(_formatDelegate);
+
                     auto defaultDepthFormat = _formatDelegate->FindImageFormat(
                         {
                           VK_Format_D32_SFloat_S8_UInt,
@@ -196,6 +222,8 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_UpdateSurfaceInfo() KMP_PROFILING(ProfileLevelMinorVerbose)
         {
+            KMP_ASSERT(_physicalDevice && _surface);
+
             auto surfaceAndPresentModeProperties = VKUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
             _vulkanContext.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
@@ -205,6 +233,8 @@ namespace Kmplete
 
         void VulkanPhysicalDevice::_QueryGPUInfo() KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_physicalDevice);
+
             auto propertiesVersion12 = VKUtils::InitVkPhysicalDeviceVulkan12Properties();
             propertiesVersion12.pNext = nullptr;
 
