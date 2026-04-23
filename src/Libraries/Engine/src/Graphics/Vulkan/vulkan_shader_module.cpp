@@ -3,6 +3,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -17,6 +18,64 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
+            KMP_ASSERT(_device);
+
+            _Initialize(filepath);
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanShaderModule::VulkanShaderModule(VulkanShaderModule&& other) noexcept
+            : _device(other._device)
+            , _shaderModule(other._shaderModule)
+        {
+            other._device = VK_NULL_HANDLE;
+            other._shaderModule = VK_NULL_HANDLE;
+
+            KMP_ASSERT(_device && _shaderModule);
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanShaderModule& VulkanShaderModule::operator=(VulkanShaderModule&& other) noexcept
+        {
+            if (this == &other)
+            {
+                return *this;
+            }
+
+            _Finalize();
+
+            _device = other._device;
+            _shaderModule = other._shaderModule;
+
+            other._device = VK_NULL_HANDLE;
+            other._shaderModule = VK_NULL_HANDLE;
+
+            KMP_ASSERT(_device && _shaderModule);
+
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanShaderModule::~VulkanShaderModule() KMP_PROFILING(ProfileLevelAlways)
+        {
+            _Finalize();
+        }}
+        //--------------------------------------------------------------------------
+
+        VkPipelineShaderStageCreateInfo VulkanShaderModule::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept KMP_PROFILING(ProfileLevelMinor)
+        {
+            KMP_ASSERT(_shaderModule);
+
+            auto shaderStageCreateInfo = VKUtils::InitVkPipelineShaderStageCreateInfo(stage);
+            shaderStageCreateInfo.module = _shaderModule;
+            shaderStageCreateInfo.pName = entryPointName;
+
+            return shaderStageCreateInfo;
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanShaderModule::_Initialize(const Filepath& filepath) KMP_PROFILING(ProfileLevelAlways)
+        {
             if (!Filesystem::FilepathExists(filepath))
             {
                 KMP_LOG_ERROR("shader file not found '{}'", filepath);
@@ -42,51 +101,16 @@ namespace Kmplete
 
             auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
             VKUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanShaderModule::VulkanShaderModule(VulkanShaderModule&& other) noexcept
-            : _device(other._device)
-            , _shaderModule(other._shaderModule)
-        {
-            other._device = VK_NULL_HANDLE;
-            other._shaderModule = VK_NULL_HANDLE;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanShaderModule& VulkanShaderModule::operator=(VulkanShaderModule&& other) noexcept
-        {
-            if (this == &other)
-            {
-                return *this;
-            }
-
-            _device = other._device;
-            _shaderModule = other._shaderModule;
-
-            other._device = VK_NULL_HANDLE;
-            other._shaderModule = VK_NULL_HANDLE;
-
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanShaderModule::~VulkanShaderModule() KMP_PROFILING(ProfileLevelAlways)
-        {
-            if (_device != VK_NULL_HANDLE && _shaderModule != VK_NULL_HANDLE)
-            {
-                vkDestroyShaderModule(_device, _shaderModule, nullptr);
-            }
+            KMP_ASSERT(_shaderModule);
         }}
         //--------------------------------------------------------------------------
 
-        VkPipelineShaderStageCreateInfo VulkanShaderModule::GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName /*= "main"*/) const noexcept KMP_PROFILING(ProfileLevelMinor)
+        void VulkanShaderModule::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
-            auto shaderStageCreateInfo = VKUtils::InitVkPipelineShaderStageCreateInfo(stage);
-            shaderStageCreateInfo.module = _shaderModule;
-            shaderStageCreateInfo.pName = entryPointName;
-
-            return shaderStageCreateInfo;
+            if (_device && _shaderModule)
+            {
+                vkDestroyShaderModule(_device, _shaderModule, nullptr);
+            }
         }}
         //--------------------------------------------------------------------------
     }

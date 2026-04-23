@@ -27,6 +27,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPipelineShaderStageCreateInfo GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName = "main") const noexcept;
 
         private:
+            void _Initialize(const Filepath& filepath);
+            void _Finalize();
+
+        private:
             VkDevice _device;
             VkShaderModule _shaderModule;
         };
