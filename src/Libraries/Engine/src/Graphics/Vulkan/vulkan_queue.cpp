@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -20,6 +21,8 @@ namespace Kmplete
             , _supportPresentation(supportPresentation)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+            KMP_ASSERT(_device);
 
             vkGetDeviceQueue(_device, _familyIndex, 0, &_queue);
 
@@ -40,6 +43,8 @@ namespace Kmplete
             other._device = VK_NULL_HANDLE;
             other._familyIndex = UINT32_MAX;
             other._queue = nullptr;
+
+            KMP_ASSERT(_device && _queue);
         }
         //--------------------------------------------------------------------------
 
@@ -59,12 +64,16 @@ namespace Kmplete
             other._familyIndex = UINT32_MAX;
             other._queue = nullptr;
 
+            KMP_ASSERT(_device && _queue);
+
             return *this;
         }
         //--------------------------------------------------------------------------
 
         void VulkanQueue::WaitIdle() const KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_queue);
+
             vkQueueWaitIdle(_queue);
         }}
         //--------------------------------------------------------------------------
@@ -82,6 +91,8 @@ namespace Kmplete
 
         void VulkanQueue::Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_queue);
+
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence);
             VKUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
         }}
@@ -100,6 +111,8 @@ namespace Kmplete
 
         void VulkanQueue::SyncSubmit(const Vector<VkSubmitInfo>& submits) const KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_device && _queue);
+
             VulkanFence fence(_device, "signaled"_false);
             const auto result = vkQueueSubmit(_queue, UInt32(submits.size()), submits.data(), fence.GetVkFence());
             VKUtils::CheckResult(result, "VulkanQueue: failed to submit commands to queue");
@@ -109,6 +122,8 @@ namespace Kmplete
 
         void VulkanQueue::Present(const VkPresentInfoKHR& presentationInfo) const KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_queue);
+
             if (!_supportPresentation)
             {
                 KMP_LOG_ERROR("current queue does not support presentation");
@@ -128,6 +143,8 @@ namespace Kmplete
 
         VkQueue VulkanQueue::GetVkQueue() const noexcept
         {
+            KMP_ASSERT(_queue);
+
             return _queue;
         }
         //--------------------------------------------------------------------------
