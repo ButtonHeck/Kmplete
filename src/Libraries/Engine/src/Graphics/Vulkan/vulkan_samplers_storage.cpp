@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
@@ -13,11 +14,15 @@ namespace Kmplete
         VulkanSamplersStorage::VulkanSamplersStorage(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : _imageCreatorDelegate(imageCreatorDelegate)
             , _device(device)
-        {}
+        {
+            KMP_ASSERT(_device);
+        }
         //--------------------------------------------------------------------------
 
         VulkanSamplersStorage::~VulkanSamplersStorage() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_device);
+
             for (const auto& [sid, sampler] : _samplers)
             {
                 vkDestroySampler(_device, sampler, nullptr);
