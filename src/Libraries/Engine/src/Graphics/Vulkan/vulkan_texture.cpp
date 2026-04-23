@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -18,11 +19,13 @@ namespace Kmplete
 
         VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
                                      const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
-            : _logicalDevice(device)
+            : _device(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
+            KMP_ASSERT(_device);
 
             _InitializeImage(format, mipLevels, extent, imageCreatorDelegate);
             _TransitionImageLayout(mipLevels, commandBuffer);
@@ -34,7 +37,9 @@ namespace Kmplete
 
         VulkanTexture::~VulkanTexture() KMP_PROFILING(ProfileLevelAlways)
         {
-            vkDestroyImageView(_logicalDevice, _imageView, nullptr);
+            KMP_ASSERT(_device && _imageView && _image);
+
+            vkDestroyImageView(_device, _imageView, nullptr);
 
             _image.reset();
         }}
@@ -42,6 +47,8 @@ namespace Kmplete
 
         VkImageView VulkanTexture::GetVkImageView() const noexcept
         {
+            KMP_ASSERT(_imageView);
+
             return _imageView;
         }
         //--------------------------------------------------------------------------
@@ -51,11 +58,14 @@ namespace Kmplete
             const auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled);
 
             _image.reset(imageCreatorDelegate.CreateVulkanImagePtr(creationParameters, VK_Memory_DeviceLocal));
+            KMP_ASSERT(_image);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanTexture::_TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_image && commandBuffer);
+
             const VKUtils::MemoryBarrierParameters barrierParameters = {
                 .cmdbuffer = commandBuffer,
                 .image = _image->GetVkImage(),
@@ -73,6 +83,8 @@ namespace Kmplete
 
         void VulkanTexture::_CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, VkCommandBuffer commandBuffer) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_image && commandBuffer);
+
             VkBufferImageCopy region{};
             region.imageSubresource.aspectMask = VK_ImageAspect_Color;
             region.imageSubresource.layerCount = 1;
@@ -83,7 +95,10 @@ namespace Kmplete
 
         void VulkanTexture::_GenerateMipmaps(const VkExtent3D& extent, UInt32 mipLevels, VkCommandBuffer commandBuffer) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_image && commandBuffer);
+
             auto vulkanImage = _image->GetVkImage();
+            KMP_ASSERT(vulkanImage);
 
             auto imageBarrier = VKUtils::InitVkImageMemoryBarrier();
             imageBarrier.image = vulkanImage;
@@ -159,6 +174,8 @@ namespace Kmplete
 
         void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_image);
+
             auto imageViewParameters = VKUtils::InitVkImageViewCreateInfo();
             imageViewParameters.image = _image->GetVkImage();
             imageViewParameters.viewType = VK_ImageView_2D;
@@ -170,6 +187,7 @@ namespace Kmplete
             imageViewParameters.subresourceRange.layerCount = 1;
 
             _imageView = imageCreatorDelegate.CreateVkImageView(imageViewParameters);
+            KMP_ASSERT(_imageView);
         }}
         //--------------------------------------------------------------------------
     }

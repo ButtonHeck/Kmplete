@@ -38,7 +38,7 @@ namespace Kmplete
             void _InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         private:
-            VkDevice _logicalDevice;
+            VkDevice _device;
             UPtr<VulkanImage> _image;
             VkImageView _imageView;
         };
