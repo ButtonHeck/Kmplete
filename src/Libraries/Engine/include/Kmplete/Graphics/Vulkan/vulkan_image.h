@@ -22,6 +22,8 @@ namespace Kmplete
 
         public:
             KMP_API VulkanImage(VkDevice device, const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
+            KMP_API VulkanImage(VulkanImage&& other) noexcept;
+            KMP_API VulkanImage& operator=(VulkanImage&& other) noexcept;
             KMP_API ~VulkanImage();
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
@@ -29,8 +31,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkFormat GetVkFormat() const noexcept;
 
         private:
-            void _CreateImageObject(const VkImageCreateInfo& creationParameters);
-            void _AllocateImageMemory(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
+            void _Initialize(const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
+            void _Finalize();
 
         private:
             VkDevice _device;
