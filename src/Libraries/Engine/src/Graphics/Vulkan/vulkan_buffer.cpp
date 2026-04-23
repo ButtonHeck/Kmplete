@@ -24,24 +24,7 @@ namespace Kmplete
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            auto bufferCreateInfo = VKUtils::InitVkBufferCreateInfo(_size, _usageFlags);
-
-            auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
-            VKUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
-
-            auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, parameters.memoryPropertyFlags);
-            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VKUtils::InitVkMemoryAllocateFlagsInfoKHR();
-            if (_usageFlags & VK_BufferUsage_ShaderDeviceAddress)
-            {
-                allocateFlagsInfo.flags = VK_MemoryAllocate_DeviceAddress;
-                bufferMemoryContext.allocateInfo.pNext = &allocateFlagsInfo;
-            }
-
-            result = vkAllocateMemory(_device, &bufferMemoryContext.allocateInfo, nullptr, &_memory);
-            VKUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
-
-            result = Bind();
-            VKUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
+            _Initialize(memoryTypeDelegate, parameters);
         }
         //--------------------------------------------------------------------------
 
@@ -58,6 +41,8 @@ namespace Kmplete
             other._memory = VK_NULL_HANDLE;
             other._size = 0ULL;
             other._mapped = nullptr;
+
+            KMP_ASSERT(_device && _buffer && _memory);
         }
         //--------------------------------------------------------------------------
 
@@ -69,16 +54,7 @@ namespace Kmplete
             }
 
             Unmap();
-
-            if (_buffer)
-            {
-                vkDestroyBuffer(_device, _buffer, nullptr);
-            }
-
-            if (_memory)
-            {
-                vkFreeMemory(_device, _memory, nullptr);
-            }
+            _Finalize();
 
             _device = other._device;
             _buffer = other._buffer;
@@ -94,32 +70,30 @@ namespace Kmplete
             other._size = 0ULL;
             other._mapped = nullptr;
 
+            KMP_ASSERT(_device && _buffer && _memory);
+
             return *this;
         }
         //--------------------------------------------------------------------------
 
         VulkanBuffer::~VulkanBuffer() KMP_PROFILING(ProfileLevelAlways)
         {
-            if (_buffer)
-            {
-                vkDestroyBuffer(_device, _buffer, nullptr);
-            }
-
-            if (_memory)
-            {
-                vkFreeMemory(_device, _memory, nullptr);
-            }
+            _Finalize();
         }}
         //--------------------------------------------------------------------------
 
         VkResult VulkanBuffer::Map(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
+            KMP_ASSERT(_device && _memory);
+
             return vkMapMemory(_device, _memory, offset, size, 0, &_mapped);
         }}
         //--------------------------------------------------------------------------
 
         VkResult VulkanBuffer::Unmap(bool flush /*= false*/, VkDeviceSize size/* = VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
+            KMP_ASSERT(_device && _memory);
+
             auto result = VK_SUCCESS;
             if (flush)
             {
@@ -138,12 +112,16 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Bind(VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
+            KMP_ASSERT(_device && _buffer && _memory);
+
             return vkBindBufferMemory(_device, _buffer, _memory, offset);
         }}
         //--------------------------------------------------------------------------
 
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
+            KMP_ASSERT(_device && _memory);
+
             auto mappedRange = VKUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
@@ -153,6 +131,8 @@ namespace Kmplete
 
         VkResult VulkanBuffer::Invalidate(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
+            KMP_ASSERT(_device && _memory);
+
             auto mappedRange = VKUtils::InitVkMappedMemoryRange(size, offset);
             mappedRange.memory = _memory;
 
@@ -163,12 +143,15 @@ namespace Kmplete
         void VulkanBuffer::CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size) KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_mapped);
+
             memcpy((char*)_mapped + mappedOffset, data, size);
         }}
         //--------------------------------------------------------------------------
 
         VkBuffer VulkanBuffer::GetVkBuffer() const noexcept
         {
+            KMP_ASSERT(_buffer);
+
             return _buffer;
         }
         //--------------------------------------------------------------------------
@@ -183,6 +166,47 @@ namespace Kmplete
         {
             return _mapped;
         }
+        //--------------------------------------------------------------------------
+
+        void VulkanBuffer::_Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters) KMP_PROFILING(ProfileLevelAlways)
+        {
+            KMP_ASSERT(_device);
+
+            auto bufferCreateInfo = VKUtils::InitVkBufferCreateInfo(_size, _usageFlags);
+
+            auto result = vkCreateBuffer(_device, &bufferCreateInfo, nullptr, &_buffer);
+            VKUtils::CheckResult(result, "VulkanBuffer: failed to create buffer object");
+            KMP_ASSERT(_buffer);
+
+            auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, parameters.memoryPropertyFlags);
+            VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VKUtils::InitVkMemoryAllocateFlagsInfoKHR();
+            if (_usageFlags & VK_BufferUsage_ShaderDeviceAddress)
+            {
+                allocateFlagsInfo.flags = VK_MemoryAllocate_DeviceAddress;
+                bufferMemoryContext.allocateInfo.pNext = &allocateFlagsInfo;
+            }
+
+            result = vkAllocateMemory(_device, &bufferMemoryContext.allocateInfo, nullptr, &_memory);
+            VKUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
+            KMP_ASSERT(_memory);
+
+            result = Bind();
+            VKUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanBuffer::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        {
+            if (_buffer && _device)
+            {
+                vkDestroyBuffer(_device, _buffer, nullptr);
+            }
+
+            if (_memory && _device)
+            {
+                vkFreeMemory(_device, _memory, nullptr);
+            }
+        }}
         //--------------------------------------------------------------------------
     }
 }

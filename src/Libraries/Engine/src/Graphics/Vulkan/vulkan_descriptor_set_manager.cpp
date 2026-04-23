@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -37,12 +38,16 @@ namespace Kmplete
 
         VkDescriptorPool VulkanDescriptorSetManager::GetVkDescriptorPool() const noexcept
         {
+            KMP_ASSERT(_descriptorPool);
+
             return _descriptorPool;
         }
         //--------------------------------------------------------------------------
 
         VkDescriptorSetLayout VulkanDescriptorSetManager::AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_device);
+
             if (_descriptorSetLayouts.contains(layoutSid))
             {
                 KMP_LOG_WARN("descriptor set layout with sid '{}' has already been created", layoutSid);
@@ -186,6 +191,11 @@ namespace Kmplete
                 KMP_LOG_ERROR("failed to set uniform buffer descriptor - set is null");
                 return false;
             }
+            if (buffer == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set uniform buffer descriptor - buffer is null");
+                return false;
+            }
 
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = buffer;
@@ -232,6 +242,16 @@ namespace Kmplete
             if (descriptorSet == VK_NULL_HANDLE)
             {
                 KMP_LOG_ERROR("failed to set combined image sampler descriptor - set is null");
+                return false;
+            }
+            if (imageView == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set combined image sampler descriptor - imageView is null");
+                return false;
+            }
+            if (sampler == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set combined image sampler descriptor - sampler is null");
                 return false;
             }
 
@@ -283,6 +303,11 @@ namespace Kmplete
                 KMP_LOG_ERROR("failed to set sampled image descriptor - set is null");
                 return false;
             }
+            if (imageView == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set sampled image descriptor - imageView is null");
+                return false;
+            }
 
             VkDescriptorImageInfo descriptorInfo{};
             descriptorInfo.imageView = imageView;
@@ -331,6 +356,11 @@ namespace Kmplete
                 KMP_LOG_ERROR("failed to set sampler descriptor - set is null");
                 return false;
             }
+            if (sampler == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set sampler descriptor - sampler is null");
+                return false;
+            }
 
             VkDescriptorImageInfo descriptorInfo{};
             descriptorInfo.sampler = sampler;
@@ -343,6 +373,8 @@ namespace Kmplete
 
         void VulkanDescriptorSetManager::_Initialize() KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_device);
+
             //TODO: fix numbers
             VkDescriptorPoolSize poolSizes[] = {
                 { VK_DescriptorType_Sampler, 100 },
@@ -364,11 +396,15 @@ namespace Kmplete
 
             const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
             VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor pool");
+
+            KMP_ASSERT(_descriptorPool);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanDescriptorSetManager::_Finalize() KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_device && _descriptorPool);
+
             for (const auto& [sid, descriptorSetLayout] : _descriptorSetLayouts)
             {
                 vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
@@ -381,6 +417,8 @@ namespace Kmplete
 
         bool VulkanDescriptorSetManager::_AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, DescriptorSetStorage& storage) const KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_device && _descriptorPool);
+
             auto descriptorSetAllocateInfo = VKUtils::InitVkDescriptorSetAllocateInfo();
             descriptorSetAllocateInfo.descriptorPool = _descriptorPool;
             descriptorSetAllocateInfo.descriptorSetCount = setsCount;
@@ -441,6 +479,8 @@ namespace Kmplete
 
         void VulkanDescriptorSetManager::_UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorBufferInfo& bufferInfo, VkDescriptorType type, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
+            KMP_ASSERT(_device);
+
             auto writeDescriptorSet = _GetWriteDescriptorSetTemplate(descriptorSet, type, binding);
             writeDescriptorSet.pBufferInfo = &bufferInfo;
             vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);
@@ -449,6 +489,8 @@ namespace Kmplete
 
         void VulkanDescriptorSetManager::_UpdateDescriptorSet(VkDescriptorSet descriptorSet, const VkDescriptorImageInfo& imageInfo, VkDescriptorType type, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
+            KMP_ASSERT(_device);
+
             auto writeDescriptorSet = _GetWriteDescriptorSetTemplate(descriptorSet, type, binding);
             writeDescriptorSet.pImageInfo = &imageInfo;
             vkUpdateDescriptorSets(_device, 1, &writeDescriptorSet, 0, nullptr);

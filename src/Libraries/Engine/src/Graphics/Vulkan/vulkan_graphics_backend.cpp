@@ -4,6 +4,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Core/settings_document.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Base/exception.h"
@@ -91,30 +92,40 @@ namespace Kmplete
 
         const GraphicsSurface& VulkanGraphicsBackend::GetGraphicsSurface() const noexcept
         {
+            KMP_ASSERT(_surface);
+
             return *_surface.get();
         }
         //--------------------------------------------------------------------------
 
         const VulkanPhysicalDevice& VulkanGraphicsBackend::GetPhysicalDevice() const noexcept
         {
+            KMP_ASSERT(_physicalDevice);
+
             return *_physicalDevice.get();
         }
         //--------------------------------------------------------------------------
 
         VulkanPhysicalDevice& VulkanGraphicsBackend::GetPhysicalDevice() noexcept
         {
+            KMP_ASSERT(_physicalDevice);
+
             return *_physicalDevice.get();
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::StartFrame(float frameTimestep)
         {
+            KMP_ASSERT(_physicalDevice);
+
             _physicalDevice->StartFrame(frameTimestep);
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::EndFrame()
         {
+            KMP_ASSERT(_physicalDevice);
+
             _physicalDevice->EndFrame();
 
             _currentBufferIndex = (_currentBufferIndex + 1) % NumConcurrentFrames;
@@ -123,6 +134,8 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::HandleWindowResize()
         {
+            KMP_ASSERT(_physicalDevice);
+
             if (!_window.IsIconified())
             {
                 _physicalDevice->HandleWindowResize();
@@ -132,18 +145,24 @@ namespace Kmplete
 
         Nullable<Texture*> VulkanGraphicsBackend::CreateTexture(const Image& image)
         {
+            KMP_ASSERT(_physicalDevice);
+
             return _physicalDevice->GetLogicalDevice().CreateTexture(image);
         }
         //--------------------------------------------------------------------------
 
         UInt32 VulkanGraphicsBackend::GetMultisampling() const
         {
+            KMP_ASSERT(_physicalDevice);
+
             return UInt32(_physicalDevice->GetLogicalDevice().GetMultisampling());
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::SetMultisampling(UInt32 samples) KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_physicalDevice);
+
             if (!Math::IsPowerOf2(samples))
             {
                 KMP_LOG_WARN("samples value (given {}) will be converted to nearest power of two", samples);
@@ -179,6 +198,8 @@ namespace Kmplete
 
         VkInstance VulkanGraphicsBackend::GetVkInstance() const noexcept
         {
+            KMP_ASSERT(_instance);
+
             return _instance;
         }
         //--------------------------------------------------------------------------
@@ -211,6 +232,7 @@ namespace Kmplete
 
             const auto result = vkCreateInstance(&instanceCreateInfo, nullptr, &_instance);
             VKUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
+            KMP_ASSERT(_instance);
 
             if (!VKCommands::LoadExtensionFunctions(_instance))
             {
@@ -223,12 +245,17 @@ namespace Kmplete
 #endif
 
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
+            KMP_ASSERT(_surface);
+
             _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
+            KMP_ASSERT(_physicalDevice);
         }}
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::_Finalize() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_instance && _physicalDevice && _surface);
+
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             VKCommands::DestroyDebugUtilsMessengerEXT(_instance, _debugMessenger, nullptr);
 #endif

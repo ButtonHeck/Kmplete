@@ -28,6 +28,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkFence GetVkFence() const noexcept;
 
         private:
+            void _Initialize(bool signaled);
+            void _Finalize();
+
+        private:
             VkDevice _device;
             VkFence _fence;
         };

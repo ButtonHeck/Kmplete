@@ -28,6 +28,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkCommandBuffer GetVkCommandBuffer() const noexcept;
 
         private:
+            void _Initialize();
+            void _Finalize();
+
+        private:
             VkDevice _device;
             VkCommandPool _commandPool;
             VkCommandBuffer _commandBuffer;

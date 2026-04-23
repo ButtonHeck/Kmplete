@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -26,17 +27,23 @@ namespace Kmplete
 
             const auto result = vkCreateCommandPool(_device, &createPoolInfo, nullptr, &_commandPool);
             VKUtils::CheckResult(result, "VulkanCommandPool: failed to create command pool");
+
+            KMP_ASSERT(_device && _commandPool);
         }
         //--------------------------------------------------------------------------
 
         VulkanCommandPool::~VulkanCommandPool() KMP_PROFILING(ProfileLevelAlways)
         {
+            KMP_ASSERT(_device && _commandPool);
+
             vkDestroyCommandPool(_device, _commandPool, nullptr);
         }}
         //--------------------------------------------------------------------------
 
         VkCommandPool VulkanCommandPool::GetVkCommandPool() const noexcept
         {
+            KMP_ASSERT(_commandPool);
+
             return _commandPool;
         }
         //--------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_context.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -15,14 +16,16 @@ namespace Kmplete
         void VulkanContext::Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                                      const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam) KMP_PROFILING(ProfileLevelAlways)
         {
-            this->instance = vkInstance;
-            this->physicalDevice = physDevice;
-            this->surface = surfaceParam;
-            this->graphicsFamilyIndex = graphicsIndex;
-            this->presentFamilyIndex = presentIndex;
-            this->surfaceCapabilities = surfCapabilities;
-            this->surfaceFormats = std::move(surfFormats);
-            this->presentModes = std::move(presentModesParam);
+            instance = vkInstance;
+            physicalDevice = physDevice;
+            surface = surfaceParam;
+            graphicsFamilyIndex = graphicsIndex;
+            presentFamilyIndex = presentIndex;
+            surfaceCapabilities = surfCapabilities;
+            surfaceFormats = std::move(surfFormats);
+            presentModes = std::move(presentModesParam);
+
+            KMP_ASSERT(instance && physicalDevice && surface);
 
             vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
             vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
@@ -48,6 +51,8 @@ namespace Kmplete
             defaultDepthFormat = depthFormat;
 
             surfaceFormat = _FindSurfaceFormat();
+
+            KMP_ASSERT(!supportedSampleCounts.empty());
         }}
         //--------------------------------------------------------------------------
 

@@ -46,6 +46,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDeviceSize GetSize() const noexcept;
             KMP_NODISCARD KMP_API void* GetMappedPtr() const noexcept;
 
+        private:
+            void _Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters);
+            void _Finalize();
+
         protected:
             VkDevice _device;
             VkBuffer _buffer;

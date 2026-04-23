@@ -55,6 +55,14 @@ namespace Kmplete
 
         bool VulkanGraphicsPipeline::Build() KMP_PROFILING(ProfileLevelImportant)
         {
+            KMP_ASSERT(_device);
+
+            if (_pipelineLayout && _pipeline)
+            {
+                KMP_LOG_WARN("pipeline has already been built");
+                return true;
+            }
+
             _layoutCreateInfo.setLayoutCount = UInt32(_descriptorSetLayouts.size());
             _layoutCreateInfo.pSetLayouts = _descriptorSetLayouts.data();
 
@@ -64,6 +72,7 @@ namespace Kmplete
             {
                 return false;
             }
+            KMP_ASSERT(_pipelineLayout);
 
             _colorBlendStateCreateInfo.attachmentCount = UInt32(_colorBlendAttachments.size());
             _colorBlendStateCreateInfo.pAttachments = _colorBlendAttachments.data();
@@ -95,8 +104,13 @@ namespace Kmplete
 
             result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
             VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline", "throw exception"_false);
+            if (result != VK_SUCCESS)
+            {
+                return false;
+            }
+            KMP_ASSERT(_pipeline);
             
-            return result == VK_SUCCESS;
+            return true;
         }}
         //--------------------------------------------------------------------------
 
@@ -354,17 +368,14 @@ namespace Kmplete
 
         void VulkanGraphicsPipeline::_Finalize()
         {
-            if (_device != VK_NULL_HANDLE)
+            if (_device && _pipeline)
             {
-                if (_pipeline != VK_NULL_HANDLE)
-                {
-                    vkDestroyPipeline(_device, _pipeline, nullptr);
-                }
+                vkDestroyPipeline(_device, _pipeline, nullptr);
+            }
 
-                if (_pipelineLayout != VK_NULL_HANDLE)
-                {
-                    vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
-                }
+            if (_device && _pipelineLayout)
+            {
+                vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
             }
         }
         //--------------------------------------------------------------------------
