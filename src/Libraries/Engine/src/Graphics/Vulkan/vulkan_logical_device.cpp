@@ -575,7 +575,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipeline& VulkanLogicalDevice::AddGraphicsPipeline(StringID sid) KMP_PROFILING(ProfileLevelImportant)
+        VulkanGraphicsPipeline& VulkanLogicalDevice::AddGraphicsPipeline(StringID sid, const VulkanGraphicsPipelineParameters& parameters) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
@@ -585,7 +585,7 @@ namespace Kmplete
                 return *_pipelines[sid].get();
             }
 
-            const auto [iterator, hasEmplaced] = _pipelines.emplace(sid, CreateUPtr<VulkanGraphicsPipeline>(_device, sid));
+            const auto [iterator, hasEmplaced] = _pipelines.emplace(sid, CreateUPtr<VulkanGraphicsPipeline>(_device, sid, parameters));
             return *iterator->second.get();
         }}
         //--------------------------------------------------------------------------

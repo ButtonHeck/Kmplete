@@ -10,6 +10,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_module.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_pipeline_parameters.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_descriptor_set_manager.h"
@@ -69,7 +70,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanDescriptorSetManager& GetDescriptorSetManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
 
-            KMP_NODISCARD KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid);
+            KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid, const VulkanGraphicsPipelineParameters& parameters);
             KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
