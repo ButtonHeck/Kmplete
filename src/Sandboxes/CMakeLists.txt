@@ -10,3 +10,4 @@ set(KmpleteSandboxResourcesFolder ${CMAKE_CURRENT_LIST_DIR}/Resources)
 
 add_subdirectory(TriangleVulkan)
 add_subdirectory(TextureVulkan)
+add_subdirectory(MultiplePipelinesVulkan)
