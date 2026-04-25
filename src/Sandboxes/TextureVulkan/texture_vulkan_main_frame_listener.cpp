@@ -73,7 +73,6 @@ namespace Kmplete
         , _uniformBuffers()
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
-        , _commandBuffer(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
@@ -247,7 +246,7 @@ namespace Kmplete
 
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
         const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
-        auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
+        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
