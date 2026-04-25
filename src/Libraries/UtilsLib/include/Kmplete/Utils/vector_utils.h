@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 
 
 namespace Kmplete
@@ -9,8 +10,8 @@ namespace Kmplete
     //! Helper functions with common vectors operations
     namespace Utils
     {
-        template<typename Value>
-        void MergeVectors(const Vector<Value>& source, Vector<Value>& destination)
+        template<typename Value> requires(IsMoveConstructible<Value>::value && IsMoveAssignable<Value>::value)
+        void MergeVectors(Vector<Value>& source, Vector<Value>& destination)
         {
             if (source.empty())
             {
@@ -19,6 +20,20 @@ namespace Kmplete
 
             destination.reserve(destination.size() + source.size());
             std::move(source.begin(), source.end(), std::back_inserter(destination));
+            source.clear();
+        }
+        //--------------------------------------------------------------------------
+
+        template<typename Value> requires(IsCopyConstructible<Value>::value && IsCopyAssignable<Value>::value)
+        void AppendVectors(const Vector<Value>& source, Vector<Value>& destination)
+        {
+            if (source.empty())
+            {
+                return;
+            }
+
+            destination.reserve(destination.size() + source.size());
+            std::copy(source.begin(), source.end(), std::back_inserter(destination));
         }
         //--------------------------------------------------------------------------
 

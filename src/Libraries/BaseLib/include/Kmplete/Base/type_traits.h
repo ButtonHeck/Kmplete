@@ -38,6 +38,12 @@ namespace Kmplete
     using IsMoveAssignable = std::is_move_assignable<T>;
 
     template<typename T>
+    using IsCopyConstructible = std::is_copy_constructible<T>;
+
+    template<typename T>
+    using IsCopyAssignable = std::is_copy_assignable<T>;
+
+    template<typename T>
     using IsTriviallyCopyable = std::is_trivially_copyable<T>;
 
     template<typename T>
