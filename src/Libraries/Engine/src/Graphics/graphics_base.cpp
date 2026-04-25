@@ -76,7 +76,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        BufferLayout::BufferLayout(std::initializer_list<BufferElement> elements, bool isInstanced /*= false*/)
+        BufferLayout::BufferLayout(InitializerList<BufferElement> elements, bool isInstanced /*= false*/)
             : _elements(elements)
             , _stride(0)
             , _instanced(isInstanced)

@@ -44,7 +44,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout);
             KMP_API VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicState(VkDynamicState dynamicState);
-            KMP_API VulkanGraphicsPipelineParameters& AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates);
+            KMP_API VulkanGraphicsPipelineParameters& AddDynamicStates(InitializerList<VkDynamicState> dynamicStates);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);

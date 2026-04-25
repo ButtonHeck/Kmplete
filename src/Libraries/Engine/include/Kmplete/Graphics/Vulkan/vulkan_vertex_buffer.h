@@ -29,8 +29,8 @@ namespace Kmplete
             KMP_API void AddLayout(const BufferLayout& layout);
             KMP_NODISCARD KMP_API UInt32 LayoutCount() const noexcept;
 
-            KMP_NODISCARD KMP_API std::pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> GetBindingsDescriptions(UInt32 baseBinding) const noexcept;
-            KMP_NODISCARD KMP_API std::pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept;
+            KMP_NODISCARD KMP_API Pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> GetBindingsDescriptions(UInt32 baseBinding) const noexcept;
+            KMP_NODISCARD KMP_API Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept;
 
         private:
             Vector<BufferLayout> _layouts;

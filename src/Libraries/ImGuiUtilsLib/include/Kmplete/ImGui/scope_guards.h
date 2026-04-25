@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Kmplete/Base/types_aliases.h"
+
 #include <imgui.h>
 
 #include <variant>
-#include <initializer_list>
 
 
 namespace Kmplete
@@ -34,7 +35,7 @@ namespace Kmplete
         class StyleColorGuard
         {
         public:
-            explicit StyleColorGuard(std::initializer_list<std::pair<ImGuiCol_, ImVec4>>&& colors);
+            explicit StyleColorGuard(InitializerList<Pair<ImGuiCol_, ImVec4>>&& colors);
             ~StyleColorGuard();
 
         private:
@@ -45,7 +46,7 @@ namespace Kmplete
         class StyleVarGuard
         {
         public:
-            StyleVarGuard(std::initializer_list<std::pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables);
+            StyleVarGuard(InitializerList<Pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables);
             ~StyleVarGuard();
 
         private:

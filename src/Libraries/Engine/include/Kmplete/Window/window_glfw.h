@@ -91,7 +91,7 @@ namespace Kmplete
         };
 
         KMP_NODISCARD static NonNull<_UserData*> _GetUserPointer(const NonNull<GLFWwindow*> window);
-        KMP_NODISCARD static std::pair<bool, NonNull<GLFWmonitor*>> _GetSuitableMonitor(const Math::Rect2I& windowRectangle);
+        KMP_NODISCARD static Pair<bool, NonNull<GLFWmonitor*>> _GetSuitableMonitor(const Math::Rect2I& windowRectangle);
         KMP_NODISCARD static Math::Rect2I _GetMonitorRectangle(const NonNull<GLFWmonitor*> monitor);
         static void _UpdateDPI(const NonNull<GLFWwindow*> window);
         static void _UpdateDPIScale(const NonNull<GLFWwindow*> window);

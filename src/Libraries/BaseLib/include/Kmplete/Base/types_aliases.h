@@ -10,6 +10,8 @@
 #include <set>
 #include <array>
 #include <queue>
+#include <initializer_list>
+#include <utility>
 
 
 namespace Kmplete
@@ -56,4 +58,10 @@ namespace Kmplete
     using Int64 = int64_t;
 
     using BinaryBuffer = Vector<UByte>;
+
+    template<typename Value>
+    using InitializerList = std::initializer_list<Value>;
+
+    template<typename Value1, typename Value2>
+    using Pair = std::pair<Value1, Value2>;
 }

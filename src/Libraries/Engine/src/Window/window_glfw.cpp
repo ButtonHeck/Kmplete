@@ -24,7 +24,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    std::pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::_GetSuitableMonitor(const Math::Rect2I& windowRectangle) KMP_PROFILING(ProfileLevelImportantVerbose)
+    Pair<bool, NonNull<GLFWmonitor*>> WindowGlfw::_GetSuitableMonitor(const Math::Rect2I& windowRectangle) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
         const auto windowCenter = windowRectangle.GetCenter();
 

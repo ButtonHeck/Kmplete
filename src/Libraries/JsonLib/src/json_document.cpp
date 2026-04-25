@@ -244,9 +244,9 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    Vector<std::pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+    Vector<Pair<String, Ptr<JsonDocument>>> JsonDocument::GetChildren(bool onlyObjects /*= true*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        Vector<std::pair<String, Ptr<JsonDocument>>> children;
+        Vector<Pair<String, Ptr<JsonDocument>>> children;
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
         {

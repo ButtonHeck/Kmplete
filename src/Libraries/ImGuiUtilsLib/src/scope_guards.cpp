@@ -43,7 +43,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        StyleColorGuard::StyleColorGuard(std::initializer_list<std::pair<ImGuiCol_, ImVec4>>&& colors)
+        StyleColorGuard::StyleColorGuard(InitializerList<Pair<ImGuiCol_, ImVec4>>&& colors)
             : _count(static_cast<int>(colors.size()))
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);
@@ -62,7 +62,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        StyleVarGuard::StyleVarGuard(std::initializer_list<std::pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables)
+        StyleVarGuard::StyleVarGuard(InitializerList<Pair<ImGuiStyleVar_, std::variant<float, ImVec2>>>&& variables)
             : _count(static_cast<int>(variables.size()))
         {
             KMP_PROFILE_FUNCTION(ProfileLevelMinorVerbose);

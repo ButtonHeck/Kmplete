@@ -221,7 +221,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates)
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddDynamicStates(InitializerList<VkDynamicState> dynamicStates)
         {
             for (const auto& state : dynamicStates)
             {

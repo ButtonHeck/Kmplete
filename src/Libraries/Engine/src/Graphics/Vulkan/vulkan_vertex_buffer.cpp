@@ -52,7 +52,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        std::pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> VulkanVertexBuffer::GetBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinor)
+        Pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> VulkanVertexBuffer::GetBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
             Vector<VkVertexInputBindingDescription> inputBindingsDescriptions(_layouts.size());
             Vector<VkVertexInputAttributeDescription> attributeDescriptions;
@@ -82,7 +82,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        std::pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> VulkanVertexBuffer::GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinor)
+        Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> VulkanVertexBuffer::GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
             //TODO: cache structures during buffer creation and update bindings only
 

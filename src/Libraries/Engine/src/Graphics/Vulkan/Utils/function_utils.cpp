@@ -96,7 +96,7 @@ namespace Kmplete
             }}
             //--------------------------------------------------------------------------
 
-            std::pair<bool, std::pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
+            Pair<bool, Pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
             {
                 const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
                 if (!queueFamiliesIndices.IsValid())
