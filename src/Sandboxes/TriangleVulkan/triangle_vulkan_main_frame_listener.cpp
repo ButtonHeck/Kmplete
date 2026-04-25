@@ -266,7 +266,7 @@ namespace Kmplete
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
-        pipelineParams.AddShaderStages(std::move(shaderStages));
+        pipelineParams.AddShaderStages(shaderStages);
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
         pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);

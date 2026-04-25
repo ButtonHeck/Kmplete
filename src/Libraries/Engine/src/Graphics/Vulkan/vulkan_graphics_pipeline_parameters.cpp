@@ -235,16 +235,16 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexInputBindings(Vector<VkVertexInputBindingDescription>&& inputBindingDescriptions)
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions)
         {
-            Utils::MergeVectors(inputBindingDescriptions, _vertexInputBindings);
+            Utils::AppendVectors(inputBindingDescriptions, _vertexInputBindings);
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexAttributesDescriptions(Vector<VkVertexInputAttributeDescription>&& attributesDescriptions)
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions)
         {
-            Utils::MergeVectors(attributesDescriptions, _vertexAttributesDescriptions);
+            Utils::AppendVectors(attributesDescriptions, _vertexAttributesDescriptions);
             return *this;
         }
         //--------------------------------------------------------------------------
@@ -252,15 +252,15 @@ namespace Kmplete
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding)
         {
             auto [inputDescriptions, attributeDescriptions] = vertexBuffer.GetBindingsDescriptions(baseBinding);
-            AddVertexInputBindings(std::move(inputDescriptions));
-            AddVertexAttributesDescriptions(std::move(attributeDescriptions));
+            AddVertexInputBindings(inputDescriptions);
+            AddVertexAttributesDescriptions(attributeDescriptions);
             return *this;
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddShaderStages(Vector<VkPipelineShaderStageCreateInfo>&& shaderStages)
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages)
         {
-            Utils::MergeVectors(shaderStages, _shadersStages);
+            Utils::AppendVectors(shaderStages, _shadersStages);
             return *this;
         }
         //--------------------------------------------------------------------------

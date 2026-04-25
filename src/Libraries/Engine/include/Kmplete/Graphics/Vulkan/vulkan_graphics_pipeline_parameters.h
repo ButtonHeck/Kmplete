@@ -45,10 +45,10 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicState(VkDynamicState dynamicState);
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicStates(std::initializer_list<VkDynamicState> dynamicStates);
-            KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindings(Vector<VkVertexInputBindingDescription>&& inputBindingDescriptions);
-            KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(Vector<VkVertexInputAttributeDescription>&& attributesDescriptions);
+            KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions);
+            KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
-            KMP_API VulkanGraphicsPipelineParameters& AddShaderStages(Vector<VkPipelineShaderStageCreateInfo>&& shaderStages);
+            KMP_API VulkanGraphicsPipelineParameters& AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages);
 
             KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
 

@@ -145,7 +145,7 @@ namespace Kmplete
 
                     if (timerCondition.currentMs >= timerCondition.triggerMs)
                     {
-                        const auto newEvents = _CreateActionEvents(code, ButtonPressedValue);
+                        auto newEvents = _CreateActionEvents(code, ButtonPressedValue);
                         Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
 
                         timerCondition.Deactivate();
@@ -304,10 +304,10 @@ namespace Kmplete
             const auto newMousePosition = Math::Point2I(mouseMoveEvent.GetX(), mouseMoveEvent.GetY());
             const auto mouseMove = newMousePosition - _mousePosition;
 
-            const auto moveEvents = _CreateActionEvents(Input::Code::Mouse_Move, mouseMove);
+            auto moveEvents = _CreateActionEvents(Input::Code::Mouse_Move, mouseMove);
             Utils::MergeVectors<ActionEvent>(moveEvents, _actionEvents);
 
-            const auto positionEvents = _CreateActionEvents(Input::Code::Mouse_Position, newMousePosition);
+            auto positionEvents = _CreateActionEvents(Input::Code::Mouse_Position, newMousePosition);
             Utils::MergeVectors<ActionEvent>(positionEvents, _actionEvents);
 
             _mousePosition = newMousePosition;
@@ -369,7 +369,7 @@ namespace Kmplete
 
         void InputManager::_UpdateActionEvents(InputCode code, InputControlValue value, bool isActivation)
         {
-            const auto newEvents = _CreateActionEvents(code, value);
+            auto newEvents = _CreateActionEvents(code, value);
             Utils::MergeVectors<ActionEvent>(newEvents, _actionEvents);
 
             if (_inputCodeToTimedConditionsMap.contains(code))

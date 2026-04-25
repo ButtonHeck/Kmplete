@@ -251,7 +251,7 @@ namespace Kmplete
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
-        pipelineParams.AddShaderStages(std::move(shaderStages));
+        pipelineParams.AddShaderStages(shaderStages);
 
         pipelineParams.AddDynamicState(VK_Dynamic_DepthTestEnable);       //renderer.SetDepthTestEnabled(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthWriteEnable);      //renderer.SetDepthWriteEnabled(...)
