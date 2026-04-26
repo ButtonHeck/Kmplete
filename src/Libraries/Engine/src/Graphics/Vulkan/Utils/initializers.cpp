@@ -126,6 +126,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceLineRasterizationFeaturesEXT InitVkPhysicalDeviceLineRasterizationFeaturesEXT()
+            {
+                return VkPhysicalDeviceLineRasterizationFeaturesEXT{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_LINE_RASTERIZATION_FEATURES
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {

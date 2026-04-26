@@ -255,8 +255,13 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
+            auto lineRasterizationFeatures = VKUtils::InitVkPhysicalDeviceLineRasterizationFeaturesEXT();
+            lineRasterizationFeatures.bresenhamLines = VK_TRUE;
+            lineRasterizationFeatures.rectangularLines = VK_TRUE;
+
             auto shaderObjectFeatures = VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
             shaderObjectFeatures.shaderObject = VK_TRUE;
+            shaderObjectFeatures.pNext = &lineRasterizationFeatures;
 
             auto vertexInputDynamicStateFeatures = VKUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
             vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
