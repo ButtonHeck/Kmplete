@@ -258,6 +258,10 @@ namespace Kmplete
             auto lineRasterizationFeatures = VKUtils::InitVkPhysicalDeviceLineRasterizationFeaturesEXT();
             lineRasterizationFeatures.bresenhamLines = VK_TRUE;
             lineRasterizationFeatures.rectangularLines = VK_TRUE;
+            lineRasterizationFeatures.smoothLines = VK_TRUE;
+            lineRasterizationFeatures.stippledBresenhamLines = VK_TRUE;
+            lineRasterizationFeatures.stippledRectangularLines = VK_TRUE;
+            lineRasterizationFeatures.stippledSmoothLines = VK_TRUE;
 
             auto shaderObjectFeatures = VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
             shaderObjectFeatures.shaderObject = VK_TRUE;

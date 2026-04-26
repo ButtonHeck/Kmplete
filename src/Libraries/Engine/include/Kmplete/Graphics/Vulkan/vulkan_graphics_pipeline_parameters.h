@@ -57,6 +57,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& SetMultisamplingSampleShading(bool enabled, float minSampleShading);
             KMP_API VulkanGraphicsPipelineParameters& SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
             KMP_API VulkanGraphicsPipelineParameters& SetLineRasterizationMode(VkLineRasterizationMode mode);
+            KMP_API VulkanGraphicsPipelineParameters& SetLineStipple(bool enabled, UInt32 factor, UInt16 pattern);
 
             KMP_API VulkanGraphicsPipelineParameters& AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout);
             KMP_API VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);

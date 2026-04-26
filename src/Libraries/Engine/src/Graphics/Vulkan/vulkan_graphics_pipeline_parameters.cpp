@@ -237,6 +237,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::SetLineStipple(bool enabled, UInt32 factor, UInt16 pattern)
+        {
+            _rasterizationLineStateCreateInfo.stippledLineEnable = enabled;
+            _rasterizationLineStateCreateInfo.lineStippleFactor = factor;
+            _rasterizationLineStateCreateInfo.lineStipplePattern = pattern;
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout)
         {
             _descriptorSetLayouts.push_back(descriptorSetLayout);
