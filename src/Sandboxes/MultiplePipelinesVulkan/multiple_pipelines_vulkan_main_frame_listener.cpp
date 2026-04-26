@@ -170,7 +170,9 @@ namespace Kmplete
             Graphics::VulkanGraphicsPipelineParameters::CopyParameters::All
         );
         pipelineBufferedColorLineParams.SetPolygonMode(VK_Polygon_Line);
+        pipelineBufferedColorLineParams.SetLineRasterizationMode(VK_LineRasterization_RectangularSmooth);
         pipelineBufferedColorLineParams.SetLineWidth(8.0f);
+        pipelineBufferedColorLineParams.SetLineStipple(true, 1, 1);
 
         vulkanDevice.AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, pipelineFixedColorFillParams);
         vulkanDevice.AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, pipelineFixedColorLineParams);
