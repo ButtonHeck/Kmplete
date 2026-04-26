@@ -19,9 +19,9 @@ namespace Kmplete
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters =
-                    {.applicationName = "Triangle Vulkan sandbox",
+                    {.applicationName = "Multiple Pipelines Vulkan sandbox",
                      .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "TriangleVulkan_settings.json"
+                     .defaultSettingsFileName = "MultiplePipelinesVulkan_settings.json"
                     },
                 .resizable = true
             };
