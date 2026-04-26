@@ -20,6 +20,22 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanGraphicsPipelineParameters)
 
         public:
+            enum CopyParameters
+            {
+                OnlyParameters          = 0,
+                DescriptorSetLayouts    = 1 << 0,
+                ColorAttachmentInfos    = 1 << 1,
+                DynamicStates           = 1 << 2,
+                VertexInputBindings     = 1 << 3,
+                VertexInputDescriptions = 1 << 4,
+                ShaderStages            = 1 << 5,
+                VertexInputs            = VertexInputBindings | VertexInputDescriptions,
+                All                     = DescriptorSetLayouts | ColorAttachmentInfos | DynamicStates | VertexInputs | ShaderStages
+            };
+
+            KMP_NODISCARD KMP_API static VulkanGraphicsPipelineParameters CopyFrom(const VulkanGraphicsPipelineParameters& source, int copyParametersMask = OnlyParameters) noexcept;
+
+        public:
             KMP_API VulkanGraphicsPipelineParameters();
             ~VulkanGraphicsPipelineParameters() = default;
 

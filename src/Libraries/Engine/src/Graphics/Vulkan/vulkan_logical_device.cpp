@@ -300,6 +300,7 @@ namespace Kmplete
             features.fillModeNonSolid = VK_TRUE;
             features.alphaToOne = VK_TRUE;
             features.logicOp = VK_TRUE;
+            features.wideLines = VK_TRUE;
 
             auto features13 = VKUtils::InitVkPhysicalDeviceVulkan13Features();
             features13.dynamicRendering = VK_TRUE;

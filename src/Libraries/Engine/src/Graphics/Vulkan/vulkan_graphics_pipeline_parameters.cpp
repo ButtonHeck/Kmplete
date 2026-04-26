@@ -14,6 +14,47 @@ namespace Kmplete
         using namespace VKBits;
 
 
+        VulkanGraphicsPipelineParameters VulkanGraphicsPipelineParameters::CopyFrom(const VulkanGraphicsPipelineParameters& source, int copyParametersMask /*= OnlyParameters*/) noexcept
+        {
+            VulkanGraphicsPipelineParameters copy{};
+
+            copy._inputAssemblyCreateInfo = source._inputAssemblyCreateInfo;
+            copy._rasterizationStateCreateInfo = source._rasterizationStateCreateInfo;
+            copy._colorBlendStateCreateInfo = source._colorBlendStateCreateInfo;
+            copy._depthStencilStateCreateInfo = source._depthStencilStateCreateInfo;
+            copy._multisamplingStateCreateInfo = source._multisamplingStateCreateInfo;
+            copy._renderingCreateInfo = source._renderingCreateInfo;
+
+            if (copyParametersMask & DescriptorSetLayouts)
+            {
+                copy._descriptorSetLayouts = source._descriptorSetLayouts;
+            }
+            if (copyParametersMask & ColorAttachmentInfos)
+            {
+                copy._renderingColorAttachmentsFormats = source._renderingColorAttachmentsFormats;
+                copy._colorBlendAttachments = source._colorBlendAttachments;
+            }
+            if (copyParametersMask & DynamicStates)
+            {
+                copy._dynamicStates = source._dynamicStates;
+            }
+            if (copyParametersMask & VertexInputBindings)
+            {
+                copy._vertexInputBindings = source._vertexInputBindings;
+            }
+            if (copyParametersMask & VertexInputDescriptions)
+            {
+                copy._vertexAttributesDescriptions = source._vertexAttributesDescriptions;
+            }
+            if (copyParametersMask & ShaderStages)
+            {
+                copy._shadersStages = source._shadersStages;
+            }
+
+            return copy;
+        }
+        //--------------------------------------------------------------------------
+
         VulkanGraphicsPipelineParameters::VulkanGraphicsPipelineParameters()
             : _descriptorSetLayouts()
             , _inputAssemblyCreateInfo()
