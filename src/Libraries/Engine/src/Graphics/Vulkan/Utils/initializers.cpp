@@ -367,6 +367,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPipelineRasterizationLineStateCreateInfo InitVkPipelineRasterizationLineStateCreateInfo()
+            {
+                return VkPipelineRasterizationLineStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_LINE_STATE_CREATE_INFO
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkImageCreateInfo InitVkImageCreateInfo()
             {

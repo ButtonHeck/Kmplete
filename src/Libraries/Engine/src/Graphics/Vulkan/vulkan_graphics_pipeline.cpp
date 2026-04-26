@@ -77,6 +77,8 @@ namespace Kmplete
             _parameters._vertexInputStateCreateInfo.vertexAttributeDescriptionCount = UInt32(_parameters._vertexAttributesDescriptions.size());
             _parameters._vertexInputStateCreateInfo.pVertexAttributeDescriptions = _parameters._vertexAttributesDescriptions.data();
 
+            _parameters._rasterizationStateCreateInfo.pNext = &_parameters._rasterizationLineStateCreateInfo;
+
             auto pipelineCI = Graphics::VKUtils::InitVkGraphicsPipelineCreateInfo();
             pipelineCI.layout = _pipelineLayout;
             pipelineCI.pInputAssemblyState = &_parameters._inputAssemblyCreateInfo;

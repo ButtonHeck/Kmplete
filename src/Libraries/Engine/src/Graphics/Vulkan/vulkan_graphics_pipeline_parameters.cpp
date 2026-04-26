@@ -20,6 +20,7 @@ namespace Kmplete
 
             copy._inputAssemblyCreateInfo = source._inputAssemblyCreateInfo;
             copy._rasterizationStateCreateInfo = source._rasterizationStateCreateInfo;
+            copy._rasterizationLineStateCreateInfo = source._rasterizationLineStateCreateInfo;
             copy._colorBlendStateCreateInfo = source._colorBlendStateCreateInfo;
             copy._depthStencilStateCreateInfo = source._depthStencilStateCreateInfo;
             copy._multisamplingStateCreateInfo = source._multisamplingStateCreateInfo;
@@ -59,6 +60,7 @@ namespace Kmplete
             : _descriptorSetLayouts()
             , _inputAssemblyCreateInfo()
             , _rasterizationStateCreateInfo()
+            , _rasterizationLineStateCreateInfo()
             , _colorBlendStateCreateInfo()
             , _colorBlendAttachments()
             , _viewportStateCreateInfo()
@@ -77,6 +79,7 @@ namespace Kmplete
 
             _inputAssemblyCreateInfo = VKUtils::InitVkPipelineInputAssemblyStateCreateInfo();
             _rasterizationStateCreateInfo = VKUtils::InitVkPipelineRasterizationStateCreateInfo();
+            _rasterizationLineStateCreateInfo = VKUtils::InitVkPipelineRasterizationLineStateCreateInfo();
             _colorBlendStateCreateInfo = VKUtils::InitVkPipelineColorBlendStateCreateInfo();
             _viewportStateCreateInfo = VKUtils::InitVkPipelineViewportStateCreateInfo();
             _dynamicStateCreateInfo = VKUtils::InitVkPipelineDynamicStateCreateInfo();
@@ -227,6 +230,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::SetLineRasterizationMode(VkLineRasterizationMode mode)
+        {
+            _rasterizationLineStateCreateInfo.lineRasterizationMode = mode;
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout)
         {
             _descriptorSetLayouts.push_back(descriptorSetLayout);
@@ -327,6 +337,9 @@ namespace Kmplete
             _rasterizationStateCreateInfo.depthBiasConstantFactor = 0.0f;
             _rasterizationStateCreateInfo.depthBiasClamp = 0.0f;
             _rasterizationStateCreateInfo.depthBiasSlopeFactor = 0.0f;
+
+            _rasterizationLineStateCreateInfo.lineRasterizationMode = VK_LineRasterization_Default;
+            _rasterizationLineStateCreateInfo.stippledLineEnable = VK_FALSE;
 
             _colorBlendStateCreateInfo.logicOpEnable = VK_FALSE;
             _colorBlendStateCreateInfo.logicOp = VK_LogicOp_Clear;

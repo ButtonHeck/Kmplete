@@ -56,6 +56,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& SetMultisamplingSamples(VkSampleCountFlagBits samples);
             KMP_API VulkanGraphicsPipelineParameters& SetMultisamplingSampleShading(bool enabled, float minSampleShading);
             KMP_API VulkanGraphicsPipelineParameters& SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
+            KMP_API VulkanGraphicsPipelineParameters& SetLineRasterizationMode(VkLineRasterizationMode mode);
 
             KMP_API VulkanGraphicsPipelineParameters& AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout);
             KMP_API VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
@@ -77,6 +78,7 @@ namespace Kmplete
             Vector<VkDescriptorSetLayout> _descriptorSetLayouts;
             VkPipelineInputAssemblyStateCreateInfo _inputAssemblyCreateInfo;
             VkPipelineRasterizationStateCreateInfo _rasterizationStateCreateInfo;
+            VkPipelineRasterizationLineStateCreateInfo _rasterizationLineStateCreateInfo;
             VkPipelineColorBlendStateCreateInfo _colorBlendStateCreateInfo;
             Vector<VkPipelineColorBlendAttachmentState> _colorBlendAttachments;
             VkPipelineViewportStateCreateInfo _viewportStateCreateInfo;
