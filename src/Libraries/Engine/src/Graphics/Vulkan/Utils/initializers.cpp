@@ -134,6 +134,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceVertexAttributeDivisorFeatures InitVkPhysicalDeviceVertexAttributeDivisorFeatures()
+            {
+                return VkPhysicalDeviceVertexAttributeDivisorFeatures{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VERTEX_ATTRIBUTE_DIVISOR_FEATURES
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {

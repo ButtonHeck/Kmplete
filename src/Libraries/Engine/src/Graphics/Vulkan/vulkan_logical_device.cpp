@@ -255,6 +255,10 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
+            auto vertexAttributeDivisorFeatures = VKUtils::InitVkPhysicalDeviceVertexAttributeDivisorFeatures();
+            vertexAttributeDivisorFeatures.vertexAttributeInstanceRateDivisor = VK_TRUE;
+            vertexAttributeDivisorFeatures.vertexAttributeInstanceRateZeroDivisor = VK_TRUE;
+
             auto lineRasterizationFeatures = VKUtils::InitVkPhysicalDeviceLineRasterizationFeaturesEXT();
             lineRasterizationFeatures.bresenhamLines = VK_TRUE;
             lineRasterizationFeatures.rectangularLines = VK_TRUE;
@@ -262,6 +266,7 @@ namespace Kmplete
             lineRasterizationFeatures.stippledBresenhamLines = VK_TRUE;
             lineRasterizationFeatures.stippledRectangularLines = VK_TRUE;
             lineRasterizationFeatures.stippledSmoothLines = VK_TRUE;
+            lineRasterizationFeatures.pNext = &vertexAttributeDivisorFeatures;
 
             auto shaderObjectFeatures = VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
             shaderObjectFeatures.shaderObject = VK_TRUE;
