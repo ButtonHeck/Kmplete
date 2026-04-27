@@ -100,6 +100,7 @@ namespace Kmplete
             KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;
             KMP_API bool BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets = Vector<UInt32>()) const;
             KMP_API bool BindVertexBuffers(UInt32 firstBinding, const Vector<VkBuffer>& vertexBuffers, const Vector<VkDeviceSize>& offsets) const;
+            KMP_API void BindIndexBuffer(const VulkanBuffer& indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
             KMP_API void BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
             KMP_API void DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const;
             KMP_API void Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const;

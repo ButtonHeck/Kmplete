@@ -430,7 +430,7 @@ namespace Kmplete
         });
         renderer.BindGraphicsPipeline(Pipeline_SID);
         renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { 0 });
-        renderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
+        renderer.BindIndexBuffer(*_indexBuffer.get());
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
         renderer.SetDepthTestEnabled(true);

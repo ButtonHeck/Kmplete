@@ -488,7 +488,7 @@ namespace Kmplete
             descriptorSetManager.GetDescriptorSet(ColorMultiplierDS_SID, 0, "per frame"_true)
         });
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
+        renderer.BindIndexBuffer(*_indexBuffer.get());
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING

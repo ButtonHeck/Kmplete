@@ -686,6 +686,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::BindIndexBuffer(const VulkanBuffer& indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_Index_UInt32*/) const
+        {
+            BindIndexBuffer(indexBuffer.GetVkBuffer(), offset, indexType);
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_Index_UInt32*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             KMP_ASSERT(_currentCommandBuffer);

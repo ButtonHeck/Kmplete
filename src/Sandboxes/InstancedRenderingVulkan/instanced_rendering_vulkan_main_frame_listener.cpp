@@ -210,7 +210,7 @@ namespace Kmplete
         renderer.BindVertexBuffers(VertexPositionIndex, { _vertexBuffer->GetVkBuffer(), _vertexBufferPosInstanced->GetVkBuffer(), _vertexBufferColorsInstanced->GetVkBuffer() }, { 0, 0, 0 });
         renderer.Draw(3, NumInstancesInRow, 0, 0);
 
-        renderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
+        renderer.BindIndexBuffer(*_indexBuffer.get());
 
         renderer.BindVertexBuffers(VertexPositionInstancedIndex, { _vertexBufferPosInstanced->GetVkBuffer() }, { sizeof(Vertex) * NumInstancesInRow });
         renderer.DrawIndexed(3, NumInstancesInRow, 0, 0, 0);
