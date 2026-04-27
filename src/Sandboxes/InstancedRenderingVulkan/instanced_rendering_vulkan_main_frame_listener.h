@@ -32,7 +32,8 @@ namespace Kmplete
         Graphics::GraphicsBackend& _graphicsBackend;
 
         UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
-        UPtr<Graphics::VulkanVertexBuffer> _vertexBufferInstanced;
+        UPtr<Graphics::VulkanVertexBuffer> _vertexBufferPosInstanced;
+        UPtr<Graphics::VulkanVertexBuffer> _vertexBufferColorsInstanced;
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
         UInt32 _indexCount;
         VkDevice _device;

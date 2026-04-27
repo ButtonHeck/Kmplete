@@ -11,12 +11,23 @@ namespace Kmplete
 {
     static constexpr auto Pipeline_SID = "Pipeline"_sid;
 
+    static constexpr auto VertexPositionIndex = 0;
+    static constexpr auto VertexPositionInstancedIndex = 1;
+    static constexpr auto VertexColorInstancedIndex = 2;
+
+    static constexpr auto NumInstancesInRow = 9;
+
 
     namespace
     {
         struct Vertex
         {
             float position[2];
+        };
+
+        struct Color
+        {
+            float colors[4];
         };
     }
 
@@ -28,7 +39,8 @@ namespace Kmplete
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _vertexBuffer(nullptr)
-        , _vertexBufferInstanced(nullptr)
+        , _vertexBufferPosInstanced(nullptr)
+        , _vertexBufferColorsInstanced(nullptr)
         , _indexBuffer(nullptr)
         , _indexCount(0)
         , _device(VK_NULL_HANDLE)
@@ -84,28 +96,44 @@ namespace Kmplete
         };
         const auto vertexInstancedBufferSize = UInt32(verticesInstanced.size() * sizeof(Vertex));
 
+        const Vector<Color> verticesColorsInstanced{
+            { 1.0f, 0.0f, 0.0f, 1.0f },
+            { 0.0f, 1.0f, 0.0f, 1.0f },
+            { 0.0f, 0.0f, 1.0f, 1.0f },
+            { 1.0f, 1.0f, 1.0f, 1.0f },
+            { 0.5f, 0.5f, 0.5f, 1.0f }
+        };
+        const auto vertexColorsInstancedBufferSize = UInt32(verticesColorsInstanced.size() * sizeof(Color));
+
         const Vector<UInt32> indices{ 0, 1, 2 };
         _indexCount = UInt32(indices.size());
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
-        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize + vertexInstancedBufferSize + indexBufferSize });
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize + indexBufferSize });
         stagingBuffer.Map();
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)verticesInstanced.data(), vertexInstancedBufferSize);
-        stagingBuffer.CopyToMappedMemory(vertexBufferSize + vertexInstancedBufferSize, (char*)indices.data(), indexBufferSize);
+        stagingBuffer.CopyToMappedMemory(vertexBufferSize + vertexInstancedBufferSize, (char*)verticesColorsInstanced.data(), vertexColorsInstancedBufferSize);
+        stagingBuffer.CopyToMappedMemory(vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
         const auto vertexBufferLayout = Graphics::BufferLayout({
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionIndex }
         });
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
         const auto vertexInstancedBufferLayout = Graphics::BufferLayout({
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 1 }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionInstancedIndex }
         }, "instanced"_true);
-        _vertexBufferInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexInstancedBufferSize }));
-        _vertexBufferInstanced->AddLayout(vertexInstancedBufferLayout);
+        _vertexBufferPosInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexInstancedBufferSize }));
+        _vertexBufferPosInstanced->AddLayout(vertexInstancedBufferLayout);
+
+        const auto vertexColorsInstancedBufferLayout = Graphics::BufferLayout({
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorInstancedIndex }
+        }, "instanced"_true);
+        _vertexBufferColorsInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexColorsInstancedBufferSize }));
+        _vertexBufferColorsInstanced->AddLayout(vertexColorsInstancedBufferLayout);
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
@@ -113,8 +141,9 @@ namespace Kmplete
             const auto copyCmd = renderer.CreateCommandBuffer();
             copyCmd.Begin();
             renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferInstanced.get(), vertexBufferSize, 0, vertexInstancedBufferSize);
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize + vertexInstancedBufferSize, 0, indexBufferSize);
+            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferPosInstanced.get(), vertexBufferSize, 0, vertexInstancedBufferSize);
+            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferColorsInstanced.get(), vertexBufferSize + vertexInstancedBufferSize, 0, vertexColorsInstancedBufferSize);
+            renderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, 0, indexBufferSize);
             copyCmd.End();
             vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
         }
@@ -144,8 +173,10 @@ namespace Kmplete
         pipelineParams.SetStencilTest(true);
         pipelineParams.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipelineParams.AddShaderStages(shaderStages);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferInstanced, 1);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferPosInstanced, VertexPositionInstancedIndex);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferColorsInstanced, VertexColorInstancedIndex);
+        pipelineParams.AddVertexInputBindingsDivisors({{ VertexColorInstancedIndex, 2 }});
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.AddGraphicsPipeline(Pipeline_SID, pipelineParams);
@@ -155,7 +186,8 @@ namespace Kmplete
     void MainFrameListener::_Finalize()
     {
         _vertexBuffer.reset();
-        _vertexBufferInstanced.reset();
+        _vertexBufferPosInstanced.reset();
+        _vertexBufferColorsInstanced.reset();
         _indexBuffer.reset();
     }
     //--------------------------------------------------------------------------
@@ -175,11 +207,13 @@ namespace Kmplete
 
         renderer.BindGraphicsPipeline(Pipeline_SID);
 
-        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer(), _vertexBufferInstanced->GetVkBuffer() }, { VkDeviceSize{0}, VkDeviceSize{0} });
-        renderer.Draw(3, 9, 0, 0);
+        renderer.BindVertexBuffers(VertexPositionIndex, { _vertexBuffer->GetVkBuffer(), _vertexBufferPosInstanced->GetVkBuffer(), _vertexBufferColorsInstanced->GetVkBuffer() }, { VkDeviceSize{0}, VkDeviceSize{0}, VkDeviceSize{0} });
+        renderer.Draw(3, NumInstancesInRow, 0, 0);
 
         renderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
-        renderer.DrawIndexed(3, 9, 0, 0, 9);
+
+        renderer.BindVertexBuffers(VertexPositionInstancedIndex, { _vertexBufferPosInstanced->GetVkBuffer() }, { VkDeviceSize{ sizeof(Vertex) * NumInstancesInRow }});
+        renderer.DrawIndexed(3, NumInstancesInRow, 0, 0, 0);
 
         renderer.EndRendering();
     }
