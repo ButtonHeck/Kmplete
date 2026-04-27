@@ -64,6 +64,7 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicState(VkDynamicState dynamicState);
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicStates(InitializerList<VkDynamicState> dynamicStates);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions);
+            KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindingsDivisors(const Vector<VkVertexInputBindingDivisorDescription>& inputBindingDivisorsDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
             KMP_API VulkanGraphicsPipelineParameters& AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages);
@@ -88,7 +89,9 @@ namespace Kmplete
             VkPipelineDepthStencilStateCreateInfo _depthStencilStateCreateInfo;
             VkPipelineMultisampleStateCreateInfo _multisamplingStateCreateInfo;
             VkPipelineVertexInputStateCreateInfo _vertexInputStateCreateInfo;
+            VkPipelineVertexInputDivisorStateCreateInfo _vertexInputDivisorStateCreateInfo;
             Vector<VkVertexInputBindingDescription> _vertexInputBindings;
+            Vector<VkVertexInputBindingDivisorDescription> _vertexInputBindingsDivisors;
             Vector<VkVertexInputAttributeDescription> _vertexAttributesDescriptions;
             Vector<VkPipelineShaderStageCreateInfo> _shadersStages;
             VkPipelineRenderingCreateInfoKHR _renderingCreateInfo;

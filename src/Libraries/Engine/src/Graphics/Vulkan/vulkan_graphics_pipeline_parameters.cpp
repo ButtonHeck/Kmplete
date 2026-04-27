@@ -42,6 +42,7 @@ namespace Kmplete
             if (copyParametersMask & VertexInputBindings)
             {
                 copy._vertexInputBindings = source._vertexInputBindings;
+                copy._vertexInputBindingsDivisors = source._vertexInputBindingsDivisors;
             }
             if (copyParametersMask & VertexInputDescriptions)
             {
@@ -69,7 +70,9 @@ namespace Kmplete
             , _depthStencilStateCreateInfo()
             , _multisamplingStateCreateInfo()
             , _vertexInputStateCreateInfo()
+            , _vertexInputDivisorStateCreateInfo()
             , _vertexInputBindings()
+            , _vertexInputBindingsDivisors()
             , _vertexAttributesDescriptions()
             , _shadersStages()
             , _renderingCreateInfo()
@@ -86,6 +89,7 @@ namespace Kmplete
             _depthStencilStateCreateInfo = VKUtils::InitVkPipelineDepthStencilStateCreateInfo();
             _multisamplingStateCreateInfo = VKUtils::InitVkPipelineMultisampleStateCreateInfo();
             _vertexInputStateCreateInfo = VKUtils::InitVkPipelineVertexInputStateCreateInfo();
+            _vertexInputDivisorStateCreateInfo = VKUtils::InitVkPipelineVertexInputDivisorStateCreateInfo();
             _renderingCreateInfo = VKUtils::InitVkPipelineRenderingCreateInfoKHR();
 
             _SetDefaults();
@@ -298,6 +302,13 @@ namespace Kmplete
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions)
         {
             Utils::AppendVectors(inputBindingDescriptions, _vertexInputBindings);
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddVertexInputBindingsDivisors(const Vector<VkVertexInputBindingDivisorDescription>& inputBindingDivisorsDescriptions)
+        {
+            Utils::AppendVectors(inputBindingDivisorsDescriptions, _vertexInputBindingsDivisors);
             return *this;
         }
         //--------------------------------------------------------------------------

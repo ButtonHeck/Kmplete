@@ -58,6 +58,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPipelineDepthStencilStateCreateInfo InitVkPipelineDepthStencilStateCreateInfo();
             KMP_NODISCARD KMP_API VkPipelineMultisampleStateCreateInfo InitVkPipelineMultisampleStateCreateInfo();
             KMP_NODISCARD KMP_API VkPipelineVertexInputStateCreateInfo InitVkPipelineVertexInputStateCreateInfo();
+            KMP_NODISCARD KMP_API VkPipelineVertexInputDivisorStateCreateInfo InitVkPipelineVertexInputDivisorStateCreateInfo();
             KMP_NODISCARD KMP_API VkPipelineShaderStageCreateInfo InitVkPipelineShaderStageCreateInfo(VkShaderStageFlagBits stage);
             KMP_NODISCARD KMP_API VkPipelineRasterizationLineStateCreateInfo InitVkPipelineRasterizationLineStateCreateInfo();
 

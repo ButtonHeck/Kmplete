@@ -79,6 +79,13 @@ namespace Kmplete
 
             _parameters._rasterizationStateCreateInfo.pNext = &_parameters._rasterizationLineStateCreateInfo;
 
+            if (!_parameters._vertexInputBindingsDivisors.empty())
+            {
+                _parameters._vertexInputDivisorStateCreateInfo.vertexBindingDivisorCount = UInt32(_parameters._vertexInputBindingsDivisors.size());
+                _parameters._vertexInputDivisorStateCreateInfo.pVertexBindingDivisors = _parameters._vertexInputBindingsDivisors.data();
+                _parameters._vertexInputStateCreateInfo.pNext = &_parameters._vertexInputDivisorStateCreateInfo;
+            }
+
             auto pipelineCI = Graphics::VKUtils::InitVkGraphicsPipelineCreateInfo();
             pipelineCI.layout = _pipelineLayout;
             pipelineCI.pInputAssemblyState = &_parameters._inputAssemblyCreateInfo;

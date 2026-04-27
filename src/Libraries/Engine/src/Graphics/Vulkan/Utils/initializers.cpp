@@ -374,6 +374,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPipelineVertexInputDivisorStateCreateInfo InitVkPipelineVertexInputDivisorStateCreateInfo()
+            {
+                return VkPipelineVertexInputDivisorStateCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_DIVISOR_STATE_CREATE_INFO
+                };
+            }
+            //--------------------------------------------------------------------------
+
             VkPipelineShaderStageCreateInfo InitVkPipelineShaderStageCreateInfo(VkShaderStageFlagBits stage)
             {
                 return VkPipelineShaderStageCreateInfo{
