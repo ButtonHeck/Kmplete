@@ -429,7 +429,7 @@ namespace Kmplete
             descriptorSetManager.GetDescriptorSet(SamplerDS_SID, 0, "per frame"_true)
         });
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} });
+        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { 0 });
         renderer.BindIndexBuffer(_indexBuffer->GetVkBuffer());
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 

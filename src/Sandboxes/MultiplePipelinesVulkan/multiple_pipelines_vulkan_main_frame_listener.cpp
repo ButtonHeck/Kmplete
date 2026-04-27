@@ -203,14 +203,14 @@ namespace Kmplete
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
         // fixed color drawing
-        renderer.BindVertexBuffers(0, { _vertexBufferFixedColor->GetVkBuffer() }, { VkDeviceSize{0} });
+        renderer.BindVertexBuffers(0, { _vertexBufferFixedColor->GetVkBuffer() }, { 0 });
         renderer.BindGraphicsPipeline(Pipeline_FixedColor_Fill_SID);
         renderer.Draw(3, 1, 0, 0);
         renderer.BindGraphicsPipeline(Pipeline_FixedColor_Line_SID);
         renderer.Draw(3, 1, 3, 0);
 
         // buffered color drawing
-        renderer.BindVertexBuffers(0, { _vertexBufferBufferedColor->GetVkBuffer() }, { VkDeviceSize{0} });
+        renderer.BindVertexBuffers(0, { _vertexBufferBufferedColor->GetVkBuffer() }, { 0 });
         renderer.BindGraphicsPipeline(Pipeline_BufferedColor_Fill_SID);
         renderer.Draw(3, 1, 0, 0);
         renderer.BindGraphicsPipeline(Pipeline_BufferedColor_Line_SID);

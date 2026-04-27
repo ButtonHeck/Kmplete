@@ -559,7 +559,7 @@ namespace Kmplete
         renderer.SetPolygonMode(VK_Polygon_Fill);
         renderer.SetProvokingVertexMode(VK_ProvokingVertexMode_FirstVertex);
         renderer.SetSampleMask(vulkanDevice.GetMultisampling(), {0xFF});
-        renderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0} }, { VkDeviceSize{420} }, { VkDeviceSize{sizeof(Vertex)} });
+        renderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { 0 }, { 420 }, { sizeof(Vertex) });
         renderer.BindShaderObjects(
             { VK_ShaderStage_Vertex, VK_ShaderStage_Fragment },
             { VertexShader_SID, FragmentShader_SID }
