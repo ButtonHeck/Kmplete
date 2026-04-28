@@ -79,14 +79,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea, bool clearPrevious /*= true*/) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
 
             const auto& swapchain = _swapchain.get();
 
-            const auto colorAttachmentInfo = swapchain.GetRenderingColorAttachmentInfo();
-            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo();
+            const auto colorAttachmentInfo = swapchain.GetRenderingColorAttachmentInfo(clearPrevious);
+            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo(clearPrevious);
 
             auto renderingInfo = VKUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = renderArea;
@@ -100,7 +100,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(StringID pipelineSid, const VkRect2D& renderArea) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::BeginRendering(StringID pipelineSid, const VkRect2D& renderArea, bool clearPrevious /*= true*/) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
 
@@ -117,10 +117,10 @@ namespace Kmplete
             colorAttachmentsInfos.reserve(colorAttachmentsCount);
             for (UInt32 i = 0; i < colorAttachmentsCount; i++)
             {
-                colorAttachmentsInfos.push_back(swapchain.GetRenderingColorAttachmentInfo());
+                colorAttachmentsInfos.push_back(swapchain.GetRenderingColorAttachmentInfo(clearPrevious));
             }
 
-            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo();
+            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo(clearPrevious);
 
             auto renderingInfo = VKUtils::InitVkRenderingInfo();
             renderingInfo.renderArea = renderArea;

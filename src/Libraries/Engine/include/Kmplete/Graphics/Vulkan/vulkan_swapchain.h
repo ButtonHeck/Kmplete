@@ -49,8 +49,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkImageView GetMultisampledColorImageView() const;
             KMP_NODISCARD KMP_API VkImageView GetMultisampledDepthStencilImageView() const;
 
-            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingColorAttachmentInfo() const;
-            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingDepthStencilAttachmentInfo() const;
+            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingColorAttachmentInfo(bool clearPrevious = true) const;
+            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingDepthStencilAttachmentInfo(bool clearPrevious = true) const;
 
         private:
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;

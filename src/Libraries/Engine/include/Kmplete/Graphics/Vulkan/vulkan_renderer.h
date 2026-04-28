@@ -37,8 +37,8 @@ namespace Kmplete
 
             KMP_API void SetSwapchain(const VulkanSwapchain& swapchain);
 
-            KMP_API void BeginRendering(const VkRect2D& renderArea) const;
-            KMP_API void BeginRendering(StringID pipelineSid, const VkRect2D& renderArea) const;
+            KMP_API void BeginRendering(const VkRect2D& renderArea, bool clearPrevious = true) const;
+            KMP_API void BeginRendering(StringID pipelineSid, const VkRect2D& renderArea, bool clearPrevious = true) const;
             KMP_API void EndRendering() const;
 
             KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const;

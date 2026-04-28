@@ -199,9 +199,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo() const
+        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo(bool clearPrevious /*= true*/) const
         {
-            auto colorAttachmentInfo = VKPresets::RenderingAttachmentInfo_Color_ClearStore;
+            auto colorAttachmentInfo = clearPrevious ? VKPresets::RenderingAttachmentInfo_Color_ClearStore : VKPresets::RenderingAttachmentInfo_Color_LoadStore;
             if (GetMultisampling() == VK_SampleCount_1)
             {
                 colorAttachmentInfo.imageView = GetCurrentImageView();
@@ -218,9 +218,9 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingDepthStencilAttachmentInfo() const
+        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingDepthStencilAttachmentInfo(bool clearPrevious /*= true*/) const
         {
-            auto depthStencilAttachmentInfo = VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+            auto depthStencilAttachmentInfo = clearPrevious ? VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore : VKPresets::RenderingAttachmentInfo_DepthStencil_LoadStore;
             depthStencilAttachmentInfo.imageView = GetMultisampledDepthStencilImageView();
 
             return depthStencilAttachmentInfo;

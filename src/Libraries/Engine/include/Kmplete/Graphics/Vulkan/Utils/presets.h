@@ -109,6 +109,24 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
+            static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_Color_LoadStore{
+                .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+                .imageLayout = VK_ImageLayout_ColorAttachmentOptimal,
+                .loadOp = VK_AttachmentLoad_Load,
+                .storeOp = VK_AttachmentStore_Store,
+                .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f }}
+            };
+            //--------------------------------------------------------------------------
+
+            static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_DepthStencil_LoadStore{
+                .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
+                .imageLayout = VK_ImageLayout_DepthStencilAttachmentOptimal,
+                .loadOp = VK_AttachmentLoad_Load,
+                .storeOp = VK_AttachmentStore_Store,
+                .clearValue = VkClearValue{.depthStencil{ 1.0f, 0 }}
+            };
+            //--------------------------------------------------------------------------
+
             static constexpr VkSamplerCreateInfo SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy{
                 .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                 .magFilter = VK_Filter_Nearest,
