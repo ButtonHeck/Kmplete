@@ -200,21 +200,20 @@ namespace Kmplete
         const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
         const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
 
-        renderer.BeginRendering(drawArea);
         renderer.SetViewport(viewport);
         renderer.SetScissor(drawArea);
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
-
         renderer.BindGraphicsPipeline(Pipeline_SID);
-
         renderer.BindVertexBuffers(VertexPositionIndex, { _vertexBuffer->GetVkBuffer(), _vertexBufferPosInstanced->GetVkBuffer(), _vertexBufferColorsInstanced->GetVkBuffer() }, { 0, 0, 0 });
-        renderer.Draw(3, NumInstancesInRow, 0, 0);
-
         renderer.BindIndexBuffer(*_indexBuffer.get());
 
+        renderer.BeginRendering(drawArea);
+        renderer.Draw(3, NumInstancesInRow, 0, 0);
+        renderer.EndRendering();
+
+        renderer.BeginRendering(drawArea, "clear previous"_false);
         renderer.BindVertexBuffers(VertexPositionInstancedIndex, { _vertexBufferPosInstanced->GetVkBuffer() }, { sizeof(Vertex) * NumInstancesInRow });
         renderer.DrawIndexed(3, NumInstancesInRow, 0, 0, 0);
-
         renderer.EndRendering();
     }
     //--------------------------------------------------------------------------
