@@ -73,6 +73,8 @@ namespace Kmplete
 
         VulkanLogicalDevice::~VulkanLogicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
+            WaitIdle();
+
             _DeleteDescriptorSetManager();
             _DeleteSamplersStorage();
             _DeleteShaderObjects();
