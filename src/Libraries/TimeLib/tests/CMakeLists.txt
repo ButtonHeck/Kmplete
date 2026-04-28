@@ -15,6 +15,6 @@ add_executable(TimeLib_UnitTests
 
 SetupUnitTestsTargetProperties(
     TimeLib_UnitTests 
-    Kmplete/Tests
+    Kmplete/Tests/Auto
     Catch2::Catch2WithMain BaseLib TimeLib
 )

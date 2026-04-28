@@ -125,8 +125,6 @@ namespace Kmplete
 
     void WindowBackendGlfw::_Finalize() KMP_PROFILING(ProfileLevelAlways)
     {
-        KMP_ASSERT(_mainWindow && _mainWindowSettings);
-
         _mainWindow.reset();
         _mainWindowSettings.reset();
 
