@@ -28,6 +28,81 @@ namespace Kmplete
         using namespace VKBits;
 
 
+        static void InitializeFeaturesChain(
+            VkPhysicalDeviceVertexAttributeDivisorFeatures& vertexAttributeDivisorFeatures,
+            VkPhysicalDeviceLineRasterizationFeaturesEXT& lineRasterizationFeatures,
+            VkPhysicalDeviceShaderObjectFeaturesEXT& shaderObjectFeatures,
+            VkPhysicalDeviceVertexInputDynamicStateFeaturesEXT& vertexInputDynamicStateFeatures,
+            VkPhysicalDeviceExtendedDynamicState2FeaturesEXT& dynamicStateFeatures2,
+            VkPhysicalDeviceColorWriteEnableFeaturesEXT& colorWriteEnableFeatures,
+            VkPhysicalDeviceDepthClipEnableFeaturesEXT& depthClipEnableFeatures,
+            VkPhysicalDeviceExtendedDynamicState3FeaturesEXT& dynamicStateFeatures3,
+            VkPhysicalDeviceFeatures& features,
+            VkPhysicalDeviceVulkan13Features& features13,
+            VkPhysicalDeviceFeatures2& features2)
+        {
+            vertexAttributeDivisorFeatures.vertexAttributeInstanceRateDivisor = VK_TRUE;
+            vertexAttributeDivisorFeatures.vertexAttributeInstanceRateZeroDivisor = VK_TRUE;
+
+            lineRasterizationFeatures.bresenhamLines = VK_TRUE;
+            lineRasterizationFeatures.rectangularLines = VK_TRUE;
+            lineRasterizationFeatures.smoothLines = VK_TRUE;
+            lineRasterizationFeatures.stippledBresenhamLines = VK_TRUE;
+            lineRasterizationFeatures.stippledRectangularLines = VK_TRUE;
+            lineRasterizationFeatures.stippledSmoothLines = VK_TRUE;
+            lineRasterizationFeatures.pNext = &vertexAttributeDivisorFeatures;
+
+            shaderObjectFeatures.shaderObject = VK_TRUE;
+            shaderObjectFeatures.pNext = &lineRasterizationFeatures;
+
+            vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
+            vertexInputDynamicStateFeatures.pNext = &shaderObjectFeatures;
+
+            dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
+            dynamicStateFeatures2.pNext = &vertexInputDynamicStateFeatures;
+
+            colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;
+            colorWriteEnableFeatures.pNext = &dynamicStateFeatures2;
+
+            depthClipEnableFeatures.depthClipEnable = VK_TRUE;
+            depthClipEnableFeatures.pNext = &colorWriteEnableFeatures;
+
+            dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3DepthClipEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3LineStippleEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3LineRasterizationMode = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3SampleLocationsEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3SampleMask = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3ColorBlendEquation = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3ColorWriteMask = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3AlphaToCoverageEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3AlphaToOneEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3LogicOpEnable = VK_TRUE;
+            dynamicStateFeatures3.extendedDynamicState3ProvokingVertexMode = VK_TRUE;
+            dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
+
+            features.samplerAnisotropy = VK_TRUE;
+            features.independentBlend = VK_TRUE;
+            features.depthClamp = VK_TRUE;
+            features.depthBounds = VK_TRUE;
+            features.fillModeNonSolid = VK_TRUE;
+            features.alphaToOne = VK_TRUE;
+            features.logicOp = VK_TRUE;
+            features.wideLines = VK_TRUE;
+
+            features13.dynamicRendering = VK_TRUE;
+            features13.synchronization2 = VK_TRUE;
+            features13.pNext = &dynamicStateFeatures3;
+
+            features2.features = features;
+            features2.pNext = &features13;
+        }
+        //--------------------------------------------------------------------------
+
+
         VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
                                                  const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
@@ -257,75 +332,19 @@ namespace Kmplete
         {
             const auto queueCreateInfos = _CreateQueueCreateInfos();
 
-            auto vertexAttributeDivisorFeatures = VKUtils::InitVkPhysicalDeviceVertexAttributeDivisorFeatures();
-            vertexAttributeDivisorFeatures.vertexAttributeInstanceRateDivisor = VK_TRUE;
-            vertexAttributeDivisorFeatures.vertexAttributeInstanceRateZeroDivisor = VK_TRUE;
-
-            auto lineRasterizationFeatures = VKUtils::InitVkPhysicalDeviceLineRasterizationFeaturesEXT();
-            lineRasterizationFeatures.bresenhamLines = VK_TRUE;
-            lineRasterizationFeatures.rectangularLines = VK_TRUE;
-            lineRasterizationFeatures.smoothLines = VK_TRUE;
-            lineRasterizationFeatures.stippledBresenhamLines = VK_TRUE;
-            lineRasterizationFeatures.stippledRectangularLines = VK_TRUE;
-            lineRasterizationFeatures.stippledSmoothLines = VK_TRUE;
-            lineRasterizationFeatures.pNext = &vertexAttributeDivisorFeatures;
-
-            auto shaderObjectFeatures = VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
-            shaderObjectFeatures.shaderObject = VK_TRUE;
-            shaderObjectFeatures.pNext = &lineRasterizationFeatures;
-
-            auto vertexInputDynamicStateFeatures = VKUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
-            vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_TRUE;
-            vertexInputDynamicStateFeatures.pNext = &shaderObjectFeatures;
-
-            auto dynamicStateFeatures2 = VKUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
-            dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
-            dynamicStateFeatures2.pNext = &vertexInputDynamicStateFeatures;
-
-            auto colorWriteEnableFeatures = VKUtils::InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
-            colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;
-            colorWriteEnableFeatures.pNext = &dynamicStateFeatures2;
-
-            auto depthClipEnableFeatures = VKUtils::InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
-            depthClipEnableFeatures.depthClipEnable = VK_TRUE;
-            depthClipEnableFeatures.pNext = &colorWriteEnableFeatures;
-
-            auto dynamicStateFeatures3 = VKUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
-            dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3DepthClipEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3LineStippleEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3LineRasterizationMode = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3SampleLocationsEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3SampleMask = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3ColorBlendEquation = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3ColorWriteMask = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3AlphaToCoverageEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3AlphaToOneEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3LogicOpEnable = VK_TRUE;
-            dynamicStateFeatures3.extendedDynamicState3ProvokingVertexMode = VK_TRUE;
-            dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
-
             VkPhysicalDeviceFeatures features{};
-            features.samplerAnisotropy = VK_TRUE;
-            features.independentBlend = VK_TRUE;
-            features.depthClamp = VK_TRUE;
-            features.depthBounds = VK_TRUE;
-            features.fillModeNonSolid = VK_TRUE;
-            features.alphaToOne = VK_TRUE;
-            features.logicOp = VK_TRUE;
-            features.wideLines = VK_TRUE;
-
             auto features13 = VKUtils::InitVkPhysicalDeviceVulkan13Features();
-            features13.dynamicRendering = VK_TRUE;
-            features13.synchronization2 = VK_TRUE;
-            features13.pNext = &dynamicStateFeatures3;
-
             auto features2 = VKUtils::InitVkPhysicalDeviceFeatures2();
-            features2.features = features;
-            features2.pNext = &features13;
+            auto vertexAttributeDivisorFeatures = VKUtils::InitVkPhysicalDeviceVertexAttributeDivisorFeatures();
+            auto lineRasterizationFeatures = VKUtils::InitVkPhysicalDeviceLineRasterizationFeaturesEXT();
+            auto shaderObjectFeatures = VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT();
+            auto vertexInputDynamicStateFeatures = VKUtils::InitVkPhysicalDeviceVertexInputDynamicStateFeaturesEXT();
+            auto dynamicStateFeatures2 = VKUtils::InitVkPhysicalDeviceExtendedDynamicState2FeaturesEXT();
+            auto colorWriteEnableFeatures = VKUtils::InitVkPhysicalDeviceColorWriteEnableFeaturesEXT();
+            auto depthClipEnableFeatures = VKUtils::InitVkPhysicalDeviceDepthClipEnableFeaturesEXT();
+            auto dynamicStateFeatures3 = VKUtils::InitVkPhysicalDeviceExtendedDynamicState3FeaturesEXT();
+            InitializeFeaturesChain(vertexAttributeDivisorFeatures, lineRasterizationFeatures, shaderObjectFeatures, vertexInputDynamicStateFeatures, dynamicStateFeatures2,
+                                    colorWriteEnableFeatures, depthClipEnableFeatures, dynamicStateFeatures3, features, features13, features2);
 
             const auto& enabledDeviceExtensions = VulkanPhysicalDevice::GetEnabledDeviceExtensions();
 
