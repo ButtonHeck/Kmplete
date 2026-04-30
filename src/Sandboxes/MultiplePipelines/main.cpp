@@ -1,4 +1,4 @@
-#include "multiple_pipelines_vulkan_application.h"
+#include "multiple_pipelines_application.h"
 
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
@@ -8,7 +8,7 @@ namespace Kmplete
 {
     const char* ApplicationProfileSessionPrefix()
     {
-        return "MultiplePipelinesVulkan";
+        return "MultiplePipelines";
     }
     //--------------------------------------------------------------------------
 
@@ -19,14 +19,14 @@ namespace Kmplete
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters =
-                    {.applicationName = "Multiple Pipelines Vulkan sandbox",
+                    {.applicationName = "Multiple Pipelines sandbox",
                      .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "MultiplePipelinesVulkan_settings.json"
+                     .defaultSettingsFileName = "MultiplePipelinesSandbox_settings.json"
                     },
                 .resizable = true
             };
 
-            return CreateUPtr<MultiplePipelinesVulkanApplication>(parameters);
+            return CreateUPtr<MultiplePipelinesApplication>(parameters);
         }
         catch (const Exception&)
         {
