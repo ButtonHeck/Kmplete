@@ -1,4 +1,4 @@
-#include "texture_vulkan_application.h"
+#include "texture_application.h"
 
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
@@ -8,7 +8,7 @@ namespace Kmplete
 {
     const char* ApplicationProfileSessionPrefix()
     {
-        return "TextureVulkan";
+        return "Texture";
     }
     //--------------------------------------------------------------------------
 
@@ -19,14 +19,14 @@ namespace Kmplete
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters =
-                    {.applicationName = "Texture Vulkan sandbox",
+                    {.applicationName = "Texture sandbox",
                      .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "TextureVulkan_settings.json"
+                     .defaultSettingsFileName = "TextureSandbox_settings.json"
                     },
                 .resizable = true
             };
 
-            return CreateUPtr<TextureVulkanApplication>(parameters);
+            return CreateUPtr<TextureApplication>(parameters);
         }
         catch (const Exception&)
         {

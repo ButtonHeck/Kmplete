@@ -9,6 +9,6 @@ cmake_minimum_required(VERSION 3.20)
 set(KmpleteSandboxResourcesFolder ${CMAKE_CURRENT_LIST_DIR}/Resources)
 
 add_subdirectory(Triangle)
-add_subdirectory(TextureVulkan)
+add_subdirectory(Texture)
 add_subdirectory(MultiplePipelinesVulkan)
 add_subdirectory(InstancedRenderingVulkan)

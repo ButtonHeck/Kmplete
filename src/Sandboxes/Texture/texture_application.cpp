@@ -1,9 +1,9 @@
-#include "texture_vulkan_application.h"
+#include "texture_application.h"
 
 
 namespace Kmplete
 {
-    TextureVulkanApplication::TextureVulkanApplication(const WindowApplicationParameters& parameters)
+    TextureApplication::TextureApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)
         , _mainWindow(_windowBackend->GetMainWindow())
         , _mainFrameListener(nullptr)
@@ -12,27 +12,27 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    TextureVulkanApplication::~TextureVulkanApplication()
+    TextureApplication::~TextureApplication()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void TextureVulkanApplication::_Initialize()
+    void TextureApplication::_Initialize()
     {
         _mainWindow.SetTitle(_applicationName.c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
-        if (!_assetsManager->LoadAssetFile("TextureVulkan_assets.kmpdata"))
+        if (!_assetsManager->LoadAssetFile("TextureSandbox_assets.kmpdata"))
         {
-            KMP_LOG_ERROR("failed to load TextureVulkan assets");
+            KMP_LOG_ERROR("failed to load TextureSandbox assets");
         }
 
-        _mainFrameListener.reset(new MainFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), _inputManager.get()));
+        _mainFrameListener.reset(new TextureFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), _inputManager.get()));
     }
     //--------------------------------------------------------------------------
 
-    void TextureVulkanApplication::_Finalize()
+    void TextureApplication::_Finalize()
     {
         _mainFrameListener.reset();
     }

@@ -28,14 +28,14 @@ namespace Kmplete
 
 #define USE_ORTHOGRAPHIC_CAMERA false
 
-    class MainFrameListener : public FrameListener
+    class TextureFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(MainFrameListener)
-        KMP_DISABLE_COPY_MOVE(MainFrameListener)
+        KMP_LOG_CLASSNAME(TextureFrameListener)
+        KMP_DISABLE_COPY_MOVE(TextureFrameListener)
 
     public:
-        MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager);
-        ~MainFrameListener();
+        TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager);
+        ~TextureFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;

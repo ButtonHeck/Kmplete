@@ -1,4 +1,4 @@
-#include "texture_vulkan_main_frame_listener.h"
+#include "texture_frame_listener.h"
 
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
@@ -63,7 +63,7 @@ namespace Kmplete
 #define USE_ORTHOGRAPHIC_CAMERA false
 
 
-    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
+    TextureFrameListener::TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
@@ -75,9 +75,9 @@ namespace Kmplete
         , _device(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseButtonPressedEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseScrollEvent))
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowResizeEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
 #if USE_ORTHOGRAPHIC_CAMERA
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
@@ -89,13 +89,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    MainFrameListener::~MainFrameListener()
+    TextureFrameListener::~TextureFrameListener()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_Initialize()
+    void TextureFrameListener::_Initialize()
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
@@ -165,7 +165,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_InitializeTextureQuad()
+    void TextureFrameListener::_InitializeTextureQuad()
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
@@ -311,7 +311,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_InitializeImGui(float dpiScale)
+    void TextureFrameListener::_InitializeImGui(float dpiScale)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -348,7 +348,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_Finalize()
+    void TextureFrameListener::_Finalize()
     {
         _imguiImpl.reset();
 
@@ -358,7 +358,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    bool TextureFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
     {
         if (evt.GetWidth() > 0 && evt.GetHeight())
         {
@@ -368,7 +368,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    bool TextureFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
     {
         if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
         {
@@ -386,7 +386,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    bool TextureFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
     {
 #if USE_ORTHOGRAPHIC_CAMERA
         _camera.SetScaleDelta(evt.GetYOffset());
@@ -397,20 +397,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    void TextureFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::Render()
+    void TextureFrameListener::Render()
     {
         _RenderTextureQuad();
         _RenderImGui();
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_RenderTextureQuad()
+    void TextureFrameListener::_RenderTextureQuad()
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
@@ -491,7 +491,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_RenderImGui()
+    void TextureFrameListener::_RenderImGui()
     {
         _imguiImpl->NewFrame();
 
