@@ -1,4 +1,4 @@
-#include "triangle_vulkan_application.h"
+#include "triangle_application.h"
 
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
@@ -8,7 +8,7 @@ namespace Kmplete
 {
     const char* ApplicationProfileSessionPrefix()
     {
-        return "TriangleVulkan";
+        return "Triangle";
     }
     //--------------------------------------------------------------------------
 
@@ -19,14 +19,14 @@ namespace Kmplete
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters =
-                    {.applicationName = "Triangle Vulkan sandbox",
+                    {.applicationName = "Triangle sandbox",
                      .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "TriangleVulkan_settings.json"
+                     .defaultSettingsFileName = "TriangleSandbox_settings.json"
                     },
                 .resizable = true
             };
 
-            return CreateUPtr<TriangleVulkanApplication>(parameters);
+            return CreateUPtr<TriangleApplication>(parameters);
         }
         catch (const Exception&)
         {

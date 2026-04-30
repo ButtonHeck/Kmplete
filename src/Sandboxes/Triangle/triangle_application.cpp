@@ -1,9 +1,9 @@
-#include "triangle_vulkan_application.h"
+#include "triangle_application.h"
 
 
 namespace Kmplete
 {
-    TriangleVulkanApplication::TriangleVulkanApplication(const WindowApplicationParameters& parameters)
+    TriangleApplication::TriangleApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)
         , _mainWindow(_windowBackend->GetMainWindow())
         , _mainFrameListener(nullptr)
@@ -12,22 +12,22 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    TriangleVulkanApplication::~TriangleVulkanApplication()
+    TriangleApplication::~TriangleApplication()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void TriangleVulkanApplication::_Initialize()
+    void TriangleApplication::_Initialize()
     {
         _mainWindow.SetTitle(_applicationName.c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
-        _mainFrameListener.reset(new MainFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), _inputManager.get()));
+        _mainFrameListener.reset(new TriangleFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), _inputManager.get()));
     }
     //--------------------------------------------------------------------------
 
-    void TriangleVulkanApplication::_Finalize()
+    void TriangleApplication::_Finalize()
     {
         _mainFrameListener.reset();
     }

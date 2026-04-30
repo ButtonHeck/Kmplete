@@ -1,4 +1,4 @@
-#include "triangle_vulkan_main_frame_listener.h"
+#include "triangle_frame_listener.h"
 
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
@@ -57,7 +57,7 @@ namespace Kmplete
 #define USE_ORTHOGRAPHIC_CAMERA false
 
 
-    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
+    TriangleFrameListener::TriangleFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
@@ -70,10 +70,10 @@ namespace Kmplete
         , _device(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
-        , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMultisamplingChangeEvent))
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnWindowResizeEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseButtonPressedEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(MainFrameListener::_OnMouseScrollEvent))
+        , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMultisamplingChangeEvent))
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowResizeEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
         , _shaderData(ShaderData{.colorMultiplier = 1.0f})
 #if USE_ORTHOGRAPHIC_CAMERA
@@ -86,13 +86,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    MainFrameListener::~MainFrameListener()
+    TriangleFrameListener::~TriangleFrameListener()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_Initialize()
+    void TriangleFrameListener::_Initialize()
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
@@ -162,7 +162,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_InitializeTriangle()
+    void TriangleFrameListener::_InitializeTriangle()
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
@@ -354,7 +354,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_InitializeImGui(float dpiScale)
+    void TriangleFrameListener::_InitializeImGui(float dpiScale)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -391,7 +391,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_Finalize()
+    void TriangleFrameListener::_Finalize()
     {
         _imguiImpl.reset();
 
@@ -402,20 +402,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_SetMultisampling(UInt32 samples)
+    void TriangleFrameListener::_SetMultisampling(UInt32 samples)
     {
         Events::QueueEvent(CreateUPtr<Events::MultisamplingChangeEvent>(samples));
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
+    bool TriangleFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
     {
         _graphicsBackend.SetMultisampling(evt.msaaSamples);
         return true;
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    bool TriangleFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
     {
         if (evt.GetWidth() > 0 && evt.GetHeight())
         {
@@ -425,7 +425,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    bool TriangleFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
     {
         if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
         {
@@ -443,7 +443,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool MainFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    bool TriangleFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
     {
 #if USE_ORTHOGRAPHIC_CAMERA
         _camera.SetScaleDelta(evt.GetYOffset());
@@ -454,20 +454,20 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    void TriangleFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::Render()
+    void TriangleFrameListener::Render()
     {
         _RenderTriangle();
         _RenderImGui();
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_RenderTriangle()
+    void TriangleFrameListener::_RenderTriangle()
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
@@ -573,7 +573,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_RenderImGui()
+    void TriangleFrameListener::_RenderImGui()
     {
         _imguiImpl->NewFrame();
 
