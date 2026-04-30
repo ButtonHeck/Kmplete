@@ -1,4 +1,4 @@
-#include "instanced_rendering_vulkan_main_frame_listener.h"
+#include "instanced_rendering_frame_listener.h"
 
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
@@ -34,7 +34,7 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+    InstancedRenderingFrameListener::InstancedRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
@@ -49,13 +49,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    MainFrameListener::~MainFrameListener()
+    InstancedRenderingFrameListener::~InstancedRenderingFrameListener()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_Initialize()
+    void InstancedRenderingFrameListener::_Initialize()
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
@@ -183,7 +183,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::_Finalize()
+    void InstancedRenderingFrameListener::_Finalize()
     {
         _vertexBuffer.reset();
         _vertexBufferPosInstanced.reset();
@@ -192,7 +192,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MainFrameListener::Render()
+    void InstancedRenderingFrameListener::Render()
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();

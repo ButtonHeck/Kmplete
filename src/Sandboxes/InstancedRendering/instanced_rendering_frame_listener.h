@@ -12,14 +12,14 @@
 
 namespace Kmplete
 {
-    class MainFrameListener : public FrameListener
+    class InstancedRenderingFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(MainFrameListener)
-        KMP_DISABLE_COPY_MOVE(MainFrameListener)
+        KMP_LOG_CLASSNAME(InstancedRenderingFrameListener)
+        KMP_DISABLE_COPY_MOVE(InstancedRenderingFrameListener)
 
     public:
-        MainFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend);
-        ~MainFrameListener();
+        InstancedRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend);
+        ~InstancedRenderingFrameListener();
 
         void Render() override;
 

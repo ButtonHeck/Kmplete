@@ -1,4 +1,4 @@
-#include "instanced_rendering_vulkan_application.h"
+#include "instanced_rendering_application.h"
 
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
@@ -8,7 +8,7 @@ namespace Kmplete
 {
     const char* ApplicationProfileSessionPrefix()
     {
-        return "InstancedRenderingVulkan";
+        return "InstancedRendering";
     }
     //--------------------------------------------------------------------------
 
@@ -19,14 +19,14 @@ namespace Kmplete
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters =
-                    {.applicationName = "Instanced Rendering Vulkan sandbox",
+                    {.applicationName = "Instanced Rendering sandbox",
                      .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "InstancedRenderingVulkan_settings.json"
+                     .defaultSettingsFileName = "InstancedRenderingSandbox_settings.json"
                     },
                 .resizable = true
             };
 
-            return CreateUPtr<InstancedRenderingVulkanApplication>(parameters);
+            return CreateUPtr<InstancedRenderingApplication>(parameters);
         }
         catch (const Exception&)
         {
