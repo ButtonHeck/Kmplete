@@ -133,7 +133,7 @@ namespace Kmplete
 
             outputFileStream
                 << std::setprecision(3) << std::fixed
-                << R"rjs(,{"cat":"function","dur":)rjs"
+                << R"rjs(,{"dur":)rjs"
                 << elapsedMicroseconds
                 << R"rjs(,"name":")rjs"
                 << profileResult.name
