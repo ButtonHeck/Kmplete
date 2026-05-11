@@ -24,6 +24,8 @@ namespace Kmplete
         {
             _controlStates[Code::Mouse_Move] = Math::Point2I();
             _controlStates[Code::Mouse_Position] = Math::Point2I();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
