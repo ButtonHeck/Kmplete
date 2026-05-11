@@ -193,12 +193,15 @@ namespace Kmplete
     constexpr auto fixedNameWString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
     constexpr auto fixedNameInt64##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
     constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Filepath");\
-    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "class ", "");\
+    constexpr auto fixedNameArray##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "std::array", "Array");\
+    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameArray##line.data, "class ", "");\
     constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
     constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\
     constexpr auto fixedNameVoidParams##line = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVector##line.data, "(void)", "()");\
     constexpr auto fixedNameRapidjson##line  = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVoidParams##line.data, "rapidjson::GenericDocument<rapidjson::UTF8<char>,rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>,rapidjson::CrtAllocator>", "rapidjson::Document");\
-    ::Kmplete::ProfilerTimer timer##line(fixedNameRapidjson##line.data, level)
+    constexpr auto fixedName_T##line         = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameRapidjson##line.data, "_T *", "");\
+    constexpr auto fixedNameKHR_T##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedName_T##line.data, "KHR_T *", "");\
+    ::Kmplete::ProfilerTimer timer##line(fixedNameKHR_T##line.data, level)
 #define _KMP_PROFILE_SCOPE_LINE(name, line, level) _KMP_PROFILE_SCOPE_LINE2(name, line, level)
 #define KMP_PROFILE_SCOPE(name, level) _KMP_PROFILE_SCOPE_LINE(name, __LINE__, level)
 #define KMP_PROFILE_FUNCTION(level) KMP_PROFILE_SCOPE(KMP_FUNC_SIG, level)
@@ -229,12 +232,15 @@ namespace Kmplete
     constexpr auto fixedNameWString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
     constexpr auto fixedNameInt64##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
     constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Filepath");\
-    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "class ", "");\
+    constexpr auto fixedNameArray##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "std::array", "Array");\
+    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameArray##line.data, "class ", "");\
     constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
     constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\
     constexpr auto fixedNameVoidParams##line = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVector##line.data, "(void)", "()");\
     constexpr auto fixedNameRapidjson##line  = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVoidParams##line.data, "rapidjson::GenericDocument<rapidjson::UTF8<char>,rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>,rapidjson::CrtAllocator>", "rapidjson::Document");\
-    _constructorProfilerTimer->SetName(fixedNameRapidjson##line.data);\
+    constexpr auto fixedName_T##line         = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameRapidjson##line.data, "_T *", "");\
+    constexpr auto fixedNameKHR_T##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedName_T##line.data, "KHR_T *", "");\
+    _constructorProfilerTimer->SetName(fixedNameKHR_T##line.data);\
     _constructorProfilerTimer.reset(nullptr);
 
 #else
