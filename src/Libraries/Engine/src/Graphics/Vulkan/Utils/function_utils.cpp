@@ -4,6 +4,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -92,27 +93,46 @@ namespace Kmplete
                     requiredExtensions.erase(extension.extensionName);
                 }
 
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+                if (!requiredExtensions.empty())
+                {
+                    auto properties2 = VKUtils::InitVkPhysicalDeviceProperties2();
+                    vkGetPhysicalDeviceProperties2(device, &properties2);
+
+                    for (const auto& extension : requiredExtensions)
+                    {
+                        KMP_LOG_WARN_FN("VKUtils::QueryDeviceExtensionSupport: for device '{}' required extension {} not found", properties2.properties.deviceName, extension);
+                    }
+                }
+#endif
+
                 return requiredExtensions.empty();
             }}
             //--------------------------------------------------------------------------
 
             Pair<bool, Pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
             {
+                auto properties2 = VKUtils::InitVkPhysicalDeviceProperties2();
+                vkGetPhysicalDeviceProperties2(device, &properties2);
+
                 const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
                 if (!queueFamiliesIndices.IsValid())
                 {
+                    KMP_LOG_WARN_FN("VKUtils::IsDeviceSuitable: '{}' is not suitable - queue families indices are invalid", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
                 }
 
                 const auto extensionsSupported = QueryDeviceExtensionSupport(device, enabledExtensions);
                 if (!extensionsSupported)
                 {
+                    KMP_LOG_WARN_FN("VKUtils::IsDeviceSuitable: '{}' is not suitable - required extensions are not supported", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
                 }
 
                 const auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(device, surface);
                 if (!surfaceAndPresentModeProperties.IsValid())
                 {
+                    KMP_LOG_WARN_FN("VKUtils::IsDeviceSuitable: '{}' is not suitable - surface and present modes properties are invalid", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
                 }
 
@@ -123,6 +143,7 @@ namespace Kmplete
                     !supportedFeatures.depthClamp ||
                     !supportedFeatures.depthBounds)
                 {
+                    KMP_LOG_WARN_FN("VKUtils::IsDeviceSuitable: '{}' is not suitable - some device features are not supported", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
                 }
 
