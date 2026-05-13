@@ -119,13 +119,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::SetDepthClamping(bool enabled)
-        {
-            _rasterizationStateCreateInfo.depthClampEnable = enabled;
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::SetDepthBiasParameters(bool biasEnabled, float constantFactor, float clamp, float slopeFactor)
         {
             _rasterizationStateCreateInfo.depthBiasEnable = biasEnabled;
@@ -350,7 +343,6 @@ namespace Kmplete
             _rasterizationStateCreateInfo.polygonMode = VK_Polygon_Fill;
             _rasterizationStateCreateInfo.cullMode = VK_Cull_Back;
             _rasterizationStateCreateInfo.frontFace = VK_FrontFace_CounterClockwise;
-            _rasterizationStateCreateInfo.depthClampEnable = VK_FALSE;
             _rasterizationStateCreateInfo.rasterizerDiscardEnable = VK_TRUE;
             _rasterizationStateCreateInfo.lineWidth = 1.0f;
             _rasterizationStateCreateInfo.depthBiasEnable = VK_FALSE;

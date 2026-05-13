@@ -51,8 +51,6 @@ namespace Kmplete
             KMP_API void SetDepthBias(float constantFactor, float clamp, float slopeFactor) const;
             KMP_API void SetDepthBoundsEnabled(bool enabled) const;
             KMP_API void SetDepthBounds(float min, float max) const;
-            KMP_API void SetDepthClampEnabled(bool enabled) const;
-            KMP_API void SetDepthClampRange(VkDepthClampModeEXT depthClampMode, float min, float max) const;
             KMP_API void SetDepthClipEnabled(bool enabled) const;
             KMP_API void SetStencilTestEnabled(bool enabled) const;
             KMP_API void SetStencilOp(VkStencilFaceFlags faceMask, VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp comparison) const;

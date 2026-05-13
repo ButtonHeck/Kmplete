@@ -186,7 +186,7 @@ namespace Kmplete
             {{-0.75f,  0.25f, 0.1f}, {0.6f, 0.6f, 0.6f, 1.0f}},
             {{-0.25f,  0.25f, 0.1f}, {1.0f, 1.0f, 1.0f, 1.0f}},
 
-            // reddish triangle below main RGB triangle (depth is outside of range, but it will be clamped due to DepthClamping option)
+            // reddish triangle below main RGB triangle
             {{-0.00f,  0.40f, 0.8f}, {1.0f, 0.3f, 0.3f, 1.0f}},
             {{-0.25f, -0.25f, 0.8f}, {1.0f, 0.6f, 0.6f, 1.0f}},
             {{ 0.25f, -0.25f, 0.8f}, {1.0f, 0.9f, 0.9f, 1.0f}},
@@ -293,8 +293,6 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_DepthBounds);           //renderer.SetDepthBounds(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthBiasEnable);       //renderer.SetDepthBiasEnabled(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthBias);             //renderer.SetDepthBias(...)
-        pipelineParams.AddDynamicState(VK_Dynamic_DepthClampEnable);      //renderer.SetDepthClampEnabled(...)
-        pipelineParams.AddDynamicState(VK_Dynamic_DepthClampRange);       //renderer.SetDepthClampRange(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthClipEnable);       //renderer.SetDepthClipEnabled(...)
 
         pipelineParams.AddDynamicState(VK_Dynamic_StencilTestEnable);     //renderer.SetStencilTestEnabled(...)
@@ -504,8 +502,6 @@ namespace Kmplete
         renderer.SetDepthBounds(0.0f, 1.0f);
         renderer.SetDepthBiasEnabled(true);
         renderer.SetDepthBias(0.0f, 0.0f, 0.0f);
-        renderer.SetDepthClampEnabled(true);
-        renderer.SetDepthClampRange(VK_DepthClamp_ViewportRange, 0.0f, 1.0f);
         renderer.SetDepthClipEnabled(true);
 
         renderer.SetStencilTestEnabled(false);

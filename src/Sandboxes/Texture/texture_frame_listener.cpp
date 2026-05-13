@@ -259,8 +259,6 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_DepthBounds);           //renderer.SetDepthBounds(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthBiasEnable);       //renderer.SetDepthBiasEnabled(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthBias);             //renderer.SetDepthBias(...)
-        pipelineParams.AddDynamicState(VK_Dynamic_DepthClampEnable);      //renderer.SetDepthClampEnabled(...)
-        pipelineParams.AddDynamicState(VK_Dynamic_DepthClampRange);       //renderer.SetDepthClampRange(...)
         pipelineParams.AddDynamicState(VK_Dynamic_DepthClipEnable);       //renderer.SetDepthClipEnabled(...)
 
         pipelineParams.AddDynamicState(VK_Dynamic_StencilTestEnable);     //renderer.SetStencilTestEnabled(...)
@@ -440,8 +438,6 @@ namespace Kmplete
         renderer.SetDepthBounds(0.0f, 1.0f);
         renderer.SetDepthBiasEnabled(true);
         renderer.SetDepthBias(0.0f, 0.0f, 0.0f);
-        renderer.SetDepthClampEnabled(true);
-        renderer.SetDepthClampRange(VK_DepthClamp_ViewportRange, 0.0f, 1.0f);
         renderer.SetDepthClipEnabled(true);
 
         renderer.SetStencilTestEnabled(false);

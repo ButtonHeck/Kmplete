@@ -249,23 +249,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetDepthClampEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VKCommands::CmdSetDepthClampEnableEXT(_currentCommandBuffer, enabled);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetDepthClampRange(VkDepthClampModeEXT depthClampMode, float min, float max) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VkDepthClampRangeEXT depthClampRange{ .minDepthClamp = min, .maxDepthClamp = max };
-            VKCommands::CmdSetDepthClampRangeEXT(_currentCommandBuffer, depthClampMode, &depthClampRange);
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanRenderer::SetDepthClipEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);

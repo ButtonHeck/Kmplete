@@ -86,7 +86,6 @@ namespace Kmplete
 
             features.samplerAnisotropy = VK_TRUE;
             features.independentBlend = VK_TRUE;
-            features.depthClamp = VK_TRUE;
             features.depthBounds = VK_TRUE;
             features.fillModeNonSolid = VK_TRUE;
             features.alphaToOne = VK_TRUE;

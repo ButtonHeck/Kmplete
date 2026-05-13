@@ -42,7 +42,6 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable);
             KMP_API VulkanGraphicsPipelineParameters& SetPolygonMode(VkPolygonMode polygonMode);
             KMP_API VulkanGraphicsPipelineParameters& SetCulling(VkCullModeFlags cullMode, VkFrontFace frontFace);
-            KMP_API VulkanGraphicsPipelineParameters& SetDepthClamping(bool enabled);
             KMP_API VulkanGraphicsPipelineParameters& SetDepthBiasParameters(bool biasEnabled, float constantFactor, float clamp, float slopeFactor);
             KMP_API VulkanGraphicsPipelineParameters& SetRasterizerDiscard(bool enabled);
             KMP_API VulkanGraphicsPipelineParameters& SetLineWidth(float lineWidth);

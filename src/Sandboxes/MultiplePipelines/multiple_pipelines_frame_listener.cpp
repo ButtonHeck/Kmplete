@@ -141,7 +141,6 @@ namespace Kmplete
         pipelineFixedColorFillParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
         pipelineFixedColorFillParams.SetPolygonMode(VK_Polygon_Fill);
         pipelineFixedColorFillParams.SetCulling(VK_Cull_Back, VK_FrontFace_CounterClockwise);
-        pipelineFixedColorFillParams.SetDepthClamping(true);
         pipelineFixedColorFillParams.SetRasterizerDiscard(false);
         pipelineFixedColorFillParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
         pipelineFixedColorFillParams.SetDepthTest(true);

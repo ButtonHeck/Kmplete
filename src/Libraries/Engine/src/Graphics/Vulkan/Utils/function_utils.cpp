@@ -140,7 +140,6 @@ namespace Kmplete
                 vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
                 if (!supportedFeatures.samplerAnisotropy ||
                     !supportedFeatures.independentBlend ||
-                    !supportedFeatures.depthClamp ||
                     !supportedFeatures.depthBounds)
                 {
                     KMP_LOG_WARN_FN("VKUtils::IsDeviceSuitable: '{}' is not suitable - some device features are not supported", properties2.properties.deviceName);

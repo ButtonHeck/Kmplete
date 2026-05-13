@@ -163,7 +163,6 @@ namespace Kmplete
         pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
         pipelineParams.SetPolygonMode(VK_Polygon_Fill);
         pipelineParams.SetCulling(VK_Cull_Back, VK_FrontFace_CounterClockwise);
-        pipelineParams.SetDepthClamping(true);
         pipelineParams.SetRasterizerDiscard(false);
         pipelineParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
         pipelineParams.SetDepthTest(true);
