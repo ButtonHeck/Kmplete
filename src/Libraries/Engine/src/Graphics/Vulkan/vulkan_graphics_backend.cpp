@@ -234,6 +234,8 @@ namespace Kmplete
             VKUtils::CheckResult(result, "VulkanGraphicsBackend: failed to create VkInstance");
             KMP_ASSERT(_instance);
 
+            KMP_LOG_INFO("instance object successfully created");
+
             if (!VKCommands::LoadExtensionFunctions(_instance))
             {
                 KMP_LOG_CRITICAL("extension functions failed to load");

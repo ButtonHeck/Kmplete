@@ -358,6 +358,8 @@ namespace Kmplete
             const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
             VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
             KMP_ASSERT(_device);
+
+            KMP_LOG_INFO("logical device object successfully created");
         }}
         //--------------------------------------------------------------------------
 
