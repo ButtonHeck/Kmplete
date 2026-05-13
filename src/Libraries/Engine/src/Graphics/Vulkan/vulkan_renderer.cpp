@@ -417,30 +417,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetDiscardRectangleEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VKCommands::CmdSetDiscardRectangleEnableEXT(_currentCommandBuffer, enabled);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetDiscardRectangle(UInt32 firstDiscardRectangle, UInt32 count, const Vector<VkRect2D>& discardRectangles) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VKCommands::CmdSetDiscardRectangleEXT(_currentCommandBuffer, firstDiscardRectangle, count, discardRectangles.data());
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetDiscardRectangleMode(VkDiscardRectangleModeEXT mode) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VKCommands::CmdSetDiscardRectangleModeEXT(_currentCommandBuffer, mode);
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanRenderer::SetSampleLocationsEnabled(bool enabled) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);

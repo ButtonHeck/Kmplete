@@ -278,8 +278,6 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_PrimitiveTopology);         //renderer.SetPrimitiveTopology(...)
         pipelineParams.AddDynamicState(VK_Dynamic_PrimitiveRestartEnable);    //renderer.SetPrimitiveRestartEnabled(...)
 
-        pipelineParams.AddDynamicState(VK_Dynamic_DiscardRectangleEnable);    //renderer.SetDiscardRectangleEnabled(...)
-
         pipelineParams.AddDynamicState(VK_Dynamic_SampleLocationsEnable); //renderer.SetSampleLocationsEnabled(...)
 
         pipelineParams.AddDynamicState(VK_Dynamic_SampleMask);           //renderer.SetSampleMask(...)
@@ -456,8 +454,6 @@ namespace Kmplete
 
         renderer.SetPrimitiveTopology(VK_Primitive_TriangleList);
         renderer.SetPrimitiveRestartEnabled(false);
-
-        renderer.SetDiscardRectangleEnabled(false);
 
         renderer.SetSampleLocationsEnabled(false);
 

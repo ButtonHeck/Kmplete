@@ -72,9 +72,6 @@ namespace Kmplete
             KMP_API void SetFrontFace(VkFrontFace frontFace) const;
             KMP_API void SetBlendConstants(const Array<float, 4> constants) const;
             KMP_API void SetRasterizerDiscardEnabled(bool enabled) const;
-            KMP_API void SetDiscardRectangleEnabled(bool enabled) const;
-            KMP_API void SetDiscardRectangle(UInt32 firstDiscardRectangle, UInt32 count, const Vector<VkRect2D>& discardRectangles) const;
-            KMP_API void SetDiscardRectangleMode(VkDiscardRectangleModeEXT mode) const;
             KMP_API void SetSampleLocationsEnabled(bool enabled) const;
             KMP_API void SetSampleLocations(const Vector<VkSampleLocationsInfoEXT>& sampleLocationInfos) const;
             KMP_API void SetSampleMask(VkSampleCountFlagBits samples, const Vector<VkSampleMask>& sampleMasks) const;

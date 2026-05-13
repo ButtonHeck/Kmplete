@@ -317,10 +317,6 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_PrimitiveTopology);          //renderer.SetPrimitiveTopology(...)
         pipelineParams.AddDynamicState(VK_Dynamic_PrimitiveRestartEnable);    //renderer.SetPrimitiveRestartEnabled(...)
 
-        pipelineParams.AddDynamicState(VK_Dynamic_DiscardRectangleEnable);    //renderer.SetDiscardRectangleEnabled(...)
-        pipelineParams.AddDynamicState(VK_Dynamic_DiscardRectangle);          //renderer.SetDiscardRectangle(...)
-        pipelineParams.AddDynamicState(VK_Dynamic_DiscardRectangleMode);      //renderer.SetDiscardRectangleMode(...)
-
         //pipelineParams.AddDynamicState(VK_Dynamic_SampleLocationsEnable);   //renderer.SetSampleLocationsEnabled(...)
         //pipelineParams.AddDynamicState(VK_Dynamic_SampleLocations);         //renderer.SetSampleLocations(...)
         pipelineParams.AddDynamicState(VK_Dynamic_SampleMask);                //renderer.SetSampleMask(...)
@@ -525,18 +521,6 @@ namespace Kmplete
 
         renderer.SetPrimitiveTopology(VK_Primitive_TriangleList);
         renderer.SetPrimitiveRestartEnabled(false);
-
-        renderer.SetDiscardRectangleEnabled(false);
-        renderer.SetDiscardRectangle(0, 8,
-            { VkRect2D{.offset = VkOffset2D{.x = 1000, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1030, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1060, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1090, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1120, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1150, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1180, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}},
-             VkRect2D{.offset = VkOffset2D{.x = 1210, .y = 1000}, .extent = VkExtent2D{.width = 25, .height = 25}} });
-        renderer.SetDiscardRectangleMode(VK_DiscardRectangle_Exclusive);
 
         renderer.SetAlphaToCoverageEnabled(false);
         renderer.SetAlphaToOneEnabled(false);
