@@ -129,13 +129,8 @@ namespace Kmplete
         _mainWindowSettings.reset();
 
         _auxWindows.clear();
-
-        if (glfwGetCurrentContext())
-        {
-            KMP_LOG_WARN("some window's context is still current");
-        }
-
         _auxWindowsSettings.clear();
+
         _cursors.clear();
 
         {

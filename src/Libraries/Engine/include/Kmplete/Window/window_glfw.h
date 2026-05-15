@@ -68,7 +68,6 @@ namespace Kmplete
 
         KMP_API void FetchEvents() override;
         KMP_API void SwapBuffers() const override;
-        KMP_API void MakeContextCurrent() override;
         KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
 
         KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const noexcept override;

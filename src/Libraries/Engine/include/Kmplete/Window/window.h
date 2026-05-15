@@ -139,7 +139,6 @@ namespace Kmplete
 
         KMP_API virtual void FetchEvents() = 0;
         KMP_API virtual void SwapBuffers() const = 0;
-        KMP_API virtual void MakeContextCurrent() = 0;
         KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 
         KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const noexcept = 0;

@@ -501,14 +501,6 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::MakeContextCurrent() KMP_PROFILING(ProfileLevelImportant)
-    {
-        KMP_ASSERT(_window);
-
-        glfwMakeContextCurrent(_window);
-    }}
-    //--------------------------------------------------------------------------
-
     NonNull<void*> WindowGlfw::GetImplPointer() const noexcept
     {
         KMP_ASSERT(_window);
