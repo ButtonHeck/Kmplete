@@ -137,7 +137,7 @@ namespace Kmplete
                     _ComposeMainArea();
 
                     ImGuiUtils::StyleVarGuard styleVarGuard({
-                        {ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f)}
+                        { ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f) }
                     });
                     _EndMainWorkingArea();
                 }
@@ -199,7 +199,7 @@ namespace Kmplete
             auto commandBuffer = vulkanRenderer.GetCurrentCommandBuffer();
             auto* vulkanImGuiImpl = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
 
-            vulkanRenderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
+            vulkanRenderer.BeginRendering({ VkOffset2D{ .x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
             vulkanImGuiImpl->SetCommandBuffer(commandBuffer);
             vulkanImGuiImpl->Render();
             vulkanRenderer.EndRendering();
@@ -243,9 +243,9 @@ namespace Kmplete
         ImGui::SetNextWindowViewport(viewport->ID);
 
         ImGuiUtils::StyleVarGuard guard({
-            {ImGuiStyleVar_WindowRounding, 0.0f},
-            {ImGuiStyleVar_WindowBorderSize, 0.0f},
-            {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
+            { ImGuiStyleVar_WindowRounding, 0.0f },
+            { ImGuiStyleVar_WindowBorderSize, 0.0f },
+            { ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f) }
         });
 
         static constexpr auto applicationWindowFlags =
@@ -265,9 +265,9 @@ namespace Kmplete
 
         {
             ImGuiUtils::StyleVarGuard guard({
-                {ImGuiStyleVar_WindowRounding, 0.0f},
-                {ImGuiStyleVar_WindowBorderSize, 0.0f},
-                {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
+                { ImGuiStyleVar_WindowRounding, 0.0f },
+                { ImGuiStyleVar_WindowBorderSize, 0.0f },
+                { ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f) }
             });
 
             const auto statusBarHeight = 28 * _mainWindow.GetDPIScale();
@@ -303,12 +303,12 @@ namespace Kmplete
     void EditorFrameListener::_BeginStatusBarArea() const KMP_PROFILING(ProfileLevelImportantVerbose)
     {
         ImGuiUtils::StyleVarGuard styleVarGuard({
-            {ImGuiStyleVar_WindowRounding, 0.0f},
-            {ImGuiStyleVar_WindowBorderSize, 0.0f},
-            {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)}
+            { ImGuiStyleVar_WindowRounding, 0.0f },
+            { ImGuiStyleVar_WindowBorderSize, 0.0f },
+            { ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f) }
         });
 
-        ImGuiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg)} });
+        ImGuiUtils::StyleColorGuard styleColorGuard({ { ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_MenuBarBg) } });
 
         static constexpr auto statusBarFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking;
         ImGui::BeginChild(IdApp_StatusBar, ImGui::GetContentRegionAvail(), 0, statusBarFlags);

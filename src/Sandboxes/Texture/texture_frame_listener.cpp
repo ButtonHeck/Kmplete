@@ -419,7 +419,7 @@ namespace Kmplete
 
         _uniformBuffers[vulkanGraphicsBackend.GetCurrentBufferIndex()]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
-        renderer.BeginRendering(Pipeline_SID, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
+        renderer.BeginRendering(Pipeline_SID, { VkOffset2D{ .x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
         renderer.BindDescriptorSets(Pipeline_SID, 0, {
             descriptorSetManager.GetDescriptorSet(MatricesAndTextureDS_SID, 0, "per frame"_true),
             descriptorSetManager.GetDescriptorSet(SamplerDS_SID, 0, "per frame"_true)
@@ -444,8 +444,8 @@ namespace Kmplete
         renderer.SetStencilWriteMask(VK_StencilFace_Front, 0);
         renderer.SetStencilReference(VK_StencilFace_Front, 0);
 
-        renderer.SetViewportWithCount({ VkViewport{.x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f} });
-        renderer.SetScissorWithCount({ VkRect2D{.offset = VkOffset2D{.x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() } });
+        renderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f } });
+        renderer.SetScissorWithCount({ VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() } });
 
         renderer.SetColorWriteEnabled(1, { VK_TRUE });
         renderer.SetColorWriteMask(0, 1, { VK_Color_RGBA });

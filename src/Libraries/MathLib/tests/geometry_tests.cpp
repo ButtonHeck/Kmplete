@@ -7,52 +7,52 @@ TEST_CASE("Geometry GetCenter 2D tests", "[math][geometry]")
 {
     using namespace Kmplete::Math;
 
-    Rect2I rectInt({0, 0}, {10, 10});
+    Rect2I rectInt({ 0, 0 }, { 10, 10 });
     Point2I centerInt = rectInt.GetCenter();
     REQUIRE((centerInt.x == 5 && centerInt.y == 5));
 
-    rectInt = Rect2I({-20, -20}, {40, 40});
+    rectInt = Rect2I({ -20, -20 }, { 40, 40 });
     centerInt = rectInt.GetCenter();
     REQUIRE((centerInt.x == 0 && centerInt.y == 0));
 
-    rectInt = Rect2I({0, 0}, {-10, -10});
+    rectInt = Rect2I({ 0, 0 }, { -10, -10 });
     centerInt = rectInt.GetCenter();
     REQUIRE((centerInt.x == -5 && centerInt.y == -5));
 
-    rectInt = Rect2I({-20, 100}, {40, -10});
+    rectInt = Rect2I({ -20, 100 }, { 40, -10 });
     centerInt = rectInt.GetCenter();
     REQUIRE((centerInt.x == 0 && centerInt.y == 95));
 
-    rectInt = Rect2I({11, 11}, {5, 5});
+    rectInt = Rect2I({ 11, 11 }, { 5, 5 });
     centerInt = rectInt.GetCenter();
     REQUIRE((centerInt.x == 13/*.5*/ && centerInt.y == 13/*.5*/));
 
-    rectInt = Rect2I({9, 9}, {0, 0});
+    rectInt = Rect2I({ 9, 9 }, { 0, 0 });
     centerInt = rectInt.GetCenter();
     REQUIRE((centerInt.x == 9 && centerInt.y == 9));
 
 
-    Rect2F rectFloat({0.0f, 0.0f}, {10.0f, 10.0f});
+    Rect2F rectFloat({ 0.0f, 0.0f }, { 10.0f, 10.0f });
     Point2F centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == 5.0f && centerFloat.y == 5.0f));
 
-    rectFloat = Rect2F({-20.0f, -20.0f}, {40.0f, 40.0f});
+    rectFloat = Rect2F({ -20.0f, -20.0f }, { 40.0f, 40.0f });
     centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == 0.0f && centerFloat.y == 0.0f));
 
-    rectFloat = Rect2F({0.0f, 0.0f}, {-10.0f, -10.0f});
+    rectFloat = Rect2F({ 0.0f, 0.0f }, { -10.0f, -10.0f });
     centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == -5.0f && centerFloat.y == -5.0f));
 
-    rectFloat = Rect2F({-20.0f, 100.0f}, {40.0f, -10.0f});
+    rectFloat = Rect2F({ -20.0f, 100.0f }, { 40.0f, -10.0f });
     centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == 0.0f && centerFloat.y == 95.0f));
 
-    rectFloat = Rect2F({11.0f, 11.0f}, {5.0f, 5.0f});
+    rectFloat = Rect2F({ 11.0f, 11.0f }, { 5.0f, 5.0f });
     centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == 13.5f && centerFloat.y == 13.5f));
 
-    rectFloat = Rect2F({9.0f, 9.0f}, {0.0f, 0.0f});
+    rectFloat = Rect2F({ 9.0f, 9.0f }, { 0.0f, 0.0f });
     centerFloat = rectFloat.GetCenter();
     REQUIRE((centerFloat.x == 9.0f && centerFloat.y == 9.0f));
 }
@@ -117,7 +117,7 @@ TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
 {
     using namespace Kmplete::Math;
 
-    Rect2I rectInt({0, 0}, {10, 10});
+    Rect2I rectInt({ 0, 0 }, { 10, 10 });
     Point2I point(5, 5);
     REQUIRE(rectInt.ContainsPoint(point));
 
@@ -130,7 +130,7 @@ TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
     point = Point2I(-10, 5);
     REQUIRE_FALSE(rectInt.ContainsPoint(point));
 
-    rectInt = Rect2I({10, 10}, {10, 10});
+    rectInt = Rect2I({ 10, 10 }, { 10, 10 });
     point = Point2I(5, 5);
     REQUIRE_FALSE(rectInt.ContainsPoint(point));
 
@@ -143,7 +143,7 @@ TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
     point = Point2I(-15, -15);
     REQUIRE_FALSE(rectInt.ContainsPoint(point));
 
-    rectInt = Rect2I({10, 10}, {-20, -20});
+    rectInt = Rect2I({ 10, 10 }, { -20, -20 });
     point = Point2I(0, 0);
     REQUIRE(rectInt.ContainsPoint(point));
 
@@ -153,7 +153,7 @@ TEST_CASE("Geometry ContainsPoint 2D tests", "[math][geometry]")
     point = Point2I(-10, 11);
     REQUIRE_FALSE(rectInt.ContainsPoint(point));
 
-    rectInt = Rect2I({0, 0}, {0, 0});
+    rectInt = Rect2I({ 0, 0 }, { 0, 0 });
     point = Point2I(0, 0);
     REQUIRE(rectInt.ContainsPoint(point));
 
@@ -215,7 +215,7 @@ TEST_CASE("Geometry ContainsPoint 2D with offset tests", "[math][geometry]")
 {
     using namespace Kmplete::Math;
 
-    Rect2I rectInt({0, 0}, {10, 10});
+    Rect2I rectInt({ 0, 0 }, { 10, 10 });
     Point2I point(11, 5);
     REQUIRE(rectInt.ContainsPoint(point, 1));
     
@@ -235,14 +235,14 @@ TEST_CASE("Geometry ContainsPoint 2D with offset tests", "[math][geometry]")
     REQUIRE_FALSE(rectInt.ContainsPoint(point, 0));
     
 
-    Rect2F rectFloat({0.0f, 0.0f}, {10.0f, 10.0f});
+    Rect2F rectFloat({ 0.0f, 0.0f }, { 10.0f, 10.0f });
     Point2F pointF(10.5f, 5.0f);
     REQUIRE(rectFloat.ContainsPoint(pointF, 0.5f));
     
     pointF = Point2F(11.0f, 5.0f);
     REQUIRE_FALSE(rectFloat.ContainsPoint(pointF, 0.5f));
     
-    Rect2I rectNeg({10, 10}, {-10, -10});
+    Rect2I rectNeg({ 10, 10 }, { -10, -10 });
     point = Point2I(-1, 5);
     REQUIRE(rectNeg.ContainsPoint(point, 2));
     
@@ -352,7 +352,7 @@ TEST_CASE("Geometry ContainsPoint 3D with offset tests", "[math][geometry]")
 {
     using namespace Kmplete::Math;
 
-    Rect3I rectInt({0, 0, 0}, {10, 10, 10});
+    Rect3I rectInt({ 0, 0, 0 }, { 10, 10, 10 });
     Point3I point(11, 5, 5);
     REQUIRE(rectInt.ContainsPoint(point, 1));
     
@@ -372,7 +372,7 @@ TEST_CASE("Geometry ContainsPoint 3D with offset tests", "[math][geometry]")
     REQUIRE_FALSE(rectInt.ContainsPoint(point, 0));
     
 
-    Rect3F rectFloat({0.0f, 0.0f, 0.0f}, {10.0f, 10.0f, 10.0f});
+    Rect3F rectFloat({ 0.0f, 0.0f, 0.0f }, { 10.0f, 10.0f, 10.0f });
     Point3F pointF(10.5f, 5.0f, 5.0f);
     REQUIRE(rectFloat.ContainsPoint(pointF, 0.5f));
     

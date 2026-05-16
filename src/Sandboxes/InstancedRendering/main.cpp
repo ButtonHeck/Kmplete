@@ -18,11 +18,11 @@ namespace Kmplete
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
-                .applicationParameters =
-                    {.applicationName = "Instanced Rendering sandbox",
-                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "InstancedRenderingSandbox_settings.json"
-                    },
+                .applicationParameters = {
+                    .applicationName = "Instanced Rendering sandbox",
+                    .settingsFilepath = programOptions.GetSettingsFilepath(),
+                    .defaultSettingsFileName = "InstancedRenderingSandbox_settings.json"
+                },
                 .resizable = true
             };
 

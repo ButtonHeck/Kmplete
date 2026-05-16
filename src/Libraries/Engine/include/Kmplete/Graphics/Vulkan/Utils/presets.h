@@ -96,7 +96,7 @@ namespace Kmplete
                 .imageLayout = VK_ImageLayout_ColorAttachmentOptimal,
                 .loadOp = VK_AttachmentLoad_Clear,
                 .storeOp = VK_AttachmentStore_Store,
-                .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f }}
+                .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f } }
             };
             //--------------------------------------------------------------------------
 
@@ -105,7 +105,7 @@ namespace Kmplete
                 .imageLayout = VK_ImageLayout_DepthStencilAttachmentOptimal,
                 .loadOp = VK_AttachmentLoad_Clear,
                 .storeOp = VK_AttachmentStore_Store,
-                .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 }}
+                .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 } }
             };
             //--------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ namespace Kmplete
                 .imageLayout = VK_ImageLayout_ColorAttachmentOptimal,
                 .loadOp = VK_AttachmentLoad_Load,
                 .storeOp = VK_AttachmentStore_Store,
-                .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f }}
+                .clearValue = VkClearValue{ .color{ 0.0f, 0.0f, 0.0f, 0.0f } }
             };
             //--------------------------------------------------------------------------
 
@@ -123,7 +123,7 @@ namespace Kmplete
                 .imageLayout = VK_ImageLayout_DepthStencilAttachmentOptimal,
                 .loadOp = VK_AttachmentLoad_Load,
                 .storeOp = VK_AttachmentStore_Store,
-                .clearValue = VkClearValue{.depthStencil{ 1.0f, 0 }}
+                .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 } }
             };
             //--------------------------------------------------------------------------
 

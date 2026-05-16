@@ -16,7 +16,7 @@ namespace Kmplete
         InputManager::InputManager() noexcept
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _mousePosition(0, 0)
-            , _controlStates({false})
+            , _controlStates({ false })
             , _modifiersMask(Modifier::None)
             , _inputCodeToActionsMap({})
             , _actionToInputCodesMap({})
@@ -199,7 +199,7 @@ namespace Kmplete
 
         bool InputManager::MapInputToAction(InputCode code, ActionIdentifier actionId)
         {
-            return MapInputToAction(InputCodeWithCondition{.code = code, .condition = NoCondition}, actionId);
+            return MapInputToAction(InputCodeWithCondition{ .code = code, .condition = NoCondition }, actionId);
         }
         //--------------------------------------------------------------------------
 

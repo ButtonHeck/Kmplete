@@ -18,11 +18,11 @@ namespace Kmplete
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
-                .applicationParameters =
-                    {.applicationName = "Uniform Dynamic sandbox",
-                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "UniformDynamicSandbox_settings.json"
-                    },
+                .applicationParameters = {
+                    .applicationName = "Uniform Dynamic sandbox",
+                    .settingsFilepath = programOptions.GetSettingsFilepath(),
+                    .defaultSettingsFileName = "UniformDynamicSandbox_settings.json"
+                },
                 .resizable = true
             };
 

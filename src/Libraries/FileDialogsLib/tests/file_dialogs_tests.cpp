@@ -195,7 +195,7 @@ TEST_CASE("File dialog save file - SAVE overwrite", "[file_dialogs][save]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any existing file", Kmplete::FileDialogs::MessageChoice::Ok);
-    const auto file = Kmplete::FileDialogs::SaveFile("Save to any existing file", Kmplete::Filesystem::GetCurrentFilepath(), {"Any files", "*.*"}, true);
+    const auto file = Kmplete::FileDialogs::SaveFile("Save to any existing file", Kmplete::Filesystem::GetCurrentFilepath(), { "Any files", "*.*" }, true);
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathExists(file));
     REQUIRE(Kmplete::Filesystem::IsFile(file));
@@ -207,7 +207,7 @@ TEST_CASE("File dialog save file - SAVE new non-matching filter", "[file_dialogs
     localizationManager.SetLocale("ru_RU.UTF8");
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any new file that do not match filter", Kmplete::FileDialogs::MessageChoice::Ok);
-    const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file that do not match filter", Kmplete::Filesystem::GetCurrentFilepath(), {"JSON files", "*.json"});
+    const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file that do not match filter", Kmplete::Filesystem::GetCurrentFilepath(), { "JSON files", "*.json" });
     REQUIRE(!file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(file));

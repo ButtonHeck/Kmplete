@@ -63,16 +63,16 @@ namespace Kmplete
     {
         _InitializeImGui();
 
-        _inputManager->MapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
-        _inputManager->MapInputToAction({Input::Code::Key_S, Input::PressNoModsCondition}, "move_backward"_sid);
-        _inputManager->MapInputToAction({Input::Code::Key_A, Input::PressNoModsCondition}, "move_left"_sid);
-        _inputManager->MapInputToAction({Input::Code::Key_D, Input::PressNoModsCondition}, "move_right"_sid);
-        _inputManager->MapInputToCallback({Input::Code::Key_LeftControl, Input::PressNoModsCondition}, "crouch"_sid, [this](Input::InputControlValue) {
+        _inputManager->MapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
+        _inputManager->MapInputToAction({ Input::Code::Key_S, Input::PressNoModsCondition }, "move_backward"_sid);
+        _inputManager->MapInputToAction({ Input::Code::Key_A, Input::PressNoModsCondition }, "move_left"_sid);
+        _inputManager->MapInputToAction({ Input::Code::Key_D, Input::PressNoModsCondition }, "move_right"_sid);
+        _inputManager->MapInputToCallback({ Input::Code::Key_LeftControl, Input::PressNoModsCondition }, "crouch"_sid, [this](Input::InputControlValue) {
             _emulatorPlayerCrawling = false;
             _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
             return true;
         });
-        _inputManager->MapInputToCallback({ Input::Code::Key_LeftControl, {Input::ButtonPressedValue, Input::Modifier::None, 1000.0f} }, "crawl"_sid, [this](Input::InputControlValue) {
+        _inputManager->MapInputToCallback({ Input::Code::Key_LeftControl, { Input::ButtonPressedValue, Input::Modifier::None, 1000.0f } }, "crawl"_sid, [this](Input::InputControlValue) {
             _emulatorPlayerCrawling = true;
             _emulatorPlayerCrouching = false;
             return true;
@@ -90,13 +90,13 @@ namespace Kmplete
 
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
         _actionDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_default_tag_check"_sid, [](Input::InputControlValue){ return true; });
-        _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
-        _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{.tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
+        _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{ .tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
+        _actionNonDefaultTagCallbackDoubleRegistrationCheck = _inputManager->MapActionToCallback("duplicate_tag_check"_sid, Input::TaggedActionCallback{ .tag = "bzz"_sid, .callback = [](Input::InputControlValue) { return true; } });
         _unmapUnregisteredActionCheck = _inputManager->UnmapActionFromCallback("unregistered_action"_sid, "bzz"_sid);
-        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
+        _inputToActionDoubleRegistrationCheck = _inputManager->MapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
         _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Code::Key_M, "bzz"_sid);
         _unmapInvalidInputFromActionCheck |= _inputManager->UnmapInputFromAction(Input::Code::Key_M, "move_forward"_sid);
-        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "bzz"_sid);
+        _remapInvalidInputToActionCheck |= _inputManager->RemapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "bzz"_sid);
     }
 
     void MainFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/)
@@ -193,7 +193,7 @@ namespace Kmplete
         ImGui::SetNextWindowSize(viewport->WorkSize);
         ImGui::SetNextWindowViewport(viewport->ID);
         {
-            ImGuiUtils::StyleVarGuard colorGuard({ {ImGuiStyleVar_WindowRounding, 0.0f}, {ImGuiStyleVar_WindowBorderSize, 0.0f}, {ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f)} });
+            ImGuiUtils::StyleVarGuard colorGuard({ { ImGuiStyleVar_WindowRounding, 0.0f }, { ImGuiStyleVar_WindowBorderSize, 0.0f }, { ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f) } });
             ImGui::Begin(Id_Dockspace, nullptr, dockFlags);
         }
 
@@ -779,19 +779,19 @@ namespace Kmplete
             if (ImGui::RadioButton("Arrows", _emulatorMoveWASD == 0))
             {
                 _emulatorMoveWASD = 0;
-                _inputManager->RemapInputToAction({Input::Code::Key_Up, Input::PressNoModsCondition}, "move_forward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_Left, Input::PressNoModsCondition}, "move_left"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_Down, Input::PressNoModsCondition}, "move_backward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_Right, Input::PressNoModsCondition}, "move_right"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_Up, Input::PressNoModsCondition }, "move_forward"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_Left, Input::PressNoModsCondition }, "move_left"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_Down, Input::PressNoModsCondition }, "move_backward"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_Right, Input::PressNoModsCondition }, "move_right"_sid);
             }
             ImGui::SameLine();
             if (ImGui::RadioButton("WASD", _emulatorMoveWASD == 1))
             {
                 _emulatorMoveWASD = 1;
-                _inputManager->RemapInputToAction({Input::Code::Key_W, Input::PressNoModsCondition}, "move_forward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_A, Input::PressNoModsCondition}, "move_left"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_S, Input::PressNoModsCondition}, "move_backward"_sid);
-                _inputManager->RemapInputToAction({Input::Code::Key_D, Input::PressNoModsCondition}, "move_right"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_A, Input::PressNoModsCondition }, "move_left"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_S, Input::PressNoModsCondition }, "move_backward"_sid);
+                _inputManager->RemapInputToAction({ Input::Code::Key_D, Input::PressNoModsCondition }, "move_right"_sid);
             }
             ImGui::SameLine();
             ImGui::Text("Player position: [%3d : %3d]", _emulatorPlayerPos.x / 5, _emulatorPlayerPos.y / 5);
@@ -973,7 +973,7 @@ namespace Kmplete
             auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
             auto* vulkanImGuiImpl = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
 
-            vulkanRenderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
+            vulkanRenderer.BeginRendering({ VkOffset2D{ .x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
             vulkanImGuiImpl->SetCommandBuffer(commandBuffer);
             vulkanImGuiImpl->Render();
             vulkanRenderer.EndRendering();

@@ -18,11 +18,11 @@ namespace Kmplete
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
-                .applicationParameters = 
-                    {.applicationName = "Kmplete Editor",
-                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "Editor_settings.json"
-                    },
+                .applicationParameters = {
+                    .applicationName = "Kmplete Editor",
+                    .settingsFilepath = programOptions.GetSettingsFilepath(),
+                    .defaultSettingsFileName = "Editor_settings.json"
+                },
                 .resizable = true
             };
 

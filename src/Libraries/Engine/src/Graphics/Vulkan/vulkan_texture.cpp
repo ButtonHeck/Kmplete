@@ -125,7 +125,7 @@ namespace Kmplete
 
                 VkImageBlit blit{};
                 blit.srcOffsets[0] = { 0, 0, 0 };
-                blit.srcOffsets[1] = { mipWidth, mipHeight, 1};
+                blit.srcOffsets[1] = { mipWidth, mipHeight, 1 };
                 blit.srcSubresource.aspectMask = VK_ImageAspect_Color;
                 blit.srcSubresource.mipLevel = mip - 1;
                 blit.srcSubresource.baseArrayLayer = 0;

@@ -73,7 +73,7 @@ TEST_CASE("StringVectorToString empty vector - string delimiter", "[utils][strin
 
 TEST_CASE("StringVectorToString - char delimiter", "[utils][string]")
 {
-    Kmplete::StringVector vec{"Hello", "World", "!"};
+    Kmplete::StringVector vec{ "Hello", "World", "!" };
     const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
     REQUIRE(result == "/Hello/World/!");
 }
@@ -87,7 +87,7 @@ TEST_CASE("StringVectorToString - string delimiter", "[utils][string]")
 
 TEST_CASE("StringVectorToString with some empty strings - char delimiter", "[utils][string]")
 {
-    Kmplete::StringVector vec{ "", "This", "", "Is", "Sparta", ""};
+    Kmplete::StringVector vec{ "", "This", "", "Is", "Sparta", "" };
     const auto result = Kmplete::Utils::StringVectorToString(vec, '/');
     REQUIRE(result == "/This/Is/Sparta");
 }
@@ -115,7 +115,7 @@ TEST_CASE("StringVectorToString with all empty strings - string delimiter", "[ut
 
 TEST_CASE("StringVectorToString single element - char delimiter", "[utils][string]")
 {
-    Kmplete::StringVector vec{"Alone"};
+    Kmplete::StringVector vec{ "Alone" };
     auto result = Kmplete::Utils::StringVectorToString(vec, ".");
     REQUIRE(result == ".Alone");
 
@@ -135,14 +135,14 @@ TEST_CASE("StringVectorToString single element - string delimiter", "[utils][str
 
 TEST_CASE("StringVectorToString - empty delimiter", "[utils][string]")
 {
-    Kmplete::StringVector vec{"Harry", "Potter"};
+    Kmplete::StringVector vec{ "Harry", "Potter" };
     const auto result = Kmplete::Utils::StringVectorToString(vec, "");
     REQUIRE(result == "HarryPotter");
 }
 
 TEST_CASE("StringVectorToString with some empty elements - empty delimiter", "[utils][string]")
 {
-    Kmplete::StringVector vec{ "", "A", "B", "", "C", "", "", "D", "", ""};
+    Kmplete::StringVector vec{ "", "A", "B", "", "C", "", "", "D", "", "" };
     const auto result = Kmplete::Utils::StringVectorToString(vec, "");
     REQUIRE(result == "ABCD");
 }
@@ -319,7 +319,7 @@ TEST_CASE("NarrowToUtf8 cyrillic", "[utils][string]")
     auto localizationManager = Kmplete::LocalizationManager();
     localizationManager.SetLocale("ru_RU.UTF8");
 
-    const auto cyrillicStr = Kmplete::String({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)});
+    const auto cyrillicStr = Kmplete::String({ static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2) });
     const auto toUtf8 = Kmplete::Utils::NarrowToUtf8(cyrillicStr);
 #if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((toUtf8.size() == size_t(6) &&
@@ -399,11 +399,11 @@ TEST_CASE("NarrowToWide cyrillic", "[utils][string]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
 #if defined (KMP_PLATFORM_WINDOWS)
-    const auto narrow = Kmplete::String({static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2)});
+    const auto narrow = Kmplete::String({ static_cast<char>(0xE0), static_cast<char>(0xE1), static_cast<char>(0xE2) });
 #else
-    const auto narrow = Kmplete::String({static_cast<char>(0xD0), static_cast<char>(0xB0), 
-                                     static_cast<char>(0xD0), static_cast<char>(0xB1),
-                                     static_cast<char>(0xD0), static_cast<char>(0xB2)});
+    const auto narrow = Kmplete::String({ static_cast<char>(0xD0), static_cast<char>(0xB0), 
+                                          static_cast<char>(0xD0), static_cast<char>(0xB1),
+                                          static_cast<char>(0xD0), static_cast<char>(0xB2) });
 #endif
     const auto wstr = Kmplete::Utils::NarrowToWide(narrow);
     REQUIRE((wstr.size() == size_t(3) &&
@@ -418,9 +418,9 @@ TEST_CASE("NarrowToWide mixed", "[utils][string]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
 #if defined (KMP_PLATFORM_WINDOWS)
-    const auto narrow = Kmplete::String({static_cast<char>(0xE0), 'a', 'b', 'c', static_cast<char>(0xE1), 'd', 'e'});
+    const auto narrow = Kmplete::String({ static_cast<char>(0xE0), 'a', 'b', 'c', static_cast<char>(0xE1), 'd', 'e' });
 #else
-    const auto narrow = Kmplete::String({static_cast<char>(0xD0), static_cast<char>(0xB0), 'a', 'b', 'c', static_cast<char>(0xD0), static_cast<char>(0xB1), 'd', 'e'});
+    const auto narrow = Kmplete::String({ static_cast<char>(0xD0), static_cast<char>(0xB0), 'a', 'b', 'c', static_cast<char>(0xD0), static_cast<char>(0xB1), 'd', 'e' });
 #endif
     const auto wstr = Kmplete::Utils::NarrowToWide(narrow);
     REQUIRE((wstr.size() == size_t(7) &&
@@ -450,7 +450,7 @@ TEST_CASE("WideToNarrow cyrillic", "[utils][string]")
     auto localizationManager = Kmplete::LocalizationManager();
     localizationManager.SetLocale("ru_RU.UTF8");
 
-    const auto wstr = Kmplete::WString({static_cast<wchar_t>(0x430), static_cast<wchar_t>(0x431), static_cast<wchar_t>(0x432)});
+    const auto wstr = Kmplete::WString({ static_cast<wchar_t>(0x430), static_cast<wchar_t>(0x431), static_cast<wchar_t>(0x432) });
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
 #if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((narrow.size() == size_t(3) &&
@@ -473,7 +473,7 @@ TEST_CASE("WideToNarrow mixed", "[utils][string]")
     auto localizationManager = Kmplete::LocalizationManager();
     localizationManager.SetLocale("ru_RU.UTF8");
 
-    const auto wstr = Kmplete::WString({L'a', static_cast<wchar_t>(0x430), L'b', static_cast<wchar_t>(0x431), L'c', static_cast<wchar_t>(0x432)});
+    const auto wstr = Kmplete::WString({ L'a', static_cast<wchar_t>(0x430), L'b', static_cast<wchar_t>(0x431), L'c', static_cast<wchar_t>(0x432) });
     const auto narrow = Kmplete::Utils::WideToNarrow(wstr);
 #if defined (KMP_PLATFORM_WINDOWS)
     REQUIRE((narrow.size() == size_t(6) &&

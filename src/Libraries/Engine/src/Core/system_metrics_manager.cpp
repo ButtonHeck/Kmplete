@@ -289,7 +289,7 @@ namespace Kmplete
         
         FILE* file = fopen("/proc/self/status", "r");
         int numThreads = 0;
-        char lineBuffer[128] = {0};
+        char lineBuffer[128] = { 0 };
         
         while (fgets(lineBuffer, 128, file) != NULL)
         {
@@ -337,7 +337,7 @@ namespace Kmplete
         FILE* file = fopen("/proc/self/status", "r");
         int resultVirtual = -1;
         int resultPhysical = -1;
-        char line[128] = {0};
+        char line[128] = { 0 };
         
         while (fgets(line, 128, file) != NULL)
         {

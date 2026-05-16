@@ -38,7 +38,7 @@ namespace Kmplete
 
         String StringVectorToString(const StringVector& stringVector, char delimiter, bool startWithDelimiter /*= true*/)
         {
-            return StringVectorToString(stringVector, String({delimiter}), startWithDelimiter);
+            return StringVectorToString(stringVector, String({ delimiter }), startWithDelimiter);
         }
         //--------------------------------------------------------------------------
 

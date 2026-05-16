@@ -75,11 +75,11 @@ namespace Kmplete
         , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
-        , _shaderData(ShaderData{.colorMultiplier = 1.0f})
+        , _shaderData(ShaderData{ .colorMultiplier = 1.0f })
 #if USE_ORTHOGRAPHIC_CAMERA
-        , _camera({0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
+        , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
 #else
-        , _camera({0.0f, 0.0f, -2.0f}, Graphics::Camera::Type::FirstPerson, 75.0f)
+        , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson, 75.0f)
 #endif
     {
         _Initialize();
@@ -174,30 +174,30 @@ namespace Kmplete
 
         const Vector<Vertex> vertices{
             // main RGB triangle
-            {{-0.95f, -0.97f, 0.2f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-            {{ 0.95f, -0.95f, 0.2f}, {0.0f, 1.0f, 0.0f, 1.0f}},
-            {{-0.92f,  0.95f, 0.2f}, {0.0f, 0.0f, 1.0f, 1.0f}}
+            { { -0.95f, -0.97f, 0.2f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+            { {  0.95f, -0.95f, 0.2f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+            { { -0.92f,  0.95f, 0.2f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
         const Vector<Vertex> vertices2{
             // grey-to-white triangle above main RGB triangle
-            {{-0.50f,  0.90f, 0.1f}, {0.3f, 0.3f, 0.3f, 1.0f}},
-            {{-0.75f,  0.25f, 0.1f}, {0.6f, 0.6f, 0.6f, 1.0f}},
-            {{-0.25f,  0.25f, 0.1f}, {1.0f, 1.0f, 1.0f, 1.0f}},
+            { { -0.50f,  0.90f, 0.1f }, { 0.3f, 0.3f, 0.3f, 1.0f } },
+            { { -0.75f,  0.25f, 0.1f }, { 0.6f, 0.6f, 0.6f, 1.0f } },
+            { { -0.25f,  0.25f, 0.1f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
 
             // reddish triangle below main RGB triangle
-            {{-0.00f,  0.40f, 0.8f}, {1.0f, 0.3f, 0.3f, 1.0f}},
-            {{-0.25f, -0.25f, 0.8f}, {1.0f, 0.6f, 0.6f, 1.0f}},
-            {{ 0.25f, -0.25f, 0.8f}, {1.0f, 0.9f, 0.9f, 1.0f}},
+            { { -0.00f,  0.40f, 0.8f }, { 1.0f, 0.3f, 0.3f, 1.0f } },
+            { { -0.25f, -0.25f, 0.8f }, { 1.0f, 0.6f, 0.6f, 1.0f } },
+            { {  0.25f, -0.25f, 0.8f }, { 1.0f, 0.9f, 0.9f, 1.0f } },
 
             // half-transparent quad above everything
-            {{-0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{-0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f, -0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
-            {{ 0.80f,  0.80f, 0.0f}, {1.0f, 1.0f, 1.0f, 0.25f}},
+            { { -0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { {  0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { { -0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { { -0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { {  0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { {  0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
         };
         const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
@@ -232,7 +232,7 @@ namespace Kmplete
         }
 
         VkDescriptorSetLayoutBinding matricesLayoutBinding{ MatricesBindingIndex, VK_DescriptorType_UniformBuffer, 1, VK_ShaderStage_Vertex };
-        const auto matricesLayout = descriptorSetManager.AddDescriptorSetLayout(MatricesDSLayout_SID, {matricesLayoutBinding});
+        const auto matricesLayout = descriptorSetManager.AddDescriptorSetLayout(MatricesDSLayout_SID, { matricesLayoutBinding });
         descriptorSetManager.AllocateDescriptorSets(matricesLayout, MatricesDS_SID, 1, "per frame"_true);
 
         VkDescriptorSetLayoutBinding colorMultiplierLayoutBinding{ ColorMultiplierBindingIndex, VK_DescriptorType_UniformBuffer, 1, VK_ShaderStage_Fragment };
@@ -486,9 +486,9 @@ namespace Kmplete
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
-        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{0}} );
+        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{ 0 } } );
         renderer.SetViewport(VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f });
-        renderer.SetScissor(VkRect2D{ .offset = VkOffset2D{.x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() });
+        renderer.SetScissor(VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() });
 #else
         // dynamic rendering functions tests
         renderer.SetDepthTestEnabled(true);
@@ -506,8 +506,8 @@ namespace Kmplete
         renderer.SetStencilWriteMask(VK_StencilFace_Front, 0);
         renderer.SetStencilReference(VK_StencilFace_Front, 0);
 
-        renderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f}});
-        renderer.SetScissorWithCount({ VkRect2D{ .offset = VkOffset2D{.x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() }});
+        renderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f } });
+        renderer.SetScissorWithCount({ VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() } });
 
         renderer.SetLineWidth(1.0f);
         renderer.SetLineStippleEnabled(false);

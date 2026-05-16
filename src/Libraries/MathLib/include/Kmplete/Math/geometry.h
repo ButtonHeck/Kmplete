@@ -73,8 +73,8 @@ namespace Kmplete
 
             KMP_NODISCARD bool ContainsPoint(const PositionType& point, const typename PositionType::value_type& offset = PositionType::value_type()) const noexcept
             {
-                const auto [minX, maxX] = std::minmax({position.x, position.x + size.x});
-                const auto [minY, maxY] = std::minmax({position.y, position.y + size.y});
+                const auto [minX, maxX] = std::minmax({ position.x, position.x + size.x });
+                const auto [minY, maxY] = std::minmax({ position.y, position.y + size.y });
 
                 return (point.x >= minX - offset) && (point.x <= maxX + offset) &&
                        (point.y >= minY - offset) && (point.y <= maxY + offset);
@@ -111,9 +111,9 @@ namespace Kmplete
 
             KMP_NODISCARD bool ContainsPoint(const PositionType& point, const typename PositionType::value_type& offset = PositionType::value_type()) const noexcept
             {
-                const auto [minX, maxX] = std::minmax({position.x, position.x + size.x});
-                const auto [minY, maxY] = std::minmax({position.y, position.y + size.y});
-                const auto [minZ, maxZ] = std::minmax({position.z, position.z + size.z});
+                const auto [minX, maxX] = std::minmax({ position.x, position.x + size.x });
+                const auto [minY, maxY] = std::minmax({ position.y, position.y + size.y });
+                const auto [minZ, maxZ] = std::minmax({ position.z, position.z + size.z });
 
                 return (point.x >= minX - offset) && (point.x <= maxX + offset) &&
                        (point.y >= minY - offset) && (point.y <= maxY + offset) &&

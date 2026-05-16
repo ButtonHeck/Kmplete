@@ -136,7 +136,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale && pluralityForm >= PluralityFormSingular && pluralityForm < PluralityFormCount);
 
-        return _translationPluralMap[_currentLocaleSid][PluralSource{sourceSidSingular, sourceSidPlural}][pluralityForm];
+        return _translationPluralMap[_currentLocaleSid][PluralSource{ sourceSidSingular, sourceSidPlural }][pluralityForm];
     }}
     //--------------------------------------------------------------------------
 
@@ -144,7 +144,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale);
 
-        return _translationCtxMap[_currentLocaleSid][ContextedSource{sourceSid, contextSid}];
+        return _translationCtxMap[_currentLocaleSid][ContextedSource{ sourceSid, contextSid }];
     }}
     //--------------------------------------------------------------------------
 
@@ -153,7 +153,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_currentLocaleSid != SidTrInvalidLocale && pluralityForm >= PluralityFormSingular && pluralityForm < PluralityFormCount);
 
-        return _translationCtxPluralMap[_currentLocaleSid][ContextedPluralSource{sourceSidSingular, sourceSidPlural, contextSid}][pluralityForm];
+        return _translationCtxPluralMap[_currentLocaleSid][ContextedPluralSource{ sourceSidSingular, sourceSidPlural, contextSid }][pluralityForm];
     }}
     //--------------------------------------------------------------------------
 }

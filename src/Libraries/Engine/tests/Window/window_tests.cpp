@@ -105,8 +105,8 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
 
     Kmplete::Window::WindowSettings settings;
     settings.name = "Some window";
-    settings.size = {200, 200};
-    settings.windowedSize = {200, 200};
+    settings.size = { 200, 200 };
+    settings.windowedSize = { 200, 200 };
     settings.vSync = true;
     settings.updateContinuously = true;
 
@@ -145,7 +145,7 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
 
     Kmplete::Window::WindowSettings settings2;
     settings2.name = "ValidName-InvalidWidth";
-    settings2.size = {65000, 200};
+    settings2.size = { 65000, 200 };
 
     REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings2));
     REQUIRE(window);

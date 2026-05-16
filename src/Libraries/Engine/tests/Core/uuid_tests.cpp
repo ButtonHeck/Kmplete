@@ -37,25 +37,25 @@ TEST_CASE("UUID compilation checks", "[core][uuid]")
     using UUIDUnorderedSet = std::unordered_set<Kmplete::UUID>;
 
     UUIDMap m1;
-    m1.insert({{Kmplete::UUID(), Kmplete::UUID()}, {Kmplete::UUID(), Kmplete::UUID()}, {Kmplete::UUID(), Kmplete::UUID()}});
+    m1.insert({ { Kmplete::UUID(), Kmplete::UUID() }, { Kmplete::UUID(), Kmplete::UUID() }, { Kmplete::UUID(), Kmplete::UUID() } });
     const UUIDMap m2 = m1;
     UUIDMap m3;
     m3 = m1;
 
     UUIDUnorderedMap um1;
-    um1.insert({{Kmplete::UUID(), Kmplete::UUID()}, {Kmplete::UUID(), Kmplete::UUID()}, {Kmplete::UUID(), Kmplete::UUID()}});
+    um1.insert({ { Kmplete::UUID(), Kmplete::UUID() }, { Kmplete::UUID(), Kmplete::UUID() }, { Kmplete::UUID(), Kmplete::UUID() } });
     const UUIDUnorderedMap um2 = um1;
     UUIDUnorderedMap um3;
     um3 = um1;
 
     UUIDSet s1;
-    s1.insert({Kmplete::UUID(), Kmplete::UUID(), Kmplete::UUID()});
+    s1.insert({ Kmplete::UUID(), Kmplete::UUID(), Kmplete::UUID() });
     const UUIDSet s2 = s1;
     UUIDSet s3;
     s3 = s1;
 
     UUIDUnorderedSet us1;
-    us1.insert({Kmplete::UUID(), Kmplete::UUID(), Kmplete::UUID()});
+    us1.insert({ Kmplete::UUID(), Kmplete::UUID(), Kmplete::UUID() });
     const UUIDUnorderedSet us2 = us1;
     UUIDUnorderedSet us3;
     us3 = us1;

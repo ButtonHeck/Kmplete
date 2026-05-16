@@ -18,11 +18,11 @@ namespace Kmplete
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
-                .applicationParameters =
-                    {.applicationName = "Triangle sandbox",
-                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "TriangleSandbox_settings.json"
-                    },
+                .applicationParameters = {
+                    .applicationName = "Triangle sandbox",
+                    .settingsFilepath = programOptions.GetSettingsFilepath(),
+                    .defaultSettingsFileName = "TriangleSandbox_settings.json"
+                },
                 .resizable = true
             };
 

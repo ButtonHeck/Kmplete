@@ -18,11 +18,11 @@ namespace Kmplete
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
-                .applicationParameters =
-                    {.applicationName = "Multiple Pipelines sandbox",
-                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "MultiplePipelinesSandbox_settings.json"
-                    },
+                .applicationParameters = {
+                    .applicationName = "Multiple Pipelines sandbox",
+                    .settingsFilepath = programOptions.GetSettingsFilepath(),
+                    .defaultSettingsFileName = "MultiplePipelinesSandbox_settings.json"
+                },
                 .resizable = true
             };
 

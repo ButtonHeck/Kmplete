@@ -65,27 +65,27 @@ namespace Kmplete
 
         const Vector<FixedColorVertex> fixedColorVertices{
             // Top-left
-            {-0.95f, -0.05f},
-            {-0.05f, -0.05f},
-            {-0.95f, -0.95f},
+            { -0.95f, -0.05f },
+            { -0.05f, -0.05f },
+            { -0.95f, -0.95f },
 
             // Bottom-left
-            {-0.95f,  0.95f},
-            {-0.05f,  0.95f},
-            {-0.95f,  0.05f}
+            { -0.95f,  0.95f },
+            { -0.05f,  0.95f },
+            { -0.95f,  0.05f }
         };
         const auto fixedColorBufferSize = UInt32(fixedColorVertices.size() * sizeof(FixedColorVertex));
 
         const Vector<BufferedColorVertex> bufferedColorVertices{
             // Top-right
-            { {0.05f, -0.05f}, {1.0f, 0.0f, 0.0f, 1.0f} },
-            { {0.95f, -0.05f}, {0.0f, 1.0f, 0.0f, 1.0f} },
-            { {0.05f, -0.95f}, {0.0f, 0.0f, 1.0f, 1.0f} },
+            { { 0.05f, -0.05f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+            { { 0.95f, -0.05f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+            { { 0.05f, -0.95f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
 
             // Bottom-right
-            { {0.05f,  0.95f}, {1.0f, 0.0f, 0.0f, 1.0f} },
-            { {0.95f,  0.95f}, {0.0f, 1.0f, 0.0f, 1.0f} },
-            { {0.05f,  0.05f}, {0.0f, 0.0f, 1.0f, 1.0f} }
+            { { 0.05f,  0.95f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
+            { { 0.95f,  0.95f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
+            { { 0.05f,  0.05f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
         };
         const auto bufferedColorBufferSize = UInt32(bufferedColorVertices.size() * sizeof(BufferedColorVertex));
 
@@ -192,7 +192,7 @@ namespace Kmplete
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
         const auto& renderer = vulkanDevice.GetRenderer();
-        const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
+        const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
         const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
 
         // common setup for all pipelines

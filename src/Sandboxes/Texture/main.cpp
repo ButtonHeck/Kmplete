@@ -18,11 +18,11 @@ namespace Kmplete
         try
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
-                .applicationParameters =
-                    {.applicationName = "Texture sandbox",
-                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                     .defaultSettingsFileName = "TextureSandbox_settings.json"
-                    },
+                .applicationParameters = {
+                    .applicationName = "Texture sandbox",
+                    .settingsFilepath = programOptions.GetSettingsFilepath(),
+                    .defaultSettingsFileName = "TextureSandbox_settings.json"
+                },
                 .resizable = true
             };
 

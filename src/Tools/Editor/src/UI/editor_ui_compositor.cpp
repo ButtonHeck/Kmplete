@@ -40,15 +40,15 @@ namespace Kmplete
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::_FillDictionary));
 
-        inputManager.MapInputToCallback({Input::Code::Key_Q, {Input::ButtonPressedValue, Input::Modifier::Ctrl}}, "editor_quit"_sid, [&](Input::InputControlValue) {
+        inputManager.MapInputToCallback({ Input::Code::Key_Q, { Input::ButtonPressedValue, Input::Modifier::Ctrl } }, "editor_quit"_sid, [&](Input::InputControlValue) {
             _popups.quit = true;
             return true;
         });
-        inputManager.MapInputToCallback({Input::Code::Key_Enter, {Input::ButtonPressedValue, Input::Modifier::Alt}}, "editor_screenmode"_sid, [&](Input::InputControlValue) {
+        inputManager.MapInputToCallback({ Input::Code::Key_Enter, { Input::ButtonPressedValue, Input::Modifier::Alt } }, "editor_screenmode"_sid, [&](Input::InputControlValue) {
             _SwitchFullscreen();
             return true;
         });
-        inputManager.MapInputToCallback({Input::Code::Key_T, {Input::ButtonPressedValue, Input::Modifier::Ctrl}}, "editor_always_on_top"_sid, [&](Input::InputControlValue) {
+        inputManager.MapInputToCallback({ Input::Code::Key_T, { Input::ButtonPressedValue, Input::Modifier::Ctrl } }, "editor_always_on_top"_sid, [&](Input::InputControlValue) {
             _SwitchAlwaysOnTop();
             return true;
         });
@@ -112,7 +112,7 @@ namespace Kmplete
             languageIndex = 1;
         }
 
-        ImGuiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Button, ImColor(0, 0, 0, 0)}, {ImGuiCol_Border, ImColor(0, 0, 0, 0)} });
+        ImGuiUtils::StyleColorGuard colorGuard({ { ImGuiCol_Button, ImColor(0, 0, 0, 0) }, { ImGuiCol_Border, ImColor(0, 0, 0, 0) } });
         if (ImGui::ImageButton(languageIcons[languageIndex], iconSize))
         {
             ImGui::OpenPopup(IdPopup_ChangeLanguage);
@@ -244,7 +244,7 @@ namespace Kmplete
 
         if (ImGui::BeginPopup(IdPopup_StatusBarSettings))
         {
-            const char* intervals[] = {"500", "1000", "2000"};
+            const char* intervals[] = { "500", "1000", "2000" };
             for (auto intervalIndex = 0; intervalIndex < 3; intervalIndex++)
             {
                 if (ImGui::Selectable(intervals[intervalIndex]))
@@ -259,7 +259,7 @@ namespace Kmplete
         ImGui::SameLine();
 
         {
-            ImGuiUtils::StyleColorGuard colorGuard({ {ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border)} });
+            ImGuiUtils::StyleColorGuard colorGuard({ { ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border) } });
             if (ImGui::Button(ICON_FK_PERCENT, buttonSize))
             {
                 _state.metricsFractional = !_state.metricsFractional;
