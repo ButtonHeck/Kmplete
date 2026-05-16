@@ -112,51 +112,7 @@ namespace Kmplete
 
             for (UInt32 mip = 1; mip < mipLevels; mip++)
             {
-                imageBarrier.subresourceRange.baseMipLevel = mip - 1;
-                imageBarrier.oldLayout = VK_ImageLayout_TransferDstOptimal;
-                imageBarrier.newLayout = VK_ImageLayout_TransferSrcOptimal;
-                imageBarrier.srcAccessMask = VK_Access_TransferWrite;
-                imageBarrier.dstAccessMask = VK_Access_TransferRead;
-
-                vkCmdPipelineBarrier(commandBuffer, VK_PipelineStage_Transfer, VK_PipelineStage_Transfer, 0,
-                    0, nullptr,
-                    0, nullptr,
-                    1, &imageBarrier);
-
-                VkImageBlit blit{};
-                blit.srcOffsets[0] = { 0, 0, 0 };
-                blit.srcOffsets[1] = { mipWidth, mipHeight, 1 };
-                blit.srcSubresource.aspectMask = VK_ImageAspect_Color;
-                blit.srcSubresource.mipLevel = mip - 1;
-                blit.srcSubresource.baseArrayLayer = 0;
-                blit.srcSubresource.layerCount = 1;
-                blit.dstOffsets[0] = { 0, 0, 0 };
-                blit.dstOffsets[1] = { mipWidth > 1 ? mipWidth / 2 : 1, mipHeight > 1 ? mipHeight / 2 : 1, 1 };
-                blit.dstSubresource.aspectMask = VK_ImageAspect_Color;
-                blit.dstSubresource.mipLevel = mip;
-                blit.dstSubresource.baseArrayLayer = 0;
-                blit.dstSubresource.layerCount = 1;
-
-                vkCmdBlitImage(commandBuffer, vulkanImage, VK_ImageLayout_TransferSrcOptimal, vulkanImage, VK_ImageLayout_TransferDstOptimal, 1, &blit, VK_Filter_Linear);
-
-                imageBarrier.oldLayout = VK_ImageLayout_TransferSrcOptimal;
-                imageBarrier.newLayout = VK_ImageLayout_ShaderReadOnlyOptimal;
-                imageBarrier.srcAccessMask = VK_Access_TransferRead;
-                imageBarrier.dstAccessMask = VK_Access_ShaderRead;
-
-                vkCmdPipelineBarrier(commandBuffer, VK_PipelineStage_Transfer, VK_PipelineStage_FragmentShader, 0,
-                    0, nullptr,
-                    0, nullptr,
-                    1, &imageBarrier);
-
-                if (mipWidth > 1)
-                {
-                    mipWidth /= 2;
-                }
-                if (mipHeight > 1)
-                {
-                    mipHeight /= 2;
-                }
+                _GenerateMipmapLevel(imageBarrier, mip, mipWidth, mipHeight, vulkanImage, commandBuffer);
             }
 
             imageBarrier.subresourceRange.baseMipLevel = mipLevels - 1;
@@ -169,6 +125,56 @@ namespace Kmplete
                 0, nullptr,
                 0, nullptr,
                 1, &imageBarrier);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanTexture::_GenerateMipmapLevel(VkImageMemoryBarrier& imageBarrier, UInt32 mipLevel, Int32& mipWidth, Int32& mipHeight, VkImage image, VkCommandBuffer commandBuffer) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            imageBarrier.subresourceRange.baseMipLevel = mipLevel - 1;
+            imageBarrier.oldLayout = VK_ImageLayout_TransferDstOptimal;
+            imageBarrier.newLayout = VK_ImageLayout_TransferSrcOptimal;
+            imageBarrier.srcAccessMask = VK_Access_TransferWrite;
+            imageBarrier.dstAccessMask = VK_Access_TransferRead;
+
+            vkCmdPipelineBarrier(commandBuffer, VK_PipelineStage_Transfer, VK_PipelineStage_Transfer, 0,
+                0, nullptr,
+                0, nullptr,
+                1, &imageBarrier);
+
+            VkImageBlit blit{};
+            blit.srcOffsets[0] = { 0, 0, 0 };
+            blit.srcOffsets[1] = { mipWidth, mipHeight, 1 };
+            blit.srcSubresource.aspectMask = VK_ImageAspect_Color;
+            blit.srcSubresource.mipLevel = mipLevel - 1;
+            blit.srcSubresource.baseArrayLayer = 0;
+            blit.srcSubresource.layerCount = 1;
+            blit.dstOffsets[0] = { 0, 0, 0 };
+            blit.dstOffsets[1] = { mipWidth > 1 ? mipWidth / 2 : 1, mipHeight > 1 ? mipHeight / 2 : 1, 1 };
+            blit.dstSubresource.aspectMask = VK_ImageAspect_Color;
+            blit.dstSubresource.mipLevel = mipLevel;
+            blit.dstSubresource.baseArrayLayer = 0;
+            blit.dstSubresource.layerCount = 1;
+
+            vkCmdBlitImage(commandBuffer, image, VK_ImageLayout_TransferSrcOptimal, image, VK_ImageLayout_TransferDstOptimal, 1, &blit, VK_Filter_Linear);
+
+            imageBarrier.oldLayout = VK_ImageLayout_TransferSrcOptimal;
+            imageBarrier.newLayout = VK_ImageLayout_ShaderReadOnlyOptimal;
+            imageBarrier.srcAccessMask = VK_Access_TransferRead;
+            imageBarrier.dstAccessMask = VK_Access_ShaderRead;
+
+            vkCmdPipelineBarrier(commandBuffer, VK_PipelineStage_Transfer, VK_PipelineStage_FragmentShader, 0,
+                0, nullptr,
+                0, nullptr,
+                1, &imageBarrier);
+
+            if (mipWidth > 1)
+            {
+                mipWidth /= 2;
+            }
+            if (mipHeight > 1)
+            {
+                mipHeight /= 2;
+            }
         }}
         //--------------------------------------------------------------------------
 
