@@ -107,7 +107,6 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
     settings.name = "Some window";
     settings.size = { 200, 200 };
     settings.windowedSize = { 200, 200 };
-    settings.vSync = true;
     settings.updateContinuously = true;
 
     Kmplete::Window* window;

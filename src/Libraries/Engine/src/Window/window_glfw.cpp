@@ -406,19 +406,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::SetVSync(bool vSync) KMP_PROFILING(ProfileLevelMinor)
-    {
-        _settings.vSync = vSync;
-        glfwSwapInterval(vSync ? 1 : 0);
-    }}
-    //--------------------------------------------------------------------------
-
-    bool WindowGlfw::IsVSync() const
-    {
-        return _settings.vSync;
-    }
-    //--------------------------------------------------------------------------
-
     void WindowGlfw::SetUpdatedContinuously(bool updatedContinuously)
     {
         _settings.updateContinuously = updatedContinuously;

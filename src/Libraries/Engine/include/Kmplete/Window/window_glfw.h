@@ -51,9 +51,6 @@ namespace Kmplete
         KMP_NODISCARD KMP_API CursorMode GetCursorMode() const override;
         KMP_NODISCARD KMP_API Math::Point2I GetCursorPosition() const override;
 
-        KMP_API void SetVSync(bool vSync) override;
-        KMP_NODISCARD KMP_API bool IsVSync() const override;
-
         KMP_API void SetUpdatedContinuously(bool updatedContinuously) override;
         KMP_NODISCARD KMP_API bool IsUpdatedContinuously() const override;
 

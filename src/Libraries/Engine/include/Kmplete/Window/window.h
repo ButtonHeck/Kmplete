@@ -71,7 +71,6 @@ namespace Kmplete
             ScreenMode screenMode = ScreenMode::Windowed;
             CursorMode cursorMode = CursorMode::Default;
             Math::Point2I cursorPosition = Math::Point2I(0, 0);
-            bool vSync = true;
             bool updateContinuously = true;
             bool alwaysOnTop = false;
             UInt32 dpi = 96;
@@ -121,9 +120,6 @@ namespace Kmplete
         KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;
         KMP_NODISCARD KMP_API virtual CursorMode GetCursorMode() const = 0;
         KMP_NODISCARD KMP_API virtual Math::Point2I GetCursorPosition() const = 0;
-
-        KMP_API virtual void SetVSync(bool vSync) = 0;
-        KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;
 
         KMP_API virtual void SetUpdatedContinuously(bool updatedContinuously) = 0;
         KMP_NODISCARD KMP_API virtual bool IsUpdatedContinuously() const = 0;

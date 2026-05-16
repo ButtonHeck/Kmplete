@@ -15,7 +15,6 @@ namespace Kmplete
     static constexpr auto WindowedWidthStr = "WindowedWidth";
     static constexpr auto WindowedHeightStr = "WindowedHeight";
     static constexpr auto ScreenModeStr = "ScreenMode";
-    static constexpr auto VSyncStr = "VSync";
     static constexpr auto UpdateContinuouslyStr = "UpdateContinuously";
     static constexpr auto AlwaysOnTopStr = "AlwaysOnTop";
 
@@ -138,7 +137,6 @@ namespace Kmplete
         settings.SaveInt(WindowedWidthStr, windowedSize.x);
         settings.SaveInt(WindowedHeightStr, windowedSize.y);
         settings.SaveString(ScreenModeStr, ScreenModeToString(screenMode));
-        settings.SaveBool(VSyncStr, vSync);
         settings.SaveBool(UpdateContinuouslyStr, updateContinuously);
         settings.SaveBool(AlwaysOnTopStr, alwaysOnTop);
     }}
@@ -154,7 +152,6 @@ namespace Kmplete
         windowedSize.x = settings.GetInt(WindowedWidthStr, DefaultWidth);
         windowedSize.y = settings.GetInt(WindowedHeightStr, DefaultHeight);
         screenMode = StringToScreenMode(settings.GetString(ScreenModeStr, WindowedModeStr));
-        vSync = settings.GetBool(VSyncStr, true);
         updateContinuously = settings.GetBool(UpdateContinuouslyStr, true);
         alwaysOnTop = settings.GetBool(AlwaysOnTopStr, false);
     }}
