@@ -36,11 +36,14 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) override;
 
-            KMP_NODISCARD KMP_API virtual UInt32 GetMultisampling() const override;
-            KMP_API virtual void SetMultisampling(UInt32 samples) override;
+            KMP_NODISCARD KMP_API UInt32 GetMultisampling() const override;
+            KMP_API void SetMultisampling(UInt32 samples) override;
 
-            KMP_API virtual void SaveSettings(SettingsDocument& settings) const override;
-            KMP_API virtual void LoadSettings(SettingsDocument& settings) override;
+            KMP_NODISCARD KMP_API bool IsVSync() const override;
+            KMP_API void SetVSync(bool vSync) override;
+
+            KMP_API void SaveSettings(SettingsDocument& settings) const override;
+            KMP_API void LoadSettings(SettingsDocument& settings) override;
 
             KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
             KMP_NODISCARD KMP_API UInt32 GetCurrentBufferIndex() const noexcept;

@@ -33,7 +33,8 @@
             "AuxWindows": []
         },
         "GraphicsBackend": {
-            "MSAAsamples": 1
+            "MSAAsamples": 1,
+            "VSync": true
         }
     }
 }

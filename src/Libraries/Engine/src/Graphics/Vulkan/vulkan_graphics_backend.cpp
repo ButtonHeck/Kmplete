@@ -178,10 +178,32 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool VulkanGraphicsBackend::IsVSync() const
+        {
+            KMP_ASSERT(_physicalDevice);
+
+            return _physicalDevice->GetLogicalDevice().IsVSync();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanGraphicsBackend::SetVSync(bool vSync) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_physicalDevice);
+
+            if (IsVSync() == vSync)
+            {
+                return;
+            }
+
+            _physicalDevice->GetLogicalDevice().SetVSync(vSync);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanGraphicsBackend::SaveSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
         {
             settings.StartSaveObject(SettingsEntryName);
             settings.SaveUInt(MSAAsamplesStr, GetMultisampling());
+            settings.SaveBool(VSyncStr, IsVSync());
             settings.EndSaveObject();
         }}
         //--------------------------------------------------------------------------
@@ -189,8 +211,12 @@ namespace Kmplete
         void VulkanGraphicsBackend::LoadSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
         {
             settings.StartLoadObject(SettingsEntryName);
+
             const UInt32 msaaSamples = settings.GetUInt(MSAAsamplesStr, 1);
             SetMultisampling(msaaSamples);
+
+            const auto vSync = settings.GetBool(VSyncStr, true);
+            SetVSync(vSync);
 
             settings.EndLoadObject();
         }}

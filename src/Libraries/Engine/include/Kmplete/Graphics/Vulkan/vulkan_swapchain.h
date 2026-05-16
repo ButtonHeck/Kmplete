@@ -25,7 +25,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanSwapchain)
 
         public:
-            KMP_API VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
+            KMP_API VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, bool vSync,
                                     VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                     const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             KMP_API ~VulkanSwapchain();
@@ -77,6 +77,7 @@ namespace Kmplete
             Vector<VkImage> _swapchainImages;
             VkFormat _swapchainImageFormat;
             Vector<VkImageView> _swapchainImageViews;
+            bool _vSync;
 
             VkSampleCountFlagBits _msaaSamples;
             UPtr<VulkanImage> _multisampledColorImage;

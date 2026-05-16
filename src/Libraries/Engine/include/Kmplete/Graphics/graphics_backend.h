@@ -32,6 +32,7 @@ namespace Kmplete
         protected:
             static constexpr auto SettingsEntryName = "GraphicsBackend";
             static constexpr auto MSAAsamplesStr = "MSAAsamples";
+            static constexpr auto VSyncStr = "VSync";
 
         public:
             KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(Window& window);
@@ -55,6 +56,9 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API virtual UInt32 GetMultisampling() const = 0;
             KMP_API virtual void SetMultisampling(UInt32 samples) = 0;
+
+            KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;
+            KMP_API virtual void SetVSync(bool vSync) = 0;
 
             KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
             KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;

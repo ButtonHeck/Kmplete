@@ -58,6 +58,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkSampleCountFlagBits GetMultisampling() const noexcept;
             KMP_API void SetMultisampling(VkSampleCountFlagBits samples);
 
+            KMP_NODISCARD KMP_API bool IsVSync() const noexcept;
+            KMP_API void SetVSync(bool vSync);
+
             KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
@@ -119,6 +122,7 @@ namespace Kmplete
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
+            void _RecreateSwapchain();
 
         private:
             const VulkanContext& _vulkanContext;
@@ -143,6 +147,7 @@ namespace Kmplete
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
+            bool _vSync;
             UPtr<VulkanRenderer> _renderer;
             StringIDHashMap<UPtr<VulkanShaderObject>> _shaderObjects;
             UPtr<VulkanSamplersStorage> _samplersStorage;

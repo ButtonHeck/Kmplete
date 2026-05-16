@@ -125,6 +125,7 @@ namespace Kmplete
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SampleCount_1)
+            , _vSync(true)
             , _renderer(nullptr)
             , _shaderObjects()
             , _samplersStorage(nullptr)
@@ -198,16 +199,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_swapchain && _renderer);
-
-            WaitIdle();
-
-            _DeleteSwapchain();
-            _DeleteSyncronizationObjects();
-
-            _CreateSynchronizationObjects();
-            _CreateSwapchain();
-            _renderer->SetSwapchain(*_swapchain.get());
+            _RecreateSwapchain();
         }}
         //--------------------------------------------------------------------------
 
@@ -238,6 +230,19 @@ namespace Kmplete
             }
 
             _swapchain->SetMultisampling(_msaaSamples);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanLogicalDevice::IsVSync() const noexcept
+        {
+            return _vSync;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::SetVSync(bool vSync) KMP_PROFILING(ProfileLevelImportant)
+        {
+            _vSync = vSync;
+            _RecreateSwapchain();
         }}
         //--------------------------------------------------------------------------
 
@@ -445,7 +450,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _imageCreatorDelegate);
 
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _vulkanContext, _currentExtent, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _vulkanContext, _currentExtent, _vSync, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
             KMP_ASSERT(_swapchain);
         }}
         //--------------------------------------------------------------------------
@@ -609,6 +614,21 @@ namespace Kmplete
             };
 
             return actualExtent;
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_RecreateSwapchain() KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            KMP_ASSERT(_swapchain && _renderer);
+
+            WaitIdle();
+
+            _DeleteSwapchain();
+            _DeleteSyncronizationObjects();
+
+            _CreateSynchronizationObjects();
+            _CreateSwapchain();
+            _renderer->SetSwapchain(*_swapchain.get());
         }}
         //--------------------------------------------------------------------------
 

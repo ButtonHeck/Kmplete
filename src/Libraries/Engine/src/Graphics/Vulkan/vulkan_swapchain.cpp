@@ -19,7 +19,7 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, bool vSync,
                                          VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
@@ -37,6 +37,7 @@ namespace Kmplete
             , _swapchainImages()
             , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _swapchainImageViews()
+            , _vSync(vSync)
             , _msaaSamples(msaaSamples)
             , _multisampledColorImage(nullptr)
             , _multisampledColorImageView(VK_NULL_HANDLE)
@@ -235,11 +236,10 @@ namespace Kmplete
                 throw RuntimeError("VulkanSwapchain: unable to get available present mode");
             }
 
-            // TODO: add presentation option in a future, use FIFO by default right now
-            //if (Utils::VectorContains(presentModes, VK_PresentMode_Mailbox))
-            //{
-            //    return VK_PresentMode_Mailbox;
-            //}
+            if (!_vSync && Utils::VectorContains(presentModes, VK_PresentMode_Immediate))
+            {
+                return VK_PresentMode_Immediate;
+            }
 
             return VK_PresentMode_FIFO;
         }
