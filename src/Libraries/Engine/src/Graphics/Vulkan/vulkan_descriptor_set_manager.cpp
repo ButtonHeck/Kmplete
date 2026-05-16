@@ -177,14 +177,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetUniformBufferDescriptor(descriptorSet, buffer, size, binding);
+            return SetUniformBufferDescriptor(descriptorSet, buffer, range, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
             if (descriptorSet == VK_NULL_HANDLE)
             {
@@ -199,7 +199,7 @@ namespace Kmplete
 
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = buffer;
-            bufferInfo.range = size;
+            bufferInfo.range = range;
 
             _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DescriptorType_UniformBuffer, binding);
 
@@ -207,14 +207,14 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
             auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetUniformBufferDynamicDescriptor(descriptorSet, buffer, size, binding);
+            return SetUniformBufferDynamicDescriptor(descriptorSet, buffer, range, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize size, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetUniformBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
             if (descriptorSet == VK_NULL_HANDLE)
             {
@@ -229,7 +229,7 @@ namespace Kmplete
 
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = buffer;
-            bufferInfo.range = size;
+            bufferInfo.range = range;
 
             _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DescriptorType_UniformBufferDynamic, binding);
 
