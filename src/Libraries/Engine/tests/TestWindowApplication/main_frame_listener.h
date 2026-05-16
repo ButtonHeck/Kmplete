@@ -128,6 +128,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool OnWindowCloseEvent(Events::WindowCloseEvent&);
 
         KMP_NODISCARD virtual bool OnCustomEvent(Events::CustomEvent&) { _customEventInvokedCount++; return true; }
+        virtual bool OnVSyncChangeEvent(Events::VSyncChangeEvent& evt);
 
     private:
         void _InitializeImGui();
@@ -162,6 +163,7 @@ namespace Kmplete
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
 
         Events::EventHandlerGuard<Events::CustomEvent> _customEventHandler;
+        Events::EventHandlerGuard<Events::VSyncChangeEvent> _vSyncEventHandler;
 
         bool _switchFontRequested = false;
         bool _useDefaultFont = true;

@@ -335,6 +335,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewports"_true, initInfo);
+            context->configName = "TextureSandbox_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 

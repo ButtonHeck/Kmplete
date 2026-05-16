@@ -55,6 +55,7 @@ namespace Kmplete
         , _windowFramebufferResizeHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowFramebufferResizeEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnWindowContentScaleEvent))
         , _customEventHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnCustomEvent))
+        , _vSyncEventHandler(_eventDispatcher, KMP_BIND(MainFrameListener::OnVSyncChangeEvent))
     {
         Initialize();
     }
@@ -300,10 +301,10 @@ namespace Kmplete
                 _mainWindow.SetUpdatedContinuously(updateContinuously);
             }
 
-            auto vSync = _mainWindow.IsVSync();
+            auto vSync = _graphicsBackend->IsVSync();
             if (ImGui::Checkbox("VSync", &vSync))
             {
-                _mainWindow.SetVSync(vSync);
+                Events::QueueEvent(CreateUPtr<Events::VSyncChangeEvent>(vSync));
             }
 
             auto alwaysOnTop = _mainWindow.IsAlwaysOnTop();
@@ -927,6 +928,12 @@ namespace Kmplete
         return true;
     }
 
+    bool MainFrameListener::OnVSyncChangeEvent(Events::VSyncChangeEvent& evt)
+    {
+        _graphicsBackend->SetVSync(evt.vSync);
+        return true;
+    }
+
     void MainFrameListener::_InitializeImGui()
     {
         ImGuiUtils::Context* context = nullptr;
@@ -956,6 +963,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, initInfo);
+            context->configName = "TestWindowApplication_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 

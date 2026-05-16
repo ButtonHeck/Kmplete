@@ -14,5 +14,17 @@ namespace Kmplete
             CustomEvent() = default;
         };
         //--------------------------------------------------------------------------
+
+        struct VSyncChangeEvent : public Event
+        {
+            EVENT_CLASS_TYPE("VSyncChangeEvent")
+
+            VSyncChangeEvent(bool vSync)
+                : vSync(vSync)
+            {}
+
+            bool vSync;
+        };
+        //--------------------------------------------------------------------------
     }
 }
