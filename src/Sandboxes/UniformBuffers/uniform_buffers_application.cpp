@@ -1,9 +1,9 @@
-#include "uniform_dynamic_application.h"
+#include "uniform_buffers_application.h"
 
 
 namespace Kmplete
 {
-    UniformDynamicApplication::UniformDynamicApplication(const WindowApplicationParameters& parameters)
+    UniformBuffersApplication::UniformBuffersApplication(const WindowApplicationParameters& parameters)
         : WindowApplication(parameters)
         , _mainWindow(_windowBackend->GetMainWindow())
         , _mainFrameListener(nullptr)
@@ -12,22 +12,22 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    UniformDynamicApplication::~UniformDynamicApplication()
+    UniformBuffersApplication::~UniformBuffersApplication()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicApplication::_Initialize()
+    void UniformBuffersApplication::_Initialize()
     {
         _mainWindow.SetTitle(_applicationName.c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
-        _mainFrameListener.reset(new UniformDynamicFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), _inputManager.get()));
+        _mainFrameListener.reset(new UniformBuffersFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), _inputManager.get()));
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicApplication::_Finalize()
+    void UniformBuffersApplication::_Finalize()
     {
         _mainFrameListener.reset();
     }

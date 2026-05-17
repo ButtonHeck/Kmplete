@@ -18,14 +18,14 @@
 
 namespace Kmplete
 {
-    class UniformDynamicFrameListener : public FrameListener
+    class UniformBuffersFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(UniformDynamicFrameListener)
-        KMP_DISABLE_COPY_MOVE(UniformDynamicFrameListener)
+        KMP_LOG_CLASSNAME(UniformBuffersFrameListener)
+        KMP_DISABLE_COPY_MOVE(UniformBuffersFrameListener)
 
     public:
-        UniformDynamicFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
-        ~UniformDynamicFrameListener();
+        UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
+        ~UniformBuffersFrameListener();
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;

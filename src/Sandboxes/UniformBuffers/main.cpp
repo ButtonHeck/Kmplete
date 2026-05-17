@@ -1,4 +1,4 @@
-#include "uniform_dynamic_application.h"
+#include "uniform_buffers_application.h"
 
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
@@ -8,7 +8,7 @@ namespace Kmplete
 {
     const char* ApplicationProfileSessionPrefix()
     {
-        return "UniformDynamic";
+        return "UniformBuffers";
     }
     //--------------------------------------------------------------------------
 
@@ -19,21 +19,20 @@ namespace Kmplete
         {
             WindowApplicationParameters parameters = WindowApplicationParameters{
                 .applicationParameters = {
-                    .applicationName = "Uniform Dynamic sandbox",
+                    .applicationName = "Uniform Buffers sandbox",
                     .settingsFilepath = programOptions.GetSettingsFilepath(),
-                    .defaultSettingsFileName = "UniformDynamicSandbox_settings.json"
+                    .defaultSettingsFileName = "UniformBuffersSandbox_settings.json"
                 },
                 .resizable = true
             };
 
-            return CreateUPtr<UniformDynamicApplication>(parameters);
+            return CreateUPtr<UniformBuffersApplication>(parameters);
         }
         catch (const Exception&)
         {
             KMP_LOG_CRITICAL_FN("CreateApplication: failed to create sandbox instance");
             return nullptr;
         }
-    }
-}
-//--------------------------------------------------------------------------
+    }}
+    //--------------------------------------------------------------------------
 }

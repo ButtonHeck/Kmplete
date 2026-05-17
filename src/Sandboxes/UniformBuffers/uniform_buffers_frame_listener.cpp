@@ -1,4 +1,4 @@
-#include "uniform_dynamic_frame_listener.h"
+#include "uniform_buffers_frame_listener.h"
 
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Utils/memory_utils.h"
@@ -27,10 +27,10 @@ namespace Kmplete
     static constexpr auto MatricesDSLayout_SID = "MatricesDSLayout"_sid;
     static constexpr auto MatricesDS_SID = "Matrices_Set"_sid;
 
-    static constexpr auto Pipeline_SID = "UniformDynamic_Pipeline"_sid;
+    static constexpr auto Pipeline_SID = "UniformBuffers_Pipeline"_sid;
 
-    static constexpr auto VertexShader_SID = "UniformDynamic_vertex"_sid;
-    static constexpr auto FragmentShader_SID = "UniformDynamic_fragment"_sid;
+    static constexpr auto VertexShader_SID = "UniformBuffers_vertex"_sid;
+    static constexpr auto FragmentShader_SID = "UniformBuffers_fragment"_sid;
 
     static constexpr auto ViewProjectionMatricesBindingIndex = 0;
     static constexpr auto ModelInstanceMatricesBindingIndex = 1;
@@ -53,7 +53,7 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    UniformDynamicFrameListener::UniformDynamicFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager)
+    UniformBuffersFrameListener::UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
@@ -62,9 +62,9 @@ namespace Kmplete
         , _uniformBuffersCommon()
         , _uniformBuffersInstanced()
         , _device(VK_NULL_HANDLE)
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(UniformDynamicFrameListener::_OnWindowResizeEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(UniformDynamicFrameListener::_OnMouseButtonPressedEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(UniformDynamicFrameListener::_OnMouseScrollEvent))
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(UniformBuffersFrameListener::_OnWindowResizeEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(UniformBuffersFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(UniformBuffersFrameListener::_OnMouseScrollEvent))
         , _commonShaderData()
         , _instanceShaderData()
         , _dynamicAlignment(0ULL)
@@ -74,13 +74,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    UniformDynamicFrameListener::~UniformDynamicFrameListener()
+    UniformBuffersFrameListener::~UniformBuffersFrameListener()
     {
         _Finalize();
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicFrameListener::_Initialize()
+    void UniformBuffersFrameListener::_Initialize()
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
@@ -112,7 +112,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicFrameListener::_InitializeInstances()
+    void UniformBuffersFrameListener::_InitializeInstances()
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
@@ -174,8 +174,8 @@ namespace Kmplete
             descriptorSetManager.SetUniformBufferDynamicDescriptor(MatricesDS_SID, 0, "per frame"_true, i, _uniformBuffersInstanced[i].get()->GetVkBuffer(), _dynamicAlignment, ModelInstanceMatricesBindingIndex);
         }
 
-        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("uniform_dynamic.vert.spv");
-        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("uniform_dynamic.frag.spv");
+        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("uniform_buffers.vert.spv");
+        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("uniform_buffers.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
         const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
@@ -206,7 +206,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicFrameListener::_Finalize()
+    void UniformBuffersFrameListener::_Finalize()
     {
         if (_instanceShaderData.model)
         {
@@ -219,7 +219,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool UniformDynamicFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    bool UniformBuffersFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
     {
         if (evt.GetWidth() > 0 && evt.GetHeight())
         {
@@ -229,7 +229,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool UniformDynamicFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    bool UniformBuffersFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
     {
         if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
         {
@@ -247,7 +247,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool UniformDynamicFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    bool UniformBuffersFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
     {
         _camera.SetScaleDelta(evt.GetYOffset());
 
@@ -255,13 +255,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
+    void UniformBuffersFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
     }
     //--------------------------------------------------------------------------
 
-    void UniformDynamicFrameListener::Render()
+    void UniformBuffersFrameListener::Render()
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();

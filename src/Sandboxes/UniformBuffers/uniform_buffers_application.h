@@ -1,0 +1,30 @@
+#pragma once
+
+#include "uniform_buffers_frame_listener.h"
+
+#include "Kmplete/Base/pointers.h"
+#include "Kmplete/Application/window_application.h"
+#include "Kmplete/Log/log_class_macro.h"
+
+
+namespace Kmplete
+{
+    class UniformBuffersApplication : public WindowApplication
+    {
+        KMP_LOG_CLASSNAME(UniformBuffersApplication)
+        KMP_DISABLE_COPY_MOVE(UniformBuffersApplication)
+
+    public:
+        explicit UniformBuffersApplication(const WindowApplicationParameters& parameters);
+        ~UniformBuffersApplication();
+
+    private:
+        void _Initialize();
+        void _Finalize();
+
+    private:
+        Window& _mainWindow;
+        UPtr<UniformBuffersFrameListener> _mainFrameListener;
+    };
+    //--------------------------------------------------------------------------
+}
