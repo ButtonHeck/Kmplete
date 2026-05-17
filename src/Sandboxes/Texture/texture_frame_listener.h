@@ -50,6 +50,7 @@ namespace Kmplete
         void _RenderImGui();
 
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
+        bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
         bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
         bool _OnMouseScrollEvent(Events::MouseScrollEvent& evt);
 
@@ -78,6 +79,7 @@ namespace Kmplete
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
         Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
         Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         MatrixShaderData _matrixShaderData;
