@@ -53,6 +53,7 @@ namespace Kmplete
         void _SetMultisampling(UInt32 samples);
         bool _OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt);
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
+        bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
         bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
         bool _OnMouseScrollEvent(Events::MouseScrollEvent& evt);
 
@@ -86,6 +87,7 @@ namespace Kmplete
 
         Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
         Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
         Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
         Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         MatrixShaderData _matrixShaderData;

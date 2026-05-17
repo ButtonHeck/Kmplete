@@ -72,6 +72,7 @@ namespace Kmplete
         , _assetsManager(assetsManager)
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMultisamplingChangeEvent))
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowResizeEvent))
+        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowContentScaleEvent))
         , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
@@ -370,12 +371,13 @@ namespace Kmplete
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
             initInfo.CheckVkResultFn = nullptr;
             initInfo.UseDynamicRendering = true;
+            initInfo.MSAASamples = logicalDevice.GetMultisampling();
             initInfo.PipelineRenderingCreateInfo = Graphics::VKUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewports"_true, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, "viewports"_true, initInfo);
             context->configName = "TriangleSandbox_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
@@ -406,6 +408,8 @@ namespace Kmplete
     bool TriangleFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
     {
         _graphicsBackend.SetMultisampling(evt.msaaSamples);
+        _imguiImpl.reset();
+        _InitializeImGui(_mainWindow.GetDPIScale());
         return true;
     }
     //--------------------------------------------------------------------------
@@ -416,6 +420,17 @@ namespace Kmplete
         {
             _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
         }
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TriangleFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
+    {
+        const auto scale = event.GetScale();
+
+        _imguiImpl.reset();
+        _InitializeImGui(scale);
+
         return true;
     }
     //--------------------------------------------------------------------------
@@ -559,9 +574,16 @@ namespace Kmplete
         _imguiImpl->NewFrame();
 
         static constexpr auto applicationWindowFlags =
-            ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
+            ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
 
+        const auto imguiScale = ImGui::GetMainViewport()->DpiScale;
+        const auto imguiViewportPos = ImGui::GetMainViewport()->WorkPos;
+        const auto imguiWindowPos = ImVec2{ imguiViewportPos.x + 16, imguiViewportPos.y + 16 };
+        ImGui::SetNextWindowPos(imguiWindowPos, ImGuiCond_Always);
         ImGui::Begin("TriangleVulkan", nullptr, applicationWindowFlags);
+        ImGui::SetWindowSize(ImVec2(330 * imguiScale, 120 * imguiScale));
+
         if (ImGui::Button("Multisampling 1"))
         {
             _SetMultisampling(1);
@@ -581,8 +603,12 @@ namespace Kmplete
         auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
         auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
         auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+        const auto& renderer = vulkanLogicalDevice.GetRenderer();
+
+        renderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() }, "clear previous"_false);
         vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
         vulkanImGuiUtils->Render();
+        renderer.EndRendering();
 
         ImGui::EndFrame();
     }
