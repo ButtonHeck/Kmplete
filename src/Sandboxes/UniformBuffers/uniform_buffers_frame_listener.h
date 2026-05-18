@@ -66,6 +66,7 @@ namespace Kmplete
         CommonShaderData _commonShaderData;
         InstanceShaderData _instanceShaderData;
         size_t _dynamicAlignment;
+        Vector<float> _rotationsAngles;
 
         Graphics::OrthographicCamera _camera;
     };

@@ -68,6 +68,7 @@ namespace Kmplete
         , _commonShaderData()
         , _instanceShaderData()
         , _dynamicAlignment(0ULL)
+        , _rotationsAngles()
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
     {
         _Initialize();
@@ -157,6 +158,8 @@ namespace Kmplete
 
         const auto instanceBufferSize = InstancesCount * _dynamicAlignment;
         _instanceShaderData.model = (Math::Mat4*)Utils::AlignedAlloc(instanceBufferSize, _dynamicAlignment);
+
+        _rotationsAngles.resize(InstancesCount, 0.0f);
 
         VkDescriptorSetLayoutBinding viewProjectionLayoutBinding{ ViewProjectionMatricesBindingIndex, VK_DescriptorType_UniformBuffer, 1, VK_ShaderStage_Vertex };
         VkDescriptorSetLayoutBinding instanceModelsLayoutBinding{ ModelInstanceMatricesBindingIndex, VK_DescriptorType_UniformBufferDynamic, 1, VK_ShaderStage_Vertex };
@@ -258,6 +261,11 @@ namespace Kmplete
     void UniformBuffersFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
+
+        for (auto i = 0; i < InstancesCount; i++)
+        {
+            _rotationsAngles[i] += 0.0001f * i * frameTimestep;
+        }
     }
     //--------------------------------------------------------------------------
 
@@ -283,6 +291,7 @@ namespace Kmplete
                 auto* modelMatrix = (Math::Mat4*)((UInt64(_instanceShaderData.model) + (index * _dynamicAlignment)));
                 const auto position = Math::Vec3F(c * 2.5f - 5.0f, r * 2.5 - 5.0f, 0.0);
                 *modelMatrix = glm::translate(Math::Mat4(1.0f), position);
+                *modelMatrix = glm::rotate(*modelMatrix, _rotationsAngles[index], glm::vec3(0.0f, 0.0f, 1.0f));
             }
         }
         _uniformBuffersInstanced[currentBufferIndex]->CopyToMappedMemory(0, _instanceShaderData.model, InstancesCount * _dynamicAlignment);
