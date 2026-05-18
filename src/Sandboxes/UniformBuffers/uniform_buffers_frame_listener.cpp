@@ -171,7 +171,7 @@ namespace Kmplete
 
             _uniformBuffersInstanced.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, instanceBufferSize }));
             _uniformBuffersInstanced[i]->Map();
-            descriptorSetManager.SetUniformBufferDynamicDescriptor(MatricesDS_SID, 0, "per frame"_true, i, _uniformBuffersInstanced[i].get()->GetVkBuffer(), _dynamicAlignment, ModelInstanceMatricesBindingIndex);
+            descriptorSetManager.SetUniformBufferDynamicDescriptor(MatricesDS_SID, 0, "per frame"_true, i, _uniformBuffersInstanced[i].get()->GetVkBuffer(), _dynamicAlignment, 0, ModelInstanceMatricesBindingIndex);
         }
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("uniform_buffers.vert.spv");
