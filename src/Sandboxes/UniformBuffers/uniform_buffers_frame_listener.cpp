@@ -167,7 +167,7 @@ namespace Kmplete
         {
             _uniformBuffersCommon.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(CommonShaderData) }));
             _uniformBuffersCommon[i]->Map();
-            descriptorSetManager.SetUniformBufferDescriptor(MatricesDS_SID, 0, "per frame"_true, i, *_uniformBuffersCommon[i].get(), ViewProjectionMatricesBindingIndex);
+            descriptorSetManager.SetUniformBufferDescriptor(MatricesDS_SID, 0, "per frame"_true, i, *_uniformBuffersCommon[i].get(), _uniformBuffersCommon[i]->GetSize(), 0, ViewProjectionMatricesBindingIndex);
 
             _uniformBuffersInstanced.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, instanceBufferSize }));
             _uniformBuffersInstanced[i]->Map();

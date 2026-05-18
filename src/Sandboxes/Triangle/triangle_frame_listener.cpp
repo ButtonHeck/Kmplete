@@ -244,11 +244,11 @@ namespace Kmplete
         {
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(ShaderData) }));
             _uniformBuffers[i]->Map();
-            descriptorSetManager.SetUniformBufferDescriptor(ColorMultiplierDS_SID, 0, "per frame"_true, i, *_uniformBuffers[i].get(), ColorMultiplierBindingIndex);
+            descriptorSetManager.SetUniformBufferDescriptor(ColorMultiplierDS_SID, 0, "per frame"_true, i, *_uniformBuffers[i].get(), _uniformBuffers[i]->GetSize(), 0, ColorMultiplierBindingIndex);
 
             _matrixUniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(MatrixShaderData) }));
             _matrixUniformBuffers[i]->Map();
-            descriptorSetManager.SetUniformBufferDescriptor(MatricesDS_SID, 0, "per frame"_true, i, *_matrixUniformBuffers[i].get(), MatricesBindingIndex);
+            descriptorSetManager.SetUniformBufferDescriptor(MatricesDS_SID, 0, "per frame"_true, i, *_matrixUniformBuffers[i].get(), _matrixUniformBuffers[i]->GetSize(), 0, MatricesBindingIndex);
         }
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();

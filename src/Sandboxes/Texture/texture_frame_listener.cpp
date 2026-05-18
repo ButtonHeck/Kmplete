@@ -228,7 +228,7 @@ namespace Kmplete
             _uniformBuffers.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(MatrixShaderData) }));
             _uniformBuffers[i]->Map();
 
-            descriptorSetManager.SetUniformBufferDescriptor(MatricesAndTextureDS_SID, 0, "per frame"_true, i, *_uniformBuffers[i].get(), MatricesBindingIndex);
+            descriptorSetManager.SetUniformBufferDescriptor(MatricesAndTextureDS_SID, 0, "per frame"_true, i, *_uniformBuffers[i].get(), _uniformBuffers[i]->GetSize(), 0, MatricesBindingIndex);
             descriptorSetManager.SetSampledImageDescriptor(
                 MatricesAndTextureDS_SID, 0, "per frame"_true, i,
                 dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset(TextureMetal_SID).GetTexture()).GetVkImageView(), TextureBindingIndex

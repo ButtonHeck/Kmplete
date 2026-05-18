@@ -40,9 +40,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame) const noexcept;
             KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept;
 
-            KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const;
+            KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            KMP_API bool SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
 
             KMP_API bool SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const;
             KMP_API bool SetUniformBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const;

@@ -171,20 +171,20 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, UInt32 binding) const
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const
         {
-            return SetUniformBufferDescriptor(setSid, setIndex, perFrame, frameIndex, buffer.GetVkBuffer(), buffer.GetSize(), binding);
+            return SetUniformBufferDescriptor(setSid, setIndex, perFrame, frameIndex, buffer.GetVkBuffer(), range, offset, binding);
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
-            return SetUniformBufferDescriptor(descriptorSet, buffer, range, binding);
+            return SetUniformBufferDescriptor(descriptorSet, buffer, range, offset, binding);
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanDescriptorSetManager::SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
             if (descriptorSet == VK_NULL_HANDLE)
             {
@@ -200,6 +200,7 @@ namespace Kmplete
             VkDescriptorBufferInfo bufferInfo{};
             bufferInfo.buffer = buffer;
             bufferInfo.range = range;
+            bufferInfo.offset = offset;
 
             _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DescriptorType_UniformBuffer, binding);
 
