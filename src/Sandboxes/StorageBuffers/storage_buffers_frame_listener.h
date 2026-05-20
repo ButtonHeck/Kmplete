@@ -1,0 +1,83 @@
+#pragma once
+
+#include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Application/frame_listener.h"
+#include "Kmplete/Window/window.h"
+#include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Graphics/perspective_camera.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
+#include "Kmplete/Event/event_handler_guard.h"
+#include "Kmplete/Event/window_events.h"
+#include "Kmplete/Event/mouse_events.h"
+#include "Kmplete/Input/input_manager.h"
+#include "Kmplete/Time/timer.h"
+
+#include <vulkan/vulkan.h>
+
+
+namespace Kmplete
+{
+    class StorageBuffersFrameListener : public FrameListener
+    {
+        KMP_LOG_CLASSNAME(StorageBuffersFrameListener)
+        KMP_DISABLE_COPY_MOVE(StorageBuffersFrameListener)
+
+    public:
+        static constexpr auto InstancesCount = 1000;
+        static constexpr auto ColorsInstancesCount = 100;
+
+    public:
+        StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
+        ~StorageBuffersFrameListener();
+
+        void Update(float frameTimestep, bool applicationIsIconified) override;
+        void Render() override;
+
+    private:
+        void _Initialize();
+        void _InitializeCubes();
+        void _Finalize();
+
+        bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
+        bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
+        bool _OnMouseScrollEvent(Events::MouseScrollEvent& evt);
+
+    private:
+        struct MatricesShaderData
+        {
+            Math::Mat4 projectionMatrix;
+            Math::Mat4 viewMatrix;
+            Array<Math::Mat4, InstancesCount> models;
+        };
+        struct ColorShaderData
+        {
+            Math::Vec4F* color = nullptr;
+        };
+
+    private:
+        Window& _mainWindow;
+        Graphics::GraphicsBackend& _graphicsBackend;
+        Input::InputManager* _inputManager;
+
+        UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
+        UPtr<Graphics::VulkanBuffer> _indexBuffer;
+        Vector<UPtr<Graphics::VulkanBuffer>> _matricesStorageBuffers;
+        Vector<UPtr<Graphics::VulkanBuffer>> _colorsStorageBuffers;
+        VkDevice _device;
+        UInt32 _indexCount;
+
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
+        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
+        MatricesShaderData _matricesShaderData;
+        ColorShaderData _colorsShaderData;
+        size_t _dynamicAlignment;
+        Time::Timer _colorRandomizingTimer;
+        Array<UInt32, ColorsInstancesCount> _colorsIndices;
+
+        Graphics::PerspectiveCamera _camera;
+    };
+    //--------------------------------------------------------------------------
+}
