@@ -38,6 +38,9 @@ namespace Kmplete
 
         using Vec3I = glm::ivec3;
         using Vec3F = glm::vec3;
+
+        using Vec4I = glm::ivec4;
+        using Vec4F = glm::vec4;
         //--------------------------------------------------------------------------
 
         static constexpr Vec3F UnitVectorX =        Vec3F{  1.0f,  0.0f,  0.0f };

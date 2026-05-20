@@ -245,6 +245,80 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool VulkanDescriptorSetManager::SetStorageBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            return SetStorageBufferDescriptor(setSid, setIndex, perFrame, frameIndex, buffer.GetVkBuffer(), range, offset, binding);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::SetStorageBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
+            return SetStorageBufferDescriptor(descriptorSet, buffer, range, offset, binding);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::SetStorageBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (descriptorSet == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set storage buffer descriptor - set is null");
+                return false;
+            }
+            if (buffer == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set storage buffer descriptor - buffer is null");
+                return false;
+            }
+
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = buffer;
+            bufferInfo.range = range;
+            bufferInfo.offset = offset;
+
+            _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DescriptorType_StorageBuffer, binding);
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::SetStorageBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            return SetStorageBufferDynamicDescriptor(setSid, setIndex, perFrame, frameIndex, buffer.GetVkBuffer(), range, offset, binding);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::SetStorageBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            auto descriptorSet = GetDescriptorSet(setSid, setIndex, perFrame, frameIndex);
+            return SetStorageBufferDynamicDescriptor(descriptorSet, buffer, range, offset, binding);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanDescriptorSetManager::SetStorageBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (descriptorSet == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set storage buffer dynamic descriptor - set is null");
+                return false;
+            }
+            if (buffer == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("failed to set storage buffer dynamic descriptor - buffer is null");
+                return false;
+            }
+
+            VkDescriptorBufferInfo bufferInfo{};
+            bufferInfo.buffer = buffer;
+            bufferInfo.range = range;
+            bufferInfo.offset = offset;
+
+            _UpdateDescriptorSet(descriptorSet, bufferInfo, VK_DescriptorType_StorageBufferDynamic, binding);
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
         bool VulkanDescriptorSetManager::SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, VkSampler sampler, UInt32 binding) const KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
