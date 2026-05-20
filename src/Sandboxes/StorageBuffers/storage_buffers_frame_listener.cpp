@@ -328,9 +328,8 @@ namespace Kmplete
         if (_colorRandomizingTimer.ReachedTimeout())
         {
             _colorRandomizingTimer.Mark();
-            const auto seed = 1;
-            std::default_random_engine engine(seed);
-            std::shuffle(_colorsIndices.begin(), _colorsIndices.end(), engine);
+            MersenneTwister32 mt32;
+            std::shuffle(_colorsIndices.begin(), _colorsIndices.end(), mt32.engine);
         }
     }
     //--------------------------------------------------------------------------

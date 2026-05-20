@@ -16,6 +16,33 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
+    //! Randomizer engine wrapper based on Mersenne Twister algorithm for generating 32-bit numbers
+    struct MersenneTwister32
+    {
+        MersenneTwister32()
+            : randomDevice()
+            , engine(randomDevice())
+        {}
+
+        std::random_device randomDevice;
+        std::mt19937 engine;
+    };
+    //--------------------------------------------------------------------------
+
+    //! Randomizer engine wrapper based on Mersenne Twister algorithm for generating 64-bit numbers
+    struct MersenneTwister64
+    {
+        MersenneTwister64()
+            : randomDevice()
+            , engine(randomDevice())
+        {}
+
+        std::random_device randomDevice;
+        std::mt19937_64 engine;
+    };
+    //--------------------------------------------------------------------------
+
+
     //! Base template class for random integer number generators
     //! parameterized with the type of integer and bit width of the backend generator
     template<typename T, RNGBitWidth> requires (IsIntegral<T>::value)
@@ -28,23 +55,22 @@ namespace Kmplete
     {
     public:
         RNGIntegral()
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(std::numeric_limits<T>::min(), std::numeric_limits<T>::max())
         {}
 
         RNGIntegral(T min, T max)
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(min, max)
         {}
 
         KMP_NODISCARD T Generate()
         {
-            return _uniformDistribution(_engine);
+            return _uniformDistribution(_randomizer.engine);
         }
 
     private:
-        std::random_device _randomDevice;
-        std::mt19937 _engine;
+        MersenneTwister32 _randomizer;
         std::uniform_int_distribution<T> _uniformDistribution;
     };
     //--------------------------------------------------------------------------
@@ -54,23 +80,22 @@ namespace Kmplete
     {
     public:
         RNGIntegral()
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(std::numeric_limits<T>::min(), std::numeric_limits<T>::max())
         {}
 
         RNGIntegral(T min, T max)
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(min, max)
         {}
 
         KMP_NODISCARD T Generate()
         {
-            return _uniformDistribution(_engine);
+            return _uniformDistribution(_randomizer.engine);
         }
 
     private:
-        std::random_device _randomDevice;
-        std::mt19937_64 _engine;
+        MersenneTwister64 _randomizer;
         std::uniform_int_distribution<T> _uniformDistribution;
     };
     //--------------------------------------------------------------------------
@@ -88,23 +113,22 @@ namespace Kmplete
     {
     public:
         RNGReal()
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(0.0, 1.0)
         {}
 
         RNGReal(T min, T max)
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(min, max)
         {}
 
         KMP_NODISCARD T Generate()
         {
-            return _uniformDistribution(_engine);
+            return _uniformDistribution(_randomizer.engine);
         }
 
     private:
-        std::random_device _randomDevice;
-        std::mt19937 _engine;
+        MersenneTwister32 _randomizer;
         std::uniform_real_distribution<T> _uniformDistribution;
     };
     //--------------------------------------------------------------------------
@@ -114,23 +138,22 @@ namespace Kmplete
     {
     public:
         RNGReal()
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(0.0, 1.0)
         {}
 
         RNGReal(T min, T max)
-            : _engine(_randomDevice())
+            : _randomizer()
             , _uniformDistribution(min, max)
         {}
 
         KMP_NODISCARD T Generate()
         {
-            return _uniformDistribution(_engine);
+            return _uniformDistribution(_randomizer.engine);
         }
 
     private:
-        std::random_device _randomDevice;
-        std::mt19937_64 _engine;
+        MersenneTwister64 _randomizer;
         std::uniform_real_distribution<T> _uniformDistribution;
     };
     //--------------------------------------------------------------------------
