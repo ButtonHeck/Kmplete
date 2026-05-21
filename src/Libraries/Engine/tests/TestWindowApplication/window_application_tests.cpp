@@ -9,12 +9,75 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_parameters.h"
 
 #include <catch2/catch_test_macros.hpp>
 
 
 namespace Kmplete
 {
+    namespace Graphics
+    {
+        void InitializeTestWindowAppGraphicsParameters(GraphicsParameters& parameters)
+        {
+            if (parameters.type == GraphicsBackendType::Vulkan)
+            {
+                auto& vulkanParameters = dynamic_cast<VulkanGraphicsParameters&>(parameters);
+
+                vulkanParameters.vertexAttributeDivisorFeatures.vertexAttributeInstanceRateDivisor = VK_FALSE;
+                vulkanParameters.vertexAttributeDivisorFeatures.vertexAttributeInstanceRateZeroDivisor = VK_FALSE;
+
+                vulkanParameters.lineRasterizationFeatures.bresenhamLines = VK_FALSE;
+                vulkanParameters.lineRasterizationFeatures.rectangularLines = VK_FALSE;
+                vulkanParameters.lineRasterizationFeatures.smoothLines = VK_FALSE;
+                vulkanParameters.lineRasterizationFeatures.stippledBresenhamLines = VK_FALSE;
+                vulkanParameters.lineRasterizationFeatures.stippledRectangularLines = VK_FALSE;
+                vulkanParameters.lineRasterizationFeatures.stippledSmoothLines = VK_FALSE;
+
+                vulkanParameters.shaderObjectFeatures.shaderObject = VK_FALSE;
+
+                vulkanParameters.vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_FALSE;
+
+                vulkanParameters.dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
+
+                vulkanParameters.colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;
+
+                vulkanParameters.depthClipEnableFeatures.depthClipEnable = VK_TRUE;
+
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3DepthClipEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3LineStippleEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3LineRasterizationMode = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3SampleLocationsEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3SampleMask = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ColorBlendEquation = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ColorWriteMask = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3AlphaToCoverageEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3AlphaToOneEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3LogicOpEnable = VK_TRUE;
+                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ProvokingVertexMode = VK_TRUE;
+
+                vulkanParameters.features.samplerAnisotropy = VK_FALSE;
+                vulkanParameters.features.independentBlend = VK_FALSE;
+                vulkanParameters.features.depthBounds = VK_FALSE;
+                vulkanParameters.features.fillModeNonSolid = VK_FALSE;
+                vulkanParameters.features.alphaToOne = VK_FALSE;
+                vulkanParameters.features.logicOp = VK_FALSE;
+                vulkanParameters.features.wideLines = VK_FALSE;
+
+                vulkanParameters.features13.dynamicRendering = VK_TRUE;
+                vulkanParameters.features13.synchronization2 = VK_TRUE;
+
+                vulkanParameters.features2.features = vulkanParameters.features;
+            }
+        }
+        //--------------------------------------------------------------------------
+    }
+
+
     class TestWindowApplication : public WindowApplication
     {
     public:
@@ -109,6 +172,8 @@ namespace Kmplete
 
 TEST_CASE("Test window application", "[window_application][application][window][event]")
 {
+    Kmplete::Graphics::InitializeGraphicsParameters = Kmplete::Graphics::InitializeTestWindowAppGraphicsParameters;
+
     auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestWindowApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
 
     REQUIRE(application);
