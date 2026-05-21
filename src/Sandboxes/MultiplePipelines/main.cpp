@@ -22,50 +22,15 @@ namespace Kmplete
             {
                 auto& vulkanParameters = dynamic_cast<VulkanGraphicsParameters&>(parameters);
 
-                vulkanParameters.vertexAttributeDivisorFeatures.vertexAttributeInstanceRateDivisor = VK_FALSE;
-                vulkanParameters.vertexAttributeDivisorFeatures.vertexAttributeInstanceRateZeroDivisor = VK_FALSE;
-
                 vulkanParameters.lineRasterizationFeatures.bresenhamLines = VK_TRUE;
                 vulkanParameters.lineRasterizationFeatures.rectangularLines = VK_TRUE;
                 vulkanParameters.lineRasterizationFeatures.smoothLines = VK_TRUE;
                 vulkanParameters.lineRasterizationFeatures.stippledBresenhamLines = VK_TRUE;
                 vulkanParameters.lineRasterizationFeatures.stippledRectangularLines = VK_TRUE;
                 vulkanParameters.lineRasterizationFeatures.stippledSmoothLines = VK_TRUE;
-
-                vulkanParameters.shaderObjectFeatures.shaderObject = VK_FALSE;
-
-                vulkanParameters.vertexInputDynamicStateFeatures.vertexInputDynamicState = VK_FALSE;
-
-                vulkanParameters.dynamicStateFeatures2.extendedDynamicState2LogicOp = VK_TRUE;
-
-                vulkanParameters.colorWriteEnableFeatures.colorWriteEnable = VK_TRUE;
-
-                vulkanParameters.depthClipEnableFeatures.depthClipEnable = VK_TRUE;
-
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ColorBlendEnable = VK_TRUE;
                 vulkanParameters.dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3DepthClampEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3DepthClipEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3LineStippleEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3LineRasterizationMode = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3SampleLocationsEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3SampleMask = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3PolygonMode = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ColorBlendEquation = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ColorWriteMask = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3AlphaToCoverageEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3AlphaToOneEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3LogicOpEnable = VK_TRUE;
-                vulkanParameters.dynamicStateFeatures3.extendedDynamicState3ProvokingVertexMode = VK_TRUE;
-
-                vulkanParameters.features.samplerAnisotropy = VK_FALSE;
-                vulkanParameters.features.independentBlend = VK_FALSE;
-                vulkanParameters.features.depthBounds = VK_FALSE;
                 vulkanParameters.features.fillModeNonSolid = VK_TRUE;
-                vulkanParameters.features.alphaToOne = VK_FALSE;
-                vulkanParameters.features.logicOp = VK_FALSE;
                 vulkanParameters.features.wideLines = VK_TRUE;
-
                 vulkanParameters.features13.dynamicRendering = VK_TRUE;
                 vulkanParameters.features13.synchronization2 = VK_TRUE;
 
