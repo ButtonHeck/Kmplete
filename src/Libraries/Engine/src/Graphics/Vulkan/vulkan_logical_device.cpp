@@ -262,13 +262,13 @@ namespace Kmplete
         void VulkanLogicalDevice::_CreateLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
             VulkanGraphicsParameters parameters;
-            if (InitializeGraphicsParameters == nullptr)
+            if (ClientInitializeGraphicsParametersFn == nullptr)
             {
                 KMP_LOG_WARN("graphics parameters function pointer is not assigned");
             }
             else
             {
-                InitializeGraphicsParameters(parameters);
+                ClientInitializeGraphicsParametersFn(parameters);
             }
 
             const auto queueCreateInfos = _CreateQueueCreateInfos();

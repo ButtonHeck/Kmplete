@@ -89,7 +89,7 @@ namespace Kmplete
                 .resizable = true
             };
 
-            Graphics::InitializeGraphicsParameters = Graphics::InitializeTriangleGraphicsParameters;
+            Graphics::ClientInitializeGraphicsParametersFn = Graphics::InitializeTriangleGraphicsParameters;
 
             return CreateUPtr<TriangleApplication>(parameters);
         }

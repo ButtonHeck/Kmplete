@@ -172,7 +172,7 @@ namespace Kmplete
 
 TEST_CASE("Test window application", "[window_application][application][window][event]")
 {
-    Kmplete::Graphics::InitializeGraphicsParameters = Kmplete::Graphics::InitializeTestWindowAppGraphicsParameters;
+    Kmplete::Graphics::ClientInitializeGraphicsParametersFn = Kmplete::Graphics::InitializeTestWindowAppGraphicsParameters;
 
     auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestWindowApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
 

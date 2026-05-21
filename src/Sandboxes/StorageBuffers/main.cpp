@@ -89,7 +89,7 @@ namespace Kmplete
                 .resizable = true
             };
 
-            Graphics::InitializeGraphicsParameters = Graphics::InitializeStorageBuffersGraphicsParameters;
+            Graphics::ClientInitializeGraphicsParametersFn = Graphics::InitializeStorageBuffersGraphicsParameters;
 
             return CreateUPtr<StorageBuffersApplication>(parameters);
         }

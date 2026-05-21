@@ -89,7 +89,7 @@ namespace Kmplete
                 .resizable = true
             };
 
-            Graphics::InitializeGraphicsParameters = Graphics::InitializeMultiplePipelinesGraphicsParameters;
+            Graphics::ClientInitializeGraphicsParametersFn = Graphics::InitializeMultiplePipelinesGraphicsParameters;
 
             return CreateUPtr<MultiplePipelinesApplication>(parameters);
         }

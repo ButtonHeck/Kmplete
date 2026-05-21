@@ -89,7 +89,7 @@ namespace Kmplete
                 .resizable = true
             };
 
-            Graphics::InitializeGraphicsParameters = Graphics::InitializeEditorGraphicsParameters;
+            Graphics::ClientInitializeGraphicsParametersFn = Graphics::InitializeEditorGraphicsParameters;
 
             return CreateUPtr<EditorApplication>(parameters);
         }

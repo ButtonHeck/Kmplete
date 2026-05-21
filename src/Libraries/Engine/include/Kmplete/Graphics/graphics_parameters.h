@@ -23,6 +23,6 @@ namespace Kmplete
 
 
         //! Client application should assign this to the function for graphics parameters initialization
-        KMP_API void (*InitializeGraphicsParameters)(GraphicsParameters& parameters);
+        KMP_API void (*ClientInitializeGraphicsParametersFn)(GraphicsParameters& parameters);
     }
 }
