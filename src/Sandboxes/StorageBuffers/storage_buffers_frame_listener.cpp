@@ -20,7 +20,6 @@
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/named_bool.h"
-#include "Kmplete/Log/log.h"
 
 #include <numeric>
 
@@ -62,16 +61,15 @@ namespace Kmplete
         , _indexBuffer(nullptr)
         , _matricesStorageBuffers()
         , _colorsStorageBuffers()
-        , _device(VK_NULL_HANDLE)
         , _indexCount(0)
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnWindowResizeEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnMouseButtonPressedEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnMouseScrollEvent))
         , _matricesShaderData()
         , _colorsShaderData()
         , _dynamicAlignment(0ULL)
         , _colorRandomizingTimer(1000)
         , _camera(Graphics::Camera::Type::FirstPerson, 75.0f)
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnWindowResizeEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
     }
@@ -84,6 +82,22 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     void StorageBuffersFrameListener::_Initialize()
+    {
+        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
+
+        _InitializeCamera();
+        _InitializeBuffers(vulkanDevice, vulkanContext);
+        _InitializePipeline(vulkanDevice, vulkanContext);
+
+        std::iota(_colorsIndices.begin(), _colorsIndices.end(), 0);
+
+        _colorRandomizingTimer.Mark();
+    }
+    //--------------------------------------------------------------------------
+
+    void StorageBuffersFrameListener::_InitializeCamera()
     {
         _camera.SetMovementSpeed(0.025f);
         _camera.SetRotationSpeed(0.1f);
@@ -125,17 +139,11 @@ namespace Kmplete
             _camera.Rotate(Math::Vec3F(-rotationValue.y * _camera.GetRotationSpeed(), rotationValue.x * _camera.GetRotationSpeed(), 0.0f));
             return true;
         });
-
-        _InitializeCubes();
     }
     //--------------------------------------------------------------------------
 
-    void StorageBuffersFrameListener::_InitializeCubes()
+    void StorageBuffersFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
-        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
-        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
-        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        _device = vulkanDevice.GetVkDevice();
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& vulkanRenderer = vulkanDevice.GetRenderer();
         auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
@@ -153,7 +161,7 @@ namespace Kmplete
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
-        const Vector<UInt32> indices{ 
+        const Vector<UInt32> indices{
             0, 1, 2,  2, 3, 0,
             // Right face
             1, 5, 6,  6, 2, 1,
@@ -234,7 +242,11 @@ namespace Kmplete
             _colorsStorageBuffers[i]->CopyToMappedMemory(0, _colorsShaderData.color, ColorsInstancesCount * _dynamicAlignment);
             descriptorSetManager.SetStorageBufferDynamicDescriptor(DS_SID, 0, "per frame"_true, i, _colorsStorageBuffers[i].get()->GetVkBuffer(), _dynamicAlignment, 0, ColorsBindingIndex);
         }
+    }
+    //--------------------------------------------------------------------------
 
+    void StorageBuffersFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
@@ -247,7 +259,7 @@ namespace Kmplete
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
-        pipelineParams.AddDescriptorSetLayout(DSLayout);
+        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(DSLayout_SID));
         pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
         pipelineParams.SetPolygonMode(VK_Polygon_Fill);
         pipelineParams.SetCulling(VK_Cull_None, VK_FrontFace_CounterClockwise);
@@ -264,10 +276,6 @@ namespace Kmplete
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.AddGraphicsPipeline(Pipeline_SID, pipelineParams);
-
-        std::iota(_colorsIndices.begin(), _colorsIndices.end(), 0);
-
-        _colorRandomizingTimer.Mark();
     }
     //--------------------------------------------------------------------------
 
@@ -282,42 +290,6 @@ namespace Kmplete
         _matricesStorageBuffers.clear();
         _indexBuffer.reset();
         _vertexBuffer.reset();
-    }
-    //--------------------------------------------------------------------------
-
-    bool StorageBuffersFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
-    {
-        if (evt.GetWidth() > 0 && evt.GetHeight())
-        {
-            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
-        }
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool StorageBuffersFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool StorageBuffersFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
-    {
-        _camera.SetFOVDelta(evt.GetYOffset());
-
-        return true;
     }
     //--------------------------------------------------------------------------
 
@@ -368,6 +340,42 @@ namespace Kmplete
         }
 
         renderer.EndRendering();
+    }
+    //--------------------------------------------------------------------------
+
+    bool StorageBuffersFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    {
+        if (evt.GetWidth() > 0 && evt.GetHeight())
+        {
+            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        }
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool StorageBuffersFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    {
+        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
+        {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool StorageBuffersFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    {
+        _camera.SetFOVDelta(evt.GetYOffset());
+
+        return true;
     }
     //--------------------------------------------------------------------------
 }

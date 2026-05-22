@@ -19,9 +19,15 @@
 
 namespace Kmplete
 {
+    namespace Graphics
+    {
+        class VulkanLogicalDevice;
+        struct VulkanContext;
+    }
+
+
     class StorageBuffersFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(StorageBuffersFrameListener)
         KMP_DISABLE_COPY_MOVE(StorageBuffersFrameListener)
 
     public:
@@ -37,7 +43,9 @@ namespace Kmplete
 
     private:
         void _Initialize();
-        void _InitializeCubes();
+        void _InitializeCamera();
+        void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
+        void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _Finalize();
 
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
@@ -65,19 +73,17 @@ namespace Kmplete
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
         Vector<UPtr<Graphics::VulkanBuffer>> _matricesStorageBuffers;
         Vector<UPtr<Graphics::VulkanBuffer>> _colorsStorageBuffers;
-        VkDevice _device;
         UInt32 _indexCount;
-
-        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
-        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
-        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         MatricesShaderData _matricesShaderData;
         ColorShaderData _colorsShaderData;
         size_t _dynamicAlignment;
         Time::Timer _colorRandomizingTimer;
         Array<UInt32, ColorsInstancesCount> _colorsIndices;
-
         Graphics::PerspectiveCamera _camera;
+
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
+        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
     };
     //--------------------------------------------------------------------------
 }
