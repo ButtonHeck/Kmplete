@@ -42,7 +42,6 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _vertexBufferFixedColor(nullptr)
         , _vertexBufferBufferedColor(nullptr)
-        , _device(VK_NULL_HANDLE)
     {
         _Initialize();
     }
@@ -58,8 +57,14 @@ namespace Kmplete
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
-        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        _device = vulkanDevice.GetVkDevice();
+
+        _InitializeBuffers(vulkanDevice);
+        _InitializePipelines(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+    }
+    //--------------------------------------------------------------------------
+
+    void MultiplePipelinesFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
+    {
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& renderer = vulkanDevice.GetRenderer();
 
@@ -108,15 +113,17 @@ namespace Kmplete
         _vertexBufferBufferedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize }));
         _vertexBufferBufferedColor->AddLayout(bufferColorBufferLayout);
 
-        {
-            const auto copyCmd = renderer.CreateCommandBuffer();
-            copyCmd.Begin();
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferFixedColor.get(), 0, 0, fixedColorBufferSize);
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferBufferedColor.get(), fixedColorBufferSize, 0, bufferedColorBufferSize);
-            copyCmd.End();
-            vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
-        }
+        const auto copyCmd = renderer.CreateCommandBuffer();
+        copyCmd.Begin();
+        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferFixedColor.get(), 0, 0, fixedColorBufferSize);
+        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferBufferedColor.get(), fixedColorBufferSize, 0, bufferedColorBufferSize);
+        copyCmd.End();
+        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+    }
+    //--------------------------------------------------------------------------
 
+    void MultiplePipelinesFrameListener::_InitializePipelines(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
         const auto fixedColorVertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.vert.spv");
         const auto fixedColorFragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.frag.spv");
         const auto fixedColorVertexShaderModule = vulkanDevice.CreateShaderModule(fixedColorVertexShaderPath);
