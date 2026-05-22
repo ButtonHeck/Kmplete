@@ -47,6 +47,8 @@ namespace Kmplete
 
             io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
             io.IniFilename = _context->configName;
+
+            Stylize(implementationContext->baseScale);
         }
         //--------------------------------------------------------------------------
 

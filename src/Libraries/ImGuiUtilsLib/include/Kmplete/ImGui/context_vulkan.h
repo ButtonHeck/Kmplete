@@ -13,7 +13,7 @@ namespace Kmplete
         //TODO: comments
         struct ContextVulkan : public Context
         {
-            ContextVulkan(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, ImGui_ImplVulkan_InitInfo initInfo);
+            ContextVulkan(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, float baseScale, ImGui_ImplVulkan_InitInfo initInfo);
 
             ImGui_ImplVulkan_InitInfo initInfo;
         };

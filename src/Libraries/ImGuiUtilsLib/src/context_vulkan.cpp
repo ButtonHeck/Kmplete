@@ -5,8 +5,8 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        ContextVulkan::ContextVulkan(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, ImGui_ImplVulkan_InitInfo initInfo)
-            : Context(window, graphicsBackendType, dockingEnabled, viewportsEnabled)
+        ContextVulkan::ContextVulkan(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, float baseScale, ImGui_ImplVulkan_InitInfo initInfo)
+            : Context(window, graphicsBackendType, dockingEnabled, viewportsEnabled, baseScale)
             , initInfo(initInfo)
         {}
         //--------------------------------------------------------------------------

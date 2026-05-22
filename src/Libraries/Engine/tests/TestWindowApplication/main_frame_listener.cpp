@@ -14,6 +14,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Event/event_queue.h"
+#include "Kmplete/Base/named_bool.h"
 
 #include <imgui.h>
 
@@ -62,7 +63,7 @@ namespace Kmplete
 
     void MainFrameListener::Initialize()
     {
-        _InitializeImGui();
+        _InitializeImGui(_mainWindow.GetDPIScale());
 
         _inputManager->MapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
         _inputManager->MapInputToAction({ Input::Code::Key_S, Input::PressNoModsCondition }, "move_backward"_sid);
@@ -916,7 +917,7 @@ namespace Kmplete
         const auto scale = evt.GetScale();
 
         _imguiImpl.reset();
-        _InitializeImGui();
+        _InitializeImGui(scale);
 
         return true;
     }
@@ -934,7 +935,7 @@ namespace Kmplete
         return true;
     }
 
-    void MainFrameListener::_InitializeImGui()
+    void MainFrameListener::_InitializeImGui(float dpiScale)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -962,14 +963,13 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), true, true, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), "docking"_true, "viewport"_true, dpiScale, initInfo);
             context->configName = "TestWindowApplication_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
-        _imguiImpl->Stylize(_mainWindow.GetDPIScale());
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), dpiScale, 15);
     }
 
     void MainFrameListener::_RenderImGui()

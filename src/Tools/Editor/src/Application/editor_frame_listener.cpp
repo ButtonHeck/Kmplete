@@ -95,7 +95,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewport"_true, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewport"_true, dpiScale, initInfo);
             context->configName = "Editor_imgui.ini";
 
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
@@ -107,7 +107,6 @@ namespace Kmplete
         }
 
         _AddImGuiFonts(dpiScale);
-        _imguiImpl->Stylize(dpiScale);
     }
     //--------------------------------------------------------------------------
 
