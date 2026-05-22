@@ -12,9 +12,15 @@
 
 namespace Kmplete
 {
+    namespace Graphics
+    {
+        class VulkanLogicalDevice;
+        struct VulkanContext;
+    }
+
+
     class InstancedRenderingFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(InstancedRenderingFrameListener)
         KMP_DISABLE_COPY_MOVE(InstancedRenderingFrameListener)
 
     public:
@@ -25,6 +31,8 @@ namespace Kmplete
 
     private:
         void _Initialize();
+        void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
+        void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _Finalize();
 
     private:
@@ -36,7 +44,6 @@ namespace Kmplete
         UPtr<Graphics::VulkanVertexBuffer> _vertexBufferColorsInstanced;
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
         UInt32 _indexCount;
-        VkDevice _device;
     };
     //--------------------------------------------------------------------------
 }

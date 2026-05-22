@@ -43,7 +43,6 @@ namespace Kmplete
         , _vertexBufferColorsInstanced(nullptr)
         , _indexBuffer(nullptr)
         , _indexCount(0)
-        , _device(VK_NULL_HANDLE)
     {
         _Initialize();
     }
@@ -59,8 +58,14 @@ namespace Kmplete
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
-        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        _device = vulkanDevice.GetVkDevice();
+
+        _InitializeBuffers(vulkanDevice);
+        _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+    }
+    //--------------------------------------------------------------------------
+
+    void InstancedRenderingFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
+    {
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& renderer = vulkanDevice.GetRenderer();
 
@@ -137,17 +142,19 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        {
-            const auto copyCmd = renderer.CreateCommandBuffer();
-            copyCmd.Begin();
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferPosInstanced.get(), vertexBufferSize, 0, vertexInstancedBufferSize);
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferColorsInstanced.get(), vertexBufferSize + vertexInstancedBufferSize, 0, vertexColorsInstancedBufferSize);
-            renderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, 0, indexBufferSize);
-            copyCmd.End();
-            vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
-        }
+        const auto copyCmd = renderer.CreateCommandBuffer();
+        copyCmd.Begin();
+        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
+        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferPosInstanced.get(), vertexBufferSize, 0, vertexInstancedBufferSize);
+        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferColorsInstanced.get(), vertexBufferSize + vertexInstancedBufferSize, 0, vertexColorsInstancedBufferSize);
+        renderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, 0, indexBufferSize);
+        copyCmd.End();
+        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+    }
+    //--------------------------------------------------------------------------
 
+    void InstancedRenderingFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("instanced_rendering.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("instanced_rendering.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
@@ -175,7 +182,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferPosInstanced, VertexPositionInstancedIndex);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferColorsInstanced, VertexColorInstancedIndex);
-        pipelineParams.AddVertexInputBindingsDivisors({{ VertexColorInstancedIndex, 2 }});
+        pipelineParams.AddVertexInputBindingsDivisors({ { VertexColorInstancedIndex, 2 } });
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.AddGraphicsPipeline(Pipeline_SID, pipelineParams);
