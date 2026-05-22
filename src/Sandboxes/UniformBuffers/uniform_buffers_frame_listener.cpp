@@ -1,7 +1,6 @@
 #include "uniform_buffers_frame_listener.h"
 
 #include "Kmplete/Utils/function_utils.h"
-#include "Kmplete/Utils/memory_utils.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
@@ -62,7 +61,7 @@ namespace Kmplete
         , _uniformBuffersCommon()
         , _uniformBuffersInstanced()
         , _commonShaderData()
-        , _instanceShaderData()
+        , _instanceShaderData(nullptr)
         , _dynamicAlignment(0ULL)
         , _rotationsAngles()
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
@@ -166,7 +165,7 @@ namespace Kmplete
         }
 
         const auto instanceBufferSize = InstancesCount * _dynamicAlignment;
-        _instanceShaderData.model = (Math::Mat4*)Utils::AlignedAlloc(instanceBufferSize, _dynamicAlignment);
+        _instanceShaderData.reset(new InstanceShaderData(instanceBufferSize, _dynamicAlignment));
 
         _rotationsAngles.resize(InstancesCount, 0.0f);
 
@@ -224,11 +223,7 @@ namespace Kmplete
 
     void UniformBuffersFrameListener::_Finalize()
     {
-        if (_instanceShaderData.model)
-        {
-            Utils::AlignedFree(_instanceShaderData.model);
-        }
-
+        _instanceShaderData.reset();
         _uniformBuffersInstanced.clear();
         _uniformBuffersCommon.clear();
         _vertexBuffer.reset();
@@ -265,13 +260,13 @@ namespace Kmplete
             for (UInt32 c = 0; c < GridDimension; c++)
             {
                 const auto index = r * GridDimension + c;
-                auto* modelMatrix = (Math::Mat4*)((UInt64(_instanceShaderData.model) + (index * _dynamicAlignment)));
+                auto* modelMatrix = (Math::Mat4*)((UInt64(_instanceShaderData->model) + (index * _dynamicAlignment)));
                 const auto position = Math::Vec3F(c * 2.5f - 5.0f, r * 2.5 - 5.0f, 0.0);
                 *modelMatrix = glm::translate(Math::Mat4(1.0f), position);
                 *modelMatrix = glm::rotate(*modelMatrix, _rotationsAngles[index], glm::vec3(0.0f, 0.0f, 1.0f));
             }
         }
-        _uniformBuffersInstanced[currentBufferIndex]->CopyToMappedMemory(0, _instanceShaderData.model, InstancesCount * _dynamicAlignment);
+        _uniformBuffersInstanced[currentBufferIndex]->CopyToMappedMemory(0, _instanceShaderData->model, InstancesCount * _dynamicAlignment);
 
         renderer.SetViewport(viewport);
         renderer.SetScissor(drawArea);

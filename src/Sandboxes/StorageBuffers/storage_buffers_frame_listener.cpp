@@ -1,7 +1,6 @@
 #include "storage_buffers_frame_listener.h"
 
 #include "Kmplete/Utils/function_utils.h"
-#include "Kmplete/Utils/memory_utils.h"
 #include "Kmplete/Core/rng.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
@@ -63,7 +62,7 @@ namespace Kmplete
         , _colorsStorageBuffers()
         , _indexCount(0)
         , _matricesShaderData()
-        , _colorsShaderData()
+        , _colorsShaderData(nullptr)
         , _dynamicAlignment(0ULL)
         , _colorRandomizingTimer(1000)
         , _camera(Graphics::Camera::Type::FirstPerson, 75.0f)
@@ -213,7 +212,7 @@ namespace Kmplete
         }
 
         const auto colorsInstanceBufferSize = ColorsInstancesCount * _dynamicAlignment;
-        _colorsShaderData.color = (Math::Vec4F*)Utils::AlignedAlloc(colorsInstanceBufferSize, _dynamicAlignment);
+        _colorsShaderData.reset(new ColorShaderData(colorsInstanceBufferSize, _dynamicAlignment));
 
         VkDescriptorSetLayoutBinding matricesLayoutBinding{ MatricesBindingIndex, VK_DescriptorType_StorageBuffer, 1, VK_ShaderStage_Vertex };
         VkDescriptorSetLayoutBinding colorsLayoutBinding{ ColorsBindingIndex, VK_DescriptorType_StorageBufferDynamic, 1, VK_ShaderStage_Vertex };
@@ -229,7 +228,7 @@ namespace Kmplete
         }
         for (auto c = 0; c < ColorsInstancesCount; c++)
         {
-            auto* color = (Math::Vec4F*)((UInt64(_colorsShaderData.color) + (c * _dynamicAlignment)));
+            auto* color = (Math::Vec4F*)((UInt64(_colorsShaderData->color) + (c * _dynamicAlignment)));
             color->r = colorRng.Generate();
             color->g = colorRng.Generate();
             color->b = colorRng.Generate();
@@ -244,7 +243,7 @@ namespace Kmplete
 
             _colorsStorageBuffers.emplace_back(vulkanBufferCreator.CreateStorageBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, colorsInstanceBufferSize }));
             _colorsStorageBuffers[i]->Map();
-            _colorsStorageBuffers[i]->CopyToMappedMemory(0, _colorsShaderData.color, ColorsInstancesCount * _dynamicAlignment);
+            _colorsStorageBuffers[i]->CopyToMappedMemory(0, _colorsShaderData->color, ColorsInstancesCount * _dynamicAlignment);
             descriptorSetManager.SetStorageBufferDynamicDescriptor(DS_SID, 0, "per frame"_true, i, _colorsStorageBuffers[i].get()->GetVkBuffer(), _dynamicAlignment, 0, ColorsBindingIndex);
         }
     }
@@ -286,11 +285,7 @@ namespace Kmplete
 
     void StorageBuffersFrameListener::_Finalize()
     {
-        if (_colorsShaderData.color)
-        {
-            Utils::AlignedFree(_colorsShaderData.color);
-        }
-
+        _colorsShaderData.reset();
         _colorsStorageBuffers.clear();
         _matricesStorageBuffers.clear();
         _indexBuffer.reset();

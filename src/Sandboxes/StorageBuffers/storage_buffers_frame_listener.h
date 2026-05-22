@@ -13,6 +13,7 @@
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Input/input_manager.h"
 #include "Kmplete/Time/timer.h"
+#include "Kmplete/Utils/memory_utils.h"
 
 #include <vulkan/vulkan.h>
 
@@ -62,6 +63,15 @@ namespace Kmplete
         };
         struct ColorShaderData
         {
+            ColorShaderData(std::size_t size, std::size_t alignment)
+                : color((Math::Vec4F*)Utils::AlignedAlloc(size, alignment))
+            {}
+
+            ~ColorShaderData()
+            {
+                Utils::AlignedFree(color);
+            }
+
             Math::Vec4F* color = nullptr;
         };
 
@@ -76,7 +86,7 @@ namespace Kmplete
         Vector<UPtr<Graphics::VulkanBuffer>> _colorsStorageBuffers;
         UInt32 _indexCount;
         MatricesShaderData _matricesShaderData;
-        ColorShaderData _colorsShaderData;
+        UPtr<ColorShaderData> _colorsShaderData;
         size_t _dynamicAlignment;
         Time::Timer _colorRandomizingTimer;
         Array<UInt32, ColorsInstancesCount> _colorsIndices;

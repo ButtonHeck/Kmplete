@@ -12,6 +12,7 @@
 #include "Kmplete/Event/window_events.h"
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Input/input_manager.h"
+#include "Kmplete/Utils/memory_utils.h"
 
 #include <vulkan/vulkan.h>
 
@@ -56,6 +57,15 @@ namespace Kmplete
         };
         struct InstanceShaderData
         {
+            InstanceShaderData(std::size_t size, std::size_t alignment)
+                : model((Math::Mat4*)Utils::AlignedAlloc(size, alignment))
+            {}
+
+            ~InstanceShaderData()
+            {
+                Utils::AlignedFree(model);
+            }
+
             Math::Mat4* model = nullptr;
         };
 
@@ -68,7 +78,7 @@ namespace Kmplete
         Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffersCommon;
         Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffersInstanced;
         CommonShaderData _commonShaderData;
-        InstanceShaderData _instanceShaderData;
+        UPtr<InstanceShaderData> _instanceShaderData;
         size_t _dynamicAlignment;
         Vector<float> _rotationsAngles;
         Graphics::OrthographicCamera _camera;
