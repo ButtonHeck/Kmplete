@@ -4,14 +4,12 @@
 
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Application/window_application.h"
-#include "Kmplete/Log/log_class_macro.h"
 
 
 namespace Kmplete
 {
     class TriangleApplication : public WindowApplication
     {
-        KMP_LOG_CLASSNAME(TriangleApplication)
         KMP_DISABLE_COPY_MOVE(TriangleApplication)
 
     public:

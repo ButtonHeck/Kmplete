@@ -53,10 +53,6 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-#define TRIANGLE_VULKAN_DYNAMIC_RENDERING true
-#define USE_ORTHOGRAPHIC_CAMERA false
-
-
     TriangleFrameListener::TriangleFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
@@ -67,14 +63,8 @@ namespace Kmplete
         , _uniformBuffers()
         , _matrixUniformBuffers()
         , _indexCount(0)
-        , _device(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
-        , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMultisamplingChangeEvent))
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowResizeEvent))
-        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowContentScaleEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseButtonPressedEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
         , _shaderData(ShaderData{ .colorMultiplier = 1.0f })
 #if USE_ORTHOGRAPHIC_CAMERA
@@ -82,6 +72,11 @@ namespace Kmplete
 #else
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson, 75.0f)
 #endif
+        , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMultisamplingChangeEvent))
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowResizeEvent))
+        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowContentScaleEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
     }
@@ -94,6 +89,18 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     void TriangleFrameListener::_Initialize()
+    {
+        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+
+        _InitializeCamera();
+        _InitializeTriangle(vulkanDevice);
+        _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+        _InitializeImGui(_mainWindow.GetDPIScale());
+    }
+    //--------------------------------------------------------------------------
+
+    void TriangleFrameListener::_InitializeCamera()
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
@@ -157,18 +164,11 @@ namespace Kmplete
             return true;
         });
 #endif
-
-        _InitializeTriangle();
-        _InitializeImGui(_mainWindow.GetDPIScale());
     }
     //--------------------------------------------------------------------------
 
-    void TriangleFrameListener::_InitializeTriangle()
+    void TriangleFrameListener::_InitializeTriangle(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
-        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
-        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
-        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        _device = vulkanDevice.GetVkDevice();
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& renderer = vulkanDevice.GetRenderer();
         auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
@@ -250,22 +250,25 @@ namespace Kmplete
             _matrixUniformBuffers[i]->Map();
             descriptorSetManager.SetUniformBufferDescriptor(MatricesDS_SID, 0, "per frame"_true, i, *_matrixUniformBuffers[i].get(), _matrixUniformBuffers[i]->GetSize(), 0, MatricesBindingIndex);
         }
+    }
+    //--------------------------------------------------------------------------
 
-        auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
-        pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipelineParams.AddDescriptorSetLayout(matricesLayout);
-        pipelineParams.AddDescriptorSetLayout(colorMultiplierLayout);
-
+    void TriangleFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
-
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
         const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
+
+        auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
+        pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID));
+        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(ColorMultiplierDSLayout_SID));
         pipelineParams.AddShaderStages(shaderStages);
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
@@ -399,71 +402,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void TriangleFrameListener::_SetMultisampling(UInt32 samples)
-    {
-        Events::QueueEvent(CreateUPtr<Events::MultisamplingChangeEvent>(samples));
-    }
-    //--------------------------------------------------------------------------
-
-    bool TriangleFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
-    {
-        _graphicsBackend.SetMultisampling(evt.msaaSamples);
-        _imguiImpl.reset();
-        _InitializeImGui(_mainWindow.GetDPIScale());
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TriangleFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
-    {
-        if (evt.GetWidth() > 0 && evt.GetHeight())
-        {
-            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
-        }
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TriangleFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
-    {
-        const auto scale = event.GetScale();
-
-        _imguiImpl.reset();
-        _InitializeImGui(scale);
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TriangleFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TriangleFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
-    {
-#if USE_ORTHOGRAPHIC_CAMERA
-        _camera.SetScaleDelta(evt.GetYOffset());
-#else
-        _camera.SetFOVDelta(evt.GetYOffset());
-#endif
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
     void TriangleFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
@@ -571,6 +509,11 @@ namespace Kmplete
 
     void TriangleFrameListener::_RenderImGui()
     {
+        auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
+        auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+        const auto& renderer = vulkanLogicalDevice.GetRenderer();
+
         _imguiImpl->NewFrame();
 
         static constexpr auto applicationWindowFlags =
@@ -600,17 +543,77 @@ namespace Kmplete
 
         ImGui::End();
 
-        auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
-        auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
-        auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
-        const auto& renderer = vulkanLogicalDevice.GetRenderer();
-
         renderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() }, "clear previous"_false);
         vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
         vulkanImGuiUtils->Render();
         renderer.EndRendering();
 
         ImGui::EndFrame();
+    }
+    //--------------------------------------------------------------------------
+
+    void TriangleFrameListener::_SetMultisampling(UInt32 samples)
+    {
+        Events::QueueEvent(CreateUPtr<Events::MultisamplingChangeEvent>(samples));
+    }
+    //--------------------------------------------------------------------------
+
+    bool TriangleFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
+    {
+        _graphicsBackend.SetMultisampling(evt.msaaSamples);
+        _imguiImpl.reset();
+        _InitializeImGui(_mainWindow.GetDPIScale());
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TriangleFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    {
+        if (evt.GetWidth() > 0 && evt.GetHeight())
+        {
+            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        }
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TriangleFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
+    {
+        const auto scale = event.GetScale();
+
+        _imguiImpl.reset();
+        _InitializeImGui(scale);
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TriangleFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    {
+        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
+        {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TriangleFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    {
+#if USE_ORTHOGRAPHIC_CAMERA
+        _camera.SetScaleDelta(evt.GetYOffset());
+#else
+        _camera.SetFOVDelta(evt.GetYOffset());
+#endif
+        return true;
     }
     //--------------------------------------------------------------------------
 }

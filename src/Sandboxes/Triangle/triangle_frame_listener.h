@@ -26,12 +26,18 @@ namespace Kmplete
         class AssetsManager;
     }
 
+    namespace Graphics
+    {
+        class VulkanLogicalDevice;
+        struct VulkanContext;
+    }
 
+
+#define TRIANGLE_VULKAN_DYNAMIC_RENDERING true
 #define USE_ORTHOGRAPHIC_CAMERA false
 
     class TriangleFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(TriangleFrameListener)
         KMP_DISABLE_COPY_MOVE(TriangleFrameListener)
 
     public:
@@ -43,7 +49,9 @@ namespace Kmplete
 
     private:
         void _Initialize();
-        void _InitializeTriangle();
+        void _InitializeCamera();
+        void _InitializeTriangle(Graphics::VulkanLogicalDevice& vulkanDevice);
+        void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _InitializeImGui(float dpiScale);
         void _Finalize();
 
@@ -80,16 +88,8 @@ namespace Kmplete
         Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffers;
         Vector<UPtr<Graphics::VulkanBuffer>> _matrixUniformBuffers;
         UInt32 _indexCount;
-        VkDevice _device;
-
         Assets::AssetsManager& _assetsManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
-
-        Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
-        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
-        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
-        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
-        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         MatrixShaderData _matrixShaderData;
         ShaderData _shaderData;
 
@@ -98,6 +98,12 @@ namespace Kmplete
 #else
         Graphics::PerspectiveCamera _camera;
 #endif
+
+        Events::EventHandlerGuard<Events::MultisamplingChangeEvent> _multisamplingChangeHandler;
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
+        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
     };
     //--------------------------------------------------------------------------
 }
