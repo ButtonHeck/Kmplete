@@ -23,7 +23,6 @@
 #include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Assets/assets_manager.h"
-#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -60,9 +59,6 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-#define USE_ORTHOGRAPHIC_CAMERA false
-
-
     TextureFrameListener::TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
@@ -72,19 +68,18 @@ namespace Kmplete
         , _indexBuffer(nullptr)
         , _uniformBuffers()
         , _indexCount(0)
-        , _device(VK_NULL_HANDLE)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
-        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowResizeEvent))
-        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowContentScaleEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseButtonPressedEvent))
-        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseScrollEvent))
         , _matrixShaderData()
 #if USE_ORTHOGRAPHIC_CAMERA
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
 #else
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson, 75.0f)
 #endif
+        , _windowResizeHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowResizeEvent))
+        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowContentScaleEvent))
+        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseButtonPressedEvent))
+        , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
     }
@@ -97,6 +92,18 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
     void TextureFrameListener::_Initialize()
+    {
+        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+
+        _InitializeCamera();
+        _InitializeBuffers(vulkanDevice);
+        _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+        _InitializeImGui(_mainWindow.GetDPIScale());
+    }
+    //--------------------------------------------------------------------------
+
+    void TextureFrameListener::_InitializeCamera()
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
@@ -160,18 +167,11 @@ namespace Kmplete
             return true;
         });
 #endif
-
-        _InitializeTextureQuad();
-        _InitializeImGui(_mainWindow.GetDPIScale());
     }
     //--------------------------------------------------------------------------
 
-    void TextureFrameListener::_InitializeTextureQuad()
+    void TextureFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
-        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
-        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
-        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
-        _device = vulkanDevice.GetVkDevice();
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& vulkanRenderer = vulkanDevice.GetRenderer();
         auto& textureAssetManager = _assetsManager.GetTextureAssetManager();
@@ -235,22 +235,25 @@ namespace Kmplete
             );
             descriptorSetManager.SetSamplerDescriptor(SamplerDS_SID, 0, "per frame"_true, i, samplersStorage.GetSampler(Graphics::SamplerDefaultNearestSid), SamplerBindingIndex);
         }
+    }
+    //--------------------------------------------------------------------------
 
-        auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
-        pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipelineParams.AddDescriptorSetLayout(matrixAndTextureLayout);
-        pipelineParams.AddDescriptorSetLayout(samplerLayout);
-
+    void TextureFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.frag.spv");
-
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
         const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
+
+        auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
+        pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesAndTextureDSLayout_SID));
+        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(SamplerDSLayout_SID));
         pipelineParams.AddShaderStages(shaderStages);
 
         pipelineParams.AddDynamicState(VK_Dynamic_DepthTestEnable);       //renderer.SetDepthTestEnabled(...)
@@ -357,56 +360,6 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
-    {
-        if (evt.GetWidth() > 0 && evt.GetHeight())
-        {
-            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
-        }
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TextureFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
-    {
-        const auto scale = event.GetScale();
-
-        _imguiImpl.reset();
-        _InitializeImGui(scale);
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TextureFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TextureFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
-    {
-#if USE_ORTHOGRAPHIC_CAMERA
-        _camera.SetScaleDelta(evt.GetYOffset());
-#else
-        _camera.SetFOVDelta(evt.GetYOffset());
-#endif
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
     void TextureFrameListener::Update(float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified)
     {
         _camera.Update(frameTimestep);
@@ -506,6 +459,8 @@ namespace Kmplete
         auto& textureAssetManager = _assetsManager.GetTextureAssetManager();
         const auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
         const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
+        auto commandBuffer = vulkanDevice.GetRenderer().GetCurrentCommandBuffer();
+        const auto& renderer = vulkanDevice.GetRenderer();
 
         static constexpr auto applicationWindowFlags =
             ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
@@ -556,9 +511,7 @@ namespace Kmplete
 
         ImGui::End();
 
-        auto commandBuffer = vulkanDevice.GetRenderer().GetCurrentCommandBuffer();
         auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
-        const auto& renderer = vulkanDevice.GetRenderer();
 
         renderer.BeginRendering({ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() }, "clear previous"_false);
         vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
@@ -566,6 +519,56 @@ namespace Kmplete
         renderer.EndRendering();
 
         ImGui::EndFrame();
+    }
+    //--------------------------------------------------------------------------
+
+    bool TextureFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
+    {
+        if (evt.GetWidth() > 0 && evt.GetHeight())
+        {
+            _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
+        }
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TextureFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
+    {
+        const auto scale = event.GetScale();
+
+        _imguiImpl.reset();
+        _InitializeImGui(scale);
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TextureFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
+    {
+        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
+        {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+        }
+
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool TextureFrameListener::_OnMouseScrollEvent(Events::MouseScrollEvent& evt)
+    {
+#if USE_ORTHOGRAPHIC_CAMERA
+        _camera.SetScaleDelta(evt.GetYOffset());
+#else
+        _camera.SetFOVDelta(evt.GetYOffset());
+#endif
+        return true;
     }
     //--------------------------------------------------------------------------
 }

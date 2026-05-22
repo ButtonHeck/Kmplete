@@ -25,12 +25,17 @@ namespace Kmplete
         class AssetsManager;
     }
 
+    namespace Graphics
+    {
+        class VulkanLogicalDevice;
+        struct VulkanContext;
+    }
+
 
 #define USE_ORTHOGRAPHIC_CAMERA false
 
     class TextureFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(TextureFrameListener)
         KMP_DISABLE_COPY_MOVE(TextureFrameListener)
 
     public:
@@ -42,7 +47,9 @@ namespace Kmplete
 
     private:
         void _Initialize();
-        void _InitializeTextureQuad();
+        void _InitializeCamera();
+        void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
+        void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _InitializeImGui(float dpiScale);
         void _Finalize();
 
@@ -73,15 +80,8 @@ namespace Kmplete
         UPtr<Graphics::VulkanBuffer> _indexBuffer;
         Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffers;
         UInt32 _indexCount;
-        VkDevice _device;
-
         Assets::AssetsManager& _assetsManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
-
-        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
-        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
-        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
-        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         MatrixShaderData _matrixShaderData;
 
 #if USE_ORTHOGRAPHIC_CAMERA
@@ -89,6 +89,11 @@ namespace Kmplete
 #else
         Graphics::PerspectiveCamera _camera;
 #endif
+
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
+        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
     };
     //--------------------------------------------------------------------------
 }
