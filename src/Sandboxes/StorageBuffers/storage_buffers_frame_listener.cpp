@@ -88,7 +88,8 @@ namespace Kmplete
         const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
 
         _InitializeCamera();
-        _InitializeBuffers(vulkanDevice, vulkanContext);
+        _InitializeBuffers(vulkanDevice);
+        _InitializeStorageBuffers(vulkanDevice, vulkanContext);
         _InitializePipeline(vulkanDevice, vulkanContext);
 
         std::iota(_colorsIndices.begin(), _colorsIndices.end(), 0);
@@ -142,11 +143,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void StorageBuffersFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    void StorageBuffersFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& vulkanRenderer = vulkanDevice.GetRenderer();
-        auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
 
         const Vector<Vertex> vertices{
             { { -0.5f, -0.5f,  0.5f } }, // 0: Bottom-left
@@ -191,14 +191,19 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        {
-            const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
-            copyCmd.Begin();
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
-            copyCmd.End();
-            vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
-        }
+        const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
+        copyCmd.Begin();
+        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
+        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
+        copyCmd.End();
+        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+    }
+    //--------------------------------------------------------------------------
+
+    void StorageBuffersFrameListener::_InitializeStorageBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
+        const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
+        auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
 
         const auto minUboAlignment = vulkanContext.deviceProperties.limits.minStorageBufferOffsetAlignment;
         _dynamicAlignment = sizeof(Math::Vec4F);

@@ -50,7 +50,8 @@ namespace Kmplete
     private:
         void _Initialize();
         void _InitializeCamera();
-        void _InitializeTriangle(Graphics::VulkanLogicalDevice& vulkanDevice);
+        void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
+        void _InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
         void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _InitializeImGui(float dpiScale);
         void _Finalize();

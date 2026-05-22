@@ -98,6 +98,7 @@ namespace Kmplete
 
         _InitializeCamera();
         _InitializeBuffers(vulkanDevice);
+        _InitializeUniformBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
         _InitializeImGui(_mainWindow.GetDPIScale());
     }
@@ -174,9 +175,6 @@ namespace Kmplete
     {
         const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
         const auto& vulkanRenderer = vulkanDevice.GetRenderer();
-        auto& textureAssetManager = _assetsManager.GetTextureAssetManager();
-        auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
-        const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
 
         const Vector<Vertex> vertices{
             { {  1.0f,  1.0f, 0.0f }, { 1.0f, 0.0f } },
@@ -205,14 +203,21 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        {
-            const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
-            copyCmd.Begin();
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-            vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
-            copyCmd.End();
-            vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
-        }
+        const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
+        copyCmd.Begin();
+        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
+        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
+        copyCmd.End();
+        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+    }
+    //--------------------------------------------------------------------------
+
+    void TextureFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
+    {
+        const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
+        auto& textureAssetManager = _assetsManager.GetTextureAssetManager();
+        auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
+        const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
 
         VkDescriptorSetLayoutBinding matricesLayoutBinding{ MatricesBindingIndex, VK_DescriptorType_UniformBuffer, 1, VK_ShaderStage_Vertex };
         VkDescriptorSetLayoutBinding textureLayoutBinding{ TextureBindingIndex, VK_DescriptorType_SampledImage, 1, VK_ShaderStage_Fragment };
@@ -452,8 +457,6 @@ namespace Kmplete
 
     void TextureFrameListener::_RenderImGui()
     {
-        _imguiImpl->NewFrame();
-
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
         auto& textureAssetManager = _assetsManager.GetTextureAssetManager();
@@ -461,6 +464,8 @@ namespace Kmplete
         const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
         auto commandBuffer = vulkanDevice.GetRenderer().GetCurrentCommandBuffer();
         const auto& renderer = vulkanDevice.GetRenderer();
+
+        _imguiImpl->NewFrame();
 
         static constexpr auto applicationWindowFlags =
             ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
