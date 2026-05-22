@@ -18,9 +18,15 @@
 
 namespace Kmplete
 {
+    namespace Graphics
+    {
+        class VulkanLogicalDevice;
+        struct VulkanContext;
+    }
+
+
     class UniformBuffersFrameListener : public FrameListener
     {
-        KMP_LOG_CLASSNAME(UniformBuffersFrameListener)
         KMP_DISABLE_COPY_MOVE(UniformBuffersFrameListener)
 
     public:
@@ -32,7 +38,10 @@ namespace Kmplete
 
     private:
         void _Initialize();
-        void _InitializeInstances();
+        void _InitializeCamera();
+        void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
+        void _InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
+        void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _Finalize();
 
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
@@ -58,17 +67,15 @@ namespace Kmplete
         UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
         Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffersCommon;
         Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffersInstanced;
-        VkDevice _device;
-
-        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
-        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
-        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
         CommonShaderData _commonShaderData;
         InstanceShaderData _instanceShaderData;
         size_t _dynamicAlignment;
         Vector<float> _rotationsAngles;
-
         Graphics::OrthographicCamera _camera;
+
+        Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
+        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
+        Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
     };
     //--------------------------------------------------------------------------
 }
