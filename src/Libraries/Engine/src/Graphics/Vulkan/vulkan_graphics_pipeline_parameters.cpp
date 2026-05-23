@@ -2,6 +2,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
@@ -343,7 +344,7 @@ namespace Kmplete
             _rasterizationStateCreateInfo.polygonMode = VK_Polygon_Fill;
             _rasterizationStateCreateInfo.cullMode = VK_Cull_Back;
             _rasterizationStateCreateInfo.frontFace = VK_FrontFace_CounterClockwise;
-            _rasterizationStateCreateInfo.rasterizerDiscardEnable = VK_TRUE;
+            _rasterizationStateCreateInfo.rasterizerDiscardEnable = VK_FALSE;
             _rasterizationStateCreateInfo.lineWidth = 1.0f;
             _rasterizationStateCreateInfo.depthBiasEnable = VK_FALSE;
             _rasterizationStateCreateInfo.depthBiasConstantFactor = 0.0f;
@@ -370,10 +371,8 @@ namespace Kmplete
             _depthStencilStateCreateInfo.minDepthBounds = 0.0f;
             _depthStencilStateCreateInfo.maxDepthBounds = 1.0f;
             _depthStencilStateCreateInfo.stencilTestEnable = VK_FALSE;
-            _depthStencilStateCreateInfo.back.failOp = VK_Stencil_Keep;
-            _depthStencilStateCreateInfo.back.passOp = VK_Stencil_Keep;
-            _depthStencilStateCreateInfo.back.compareOp = VK_Compare_Always;
-            _depthStencilStateCreateInfo.front = _depthStencilStateCreateInfo.back;
+            _depthStencilStateCreateInfo.back = VKPresets::StencilOpState_Keep_Always;
+            _depthStencilStateCreateInfo.front = VKPresets::StencilOpState_Keep_Always;
 
             _multisamplingStateCreateInfo.rasterizationSamples = VK_SampleCount_1;
             _multisamplingStateCreateInfo.sampleShadingEnable = VK_FALSE;

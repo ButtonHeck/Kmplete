@@ -44,7 +44,7 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
-            static constexpr VkStencilOpState StencilOpState_Disabled{
+            static constexpr VkStencilOpState StencilOpState_Keep_Always{
                 .failOp = VK_Stencil_Keep,
                 .passOp = VK_Stencil_Keep,
                 .compareOp = VK_Compare_Always
