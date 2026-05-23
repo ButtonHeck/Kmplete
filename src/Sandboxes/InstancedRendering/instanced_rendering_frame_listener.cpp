@@ -167,17 +167,6 @@ namespace Kmplete
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
-        pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
-        pipelineParams.SetPolygonMode(VK_Polygon_Fill);
-        pipelineParams.SetCulling(VK_Cull_Back, VK_FrontFace_CounterClockwise);
-        pipelineParams.SetRasterizerDiscard(false);
-        pipelineParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
-        pipelineParams.SetDepthTest(true);
-        pipelineParams.SetDepthWrite(true);
-        pipelineParams.SetDepthComparison(VK_Compare_LessOrEqual);
-        pipelineParams.SetDepthBoundsTest(false);
-        pipelineParams.SetStencilTest(true);
-        pipelineParams.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferPosInstanced, VertexPositionInstancedIndex);

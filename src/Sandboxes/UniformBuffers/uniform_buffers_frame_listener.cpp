@@ -66,7 +66,6 @@ namespace Kmplete
         , _rotationsAngles()
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(UniformBuffersFrameListener::_OnWindowResizeEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(UniformBuffersFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(UniformBuffersFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
@@ -202,17 +201,6 @@ namespace Kmplete
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID));
-        pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
-        pipelineParams.SetPolygonMode(VK_Polygon_Fill);
-        pipelineParams.SetCulling(VK_Cull_Back, VK_FrontFace_CounterClockwise);
-        pipelineParams.SetRasterizerDiscard(false);
-        pipelineParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
-        pipelineParams.SetDepthTest(true);
-        pipelineParams.SetDepthWrite(true);
-        pipelineParams.SetDepthComparison(VK_Compare_LessOrEqual);
-        pipelineParams.SetDepthBoundsTest(false);
-        pipelineParams.SetStencilTest(true);
-        pipelineParams.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
@@ -294,24 +282,6 @@ namespace Kmplete
         {
             _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
         }
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool UniformBuffersFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
-
         return true;
     }
     //--------------------------------------------------------------------------

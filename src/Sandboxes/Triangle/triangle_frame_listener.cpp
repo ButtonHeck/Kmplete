@@ -277,18 +277,6 @@ namespace Kmplete
         pipelineParams.AddShaderStages(shaderStages);
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
-        pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
-        pipelineParams.SetPolygonMode(VK_Polygon_Fill);
-        pipelineParams.SetCulling(VK_Cull_Back, VK_FrontFace_CounterClockwise);
-        pipelineParams.SetDepthClamping(true);
-        pipelineParams.SetRasterizerDiscard(false);
-        pipelineParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
-        pipelineParams.SetDepthTest(true);
-        pipelineParams.SetDepthWrite(true);
-        pipelineParams.SetDepthComparison(VK_Compare_LessOrEqual);
-        pipelineParams.SetDepthBoundsTest(false);
-        pipelineParams.SetStencilTest(true);
-        pipelineParams.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
         pipelineParams.AddDynamicState(VK_Dynamic_Viewport);
         pipelineParams.AddDynamicState(VK_Dynamic_Scissor);

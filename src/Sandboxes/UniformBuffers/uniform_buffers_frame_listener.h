@@ -46,7 +46,6 @@ namespace Kmplete
         void _Finalize();
 
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
-        bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
         bool _OnMouseScrollEvent(Events::MouseScrollEvent& evt);
 
     private:
@@ -84,7 +83,6 @@ namespace Kmplete
         Graphics::OrthographicCamera _camera;
 
         Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
-        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
         Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
     };
     //--------------------------------------------------------------------------

@@ -145,17 +145,6 @@ namespace Kmplete
         auto pipelineFixedColorFillParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineFixedColorFillParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
-        pipelineFixedColorFillParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
-        pipelineFixedColorFillParams.SetPolygonMode(VK_Polygon_Fill);
-        pipelineFixedColorFillParams.SetCulling(VK_Cull_Back, VK_FrontFace_CounterClockwise);
-        pipelineFixedColorFillParams.SetRasterizerDiscard(false);
-        pipelineFixedColorFillParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
-        pipelineFixedColorFillParams.SetDepthTest(true);
-        pipelineFixedColorFillParams.SetDepthWrite(true);
-        pipelineFixedColorFillParams.SetDepthComparison(VK_Compare_LessOrEqual);
-        pipelineFixedColorFillParams.SetDepthBoundsTest(false);
-        pipelineFixedColorFillParams.SetStencilTest(true);
-        pipelineFixedColorFillParams.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipelineFixedColorFillParams.AddShaderStages(fixedColorShaderStages);
         pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferFixedColor, 0);
         pipelineFixedColorFillParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });

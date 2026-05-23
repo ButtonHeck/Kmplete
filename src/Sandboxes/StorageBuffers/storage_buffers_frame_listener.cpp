@@ -264,17 +264,7 @@ namespace Kmplete
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(DSLayout_SID));
-        pipelineParams.SetInputAssembly(VK_Primitive_TriangleList, "primitive restart"_false);
-        pipelineParams.SetPolygonMode(VK_Polygon_Fill);
         pipelineParams.SetCulling(VK_Cull_None, VK_FrontFace_CounterClockwise);
-        pipelineParams.SetRasterizerDiscard(false);
-        pipelineParams.SetDepthBiasParameters("bias enabled"_false, 0.0f, 0.0f, 0.0f);
-        pipelineParams.SetDepthTest(true);
-        pipelineParams.SetDepthWrite(true);
-        pipelineParams.SetDepthComparison(VK_Compare_LessOrEqual);
-        pipelineParams.SetDepthBoundsTest(false);
-        pipelineParams.SetStencilTest(true);
-        pipelineParams.SetStencilStates(Graphics::VKPresets::StencilOpState_Disabled, Graphics::VKPresets::StencilOpState_Disabled);
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
