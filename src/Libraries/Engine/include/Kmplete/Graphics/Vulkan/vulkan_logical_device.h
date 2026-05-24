@@ -37,6 +37,7 @@ namespace Kmplete
     namespace Graphics
     {
         class Image;
+        struct VulkanGraphicsParameters;
 
 
         //TODO: comments
@@ -133,6 +134,7 @@ namespace Kmplete
 
             VkPhysicalDevice _physicalDevice;
             VkSurfaceKHR _surface;
+            UPtr<VulkanGraphicsParameters> _graphicsParameters;
 
             VkDevice _device;
             UPtr<VulkanQueue> _graphicsQueue;

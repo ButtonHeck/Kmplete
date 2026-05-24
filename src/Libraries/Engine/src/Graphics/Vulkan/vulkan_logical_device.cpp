@@ -39,6 +39,7 @@ namespace Kmplete
             , _currentBufferIndex(currentBufferIndex)
             , _physicalDevice(physicalDevice)
             , _surface(surface)
+            , _graphicsParameters(nullptr)
             , _device(nullptr)
             , _graphicsQueue(nullptr)
             , _presentQueue(nullptr)
@@ -261,14 +262,14 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
-            VulkanGraphicsParameters parameters;
+            _graphicsParameters.reset(new VulkanGraphicsParameters());
             if (ClientInitializeGraphicsParametersFn == nullptr)
             {
                 KMP_LOG_WARN("graphics parameters function pointer is not assigned");
             }
             else
             {
-                ClientInitializeGraphicsParametersFn(parameters);
+                ClientInitializeGraphicsParametersFn(*_graphicsParameters);
             }
 
             const auto queueCreateInfos = _CreateQueueCreateInfos();
@@ -281,7 +282,7 @@ namespace Kmplete
             deviceCreateInfo.pEnabledFeatures = nullptr;
             deviceCreateInfo.enabledExtensionCount = UInt32(enabledDeviceExtensions.size());
             deviceCreateInfo.ppEnabledExtensionNames = enabledDeviceExtensions.data();
-            deviceCreateInfo.pNext = &parameters.features2;
+            deviceCreateInfo.pNext = &_graphicsParameters->features2;
 
             const auto result = vkCreateDevice(_physicalDevice, &deviceCreateInfo, nullptr, &_device);
             VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create logical device");
@@ -293,8 +294,9 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_DeleteLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_device);
+            KMP_ASSERT(_device && _graphicsParameters);
 
+            _graphicsParameters.reset();
             vkDestroyDevice(_device, nullptr);
         }}
         //--------------------------------------------------------------------------

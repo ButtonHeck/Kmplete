@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/graphics_parameters.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 
@@ -26,6 +27,8 @@ namespace Kmplete
                 , features({})
                 , features13(VKUtils::InitVkPhysicalDeviceVulkan13Features())
                 , features2(VKUtils::InitVkPhysicalDeviceFeatures2())
+                , maxDescriptorSets(0)
+                , descriptorPoolSizes()
             {
                 lineRasterizationFeatures.pNext = &vertexAttributeDivisorFeatures;
                 shaderObjectFeatures.pNext = &lineRasterizationFeatures;
@@ -49,6 +52,9 @@ namespace Kmplete
             VkPhysicalDeviceFeatures features;
             VkPhysicalDeviceVulkan13Features features13;
             VkPhysicalDeviceFeatures2 features2;
+
+            UInt32 maxDescriptorSets;
+            Vector<VkDescriptorPoolSize> descriptorPoolSizes;
         };
         //--------------------------------------------------------------------------
     }
