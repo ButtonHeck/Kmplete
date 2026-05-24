@@ -141,6 +141,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            VkPipelineStageFlags waitStageMask = VK_PipelineStage_ColorAttachmentOutput;
+            auto submitInfo = VKUtils::InitVkSubmitInfo();
+            submitInfo.pWaitDstStageMask = &waitStageMask;
+            submitInfo.commandBufferCount = 1;
+            submitInfo.pCommandBuffers = &_currentCommandBuffer;
+            submitInfo.waitSemaphoreCount = UInt32(waitSemaphores.size());
+            submitInfo.pWaitSemaphores = waitSemaphores.data();
+            submitInfo.signalSemaphoreCount = UInt32(signalSemaphores.size());
+            submitInfo.pSignalSemaphores = signalSemaphores.data();
+
+            queue.Submit({ submitInfo }, fence);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
@@ -536,62 +554,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            if (buffers.size() != offsets.size() || 
-                ((buffers.size() != sizes.size()) && !sizes.empty() ) || 
-                ((buffers.size() != strides.size()) && !strides.empty() ) || 
-                buffers.empty())
-            {
-                KMP_LOG_ERROR("failed to bind vertex buffers - vertex buffers size doesn't match size of the offsets/sizes/strides or vertex buffers are empty");
-                return;
-            }
-
-            vkCmdBindVertexBuffers2(_currentCommandBuffer, firstBinding, UInt32(buffers.size()), buffers.data(), offsets.data(), sizes.data(), strides.data());
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            Vector<VkShaderEXT> shaders;
-            shaders.reserve(shadersSids.size());
-            for (const auto& shaderSid : shadersSids)
-            {
-                if (_shaderObjects.contains(shaderSid))
-                {
-                    shaders.push_back(_shaderObjects.at(shaderSid)->GetVkShader());
-                    continue;
-                }
-
-                KMP_LOG_ERROR("cannot bind shader with sid '{}' - not found", shaderSid);
-            }
-
-            VKCommands::CmdBindShadersEXT(_currentCommandBuffer, UInt32(stages.size()), stages.data(), shaders.data());
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence) KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VkPipelineStageFlags waitStageMask = VK_PipelineStage_ColorAttachmentOutput;
-            auto submitInfo = VKUtils::InitVkSubmitInfo();
-            submitInfo.pWaitDstStageMask = &waitStageMask;
-            submitInfo.commandBufferCount = 1;
-            submitInfo.pCommandBuffers = &_currentCommandBuffer;
-            submitInfo.waitSemaphoreCount = UInt32(waitSemaphores.size());
-            submitInfo.pWaitSemaphores = waitSemaphores.data();
-            submitInfo.signalSemaphoreCount = UInt32(signalSemaphores.size());
-            submitInfo.pSignalSemaphores = signalSemaphores.data();
-
-            queue.Submit({ submitInfo }, fence);
-        }}
-        //--------------------------------------------------------------------------
-
         bool VulkanRenderer::BindGraphicsPipeline(StringID pipelineSid) const KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_currentCommandBuffer);
@@ -644,6 +606,23 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            if (buffers.size() != offsets.size() ||
+                ((buffers.size() != sizes.size()) && !sizes.empty()) ||
+                ((buffers.size() != strides.size()) && !strides.empty()) ||
+                buffers.empty())
+            {
+                KMP_LOG_ERROR("failed to bind vertex buffers - vertex buffers size doesn't match size of the offsets/sizes/strides or vertex buffers are empty");
+                return;
+            }
+
+            vkCmdBindVertexBuffers2(_currentCommandBuffer, firstBinding, UInt32(buffers.size()), buffers.data(), offsets.data(), sizes.data(), strides.data());
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::BindIndexBuffer(const VulkanBuffer& indexBuffer, VkDeviceSize offset /*= 0*/, VkIndexType indexType /*= VK_Index_UInt32*/) const
         {
             BindIndexBuffer(indexBuffer.GetVkBuffer(), offset, indexType);
@@ -658,11 +637,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        void VulkanRenderer::BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            vkCmdDrawIndexed(_currentCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
+            Vector<VkShaderEXT> shaders;
+            shaders.reserve(shadersSids.size());
+            for (const auto& shaderSid : shadersSids)
+            {
+                if (_shaderObjects.contains(shaderSid))
+                {
+                    shaders.push_back(_shaderObjects.at(shaderSid)->GetVkShader());
+                    continue;
+                }
+
+                KMP_LOG_ERROR("cannot bind shader with sid '{}' - not found", shaderSid);
+            }
+
+            VKCommands::CmdBindShadersEXT(_currentCommandBuffer, UInt32(stages.size()), stages.data(), shaders.data());
         }}
         //--------------------------------------------------------------------------
 
@@ -671,6 +663,14 @@ namespace Kmplete
             KMP_ASSERT(_currentCommandBuffer);
 
             vkCmdDraw(_currentCommandBuffer, vertexCount, instanceCount, firstVertex, firstInstance);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            vkCmdDrawIndexed(_currentCommandBuffer, indexCount, instanceCount, firstIndex, vertexOffset, firstInstance);
         }}
         //--------------------------------------------------------------------------
 
