@@ -29,8 +29,9 @@ namespace Kmplete
                 VertexInputBindings     = 1 << 3,
                 VertexInputDescriptions = 1 << 4,
                 ShaderStages            = 1 << 5,
+                PushConstantRanges      = 1 << 6,
                 VertexInputs            = VertexInputBindings | VertexInputDescriptions,
-                All                     = DescriptorSetLayouts | ColorAttachmentInfos | DynamicStates | VertexInputs | ShaderStages
+                All                     = DescriptorSetLayouts | ColorAttachmentInfos | DynamicStates | VertexInputs | ShaderStages | PushConstantRanges
             };
 
             KMP_NODISCARD KMP_API static VulkanGraphicsPipelineParameters CopyFrom(const VulkanGraphicsPipelineParameters& source, int copyParametersMask = OnlyParameters) noexcept;
@@ -67,6 +68,8 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
             KMP_API VulkanGraphicsPipelineParameters& AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages);
+            KMP_API VulkanGraphicsPipelineParameters& AddPushConstantRange(VkShaderStageFlags shadersStagesFlags, UInt32 offset, UInt32 size);
+            KMP_API VulkanGraphicsPipelineParameters& AddPushConstantRange(const VkPushConstantRange& pushConstantRange);
 
             KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
 
@@ -95,6 +98,7 @@ namespace Kmplete
             Vector<VkPipelineShaderStageCreateInfo> _shadersStages;
             VkPipelineRenderingCreateInfoKHR _renderingCreateInfo;
             Vector<VkFormat> _renderingColorAttachmentsFormats;
+            Vector<VkPushConstantRange> _pushConstantRanges;
         };
         //--------------------------------------------------------------------------
     }

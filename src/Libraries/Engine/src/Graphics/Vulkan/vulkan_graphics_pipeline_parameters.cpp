@@ -53,6 +53,10 @@ namespace Kmplete
             {
                 copy._shadersStages = source._shadersStages;
             }
+            if (copyParametersMask & PushConstantRanges)
+            {
+                copy._pushConstantRanges = source._pushConstantRanges;
+            }
 
             return copy;
         }
@@ -78,6 +82,7 @@ namespace Kmplete
             , _shadersStages()
             , _renderingCreateInfo()
             , _renderingColorAttachmentsFormats()
+            , _pushConstantRanges()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -326,6 +331,19 @@ namespace Kmplete
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages)
         {
             Utils::AppendVectors(shaderStages, _shadersStages);
+            return *this;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddPushConstantRange(VkShaderStageFlags shadersStagesFlags, UInt32 offset, UInt32 size)
+        {
+            return AddPushConstantRange(VkPushConstantRange{ .stageFlags = shadersStagesFlags, .offset = offset, .size = size });
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddPushConstantRange(const VkPushConstantRange& pushConstantRange)
+        {
+            _pushConstantRanges.push_back(pushConstantRange);
             return *this;
         }
         //--------------------------------------------------------------------------
