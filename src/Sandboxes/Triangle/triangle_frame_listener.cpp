@@ -222,13 +222,11 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        const auto copyCmd = renderer.CreateCommandBuffer();
-        copyCmd.Begin();
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), vertexBufferSize + indexBufferSize, vertexBufferSize, vertex2BufferSize);
-        copyCmd.End();
-        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+        renderer.CopyBuffers(stagingBuffer, {
+            { *_vertexBuffer.get(), 0, 0, vertexBufferSize },
+            { *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize },
+            { *_vertexBuffer.get(), vertexBufferSize + indexBufferSize, vertexBufferSize, vertex2BufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 

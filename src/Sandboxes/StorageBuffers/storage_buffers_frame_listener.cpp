@@ -190,12 +190,10 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
-        copyCmd.Begin();
-        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize);
-        copyCmd.End();
-        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+        vulkanRenderer.CopyBuffers(stagingBuffer, {
+            { *_vertexBuffer.get(), 0, 0, vertexBufferSize },
+            { *_indexBuffer.get(), vertexBufferSize, 0, indexBufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 

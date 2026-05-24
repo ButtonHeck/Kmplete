@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
-#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/extension_functions.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
@@ -695,6 +694,20 @@ namespace Kmplete
         void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             vkCmdCopyBuffer(commandBuffer.GetVkCommandBuffer(), sourceBuffer.GetVkBuffer(), destinationBuffer.GetVkBuffer(), UInt32(copyRegions.size()), copyRegions.data());
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::CopyBuffers(const VulkanBuffer& stagingBuffer, const Vector<VKUtils::BufferCopyParameters>& copyParameters, const VulkanQueue& queue) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            const auto copyCommandBuffer = CreateCommandBuffer();
+            copyCommandBuffer.Begin();
+            for (const auto& singleCopyParameters : copyParameters)
+            {
+                CopyBuffer(copyCommandBuffer, stagingBuffer, singleCopyParameters.destinationBuffer, singleCopyParameters.srcOfset, singleCopyParameters.dstOfset, singleCopyParameters.size);
+            }
+            copyCommandBuffer.End();
+
+            queue.SyncSubmit(copyCommandBuffer);
         }}
         //--------------------------------------------------------------------------
 

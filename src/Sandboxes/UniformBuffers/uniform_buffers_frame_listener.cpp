@@ -143,11 +143,9 @@ namespace Kmplete
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(vertexBufferLayout);
 
-        const auto copyCmd = vulkanRenderer.CreateCommandBuffer();
-        copyCmd.Begin();
-        vulkanRenderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-        copyCmd.End();
-        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+        vulkanRenderer.CopyBuffers(stagingBuffer, {
+            { *_vertexBuffer.get(), 0, 0, vertexBufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 

@@ -113,12 +113,10 @@ namespace Kmplete
         _vertexBufferBufferedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize }));
         _vertexBufferBufferedColor->AddLayout(bufferColorBufferLayout);
 
-        const auto copyCmd = renderer.CreateCommandBuffer();
-        copyCmd.Begin();
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferFixedColor.get(), 0, 0, fixedColorBufferSize);
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferBufferedColor.get(), fixedColorBufferSize, 0, bufferedColorBufferSize);
-        copyCmd.End();
-        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+        renderer.CopyBuffers(stagingBuffer, {
+            { *_vertexBufferFixedColor.get(), 0, 0, fixedColorBufferSize },
+            { *_vertexBufferBufferedColor.get(), fixedColorBufferSize, 0, bufferedColorBufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 

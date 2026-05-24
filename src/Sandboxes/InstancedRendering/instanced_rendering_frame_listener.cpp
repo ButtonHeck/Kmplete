@@ -142,14 +142,12 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        const auto copyCmd = renderer.CreateCommandBuffer();
-        copyCmd.Begin();
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBuffer.get(), 0, 0, vertexBufferSize);
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferPosInstanced.get(), vertexBufferSize, 0, vertexInstancedBufferSize);
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_vertexBufferColorsInstanced.get(), vertexBufferSize + vertexInstancedBufferSize, 0, vertexColorsInstancedBufferSize);
-        renderer.CopyBuffer(copyCmd, stagingBuffer, *_indexBuffer.get(), vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, 0, indexBufferSize);
-        copyCmd.End();
-        vulkanDevice.GetGraphicsQueue().SyncSubmit(copyCmd);
+        renderer.CopyBuffers(stagingBuffer, {
+            { *_vertexBuffer.get(), 0, 0, vertexBufferSize },
+            { *_vertexBufferPosInstanced.get(), vertexBufferSize, 0, vertexInstancedBufferSize },
+            { *_vertexBufferColorsInstanced.get(), vertexBufferSize + vertexInstancedBufferSize, 0, vertexColorsInstancedBufferSize },
+            { *_indexBuffer.get(), vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, 0, indexBufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 

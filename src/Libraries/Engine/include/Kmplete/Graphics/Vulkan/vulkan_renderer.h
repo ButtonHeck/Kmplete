@@ -13,6 +13,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -102,6 +103,7 @@ namespace Kmplete
             KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const;
             KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const;
             KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const;
+            KMP_API void CopyBuffers(const VulkanBuffer& stagingBuffer, const Vector<VKUtils::BufferCopyParameters>& copyParameters, const VulkanQueue& queue) const;
 
             KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;

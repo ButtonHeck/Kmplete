@@ -11,6 +11,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanBuffer;
+
+
         namespace VKUtils
         {
             //TODO: comments
@@ -54,6 +57,17 @@ namespace Kmplete
                 VkPipelineStageFlags srcStageMask;
                 VkPipelineStageFlags dstStageMask;
                 VkImageSubresourceRange subresourceRange;
+            };
+            //--------------------------------------------------------------------------
+
+
+            //TODO: comments
+            struct BufferCopyParameters
+            {
+                VulkanBuffer& destinationBuffer;
+                VkDeviceSize srcOfset;
+                VkDeviceSize dstOfset;
+                VkDeviceSize size;
             };
             //--------------------------------------------------------------------------
 
