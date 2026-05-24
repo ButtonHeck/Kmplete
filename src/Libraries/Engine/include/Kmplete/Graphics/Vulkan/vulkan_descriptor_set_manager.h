@@ -26,10 +26,13 @@ namespace Kmplete
             using DescriptorSetStorage = StringIDHashMap<Vector<VkDescriptorSet>>;
 
         public:
-            KMP_API VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex);
+            KMP_API VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
             KMP_API ~VulkanDescriptorSetManager();
 
             KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
+
+            KMP_API void AllocateAuxDescriptorPool(StringID sid, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
+            KMP_NODISCARD KMP_API VkDescriptorPool GetAuxDescriptorPool(StringID sid) const noexcept;
 
             KMP_API VkDescriptorSetLayout AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
             KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID layoutSid) const noexcept;
@@ -69,7 +72,7 @@ namespace Kmplete
             KMP_API bool SetSamplerDescriptor(VkDescriptorSet descriptorSet, VkSampler sampler, UInt32 binding) const;
 
         private:
-            void _Initialize();
+            void _Initialize(UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
             void _Finalize();
 
             KMP_NODISCARD bool _AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, DescriptorSetStorage& storage) const;
@@ -83,6 +86,7 @@ namespace Kmplete
             const UInt32& _currentBufferIndex;
             VkDevice _device;
             VkDescriptorPool _descriptorPool;
+            StringIDHashMap<VkDescriptorPool> _auxDescriptorPools;
             StringIDHashMap<VkDescriptorSetLayout> _descriptorSetLayouts;
 
             Array<DescriptorSetStorage, NumConcurrentFrames> _descriptorsPerFrame;

@@ -18,15 +18,16 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanDescriptorSetManager::VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex)
+        VulkanDescriptorSetManager::VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes)
             : _currentBufferIndex(currentBufferIndex)
             , _device(device)
             , _descriptorPool(VK_NULL_HANDLE)
+            , _auxDescriptorPools()
             , _descriptorSetLayouts()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _Initialize();
+            _Initialize(maxDescriptorSets, descriptorPoolSizes);
         }
         //--------------------------------------------------------------------------
 
@@ -41,6 +42,41 @@ namespace Kmplete
             KMP_ASSERT(_descriptorPool);
 
             return _descriptorPool;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanDescriptorSetManager::AllocateAuxDescriptorPool(StringID sid, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            if (_auxDescriptorPools.contains(sid))
+            {
+                KMP_LOG_WARN("aux descriptor pool with sid '{}' has already been added", sid);
+                return;
+            }
+
+            auto poolInfo = VKUtils::InitVkDescriptorPoolCreateInfo();
+            poolInfo.maxSets = maxDescriptorSets;
+            poolInfo.poolSizeCount = UInt32(descriptorPoolSizes.size());
+            poolInfo.pPoolSizes = descriptorPoolSizes.data();
+
+            VkDescriptorPool auxPool;
+            const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &auxPool);
+            VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create aux descriptor pool");
+
+            _auxDescriptorPools.emplace(sid, auxPool);
+        }}
+        //--------------------------------------------------------------------------
+
+        VkDescriptorPool VulkanDescriptorSetManager::GetAuxDescriptorPool(StringID sid) const noexcept
+        {
+            if (!_auxDescriptorPools.contains(sid))
+            {
+                KMP_LOG_ERROR("aux descriptor pool with sid '{}' not found", sid);
+                return VK_NULL_HANDLE;
+            }
+
+            return _auxDescriptorPools.at(sid);
         }
         //--------------------------------------------------------------------------
 
@@ -483,28 +519,14 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanDescriptorSetManager::_Initialize() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanDescriptorSetManager::_Initialize(UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
-            //TODO: fix numbers
-            VkDescriptorPoolSize poolSizes[] = {
-                { VK_DescriptorType_Sampler, 100 },
-                { VK_DescriptorType_CombinedImageSampler, 100 },
-                { VK_DescriptorType_SampledImage, 100 },
-                { VK_DescriptorType_StorageImage, 100 },
-                { VK_DescriptorType_UniformTexelBuffer, 100 },
-                { VK_DescriptorType_StorageTexelBuffer, 100 },
-                { VK_DescriptorType_UniformBuffer, 100 },
-                { VK_DescriptorType_StorageBuffer, 100 },
-                { VK_DescriptorType_UniformBufferDynamic, 100 },
-                { VK_DescriptorType_StorageBufferDynamic, 100 },
-                { VK_DescriptorType_InputAttachment, 100 } };
-
             auto poolInfo = VKUtils::InitVkDescriptorPoolCreateInfo();
-            poolInfo.maxSets = 100;
-            poolInfo.poolSizeCount = UInt32(std::size(poolSizes));
-            poolInfo.pPoolSizes = poolSizes;
+            poolInfo.maxSets = maxDescriptorSets;
+            poolInfo.poolSizeCount = UInt32(descriptorPoolSizes.size());
+            poolInfo.pPoolSizes = descriptorPoolSizes.data();
 
             const auto result = vkCreateDescriptorPool(_device, &poolInfo, nullptr, &_descriptorPool);
             VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor pool");
@@ -522,6 +544,12 @@ namespace Kmplete
                 vkDestroyDescriptorSetLayout(_device, descriptorSetLayout, nullptr);
             }
             _descriptorSetLayouts.clear();
+
+            for (const auto& [sid, auxDescriptorPool] : _auxDescriptorPools)
+            {
+                vkDestroyDescriptorPool(_device, auxDescriptorPool, nullptr);
+            }
+            _auxDescriptorPools.clear();
 
             vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
         }}

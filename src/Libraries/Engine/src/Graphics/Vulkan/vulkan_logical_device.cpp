@@ -489,7 +489,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            _descriptorSetManager.reset(new VulkanDescriptorSetManager(_device, _currentBufferIndex));
+            _descriptorSetManager.reset(new VulkanDescriptorSetManager(_device, _currentBufferIndex, _graphicsParameters->maxDescriptorSets, _graphicsParameters->descriptorPoolSizes));
             KMP_ASSERT(_descriptorSetManager);
         }}
         //--------------------------------------------------------------------------
