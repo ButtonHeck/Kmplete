@@ -3,6 +3,7 @@
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_parameters.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 
 
 namespace Kmplete
@@ -25,6 +26,12 @@ namespace Kmplete
                 vulkanParameters.dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
                 vulkanParameters.features13.dynamicRendering = VK_TRUE;
                 vulkanParameters.features13.synchronization2 = VK_TRUE;
+
+                vulkanParameters.descriptorPoolSizes = {
+                    { VKBits::VK_DescriptorType_UniformBuffer, 1 },
+                    { VKBits::VK_DescriptorType_UniformBufferDynamic, 1 }
+                };
+                vulkanParameters.maxDescriptorSets = 1 * NumConcurrentFrames;
             }
         }
         //--------------------------------------------------------------------------

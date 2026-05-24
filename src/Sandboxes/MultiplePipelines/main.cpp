@@ -35,6 +35,8 @@ namespace Kmplete
                 vulkanParameters.features13.synchronization2 = VK_TRUE;
 
                 vulkanParameters.features2.features = vulkanParameters.features;
+
+                vulkanParameters.maxDescriptorSets = 1;
             }
         }
         //--------------------------------------------------------------------------

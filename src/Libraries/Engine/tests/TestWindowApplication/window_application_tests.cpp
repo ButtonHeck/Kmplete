@@ -27,6 +27,8 @@ namespace Kmplete
                 vulkanParameters.dynamicStateFeatures3.extendedDynamicState3RasterizationSamples = VK_TRUE;
                 vulkanParameters.features13.dynamicRendering = VK_TRUE;
                 vulkanParameters.features13.synchronization2 = VK_TRUE;
+
+                vulkanParameters.maxDescriptorSets = 1;
             }
         }
         //--------------------------------------------------------------------------

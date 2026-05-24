@@ -320,8 +320,22 @@ namespace Kmplete
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
             const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
-            const auto& physicalDevice = dynamic_cast<const Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
-            const auto& logicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
+            auto& physicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+            auto& logicalDevice = dynamic_cast<Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
+
+            logicalDevice.GetDescriptorSetManager().AllocateAuxDescriptorPool("ImGui_Pool"_sid, 100, {
+                { VK_DescriptorType_Sampler, 100 },
+                { VK_DescriptorType_CombinedImageSampler, 100 },
+                { VK_DescriptorType_SampledImage, 100 },
+                { VK_DescriptorType_StorageImage, 100 },
+                { VK_DescriptorType_UniformTexelBuffer, 100 },
+                { VK_DescriptorType_StorageTexelBuffer, 100 },
+                { VK_DescriptorType_UniformBuffer, 100 },
+                { VK_DescriptorType_StorageBuffer, 100 },
+                { VK_DescriptorType_UniformBufferDynamic, 100 },
+                { VK_DescriptorType_StorageBufferDynamic, 100 },
+                { VK_DescriptorType_InputAttachment, 100 }
+            });
 
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();
@@ -330,7 +344,7 @@ namespace Kmplete
             initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
             initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
             initInfo.PipelineCache = VK_NULL_HANDLE;
-            initInfo.DescriptorPool = logicalDevice.GetDescriptorSetManager().GetVkDescriptorPool();
+            initInfo.DescriptorPool = logicalDevice.GetDescriptorSetManager().GetAuxDescriptorPool("ImGui_Pool"_sid);
             initInfo.Allocator = VK_NULL_HANDLE;
             initInfo.MinImageCount = Graphics::NumConcurrentFrames;
             initInfo.ImageCount = Graphics::NumConcurrentFrames;
