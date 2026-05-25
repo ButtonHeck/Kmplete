@@ -97,6 +97,7 @@ namespace Kmplete
             KMP_API void BindIndexBuffer(const VulkanBuffer& indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
             KMP_API void BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
             KMP_API void BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const;
+            KMP_API void PushConstants(StringID pipelineSid, VkShaderStageFlags shaderStagesFlags, UInt32 offset, UInt32 size, const void* data) const;
 
             KMP_API void Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const;
             KMP_API void DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const;

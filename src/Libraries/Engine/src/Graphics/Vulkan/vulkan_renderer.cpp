@@ -658,6 +658,20 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::PushConstants(StringID pipelineSid, VkShaderStageFlags shaderStagesFlags, UInt32 offset, UInt32 size, const void* data) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            if (!_pipelines.contains(pipelineSid))
+            {
+                KMP_LOG_ERROR("cannot push constants with pipeline's sid '{}' - pipeline not found", pipelineSid);
+                return;
+            }
+
+            vkCmdPushConstants(_currentCommandBuffer, _pipelines.at(pipelineSid)->GetVkPipelineLayout(), shaderStagesFlags, offset, size, data);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             KMP_ASSERT(_currentCommandBuffer);
