@@ -59,6 +59,12 @@ namespace Kmplete
             layoutCreateInfo.setLayoutCount = UInt32(_parameters._descriptorSetLayouts.size());
             layoutCreateInfo.pSetLayouts = _parameters._descriptorSetLayouts.data();
 
+            if (!_parameters._pushConstantRanges.empty())
+            {
+                layoutCreateInfo.pushConstantRangeCount = UInt32(_parameters._pushConstantRanges.size());
+                layoutCreateInfo.pPushConstantRanges = _parameters._pushConstantRanges.data();
+            }
+
             auto result = vkCreatePipelineLayout(_device, &layoutCreateInfo, nullptr, &_pipelineLayout);
             VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline layout");
             KMP_ASSERT(_pipelineLayout);
