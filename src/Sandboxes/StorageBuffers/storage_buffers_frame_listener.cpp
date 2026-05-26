@@ -267,7 +267,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, pipelineParams);
     }
     //--------------------------------------------------------------------------
 

@@ -167,10 +167,10 @@ namespace Kmplete
         pipelineBufferedColorLineParams.SetLineWidth(8.0f);
         pipelineBufferedColorLineParams.SetLineStipple(true, 1, 1);
 
-        vulkanDevice.AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, pipelineFixedColorFillParams);
-        vulkanDevice.AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, pipelineFixedColorLineParams);
-        vulkanDevice.AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, pipelineBufferedColorFillParams);
-        vulkanDevice.AddGraphicsPipeline(Pipeline_BufferedColor_Line_SID, pipelineBufferedColorLineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, pipelineFixedColorFillParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, pipelineFixedColorLineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, pipelineBufferedColorFillParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_BufferedColor_Line_SID, pipelineBufferedColorLineParams);
     }
     //--------------------------------------------------------------------------
 

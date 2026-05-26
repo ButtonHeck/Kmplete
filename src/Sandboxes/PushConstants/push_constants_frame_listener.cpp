@@ -107,7 +107,7 @@ namespace Kmplete
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
         pipelineParams.AddPushConstantRange(VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData));
 
-        vulkanDevice.AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, pipelineParams);
     }
     //--------------------------------------------------------------------------
 
