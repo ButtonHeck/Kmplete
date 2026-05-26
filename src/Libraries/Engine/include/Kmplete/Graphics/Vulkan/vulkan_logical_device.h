@@ -14,6 +14,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_descriptor_set_manager.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_pipeline_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -73,9 +74,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
             KMP_NODISCARD KMP_API const VulkanDescriptorSetManager& GetDescriptorSetManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
-
-            KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid, const VulkanGraphicsPipelineParameters& parameters);
-            KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
+            KMP_NODISCARD KMP_API const VulkanPipelineManager& GetPipelineManager() const noexcept;
+            KMP_NODISCARD KMP_API VulkanPipelineManager& GetPipelineManager() noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
@@ -106,7 +106,9 @@ namespace Kmplete
             void _CreatePipelineCache();
             void _DeletePipelineCache();
 
-            void _DeletePipelines();
+            void _CreatePipelineManager();
+            void _DeletePipelineManager();
+
             void _DeleteShaderObjects();
 
             void _CreateBufferCreatorDelegate();
@@ -145,7 +147,7 @@ namespace Kmplete
             Vector<VulkanFence> _waitFences;
             UPtr<VulkanSwapchain> _swapchain;
             VkPipelineCache _pipelineCache;
-            StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
+            UPtr<VulkanPipelineManager> _pipelineManager;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;

@@ -12,6 +12,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_pipeline_manager.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -29,7 +30,7 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanRenderer)
 
         public:
-            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const StringIDHashMap<UPtr<VulkanGraphicsPipeline>>& pipelines, 
+            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
                                    const StringIDHashMap<UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
             KMP_API ~VulkanRenderer();
 
@@ -112,7 +113,7 @@ namespace Kmplete
 
         private:
             const UInt32& _currentBufferIndex;
-            const StringIDHashMap<UPtr<VulkanGraphicsPipeline>>& _pipelines;
+            const VulkanPipelineManager& _pipelineManager;
             const StringIDHashMap<UPtr<VulkanShaderObject>>& _shaderObjects;
             Ref<const VulkanSwapchain> _swapchain;
 

@@ -15,10 +15,10 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const StringIDHashMap<UPtr<VulkanGraphicsPipeline>>& pipelines,
+        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
                                        const StringIDHashMap<UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
             : _currentBufferIndex(currentBufferIndex)
-            , _pipelines(pipelines)
+            , _pipelineManager(pipelineManager)
             , _shaderObjects(shaderObjects)
             , _swapchain(std::cref(swapchain))
             , _device(device)
@@ -103,13 +103,14 @@ namespace Kmplete
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            if (!_pipelines.contains(pipelineSid))
+            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
+            if (!pipeline.has_value())
             {
                 KMP_LOG_ERROR("cannot begin rendering - pipeline with sid '{}' not found", pipelineSid);
                 return;
             }
 
-            const auto colorAttachmentsCount = _pipelines.at(pipelineSid)->GetColorAttachmentsCount();
+            const auto colorAttachmentsCount = pipeline.value().get().GetColorAttachmentsCount();
             const auto& swapchain = _swapchain.get();
 
             Vector<VkRenderingAttachmentInfo> colorAttachmentsInfos;
@@ -558,13 +559,14 @@ namespace Kmplete
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            if (!_pipelines.contains(pipelineSid))
+            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
+            if (!pipeline.has_value())
             {
                 KMP_LOG_ERROR("cannot bind pipeline with sid '{}' - pipeline not found", pipelineSid);
                 return false;
             }
 
-            vkCmdBindPipeline(_currentCommandBuffer, VK_PipelineBindPoint_Graphics, _pipelines.at(pipelineSid)->GetVkPipeline());
+            vkCmdBindPipeline(_currentCommandBuffer, VK_PipelineBindPoint_Graphics, pipeline.value().get().GetVkPipeline());
             return true;
         }}
         //--------------------------------------------------------------------------
@@ -573,7 +575,8 @@ namespace Kmplete
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            if (!_pipelines.contains(pipelineSid))
+            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
+            if (!pipeline.has_value())
             {
                 KMP_LOG_ERROR("cannot bind descriptor sets with pipeline's sid '{}' - pipeline not found", pipelineSid);
                 return false;
@@ -582,7 +585,7 @@ namespace Kmplete
             vkCmdBindDescriptorSets(
                 _currentCommandBuffer, 
                 VK_PipelineBindPoint_Graphics,
-                _pipelines.at(pipelineSid)->GetVkPipelineLayout(),
+                pipeline.value().get().GetVkPipelineLayout(),
                 firstSetIndex, 
                 UInt32(descriptorSets.size()), descriptorSets.empty() ? nullptr : descriptorSets.data(),
                 UInt32(dynamicOffsets.size()), dynamicOffsets.empty() ? nullptr : dynamicOffsets.data());
@@ -662,13 +665,14 @@ namespace Kmplete
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            if (!_pipelines.contains(pipelineSid))
+            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
+            if (!pipeline.has_value())
             {
                 KMP_LOG_ERROR("cannot push constants with pipeline's sid '{}' - pipeline not found", pipelineSid);
                 return;
             }
 
-            vkCmdPushConstants(_currentCommandBuffer, _pipelines.at(pipelineSid)->GetVkPipelineLayout(), shaderStagesFlags, offset, size, data);
+            vkCmdPushConstants(_currentCommandBuffer, pipeline.value().get().GetVkPipelineLayout(), shaderStagesFlags, offset, size, data);
         }}
         //--------------------------------------------------------------------------
 

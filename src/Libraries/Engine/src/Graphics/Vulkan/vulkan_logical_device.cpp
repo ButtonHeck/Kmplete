@@ -49,7 +49,7 @@ namespace Kmplete
             , _waitFences()
             , _swapchain(nullptr)
             , _pipelineCache(VK_NULL_HANDLE)
-            , _pipelines()
+            , _pipelineManager(nullptr)
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SampleCount_1)
@@ -67,6 +67,7 @@ namespace Kmplete
             _CreateSynchronizationObjects();
             _CreateSwapchain();
             _CreatePipelineCache();
+            _CreatePipelineManager();
             _CreateBufferCreatorDelegate();
             _CreateRenderer();
             _CreateSamplersStorage();
@@ -83,7 +84,7 @@ namespace Kmplete
             _DeleteShaderObjects();
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
-            _DeletePipelines();
+            _DeletePipelineManager();
             _DeletePipelineCache();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
@@ -260,6 +261,22 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const VulkanPipelineManager& VulkanLogicalDevice::GetPipelineManager() const noexcept
+        {
+            KMP_ASSERT(_pipelineManager);
+
+            return *_pipelineManager.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanPipelineManager& VulkanLogicalDevice::GetPipelineManager() noexcept
+        {
+            KMP_ASSERT(_pipelineManager);
+
+            return *_pipelineManager.get();
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
             _graphicsParameters.reset(new VulkanGraphicsParameters());
@@ -408,9 +425,20 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeletePipelines() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::_CreatePipelineManager() KMP_PROFILING(ProfileLevelImportant)
         {
-            _pipelines.clear();
+            KMP_ASSERT(_device);
+
+            _pipelineManager.reset(new VulkanPipelineManager(_device));
+            KMP_ASSERT(_pipelineManager);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeletePipelineManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_pipelineManager);
+
+            _pipelineManager.reset();
         }}
         //--------------------------------------------------------------------------
 
@@ -441,7 +469,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device && _swapchain);
 
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, _pipelines, _shaderObjects, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, *_pipelineManager.get(), _shaderObjects, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
             KMP_ASSERT(_renderer);
         }}
         //--------------------------------------------------------------------------
@@ -555,33 +583,6 @@ namespace Kmplete
             _CreateSwapchain();
             _renderer->SetSwapchain(*_swapchain.get());
         }}
-        //--------------------------------------------------------------------------
-
-        VulkanGraphicsPipeline& VulkanLogicalDevice::AddGraphicsPipeline(StringID sid, const VulkanGraphicsPipelineParameters& parameters) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device);
-
-            if (_pipelines.contains(sid))
-            {
-                KMP_LOG_WARN("pipeline with sid '{}' has already been created", sid);
-                return *_pipelines[sid].get();
-            }
-
-            const auto [iterator, hasEmplaced] = _pipelines.emplace(sid, CreateUPtr<VulkanGraphicsPipeline>(_device, sid, parameters));
-            return *iterator->second.get();
-        }}
-        //--------------------------------------------------------------------------
-
-        OptionalRef<VulkanGraphicsPipeline> VulkanLogicalDevice::GetGraphicsPipeline(StringID sid) const
-        {
-            if (_pipelines.contains(sid))
-            {
-                return *_pipelines.at(sid).get();
-            }
-            
-            KMP_LOG_ERROR("graphics pipeline with sid '{}' not found", sid);
-            return std::nullopt;
-        }
         //--------------------------------------------------------------------------
 
         Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image) const KMP_PROFILING(ProfileLevelImportant)
