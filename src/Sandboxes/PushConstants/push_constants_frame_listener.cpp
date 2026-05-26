@@ -1,0 +1,143 @@
+#include "push_constants_frame_listener.h"
+
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
+#include "Kmplete/Base/named_bool.h"
+
+
+namespace Kmplete
+{
+    static constexpr auto Pipeline_SID = "Pipeline"_sid;
+
+    static constexpr auto VertexPositionIndex = 0;
+
+
+    namespace
+    {
+        struct Vertex
+        {
+            float position[2];
+        };
+    }
+
+    using namespace Graphics::VKBits;
+
+
+    PushConstantsFrameListener::PushConstantsFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+        : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
+        , _mainWindow(mainWindow)
+        , _graphicsBackend(graphicsBackend)
+        , _vertexBuffer(nullptr)
+        , _pushConstantsArray()
+    {
+        _Initialize();
+    }
+    //--------------------------------------------------------------------------
+
+    PushConstantsFrameListener::~PushConstantsFrameListener()
+    {
+        _Finalize();
+    }
+    //--------------------------------------------------------------------------
+
+    void PushConstantsFrameListener::_Initialize()
+    {
+        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+
+        _InitializeBuffers(vulkanDevice);
+        _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+    }
+    //--------------------------------------------------------------------------
+
+    void PushConstantsFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
+    {
+        const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
+        const auto& renderer = vulkanDevice.GetRenderer();
+
+        const Vector<Vertex> vertices{
+            { -0.1f,  0.1f },
+            {  0.1f,  0.1f },
+            { -0.1f, -0.1f }
+        };
+        const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
+
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize });
+        stagingBuffer.Map();
+        stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
+        stagingBuffer.Unmap("flush"_true);
+
+        const auto vertexBufferLayout = Graphics::BufferLayout({
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionIndex }
+        });
+        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
+        _vertexBuffer->AddLayout(vertexBufferLayout);
+
+        renderer.CopyBuffers(stagingBuffer, {
+            { *_vertexBuffer.get(), 0, 0, vertexBufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
+
+        for (auto i = 0; i < InstancesCount; i++)
+        {
+            _pushConstantsArray[i].position = Math::Vec4F(-0.6f + i * 0.2f, 0.0f, 0.0f, 0.0f);
+            const auto colorComponent = 0.1f + i * 0.1f;
+            _pushConstantsArray[i].color = Math::Vec4F(colorComponent, colorComponent, colorComponent, 1.0f);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    void PushConstantsFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    {
+        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.vert.spv");
+        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.frag.spv");
+        const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
+        const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
+        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
+            vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
+            fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
+        };
+
+        auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
+        pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
+        pipelineParams.AddShaderStages(shaderStages);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
+        pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
+        pipelineParams.AddPushConstantRange(VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData));
+
+        vulkanDevice.AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+    }
+    //--------------------------------------------------------------------------
+
+    void PushConstantsFrameListener::_Finalize()
+    {
+        _vertexBuffer.reset();
+    }
+    //--------------------------------------------------------------------------
+
+    void PushConstantsFrameListener::Render()
+    {
+        auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
+        const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
+        const auto& renderer = vulkanDevice.GetRenderer();
+        const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
+        const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
+
+        renderer.SetViewport(viewport);
+        renderer.SetScissor(drawArea);
+        renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
+        renderer.BindGraphicsPipeline(Pipeline_SID);
+        renderer.BindVertexBuffers(VertexPositionIndex, { _vertexBuffer->GetVkBuffer() }, { 0 });
+
+        renderer.BeginRendering(drawArea);
+        for (auto i = 0; i < InstancesCount; i++)
+        {
+            renderer.PushConstants(Pipeline_SID, VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData), &_pushConstantsArray[i]);
+            renderer.Draw(3, 1, 0, 0);
+        }
+        renderer.EndRendering();
+    }
+    //--------------------------------------------------------------------------
+}
