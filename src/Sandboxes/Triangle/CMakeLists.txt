@@ -14,10 +14,16 @@ set(Triangle_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/triangle_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/triangle_frame_listener.cpp
 )
+set(Triangle_SHADERS
+    ${KmpleteSandboxResourcesFolder}/triangle.vert
+    ${KmpleteSandboxResourcesFolder}/triangle.frag
+)
+source_group("Shaders" FILES ${Triangle_SHADERS})
 
 add_executable(Triangle
     ${Triangle_HEADERS}
     ${Triangle_SOURCES}
+    ${Triangle_SHADERS}
 )
 
 SetupCompilerOptions(Triangle)

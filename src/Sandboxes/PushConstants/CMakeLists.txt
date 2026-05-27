@@ -13,10 +13,16 @@ set(PushConstants_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/push_constants_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/push_constants_frame_listener.cpp
 )
+set(PushConstants_SHADERS
+    ${KmpleteSandboxResourcesFolder}/push_constants.vert
+    ${KmpleteSandboxResourcesFolder}/push_constants.frag
+)
+source_group("Shaders" FILES ${PushConstants_SHADERS})
 
 add_executable(PushConstants
     ${PushConstants_HEADERS}
     ${PushConstants_SOURCES}
+    ${PushConstants_SHADERS}
 )
 
 SetupCompilerOptions(PushConstants)

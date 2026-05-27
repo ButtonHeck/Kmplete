@@ -13,10 +13,16 @@ set(StorageBuffers_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/storage_buffers_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/storage_buffers_frame_listener.cpp
 )
+set(StorageBuffers_SHADERS
+    ${KmpleteSandboxResourcesFolder}/storage_buffers.vert
+    ${KmpleteSandboxResourcesFolder}/storage_buffers.frag
+)
+source_group("Shaders" FILES ${StorageBuffers_SHADERS})
 
 add_executable(StorageBuffers
     ${StorageBuffers_HEADERS}
     ${StorageBuffers_SOURCES}
+    ${StorageBuffers_SHADERS}
 )
 
 SetupCompilerOptions(StorageBuffers)

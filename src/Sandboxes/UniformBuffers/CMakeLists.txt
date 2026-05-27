@@ -13,10 +13,16 @@ set(UniformBuffers_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/uniform_buffers_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/uniform_buffers_frame_listener.cpp
 )
+set(UniformBuffers_SHADERS
+    ${KmpleteSandboxResourcesFolder}/uniform_buffers.vert
+    ${KmpleteSandboxResourcesFolder}/uniform_buffers.frag
+)
+source_group("Shaders" FILES ${UniformBuffers_SHADERS})
 
 add_executable(UniformBuffers
     ${UniformBuffers_HEADERS}
     ${UniformBuffers_SOURCES}
+    ${UniformBuffers_SHADERS}
 )
 
 SetupCompilerOptions(UniformBuffers)

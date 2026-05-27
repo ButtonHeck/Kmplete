@@ -13,10 +13,18 @@ set(MultiplePipelines_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/multiple_pipelines_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/multiple_pipelines_frame_listener.cpp
 )
+set(MultiplePipelines_SHADERS
+    ${KmpleteSandboxResourcesFolder}/multiple_pipelines_buffered_color.vert
+    ${KmpleteSandboxResourcesFolder}/multiple_pipelines_buffered_color.frag
+    ${KmpleteSandboxResourcesFolder}/multiple_pipelines_fixed_color.vert
+    ${KmpleteSandboxResourcesFolder}/multiple_pipelines_fixed_color.frag
+)
+source_group("Shaders" FILES ${MultiplePipelines_SHADERS})  
 
 add_executable(MultiplePipelines
     ${MultiplePipelines_HEADERS}
     ${MultiplePipelines_SOURCES}
+    ${MultiplePipelines_SHADERS}
 )
 
 SetupCompilerOptions(MultiplePipelines)

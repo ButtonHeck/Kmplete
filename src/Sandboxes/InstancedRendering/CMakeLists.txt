@@ -13,10 +13,16 @@ set(InstancedRendering_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/instanced_rendering_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instanced_rendering_frame_listener.cpp
 )
+set(InstancedRendering_SHADERS
+    ${KmpleteSandboxResourcesFolder}/instanced_rendering.vert
+    ${KmpleteSandboxResourcesFolder}/instanced_rendering.frag
+)
+source_group("Shaders" FILES ${InstancedRendering_SHADERS})
 
 add_executable(InstancedRendering
     ${InstancedRendering_HEADERS}
     ${InstancedRendering_SOURCES}
+    ${InstancedRendering_SHADERS}
 )
 
 SetupCompilerOptions(InstancedRendering)

@@ -13,10 +13,16 @@ set(Texture_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/texture_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/texture_frame_listener.cpp
 )
+set(Texture_SHADERS
+    ${KmpleteSandboxResourcesFolder}/texture.vert
+    ${KmpleteSandboxResourcesFolder}/texture.frag
+)
+source_group("Shaders" FILES ${Texture_SHADERS})
 
 add_executable(Texture
     ${Texture_HEADERS}
     ${Texture_SOURCES}
+    ${Texture_SHADERS}
 )
 
 SetupCompilerOptions(Texture)
