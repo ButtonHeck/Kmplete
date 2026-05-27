@@ -9,6 +9,7 @@
 
 namespace Kmplete
 {
+    static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
     static constexpr auto Pipeline_SID = "Pipeline"_sid;
 
     static constexpr auto VertexPositionIndex = 0;
@@ -90,6 +91,10 @@ namespace Kmplete
 
     void PushConstantsFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {
+            { VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData) }
+        });
+
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
@@ -105,9 +110,8 @@ namespace Kmplete
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
-        pipelineParams.AddPushConstantRange(VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData));
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
     }
     //--------------------------------------------------------------------------
 
@@ -134,7 +138,7 @@ namespace Kmplete
         renderer.BeginRendering(drawArea);
         for (auto i = 0; i < InstancesCount; i++)
         {
-            renderer.PushConstants(Pipeline_SID, VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData), &_pushConstantsArray[i]);
+            renderer.PushConstants(PipelineLayout_SID, VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData), &_pushConstantsArray[i]);
             renderer.Draw(3, 1, 0, 0);
         }
         renderer.EndRendering();

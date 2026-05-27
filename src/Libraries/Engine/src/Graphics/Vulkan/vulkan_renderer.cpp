@@ -571,26 +571,41 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanRenderer::BindDescriptorSets(StringID pipelineSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets /*= Vector<UInt32>()*/) const KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanRenderer::BindDescriptorSets(StringID layoutSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets /*= Vector<UInt32>()*/) const KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
-            if (!pipeline.has_value())
+            const auto pipelineLayout = _pipelineManager.GetPipelineLayout(layoutSid);
+            if (pipelineLayout == VK_NULL_HANDLE)
             {
-                KMP_LOG_ERROR("cannot bind descriptor sets with pipeline's sid '{}' - pipeline not found", pipelineSid);
+                KMP_LOG_ERROR("cannot bind descriptor sets with pipeline layout sid '{}' - pipeline layout not found", layoutSid);
                 return false;
             }
 
             vkCmdBindDescriptorSets(
                 _currentCommandBuffer, 
                 VK_PipelineBindPoint_Graphics,
-                pipeline.value().get().GetVkPipelineLayout(),
+                pipelineLayout,
                 firstSetIndex, 
                 UInt32(descriptorSets.size()), descriptorSets.empty() ? nullptr : descriptorSets.data(),
                 UInt32(dynamicOffsets.size()), dynamicOffsets.empty() ? nullptr : dynamicOffsets.data());
 
             return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::PushConstants(StringID layoutSid, VkShaderStageFlags shaderStagesFlags, UInt32 offset, UInt32 size, const void* data) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            const auto pipelineLayout = _pipelineManager.GetPipelineLayout(layoutSid);
+            if (pipelineLayout == VK_NULL_HANDLE)
+            {
+                KMP_LOG_ERROR("cannot push constants with pipeline layout sid '{}' - pipeline layout not found", layoutSid);
+                return;
+            }
+
+            vkCmdPushConstants(_currentCommandBuffer, pipelineLayout, shaderStagesFlags, offset, size, data);
         }}
         //--------------------------------------------------------------------------
 
@@ -658,21 +673,6 @@ namespace Kmplete
             }
 
             VKCommands::CmdBindShadersEXT(_currentCommandBuffer, UInt32(stages.size()), stages.data(), shaders.data());
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::PushConstants(StringID pipelineSid, VkShaderStageFlags shaderStagesFlags, UInt32 offset, UInt32 size, const void* data) const KMP_PROFILING(ProfileLevelImportantVerbose)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
-            if (!pipeline.has_value())
-            {
-                KMP_LOG_ERROR("cannot push constants with pipeline's sid '{}' - pipeline not found", pipelineSid);
-                return;
-            }
-
-            vkCmdPushConstants(_currentCommandBuffer, pipeline.value().get().GetVkPipelineLayout(), shaderStagesFlags, offset, size, data);
         }}
         //--------------------------------------------------------------------------
 

@@ -32,6 +32,7 @@ namespace Kmplete
     static constexpr auto ColorMultiplierDSLayout_SID = "TriangleVulkan_DS_ColorMultiplier"_sid;
     static constexpr auto ColorMultiplierDS_SID = "ColorMultipler_Set"_sid;
 
+    static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
     static constexpr auto Pipeline_SID = "VulkanTriangle_Pipeline"_sid;
 
     static constexpr auto VertexShader_SID = "TriangleVulkan_vertex"_sid;
@@ -258,6 +259,11 @@ namespace Kmplete
 
     void TriangleFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { 
+            vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID),
+            vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(ColorMultiplierDSLayout_SID)
+        }, {});
+
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
@@ -270,8 +276,6 @@ namespace Kmplete
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
-        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID));
-        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(ColorMultiplierDSLayout_SID));
         pipelineParams.AddShaderStages(shaderStages);
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
@@ -339,7 +343,7 @@ namespace Kmplete
         vulkanDevice.AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
     }
     //--------------------------------------------------------------------------
 
@@ -435,7 +439,7 @@ namespace Kmplete
         _matrixUniformBuffers[currentBufferIndex]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
         renderer.BeginRendering(Pipeline_SID, { VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() });
-        renderer.BindDescriptorSets(Pipeline_SID, 0, {
+        renderer.BindDescriptorSets(PipelineLayout_SID, 0, {
             descriptorSetManager.GetDescriptorSet(MatricesDS_SID, 0, "per frame"_true),
             descriptorSetManager.GetDescriptorSet(ColorMultiplierDS_SID, 0, "per frame"_true)
         });

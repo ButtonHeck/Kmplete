@@ -10,16 +10,15 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkDevice device, StringID sid, const VulkanGraphicsPipelineParameters& parameters)
+        VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters)
             : _device(device)
             , _sid(sid)
-            , _pipelineLayout(VK_NULL_HANDLE)
             , _pipeline(VK_NULL_HANDLE)
             , _parameters(parameters)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _Initialize();
+            _Initialize(layout);
         }
         //--------------------------------------------------------------------------
 
@@ -37,37 +36,15 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkPipelineLayout VulkanGraphicsPipeline::GetVkPipelineLayout() const noexcept
-        {
-            KMP_ASSERT(_pipelineLayout);
-
-            return _pipelineLayout;
-        }
-        //--------------------------------------------------------------------------
-
         UInt32 VulkanGraphicsPipeline::GetColorAttachmentsCount() const noexcept
         {
             return _parameters.GetColorAttachmentsCount();
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsPipeline::_Initialize()
+        void VulkanGraphicsPipeline::_Initialize(VkPipelineLayout layout)
         {
             KMP_ASSERT(_device);
-
-            VkPipelineLayoutCreateInfo layoutCreateInfo = VKUtils::InitVkPipelineLayoutCreateInfo();
-            layoutCreateInfo.setLayoutCount = UInt32(_parameters._descriptorSetLayouts.size());
-            layoutCreateInfo.pSetLayouts = _parameters._descriptorSetLayouts.data();
-
-            if (!_parameters._pushConstantRanges.empty())
-            {
-                layoutCreateInfo.pushConstantRangeCount = UInt32(_parameters._pushConstantRanges.size());
-                layoutCreateInfo.pPushConstantRanges = _parameters._pushConstantRanges.data();
-            }
-
-            auto result = vkCreatePipelineLayout(_device, &layoutCreateInfo, nullptr, &_pipelineLayout);
-            VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline layout");
-            KMP_ASSERT(_pipelineLayout);
 
             _parameters._colorBlendStateCreateInfo.attachmentCount = UInt32(_parameters._colorBlendAttachments.size());
             _parameters._colorBlendStateCreateInfo.pAttachments = _parameters._colorBlendAttachments.data();
@@ -93,7 +70,7 @@ namespace Kmplete
             }
 
             auto pipelineCI = Graphics::VKUtils::InitVkGraphicsPipelineCreateInfo();
-            pipelineCI.layout = _pipelineLayout;
+            pipelineCI.layout = layout;
             pipelineCI.pInputAssemblyState = &_parameters._inputAssemblyCreateInfo;
             pipelineCI.pRasterizationState = &_parameters._rasterizationStateCreateInfo;
             pipelineCI.pColorBlendState = &_parameters._colorBlendStateCreateInfo;
@@ -106,7 +83,7 @@ namespace Kmplete
             pipelineCI.pStages = _parameters._shadersStages.data();
             pipelineCI.pNext = &_parameters._renderingCreateInfo;
 
-            result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
+            const auto result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
             VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline");
             KMP_ASSERT(_pipeline);
         }
@@ -114,10 +91,9 @@ namespace Kmplete
 
         void VulkanGraphicsPipeline::_Finalize()
         {
-            KMP_ASSERT(_device && _pipelineLayout && _pipeline);
+            KMP_ASSERT(_device && _pipeline);
 
             vkDestroyPipeline(_device, _pipeline, nullptr);
-            vkDestroyPipelineLayout(_device, _pipelineLayout, nullptr);
         }
         //--------------------------------------------------------------------------
     }

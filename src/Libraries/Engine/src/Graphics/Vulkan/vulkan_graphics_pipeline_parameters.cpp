@@ -27,10 +27,6 @@ namespace Kmplete
             copy._multisamplingStateCreateInfo = source._multisamplingStateCreateInfo;
             copy._renderingCreateInfo = source._renderingCreateInfo;
 
-            if (copyParametersMask & DescriptorSetLayouts)
-            {
-                copy._descriptorSetLayouts = source._descriptorSetLayouts;
-            }
             if (copyParametersMask & ColorAttachmentInfos)
             {
                 copy._renderingColorAttachmentsFormats = source._renderingColorAttachmentsFormats;
@@ -53,18 +49,13 @@ namespace Kmplete
             {
                 copy._shadersStages = source._shadersStages;
             }
-            if (copyParametersMask & PushConstantRanges)
-            {
-                copy._pushConstantRanges = source._pushConstantRanges;
-            }
 
             return copy;
         }
         //--------------------------------------------------------------------------
 
         VulkanGraphicsPipelineParameters::VulkanGraphicsPipelineParameters()
-            : _descriptorSetLayouts()
-            , _inputAssemblyCreateInfo()
+            : _inputAssemblyCreateInfo()
             , _rasterizationStateCreateInfo()
             , _rasterizationLineStateCreateInfo()
             , _colorBlendStateCreateInfo()
@@ -82,7 +73,6 @@ namespace Kmplete
             , _shadersStages()
             , _renderingCreateInfo()
             , _renderingColorAttachmentsFormats()
-            , _pushConstantRanges()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -249,13 +239,6 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout)
-        {
-            _descriptorSetLayouts.push_back(descriptorSetLayout);
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment)
         {
             _renderingColorAttachmentsFormats.push_back(attachmentFormat);
@@ -331,19 +314,6 @@ namespace Kmplete
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages)
         {
             Utils::AppendVectors(shaderStages, _shadersStages);
-            return *this;
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddPushConstantRange(VkShaderStageFlags shadersStagesFlags, UInt32 offset, UInt32 size)
-        {
-            return AddPushConstantRange(VkPushConstantRange{ .stageFlags = shadersStagesFlags, .offset = offset, .size = size });
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddPushConstantRange(const VkPushConstantRange& pushConstantRange)
-        {
-            _pushConstantRanges.push_back(pushConstantRange);
             return *this;
         }
         //--------------------------------------------------------------------------

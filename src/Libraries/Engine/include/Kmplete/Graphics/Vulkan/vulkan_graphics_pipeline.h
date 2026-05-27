@@ -23,22 +23,20 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanGraphicsPipeline)
 
         public:
-            KMP_API VulkanGraphicsPipeline(VkDevice device, StringID sid, const VulkanGraphicsPipelineParameters& parameters);
+            KMP_API VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters);
             KMP_API ~VulkanGraphicsPipeline();
 
             KMP_NODISCARD KMP_API VkPipeline GetVkPipeline() const noexcept;
-            KMP_NODISCARD KMP_API VkPipelineLayout GetVkPipelineLayout() const noexcept;
             KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
 
         private:
-            void _Initialize();
+            void _Initialize(VkPipelineLayout layout);
             void _Finalize();
 
         private:
             VkDevice _device;
             const StringID _sid;
             
-            VkPipelineLayout _pipelineLayout;
             VkPipeline _pipeline;
             VulkanGraphicsPipelineParameters _parameters;
         };

@@ -26,11 +26,16 @@ namespace Kmplete
             KMP_API explicit VulkanPipelineManager(VkDevice device);
             KMP_API ~VulkanPipelineManager();
 
-            KMP_API VulkanGraphicsPipeline& AddGraphicsPipeline(StringID sid, const VulkanGraphicsPipelineParameters& parameters);
-            KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID sid) const;
+            KMP_API bool AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges);
+            KMP_NODISCARD KMP_API VkPipelineLayout GetPipelineLayout(StringID layoutSid) const noexcept;
+
+            KMP_API bool AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters);
+            KMP_API bool AddGraphicsPipeline(StringID pipelineSid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters);
+            KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID pipelineSid) const;
 
         private:
             VkDevice _device;
+            StringIDHashMap<VkPipelineLayout> _layouts;
             StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
         };
         //--------------------------------------------------------------------------

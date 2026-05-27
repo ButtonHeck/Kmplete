@@ -23,15 +23,14 @@ namespace Kmplete
             enum CopyParameters
             {
                 OnlyParameters          = 0,
-                DescriptorSetLayouts    = 1 << 0,
-                ColorAttachmentInfos    = 1 << 1,
-                DynamicStates           = 1 << 2,
-                VertexInputBindings     = 1 << 3,
-                VertexInputDescriptions = 1 << 4,
-                ShaderStages            = 1 << 5,
-                PushConstantRanges      = 1 << 6,
+                ColorAttachmentInfos    = 1 << 0,
+                DynamicStates           = 1 << 1,
+                VertexInputBindings     = 1 << 2,
+                VertexInputDescriptions = 1 << 3,
+                ShaderStages            = 1 << 4,
+                PushConstantRanges      = 1 << 5,
                 VertexInputs            = VertexInputBindings | VertexInputDescriptions,
-                All                     = DescriptorSetLayouts | ColorAttachmentInfos | DynamicStates | VertexInputs | ShaderStages | PushConstantRanges
+                All                     = ColorAttachmentInfos | DynamicStates | VertexInputs | ShaderStages | PushConstantRanges
             };
 
             KMP_NODISCARD KMP_API static VulkanGraphicsPipelineParameters CopyFrom(const VulkanGraphicsPipelineParameters& source, int copyParametersMask = OnlyParameters) noexcept;
@@ -59,7 +58,6 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& SetLineRasterizationMode(VkLineRasterizationMode mode);
             KMP_API VulkanGraphicsPipelineParameters& SetLineStipple(bool enabled, UInt32 factor, UInt16 pattern);
 
-            KMP_API VulkanGraphicsPipelineParameters& AddDescriptorSetLayout(VkDescriptorSetLayout descriptorSetLayout);
             KMP_API VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicState(VkDynamicState dynamicState);
             KMP_API VulkanGraphicsPipelineParameters& AddDynamicStates(InitializerList<VkDynamicState> dynamicStates);
@@ -68,8 +66,6 @@ namespace Kmplete
             KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
             KMP_API VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
             KMP_API VulkanGraphicsPipelineParameters& AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages);
-            KMP_API VulkanGraphicsPipelineParameters& AddPushConstantRange(VkShaderStageFlags shadersStagesFlags, UInt32 offset, UInt32 size);
-            KMP_API VulkanGraphicsPipelineParameters& AddPushConstantRange(const VkPushConstantRange& pushConstantRange);
 
             KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
 
@@ -79,7 +75,6 @@ namespace Kmplete
         private:
             friend class VulkanGraphicsPipeline;
 
-            Vector<VkDescriptorSetLayout> _descriptorSetLayouts;
             VkPipelineInputAssemblyStateCreateInfo _inputAssemblyCreateInfo;
             VkPipelineRasterizationStateCreateInfo _rasterizationStateCreateInfo;
             VkPipelineRasterizationLineStateCreateInfo _rasterizationLineStateCreateInfo;
@@ -98,7 +93,6 @@ namespace Kmplete
             Vector<VkPipelineShaderStageCreateInfo> _shadersStages;
             VkPipelineRenderingCreateInfoKHR _renderingCreateInfo;
             Vector<VkFormat> _renderingColorAttachmentsFormats;
-            Vector<VkPushConstantRange> _pushConstantRanges;
         };
         //--------------------------------------------------------------------------
     }

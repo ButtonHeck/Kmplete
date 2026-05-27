@@ -28,6 +28,7 @@ namespace Kmplete
     static constexpr auto DSLayout_SID = "DSLayout"_sid;
     static constexpr auto DS_SID = "DS"_sid;
 
+    static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
     static constexpr auto Pipeline_SID = "StorageBuffers_Pipeline"_sid;
 
     static constexpr auto VertexShader_SID = "StorageBuffers_vertex"_sid;
@@ -249,6 +250,8 @@ namespace Kmplete
 
     void StorageBuffersFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(DSLayout_SID) }, {});
+
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
@@ -261,13 +264,12 @@ namespace Kmplete
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
-        pipelineParams.AddDescriptorSetLayout(vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(DSLayout_SID));
         pipelineParams.SetCulling(VK_Cull_None, VK_FrontFace_CounterClockwise);
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
     }
     //--------------------------------------------------------------------------
 
@@ -320,7 +322,7 @@ namespace Kmplete
         for (auto i = 0; i < ColorsInstancesCount; i++)
         {
             const auto dynamicOffset = _colorsIndices[i] * UInt32(_dynamicAlignment);
-            renderer.BindDescriptorSets(Pipeline_SID, 0, {
+            renderer.BindDescriptorSets(PipelineLayout_SID, 0, {
                 descriptorSetManager.GetDescriptorSet(DS_SID, 0, "per frame"_true)
             }, { dynamicOffset });
 

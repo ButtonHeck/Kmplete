@@ -9,6 +9,7 @@
 
 namespace Kmplete
 {
+    static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
     static constexpr auto Pipeline_SID = "Pipeline"_sid;
 
     static constexpr auto VertexPositionIndex = 0;
@@ -153,6 +154,8 @@ namespace Kmplete
 
     void InstancedRenderingFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {});
+
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("instanced_rendering.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("instanced_rendering.frag.spv");
         const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
@@ -172,7 +175,7 @@ namespace Kmplete
         pipelineParams.AddVertexInputBindingsDivisors({ { VertexColorInstancedIndex, 2 } });
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, pipelineParams);
+        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
     }
     //--------------------------------------------------------------------------
 
