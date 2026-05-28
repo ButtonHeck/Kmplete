@@ -103,9 +103,6 @@ namespace Kmplete
             void _CreateSwapchain();
             void _DeleteSwapchain();
 
-            void _CreatePipelineCache();
-            void _DeletePipelineCache();
-
             void _CreatePipelineManager();
             void _DeletePipelineManager();
 
@@ -146,7 +143,6 @@ namespace Kmplete
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
             Vector<VulkanFence> _waitFences;
             UPtr<VulkanSwapchain> _swapchain;
-            VkPipelineCache _pipelineCache;
             UPtr<VulkanPipelineManager> _pipelineManager;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             VkExtent2D _currentExtent;

@@ -48,7 +48,6 @@ namespace Kmplete
             , _renderCompleteSemaphores()
             , _waitFences()
             , _swapchain(nullptr)
-            , _pipelineCache(VK_NULL_HANDLE)
             , _pipelineManager(nullptr)
             , _bufferCreatorDelegate(nullptr)
             , _currentExtent(_UpdateExtent())
@@ -66,7 +65,6 @@ namespace Kmplete
             _CreateImageCreatorDelegate();
             _CreateSynchronizationObjects();
             _CreateSwapchain();
-            _CreatePipelineCache();
             _CreatePipelineManager();
             _CreateBufferCreatorDelegate();
             _CreateRenderer();
@@ -85,7 +83,6 @@ namespace Kmplete
             _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
             _DeletePipelineManager();
-            _DeletePipelineCache();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
             _DeleteImageCreatorDelegate();
@@ -402,26 +399,6 @@ namespace Kmplete
             KMP_ASSERT(_swapchain);
 
             _swapchain.reset();
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_CreatePipelineCache() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device);
-
-            auto pipelineCacheCreateInfo = VKUtils::InitVkPipelineCacheCreateInfo();
-
-            const auto result = vkCreatePipelineCache(_device, &pipelineCacheCreateInfo, nullptr, &_pipelineCache);
-            VKUtils::CheckResult(result, "VulkanLogicalDevice: failed to create pipeline cache");
-            KMP_ASSERT(_pipelineCache);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeletePipelineCache() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device && _pipelineCache);
-
-            vkDestroyPipelineCache(_device, _pipelineCache, nullptr);
         }}
         //--------------------------------------------------------------------------
 
