@@ -102,6 +102,10 @@ namespace Kmplete
 
             KMP_API void Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const;
             KMP_API void DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const;
+            KMP_API void DrawIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndirectCommand)) const;
+            KMP_API void DrawIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndirectCommand)) const;
+            KMP_API void DrawIndexedIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndexedIndirectCommand)) const;
+            KMP_API void DrawIndexedIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndexedIndirectCommand)) const;
 
             KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const;
             KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const;

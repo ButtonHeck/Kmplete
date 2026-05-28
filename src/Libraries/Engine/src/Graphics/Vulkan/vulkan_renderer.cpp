@@ -692,6 +692,34 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        void VulkanRenderer::DrawIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride /*= sizeof(VkDrawIndirectCommand)*/) const
+        {
+            DrawIndirect(indirectBuffer.GetVkBuffer(), offset, drawCount, stride);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::DrawIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride /*= sizeof(VkDrawIndirectCommand)*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            vkCmdDrawIndirect(_currentCommandBuffer, indirectBuffer, offset, drawCount, stride);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::DrawIndexedIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride /*= sizeof(VkDrawIndexedIndirectCommand)*/) const
+        {
+            DrawIndexedIndirect(indirectBuffer.GetVkBuffer(), offset, drawCount, stride);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::DrawIndexedIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride /*= sizeof(VkDrawIndexedIndirectCommand)*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            vkCmdDrawIndexedIndirect(_currentCommandBuffer, indirectBuffer, offset, drawCount, stride);
+        }}
+        //--------------------------------------------------------------------------
+
         void VulkanRenderer::CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             VkBufferCopy copyRegion{
