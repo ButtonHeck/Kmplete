@@ -113,5 +113,26 @@ namespace Kmplete
             });
         }}
         //--------------------------------------------------------------------------
+
+
+        VulkanBuffer VulkanBufferCreatorDelegate::CreateIndirectBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BufferUsage_Indirect | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            });
+        }}
+        //--------------------------------------------------------------------------
+
+        Nullable<VulkanBuffer*> VulkanBufferCreatorDelegate::CreateIndirectBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        {
+            return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
+                .usageFlags = VK_BufferUsage_Indirect | parameters.usageFlags,
+                .memoryPropertyFlags = parameters.memoryPropertyFlags,
+                .size = parameters.size
+            });
+        }}
+        //--------------------------------------------------------------------------
     }
 }

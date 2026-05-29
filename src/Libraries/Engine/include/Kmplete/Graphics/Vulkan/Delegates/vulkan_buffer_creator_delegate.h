@@ -39,6 +39,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanBuffer CreateStorageBuffer(const VulkanBufferParameters& parameters) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateStorageBufferPtr(const VulkanBufferParameters& parameters) const;
 
+            KMP_NODISCARD KMP_API VulkanBuffer CreateIndirectBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateIndirectBufferPtr(const VulkanBufferParameters& parameters) const;
+
         private:
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
 
