@@ -183,11 +183,10 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        const auto vertexBufferLayout = Graphics::BufferLayout({
+        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
+        _vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float3, 0 }
         });
-        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
-        _vertexBuffer->AddLayout(vertexBufferLayout);
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 

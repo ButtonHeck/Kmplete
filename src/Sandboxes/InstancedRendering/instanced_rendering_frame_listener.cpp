@@ -123,23 +123,20 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        const auto vertexBufferLayout = Graphics::BufferLayout({
+        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
+        _vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionIndex }
         });
-        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
-        _vertexBuffer->AddLayout(vertexBufferLayout);
 
-        const auto vertexInstancedBufferLayout = Graphics::BufferLayout({
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionInstancedIndex }
-        }, "instanced"_true);
         _vertexBufferPosInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexInstancedBufferSize }));
-        _vertexBufferPosInstanced->AddLayout(vertexInstancedBufferLayout);
+        _vertexBufferPosInstanced->AddLayout(Graphics::BufferLayout({
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionInstancedIndex }
+        }, "instanced"_true));
 
-        const auto vertexColorsInstancedBufferLayout = Graphics::BufferLayout({
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorInstancedIndex }
-        }, "instanced"_true);
         _vertexBufferColorsInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexColorsInstancedBufferSize }));
-        _vertexBufferColorsInstanced->AddLayout(vertexColorsInstancedBufferLayout);
+        _vertexBufferColorsInstanced->AddLayout(Graphics::BufferLayout({
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorInstancedIndex }
+        }, "instanced"_true));
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 

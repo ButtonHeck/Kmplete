@@ -101,18 +101,16 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(fixedColorBufferSize, (char*)bufferedColorVertices.data(), bufferedColorBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        const auto fixedColorBufferLayout = Graphics::BufferLayout({
+        _vertexBufferFixedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, fixedColorBufferSize }));
+        _vertexBufferFixedColor->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 }
         });
-        _vertexBufferFixedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, fixedColorBufferSize }));
-        _vertexBufferFixedColor->AddLayout(fixedColorBufferLayout);
 
-        const auto bufferColorBufferLayout = Graphics::BufferLayout({
+        _vertexBufferBufferedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize }));
+        _vertexBufferBufferedColor->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 },
             Graphics::BufferElement{ Graphics::ShaderDataType::Float4, 1 },
         });
-        _vertexBufferBufferedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize }));
-        _vertexBufferBufferedColor->AddLayout(bufferColorBufferLayout);
 
         renderer.CopyBuffers(stagingBuffer, {
             { *_vertexBufferFixedColor.get(), 0, 0, fixedColorBufferSize },
