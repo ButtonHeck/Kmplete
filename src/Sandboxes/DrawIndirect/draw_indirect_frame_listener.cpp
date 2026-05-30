@@ -112,7 +112,7 @@ namespace Kmplete
         UInt32 indexBufferSize = _indexCount * sizeof(UInt32);
 
         Vector<VkDrawIndirectCommand> drawIndirectCommands;
-        VkDrawIndirectCommand command;
+        VkDrawIndirectCommand command{};
         command.vertexCount = 3;
         command.instanceCount = 4;
         command.firstInstance = 0;
@@ -123,12 +123,26 @@ namespace Kmplete
         drawIndirectCommands.push_back(command);
         const auto drawInstancedBufferSize = UInt32(drawIndirectCommands.size() * sizeof(VkDrawIndirectCommand));
 
-        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize + instanceBufferSize + indexBufferSize + drawInstancedBufferSize });
+        Vector<VkDrawIndexedIndirectCommand> drawIndexedIndirectCommands;
+        VkDrawIndexedIndirectCommand indexedCommand{};
+        indexedCommand.firstIndex = 0;
+        indexedCommand.firstInstance = 8;
+        indexedCommand.indexCount = 3;
+        indexedCommand.instanceCount = 4;
+        indexedCommand.vertexOffset = 0;
+        drawIndexedIndirectCommands.push_back(indexedCommand);
+        indexedCommand.firstIndex = 3;
+        indexedCommand.firstInstance = 12;
+        drawIndexedIndirectCommands.push_back(indexedCommand);
+        const auto drawIndexedInstanceBufferSize = UInt32(drawIndexedIndirectCommands.size() * sizeof(VkDrawIndexedIndirectCommand));
+
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize + instanceBufferSize + indexBufferSize + drawInstancedBufferSize + drawIndexedInstanceBufferSize });
         stagingBuffer.Map();
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)instanceData.data(), instanceBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + instanceBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + instanceBufferSize + indexBufferSize, (char*)drawIndirectCommands.data(), drawInstancedBufferSize);
+        stagingBuffer.CopyToMappedMemory(vertexBufferSize + instanceBufferSize + indexBufferSize + drawInstancedBufferSize, (char*)drawIndexedIndirectCommands.data(), drawIndexedInstanceBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
@@ -144,13 +158,14 @@ namespace Kmplete
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
 
-        _indirectBuffer.reset(vulkanBufferCreator.CreateIndirectBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, drawInstancedBufferSize }));
+        _indirectBuffer.reset(vulkanBufferCreator.CreateIndirectBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, drawInstancedBufferSize + drawIndexedInstanceBufferSize }));
 
         renderer.CopyBuffers(stagingBuffer, {
             { *_vertexBuffer.get(), 0, 0, vertexBufferSize },
             { *_vertexInstanceBuffer.get(), vertexBufferSize, 0, instanceBufferSize },
             { *_indexBuffer.get(), vertexBufferSize + instanceBufferSize, 0, indexBufferSize },
-            { *_indirectBuffer.get(), vertexBufferSize + instanceBufferSize + indexBufferSize, 0, drawInstancedBufferSize }
+            { *_indirectBuffer.get(), vertexBufferSize + instanceBufferSize + indexBufferSize, 0, drawInstancedBufferSize },
+            { *_indirectBuffer.get(), vertexBufferSize + instanceBufferSize + indexBufferSize + drawInstancedBufferSize, drawInstancedBufferSize, drawIndexedInstanceBufferSize }
         }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
@@ -209,6 +224,7 @@ namespace Kmplete
 
         renderer.BeginRendering(drawArea);
         renderer.DrawIndirect(*_indirectBuffer.get(), 0, 2);
+        renderer.DrawIndexedIndirect(*_indirectBuffer.get(), 2 * sizeof(VkDrawIndirectCommand), 2);
         renderer.EndRendering();
     }
     //--------------------------------------------------------------------------
