@@ -169,7 +169,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferPosInstanced, VertexPositionInstancedIndex);
         pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferColorsInstanced, VertexColorInstancedIndex);
-        pipelineParams.AddVertexInputBindingsDivisors({ { VertexColorInstancedIndex, 2 } });
+        pipelineParams.AddVertexInputBindingsDivisors({ { VertexColorInstancedIndex, 2 } }); // only color divisor set to 2, position divisor default 1 is ok
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
