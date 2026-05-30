@@ -12,7 +12,9 @@ namespace Kmplete
     static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
     static constexpr auto Pipeline_SID = "Pipeline"_sid;
 
-    static constexpr auto VertexPositionIndex = 0;
+    static constexpr auto VertexBufferBinding = 0;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
 
 
     namespace
@@ -72,7 +74,7 @@ namespace Kmplete
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionIndex }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex }
         });
 
         renderer.CopyBuffers(stagingBuffer, {
@@ -107,7 +109,7 @@ namespace Kmplete
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddShaderStages(shaderStages);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
@@ -132,7 +134,7 @@ namespace Kmplete
         renderer.SetScissor(drawArea);
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindVertexBuffers(VertexPositionIndex, { _vertexBuffer->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { 0 });
 
         renderer.BeginRendering(drawArea);
         for (auto i = 0; i < InstancesCount; i++)

@@ -12,9 +12,13 @@ namespace Kmplete
     static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
     static constexpr auto Pipeline_SID = "Pipeline"_sid;
 
-    static constexpr auto VertexPositionIndex = 0;
-    static constexpr auto VertexPositionInstancedIndex = 1;
-    static constexpr auto VertexColorInstancedIndex = 2;
+    static constexpr auto VertexBufferBinding = 0;
+    static constexpr auto InstancePositionBufferBinding = 1;
+    static constexpr auto InstanceColorBufferBinding = 2;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
+    static constexpr auto VertexPositionInstancedAttributeIndex = 1;
+    static constexpr auto VertexColorInstancedAttributeIndex = 2;
 
     static constexpr auto NumInstancesInRow = 9;
 
@@ -125,17 +129,17 @@ namespace Kmplete
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionIndex }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex }
         });
 
         _vertexBufferPosInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexInstancedBufferSize }));
         _vertexBufferPosInstanced->AddLayout(Graphics::BufferLayout({
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionInstancedIndex }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionInstancedAttributeIndex }
         }, "instanced"_true));
 
         _vertexBufferColorsInstanced.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexColorsInstancedBufferSize }));
         _vertexBufferColorsInstanced->AddLayout(Graphics::BufferLayout({
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorInstancedIndex }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorInstancedAttributeIndex }
         }, "instanced"_true));
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
@@ -166,10 +170,10 @@ namespace Kmplete
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddShaderStages(shaderStages);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferPosInstanced, VertexPositionInstancedIndex);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferColorsInstanced, VertexColorInstancedIndex);
-        pipelineParams.AddVertexInputBindingsDivisors({ { VertexColorInstancedIndex, 2 } }); // only color divisor set to 2, position divisor default 1 is ok
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexBufferBinding);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferPosInstanced, InstancePositionBufferBinding);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBufferColorsInstanced, InstanceColorBufferBinding);
+        pipelineParams.AddVertexInputBindingsDivisors({ { InstanceColorBufferBinding, 2 } }); // only color divisor set to 2, position divisor default 1 is ok
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
@@ -197,7 +201,7 @@ namespace Kmplete
         renderer.SetScissor(drawArea);
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindVertexBuffers(VertexPositionIndex, { _vertexBuffer->GetVkBuffer(), _vertexBufferPosInstanced->GetVkBuffer(), _vertexBufferColorsInstanced->GetVkBuffer() }, { 0, 0, 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer(), _vertexBufferPosInstanced->GetVkBuffer(), _vertexBufferColorsInstanced->GetVkBuffer() }, { 0, 0, 0 });
         renderer.BindIndexBuffer(*_indexBuffer.get());
 
         renderer.BeginRendering(drawArea);
@@ -205,7 +209,7 @@ namespace Kmplete
         renderer.EndRendering();
 
         renderer.BeginRendering(drawArea, "clear previous"_false);
-        renderer.BindVertexBuffers(VertexPositionInstancedIndex, { _vertexBufferPosInstanced->GetVkBuffer() }, { sizeof(Vertex) * NumInstancesInRow });
+        renderer.BindVertexBuffers(InstancePositionBufferBinding, { _vertexBufferPosInstanced->GetVkBuffer() }, { sizeof(Vertex) * NumInstancesInRow });
         renderer.DrawIndexed(3, NumInstancesInRow, 0, 0, 0);
         renderer.EndRendering();
     }

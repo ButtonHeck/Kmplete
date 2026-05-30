@@ -20,6 +20,8 @@ namespace Kmplete
     static constexpr auto VertexShader_BufferedColor_SID =      "BufferedColor_vertex"_sid;
     static constexpr auto FragmentShader_BufferedColor_SID =    "BufferedColor_fragment"_sid;
 
+    static constexpr auto VertexBufferBinding = 0;
+
     namespace
     {
         struct FixedColorVertex
@@ -145,7 +147,7 @@ namespace Kmplete
         pipelineFixedColorFillParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineFixedColorFillParams.AddShaderStages(fixedColorShaderStages);
-        pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferFixedColor, 0);
+        pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferFixedColor, VertexBufferBinding);
         pipelineFixedColorFillParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         auto pipelineFixedColorLineParams = Graphics::VulkanGraphicsPipelineParameters::CopyFrom(pipelineFixedColorFillParams, 
@@ -157,7 +159,7 @@ namespace Kmplete
             Graphics::VulkanGraphicsPipelineParameters::CopyParameters::ColorAttachmentInfos |
             Graphics::VulkanGraphicsPipelineParameters::CopyParameters::DynamicStates
         );
-        pipelineBufferedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferBufferedColor, 0);
+        pipelineBufferedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferBufferedColor, VertexBufferBinding);
         pipelineBufferedColorFillParams.AddShaderStages(bufferedColorShaderStages);
 
         auto pipelineBufferedColorLineParams = Graphics::VulkanGraphicsPipelineParameters::CopyFrom(pipelineBufferedColorFillParams,
@@ -197,14 +199,14 @@ namespace Kmplete
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
         // fixed color drawing
-        renderer.BindVertexBuffers(0, { _vertexBufferFixedColor->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBufferFixedColor->GetVkBuffer() }, { 0 });
         renderer.BindGraphicsPipeline(Pipeline_FixedColor_Fill_SID);
         renderer.Draw(3, 1, 0, 0);
         renderer.BindGraphicsPipeline(Pipeline_FixedColor_Line_SID);
         renderer.Draw(3, 1, 3, 0);
 
         // buffered color drawing
-        renderer.BindVertexBuffers(0, { _vertexBufferBufferedColor->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBufferBufferedColor->GetVkBuffer() }, { 0 });
         renderer.BindGraphicsPipeline(Pipeline_BufferedColor_Fill_SID);
         renderer.Draw(3, 1, 0, 0);
         renderer.BindGraphicsPipeline(Pipeline_BufferedColor_Line_SID);

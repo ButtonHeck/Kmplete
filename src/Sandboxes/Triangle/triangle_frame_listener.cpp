@@ -41,6 +41,11 @@ namespace Kmplete
     static constexpr auto MatricesBindingIndex = 0;
     static constexpr auto ColorMultiplierBindingIndex = 3;
 
+    static constexpr auto VertexBufferBinding = 0;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
+    static constexpr auto VertexColorAttributeIndex = 1;
+
     namespace
     {
         struct Vertex
@@ -216,8 +221,8 @@ namespace Kmplete
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize + vertex2BufferSize }));
         _vertexBuffer->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, 0 },
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, 1 }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, VertexPositionAttributeIndex },
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorAttributeIndex }
         });
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
@@ -278,7 +283,7 @@ namespace Kmplete
         pipelineParams.AddShaderStages(shaderStages);
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, 0);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexBufferBinding);
         pipelineParams.AddDynamicState(VK_Dynamic_Viewport);
         pipelineParams.AddDynamicState(VK_Dynamic_Scissor);
         pipelineParams.AddDynamicState(VK_Dynamic_RasterizationSamples);
@@ -447,7 +452,7 @@ namespace Kmplete
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
 #if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
-        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{ 0 } } );
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{ 0 } } );
         renderer.SetViewport(VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f });
         renderer.SetScissor(VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() });
 #else
@@ -489,7 +494,7 @@ namespace Kmplete
         renderer.SetLogicOpEnabled(false);
         renderer.SetLogicOp(VK_LogicOp_Copy);
 
-        const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(0);
+        const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(VertexBufferBinding);
         renderer.SetVertexInput(inputBindingsDescriptions, attributeDescriptions);
 
         renderer.SetCullMode(VK_Cull_None);
@@ -500,7 +505,7 @@ namespace Kmplete
         renderer.SetPolygonMode(VK_Polygon_Fill);
         renderer.SetProvokingVertexMode(VK_ProvokingVertexMode_FirstVertex);
         renderer.SetSampleMask(vulkanDevice.GetMultisampling(), {0xFF});
-        renderer.BindVertexBuffers2(0, { _vertexBuffer->GetVkBuffer() }, { 0 }, { 420 }, { sizeof(Vertex) });
+        renderer.BindVertexBuffers2(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { 0 }, { 420 }, { sizeof(Vertex) });
         renderer.BindShaderObjects(
             { VK_ShaderStage_Vertex, VK_ShaderStage_Fragment },
             { VertexShader_SID, FragmentShader_SID }

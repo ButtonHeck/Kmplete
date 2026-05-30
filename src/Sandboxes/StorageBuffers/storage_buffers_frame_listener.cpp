@@ -37,7 +37,9 @@ namespace Kmplete
     static constexpr auto MatricesBindingIndex = 0;
     static constexpr auto ColorsBindingIndex = 1;
 
-    static constexpr auto VertexPositionIndex = 0;
+    static constexpr auto VertexBufferBinding = 0;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
 
 
     namespace
@@ -185,7 +187,7 @@ namespace Kmplete
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, 0 }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, VertexPositionAttributeIndex }
         });
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
@@ -265,7 +267,7 @@ namespace Kmplete
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.SetCulling(VK_Cull_None, VK_FrontFace_CounterClockwise);
         pipelineParams.AddShaderStages(shaderStages);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);

@@ -46,6 +46,11 @@ namespace Kmplete
     static constexpr auto TextureBindingIndex = 1;
     static constexpr auto SamplerBindingIndex = 0;
 
+    static constexpr auto VertexBufferBinding = 0;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
+    static constexpr auto VertexUVAttributeIndex = 1;
+
 
     namespace
     {
@@ -197,8 +202,8 @@ namespace Kmplete
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, 0 },
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 1 }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, VertexPositionAttributeIndex },
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexUVAttributeIndex }
         });
 
         _indexBuffer.reset(vulkanBufferCreator.CreateIndexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize }));
@@ -411,7 +416,7 @@ namespace Kmplete
             descriptorSetManager.GetDescriptorSet(SamplerDS_SID, 0, "per frame"_true)
         });
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { 0 });
         renderer.BindIndexBuffer(*_indexBuffer.get());
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
@@ -449,7 +454,7 @@ namespace Kmplete
         renderer.SetLogicOpEnabled(false);
         renderer.SetLogicOp(VK_LogicOp_Copy);
 
-        const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(0);
+        const auto& [inputBindingsDescriptions, attributeDescriptions] = _vertexBuffer->GetDynamicBindingsDescriptions(VertexBufferBinding);
         renderer.SetVertexInput(inputBindingsDescriptions, attributeDescriptions);
 
         renderer.SetCullMode(VK_Cull_None);

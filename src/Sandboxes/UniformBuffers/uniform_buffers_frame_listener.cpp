@@ -35,7 +35,9 @@ namespace Kmplete
     static constexpr auto ViewProjectionMatricesBindingIndex = 0;
     static constexpr auto ModelInstanceMatricesBindingIndex = 1;
 
-    static constexpr auto VertexPositionIndex = 0;
+    static constexpr auto VertexBufferBinding = 0;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
 
     static constexpr auto GridDimension = 5;
     static constexpr auto InstancesCount = GridDimension * GridDimension;
@@ -140,7 +142,7 @@ namespace Kmplete
 
         _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
         _vertexBuffer->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, 0 }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float3, VertexPositionAttributeIndex }
         });
 
         vulkanRenderer.CopyBuffers(stagingBuffer, {
@@ -203,7 +205,7 @@ namespace Kmplete
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddShaderStages(shaderStages);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexPositionIndex);
+        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
@@ -261,7 +263,7 @@ namespace Kmplete
         renderer.SetScissor(drawArea);
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindVertexBuffers(0, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{ 0 } });
+        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{ 0 } });
         renderer.BeginRendering(drawArea);
 
         for (UInt32 i = 0; i < InstancesCount; i++)
