@@ -203,7 +203,7 @@ namespace Kmplete
         VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo(bool clearPrevious /*= true*/) const
         {
             auto colorAttachmentInfo = clearPrevious ? VKPresets::RenderingAttachmentInfo_Color_ClearStore : VKPresets::RenderingAttachmentInfo_Color_LoadStore;
-            if (GetMultisampling() == VK_SampleCount_1)
+            if (_msaaSamples == VK_SampleCount_1)
             {
                 colorAttachmentInfo.imageView = GetCurrentImageView();
             }
