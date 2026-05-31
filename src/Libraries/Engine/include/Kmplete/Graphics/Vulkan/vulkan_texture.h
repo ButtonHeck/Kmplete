@@ -29,7 +29,6 @@ namespace Kmplete
                                   const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         private:
-            void _InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             void _InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
             void _TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer);

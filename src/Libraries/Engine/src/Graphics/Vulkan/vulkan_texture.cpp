@@ -19,25 +19,18 @@ namespace Kmplete
 
         VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
                                      const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
-            : VulkanTextureBase(device)
+            : VulkanTextureBase(device, 
+                VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled), 
+                imageCreatorDelegate, 
+                VK_Memory_DeviceLocal)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _InitializeImage(format, mipLevels, extent, imageCreatorDelegate);
             _InitializeImageView(mipLevels, imageCreatorDelegate);
             _TransitionImageLayout(mipLevels, commandBuffer);
             _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
             _GenerateMipmaps(extent, mipLevels, commandBuffer);
         }
-        //--------------------------------------------------------------------------
-
-        void VulkanTexture::_InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
-        {
-            const auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled);
-
-            _image.reset(imageCreatorDelegate.CreateVulkanImagePtr(creationParameters, VK_Memory_DeviceLocal));
-            KMP_ASSERT(_image);
-        }}
         //--------------------------------------------------------------------------
 
         void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)

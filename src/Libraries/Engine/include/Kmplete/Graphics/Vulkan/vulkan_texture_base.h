@@ -11,17 +11,23 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanImageCreatorDelegate;
+
+
         //TODO: comments
         class VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureBase)
 
         public:
-            KMP_API explicit VulkanTextureBase(VkDevice device);
+            KMP_API VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
             KMP_API virtual ~VulkanTextureBase();
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
             KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
+
+        private:
+            void _InitializeImage(const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
 
         protected:
             VkDevice _device;
