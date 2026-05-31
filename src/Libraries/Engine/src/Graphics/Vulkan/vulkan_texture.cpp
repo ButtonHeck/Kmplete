@@ -19,37 +19,15 @@ namespace Kmplete
 
         VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
                                      const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
-            : _device(device)
-            , _image(nullptr)
-            , _imageView(VK_NULL_HANDLE)
+            : VulkanTextureBase(device)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
-            KMP_ASSERT(_device);
 
             _InitializeImage(format, mipLevels, extent, imageCreatorDelegate);
             _TransitionImageLayout(mipLevels, commandBuffer);
             _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
             _GenerateMipmaps(extent, mipLevels, commandBuffer);
             _InitializeImageView(mipLevels, imageCreatorDelegate);
-        }
-        //--------------------------------------------------------------------------
-
-        VulkanTexture::~VulkanTexture() KMP_PROFILING(ProfileLevelAlways)
-        {
-            KMP_ASSERT(_device && _imageView && _image);
-
-            vkDestroyImageView(_device, _imageView, nullptr);
-
-            _image.reset();
-        }}
-        //--------------------------------------------------------------------------
-
-        VkImageView VulkanTexture::GetVkImageView() const noexcept
-        {
-            KMP_ASSERT(_imageView);
-
-            return _imageView;
         }
         //--------------------------------------------------------------------------
 

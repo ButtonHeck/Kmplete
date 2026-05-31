@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/texture.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -18,7 +19,7 @@ namespace Kmplete
 
 
         //TODO: comments
-        class VulkanTexture : public Texture
+        class VulkanTexture : public Texture, public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTexture)
             KMP_LOG_CLASSNAME(VulkanTexture)
@@ -26,9 +27,6 @@ namespace Kmplete
         public:
             KMP_API VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
                                   const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
-            KMP_API ~VulkanTexture();
-
-            KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
 
         private:
             void _InitializeImage(VkFormat format, UInt32 mipLevels, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
@@ -37,11 +35,6 @@ namespace Kmplete
             void _GenerateMipmaps(const VkExtent3D& extent, UInt32 mipLevels, VkCommandBuffer commandBuffer);
             void _GenerateMipmapLevel(VkImageMemoryBarrier& imageBarrier, UInt32 mipLevel, Int32& mipWidth, Int32& mipHeight, VkImage image, VkCommandBuffer commandBuffer);
             void _InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
-
-        private:
-            VkDevice _device;
-            UPtr<VulkanImage> _image;
-            VkImageView _imageView;
         };
         //--------------------------------------------------------------------------
     }
