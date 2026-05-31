@@ -16,29 +16,11 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        namespace
-        {
-            KMP_NODISCARD VkImageViewCreateInfo GetImageViewCreateInfo(UInt32 mipLevels)
-            {
-                auto imageViewCreateInfo = VKUtils::InitVkImageViewCreateInfo();
-                imageViewCreateInfo.viewType = VK_ImageView_2D;
-                imageViewCreateInfo.subresourceRange.aspectMask = VK_ImageAspect_Color;
-                imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
-                imageViewCreateInfo.subresourceRange.levelCount = mipLevels;
-                imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
-                imageViewCreateInfo.subresourceRange.layerCount = 1;
-
-                return imageViewCreateInfo;
-            }
-            //--------------------------------------------------------------------------
-        }
-
-
         VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
                                      const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : VulkanTextureBase(device, 
                 VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled),
-                GetImageViewCreateInfo(mipLevels),
+                VKPresets::GetImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer(mipLevels),
                 imageCreatorDelegate, 
                 VK_Memory_DeviceLocal)
         {

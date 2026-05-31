@@ -91,6 +91,26 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            static constexpr VkImageViewCreateInfo ImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer{
+                .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                .viewType = VK_ImageView_2D,
+                .subresourceRange = VkImageSubresourceRange{ 
+                    .aspectMask = VK_ImageAspect_Color,
+                    .baseMipLevel = 0,
+                    .baseArrayLayer = 0,
+                    .layerCount = 1
+                }
+            };
+            //--------------------------------------------------------------------------
+
+            KMP_NODISCARD constexpr VkImageViewCreateInfo GetImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer(UInt32 mipLevels)
+            {
+                auto imageViewCI = ImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer;
+                imageViewCI.subresourceRange.levelCount = mipLevels;
+                return imageViewCI;
+            }
+            //--------------------------------------------------------------------------
+
             static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_Color_ClearStore{
                 .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
                 .imageLayout = VK_ImageLayout_ColorAttachmentOptimal,
