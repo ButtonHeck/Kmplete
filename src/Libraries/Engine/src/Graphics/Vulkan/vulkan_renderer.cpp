@@ -160,54 +160,13 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::TransitionImage(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
 
-            VKUtils::MemoryBarrierParameters colorImageBarrierParameters = {
-                .cmdbuffer = _currentCommandBuffer,
-                .image = colorImage,
-                .srcAccessMask = VK_Access_None,
-                .dstAccessMask = VK_Access_ColorAttachmentWrite,
-                .oldImageLayout = VK_ImageLayout_Undefined,
-                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            VKUtils::InsertImageMemoryBarrier(colorImageBarrierParameters);
-
-            VKUtils::MemoryBarrierParameters depthStencilImageBarrierParameters = {
-                .cmdbuffer = _currentCommandBuffer,
-                .image = depthStencilImage,
-                .srcAccessMask = VK_Access_None,
-                .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
-                .oldImageLayout = VK_ImageLayout_Undefined,
-                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
-                .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
-                .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
-                .subresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
-            };
-            VKUtils::InsertImageMemoryBarrier(depthStencilImageBarrierParameters);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::TransitionColorImageToPresent(VkImage colorImage) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            VKUtils::MemoryBarrierParameters barrierParameters = {
-                .cmdbuffer = _currentCommandBuffer,
-                .image = colorImage,
-                .srcAccessMask = VK_Access_ColorAttachmentWrite,
-                .dstAccessMask = VK_Access_None,
-                .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
-                .newImageLayout = VK_ImageLayout_PresentKHR,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_BottomOfPipe,
-                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            VKUtils::InsertImageMemoryBarrier(barrierParameters);
+            memoryBarrierParameters.cmdbuffer = _currentCommandBuffer;
+            memoryBarrierParameters.image = image;
+            VKUtils::InsertImageMemoryBarrier(memoryBarrierParameters);
         }}
         //--------------------------------------------------------------------------
 

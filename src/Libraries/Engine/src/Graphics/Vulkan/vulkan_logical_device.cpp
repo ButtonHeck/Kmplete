@@ -102,7 +102,28 @@ namespace Kmplete
             _swapchain->StartFrame(frameTimestep);
 
             _renderer->StartFrame();
-            _renderer->TransitionColorAndDepthStencilImagesToWrite(_swapchain->GetCurrentImage(), _swapchain->GetMultisampledDepthStencilImage());
+
+            VKUtils::MemoryBarrierParameters imageBarrierParameters = {
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_ColorAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+            };
+            _renderer->TransitionImage(_swapchain->GetCurrentImage(), imageBarrierParameters);
+
+            imageBarrierParameters = {
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .subresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
+            };
+            _renderer->TransitionImage(_swapchain->GetMultisampledDepthStencilImage(), imageBarrierParameters);
         }}
         //--------------------------------------------------------------------------
 
@@ -113,7 +134,16 @@ namespace Kmplete
             KMP_ASSERT(_currentBufferIndex < _presentCompleteSemaphores.size());
             KMP_ASSERT(_currentBufferIndex < _renderCompleteSemaphores.size());
 
-            _renderer->TransitionColorImageToPresent(_swapchain->GetCurrentImage());
+            VKUtils::MemoryBarrierParameters memoryBarrierParameters = {
+                .srcAccessMask = VK_Access_ColorAttachmentWrite,
+                .dstAccessMask = VK_Access_None,
+                .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .newImageLayout = VK_ImageLayout_PresentKHR,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_BottomOfPipe,
+                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+            };
+            _renderer->TransitionImage(_swapchain->GetCurrentImage(), memoryBarrierParameters);
             _renderer->EndFrame();
             _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
 
