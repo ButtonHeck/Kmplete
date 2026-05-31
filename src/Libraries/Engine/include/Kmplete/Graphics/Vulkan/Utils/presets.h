@@ -16,6 +16,10 @@ namespace Kmplete
 
         namespace VKPresets
         {
+            /*
+            * VkPipelineColorBlendAttachmentState presets
+            */
+
             static constexpr VkPipelineColorBlendAttachmentState ColorBlendAttachmentState_NoBlend{
                 .blendEnable = VK_FALSE,
                 .colorWriteMask = VK_Color_RGBA
@@ -34,6 +38,11 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
+
+            /*
+            * VkColorBlendEquationEXT presets
+            */
+
             static constexpr VkColorBlendEquationEXT ColorBlendEquation_AlphaBlending{
                 .srcColorBlendFactor = VK_BlendFactor_SrcAlpha,
                 .dstColorBlendFactor = VK_BlendFactor_OneMinusSrcAlpha,
@@ -44,12 +53,22 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
+
+            /*
+            * VkStencilOpState presets
+            */
+
             static constexpr VkStencilOpState StencilOpState_Keep_Always{
                 .failOp = VK_Stencil_Keep,
                 .passOp = VK_Stencil_Keep,
                 .compareOp = VK_Compare_Always
             };
             //--------------------------------------------------------------------------
+
+
+            /*
+            * VkImageSubresourceRange presets
+            */
 
             static constexpr VkImageSubresourceRange ImageSubresourceRange_Color_Layer1_Level1{
                 .aspectMask = VK_ImageAspect_Color,
@@ -68,6 +87,11 @@ namespace Kmplete
                 .layerCount = 1
             };
             //--------------------------------------------------------------------------
+
+
+            /*
+            * VkImageCreateInfo presets
+            */
 
             static constexpr VkImageCreateInfo ImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
@@ -91,6 +115,11 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+
+            /*
+            * VkImageViewCreateInfo presets
+            */
+
             static constexpr VkImageViewCreateInfo ImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                 .viewType = VK_ImageView_2D,
@@ -110,6 +139,11 @@ namespace Kmplete
                 return imageViewCI;
             }
             //--------------------------------------------------------------------------
+
+
+            /*
+            * VkRenderingAttachmentInfo presets
+            */
 
             static constexpr VkRenderingAttachmentInfo RenderingAttachmentInfo_Color_ClearStore{
                 .sType = VK_STRUCTURE_TYPE_RENDERING_ATTACHMENT_INFO,
@@ -146,6 +180,11 @@ namespace Kmplete
                 .clearValue = VkClearValue{ .depthStencil{ 1.0f, 0 } }
             };
             //--------------------------------------------------------------------------
+
+
+            /*
+            * VkSamplerCreateInfo presets
+            */
 
             static constexpr VkSamplerCreateInfo SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy{
                 .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
