@@ -45,7 +45,7 @@ namespace Kmplete
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
             KMP_API void TransitionColorAndDepthStencilImagesToWrite(VkImage colorImage, VkImage depthStencilImage) const;
-            KMP_API void TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const;
+            KMP_API void TransitionColorImageToPresent(VkImage colorImage) const;
 
             KMP_API void SetDepthTestEnabled(bool enabled) const;
             KMP_API void SetDepthWriteEnabled(bool enabled) const;

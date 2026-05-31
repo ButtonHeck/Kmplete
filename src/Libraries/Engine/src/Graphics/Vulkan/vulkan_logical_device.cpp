@@ -113,7 +113,7 @@ namespace Kmplete
             KMP_ASSERT(_currentBufferIndex < _presentCompleteSemaphores.size());
             KMP_ASSERT(_currentBufferIndex < _renderCompleteSemaphores.size());
 
-            _renderer->TransitionColorAndDepthStencilImagesToPresent(_swapchain->GetCurrentImage());
+            _renderer->TransitionColorImageToPresent(_swapchain->GetCurrentImage());
             _renderer->EndFrame();
             _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
 

@@ -192,7 +192,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::TransitionColorAndDepthStencilImagesToPresent(VkImage colorImage) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::TransitionColorImageToPresent(VkImage colorImage) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
 
