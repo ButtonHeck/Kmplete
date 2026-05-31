@@ -63,7 +63,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API bool IsVSync() const noexcept;
             KMP_API void SetVSync(bool vSync);
 
-            KMP_NODISCARD KMP_API const Swapchain& GetSwapchain() const noexcept override;
+            KMP_NODISCARD KMP_API const VulkanSwapchain& GetSwapchain() const noexcept override;
             KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetPresentationQueue() const noexcept;

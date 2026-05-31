@@ -202,7 +202,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        const Swapchain& VulkanLogicalDevice::GetSwapchain() const noexcept
+        const VulkanSwapchain& VulkanLogicalDevice::GetSwapchain() const noexcept
         {
             KMP_ASSERT(_swapchain);
 
