@@ -20,7 +20,8 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(VulkanTextureBase)
 
         public:
-            KMP_API VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
+            KMP_API VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, VkImageViewCreateInfo imageViewCreateInfo,
+                                      const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
             KMP_API virtual ~VulkanTextureBase();
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
@@ -28,6 +29,7 @@ namespace Kmplete
 
         private:
             void _InitializeImage(const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
+            void _InitializeImageView(VkImageViewCreateInfo& imageViewCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         protected:
             VkDevice _device;

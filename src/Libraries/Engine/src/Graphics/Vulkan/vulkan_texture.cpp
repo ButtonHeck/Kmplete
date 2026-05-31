@@ -1,5 +1,4 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
-#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
@@ -17,39 +16,38 @@ namespace Kmplete
         using namespace VKBits;
 
 
+        namespace
+        {
+            KMP_NODISCARD VkImageViewCreateInfo GetImageViewCreateInfo(UInt32 mipLevels)
+            {
+                auto imageViewCreateInfo = VKUtils::InitVkImageViewCreateInfo();
+                imageViewCreateInfo.viewType = VK_ImageView_2D;
+                imageViewCreateInfo.subresourceRange.aspectMask = VK_ImageAspect_Color;
+                imageViewCreateInfo.subresourceRange.baseMipLevel = 0;
+                imageViewCreateInfo.subresourceRange.levelCount = mipLevels;
+                imageViewCreateInfo.subresourceRange.baseArrayLayer = 0;
+                imageViewCreateInfo.subresourceRange.layerCount = 1;
+
+                return imageViewCreateInfo;
+            }
+            //--------------------------------------------------------------------------
+        }
+
+
         VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
                                      const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : VulkanTextureBase(device, 
-                VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled), 
+                VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled),
+                GetImageViewCreateInfo(mipLevels),
                 imageCreatorDelegate, 
                 VK_Memory_DeviceLocal)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
-            _InitializeImageView(mipLevels, imageCreatorDelegate);
             _TransitionImageLayout(mipLevels, commandBuffer);
             _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
             _GenerateMipmaps(extent, mipLevels, commandBuffer);
         }
-        //--------------------------------------------------------------------------
-
-        void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_image);
-
-            auto imageViewParameters = VKUtils::InitVkImageViewCreateInfo();
-            imageViewParameters.image = _image->GetVkImage();
-            imageViewParameters.viewType = VK_ImageView_2D;
-            imageViewParameters.format = _image->GetVkFormat();
-            imageViewParameters.subresourceRange.aspectMask = VK_ImageAspect_Color;
-            imageViewParameters.subresourceRange.baseMipLevel = 0;
-            imageViewParameters.subresourceRange.levelCount = mipLevels;
-            imageViewParameters.subresourceRange.baseArrayLayer = 0;
-            imageViewParameters.subresourceRange.layerCount = 1;
-
-            _imageView = imageCreatorDelegate.CreateVkImageView(imageViewParameters);
-            KMP_ASSERT(_imageView);
-        }}
         //--------------------------------------------------------------------------
 
         void VulkanTexture::_TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer) KMP_PROFILING(ProfileLevelImportant)

@@ -29,8 +29,6 @@ namespace Kmplete
                                   const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         private:
-            void _InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate);
-
             void _TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer);
             void _CopyStagingBufferToImage(const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, VkCommandBuffer commandBuffer);
             void _GenerateMipmaps(const VkExtent3D& extent, UInt32 mipLevels, VkCommandBuffer commandBuffer);
