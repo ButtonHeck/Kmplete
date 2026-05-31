@@ -24,10 +24,10 @@ namespace Kmplete
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             _InitializeImage(format, mipLevels, extent, imageCreatorDelegate);
+            _InitializeImageView(mipLevels, imageCreatorDelegate);
             _TransitionImageLayout(mipLevels, commandBuffer);
             _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
             _GenerateMipmaps(extent, mipLevels, commandBuffer);
-            _InitializeImageView(mipLevels, imageCreatorDelegate);
         }
         //--------------------------------------------------------------------------
 
@@ -37,6 +37,25 @@ namespace Kmplete
 
             _image.reset(imageCreatorDelegate.CreateVulkanImagePtr(creationParameters, VK_Memory_DeviceLocal));
             KMP_ASSERT(_image);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_image);
+
+            auto imageViewParameters = VKUtils::InitVkImageViewCreateInfo();
+            imageViewParameters.image = _image->GetVkImage();
+            imageViewParameters.viewType = VK_ImageView_2D;
+            imageViewParameters.format = _image->GetVkFormat();
+            imageViewParameters.subresourceRange.aspectMask = VK_ImageAspect_Color;
+            imageViewParameters.subresourceRange.baseMipLevel = 0;
+            imageViewParameters.subresourceRange.levelCount = mipLevels;
+            imageViewParameters.subresourceRange.baseArrayLayer = 0;
+            imageViewParameters.subresourceRange.layerCount = 1;
+
+            _imageView = imageCreatorDelegate.CreateVkImageView(imageViewParameters);
+            KMP_ASSERT(_imageView);
         }}
         //--------------------------------------------------------------------------
 
@@ -153,25 +172,6 @@ namespace Kmplete
             {
                 mipHeight /= 2;
             }
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanTexture::_InitializeImageView(UInt32 mipLevels, const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_image);
-
-            auto imageViewParameters = VKUtils::InitVkImageViewCreateInfo();
-            imageViewParameters.image = _image->GetVkImage();
-            imageViewParameters.viewType = VK_ImageView_2D;
-            imageViewParameters.format = _image->GetVkFormat();
-            imageViewParameters.subresourceRange.aspectMask = VK_ImageAspect_Color;
-            imageViewParameters.subresourceRange.baseMipLevel = 0;
-            imageViewParameters.subresourceRange.levelCount = mipLevels;
-            imageViewParameters.subresourceRange.baseArrayLayer = 0;
-            imageViewParameters.subresourceRange.layerCount = 1;
-
-            _imageView = imageCreatorDelegate.CreateVkImageView(imageViewParameters);
-            KMP_ASSERT(_imageView);
         }}
         //--------------------------------------------------------------------------
     }
