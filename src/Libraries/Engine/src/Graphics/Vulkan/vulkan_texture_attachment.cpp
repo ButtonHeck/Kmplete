@@ -10,15 +10,15 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
-                                                         VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, 
+                                                         VkImageAspectFlags aspectMask, bool fixedSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : VulkanTextureBase(device,
                 VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, format, extent, 1, samples, usageFlags),
                 VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VK_ImageView_2D, aspectMask, 1),
                 imageCreatorDelegate,
                 VK_Memory_DeviceLocal)
             , _sid(sid)
-            , _parameters({ .format = format, .usageFlags = usageFlags, .aspectMask = aspectMask })
+            , _parameters({ .format = format, .usageFlags = usageFlags, .aspectMask = aspectMask, .fixedSamples = fixedSamples })
         {}
         //--------------------------------------------------------------------------
 

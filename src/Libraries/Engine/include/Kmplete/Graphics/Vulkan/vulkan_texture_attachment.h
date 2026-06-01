@@ -3,7 +3,6 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture_base.h"
-#include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
 
@@ -19,7 +18,6 @@ namespace Kmplete
         class VulkanTextureAttachment : public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachment)
-            KMP_LOG_CLASSNAME(VulkanTextureAttachment)
 
         public:
             struct Parameters
@@ -27,11 +25,12 @@ namespace Kmplete
                 VkFormat format;
                 VkImageUsageFlagBits usageFlags;
                 VkImageAspectFlags aspectMask;
+                bool fixedSamples;
             };
 
         public:
-            KMP_API VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
-                                            VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, 
+                                            VkImageAspectFlags aspectMask, bool fixedSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
             KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;
             KMP_NODISCARD KMP_API Parameters GetParameters() const noexcept;
