@@ -18,7 +18,7 @@ namespace Kmplete
                 imageCreatorDelegate,
                 VK_Memory_DeviceLocal)
             , _sid(sid)
-            , _parameters({ .format = format, .usageFlags = usageFlags, .aspectMask = aspectMask, .fixedSamples = fixedSamples })
+            , _parameters({ .format = format, .extent = extent, .usageFlags = usageFlags, .aspectMask = aspectMask, .samples = samples, .fixedSamples = fixedSamples })
         {}
         //--------------------------------------------------------------------------
 

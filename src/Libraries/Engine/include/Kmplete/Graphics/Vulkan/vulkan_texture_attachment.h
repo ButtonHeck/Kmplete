@@ -23,8 +23,10 @@ namespace Kmplete
             struct Parameters
             {
                 VkFormat format;
+                VkExtent3D extent;
                 VkImageUsageFlagBits usageFlags;
                 VkImageAspectFlags aspectMask;
+                VkSampleCountFlagBits samples;
                 bool fixedSamples;
             };
 

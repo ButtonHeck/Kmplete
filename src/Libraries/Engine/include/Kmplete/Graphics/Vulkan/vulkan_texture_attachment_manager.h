@@ -31,8 +31,8 @@ namespace Kmplete
                                               VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
             KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID textureSid) const;
 
-            //TODO: add function to recreate images during window resize
-            //TODO: add function to recreate images during msaa samples change
+            KMP_API void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);
+            KMP_API void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
 
         private:
             VkDevice _device;
