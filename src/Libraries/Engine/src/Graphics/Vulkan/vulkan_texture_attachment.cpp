@@ -18,12 +18,19 @@ namespace Kmplete
                 imageCreatorDelegate,
                 VK_Memory_DeviceLocal)
             , _sid(sid)
+            , _parameters({ .format = format, .usageFlags = usageFlags, .aspectMask = aspectMask })
         {}
         //--------------------------------------------------------------------------
 
         StringID VulkanTextureAttachment::GetStringID() const noexcept
         {
             return _sid;
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanTextureAttachment::Parameters VulkanTextureAttachment::GetParameters() const noexcept
+        {
+            return _parameters;
         }
         //--------------------------------------------------------------------------
     }

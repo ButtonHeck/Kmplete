@@ -22,13 +22,23 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanTextureAttachment)
 
         public:
+            struct Parameters
+            {
+                VkFormat format;
+                VkImageUsageFlagBits usageFlags;
+                VkImageAspectFlags aspectMask;
+            };
+
+        public:
             KMP_API VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
                                             VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
             KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;
+            KMP_NODISCARD KMP_API Parameters GetParameters() const noexcept;
 
         private:
             StringID _sid;
+            const Parameters _parameters;
         };
         //--------------------------------------------------------------------------
     }
