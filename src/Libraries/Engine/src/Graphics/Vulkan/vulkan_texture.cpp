@@ -16,10 +16,10 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanTexture::VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
-                                     const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanTexture::VulkanTexture(VkImageType imageType, VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, 
+                                     const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : VulkanTextureBase(device, 
-                VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled),
+                VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(imageType, format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled),
                 VKPresets::GetImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer(mipLevels),
                 imageCreatorDelegate, 
                 VK_Memory_DeviceLocal)

@@ -5,7 +5,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
 
@@ -21,7 +20,6 @@ namespace Kmplete
         class VulkanImageCreatorDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanImageCreatorDelegate)
-            KMP_LOG_CLASSNAME(VulkanImageCreatorDelegate)
 
         public:
             KMP_API VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
@@ -30,11 +28,15 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                 VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
             KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
                                                                 VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
             KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const;
 
             KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                                              VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
                                                                               VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
             KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
                                                                               VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;

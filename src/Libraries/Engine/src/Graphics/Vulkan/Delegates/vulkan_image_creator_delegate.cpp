@@ -4,7 +4,6 @@
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -33,10 +32,17 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkExtent2D & extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                   VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
             return CreateVulkanImage(extent.width, extent.height, mipLevels, numSamples, format, tiling, usage, memoryProperties);
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanImage VulkanImageCreatorDelegate::CreateVulkanImage(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                  VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        {
+            return CreateVulkanImage(width, 1, mipLevels, numSamples, format, tiling, usage, memoryProperties);
         }
         //--------------------------------------------------------------------------
 
@@ -48,8 +54,9 @@ namespace Kmplete
                 .height = height,
                 .depth = 1
             };
+            const auto imageType = height > 1 ? VK_Image_2D : VK_Image_1D;
 
-            auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
+            auto creationParameters = VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(imageType, format, extent, mipLevels, numSamples, usage);
             creationParameters.tiling = tiling;
 
             return CreateVulkanImage(creationParameters, memoryProperties);
@@ -70,6 +77,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
+        {
+            return CreateVulkanImagePtr(width, 1, mipLevels, numSamples, format, tiling, usage, memoryProperties);
+        }
+        //--------------------------------------------------------------------------
+
         Nullable<VulkanImage*> VulkanImageCreatorDelegate::CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
                                                                                 VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const
         {
@@ -78,8 +92,9 @@ namespace Kmplete
                 .height = height,
                 .depth = 1
             };
+            const auto imageType = height > 1 ? VK_Image_2D : VK_Image_1D;
 
-            auto creationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(format, extent, mipLevels, numSamples, usage);
+            auto creationParameters = VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(imageType, format, extent, mipLevels, numSamples, usage);
             creationParameters.tiling = tiling;
 
             return CreateVulkanImagePtr(creationParameters, memoryProperties);

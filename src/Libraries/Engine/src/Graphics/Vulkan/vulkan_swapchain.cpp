@@ -316,11 +316,11 @@ namespace Kmplete
                 .depth = 1
             };
 
-            const auto colorCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_swapchainImageFormat, extent, 1, _msaaSamples, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment);
+            const auto colorCreationParameters = VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, _swapchainImageFormat, extent, 1, _msaaSamples, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment);
             _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_Memory_DeviceLocal));
             KMP_ASSERT(_multisampledColorImage);
 
-            const auto depthCreationParameters = VKPresets::GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(_vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_ImageUsage_DepthStencilAttachment);
+            const auto depthCreationParameters = VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, _vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_ImageUsage_DepthStencilAttachment);
             _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_Memory_DeviceLocal));
             KMP_ASSERT(_multisampledDepthImage);
 

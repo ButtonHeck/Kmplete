@@ -93,9 +93,8 @@ namespace Kmplete
             * VkImageCreateInfo presets
             */
 
-            static constexpr VkImageCreateInfo ImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout{
+            static constexpr VkImageCreateInfo ImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-                .imageType = VK_Image_2D,
                 .arrayLayers = 1,
                 .tiling = VK_ImageTiling_Optimal,
                 .sharingMode = VK_Sharing_Exclusive,
@@ -103,9 +102,10 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
-            KMP_NODISCARD constexpr VkImageCreateInfo GetImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout(VkFormat format, const VkExtent3D& extent, UInt32 mipLevels, VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags)
+            KMP_NODISCARD constexpr VkImageCreateInfo GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VkImageType imageType, VkFormat format, const VkExtent3D& extent, UInt32 mipLevels, VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags)
             {
-                auto imageCI = ImageCI_2D_OptimalTiling_QueueExclusive_Layer1_NoLayout;
+                auto imageCI = ImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout;
+                imageCI.imageType = imageType;
                 imageCI.format = format;
                 imageCI.extent = extent;
                 imageCI.mipLevels = mipLevels;

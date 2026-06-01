@@ -25,8 +25,8 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanTexture)
 
         public:
-            KMP_API VulkanTexture(VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, const VulkanBuffer& stagingBuffer, 
-                                  const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanTexture(VkImageType imageType, VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, 
+                                  const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
         private:
             void _TransitionImageLayout(UInt32 mipLevels, VkCommandBuffer commandBuffer);

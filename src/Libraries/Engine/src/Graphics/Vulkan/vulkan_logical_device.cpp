@@ -606,10 +606,11 @@ namespace Kmplete
                     .height = UInt32(image.GetHeight()),
                     .depth = 1
                 };
+                const auto imageType = extent.height > 1 ? VK_Image_2D : VK_Image_1D;
 
                 auto commandBuffer = _renderer->CreateCommandBuffer();
                 commandBuffer.Begin(VK_CommandBufferUsage_OneTimeSubmit);
-                auto* texture = new VulkanTexture(textureVkFormat, mipLevels, _device, commandBuffer.GetVkCommandBuffer(), imageBuffer, extent, *_imageCreatorDelegate.get());
+                auto* texture = new VulkanTexture(imageType, textureVkFormat, mipLevels, _device, commandBuffer.GetVkCommandBuffer(), imageBuffer, extent, *_imageCreatorDelegate.get());
                 commandBuffer.End();
 
                 _graphicsQueue->SyncSubmit(commandBuffer);
