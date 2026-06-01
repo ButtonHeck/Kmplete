@@ -26,6 +26,8 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
             KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
+            KMP_NODISCARD KMP_API VkFormat GetVkFormat() const noexcept;
+            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetSamples() const noexcept;
 
         private:
             void _InitializeImage(const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);

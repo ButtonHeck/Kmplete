@@ -47,6 +47,22 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkFormat VulkanTextureBase::GetVkFormat() const noexcept
+        {
+            KMP_ASSERT(_image);
+
+            return _image->GetVkFormat();
+        }
+        //--------------------------------------------------------------------------
+
+        VkSampleCountFlagBits VulkanTextureBase::GetSamples() const noexcept
+        {
+            KMP_ASSERT(_image);
+
+            return _image->GetSamples();
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanTextureBase::_InitializeImage(const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags) KMP_PROFILING(ProfileLevelImportant)
         {
             _image.reset(imageCreatorDelegate.CreateVulkanImagePtr(imageCreateInfo, memoryPropertiesFlags));

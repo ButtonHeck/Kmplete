@@ -21,6 +21,7 @@ namespace Kmplete
             , _imageMemory(VK_NULL_HANDLE)
             , _memorySize(0)
             , _format(creationParameters.format)
+            , _samples(creationParameters.samples)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -95,6 +96,12 @@ namespace Kmplete
         VkFormat VulkanImage::GetVkFormat() const noexcept
         {
             return _format;
+        }
+        //--------------------------------------------------------------------------
+
+        VkSampleCountFlagBits VulkanImage::GetSamples() const noexcept
+        {
+            return _samples;
         }
         //--------------------------------------------------------------------------
 

@@ -29,6 +29,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
             KMP_NODISCARD KMP_API VkDeviceSize GetMemorySize() const noexcept;
             KMP_NODISCARD KMP_API VkFormat GetVkFormat() const noexcept;
+            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetSamples() const noexcept;
 
         private:
             void _Initialize(const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
@@ -40,6 +41,7 @@ namespace Kmplete
             VkDeviceMemory _imageMemory;
             VkDeviceSize _memorySize;
             VkFormat _format;
+            VkSampleCountFlagBits _samples;
         };
         //--------------------------------------------------------------------------
     }
