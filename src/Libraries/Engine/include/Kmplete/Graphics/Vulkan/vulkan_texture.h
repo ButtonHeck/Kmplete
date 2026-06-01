@@ -1,11 +1,9 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
-#include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture_base.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_image.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>

@@ -21,7 +21,7 @@ namespace Kmplete
                                      const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : VulkanTextureBase(device, 
                 VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(imageType, format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled),
-                VKPresets::GetImageViewCI_Color_BaseMip0_BaseArray0_SingleLayer(ImageTypeToViewType(imageType), mipLevels),
+                VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(ImageTypeToViewType(imageType), VK_ImageAspect_Color, mipLevels),
                 imageCreatorDelegate, 
                 VK_Memory_DeviceLocal)
         {
