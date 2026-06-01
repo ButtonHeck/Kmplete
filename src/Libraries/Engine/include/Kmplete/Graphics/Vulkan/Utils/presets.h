@@ -120,9 +120,8 @@ namespace Kmplete
             * VkImageViewCreateInfo presets
             */
 
-            static constexpr VkImageViewCreateInfo ImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer{
+            static constexpr VkImageViewCreateInfo ImageViewCI_Color_BaseMip0_BaseArray0_SingleLayer{
                 .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
-                .viewType = VK_ImageView_2D,
                 .subresourceRange = VkImageSubresourceRange{ 
                     .aspectMask = VK_ImageAspect_Color,
                     .baseMipLevel = 0,
@@ -132,9 +131,10 @@ namespace Kmplete
             };
             //--------------------------------------------------------------------------
 
-            KMP_NODISCARD constexpr VkImageViewCreateInfo GetImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer(UInt32 mipLevels)
+            KMP_NODISCARD constexpr VkImageViewCreateInfo GetImageViewCI_Color_BaseMip0_BaseArray0_SingleLayer(VkImageViewType viewType, UInt32 mipLevels)
             {
-                auto imageViewCI = ImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer;
+                auto imageViewCI = ImageViewCI_Color_BaseMip0_BaseArray0_SingleLayer;
+                imageViewCI.viewType = viewType;
                 imageViewCI.subresourceRange.levelCount = mipLevels;
                 return imageViewCI;
             }

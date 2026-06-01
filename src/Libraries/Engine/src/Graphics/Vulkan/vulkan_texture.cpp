@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
@@ -20,7 +21,7 @@ namespace Kmplete
                                      const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : VulkanTextureBase(device, 
                 VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(imageType, format, extent, mipLevels, VK_SampleCount_1, VK_ImageUsage_TransferSrcAndDst | VK_ImageUsage_Sampled),
-                VKPresets::GetImageViewCI_2D_Color_BaseMip0_BaseArray0_SingleLayer(mipLevels),
+                VKPresets::GetImageViewCI_Color_BaseMip0_BaseArray0_SingleLayer(ImageTypeToViewType(imageType), mipLevels),
                 imageCreatorDelegate, 
                 VK_Memory_DeviceLocal)
         {

@@ -13,6 +13,7 @@ namespace Kmplete
     {
         KMP_NODISCARD KMP_API VkFormat ImageChannelsToVkFormat(ImageChannels channels) noexcept;
         KMP_NODISCARD KMP_API VkFormat ShaderDataTypeToVkFormat(ShaderDataType type) noexcept;
+        KMP_NODISCARD KMP_API VkImageViewType ImageTypeToViewType(VkImageType imageType, bool array = false) noexcept;
 
         static constexpr auto SamplerDefaultNearestSid = "DefaultNearest"_sid;
         static constexpr auto SamplerDefaultLinearSid = "DefaultLinear"_sid;
