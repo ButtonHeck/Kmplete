@@ -31,8 +31,9 @@ namespace Kmplete
             };
 
         public:
-            KMP_API VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, 
-                                            VkImageAspectFlags aspectMask, bool fixedSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
+                                            VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
+            KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters);
 
             KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;
             KMP_NODISCARD KMP_API Parameters GetParameters() const noexcept;

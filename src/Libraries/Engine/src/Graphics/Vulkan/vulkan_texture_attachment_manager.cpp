@@ -26,7 +26,7 @@ namespace Kmplete
                 return true;
             }
 
-            const auto [iterator, hasEmplaced] = _textureAttachments.emplace(textureSid, CreateUPtr<VulkanTextureAttachment>(textureSid, format, _device, extent, samples, usageFlags, aspectMask, fixedSamples, _imageCreatorDelegate));
+            const auto [iterator, hasEmplaced] = _textureAttachments.emplace(textureSid, CreateUPtr<VulkanTextureAttachment>(textureSid, _device, _imageCreatorDelegate, format, extent, samples, usageFlags, aspectMask, fixedSamples));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------
@@ -49,8 +49,9 @@ namespace Kmplete
 
             for (auto& [textureSid, textureAttachment] : _textureAttachments)
             {
-                const auto parameters = textureAttachment->GetParameters();
-                textureAttachment.reset(new VulkanTextureAttachment(textureSid, parameters.format, _device, newExtent, parameters.samples, parameters.usageFlags, parameters.aspectMask, parameters.fixedSamples, _imageCreatorDelegate));
+                auto parameters = textureAttachment->GetParameters();
+                parameters.extent = newExtent;
+                textureAttachment.reset(new VulkanTextureAttachment(textureSid, _device, _imageCreatorDelegate, parameters));
             }
         }}
         //--------------------------------------------------------------------------
@@ -61,13 +62,14 @@ namespace Kmplete
 
             for (auto& [textureSid, textureAttachment] : _textureAttachments)
             {
-                const auto parameters = textureAttachment->GetParameters();
+                auto parameters = textureAttachment->GetParameters();
                 if (parameters.fixedSamples)
                 {
                     continue;
                 }
 
-                textureAttachment.reset(new VulkanTextureAttachment(textureSid, parameters.format, _device, parameters.extent, newSamples, parameters.usageFlags, parameters.aspectMask, parameters.fixedSamples, _imageCreatorDelegate));
+                parameters.samples = newSamples;
+                textureAttachment.reset(new VulkanTextureAttachment(textureSid, _device, _imageCreatorDelegate, parameters));
             }
         }}
         //--------------------------------------------------------------------------

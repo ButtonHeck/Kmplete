@@ -10,8 +10,8 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkFormat format, VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, 
-                                                         VkImageAspectFlags aspectMask, bool fixedSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
+                                                         VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples)
             : VulkanTextureBase(device,
                 VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, format, extent, 1, samples, usageFlags),
                 VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VK_ImageView_2D, aspectMask, 1),
@@ -19,6 +19,17 @@ namespace Kmplete
                 VK_Memory_DeviceLocal)
             , _sid(sid)
             , _parameters({ .format = format, .extent = extent, .usageFlags = usageFlags, .aspectMask = aspectMask, .samples = samples, .fixedSamples = fixedSamples })
+        {}
+        //--------------------------------------------------------------------------
+
+        VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters)
+            : VulkanTextureBase(device,
+                VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, parameters.format, parameters.extent, 1, parameters.samples, parameters.usageFlags),
+                VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VK_ImageView_2D, parameters.aspectMask, 1),
+                imageCreatorDelegate,
+                VK_Memory_DeviceLocal)
+            , _sid(sid)
+            , _parameters(parameters)
         {}
         //--------------------------------------------------------------------------
 
