@@ -47,10 +47,10 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            for (auto& [textureSid, texturePointer] : _textureAttachments)
+            for (auto& [textureSid, textureAttachment] : _textureAttachments)
             {
-                const auto parameters = texturePointer->GetParameters();
-                texturePointer.reset(new VulkanTextureAttachment(textureSid, parameters.format, _device, newExtent, parameters.samples, parameters.usageFlags, parameters.aspectMask, parameters.fixedSamples, _imageCreatorDelegate));
+                const auto parameters = textureAttachment->GetParameters();
+                textureAttachment.reset(new VulkanTextureAttachment(textureSid, parameters.format, _device, newExtent, parameters.samples, parameters.usageFlags, parameters.aspectMask, parameters.fixedSamples, _imageCreatorDelegate));
             }
         }}
         //--------------------------------------------------------------------------
@@ -59,15 +59,15 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            for (auto& [textureSid, texturePointer] : _textureAttachments)
+            for (auto& [textureSid, textureAttachment] : _textureAttachments)
             {
-                const auto parameters = texturePointer->GetParameters();
+                const auto parameters = textureAttachment->GetParameters();
                 if (parameters.fixedSamples)
                 {
                     continue;
                 }
 
-                texturePointer.reset(new VulkanTextureAttachment(textureSid, parameters.format, _device, parameters.extent, newSamples, parameters.usageFlags, parameters.aspectMask, parameters.fixedSamples, _imageCreatorDelegate));
+                textureAttachment.reset(new VulkanTextureAttachment(textureSid, parameters.format, _device, parameters.extent, newSamples, parameters.usageFlags, parameters.aspectMask, parameters.fixedSamples, _imageCreatorDelegate));
             }
         }}
         //--------------------------------------------------------------------------
