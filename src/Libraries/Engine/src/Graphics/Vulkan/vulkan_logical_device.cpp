@@ -57,6 +57,7 @@ namespace Kmplete
             , _shaderObjects()
             , _samplersStorage(nullptr)
             , _descriptorSetManager(nullptr)
+            , _textureAttachmentManager(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -70,6 +71,7 @@ namespace Kmplete
             _CreateRenderer();
             _CreateSamplersStorage();
             _CreateDescriptorSetManager();
+            _CreateTextureAttachmentManager();
         }
         //--------------------------------------------------------------------------
 
@@ -77,6 +79,7 @@ namespace Kmplete
         {
             WaitIdle();
 
+            _DeleteTextureAttachmentManager();
             _DeleteDescriptorSetManager();
             _DeleteSamplersStorage();
             _DeleteShaderObjects();
@@ -301,6 +304,22 @@ namespace Kmplete
             KMP_ASSERT(_pipelineManager);
 
             return *_pipelineManager.get();
+        }
+        //--------------------------------------------------------------------------
+
+        const VulkanTextureAttachmentManager& VulkanLogicalDevice::GetTextureAttachmentManager() const noexcept
+        {
+            KMP_ASSERT(_textureAttachmentManager);
+
+            return *_textureAttachmentManager.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanTextureAttachmentManager& VulkanLogicalDevice::GetTextureAttachmentManager() noexcept
+        {
+            KMP_ASSERT(_textureAttachmentManager);
+
+            return *_textureAttachmentManager.get();
         }
         //--------------------------------------------------------------------------
 
@@ -534,6 +553,23 @@ namespace Kmplete
             KMP_ASSERT(_descriptorSetManager);
 
             _descriptorSetManager.reset();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateTextureAttachmentManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            _textureAttachmentManager.reset(new VulkanTextureAttachmentManager(_device, *_imageCreatorDelegate.get()));
+            KMP_ASSERT(_textureAttachmentManager);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteTextureAttachmentManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_textureAttachmentManager);
+
+            _textureAttachmentManager.reset();
         }}
         //--------------------------------------------------------------------------
 

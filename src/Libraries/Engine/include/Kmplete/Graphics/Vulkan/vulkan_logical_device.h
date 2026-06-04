@@ -15,6 +15,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_descriptor_set_manager.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_pipeline_manager.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture_attachment_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -76,6 +77,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
             KMP_NODISCARD KMP_API const VulkanPipelineManager& GetPipelineManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanPipelineManager& GetPipelineManager() noexcept;
+            KMP_NODISCARD KMP_API const VulkanTextureAttachmentManager& GetTextureAttachmentManager() const noexcept;
+            KMP_NODISCARD KMP_API VulkanTextureAttachmentManager& GetTextureAttachmentManager() noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
@@ -120,6 +123,9 @@ namespace Kmplete
             void _CreateDescriptorSetManager();
             void _DeleteDescriptorSetManager();
 
+            void _CreateTextureAttachmentManager();
+            void _DeleteTextureAttachmentManager();
+
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
             void _RecreateSwapchain();
@@ -152,6 +158,7 @@ namespace Kmplete
             StringIDHashMap<UPtr<VulkanShaderObject>> _shaderObjects;
             UPtr<VulkanSamplersStorage> _samplersStorage;
             UPtr<VulkanDescriptorSetManager> _descriptorSetManager;
+            UPtr<VulkanTextureAttachmentManager> _textureAttachmentManager;
         };
         //--------------------------------------------------------------------------
     }
