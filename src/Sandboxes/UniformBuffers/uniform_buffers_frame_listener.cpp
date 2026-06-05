@@ -42,6 +42,9 @@ namespace Kmplete
     static constexpr auto GridDimension = 5;
     static constexpr auto InstancesCount = GridDimension * GridDimension;
 
+    static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
+    static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
+
 
     namespace
     {
@@ -188,6 +191,10 @@ namespace Kmplete
 
     void UniformBuffersFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+
         vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { 
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID)
         }, {});
@@ -237,6 +244,8 @@ namespace Kmplete
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
         const auto& renderer = vulkanDevice.GetRenderer();
+        const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        const auto& swapchain = vulkanDevice.GetSwapchain();
         const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
         const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
@@ -264,7 +273,40 @@ namespace Kmplete
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
         renderer.BindGraphicsPipeline(Pipeline_SID);
         renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { VkDeviceSize{ 0 } });
-        renderer.BeginRendering(drawArea);
+
+        const auto& msColorAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment);
+        const auto& msColorAttachmentTexture = msColorAttachment.value().get();
+        const auto& msDepthStencilAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment);
+        const auto& msDepthStencilAttachmentTexture = msDepthStencilAttachment.value().get();
+
+        Graphics::VKUtils::MemoryBarrierParameters imageBarrierParameters = {
+            .srcAccessMask = VK_Access_None,
+            .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
+            .oldImageLayout = VK_ImageLayout_Undefined,
+            .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+            .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+            .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+            .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
+        };
+        renderer.TransitionImage(msDepthStencilAttachmentTexture.GetVkImage(), imageBarrierParameters);
+
+        auto colorAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore;
+        if (msColorAttachmentTexture.GetSamples() == VK_SampleCount_1)
+        {
+            colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
+        }
+        else
+        {
+            colorAttachmentInfo.imageView = msColorAttachmentTexture.GetVkImageView();
+            colorAttachmentInfo.resolveMode = VK_Resolve_Average;
+            colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
+            colorAttachmentInfo.resolveImageLayout = VK_ImageLayout_AttachmentOptimal;
+        }
+
+        auto depthStencilAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+        depthStencilAttachmentInfo.imageView = msDepthStencilAttachmentTexture.GetVkImageView();
+
+        renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
 
         for (UInt32 i = 0; i < InstancesCount; i++)
         {
