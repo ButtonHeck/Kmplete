@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture_attachment_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -10,6 +11,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         VulkanTextureAttachmentManager::VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
                                                                        const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain)
             : _device(device)
@@ -58,6 +62,65 @@ namespace Kmplete
             KMP_LOG_ERROR("texture attachment with sid '{}' not found", textureSid);
             return std::nullopt;
         }
+        //--------------------------------------------------------------------------
+
+        VkRenderingAttachmentInfo VulkanTextureAttachmentManager::GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewSid, StringID resolveImageViewSid, VkResolveModeFlagBits resolveMode, 
+                                                                                             VkImageLayout resolveImageLayout, StringID noMSAAImageViewSid) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (!_textureAttachments.contains(imageViewSid))
+            {
+                KMP_LOG_ERROR("texture attachment for image view with sid '{}' not found", imageViewSid);
+                return preset;
+            }
+
+            const auto& textureAttachment = _textureAttachments.at(imageViewSid);
+            if (textureAttachment->GetSamples() == VK_SampleCount_1)
+            {
+                if (noMSAAImageViewSid == 0ULL)
+                {
+                    preset.imageView = _swapchain.get().GetCurrentImageView();
+                }
+                else
+                {
+                    if (!_textureAttachments.contains(noMSAAImageViewSid))
+                    {
+                        KMP_LOG_ERROR("texture attachment for image view with sid '{}' not found", noMSAAImageViewSid);
+                        return preset;
+                    }
+
+                    preset.imageView = _textureAttachments.at(noMSAAImageViewSid)->GetVkImageView();
+                }
+            }
+            else
+            {
+                preset.imageView = _textureAttachments.at(imageViewSid)->GetVkImageView();
+
+                if (resolveMode == VK_Resolve_None)
+                {
+                    return preset;
+                }
+
+                if (resolveImageViewSid == 0ULL)
+                {
+                    preset.resolveImageView = _swapchain.get().GetCurrentImageView();
+                }
+                else
+                {
+                    if (!_textureAttachments.contains(resolveImageViewSid))
+                    {
+                        KMP_LOG_ERROR("texture attachment for resolve image view with sid '{}' not found", resolveImageViewSid);
+                        return preset;
+                    }
+
+                    preset.resolveImageView = _textureAttachments.at(resolveImageViewSid)->GetVkImageView();
+                }
+
+                preset.resolveMode = resolveMode;
+                preset.resolveImageLayout = resolveImageLayout;
+            }
+
+            return preset;
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanTextureAttachmentManager::RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent) KMP_PROFILING(ProfileLevelImportant)

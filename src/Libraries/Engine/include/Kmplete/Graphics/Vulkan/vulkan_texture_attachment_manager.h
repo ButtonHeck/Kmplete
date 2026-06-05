@@ -36,6 +36,9 @@ namespace Kmplete
                                               VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID textureSid) const;
 
+            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewSid, StringID resolveImageViewSid, VkResolveModeFlagBits resolveMode, 
+                                                                                       VkImageLayout resolveImageLayout, StringID noMSAAImageViewSid) const;
+
             KMP_API void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);
             KMP_API void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
 
