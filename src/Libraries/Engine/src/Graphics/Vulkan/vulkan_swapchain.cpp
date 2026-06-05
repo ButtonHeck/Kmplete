@@ -30,7 +30,6 @@ namespace Kmplete
             , _presentCompleteSemaphores(presentCompleteSemaphores)
             , _renderCompleteSemaphores(renderCompleteSemaphores)
             , _presentationQueue(presentationQueue)
-            , _vSync(vSync)
             , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _device(device)
             , _imageIndex(0)
@@ -49,7 +48,7 @@ namespace Kmplete
                 _imageCount = _vulkanContext.surfaceCapabilities.maxImageCount;
             }
 
-            _CreateSwapchainObject(vulkanContext.surface);
+            _CreateSwapchainObject(vulkanContext.surface, vSync);
             _CreateSwapchainImages();
             _CreateSwapchainImageViews(imageCreatorDelegate);
         }
@@ -133,7 +132,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const
+        VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const
         {
             if (presentModes.empty())
             {
@@ -141,7 +140,7 @@ namespace Kmplete
                 throw RuntimeError("VulkanSwapchain: unable to get available present mode");
             }
 
-            if (!_vSync && Utils::VectorContains(presentModes, VK_PresentMode_Immediate))
+            if (!vSync && Utils::VectorContains(presentModes, VK_PresentMode_Immediate))
             {
                 return VK_PresentMode_Immediate;
             }
@@ -150,7 +149,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
+        void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface, bool vSync) KMP_PROFILING(ProfileLevelImportant)
         {
             auto swapchainCreateInfo = VKUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = surface;
@@ -162,7 +161,7 @@ namespace Kmplete
             swapchainCreateInfo.imageUsage = VK_ImageUsage_ColorAttachment;
             swapchainCreateInfo.preTransform = _vulkanContext.surfaceCapabilities.currentTransform;
             swapchainCreateInfo.compositeAlpha = VK_CompositeAlpha_Opaque;
-            swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes);
+            swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes, vSync);
             swapchainCreateInfo.clipped = VK_TRUE;
             swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
 

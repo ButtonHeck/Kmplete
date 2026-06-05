@@ -43,9 +43,9 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkImageView GetCurrentImageView() const;
 
         private:
-            KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes) const;
+            KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const;
 
-            void _CreateSwapchainObject(VkSurfaceKHR surface);
+            void _CreateSwapchainObject(VkSurfaceKHR surface, bool vSync);
             void _CreateSwapchainImages();
             void _CreateSwapchainImageViews(const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
@@ -56,7 +56,6 @@ namespace Kmplete
             const Array<VkSemaphore, NumConcurrentFrames>& _presentCompleteSemaphores;
             const Array<VkSemaphore, NumConcurrentFrames>& _renderCompleteSemaphores;
             const VulkanQueue& _presentationQueue;
-            const bool _vSync;
             const VkFormat _swapchainImageFormat;
 
             VkDevice _device;
