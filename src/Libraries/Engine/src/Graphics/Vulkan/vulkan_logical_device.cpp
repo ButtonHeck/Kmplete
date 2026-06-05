@@ -149,7 +149,7 @@ namespace Kmplete
         {
             _RecreateSwapchain();
 
-            _textureAttachmentManager->RecreateTextureAttachmentsWithNewSize(VkExtent3D{ .width = _currentExtent.width, .height = _currentExtent.height, .depth = 1 });
+            _textureAttachmentManager->RecreateTextureAttachmentsWithNewSize(VKUtils::Extent2Dto3D(_currentExtent));
         }}
         //--------------------------------------------------------------------------
 
@@ -551,7 +551,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            _textureAttachmentManager.reset(new VulkanTextureAttachmentManager(_device, *_imageCreatorDelegate.get()));
+            _textureAttachmentManager.reset(new VulkanTextureAttachmentManager(_device, VKUtils::Extent2Dto3D(_currentExtent), _msaaSamples, *_imageCreatorDelegate.get()));
             KMP_ASSERT(_textureAttachmentManager);
         }}
         //--------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_texture_attachment_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -9,13 +10,21 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanTextureAttachmentManager::VulkanTextureAttachmentManager(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanTextureAttachmentManager::VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate)
             : _device(device)
             , _imageCreatorDelegate(imageCreatorDelegate)
+            , _extent(extent)
+            , _msaaSamples(msaaSamples)
         {}
         //--------------------------------------------------------------------------
 
-        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
+        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/)
+        {
+            return AddTextureAttachment(textureSid, format, _extent, _msaaSamples, usageFlags, aspectMask, fixedSamples);
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
                                                                   VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
@@ -47,10 +56,17 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
+            if (newExtent == _extent)
+            {
+                return;
+            }
+
+            _extent = newExtent;
+
             for (auto& [textureSid, textureAttachment] : _textureAttachments)
             {
                 auto parameters = textureAttachment->GetParameters();
-                parameters.extent = newExtent;
+                parameters.extent = _extent;
                 textureAttachment.reset(new VulkanTextureAttachment(textureSid, _device, _imageCreatorDelegate, parameters));
             }
         }}
@@ -60,6 +76,13 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
+            if (newSamples == _msaaSamples)
+            {
+                return;
+            }
+
+            _msaaSamples = newSamples;
+
             for (auto& [textureSid, textureAttachment] : _textureAttachments)
             {
                 auto parameters = textureAttachment->GetParameters();
@@ -68,7 +91,7 @@ namespace Kmplete
                     continue;
                 }
 
-                parameters.samples = newSamples;
+                parameters.samples = _msaaSamples;
                 textureAttachment.reset(new VulkanTextureAttachment(textureSid, _device, _imageCreatorDelegate, parameters));
             }
         }}

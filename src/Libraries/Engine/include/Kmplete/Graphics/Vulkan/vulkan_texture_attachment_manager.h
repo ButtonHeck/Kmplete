@@ -25,8 +25,9 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanTextureAttachmentManager)
 
         public:
-            KMP_API VulkanTextureAttachmentManager(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
+            KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
                                               VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID textureSid) const;
@@ -37,6 +38,8 @@ namespace Kmplete
         private:
             VkDevice _device;
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
+            VkExtent3D _extent;
+            VkSampleCountFlagBits _msaaSamples;
 
             StringIDHashMap<UPtr<VulkanTextureAttachment>> _textureAttachments;
         };
