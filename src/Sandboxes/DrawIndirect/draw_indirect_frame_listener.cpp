@@ -2,6 +2,7 @@
 
 #include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture_attachment_manager.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Base/named_bool.h"
@@ -18,6 +19,9 @@ namespace Kmplete
     static constexpr auto VertexPositionAttributeIndex = 0;
     static constexpr auto VertexInstancePositionAttributeIndex = 1;
     static constexpr auto VertexInstanceColorAttributeIndex = 2;
+
+    static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
+    static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
 
 
     namespace
@@ -73,9 +77,9 @@ namespace Kmplete
         const auto& renderer = vulkanDevice.GetRenderer();
 
         const Vector<Vertex> vertices{
-            { -0.1f,  0.1f },
-            {  0.1f,  0.1f },
-            { -0.1f, -0.1f },
+            { -0.1f,   0.1f },
+            {  0.1f,   0.1f },
+            { -0.09f, -0.1f },
 
             // offset by +0.1 on X axis
             { -0.09f, -0.1f },
@@ -172,6 +176,14 @@ namespace Kmplete
 
     void DrawIndirectFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        const auto& extent = vulkanDevice.GetCurrentExtent();
+        const auto attachmentsExtent = VkExtent3D{ .width = extent.width, .height = extent.height, .depth = 1 };
+        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, attachmentsExtent, vulkanDevice.GetMultisampling(),
+                                                      VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, attachmentsExtent, vulkanDevice.GetMultisampling(),
+                                                      VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+
         vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {});
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.vert.spv");
@@ -211,6 +223,8 @@ namespace Kmplete
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
+        const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        const auto& swapchain = vulkanDevice.GetSwapchain();
         const auto& renderer = vulkanDevice.GetRenderer();
         const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
         const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
@@ -222,7 +236,39 @@ namespace Kmplete
         renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer(), _vertexInstanceBuffer->GetVkBuffer() }, { 0, 0 });
         renderer.BindIndexBuffer(*_indexBuffer.get());
 
-        renderer.BeginRendering(drawArea);
+        const auto& msColorAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment);
+        const auto& msColorAttachmentTexture = msColorAttachment.value().get();
+        const auto& msDepthStencilAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment);
+        const auto& msDepthStencilAttachmentTexture = msDepthStencilAttachment.value().get();
+
+        Graphics::VKUtils::MemoryBarrierParameters imageBarrierParameters = {
+            .srcAccessMask = VK_Access_None,
+            .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
+            .oldImageLayout = VK_ImageLayout_Undefined,
+            .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+            .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+            .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+            .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
+        };
+        renderer.TransitionImage(msDepthStencilAttachmentTexture.GetVkImage(), imageBarrierParameters);
+
+        auto colorAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore;
+        if (msColorAttachmentTexture.GetSamples() == VK_SampleCount_1)
+        {
+            colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
+        }
+        else
+        {
+            colorAttachmentInfo.imageView = msColorAttachmentTexture.GetVkImageView();
+            colorAttachmentInfo.resolveMode = VK_Resolve_Average;
+            colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
+            colorAttachmentInfo.resolveImageLayout = VK_ImageLayout_AttachmentOptimal;
+        }
+
+        auto depthStencilAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+        depthStencilAttachmentInfo.imageView = msDepthStencilAttachmentTexture.GetVkImageView();
+
+        renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
         renderer.DrawIndirect(*_indirectBuffer.get(), 0, 2);
         renderer.DrawIndexedIndirect(*_indirectBuffer.get(), 2 * sizeof(VkDrawIndirectCommand), 2);
         renderer.EndRendering();
