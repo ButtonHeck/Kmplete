@@ -170,6 +170,25 @@ namespace Kmplete
                     1, &imageMemoryBarrier);
             }}
             //--------------------------------------------------------------------------
+
+            VkExtent3D Extent2Dto3D(const VkExtent2D& extent, UInt32 depth /*= 1*/)
+            {
+                return VkExtent3D{
+                    .width = extent.width,
+                    .height = extent.height,
+                    .depth = depth
+                };
+            }
+            //--------------------------------------------------------------------------
+
+            VkExtent2D Extent3Dto2D(const VkExtent3D& extent)
+            {
+                return VkExtent2D{
+                    .width = extent.width,
+                    .height = extent.height
+                };
+            }
+            //--------------------------------------------------------------------------
         }
     }
 }

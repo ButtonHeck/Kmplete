@@ -78,6 +78,25 @@ namespace Kmplete
             KMP_NODISCARD Pair<bool, Pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions);
 
             KMP_API void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters);
+
+            KMP_NODISCARD KMP_API VkExtent3D Extent2Dto3D(const VkExtent2D& extent, UInt32 depth = 1);
+            KMP_NODISCARD KMP_API VkExtent2D Extent3Dto2D(const VkExtent3D& extent);
         }
     }
 }
+
+
+inline bool operator==(const VkExtent2D& extentA, const VkExtent2D& extentB)
+{
+    return extentA.width == extentB.width &&
+           extentA.height == extentB.height;
+}
+//--------------------------------------------------------------------------
+
+inline bool operator==(const VkExtent3D& extentA, const VkExtent3D& extentB)
+{
+    return extentA.width == extentB.width &&
+           extentA.height == extentB.height &&
+           extentA.depth == extentB.depth;
+}
+//--------------------------------------------------------------------------
