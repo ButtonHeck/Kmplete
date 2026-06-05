@@ -56,15 +56,15 @@ namespace Kmplete
             const Array<VkSemaphore, NumConcurrentFrames>& _presentCompleteSemaphores;
             const Array<VkSemaphore, NumConcurrentFrames>& _renderCompleteSemaphores;
             const VulkanQueue& _presentationQueue;
+            const bool _vSync;
+            const VkFormat _swapchainImageFormat;
 
             VkDevice _device;
             UInt32 _imageIndex;
             UInt32 _imageCount;
             VkSwapchainKHR _swapchain;
             Vector<VkImage> _swapchainImages;
-            VkFormat _swapchainImageFormat;
             Vector<VkImageView> _swapchainImageViews;
-            bool _vSync;
         };
         //--------------------------------------------------------------------------
     }

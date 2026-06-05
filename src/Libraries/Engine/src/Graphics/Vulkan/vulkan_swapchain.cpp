@@ -30,14 +30,14 @@ namespace Kmplete
             , _presentCompleteSemaphores(presentCompleteSemaphores)
             , _renderCompleteSemaphores(renderCompleteSemaphores)
             , _presentationQueue(presentationQueue)
+            , _vSync(vSync)
+            , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _device(device)
             , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _swapchainImageViews()
-            , _vSync(vSync)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
