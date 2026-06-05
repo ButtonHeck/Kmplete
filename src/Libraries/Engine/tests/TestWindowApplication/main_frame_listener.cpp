@@ -14,6 +14,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Event/event_queue.h"
 #include "Kmplete/Base/named_bool.h"
 
@@ -28,6 +29,11 @@ namespace Kmplete
     static constexpr auto Id_InfoWindow = "InfoWindow";
     static constexpr auto Id_FrameListenersWindow = "FrameListenersInfoWindow";
     static constexpr auto Id_ActionEventsEmulatorWindow = "ActionEventsEmulatorWindow";
+
+    static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
+    static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
+
+    using namespace Graphics::VKBits;
 
 
     MainFrameListener::MainFrameListener(FrameListenerManager& frameListenerManager, SharedState& sharedState, Window& mainWindow, Assets::AssetsManager* assetsManager, 
@@ -64,6 +70,14 @@ namespace Kmplete
 
     void MainFrameListener::Initialize()
     {
+        auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend->GetPhysicalDevice());
+        auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
+
+        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+
         _InitializeImGui(_mainWindow.GetDPIScale());
 
         _inputManager->MapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
@@ -993,10 +1007,45 @@ namespace Kmplete
         {
             auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend->GetPhysicalDevice().GetLogicalDevice());
             const auto& vulkanRenderer = vulkanLogicalDevice.GetRenderer();
+            const auto& vulkanTextureAttachmentManager = vulkanLogicalDevice.GetTextureAttachmentManager();
+            const auto& swapchain = vulkanLogicalDevice.GetSwapchain();
             auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
             auto* vulkanImGuiImpl = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+            const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() };
 
-            vulkanRenderer.BeginRendering({ VkOffset2D{ .x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() });
+            const auto& msColorAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment);
+            const auto& msColorAttachmentTexture = msColorAttachment.value().get();
+            const auto& msDepthStencilAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment);
+            const auto& msDepthStencilAttachmentTexture = msDepthStencilAttachment.value().get();
+
+            Graphics::VKUtils::MemoryBarrierParameters imageBarrierParameters = {
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
+            };
+            vulkanRenderer.TransitionImage(msDepthStencilAttachmentTexture.GetVkImage(), imageBarrierParameters);
+
+            auto colorAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore;
+            if (msColorAttachmentTexture.GetSamples() == VK_SampleCount_1)
+            {
+                colorAttachmentInfo.imageView = swapchain.GetCurrentImageView();
+            }
+            else
+            {
+                colorAttachmentInfo.imageView = msColorAttachmentTexture.GetVkImageView();
+                colorAttachmentInfo.resolveMode = VK_Resolve_Average;
+                colorAttachmentInfo.resolveImageView = swapchain.GetCurrentImageView();
+                colorAttachmentInfo.resolveImageLayout = VK_ImageLayout_AttachmentOptimal;
+            }
+
+            auto depthStencilAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore;
+            depthStencilAttachmentInfo.imageView = msDepthStencilAttachmentTexture.GetVkImageView();
+
+            vulkanRenderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
             vulkanImGuiImpl->SetCommandBuffer(commandBuffer);
             vulkanImGuiImpl->Render();
             vulkanRenderer.EndRendering();
