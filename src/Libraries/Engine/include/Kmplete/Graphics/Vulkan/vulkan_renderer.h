@@ -42,8 +42,6 @@ namespace Kmplete
             KMP_API void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments) const;
             KMP_API void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments, const VkRenderingAttachmentInfo& depthStencilAttachment) const;
             KMP_API void BeginRendering(const VkRenderingInfo& renderingInfo) const;
-            KMP_API void BeginRendering(const VkRect2D& renderArea, bool clearPrevious = true) const;
-            KMP_API void BeginRendering(StringID pipelineSid, const VkRect2D& renderArea, bool clearPrevious = true) const;
             KMP_API void EndRendering() const;
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 

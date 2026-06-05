@@ -16,7 +16,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
-                                                                  VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples) KMP_PROFILING(ProfileLevelImportant)
+                                                                  VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 

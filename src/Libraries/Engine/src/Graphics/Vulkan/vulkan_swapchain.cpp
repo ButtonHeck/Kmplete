@@ -3,6 +3,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/assertion.h"
@@ -19,13 +20,12 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, bool vSync,
-                                         VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
+        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, 
+                                         bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
             , _vulkanContext(vulkanContext)
             , _swapchainExtent(swapchainExtent)
-            , _imageCreatorDelegate(imageCreatorDelegate)
             , _currentBufferIndex(currentBufferIndex)
             , _presentCompleteSemaphores(presentCompleteSemaphores)
             , _renderCompleteSemaphores(renderCompleteSemaphores)
@@ -38,11 +38,6 @@ namespace Kmplete
             , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
             , _swapchainImageViews()
             , _vSync(vSync)
-            , _msaaSamples(msaaSamples)
-            , _multisampledColorImage(nullptr)
-            , _multisampledColorImageView(VK_NULL_HANDLE)
-            , _multisampledDepthImage(nullptr)
-            , _multisampledDepthImageView(VK_NULL_HANDLE)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -55,18 +50,14 @@ namespace Kmplete
             }
 
             _CreateSwapchainObject(vulkanContext.surface);
-
             _CreateSwapchainImages();
-            _CreateSwapchainImageViews();
-            _CreateMultisampledAttachments();
+            _CreateSwapchainImageViews(imageCreatorDelegate);
         }
         //--------------------------------------------------------------------------
 
         VulkanSwapchain::~VulkanSwapchain() KMP_PROFILING(ProfileLevelAlways)
         {
             KMP_ASSERT(_device && _swapchain);
-
-            _DestroyMultisamplingAttachments();
 
             for (auto imageView : _swapchainImageViews)
             {
@@ -114,32 +105,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VkSampleCountFlagBits VulkanSwapchain::GetMultisampling() const noexcept
-        {
-            return _msaaSamples;
-        }
-        //--------------------------------------------------------------------------
-
-        void VulkanSwapchain::SetMultisampling(VkSampleCountFlagBits samples) KMP_PROFILING(ProfileLevelImportant)
-        {
-            if (_msaaSamples == samples)
-            {
-                KMP_LOG_INFO("swapchain already contains {} samples", int(samples));
-                return;
-            }
-
-            _msaaSamples = samples;
-            if (_msaaSamples > _vulkanContext.supportedSampleCounts.top())
-            {
-                KMP_LOG_WARN("cannot set MSAA samples to {}, set to maximum supported {}", UInt32(samples), UInt32(_vulkanContext.supportedSampleCounts.top()));
-                _msaaSamples = _vulkanContext.supportedSampleCounts.top();
-            }
-
-            _DestroyMultisamplingAttachments();
-            _CreateMultisampledAttachments();
-        }}
-        //--------------------------------------------------------------------------
-
         UInt32 VulkanSwapchain::GetImageIndex() const noexcept
         {
             return _imageIndex;
@@ -165,66 +130,6 @@ namespace Kmplete
             KMP_ASSERT(_imageIndex < _swapchainImageViews.size());
 
             return _swapchainImageViews[_imageIndex];
-        }
-        //--------------------------------------------------------------------------
-
-        VkImage VulkanSwapchain::GetMultisampledColorImage() const
-        {
-            KMP_ASSERT(_multisampledColorImage);
-
-            return _multisampledColorImage->GetVkImage();
-        }
-        //--------------------------------------------------------------------------
-
-        VkImage VulkanSwapchain::GetMultisampledDepthStencilImage() const
-        {
-            KMP_ASSERT(_multisampledDepthImage);
-
-            return _multisampledDepthImage->GetVkImage();
-        }
-        //--------------------------------------------------------------------------
-
-        VkImageView VulkanSwapchain::GetMultisampledColorImageView() const
-        {
-            KMP_ASSERT(_multisampledColorImageView);
-
-            return _multisampledColorImageView;
-        }
-        //--------------------------------------------------------------------------
-
-        VkImageView VulkanSwapchain::GetMultisampledDepthStencilImageView() const
-        {
-            KMP_ASSERT(_multisampledDepthImageView);
-
-            return _multisampledDepthImageView;
-        }
-        //--------------------------------------------------------------------------
-
-        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingColorAttachmentInfo(bool clearPrevious /*= true*/) const
-        {
-            auto colorAttachmentInfo = clearPrevious ? VKPresets::RenderingAttachmentInfo_Color_ClearStore : VKPresets::RenderingAttachmentInfo_Color_LoadStore;
-            if (_msaaSamples == VK_SampleCount_1)
-            {
-                colorAttachmentInfo.imageView = GetCurrentImageView();
-            }
-            else
-            {
-                colorAttachmentInfo.imageView = GetMultisampledColorImageView();
-                colorAttachmentInfo.resolveMode = VK_Resolve_Average;
-                colorAttachmentInfo.resolveImageView = GetCurrentImageView();
-                colorAttachmentInfo.resolveImageLayout = VK_ImageLayout_AttachmentOptimal;
-            }
-
-            return colorAttachmentInfo;
-        }
-        //--------------------------------------------------------------------------
-
-        VkRenderingAttachmentInfo VulkanSwapchain::GetRenderingDepthStencilAttachmentInfo(bool clearPrevious /*= true*/) const
-        {
-            auto depthStencilAttachmentInfo = clearPrevious ? VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore : VKPresets::RenderingAttachmentInfo_DepthStencil_LoadStore;
-            depthStencilAttachmentInfo.imageView = GetMultisampledDepthStencilImageView();
-
-            return depthStencilAttachmentInfo;
         }
         //--------------------------------------------------------------------------
 
@@ -297,52 +202,14 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainImageViews() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanSwapchain::_CreateSwapchainImageViews(const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
         {
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
                 const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormat, subresourceRange);
+                _swapchainImageViews[i] = imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormat, subresourceRange);
             }
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanSwapchain::_CreateMultisampledAttachments() KMP_PROFILING(ProfileLevelImportant)
-        {
-            const VkExtent3D extent{
-                .width = _swapchainExtent.width,
-                .height = _swapchainExtent.height,
-                .depth = 1
-            };
-
-            const auto colorCreationParameters = VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, _swapchainImageFormat, extent, 1, _msaaSamples, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment);
-            _multisampledColorImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(colorCreationParameters, VK_Memory_DeviceLocal));
-            KMP_ASSERT(_multisampledColorImage);
-
-            const auto depthCreationParameters = VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, _vulkanContext.defaultDepthFormat, extent, 1, _msaaSamples, VK_ImageUsage_DepthStencilAttachment);
-            _multisampledDepthImage.reset(_imageCreatorDelegate.CreateVulkanImagePtr(depthCreationParameters, VK_Memory_DeviceLocal));
-            KMP_ASSERT(_multisampledDepthImage);
-
-            const auto& colorSubresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-            _multisampledColorImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledColorImage.get(), VK_ImageView_2D, _swapchainImageFormat, colorSubresourceRange);
-            KMP_ASSERT(_multisampledColorImageView);
-
-            const auto& depthSubresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1;
-            _multisampledDepthImageView = _imageCreatorDelegate.CreateVkImageView(*_multisampledDepthImage.get(), VK_ImageView_2D, _vulkanContext.defaultDepthFormat, depthSubresourceRange);
-            KMP_ASSERT(_multisampledDepthImageView);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanSwapchain::_DestroyMultisamplingAttachments() KMP_PROFILING(ProfileLevelImportantVerbose)
-        {
-            KMP_ASSERT(_device && _multisampledColorImageView && _multisampledColorImage && _multisampledDepthImageView && _multisampledDepthImage);
-
-            vkDestroyImageView(_device, _multisampledColorImageView, nullptr);
-            _multisampledColorImage.reset();
-
-            vkDestroyImageView(_device, _multisampledDepthImageView, nullptr);
-            _multisampledDepthImage.reset();
         }}
         //--------------------------------------------------------------------------
     }

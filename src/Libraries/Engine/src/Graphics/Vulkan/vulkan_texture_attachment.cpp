@@ -11,7 +11,7 @@ namespace Kmplete
 
 
         VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
-                                                         VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples)
+                                                         VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples)
             : VulkanTextureBase(device,
                 VKPresets::GetImageCI_OptimalTiling_QueueExclusive_Layer1_NoLayout(VK_Image_2D, format, extent, 1, samples, usageFlags),
                 VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VK_ImageView_2D, aspectMask, 1),

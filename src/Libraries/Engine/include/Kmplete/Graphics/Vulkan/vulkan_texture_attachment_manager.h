@@ -28,7 +28,7 @@ namespace Kmplete
             KMP_API VulkanTextureAttachmentManager(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate);
 
             KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
-                                              VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
+                                              VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID textureSid) const;
 
             KMP_API void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);

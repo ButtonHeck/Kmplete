@@ -116,17 +116,6 @@ namespace Kmplete
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             _renderer->TransitionImage(_swapchain->GetCurrentImage(), imageBarrierParameters);
-
-            imageBarrierParameters = {
-                .srcAccessMask = VK_Access_None,
-                .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
-                .oldImageLayout = VK_ImageLayout_Undefined,
-                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
-                .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
-                .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
-                .subresourceRange = VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
-            };
-            _renderer->TransitionImage(_swapchain->GetMultisampledDepthStencilImage(), imageBarrierParameters);
         }}
         //--------------------------------------------------------------------------
 
@@ -159,6 +148,8 @@ namespace Kmplete
         void VulkanLogicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelImportant)
         {
             _RecreateSwapchain();
+
+            _textureAttachmentManager->RecreateTextureAttachmentsWithNewSize(VkExtent3D{ .width = _currentExtent.width, .height = _currentExtent.height, .depth = 1 });
         }}
         //--------------------------------------------------------------------------
 
@@ -188,7 +179,7 @@ namespace Kmplete
                 _msaaSamples = _vulkanContext.supportedSampleCounts.top();
             }
 
-            _swapchain->SetMultisampling(_msaaSamples);
+            _textureAttachmentManager->RecreateTextureAttachmentsWithNewSamples(_msaaSamples);
         }}
         //--------------------------------------------------------------------------
 
@@ -438,7 +429,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _imageCreatorDelegate);
 
             _currentExtent = _UpdateExtent();
-            _swapchain.reset(new VulkanSwapchain(_device, GetPresentationQueue(), _vulkanContext, _currentExtent, _vSync, _msaaSamples, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_device, *_presentQueue.get(), _vulkanContext, _currentExtent, _vSync, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
             KMP_ASSERT(_swapchain);
         }}
         //--------------------------------------------------------------------------

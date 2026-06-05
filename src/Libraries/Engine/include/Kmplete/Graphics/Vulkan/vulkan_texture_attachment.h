@@ -24,7 +24,7 @@ namespace Kmplete
             {
                 VkFormat format;
                 VkExtent3D extent;
-                VkImageUsageFlagBits usageFlags;
+                VkImageUsageFlags usageFlags;
                 VkImageAspectFlags aspectMask;
                 VkSampleCountFlagBits samples;
                 bool fixedSamples;
@@ -32,7 +32,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
-                                            VkSampleCountFlagBits samples, VkImageUsageFlagBits usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
+                                            VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
             KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters);
 
             KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;

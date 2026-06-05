@@ -114,62 +114,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea, bool clearPrevious /*= true*/) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            const auto& swapchain = _swapchain.get();
-
-            const auto colorAttachmentInfo = swapchain.GetRenderingColorAttachmentInfo(clearPrevious);
-            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo(clearPrevious);
-
-            auto renderingInfo = VKUtils::InitVkRenderingInfo();
-            renderingInfo.renderArea = renderArea;
-            renderingInfo.layerCount = 1;
-            renderingInfo.colorAttachmentCount = 1;
-            renderingInfo.pColorAttachments = &colorAttachmentInfo;
-            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
-            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
-
-            vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::BeginRendering(StringID pipelineSid, const VkRect2D& renderArea, bool clearPrevious /*= true*/) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentCommandBuffer);
-
-            const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
-            if (!pipeline.has_value())
-            {
-                KMP_LOG_ERROR("cannot begin rendering - pipeline with sid '{}' not found", pipelineSid);
-                return;
-            }
-
-            const auto colorAttachmentsCount = pipeline.value().get().GetColorAttachmentsCount();
-            const auto& swapchain = _swapchain.get();
-
-            Vector<VkRenderingAttachmentInfo> colorAttachmentsInfos;
-            colorAttachmentsInfos.reserve(colorAttachmentsCount);
-            for (UInt32 i = 0; i < colorAttachmentsCount; i++)
-            {
-                colorAttachmentsInfos.push_back(swapchain.GetRenderingColorAttachmentInfo(clearPrevious));
-            }
-
-            const auto depthStencilAttachmentInfo = swapchain.GetRenderingDepthStencilAttachmentInfo(clearPrevious);
-
-            auto renderingInfo = VKUtils::InitVkRenderingInfo();
-            renderingInfo.renderArea = renderArea;
-            renderingInfo.layerCount = 1;
-            renderingInfo.colorAttachmentCount = colorAttachmentsCount;
-            renderingInfo.pColorAttachments = colorAttachmentsInfos.data();
-            renderingInfo.pDepthAttachment = &depthStencilAttachmentInfo;
-            renderingInfo.pStencilAttachment = &depthStencilAttachmentInfo;
-
-            vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanRenderer::EndRendering() const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
