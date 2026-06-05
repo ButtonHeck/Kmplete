@@ -55,6 +55,7 @@ namespace Kmplete
 
     private:
         void _Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
+        void _InitializeGraphics();
         void _InitializeImGui(float dpiScale);
         void _Finalize();
 
