@@ -1,9 +1,9 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
-#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Log/log.h"
@@ -15,6 +15,173 @@ namespace Kmplete
     namespace Graphics
     {
         using namespace VKBits;
+
+
+        namespace
+        {
+            //TODO: comments
+            struct QueueFamilyIndices
+            {
+                Optional<UInt32> graphicsFamilyIndex{};
+                Optional<UInt32> presentFamilyIndex{};
+
+                inline bool IsValid() const noexcept
+                {
+                    return graphicsFamilyIndex.has_value() && presentFamilyIndex.has_value();
+                }
+            };
+            //--------------------------------------------------------------------------
+
+
+            //TODO: comments
+            struct SurfaceAndPresentModeProperties
+            {
+                VkSurfaceCapabilitiesKHR surfaceCapabilities{};
+                Vector<VkSurfaceFormatKHR> surfaceFormats{};
+                Vector<VkPresentModeKHR> presentModes{};
+
+                inline bool IsValid() const noexcept
+                {
+                    return !surfaceFormats.empty() && !presentModes.empty();
+                }
+            };
+            //--------------------------------------------------------------------------
+
+
+            SurfaceAndPresentModeProperties QuerySurfaceAndPresentModeProperties(VkPhysicalDevice device, VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
+            {
+                SurfaceAndPresentModeProperties properties;
+                vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &properties.surfaceCapabilities);
+
+                UInt32 formatCount = 0;
+                vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
+                if (formatCount != 0)
+                {
+                    properties.surfaceFormats.resize(formatCount);
+                    vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, properties.surfaceFormats.data());
+                }
+
+                UInt32 presentModeCount = 0;
+                vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, nullptr);
+                if (presentModeCount != 0)
+                {
+                    properties.presentModes.resize(presentModeCount);
+                    vkGetPhysicalDeviceSurfacePresentModesKHR(device, surface, &presentModeCount, properties.presentModes.data());
+                }
+
+                return properties;
+            }}
+            //--------------------------------------------------------------------------
+
+            QueueFamilyIndices QueryQueueFamiliesIndices(VkPhysicalDevice device, VkSurfaceKHR surface) KMP_PROFILING(ProfileLevelImportant)
+            {
+                QueueFamilyIndices indices;
+
+                UInt32 queueFamilyCount = 0;
+                vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+                Vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+                vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+                int index = 0;
+                for (const auto& queueFamily : queueFamilies)
+                {
+                    if (queueFamily.queueFlags & VK_Queue_Graphics)
+                    {
+                        indices.graphicsFamilyIndex = index;
+                    }
+
+                    VkBool32 presentFamilySupport = false;
+                    vkGetPhysicalDeviceSurfaceSupportKHR(device, index, surface, &presentFamilySupport);
+                    if (presentFamilySupport)
+                    {
+                        indices.presentFamilyIndex = index;
+                    }
+
+                    if (indices.IsValid())
+                    {
+                        break;
+                    }
+
+                    index++;
+                }
+
+                return indices;
+            }}
+            //--------------------------------------------------------------------------
+
+            bool QueryDeviceExtensionSupport(VkPhysicalDevice device, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
+            {
+                UInt32 extensionCount;
+                vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+                Vector<VkExtensionProperties> availableExtensions(extensionCount);
+                vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+                Set<String> requiredExtensions(enabledExtensions.begin(), enabledExtensions.end());
+
+                for (const auto& extension : availableExtensions)
+                {
+                    requiredExtensions.erase(extension.extensionName);
+                }
+
+#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+                if (!requiredExtensions.empty())
+                {
+                    auto properties2 = VKUtils::InitVkPhysicalDeviceProperties2();
+                    vkGetPhysicalDeviceProperties2(device, &properties2);
+
+                    for (const auto& extension : requiredExtensions)
+                    {
+                        KMP_LOG_WARN_FN("VulkanPhysicalDevice::QueryDeviceExtensionSupport: for device '{}' required extension {} not found", properties2.properties.deviceName, extension);
+                    }
+                }
+#endif
+
+                return requiredExtensions.empty();
+            }}
+            //--------------------------------------------------------------------------
+
+            Pair<bool, Pair<QueueFamilyIndices, SurfaceAndPresentModeProperties>> IsDeviceSuitable(VkPhysicalDevice device, VkSurfaceKHR surface, const Vector<const char*>& enabledExtensions) KMP_PROFILING(ProfileLevelImportant)
+            {
+                auto properties2 = VKUtils::InitVkPhysicalDeviceProperties2();
+                vkGetPhysicalDeviceProperties2(device, &properties2);
+
+                const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
+                if (!queueFamiliesIndices.IsValid())
+                {
+                    KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - queue families indices are invalid", properties2.properties.deviceName);
+                    return { "device suitable"_false, {} };
+                }
+
+                const auto extensionsSupported = QueryDeviceExtensionSupport(device, enabledExtensions);
+                if (!extensionsSupported)
+                {
+                    KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - required extensions are not supported", properties2.properties.deviceName);
+                    return { "device suitable"_false, {} };
+                }
+
+                const auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(device, surface);
+                if (!surfaceAndPresentModeProperties.IsValid())
+                {
+                    KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - surface and present modes properties are invalid", properties2.properties.deviceName);
+                    return { "device suitable"_false, {} };
+                }
+
+                VkPhysicalDeviceFeatures supportedFeatures;
+                vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
+                if (!supportedFeatures.samplerAnisotropy ||
+                    !supportedFeatures.independentBlend ||
+                    !supportedFeatures.depthBounds)
+                {
+                    KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - some device features are not supported", properties2.properties.deviceName);
+                    return { "device suitable"_false, {} };
+                }
+
+                return { "device suitable"_true, { queueFamiliesIndices, surfaceAndPresentModeProperties } };
+            }}
+            //--------------------------------------------------------------------------
+        }
 
 
         const Vector<const char*>& VulkanPhysicalDevice::GetEnabledDeviceExtensions()
@@ -180,7 +347,7 @@ namespace Kmplete
         {
             for (const auto& device : physicalDevices)
             {
-                auto deviceCheck = VKUtils::IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
+                auto deviceCheck = IsDeviceSuitable(device, _surface, VulkanPhysicalDevice::GetEnabledDeviceExtensions());
                 auto deviceIsSuitable = deviceCheck.first;
                 if (deviceIsSuitable)
                 {
@@ -220,7 +387,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_physicalDevice && _surface);
 
-            auto surfaceAndPresentModeProperties = VKUtils::QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
+            auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(_physicalDevice, _surface);
             _vulkanContext.surfaceCapabilities = surfaceAndPresentModeProperties.surfaceCapabilities;
             _vulkanContext.surfaceFormats = std::move(surfaceAndPresentModeProperties.surfaceFormats);
             _vulkanContext.presentModes = std::move(surfaceAndPresentModeProperties.presentModes);
