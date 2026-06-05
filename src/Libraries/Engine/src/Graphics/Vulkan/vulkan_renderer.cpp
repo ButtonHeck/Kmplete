@@ -72,10 +72,46 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::SetSwapchain(const VulkanSwapchain& swapchain)
+        void VulkanRenderer::SetSwapchain(const VulkanSwapchain& swapchain) KMP_PROFILING(ProfileLevelMinorVerbose)
         {
             _swapchain = std::cref(swapchain);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments) const
+        {
+            auto renderingInfo = VKUtils::InitVkRenderingInfo();
+            renderingInfo.renderArea = renderArea;
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = UInt32(colorAttachments.size());
+            renderingInfo.pColorAttachments = colorAttachments.data();
+            renderingInfo.pDepthAttachment = nullptr;
+            renderingInfo.pStencilAttachment = nullptr;
+
+            BeginRendering(renderingInfo);
         }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments, const VkRenderingAttachmentInfo& depthStencilAttachment) const
+        {
+            auto renderingInfo = VKUtils::InitVkRenderingInfo();
+            renderingInfo.renderArea = renderArea;
+            renderingInfo.layerCount = 1;
+            renderingInfo.colorAttachmentCount = UInt32(colorAttachments.size());
+            renderingInfo.pColorAttachments = colorAttachments.data();
+            renderingInfo.pDepthAttachment = &depthStencilAttachment;
+            renderingInfo.pStencilAttachment = &depthStencilAttachment;
+
+            BeginRendering(renderingInfo);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::BeginRendering(const VkRenderingInfo& renderingInfo) const KMP_PROFILING(ProfileLevelMinor)
+        {
+            KMP_ASSERT(_currentCommandBuffer);
+
+            vkCmdBeginRendering(_currentCommandBuffer, &renderingInfo);
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanRenderer::BeginRendering(const VkRect2D& renderArea, bool clearPrevious /*= true*/) const KMP_PROFILING(ProfileLevelMinor)
