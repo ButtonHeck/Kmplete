@@ -177,12 +177,8 @@ namespace Kmplete
     void DrawIndirectFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        const auto& extent = vulkanDevice.GetCurrentExtent();
-        const auto attachmentsExtent = VkExtent3D{ .width = extent.width, .height = extent.height, .depth = 1 };
-        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, attachmentsExtent, vulkanDevice.GetMultisampling(),
-                                                      VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
-        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, attachmentsExtent, vulkanDevice.GetMultisampling(),
-                                                      VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
         vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {});
 
