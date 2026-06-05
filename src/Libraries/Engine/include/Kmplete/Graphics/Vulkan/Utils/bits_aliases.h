@@ -61,6 +61,7 @@ namespace Kmplete
             static constexpr auto VK_ImageLayout_AttachmentOptimal = VK_IMAGE_LAYOUT_ATTACHMENT_OPTIMAL;
             static constexpr auto VK_ImageLayout_RenderingLocalRead = VK_IMAGE_LAYOUT_RENDERING_LOCAL_READ;
             static constexpr auto VK_ImageLayout_PresentKHR = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+            static constexpr auto VK_ImageLayout_DontCare = VK_ImageLayout_Undefined;
 
             static constexpr auto VK_ImageUsage_TransferSrc = VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
             static constexpr auto VK_ImageUsage_TransferDst = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
