@@ -10,12 +10,20 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanTextureAttachmentManager::VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanTextureAttachmentManager::VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
+                                                                       const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain)
             : _device(device)
             , _imageCreatorDelegate(imageCreatorDelegate)
             , _extent(extent)
             , _msaaSamples(msaaSamples)
+            , _swapchain(std::cref(swapchain))
         {}
+        //--------------------------------------------------------------------------
+
+        void VulkanTextureAttachmentManager::SetSwapchain(const VulkanSwapchain& swapchain) KMP_PROFILING(ProfileLevelMinorVerbose)
+        {
+            _swapchain = std::cref(swapchain);
+        }}
         //--------------------------------------------------------------------------
 
         bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/)

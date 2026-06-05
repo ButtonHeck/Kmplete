@@ -6,6 +6,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_texture_attachment.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <vulkan/vulkan.h>
@@ -25,7 +26,10 @@ namespace Kmplete
             KMP_LOG_CLASSNAME(VulkanTextureAttachmentManager)
 
         public:
-            KMP_API VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
+                                                   const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain);
+
+            KMP_API void SetSwapchain(const VulkanSwapchain& swapchain);
 
             KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
@@ -40,6 +44,7 @@ namespace Kmplete
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
             VkExtent3D _extent;
             VkSampleCountFlagBits _msaaSamples;
+            Ref<const VulkanSwapchain> _swapchain;
 
             StringIDHashMap<UPtr<VulkanTextureAttachment>> _textureAttachments;
         };

@@ -551,7 +551,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            _textureAttachmentManager.reset(new VulkanTextureAttachmentManager(_device, VKUtils::Extent2Dto3D(_currentExtent), _msaaSamples, *_imageCreatorDelegate.get()));
+            _textureAttachmentManager.reset(new VulkanTextureAttachmentManager(_device, VKUtils::Extent2Dto3D(_currentExtent), _msaaSamples, *_imageCreatorDelegate.get(), *_swapchain.get()));
             KMP_ASSERT(_textureAttachmentManager);
         }}
         //--------------------------------------------------------------------------
@@ -615,7 +615,9 @@ namespace Kmplete
 
             _CreateSynchronizationObjects();
             _CreateSwapchain();
+
             _renderer->SetSwapchain(*_swapchain.get());
+            _textureAttachmentManager->SetSwapchain(*_swapchain.get());
         }}
         //--------------------------------------------------------------------------
 
