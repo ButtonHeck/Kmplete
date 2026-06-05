@@ -207,15 +207,7 @@ namespace Kmplete
         const auto& msDepthStencilAttachment = vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment);
         const auto& msDepthStencilAttachmentTexture = msDepthStencilAttachment.value().get();
 
-        Graphics::VKUtils::MemoryBarrierParameters imageBarrierParameters = {
-            .srcAccessMask = VK_Access_None,
-            .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
-            .oldImageLayout = VK_ImageLayout_Undefined,
-            .newImageLayout = VK_ImageLayout_AttachmentOptimal,
-            .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
-            .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
-            .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_DepthStencil_Layer1_Level1
-        };
+        auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
         renderer.TransitionImage(msDepthStencilAttachmentTexture.GetVkImage(), imageBarrierParameters);
 
         auto colorAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore;

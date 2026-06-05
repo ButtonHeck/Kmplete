@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 
 #include <vulkan/vulkan.h>
 
@@ -211,6 +212,22 @@ namespace Kmplete
                 .anisotropyEnable = VK_FALSE,
                 .minLod = 0.0f,
                 .maxLod = VK_LOD_CLAMP_NONE
+            };
+            //--------------------------------------------------------------------------
+
+
+            /*
+            * VKUtils::MemoryBarrierParameters presets
+            */
+
+            static constexpr VKUtils::MemoryBarrierParameters MemoryBarrierParameters_DepthStencil_PrepareWriting{
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_DepthStencilAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .dstStageMask = VK_PipelineStage_EarlyAndLateFragmentTests,
+                .subresourceRange = ImageSubresourceRange_DepthStencil_Layer1_Level1
             };
             //--------------------------------------------------------------------------
         }
