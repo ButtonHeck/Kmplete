@@ -457,11 +457,11 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, 0ULL
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,
-            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare, MS_DepthStencilAttachment
+            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare
         );
 
         renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
@@ -584,11 +584,11 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_LoadStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, 0ULL
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_LoadStore,
-            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare, MS_DepthStencilAttachment
+            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare
         );
 
         renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);

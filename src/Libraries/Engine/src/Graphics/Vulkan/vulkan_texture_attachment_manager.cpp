@@ -65,7 +65,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         VkRenderingAttachmentInfo VulkanTextureAttachmentManager::GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewSid, StringID resolveImageViewSid, VkResolveModeFlagBits resolveMode, 
-                                                                                             VkImageLayout resolveImageLayout, StringID noMSAAImageViewSid) const KMP_PROFILING(ProfileLevelImportantVerbose)
+                                                                                             VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA /*= false*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             if (!_textureAttachments.contains(imageViewSid))
             {
@@ -76,24 +76,12 @@ namespace Kmplete
             const auto& textureAttachment = _textureAttachments.at(imageViewSid);
             if (textureAttachment->GetSamples() == VK_SampleCount_1)
             {
-                if (noMSAAImageViewSid == 0ULL)
-                {
-                    preset.imageView = _swapchain.get().GetCurrentImageView();
-                }
-                else
-                {
-                    if (!_textureAttachments.contains(noMSAAImageViewSid))
-                    {
-                        KMP_LOG_ERROR("texture attachment for image view with sid '{}' not found", noMSAAImageViewSid);
-                        return preset;
-                    }
-
-                    preset.imageView = _textureAttachments.at(noMSAAImageViewSid)->GetVkImageView();
-                }
+                preset.imageView = useSwapchainForNonMSAA ? _swapchain.get().GetCurrentImageView() : textureAttachment->GetVkImageView();
+                return preset;
             }
             else
             {
-                preset.imageView = _textureAttachments.at(imageViewSid)->GetVkImageView();
+                preset.imageView = textureAttachment->GetVkImageView();
 
                 if (resolveMode == VK_Resolve_None)
                 {
@@ -117,9 +105,8 @@ namespace Kmplete
 
                 preset.resolveMode = resolveMode;
                 preset.resolveImageLayout = resolveImageLayout;
+                return preset;
             }
-
-            return preset;
         }}
         //--------------------------------------------------------------------------
 
