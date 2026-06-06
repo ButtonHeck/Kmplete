@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -7,6 +8,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        using namespace VKBits;
+
+
         namespace VKUtils
         {
             void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters) KMP_PROFILING(ProfileLevelImportant)
@@ -28,6 +32,22 @@ namespace Kmplete
                     0, nullptr,
                     1, &imageMemoryBarrier);
             }}
+            //--------------------------------------------------------------------------
+
+            VkImageViewType ImageTypeToViewType(VkImageType imageType, bool array /*= false*/) noexcept
+            {
+                switch (imageType)
+                {
+                case VK_Image_1D:
+                    return array ? VK_ImageView_1DArray : VK_ImageView_1D;
+                case VK_Image_2D:
+                    return array ? VK_ImageView_2DArray : VK_ImageView_2D;
+                case VK_Image_3D:
+                    return VK_ImageView_3D;
+                }
+
+                return VK_ImageView_2D;
+            }
             //--------------------------------------------------------------------------
 
             VkExtent3D Extent2Dto3D(const VkExtent2D& extent, UInt32 depth /*= 1*/)

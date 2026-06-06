@@ -43,6 +43,8 @@ namespace Kmplete
 
             KMP_API void InsertImageMemoryBarrier(const MemoryBarrierParameters& barrierParameters);
 
+            KMP_NODISCARD KMP_API VkImageViewType ImageTypeToViewType(VkImageType imageType, bool array = false) noexcept;
+
             KMP_NODISCARD KMP_API VkExtent3D Extent2Dto3D(const VkExtent2D& extent, UInt32 depth = 1);
             KMP_NODISCARD KMP_API VkExtent2D Extent3Dto2D(const VkExtent3D& extent);
         }

@@ -51,21 +51,5 @@ namespace Kmplete
             return VK_Format_RGB32_SFloat;
         }
         //--------------------------------------------------------------------------
-
-        VkImageViewType ImageTypeToViewType(VkImageType imageType, bool array /*= false*/) noexcept
-        {
-            switch (imageType)
-            {
-            case VK_Image_1D:
-                return array ? VK_ImageView_1DArray : VK_ImageView_1D;
-            case VK_Image_2D:
-                return array ? VK_ImageView_2DArray : VK_ImageView_2D;
-            case VK_Image_3D:
-                return VK_ImageView_3D;
-            }
-
-            return VK_ImageView_2D;
-        }
-        //--------------------------------------------------------------------------
     }
 }
