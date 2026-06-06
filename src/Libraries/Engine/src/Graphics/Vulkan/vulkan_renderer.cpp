@@ -140,7 +140,19 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanRenderer::TransitionImage(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const KMP_PROFILING(ProfileLevelMinor)
+        void VulkanRenderer::InsertImageMemoryBarrier(const OptionalRef<VulkanTextureAttachment>& attachment, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const
+        {
+            if (!attachment.has_value())
+            {
+                KMP_LOG_ERROR("cannot insert memory barrier for texture attachment wrapper with no value");
+                return;
+            }
+
+            InsertImageMemoryBarrier(attachment.value().get().GetVkImage(), memoryBarrierParameters);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::InsertImageMemoryBarrier(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_currentCommandBuffer);
 

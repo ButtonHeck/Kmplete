@@ -239,7 +239,7 @@ namespace Kmplete
             const auto& msDepthStencilAttachmentTexture = msDepthStencilAttachment.value().get();
 
             auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
-            vulkanRenderer.TransitionImage(msDepthStencilAttachmentTexture.GetVkImage(), imageBarrierParameters);
+            vulkanRenderer.InsertImageMemoryBarrier(msDepthStencilAttachmentTexture.GetVkImage(), imageBarrierParameters);
 
             auto colorAttachmentInfo = Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore;
             if (msColorAttachmentTexture.GetSamples() == VK_SampleCount_1)

@@ -115,7 +115,7 @@ namespace Kmplete
                 .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
-            _renderer->TransitionImage(_swapchain->GetCurrentImage(), imageBarrierParameters);
+            _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), imageBarrierParameters);
         }}
         //--------------------------------------------------------------------------
 
@@ -135,7 +135,7 @@ namespace Kmplete
                 .dstStageMask = VK_PipelineStage_BottomOfPipe,
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
-            _renderer->TransitionImage(_swapchain->GetCurrentImage(), memoryBarrierParameters);
+            _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), memoryBarrierParameters);
             _renderer->EndFrame();
             _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
 

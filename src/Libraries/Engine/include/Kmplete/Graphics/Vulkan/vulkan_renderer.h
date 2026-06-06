@@ -13,6 +13,7 @@
 #include "Kmplete/Graphics/Vulkan/vulkan_swapchain.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/vulkan_pipeline_manager.h"
+#include "Kmplete/Graphics/Vulkan/vulkan_texture_attachment.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -45,7 +46,8 @@ namespace Kmplete
             KMP_API void EndRendering() const;
             KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
-            KMP_API void TransitionImage(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
+            KMP_API void InsertImageMemoryBarrier(const OptionalRef<VulkanTextureAttachment>& attachment, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
+            KMP_API void InsertImageMemoryBarrier(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
 
             KMP_API void SetDepthTestEnabled(bool enabled) const;
             KMP_API void SetDepthWriteEnabled(bool enabled) const;
