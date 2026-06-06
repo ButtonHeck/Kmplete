@@ -240,7 +240,7 @@ namespace Kmplete
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,
-            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare, 0ULL
+            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare, MS_DepthStencilAttachment
         );
 
         renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
