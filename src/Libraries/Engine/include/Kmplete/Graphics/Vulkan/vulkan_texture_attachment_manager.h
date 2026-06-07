@@ -29,8 +29,6 @@ namespace Kmplete
             KMP_API VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
                                                    const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain);
 
-            KMP_API void SetSwapchain(const VulkanSwapchain& swapchain);
-
             KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
                                               VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
@@ -47,7 +45,7 @@ namespace Kmplete
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
             VkExtent3D _extent;
             VkSampleCountFlagBits _msaaSamples;
-            Ref<const VulkanSwapchain> _swapchain;
+            const VulkanSwapchain& _swapchain;
 
             StringIDHashMap<UPtr<VulkanTextureAttachment>> _textureAttachments;
         };

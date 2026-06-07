@@ -610,14 +610,11 @@ namespace Kmplete
 
             WaitIdle();
 
-            _DeleteSwapchain();
             _DeleteSyncronizationObjects();
-
             _CreateSynchronizationObjects();
-            _CreateSwapchain();
 
-            _renderer->SetSwapchain(*_swapchain.get());
-            _textureAttachmentManager->SetSwapchain(*_swapchain.get());
+            _currentExtent = _UpdateExtent();
+            _swapchain->Recreate(_currentExtent, _vSync, _presentCompleteSemaphores, _renderCompleteSemaphores);
         }}
         //--------------------------------------------------------------------------
 

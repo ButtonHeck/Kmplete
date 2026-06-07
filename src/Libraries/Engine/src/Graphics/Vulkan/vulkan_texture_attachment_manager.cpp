@@ -20,14 +20,8 @@ namespace Kmplete
             , _imageCreatorDelegate(imageCreatorDelegate)
             , _extent(extent)
             , _msaaSamples(msaaSamples)
-            , _swapchain(std::cref(swapchain))
+            , _swapchain(swapchain)
         {}
-        //--------------------------------------------------------------------------
-
-        void VulkanTextureAttachmentManager::SetSwapchain(const VulkanSwapchain& swapchain) KMP_PROFILING(ProfileLevelMinorVerbose)
-        {
-            _swapchain = std::cref(swapchain);
-        }}
         //--------------------------------------------------------------------------
 
         bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/)
@@ -76,7 +70,7 @@ namespace Kmplete
             const auto& textureAttachment = _textureAttachments.at(imageViewAttachmentSid);
             if (textureAttachment->GetSamples() == VK_SampleCount_1)
             {
-                preset.imageView = useSwapchainForNonMSAA ? _swapchain.get().GetCurrentImageView() : textureAttachment->GetVkImageView();
+                preset.imageView = useSwapchainForNonMSAA ? _swapchain.GetCurrentImageView() : textureAttachment->GetVkImageView();
                 return preset;
             }
             else
@@ -90,7 +84,7 @@ namespace Kmplete
 
                 if (resolveImageViewAttachmentSid == 0ULL)
                 {
-                    preset.resolveImageView = _swapchain.get().GetCurrentImageView();
+                    preset.resolveImageView = _swapchain.GetCurrentImageView();
                 }
                 else
                 {

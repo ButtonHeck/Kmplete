@@ -24,47 +24,32 @@ namespace Kmplete
                                          bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
-            , _vulkanContext(vulkanContext)
-            , _swapchainExtent(swapchainExtent)
             , _currentBufferIndex(currentBufferIndex)
-            , _presentCompleteSemaphores(presentCompleteSemaphores)
-            , _renderCompleteSemaphores(renderCompleteSemaphores)
             , _presentationQueue(presentationQueue)
-            , _swapchainImageFormat(_vulkanContext.surfaceFormat.format)
+            , _vulkanContext(vulkanContext)
+            , _imageCreatorDelegate(imageCreatorDelegate)
             , _device(device)
+            , _swapchainExtent(swapchainExtent)
+            , _swapchainImageFormat(vulkanContext.surfaceFormat.format)
             , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
             , _swapchainImageViews()
+            , _presentCompleteSemaphores()
+            , _renderCompleteSemaphores()
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
             KMP_ASSERT(_device);
 
-            _imageCount = NumConcurrentFrames;
-            if (_vulkanContext.surfaceCapabilities.maxImageCount > 0 && _imageCount > _vulkanContext.surfaceCapabilities.maxImageCount)
-            {
-                _imageCount = _vulkanContext.surfaceCapabilities.maxImageCount;
-            }
-
-            _CreateSwapchainObject(vulkanContext.surface, vSync);
-            _CreateSwapchainImages();
-            _CreateSwapchainImageViews(imageCreatorDelegate);
+            _Initialize(swapchainExtent, vSync, presentCompleteSemaphores, renderCompleteSemaphores);
         }
         //--------------------------------------------------------------------------
 
         VulkanSwapchain::~VulkanSwapchain() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_ASSERT(_device && _swapchain);
-
-            for (auto imageView : _swapchainImageViews)
-            {
-                KMP_ASSERT(imageView);
-                vkDestroyImageView(_device, imageView, nullptr);
-            }
-
-            vkDestroySwapchainKHR(_device, _swapchain, nullptr);
+            _Finalize();
         }}
         //--------------------------------------------------------------------------
 
@@ -78,6 +63,14 @@ namespace Kmplete
         void VulkanSwapchain::EndFrame() KMP_PROFILING(ProfileLevelImportant)
         {
             QueuePresent();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::Recreate(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
+                                       const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores) KMP_PROFILING(ProfileLevelImportant)
+        {
+            _Finalize();
+            _Initialize(swapchainExtent, vSync, presentCompleteSemaphores, renderCompleteSemaphores);
         }}
         //--------------------------------------------------------------------------
 
@@ -132,6 +125,40 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        void VulkanSwapchain::_Initialize(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
+                                          const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores) KMP_PROFILING(ProfileLevelAlways)
+        {
+            _imageCount = NumConcurrentFrames;
+            if (_vulkanContext.surfaceCapabilities.maxImageCount > 0 && _imageCount > _vulkanContext.surfaceCapabilities.maxImageCount)
+            {
+                _imageCount = _vulkanContext.surfaceCapabilities.maxImageCount;
+            }
+
+            _presentCompleteSemaphores = presentCompleteSemaphores;
+            _renderCompleteSemaphores = renderCompleteSemaphores;
+            _swapchainExtent = swapchainExtent;
+            _swapchainImageFormat = _vulkanContext.surfaceFormat.format;
+
+            _CreateSwapchainObject(vSync);
+            _CreateSwapchainImages();
+            _CreateSwapchainImageViews();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        {
+            KMP_ASSERT(_device && _swapchain);
+
+            for (auto imageView : _swapchainImageViews)
+            {
+                KMP_ASSERT(imageView);
+                vkDestroyImageView(_device, imageView, nullptr);
+            }
+
+            vkDestroySwapchainKHR(_device, _swapchain, nullptr);
+        }}
+        //--------------------------------------------------------------------------
+
         VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const
         {
             if (presentModes.empty())
@@ -149,10 +176,10 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainObject(VkSurfaceKHR surface, bool vSync) KMP_PROFILING(ProfileLevelImportant)
+        void VulkanSwapchain::_CreateSwapchainObject(bool vSync) KMP_PROFILING(ProfileLevelImportant)
         {
             auto swapchainCreateInfo = VKUtils::InitVkSwapchainCreateInfoKHR();
-            swapchainCreateInfo.surface = surface;
+            swapchainCreateInfo.surface = _vulkanContext.surface;
             swapchainCreateInfo.minImageCount = _imageCount;
             swapchainCreateInfo.imageFormat = _vulkanContext.surfaceFormat.format;
             swapchainCreateInfo.imageColorSpace = _vulkanContext.surfaceFormat.colorSpace;
@@ -201,13 +228,13 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainImageViews(const VulkanImageCreatorDelegate& imageCreatorDelegate) KMP_PROFILING(ProfileLevelImportant)
+        void VulkanSwapchain::_CreateSwapchainImageViews() KMP_PROFILING(ProfileLevelImportant)
         {
             _swapchainImageViews.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
                 const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-                _swapchainImageViews[i] = imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormat, subresourceRange);
+                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormat, subresourceRange);
             }
         }}
         //--------------------------------------------------------------------------

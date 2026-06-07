@@ -20,7 +20,7 @@ namespace Kmplete
             : _currentBufferIndex(currentBufferIndex)
             , _pipelineManager(pipelineManager)
             , _shaderObjects(shaderObjects)
-            , _swapchain(std::cref(swapchain))
+            , _swapchain(swapchain)
             , _device(device)
             , _commandPool(nullptr)
             , _drawCommandBuffers()
@@ -69,12 +69,6 @@ namespace Kmplete
             KMP_ASSERT(_currentBufferIndex < _drawCommandBuffers.size());
 
             _drawCommandBuffers[_currentBufferIndex].End();
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::SetSwapchain(const VulkanSwapchain& swapchain) KMP_PROFILING(ProfileLevelMinorVerbose)
-        {
-            _swapchain = std::cref(swapchain);
         }}
         //--------------------------------------------------------------------------
 
