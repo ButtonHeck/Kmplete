@@ -147,6 +147,8 @@ namespace Kmplete
 
         void VulkanLogicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelImportant)
         {
+            _currentExtent = _UpdateExtent();
+
             _RecreateSwapchain();
 
             _textureAttachmentManager->RecreateTextureAttachmentsWithNewSize(VKUtils::Extent2Dto3D(_currentExtent));
@@ -428,7 +430,6 @@ namespace Kmplete
         {
             KMP_ASSERT(_device && _imageCreatorDelegate);
 
-            _currentExtent = _UpdateExtent();
             _swapchain.reset(new VulkanSwapchain(_device, *_presentQueue.get(), _vulkanContext, _currentExtent, _vSync, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
             KMP_ASSERT(_swapchain);
         }}
@@ -613,7 +614,6 @@ namespace Kmplete
             _DeleteSyncronizationObjects();
             _CreateSynchronizationObjects();
 
-            _currentExtent = _UpdateExtent();
             _swapchain->Recreate(_currentExtent, _vSync, _presentCompleteSemaphores, _renderCompleteSemaphores);
         }}
         //--------------------------------------------------------------------------
