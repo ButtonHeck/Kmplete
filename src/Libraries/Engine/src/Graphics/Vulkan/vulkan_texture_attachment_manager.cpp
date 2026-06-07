@@ -30,50 +30,50 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/)
+        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/)
         {
-            return AddTextureAttachment(textureSid, format, _extent, _msaaSamples, usageFlags, aspectMask, fixedSamples);
+            return AddTextureAttachment(attachmentSid, format, _extent, _msaaSamples, usageFlags, aspectMask, fixedSamples);
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
+        bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
                                                                   VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
-            if (_textureAttachments.contains(textureSid))
+            if (_textureAttachments.contains(attachmentSid))
             {
-                KMP_LOG_WARN("texture attachment with sid '{}' has already been added", textureSid);
+                KMP_LOG_WARN("texture attachment with sid '{}' has already been added", attachmentSid);
                 return true;
             }
 
-            const auto [iterator, hasEmplaced] = _textureAttachments.emplace(textureSid, CreateUPtr<VulkanTextureAttachment>(textureSid, _device, _imageCreatorDelegate, format, extent, samples, usageFlags, aspectMask, fixedSamples));
+            const auto [iterator, hasEmplaced] = _textureAttachments.emplace(attachmentSid, CreateUPtr<VulkanTextureAttachment>(attachmentSid, _device, _imageCreatorDelegate, format, extent, samples, usageFlags, aspectMask, fixedSamples));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------
 
-        OptionalRef<VulkanTextureAttachment> VulkanTextureAttachmentManager::GetTextureAttachment(StringID textureSid) const
+        OptionalRef<VulkanTextureAttachment> VulkanTextureAttachmentManager::GetTextureAttachment(StringID attachmentSid) const
         {
-            if (_textureAttachments.contains(textureSid))
+            if (_textureAttachments.contains(attachmentSid))
             {
-                return std::ref(*_textureAttachments.at(textureSid).get());
+                return std::ref(*_textureAttachments.at(attachmentSid).get());
             }
 
-            KMP_LOG_ERROR("texture attachment with sid '{}' not found", textureSid);
+            KMP_LOG_ERROR("texture attachment with sid '{}' not found", attachmentSid);
             return std::nullopt;
         }
         //--------------------------------------------------------------------------
 
-        VkRenderingAttachmentInfo VulkanTextureAttachmentManager::GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewSid, StringID resolveImageViewSid, VkResolveModeFlagBits resolveMode, 
-                                                                                             VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA /*= false*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        VkRenderingAttachmentInfo VulkanTextureAttachmentManager::GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
+                                                                                             VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA /*= false*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!_textureAttachments.contains(imageViewSid))
+            if (!_textureAttachments.contains(imageViewAttachmentSid))
             {
-                KMP_LOG_ERROR("texture attachment for image view with sid '{}' not found", imageViewSid);
+                KMP_LOG_ERROR("texture attachment for image view with sid '{}' not found", imageViewAttachmentSid);
                 return preset;
             }
 
-            const auto& textureAttachment = _textureAttachments.at(imageViewSid);
+            const auto& textureAttachment = _textureAttachments.at(imageViewAttachmentSid);
             if (textureAttachment->GetSamples() == VK_SampleCount_1)
             {
                 preset.imageView = useSwapchainForNonMSAA ? _swapchain.get().GetCurrentImageView() : textureAttachment->GetVkImageView();
@@ -88,19 +88,19 @@ namespace Kmplete
                     return preset;
                 }
 
-                if (resolveImageViewSid == 0ULL)
+                if (resolveImageViewAttachmentSid == 0ULL)
                 {
                     preset.resolveImageView = _swapchain.get().GetCurrentImageView();
                 }
                 else
                 {
-                    if (!_textureAttachments.contains(resolveImageViewSid))
+                    if (!_textureAttachments.contains(resolveImageViewAttachmentSid))
                     {
-                        KMP_LOG_ERROR("texture attachment for resolve image view with sid '{}' not found", resolveImageViewSid);
+                        KMP_LOG_ERROR("texture attachment for resolve image view with sid '{}' not found", resolveImageViewAttachmentSid);
                         return preset;
                     }
 
-                    preset.resolveImageView = _textureAttachments.at(resolveImageViewSid)->GetVkImageView();
+                    preset.resolveImageView = _textureAttachments.at(resolveImageViewAttachmentSid)->GetVkImageView();
                 }
 
                 preset.resolveMode = resolveMode;
@@ -121,11 +121,11 @@ namespace Kmplete
 
             _extent = newExtent;
 
-            for (auto& [textureSid, textureAttachment] : _textureAttachments)
+            for (auto& [attachmentSid, textureAttachment] : _textureAttachments)
             {
                 auto parameters = textureAttachment->GetParameters();
                 parameters.extent = _extent;
-                textureAttachment.reset(new VulkanTextureAttachment(textureSid, _device, _imageCreatorDelegate, parameters));
+                textureAttachment.reset(new VulkanTextureAttachment(attachmentSid, _device, _imageCreatorDelegate, parameters));
             }
         }}
         //--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ namespace Kmplete
 
             _msaaSamples = newSamples;
 
-            for (auto& [textureSid, textureAttachment] : _textureAttachments)
+            for (auto& [attachmentSid, textureAttachment] : _textureAttachments)
             {
                 auto parameters = textureAttachment->GetParameters();
                 if (parameters.fixedSamples)
@@ -150,7 +150,7 @@ namespace Kmplete
                 }
 
                 parameters.samples = _msaaSamples;
-                textureAttachment.reset(new VulkanTextureAttachment(textureSid, _device, _imageCreatorDelegate, parameters));
+                textureAttachment.reset(new VulkanTextureAttachment(attachmentSid, _device, _imageCreatorDelegate, parameters));
             }
         }}
         //--------------------------------------------------------------------------

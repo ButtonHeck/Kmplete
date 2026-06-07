@@ -31,13 +31,13 @@ namespace Kmplete
 
             KMP_API void SetSwapchain(const VulkanSwapchain& swapchain);
 
-            KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
-            KMP_API bool AddTextureAttachment(StringID textureSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
+            KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
+            KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
                                               VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
-            KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID textureSid) const;
+            KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID attachmentSid) const;
 
-            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewSid, StringID resolveImageViewSid, VkResolveModeFlagBits resolveMode, 
-                                                                                       VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA = false) const;
+            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
+                                                                                       VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA = false) const;
 
             KMP_API void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);
             KMP_API void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
