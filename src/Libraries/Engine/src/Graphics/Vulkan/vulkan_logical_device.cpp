@@ -607,7 +607,7 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_RecreateSwapchain() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_ASSERT(_swapchain && _renderer);
+            KMP_ASSERT(_swapchain);
 
             WaitIdle();
 
