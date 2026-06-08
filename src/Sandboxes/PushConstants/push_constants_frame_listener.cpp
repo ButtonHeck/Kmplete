@@ -105,8 +105,8 @@ namespace Kmplete
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.frag.spv");
-        const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
-        const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
+        const auto vertexShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(vertexShaderPath);
+        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(fragmentShaderPath);
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")

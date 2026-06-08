@@ -16,10 +16,10 @@ namespace Kmplete
 
 
         VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
-                                       const StringIDHashMap<UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
+                                       const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
             : _currentBufferIndex(currentBufferIndex)
             , _pipelineManager(pipelineManager)
-            , _shaderObjects(shaderObjects)
+            , _shaderManager(shaderManager)
             , _swapchain(swapchain)
             , _device(device)
             , _commandPool(nullptr)
@@ -608,9 +608,10 @@ namespace Kmplete
             shaders.reserve(shadersSids.size());
             for (const auto& shaderSid : shadersSids)
             {
-                if (_shaderObjects.contains(shaderSid))
+                const auto shader = _shaderManager.GetShaderObject(shaderSid);
+                if (shader != VK_NULL_HANDLE)
                 {
-                    shaders.push_back(_shaderObjects.at(shaderSid)->GetVkShader());
+                    shaders.push_back(shader);
                     continue;
                 }
 

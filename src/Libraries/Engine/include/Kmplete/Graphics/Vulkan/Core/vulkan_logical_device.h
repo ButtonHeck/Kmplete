@@ -11,11 +11,10 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_descriptor_set_manager.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
-#include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_module.h"
-#include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline_parameters.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_pipeline_manager.h"
+#include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_manager.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
@@ -79,16 +78,11 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanPipelineManager& GetPipelineManager() noexcept;
             KMP_NODISCARD KMP_API const VulkanTextureAttachmentManager& GetTextureAttachmentManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanTextureAttachmentManager& GetTextureAttachmentManager() noexcept;
+            KMP_NODISCARD KMP_API const VulkanShaderManager& GetShaderManager() const noexcept;
+            KMP_NODISCARD KMP_API VulkanShaderManager& GetShaderManager() noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
             KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
-            KMP_NODISCARD KMP_API VulkanShaderModule CreateShaderModule(const Filepath& filepath) const;
-
-            KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                         const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
-            KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                         const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
-            KMP_NODISCARD KMP_API VkShaderEXT GetShaderObject(StringID sid) const noexcept;
 
         private:
             void _CreateLogicalDeviceObject();
@@ -109,13 +103,8 @@ namespace Kmplete
             void _CreatePipelineManager();
             void _DeletePipelineManager();
 
-            void _DeleteShaderObjects();
-
             void _CreateBufferCreatorDelegate();
             void _DeleteBufferCreatorDelegate();
-
-            void _CreateRenderer();
-            void _DeleteRenderer();
 
             void _CreateSamplersStorage();
             void _DeleteSamplersStorage();
@@ -125,6 +114,12 @@ namespace Kmplete
 
             void _CreateTextureAttachmentManager();
             void _DeleteTextureAttachmentManager();
+
+            void _CreateShaderManager();
+            void _DeleteShaderManager();
+
+            void _CreateRenderer();
+            void _DeleteRenderer();
 
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
@@ -154,11 +149,11 @@ namespace Kmplete
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
             bool _vSync;
-            UPtr<VulkanRenderer> _renderer;
-            StringIDHashMap<UPtr<VulkanShaderObject>> _shaderObjects;
             UPtr<VulkanSamplersStorage> _samplersStorage;
             UPtr<VulkanDescriptorSetManager> _descriptorSetManager;
             UPtr<VulkanTextureAttachmentManager> _textureAttachmentManager;
+            UPtr<VulkanShaderManager> _shaderManager;
+            UPtr<VulkanRenderer> _renderer;
         };
         //--------------------------------------------------------------------------
     }

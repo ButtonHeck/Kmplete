@@ -278,8 +278,8 @@ namespace Kmplete
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
-        const auto vertexShaderModule = vulkanDevice.CreateShaderModule(vertexShaderPath);
-        const auto fragmentShaderModule = vulkanDevice.CreateShaderModule(fragmentShaderPath);
+        const auto vertexShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(vertexShaderPath);
+        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(fragmentShaderPath);
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
@@ -351,8 +351,8 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_ProvokingVertexMode);       //renderer.SetProvokingVertexMode(...)
 
         const Vector<StringID> descriptorSetsLayoutsSids = { MatricesDSLayout_SID, ColorMultiplierDSLayout_SID };
-        vulkanDevice.AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
-        vulkanDevice.AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
+        vulkanDevice.GetShaderManager().AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
+        vulkanDevice.GetShaderManager().AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);

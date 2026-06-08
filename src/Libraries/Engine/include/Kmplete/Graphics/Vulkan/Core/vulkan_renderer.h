@@ -11,7 +11,7 @@
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_pipeline_manager.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_object.h"
+#include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_manager.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
@@ -31,7 +31,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
-                                   const StringIDHashMap<UPtr<VulkanShaderObject>>& shaderObjects, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
+                                   const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
             KMP_API ~VulkanRenderer();
 
             KMP_API void StartFrame();
@@ -117,7 +117,7 @@ namespace Kmplete
         private:
             const UInt32& _currentBufferIndex;
             const VulkanPipelineManager& _pipelineManager;
-            const StringIDHashMap<UPtr<VulkanShaderObject>>& _shaderObjects;
+            const VulkanShaderManager& _shaderManager;
             const VulkanSwapchain& _swapchain;
 
             VkDevice _device;

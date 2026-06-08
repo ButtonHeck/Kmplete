@@ -52,11 +52,11 @@ namespace Kmplete
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SampleCount_1)
             , _vSync(true)
-            , _renderer(nullptr)
-            , _shaderObjects()
             , _samplersStorage(nullptr)
             , _descriptorSetManager(nullptr)
             , _textureAttachmentManager(nullptr)
+            , _shaderManager(nullptr)
+            , _renderer(nullptr)
         {
             KMP_PROFILE_FUNCTION(ProfileLevelAlways);
 
@@ -67,10 +67,11 @@ namespace Kmplete
             _CreateSwapchain();
             _CreatePipelineManager();
             _CreateBufferCreatorDelegate();
-            _CreateRenderer();
             _CreateSamplersStorage();
             _CreateDescriptorSetManager();
             _CreateTextureAttachmentManager();
+            _CreateShaderManager();
+            _CreateRenderer();
         }
         //--------------------------------------------------------------------------
 
@@ -78,11 +79,11 @@ namespace Kmplete
         {
             WaitIdle();
 
+            _DeleteRenderer();
+            _DeleteShaderManager();
             _DeleteTextureAttachmentManager();
             _DeleteDescriptorSetManager();
             _DeleteSamplersStorage();
-            _DeleteShaderObjects();
-            _DeleteRenderer();
             _DeleteBufferCreatorDelegate();
             _DeletePipelineManager();
             _DeleteSwapchain();
@@ -315,6 +316,22 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const VulkanShaderManager& VulkanLogicalDevice::GetShaderManager() const noexcept
+        {
+            KMP_ASSERT(_shaderManager);
+
+            return *_shaderManager.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanShaderManager& VulkanLogicalDevice::GetShaderManager() noexcept
+        {
+            KMP_ASSERT(_shaderManager);
+
+            return *_shaderManager.get();
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
             _graphicsParameters.reset(new VulkanGraphicsParameters());
@@ -459,12 +476,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteShaderObjects() KMP_PROFILING(ProfileLevelImportant)
-        {
-            _shaderObjects.clear();
-        }}
-        //--------------------------------------------------------------------------
-
         void VulkanLogicalDevice::_CreateBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
@@ -479,23 +490,6 @@ namespace Kmplete
             KMP_ASSERT(_bufferCreatorDelegate);
 
             _bufferCreatorDelegate.reset();
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_CreateRenderer() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device && _swapchain);
-
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, *_pipelineManager.get(), _shaderObjects, _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
-            KMP_ASSERT(_renderer);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteRenderer() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_renderer);
-
-            _renderer.reset();
         }}
         //--------------------------------------------------------------------------
 
@@ -561,6 +555,40 @@ namespace Kmplete
             KMP_ASSERT(_textureAttachmentManager);
 
             _textureAttachmentManager.reset();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateShaderManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            _shaderManager.reset(new VulkanShaderManager(_device, *_descriptorSetManager.get()));
+            KMP_ASSERT(_shaderManager);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteShaderManager() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_shaderManager);
+
+            _shaderManager.reset();
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateRenderer() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device && _swapchain);
+
+            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, *_pipelineManager.get(), *_shaderManager.get(), _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+            KMP_ASSERT(_renderer);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteRenderer() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_renderer);
+
+            _renderer.reset();
         }}
         //--------------------------------------------------------------------------
 
@@ -657,84 +685,6 @@ namespace Kmplete
 
             return VulkanFence(_device, signaled);
         }}
-        //--------------------------------------------------------------------------
-
-        VulkanShaderModule VulkanLogicalDevice::CreateShaderModule(const Filepath& filepath) const KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device);
-
-            return VulkanShaderModule(_device, filepath);
-        }}
-        //--------------------------------------------------------------------------
-
-        bool VulkanLogicalDevice::AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
-                                                  const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device);
-
-            if (_shaderObjects.contains(sid))
-            {
-                KMP_LOG_WARN("shader object with sid '{}' has already been created", sid);
-                return true;
-            }
-
-            try
-            {
-                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(sid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
-                return hasEmplaced;
-            }
-            catch (KMP_MB_UNUSED const RuntimeError& er)
-            {
-                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", sid, filepath);
-                return false;
-            }
-        }}
-        //--------------------------------------------------------------------------
-
-        bool VulkanLogicalDevice::AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device && _descriptorSetManager);
-
-            if (_shaderObjects.contains(sid))
-            {
-                KMP_LOG_WARN("shader object with sid '{}' has already been created", sid);
-                return true;
-            }
-
-            try
-            {
-                const auto descriptorSetsLayouts = _descriptorSetManager->GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
-                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(sid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
-                return hasEmplaced;
-            }
-            catch (KMP_MB_UNUSED const RuntimeError& er)
-            {
-                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", sid, filepath);
-                return false;
-            }
-        }}
-        //--------------------------------------------------------------------------
-
-        VkShaderEXT VulkanLogicalDevice::GetShaderObject(StringID sid) const noexcept
-        {
-            if (_shaderObjects.contains(sid))
-            {
-                const auto& shaderObject = _shaderObjects.at(sid);
-                if (shaderObject)
-                {
-                    return shaderObject->GetVkShader();
-                }
-                else
-                {
-                    KMP_LOG_ERROR("shader object with sid '{}' found, but is nullptr", sid);
-                    return VK_NULL_HANDLE;
-                }
-            }
-
-            KMP_LOG_ERROR("shader object with sid '{}' not found", sid);
-            return VK_NULL_HANDLE;
-        }
         //--------------------------------------------------------------------------
     }
 }

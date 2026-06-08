@@ -135,8 +135,8 @@ namespace Kmplete
 
         const auto fixedColorVertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.vert.spv");
         const auto fixedColorFragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.frag.spv");
-        const auto fixedColorVertexShaderModule = vulkanDevice.CreateShaderModule(fixedColorVertexShaderPath);
-        const auto fixedColorFragmentShaderModule = vulkanDevice.CreateShaderModule(fixedColorFragmentShaderPath);
+        const auto fixedColorVertexShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(fixedColorVertexShaderPath);
+        const auto fixedColorFragmentShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(fixedColorFragmentShaderPath);
         const auto fixedColorShaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             fixedColorVertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             fixedColorFragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
@@ -144,8 +144,8 @@ namespace Kmplete
 
         const auto bufferedColorVertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_buffered_color.vert.spv");
         const auto bufferedColorFragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_buffered_color.frag.spv");
-        const auto bufferedColorVertexShaderModule = vulkanDevice.CreateShaderModule(bufferedColorVertexShaderPath);
-        const auto bufferedColorFragmentShaderModule = vulkanDevice.CreateShaderModule(bufferedColorFragmentShaderPath);
+        const auto bufferedColorVertexShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(bufferedColorVertexShaderPath);
+        const auto bufferedColorFragmentShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(bufferedColorFragmentShaderPath);
         const auto bufferedColorShaderStages = Vector<VkPipelineShaderStageCreateInfo>{
             bufferedColorVertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
             bufferedColorFragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
