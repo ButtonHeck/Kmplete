@@ -9,7 +9,7 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Assets/assets_manager.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_graphics_parameters.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_parameters.h"
 
 #include <catch2/catch_test_macros.hpp>
 

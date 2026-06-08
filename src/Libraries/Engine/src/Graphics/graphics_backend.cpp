@@ -1,6 +1,6 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"

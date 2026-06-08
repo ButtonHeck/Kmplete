@@ -4,8 +4,8 @@
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Graphics/graphics_backend.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
+#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
+#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.h"
 
 #include <vulkan/vulkan.h>
 

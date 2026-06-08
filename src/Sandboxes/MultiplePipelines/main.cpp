@@ -2,7 +2,7 @@
 
 #include "Kmplete/Core/main.h"
 #include "Kmplete/Base/exception.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_graphics_parameters.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_parameters.h"
 
 
 namespace Kmplete

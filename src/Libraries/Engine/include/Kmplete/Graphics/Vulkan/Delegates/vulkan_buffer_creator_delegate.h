@@ -3,8 +3,8 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/nullability.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_vertex_buffer.h"
+#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
+#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.h"
 
 #include <vulkan/vulkan.h>
 

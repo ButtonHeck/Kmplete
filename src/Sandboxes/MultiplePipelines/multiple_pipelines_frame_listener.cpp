@@ -1,7 +1,7 @@
 #include "multiple_pipelines_frame_listener.h"
 
-#include "Kmplete/Graphics/Vulkan/vulkan_graphics_backend.h"
-#include "Kmplete/Graphics/Vulkan/vulkan_physical_device.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Base/named_bool.h"
