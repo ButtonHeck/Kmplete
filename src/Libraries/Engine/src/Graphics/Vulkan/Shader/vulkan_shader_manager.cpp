@@ -80,7 +80,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VkShaderEXT VulkanShaderManager::GetShaderObject(StringID sid) const noexcept
+        VkShaderEXT VulkanShaderManager::GetVkShader(StringID sid) const noexcept
         {
             if (_shaderObjects.contains(sid))
             {

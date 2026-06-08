@@ -608,7 +608,7 @@ namespace Kmplete
             shaders.reserve(shadersSids.size());
             for (const auto& shaderSid : shadersSids)
             {
-                const auto shader = _shaderManager.GetShaderObject(shaderSid);
+                const auto shader = _shaderManager.GetVkShader(shaderSid);
                 if (shader != VK_NULL_HANDLE)
                 {
                     shaders.push_back(shader);
