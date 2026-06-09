@@ -19,6 +19,9 @@ namespace Kmplete
     static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
     static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
 
+    static constexpr auto VertexShaderModule_SID = "vertex_shader"_sid;
+    static constexpr auto FragmentShaderModule_SID = "fragment_shader"_sid;
+
 
     namespace
     {
@@ -103,13 +106,11 @@ namespace Kmplete
             { VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData) }
         });
 
-        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.vert.spv");
-        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.frag.spv");
-        const auto vertexShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(vertexShaderPath);
-        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(fragmentShaderPath);
+        const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.vert.spv"));
+        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.frag.spv"));
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
+            vertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
+            fragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();

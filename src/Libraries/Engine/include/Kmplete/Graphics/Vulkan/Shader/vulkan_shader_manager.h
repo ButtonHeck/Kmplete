@@ -4,6 +4,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/pointers.h"
+#include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_module.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -28,7 +29,8 @@ namespace Kmplete
             KMP_API VulkanShaderManager(VkDevice device, const VulkanDescriptorSetManager& descriptorSetManager);
             KMP_API ~VulkanShaderManager();
 
-            KMP_NODISCARD KMP_API VulkanShaderModule CreateShaderModule(const Filepath& filepath) const;
+            KMP_API OptionalRef<VulkanShaderModule> AddShaderModule(StringID sid, const Filepath& filepath);
+            KMP_NODISCARD KMP_API OptionalRef<VulkanShaderModule> GetShaderModule(StringID sid) const noexcept;
 
             KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");

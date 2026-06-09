@@ -23,11 +23,38 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VulkanShaderModule VulkanShaderManager::CreateShaderModule(const Filepath& filepath) const KMP_PROFILING(ProfileLevelImportant)
+        OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModule(StringID sid, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
-            return VulkanShaderModule(_device, filepath);
+            if (_shaderModules.contains(sid))
+            {
+                KMP_LOG_WARN("shader module with sid '{}' has already been created", sid);
+                return *_shaderModules.at(sid).get();
+            }
+
+            try
+            {
+                const auto [iterator, hasEmplaced] = _shaderModules.emplace(sid, CreateUPtr<VulkanShaderModule>(_device, filepath));
+                return *iterator->second.get();
+            }
+            catch (KMP_MB_UNUSED const RuntimeError& er)
+            {
+                KMP_LOG_ERROR("failed to create shader module with sid '{}' from '{}'", sid, filepath);
+                return std::nullopt;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        OptionalRef<VulkanShaderModule> VulkanShaderManager::GetShaderModule(StringID sid) const noexcept KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (_shaderModules.contains(sid))
+            {
+                return *_shaderModules.at(sid).get();
+            }
+
+            KMP_LOG_ERROR("shader module with sid '{}' not found", sid);
+            return std::nullopt;
         }}
         //--------------------------------------------------------------------------
 

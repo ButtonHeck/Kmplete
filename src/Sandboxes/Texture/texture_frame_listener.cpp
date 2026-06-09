@@ -262,11 +262,11 @@ namespace Kmplete
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.frag.spv");
-        const auto vertexShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(vertexShaderPath);
-        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().CreateShaderModule(fragmentShaderPath);
+        const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShader_SID, vertexShaderPath);
+        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShader_SID, fragmentShaderPath);
         const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fragmentShaderModule.GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
+            vertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
+            fragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
         };
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
