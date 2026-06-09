@@ -29,14 +29,14 @@ namespace Kmplete
             KMP_API VulkanShaderManager(VkDevice device, const VulkanDescriptorSetManager& descriptorSetManager);
             KMP_API ~VulkanShaderManager();
 
-            KMP_API OptionalRef<VulkanShaderModule> AddShaderModule(StringID sid, const Filepath& filepath);
-            KMP_NODISCARD KMP_API OptionalRef<VulkanShaderModule> GetShaderModule(StringID sid) const noexcept;
+            KMP_API OptionalRef<VulkanShaderModule> AddShaderModule(StringID moduleSid, const Filepath& filepath);
+            KMP_NODISCARD KMP_API OptionalRef<VulkanShaderModule> GetShaderModule(StringID moduleSid) const noexcept;
 
-            KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+            KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
-            KMP_API bool AddShaderObject(StringID sid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+            KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
-            KMP_NODISCARD KMP_API VkShaderEXT GetVkShader(StringID sid) const noexcept;
+            KMP_NODISCARD KMP_API VkShaderEXT GetVkShader(StringID shaderSid) const noexcept;
             
         private:
             VkDevice _device;
