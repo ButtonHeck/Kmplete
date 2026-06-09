@@ -82,7 +82,6 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanShaderManager& GetShaderManager() noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
-            KMP_NODISCARD KMP_API VulkanFence CreateFence(bool signaled = true) const;
 
         private:
             void _CreateLogicalDeviceObject();

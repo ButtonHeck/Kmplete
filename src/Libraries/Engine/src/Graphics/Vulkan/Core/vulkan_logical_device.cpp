@@ -678,13 +678,5 @@ namespace Kmplete
             return nullptr;
         }}
         //--------------------------------------------------------------------------
-
-        VulkanFence VulkanLogicalDevice::CreateFence(bool signaled /*= true*/) const KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device);
-
-            return VulkanFence(_device, signaled);
-        }}
-        //--------------------------------------------------------------------------
     }
 }
