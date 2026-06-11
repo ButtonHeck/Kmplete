@@ -6,7 +6,7 @@
 #include "Kmplete/Assets/texture_asset_manager.h"
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Assets/assets_interface.h"
-#include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 

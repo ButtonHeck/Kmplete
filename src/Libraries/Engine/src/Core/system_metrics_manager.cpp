@@ -1,6 +1,7 @@
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #if defined (KMP_PLATFORM_WINDOWS)
     #include <Windows.h>
@@ -91,7 +92,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void SystemMetricsManager::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+    void SystemMetricsManager::_Initialize()
     {
 #if defined (KMP_PLATFORM_WINDOWS)
         static_assert(sizeof(ULARGE_INTEGER) == sizeof(decltype(_lastCPUTimestamp)));
@@ -126,7 +127,7 @@ namespace Kmplete
         KMP_ASSERT(_systemMetrics.numProcessors != 0);
         KMP_ASSERT(_systemMetrics.totalVirtualMemoryMib != 0.0f);
         KMP_ASSERT(_systemMetrics.totalPhysicalMemoryMib != 0.0f);
-    }}
+    }
     //--------------------------------------------------------------------------
 
     bool SystemMetricsManager::_InitializeProcessId() KMP_PROFILING(ProfileLevelImportant)

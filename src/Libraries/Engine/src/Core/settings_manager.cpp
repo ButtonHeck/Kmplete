@@ -1,7 +1,8 @@
 #include "Kmplete/Core/settings_manager.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Json/json_document.h"
 #include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete

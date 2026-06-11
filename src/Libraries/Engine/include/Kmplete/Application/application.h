@@ -8,7 +8,7 @@
 #include "Kmplete/Core/settings_manager.h"
 #include "Kmplete/Core/system_metrics_manager.h"
 #include "Kmplete/Localization/localization_manager.h"
-#include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete

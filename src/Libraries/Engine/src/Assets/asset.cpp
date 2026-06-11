@@ -1,4 +1,5 @@
 #include "Kmplete/Assets/asset.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -6,9 +7,12 @@ namespace Kmplete
     namespace Assets
     {
         Asset::Asset(AssetType type, StringID sid) noexcept
-            : _type(type)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _type(type)
             , _sid(sid)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         AssetType Asset::GetType() const noexcept

@@ -5,6 +5,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/font.h"
 #include "Kmplete/Assets/asset.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 struct FT_LibraryRec_;
@@ -19,6 +20,8 @@ namespace Kmplete
         //! @see Assets::Asset
         class FontAsset : public Asset
         {
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
+
         public:
             KMP_API FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
             KMP_API FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath);

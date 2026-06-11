@@ -1,11 +1,11 @@
 #include "Kmplete/Assets/texture_asset_manager.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Internal/error_texture_data.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
-#include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -13,15 +13,16 @@ namespace Kmplete
     namespace Assets
     {
         TextureAssetManager::TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend)
-            : _graphicsBackend(graphicsBackend)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _graphicsBackend(graphicsBackend)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (!_CreateErrorTextureAsset())
             {
                 KMP_LOG_CRITICAL("error texture loading failed");
                 throw RuntimeError("TextureAssetManager: error texture loading failed");
             }
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

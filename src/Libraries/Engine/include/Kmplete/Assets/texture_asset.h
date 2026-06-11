@@ -7,6 +7,7 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Assets/asset.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -18,6 +19,8 @@ namespace Kmplete
         //! @see Assets::Asset
         class TextureAsset : public Asset
         {
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
+
         public:
             KMP_API TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept;
 

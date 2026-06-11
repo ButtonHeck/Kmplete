@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Assets/assets_interface.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -13,6 +14,8 @@ namespace Kmplete
         //! Just as simple as a pair of type enumerator and asset identifier
         class Asset
         {
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
+
         public:
             KMP_API Asset(AssetType type, StringID sid) noexcept;
 

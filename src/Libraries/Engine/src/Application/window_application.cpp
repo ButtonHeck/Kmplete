@@ -2,13 +2,14 @@
 #include "Kmplete/Internal/default_window_icon_data.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Event/key_events.h"
 #include "Kmplete/Event/window_events.h"
+#include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log.h"
 
 
 namespace Kmplete
@@ -83,7 +84,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_Initialize(const WindowApplicationParameters& parameters) KMP_PROFILING(ProfileLevelAlways)
+    void WindowApplication::_Initialize(const WindowApplicationParameters& parameters)
     {
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
         if (!settings)
@@ -133,10 +134,10 @@ namespace Kmplete
         }
 
         _frameClock.Mark();
-    }}
+    }
     //--------------------------------------------------------------------------
 
-    void WindowApplication::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+    void WindowApplication::_Finalize()
     {
         KMP_ASSERT(_frameListenerManager && _assetsManager && _inputManager && _graphicsBackend && _windowBackend);
 
@@ -147,7 +148,7 @@ namespace Kmplete
         _inputManager.reset();
         _graphicsBackend.reset();
         _windowBackend.reset();
-    }}
+    }
     //--------------------------------------------------------------------------
 
     bool WindowApplication::_RunFrameIteration(Window& window) KMP_PROFILING(ProfileLevelAlways)

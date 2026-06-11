@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -29,6 +30,7 @@ namespace Kmplete
         {
             KMP_LOG_CLASSNAME(TextureAssetManager)
             KMP_DISABLE_COPY_MOVE(TextureAssetManager)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             static constexpr StringID ErrorTextureSID = 0;

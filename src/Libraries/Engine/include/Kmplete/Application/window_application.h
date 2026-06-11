@@ -6,11 +6,11 @@
 #include "Kmplete/Window/window_backend.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Assets/assets_manager.h"
-#include "Kmplete/Profile/profiler.h"
-#include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Time/clock.h"
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Input/input_manager.h"
+#include "Kmplete/Profile/profiler_fwd.h"
+#include "Kmplete/Log/log_class_macro.h"
 
 
 namespace Kmplete

@@ -21,16 +21,19 @@ namespace Kmplete
     namespace Assets
     {
         FontAssetManager::FontAssetManager()
-            : _freetypeLibInstance(nullptr)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _freetypeLibInstance(nullptr)
         {
             _Initialize();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        FontAssetManager::~FontAssetManager()
+        FontAssetManager::~FontAssetManager() KMP_PROFILING(ProfileLevelAlways)
         {
             _Finalize();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData) KMP_PROFILING(ProfileLevelImportant)
@@ -120,7 +123,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+        void FontAssetManager::_Initialize()
         {
             const auto freetypeInitError = FT_Init_FreeType(&_freetypeLibInstance);
             if (freetypeInitError)
@@ -143,10 +146,10 @@ namespace Kmplete
             FT_Library_Version(_freetypeLibInstance, &freetypeVersionMajor, &freetypeVersionMinor, &freetypeVersionPatch);
             KMP_LOG_INFO("use FreeType version {}.{}.{}", freetypeVersionMajor, freetypeVersionMinor, freetypeVersionPatch);
 #endif
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void FontAssetManager::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void FontAssetManager::_Finalize()
         {
             KMP_ASSERT(_freetypeLibInstance);
 
@@ -157,7 +160,7 @@ namespace Kmplete
             {
                 KMP_LOG_ERROR("failed to shutdown FreeType library instance");
             }
-        }}
+        }
         //--------------------------------------------------------------------------
 
         bool FontAssetManager::_CreateDefaultFontAsset() KMP_PROFILING(ProfileLevelImportant)

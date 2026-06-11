@@ -6,6 +6,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Assets/font_asset.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 struct FT_LibraryRec_;
@@ -24,6 +25,7 @@ namespace Kmplete
         {
             KMP_LOG_CLASSNAME(FontAssetManager)
             KMP_DISABLE_COPY_MOVE(FontAssetManager)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             static constexpr StringID DefaultFontSID = 0;

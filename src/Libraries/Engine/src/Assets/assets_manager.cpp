@@ -5,6 +5,7 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -20,7 +21,7 @@ namespace Kmplete
         {
             _Initialize();
 
-            KMP_PROFILE_CONSTRUCTOR_END();
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
@@ -146,7 +147,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+        void AssetsManager::_Initialize()
         {
             if (!Filesystem::FilepathExists(_dataPath))
             {
@@ -159,16 +160,16 @@ namespace Kmplete
 
             _fontAssetManager.reset(new FontAssetManager());
             KMP_ASSERT(_fontAssetManager);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void AssetsManager::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void AssetsManager::_Finalize()
         {
             KMP_ASSERT(_fontAssetManager && _textureAssetManager);
 
             _fontAssetManager.reset();
             _textureAssetManager.reset();
-        }}
+        }
         //--------------------------------------------------------------------------
 
         void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)

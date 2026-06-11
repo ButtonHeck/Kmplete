@@ -1,5 +1,6 @@
 #include "Kmplete/Assets/texture_asset.h"
 #include "Kmplete/Core/assertion.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -8,9 +9,11 @@ namespace Kmplete
     {
         TextureAsset::TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept
             : Asset(AssetType::Texture, sid)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _texture(texture)
         {
             KMP_ASSERT(_texture);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

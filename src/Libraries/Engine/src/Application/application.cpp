@@ -5,6 +5,7 @@
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -39,7 +40,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Application::_Initialize(const ApplicationParameters& parameters) KMP_PROFILING(ProfileLevelAlways)
+    void Application::_Initialize(const ApplicationParameters& parameters)
     {
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
@@ -81,10 +82,10 @@ namespace Kmplete
 
         _FillDictionary();
         _localizationManager->AddLocaleChangedCallback(KMP_BIND(Application::_FillDictionary));
-    }}
+    }
     //--------------------------------------------------------------------------
 
-    void Application::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+    void Application::_Finalize()
     {
         KMP_ASSERT(_settingsManager && _localizationManager && _systemMetricsManager);
 
@@ -100,7 +101,7 @@ namespace Kmplete
             Log::Finalize();
         }
 #endif
-    }}
+    }
     //--------------------------------------------------------------------------
 
     void Application::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
