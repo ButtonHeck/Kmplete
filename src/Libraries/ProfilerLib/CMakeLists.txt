@@ -11,6 +11,7 @@ add_library(ProfilerLib)
 
 AddTargetSourcesGroup(ProfilerLib "Profile"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler_fwd.h
     ${CMAKE_CURRENT_LIST_DIR}/src/profiler.cpp
 )
 
@@ -40,6 +41,7 @@ add_library(ProfilerInterfaceLib INTERFACE)
 
 AddTargetSourcesGroup(ProfilerInterfaceLib "Profile"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Profile/profiler_fwd.h
 )
 
 target_compile_definitions(ProfilerInterfaceLib
