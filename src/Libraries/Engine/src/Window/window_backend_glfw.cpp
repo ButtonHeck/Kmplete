@@ -86,7 +86,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+    void WindowBackendGlfw::_Initialize()
     {
         int glfwInitExitCode = GLFW_FALSE;
         {
@@ -105,7 +105,7 @@ namespace Kmplete
         _InitializeCallbacks();
 
         _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
-    }}
+    }
     //--------------------------------------------------------------------------
 
     void WindowBackendGlfw::_InitializeCallbacks() const
@@ -123,7 +123,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void WindowBackendGlfw::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+    void WindowBackendGlfw::_Finalize()
     {
         _mainWindow.reset();
         _mainWindowSettings.reset();
@@ -137,7 +137,7 @@ namespace Kmplete
             KMP_PROFILE_SCOPE("GLFW termination", ProfileLevelAlways);
             glfwTerminate();
         }
-    }}
+    }
     //--------------------------------------------------------------------------
 
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName) KMP_PROFILING(ProfileLevelImportant)

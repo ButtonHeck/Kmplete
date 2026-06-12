@@ -8,7 +8,7 @@
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Graphics/graphics_base.h"
-#include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 

@@ -3,12 +3,13 @@
 #include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Event/window_events.h"
 #include "Kmplete/Event/key_events.h"
 #include "Kmplete/Event/mouse_events.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Math/geometry.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 
@@ -162,7 +163,7 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+    void WindowGlfw::_Initialize()
     {
         _InitializeWindowHints();
 
@@ -182,16 +183,16 @@ namespace Kmplete
         _UpdateDPI(_window);
 
         glfwShowWindow(_window);
-    }}
+    }
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+    void WindowGlfw::_Finalize()
     {
         NonNull<_UserData*> userData = _GetUserPointer(_window);
         delete userData;
 
         glfwDestroyWindow(_window);
-    }}
+    }
     //--------------------------------------------------------------------------
 
     Math::Size2I WindowGlfw::GetSize() const KMP_PROFILING(ProfileLevelMinor)
