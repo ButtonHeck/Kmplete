@@ -11,14 +11,15 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _sid(sid)
             , _pipeline(VK_NULL_HANDLE)
             , _parameters(parameters)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Initialize(layout);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

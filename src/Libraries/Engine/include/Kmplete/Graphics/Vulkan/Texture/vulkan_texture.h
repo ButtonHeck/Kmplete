@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_base.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -21,6 +22,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanTexture)
             KMP_LOG_CLASSNAME(VulkanTexture)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanTexture(VkImageType imageType, VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, 

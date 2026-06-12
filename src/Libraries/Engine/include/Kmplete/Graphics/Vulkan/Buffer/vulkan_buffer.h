@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -28,6 +29,7 @@ namespace Kmplete
         class VulkanBuffer
         {
             KMP_DISABLE_COPY(VulkanBuffer)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);

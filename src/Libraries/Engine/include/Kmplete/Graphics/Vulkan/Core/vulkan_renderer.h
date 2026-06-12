@@ -16,6 +16,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -28,6 +29,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanRenderer)
             KMP_LOG_CLASSNAME(VulkanRenderer)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,

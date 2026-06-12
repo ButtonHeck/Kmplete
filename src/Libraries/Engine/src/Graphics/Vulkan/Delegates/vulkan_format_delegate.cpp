@@ -13,8 +13,11 @@ namespace Kmplete
 
 
         VulkanFormatDelegate::VulkanFormatDelegate(VkPhysicalDevice physicalDevice) noexcept
-            : _physicalDevice(physicalDevice)
-        {}
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _physicalDevice(physicalDevice)
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         VkFormatProperties VulkanFormatDelegate::GetFormatProperties(VkFormat format) const KMP_PROFILING(ProfileLevelMinor)

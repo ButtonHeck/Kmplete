@@ -18,11 +18,10 @@ namespace Kmplete
 
         VulkanShaderObject::VulkanShaderObject(VkDevice device, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                                const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _shaderObject(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (!Filesystem::FilepathExists(filepath))
             {
                 KMP_LOG_ERROR("shader file not found '{}'", filepath);
@@ -55,19 +54,24 @@ namespace Kmplete
 
             auto result = VKCommands::CreateShadersEXT(_device, 1, &shaderCreateInfo, nullptr, &_shaderObject);
             VKUtils::CheckResult(result, "VulkanShaderObject: failed to create shader object");
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanShaderObject::VulkanShaderObject(VulkanShaderObject&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _shaderObject(other._shaderObject)
         {
             other._device = VK_NULL_HANDLE;
             other._shaderObject = VK_NULL_HANDLE;
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanShaderObject& VulkanShaderObject::operator=(VulkanShaderObject&& other) noexcept
+        VulkanShaderObject& VulkanShaderObject::operator=(VulkanShaderObject&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -81,7 +85,7 @@ namespace Kmplete
             other._shaderObject = VK_NULL_HANDLE;
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VulkanShaderObject::~VulkanShaderObject() KMP_PROFILING(ProfileLevelAlways)

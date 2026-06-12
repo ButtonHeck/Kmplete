@@ -12,10 +12,12 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanSamplersStorage::VulkanSamplersStorage(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate)
-            : _imageCreatorDelegate(imageCreatorDelegate)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _imageCreatorDelegate(imageCreatorDelegate)
             , _device(device)
         {
             KMP_ASSERT(_device);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

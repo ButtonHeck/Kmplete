@@ -8,6 +8,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -24,6 +25,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanSwapchain)
             KMP_LOG_CLASSNAME(VulkanSwapchain)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, 

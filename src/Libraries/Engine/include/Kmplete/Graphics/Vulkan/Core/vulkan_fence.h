@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -14,6 +15,7 @@ namespace Kmplete
         class VulkanFence
         {
             KMP_DISABLE_COPY(VulkanFence)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API explicit VulkanFence(VkDevice device, bool signaled = true);

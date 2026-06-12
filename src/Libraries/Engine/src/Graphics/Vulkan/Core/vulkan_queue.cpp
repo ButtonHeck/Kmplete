@@ -15,13 +15,12 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanQueue::VulkanQueue(VkDevice device, UInt32 familyIndex, bool supportPresentation)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _familyIndex(familyIndex)
             , _queue(nullptr)
             , _supportPresentation(supportPresentation)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             KMP_ASSERT(_device);
 
             vkGetDeviceQueue(_device, _familyIndex, 0, &_queue);
@@ -31,11 +30,14 @@ namespace Kmplete
                 KMP_LOG_CRITICAL("failed to get queue handle from logical device");
                 throw RuntimeError("VulkanQueue: failed to get queue handle from logical device");
             }
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanQueue::VulkanQueue(VulkanQueue&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _familyIndex(other._familyIndex)
             , _queue(other._queue)
             , _supportPresentation(other._supportPresentation)
@@ -45,10 +47,11 @@ namespace Kmplete
             other._queue = nullptr;
 
             KMP_ASSERT(_device && _queue);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanQueue& VulkanQueue::operator=(VulkanQueue&& other) noexcept
+        VulkanQueue& VulkanQueue::operator=(VulkanQueue&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -67,7 +70,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _queue);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanQueue::WaitIdle() const KMP_PROFILING(ProfileLevelImportant)

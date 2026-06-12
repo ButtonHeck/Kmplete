@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -17,9 +18,12 @@ namespace Kmplete
                 VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VK_ImageView_2D, aspectMask, 1),
                 imageCreatorDelegate,
                 VK_Memory_DeviceLocal)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _sid(sid)
             , _parameters({ .format = format, .extent = extent, .usageFlags = usageFlags, .aspectMask = aspectMask, .samples = samples, .fixedSamples = fixedSamples })
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         VulkanTextureAttachment::VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters)
@@ -28,9 +32,12 @@ namespace Kmplete
                 VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VK_ImageView_2D, parameters.aspectMask, 1),
                 imageCreatorDelegate,
                 VK_Memory_DeviceLocal)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _sid(sid)
             , _parameters(parameters)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         StringID VulkanTextureAttachment::GetStringID() const noexcept

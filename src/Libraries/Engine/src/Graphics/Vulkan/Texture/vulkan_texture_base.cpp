@@ -10,7 +10,8 @@ namespace Kmplete
     {
         VulkanTextureBase::VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, VkImageViewCreateInfo imageViewCreateInfo,
                                              const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _image(nullptr)
             , _imageView(VK_NULL_HANDLE)
         {
@@ -18,6 +19,8 @@ namespace Kmplete
 
             _InitializeImage(imageCreateInfo, imageCreatorDelegate, memoryPropertiesFlags);
             _InitializeImageView(imageViewCreateInfo, imageCreatorDelegate);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

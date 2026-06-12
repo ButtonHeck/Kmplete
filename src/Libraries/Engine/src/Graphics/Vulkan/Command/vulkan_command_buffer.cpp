@@ -10,18 +10,20 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanCommandBuffer::VulkanCommandBuffer(VkDevice device, VkCommandPool commandPool)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _commandPool(commandPool)
             , _commandBuffer(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Initialize();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanCommandBuffer::VulkanCommandBuffer(VulkanCommandBuffer&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _commandPool(other._commandPool)
             , _commandBuffer(other._commandBuffer)
         {
@@ -30,10 +32,11 @@ namespace Kmplete
             other._commandBuffer = VK_NULL_HANDLE;
 
             KMP_ASSERT(_device && _commandPool && _commandBuffer);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) noexcept
+        VulkanCommandBuffer& VulkanCommandBuffer::operator=(VulkanCommandBuffer&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -53,13 +56,13 @@ namespace Kmplete
             KMP_ASSERT(_device && _commandPool && _commandBuffer);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        VulkanCommandBuffer::~VulkanCommandBuffer() KMP_PROFILING(ProfileLevelAlways)
+        VulkanCommandBuffer::~VulkanCommandBuffer()
         {
             _Finalize();
-        }}
+        }
         //--------------------------------------------------------------------------
 
         void VulkanCommandBuffer::Begin(VkCommandBufferUsageFlags flags /*= 0*/) const KMP_PROFILING(ProfileLevelMinor)
@@ -100,7 +103,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanCommandBuffer::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanCommandBuffer::_Initialize()
         {
             KMP_ASSERT(_device && _commandPool);
 
@@ -112,7 +115,7 @@ namespace Kmplete
             VKUtils::CheckResult(result, "VulkanCommandBuffer: failed to allocate command buffer");
 
             KMP_ASSERT(_commandBuffer);
-        }}
+        }
         //--------------------------------------------------------------------------
 
         void VulkanCommandBuffer::_Finalize() KMP_PROFILING(ProfileLevelAlways)

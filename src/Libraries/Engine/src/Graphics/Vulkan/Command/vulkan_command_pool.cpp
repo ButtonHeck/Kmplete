@@ -16,11 +16,10 @@ namespace Kmplete
 
         VulkanCommandPool::VulkanCommandPool(VkDevice device, UInt32 graphicsQueueIndex)
             : CommandPool()
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _device(device)
             , _commandPool(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             auto createPoolInfo = VKUtils::InitVkCommandPoolCreateInfo();
             createPoolInfo.queueFamilyIndex = graphicsQueueIndex;
             createPoolInfo.flags = VK_CommandPoolCreate_ResetCommandBuffer;
@@ -29,6 +28,7 @@ namespace Kmplete
             VKUtils::CheckResult(result, "VulkanCommandPool: failed to create command pool");
 
             KMP_ASSERT(_device && _commandPool);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

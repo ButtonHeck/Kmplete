@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_image.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -18,6 +19,7 @@ namespace Kmplete
         class VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureBase)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, VkImageViewCreateInfo imageViewCreateInfo,

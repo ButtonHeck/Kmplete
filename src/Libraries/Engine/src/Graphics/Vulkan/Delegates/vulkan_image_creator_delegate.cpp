@@ -15,9 +15,12 @@ namespace Kmplete
 
 
         VulkanImageCreatorDelegate::VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate)
-            : _memoryTypeDelegate(memoryTypeDelegate)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _memoryTypeDelegate(memoryTypeDelegate)
             , _device(device)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
 

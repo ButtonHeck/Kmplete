@@ -17,7 +17,8 @@ namespace Kmplete
 
         VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
                                        const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
-            : _currentBufferIndex(currentBufferIndex)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _currentBufferIndex(currentBufferIndex)
             , _pipelineManager(pipelineManager)
             , _shaderManager(shaderManager)
             , _swapchain(swapchain)
@@ -26,8 +27,6 @@ namespace Kmplete
             , _drawCommandBuffers()
             , _currentCommandBuffer(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             KMP_ASSERT(_device);
 
             _commandPool.reset(new VulkanCommandPool(device, graphicsFamilyIndex));
@@ -41,6 +40,7 @@ namespace Kmplete
 
             _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
             KMP_ASSERT(_currentCommandBuffer);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

@@ -17,11 +17,10 @@ namespace Kmplete
     {
         VulkanGraphicsSurface::VulkanGraphicsSurface(Window& window, VkInstance instance)
             : GraphicsSurface(window)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _instance(instance)
             , _surface(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             KMP_ASSERT(_instance);
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
@@ -31,6 +30,7 @@ namespace Kmplete
 #endif
 
             KMP_ASSERT(_surface);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

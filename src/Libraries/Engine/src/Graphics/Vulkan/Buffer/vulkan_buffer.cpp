@@ -15,21 +15,23 @@ namespace Kmplete
 
 
         VulkanBuffer::VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _buffer(VK_NULL_HANDLE)
             , _memory(VK_NULL_HANDLE)
             , _size(parameters.size)
             , _mapped(nullptr)
             , _usageFlags(parameters.usageFlags)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Initialize(memoryTypeDelegate, parameters);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanBuffer::VulkanBuffer(VulkanBuffer&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _buffer(other._buffer)
             , _memory(other._memory)
             , _size(other._size)
@@ -43,10 +45,11 @@ namespace Kmplete
             other._mapped = nullptr;
 
             KMP_ASSERT(_device && _buffer && _memory);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanBuffer& VulkanBuffer::operator=(VulkanBuffer&& other) noexcept
+        VulkanBuffer& VulkanBuffer::operator=(VulkanBuffer&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -73,7 +76,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _buffer && _memory);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VulkanBuffer::~VulkanBuffer() KMP_PROFILING(ProfileLevelAlways)
@@ -168,7 +171,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanBuffer::_Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters) KMP_PROFILING(ProfileLevelAlways)
+        void VulkanBuffer::_Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters)
         {
             KMP_ASSERT(_device);
 
@@ -192,10 +195,10 @@ namespace Kmplete
 
             result = Bind();
             VKUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanBuffer::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanBuffer::_Finalize()
         {
             if (_buffer && _device)
             {
@@ -206,7 +209,7 @@ namespace Kmplete
             {
                 vkFreeMemory(_device, _memory, nullptr);
             }
-        }}
+        }
         //--------------------------------------------------------------------------
     }
 }

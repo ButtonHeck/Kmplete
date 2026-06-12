@@ -31,6 +31,7 @@ namespace Kmplete
         VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
                                                  const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
             : LogicalDevice()
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _vulkanContext(vulkanContext)
             , _memoryTypeDelegate(memoryTypeDelegate)
             , _formatDelegate(formatDelegate)
@@ -58,8 +59,6 @@ namespace Kmplete
             , _shaderManager(nullptr)
             , _renderer(nullptr)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _CreateLogicalDeviceObject();
             _CreateDeviceQueues();
             _CreateImageCreatorDelegate();
@@ -72,6 +71,8 @@ namespace Kmplete
             _CreateTextureAttachmentManager();
             _CreateShaderManager();
             _CreateRenderer();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

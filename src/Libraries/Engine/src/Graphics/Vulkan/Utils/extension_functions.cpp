@@ -8,7 +8,7 @@ namespace Kmplete
     namespace Graphics
     {
         template<typename FunctionType>
-        KMP_NODISCARD static bool LoadExtensionFunction(FunctionType& functionPointer, VkInstance instance, const char* functionName)
+        KMP_NODISCARD static bool LoadExtensionFunction(FunctionType& functionPointer, VkInstance instance, const char* functionName) KMP_PROFILING(ProfileLevelImportant)
         {
             functionPointer = (FunctionType)vkGetInstanceProcAddr(instance, functionName);
             if (functionPointer == nullptr)
@@ -17,7 +17,7 @@ namespace Kmplete
                 return false;
             }
             return true;
-        }
+        }}
         //--------------------------------------------------------------------------
 
 

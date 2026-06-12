@@ -211,6 +211,7 @@ namespace Kmplete
 
         VulkanPhysicalDevice::VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface)
             : PhysicalDevice()
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _window(window)
             , _currentBufferIndex(currentBufferIndex)
             , _instance(instance)
@@ -221,8 +222,6 @@ namespace Kmplete
             , _memoryTypeDelegate(nullptr)
             , _logicalDevice(nullptr)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             KMP_ASSERT(_instance && _surface);
 
             Vector<VkPhysicalDevice> devices = _GetListOfPhysicalDevices();
@@ -242,6 +241,7 @@ namespace Kmplete
 
             _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
             KMP_ASSERT(_logicalDevice);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

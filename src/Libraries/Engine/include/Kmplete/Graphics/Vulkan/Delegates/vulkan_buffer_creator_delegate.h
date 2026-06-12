@@ -5,6 +5,7 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -20,6 +21,7 @@ namespace Kmplete
         class VulkanBufferCreatorDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanBufferCreatorDelegate)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanBufferCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);

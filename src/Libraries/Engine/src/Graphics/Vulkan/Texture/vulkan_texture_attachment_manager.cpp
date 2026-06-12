@@ -16,12 +16,15 @@ namespace Kmplete
 
         VulkanTextureAttachmentManager::VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
                                                                        const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _imageCreatorDelegate(imageCreatorDelegate)
             , _extent(extent)
             , _msaaSamples(msaaSamples)
             , _swapchain(swapchain)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         bool VulkanTextureAttachmentManager::AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples /*= false*/)

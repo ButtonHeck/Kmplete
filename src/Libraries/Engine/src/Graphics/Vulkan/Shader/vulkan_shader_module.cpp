@@ -13,29 +13,32 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanShaderModule::VulkanShaderModule(VkDevice device, const Filepath& filepath)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _shaderModule(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             KMP_ASSERT(_device);
 
             _Initialize(filepath);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanShaderModule::VulkanShaderModule(VulkanShaderModule&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _shaderModule(other._shaderModule)
         {
             other._device = VK_NULL_HANDLE;
             other._shaderModule = VK_NULL_HANDLE;
 
             KMP_ASSERT(_device && _shaderModule);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanShaderModule& VulkanShaderModule::operator=(VulkanShaderModule&& other) noexcept
+        VulkanShaderModule& VulkanShaderModule::operator=(VulkanShaderModule&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -53,7 +56,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _shaderModule);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VulkanShaderModule::~VulkanShaderModule() KMP_PROFILING(ProfileLevelAlways)
@@ -74,7 +77,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanShaderModule::_Initialize(const Filepath& filepath) KMP_PROFILING(ProfileLevelAlways)
+        void VulkanShaderModule::_Initialize(const Filepath& filepath)
         {
             if (!Filesystem::FilepathExists(filepath))
             {
@@ -102,16 +105,16 @@ namespace Kmplete
             auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
             VKUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
             KMP_ASSERT(_shaderModule);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanShaderModule::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanShaderModule::_Finalize()
         {
             if (_device && _shaderModule)
             {
                 vkDestroyShaderModule(_device, _shaderModule, nullptr);
             }
-        }}
+        }
         //--------------------------------------------------------------------------
     }
 }

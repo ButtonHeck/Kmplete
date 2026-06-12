@@ -3,6 +3,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/graphics_parameters.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <vulkan/vulkan.h>
 
@@ -14,8 +15,12 @@ namespace Kmplete
         //TODO: comments
         struct VulkanGraphicsParameters : public GraphicsParameters
         {
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
+
+        public:
             VulkanGraphicsParameters()
                 : GraphicsParameters(GraphicsBackendType::Vulkan)
+                  KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
                 , vertexAttributeDivisorFeatures(VKUtils::InitVkPhysicalDeviceVertexAttributeDivisorFeatures())
                 , lineRasterizationFeatures(VKUtils::InitVkPhysicalDeviceLineRasterizationFeaturesEXT())
                 , shaderObjectFeatures(VKUtils::InitVkPhysicalDeviceShaderObjectFeaturesEXT())
@@ -39,6 +44,8 @@ namespace Kmplete
                 dynamicStateFeatures3.pNext = &depthClipEnableFeatures;
                 features13.pNext = &dynamicStateFeatures3;
                 features2.pNext = &features13;
+
+                KMP_PROFILE_CONSTRUCTOR_END()
             }
 
             VkPhysicalDeviceVertexAttributeDivisorFeatures vertexAttributeDivisorFeatures;

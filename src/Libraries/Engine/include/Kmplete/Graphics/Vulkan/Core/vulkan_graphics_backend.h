@@ -4,6 +4,7 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_surface.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -21,6 +22,7 @@ namespace Kmplete
         {
             KMP_LOG_CLASSNAME(VulkanGraphicsBackend)
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsBackend)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API explicit VulkanGraphicsBackend(Window& window);

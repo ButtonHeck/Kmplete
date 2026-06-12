@@ -26,6 +26,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -46,6 +47,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanLogicalDevice)
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,

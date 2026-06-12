@@ -11,10 +11,12 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanPipelineManager::VulkanPipelineManager(VkDevice device)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _pipelines()
         {
             KMP_ASSERT(_device);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

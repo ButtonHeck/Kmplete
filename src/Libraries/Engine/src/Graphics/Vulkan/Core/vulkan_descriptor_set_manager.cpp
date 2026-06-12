@@ -19,15 +19,16 @@ namespace Kmplete
 
 
         VulkanDescriptorSetManager::VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes)
-            : _currentBufferIndex(currentBufferIndex)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _currentBufferIndex(currentBufferIndex)
             , _device(device)
             , _descriptorPool(VK_NULL_HANDLE)
             , _auxDescriptorPools()
             , _descriptorSetLayouts()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Initialize(maxDescriptorSets, descriptorPoolSizes);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
@@ -519,7 +520,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanDescriptorSetManager::_Initialize(UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes) KMP_PROFILING(ProfileLevelImportant)
+        void VulkanDescriptorSetManager::_Initialize(UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes)
         {
             KMP_ASSERT(_device);
 
@@ -532,10 +533,10 @@ namespace Kmplete
             VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor pool");
 
             KMP_ASSERT(_descriptorPool);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanDescriptorSetManager::_Finalize() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanDescriptorSetManager::_Finalize()
         {
             KMP_ASSERT(_device && _descriptorPool);
 
@@ -552,7 +553,7 @@ namespace Kmplete
             _auxDescriptorPools.clear();
 
             vkDestroyDescriptorPool(_device, _descriptorPool, nullptr);
-        }}
+        }
         //--------------------------------------------------------------------------
 
         bool VulkanDescriptorSetManager::_AllocateDescriptorSets(const Vector<VkDescriptorSetLayout>& layouts, StringID setSid, UInt32 setsCount, DescriptorSetStorage& storage) const KMP_PROFILING(ProfileLevelImportant)

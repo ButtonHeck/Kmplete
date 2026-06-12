@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_base.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -18,6 +19,7 @@ namespace Kmplete
         class VulkanTextureAttachment : public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachment)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             struct Parameters

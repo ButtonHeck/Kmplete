@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_swapchain.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -24,6 +25,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachmentManager)
             KMP_LOG_CLASSNAME(VulkanTextureAttachmentManager)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 

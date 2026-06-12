@@ -74,6 +74,7 @@ namespace Kmplete
 
         VulkanGraphicsBackend::VulkanGraphicsBackend(Window& window)
             : GraphicsBackend(window)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _instance(VK_NULL_HANDLE)
             , _surface(nullptr)
             , _physicalDevice(nullptr)
@@ -81,13 +82,15 @@ namespace Kmplete
             , _currentBufferIndex(0)
         {
             _Initialize();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanGraphicsBackend::~VulkanGraphicsBackend()
+        VulkanGraphicsBackend::~VulkanGraphicsBackend() KMP_PROFILING(ProfileLevelAlways)
         {
             _Finalize();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         const GraphicsSurface& VulkanGraphicsBackend::GetGraphicsSurface() const noexcept
@@ -236,7 +239,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanGraphicsBackend::_Initialize()
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             if (!_CheckValidationLayerSupport())
@@ -277,10 +280,10 @@ namespace Kmplete
 
             _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
             KMP_ASSERT(_physicalDevice);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanGraphicsBackend::_Finalize()
         {
             KMP_ASSERT(_instance && _physicalDevice && _surface);
 
@@ -292,7 +295,7 @@ namespace Kmplete
             _surface.reset();
 
             vkDestroyInstance(_instance, nullptr);
-        }}
+        }
         //--------------------------------------------------------------------------
 
         VkApplicationInfo VulkanGraphicsBackend::_CreateApplicationInfo() const KMP_PROFILING(ProfileLevelImportant)

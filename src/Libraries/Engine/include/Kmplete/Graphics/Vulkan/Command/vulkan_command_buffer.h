@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/type_traits.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -14,6 +15,7 @@ namespace Kmplete
         class VulkanCommandBuffer
         {
             KMP_DISABLE_COPY(VulkanCommandBuffer)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanCommandBuffer(VkDevice device, VkCommandPool commandPool);

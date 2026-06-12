@@ -24,6 +24,7 @@ namespace Kmplete
                                          bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
             : Swapchain()
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _currentBufferIndex(currentBufferIndex)
             , _presentationQueue(presentationQueue)
             , _vulkanContext(vulkanContext)
@@ -39,11 +40,11 @@ namespace Kmplete
             , _presentCompleteSemaphores()
             , _renderCompleteSemaphores()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             KMP_ASSERT(_device);
 
             _Initialize(swapchainExtent, vSync, presentCompleteSemaphores, renderCompleteSemaphores);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
@@ -67,7 +68,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::Recreate(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
-                                       const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores) KMP_PROFILING(ProfileLevelImportant)
+                                       const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores) KMP_PROFILING(ProfileLevelAlways)
         {
             _Finalize();
             _Initialize(swapchainExtent, vSync, presentCompleteSemaphores, renderCompleteSemaphores);
@@ -126,7 +127,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         void VulkanSwapchain::_Initialize(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
-                                          const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores) KMP_PROFILING(ProfileLevelAlways)
+                                          const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
         {
             _imageCount = NumConcurrentFrames;
             if (_vulkanContext.surfaceCapabilities.maxImageCount > 0 && _imageCount > _vulkanContext.surfaceCapabilities.maxImageCount)
@@ -142,10 +143,10 @@ namespace Kmplete
             _CreateSwapchainObject(vSync);
             _CreateSwapchainImages();
             _CreateSwapchainImageViews();
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanSwapchain::_Finalize()
         {
             KMP_ASSERT(_device && _swapchain);
 
@@ -156,7 +157,7 @@ namespace Kmplete
             }
 
             vkDestroySwapchainKHR(_device, _swapchain, nullptr);
-        }}
+        }
         //--------------------------------------------------------------------------
 
         VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const

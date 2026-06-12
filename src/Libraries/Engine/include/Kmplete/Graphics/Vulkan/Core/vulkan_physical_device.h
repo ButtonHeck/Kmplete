@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -24,6 +25,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanPhysicalDevice)
             KMP_LOG_CLASSNAME(VulkanPhysicalDevice)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_NODISCARD KMP_API static const Vector<const char*>& GetEnabledDeviceExtensions();

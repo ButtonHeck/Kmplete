@@ -10,8 +10,11 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanMemoryTypeDelegate::VulkanMemoryTypeDelegate(VkPhysicalDeviceMemoryProperties memoryProperties) noexcept
-            : _memoryProperties(memoryProperties)
-        {}
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _memoryProperties(memoryProperties)
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         VulkanMemoryTypeDelegate::MemoryContext VulkanMemoryTypeDelegate::GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const KMP_PROFILING(ProfileLevelMinor)

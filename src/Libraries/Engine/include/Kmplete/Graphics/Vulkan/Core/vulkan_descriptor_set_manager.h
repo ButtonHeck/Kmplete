@@ -5,6 +5,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -21,6 +22,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanDescriptorSetManager)
             KMP_LOG_CLASSNAME(VulkanDescriptorSetManager)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             using DescriptorSetStorage = StringIDHashMap<Vector<VkDescriptorSet>>;

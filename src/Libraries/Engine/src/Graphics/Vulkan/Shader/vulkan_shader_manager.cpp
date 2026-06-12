@@ -11,9 +11,12 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanShaderManager::VulkanShaderManager(VkDevice device, const VulkanDescriptorSetManager& descriptorSetManager)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _descriptorSetManager(descriptorSetManager)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         VulkanShaderManager::~VulkanShaderManager() KMP_PROFILING(ProfileLevelAlways)

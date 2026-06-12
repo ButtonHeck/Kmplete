@@ -5,6 +5,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline_parameters.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -21,6 +22,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsPipeline)
             KMP_LOG_CLASSNAME(VulkanGraphicsPipeline)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters);

@@ -24,12 +24,13 @@ namespace Kmplete
                 VKPresets::GetImageViewCI_BaseMip0_BaseArray0_SingleLayer(VKUtils::ImageTypeToViewType(imageType), VK_ImageAspect_Color, mipLevels),
                 imageCreatorDelegate, 
                 VK_Memory_DeviceLocal)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _TransitionImageLayout(mipLevels, commandBuffer);
             _CopyStagingBufferToImage(stagingBuffer, extent, commandBuffer);
             _GenerateMipmaps(extent, mipLevels, commandBuffer);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

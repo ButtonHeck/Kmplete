@@ -10,27 +10,30 @@ namespace Kmplete
     namespace Graphics
     {
         VulkanFence::VulkanFence(VkDevice device, bool signaled /*= true*/)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _fence(VK_NULL_HANDLE)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Initialize(signaled);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanFence::VulkanFence(VulkanFence&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _fence(other._fence)
         {
             other._device = VK_NULL_HANDLE;
             other._fence = VK_NULL_HANDLE;
 
             KMP_ASSERT(_device && _fence);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanFence& VulkanFence::operator=(VulkanFence&& other) noexcept
+        VulkanFence& VulkanFence::operator=(VulkanFence&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -48,7 +51,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _fence);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VulkanFence::~VulkanFence() KMP_PROFILING(ProfileLevelAlways)
@@ -89,7 +92,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanFence::_Initialize(bool signaled) KMP_PROFILING(ProfileLevelAlways)
+        void VulkanFence::_Initialize(bool signaled)
         {
             KMP_ASSERT(_device);
 
@@ -98,16 +101,16 @@ namespace Kmplete
             VKUtils::CheckResult(result, "VulkanFence: failed to create fence");
 
             KMP_ASSERT(_fence);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanFence::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanFence::_Finalize()
         {
             if (_device && _fence)
             {
                 vkDestroyFence(_device, _fence, nullptr);
             }
-        }}
+        }
         //--------------------------------------------------------------------------
     }
 }

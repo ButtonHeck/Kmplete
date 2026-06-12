@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline_parameters.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -21,6 +22,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY_MOVE(VulkanPipelineManager)
             KMP_LOG_CLASSNAME(VulkanPipelineManager)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API explicit VulkanPipelineManager(VkDevice device);

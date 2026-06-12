@@ -7,6 +7,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        //! Codestyle-friendly aliases for Vulkan enumerators
         namespace VKBits
         {
             static constexpr auto VK_BufferUsage_TransferSrc = VK_BUFFER_USAGE_TRANSFER_SRC_BIT;

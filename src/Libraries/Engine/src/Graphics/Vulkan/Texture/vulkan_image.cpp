@@ -16,25 +16,28 @@ namespace Kmplete
 
 
         VulkanImage::VulkanImage(VkDevice device, const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties)
-            : _device(device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
             , _image(VK_NULL_HANDLE)
             , _imageMemory(VK_NULL_HANDLE)
             , _memorySize(0)
             , _format(creationParameters.format)
             , _samples(creationParameters.samples)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             _Initialize(creationParameters, memoryTypeDelegate, memoryProperties);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanImage::VulkanImage(VulkanImage&& other) noexcept
-            : _device(other._device)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(other._device)
             , _image(other._image)
             , _imageMemory(other._imageMemory)
             , _memorySize(other._memorySize)
             , _format(other._format)
+            , _samples(other._samples)
         {
             other._device = VK_NULL_HANDLE;
             other._image = VK_NULL_HANDLE;
@@ -43,10 +46,11 @@ namespace Kmplete
             other._format = VK_Format_Undefined;
 
             KMP_ASSERT(_device && _image && _imageMemory);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
-        VulkanImage& VulkanImage::operator=(VulkanImage&& other) noexcept
+        VulkanImage& VulkanImage::operator=(VulkanImage&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -70,7 +74,7 @@ namespace Kmplete
             KMP_ASSERT(_device && _image && _imageMemory);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         VulkanImage::~VulkanImage() KMP_PROFILING(ProfileLevelAlways)
@@ -105,7 +109,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_Initialize(const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties) KMP_PROFILING(ProfileLevelAlways)
+        void VulkanImage::_Initialize(const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties)
         {
             KMP_ASSERT(_device);
 
@@ -132,10 +136,10 @@ namespace Kmplete
             _memorySize = imageMemoryContext.allocateInfo.allocationSize;
 
             KMP_ASSERT(_image && _imageMemory && _memorySize != 0);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void VulkanImage::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void VulkanImage::_Finalize()
         {
             if (_device && _image)
             {
@@ -145,7 +149,7 @@ namespace Kmplete
             {
                 vkFreeMemory(_device, _imageMemory, nullptr);
             }
-        }}
+        }
         //--------------------------------------------------------------------------
     }
 }

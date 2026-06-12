@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -20,6 +21,7 @@ namespace Kmplete
         {
             KMP_DISABLE_COPY(VulkanQueue)
             KMP_LOG_CLASSNAME(VulkanQueue)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanQueue(VkDevice device, UInt32 familyIndex, bool supportPresentation);

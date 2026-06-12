@@ -5,6 +5,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_image.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -20,6 +21,7 @@ namespace Kmplete
         class VulkanImageCreatorDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanImageCreatorDelegate)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);

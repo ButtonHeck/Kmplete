@@ -5,6 +5,7 @@
 #include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <vulkan/vulkan.h>
 
@@ -20,6 +21,7 @@ namespace Kmplete
         class VulkanVertexBuffer : public VulkanBuffer
         {
             KMP_DISABLE_COPY(VulkanVertexBuffer)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);

@@ -15,17 +15,23 @@ namespace Kmplete
 
         VulkanVertexBuffer::VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters)
             : VulkanBuffer(memoryTypeDelegate, device, parameters)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _layouts()
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         VulkanVertexBuffer::VulkanVertexBuffer(VulkanVertexBuffer&& other) noexcept
             : VulkanBuffer(std::move(other))
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _layouts(std::move(other._layouts))
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
-        VulkanVertexBuffer& VulkanVertexBuffer::operator=(VulkanVertexBuffer&& other) noexcept
+        VulkanVertexBuffer& VulkanVertexBuffer::operator=(VulkanVertexBuffer&& other) noexcept KMP_PROFILING(ProfileLevelAlways)
         {
             if (this == &other)
             {
@@ -37,7 +43,7 @@ namespace Kmplete
             _layouts = std::move(other._layouts);
 
             return *this;
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void VulkanVertexBuffer::AddLayout(const BufferLayout& layout)
