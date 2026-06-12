@@ -5,6 +5,7 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <iostream>
 
