@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/perspective_camera.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -7,17 +8,23 @@ namespace Kmplete
     {
         PerspectiveCamera::PerspectiveCamera(Type type, float fov) noexcept
             : Camera(type, Projection::Perspective)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _fov(fov)
         {
             _UpdateProjectionMatrix();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         PerspectiveCamera::PerspectiveCamera(const Math::Point3F& position, Type type, float fov) noexcept
             : Camera(position, type, Projection::Perspective)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _fov(fov)
         {
             _UpdateProjectionMatrix();
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
@@ -40,11 +47,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void PerspectiveCamera::_UpdateProjectionMatrix()
+        void PerspectiveCamera::_UpdateProjectionMatrix() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             _projectionMatrix = glm::perspectiveLH(glm::radians(_fov), _aspectRatio, _zNear, _zFar);
             _projectionMatrix[1][1] *= -1.0f;
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

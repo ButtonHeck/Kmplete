@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <algorithm>
 
@@ -103,7 +104,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void BufferLayout::_CalculateLayout()
+        void BufferLayout::_CalculateLayout() KMP_PROFILING(ProfileLevelImportant)
         {
             std::sort(_elements.begin(), _elements.end(), [](const BufferElement& element1, const BufferElement& element2) {
                 return element1.location < element2.location;
@@ -119,7 +120,7 @@ namespace Kmplete
                 offset += elementSize;
                 _stride += elementSize;
             }
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

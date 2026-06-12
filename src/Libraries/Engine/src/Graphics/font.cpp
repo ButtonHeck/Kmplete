@@ -3,6 +3,7 @@
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -30,9 +31,8 @@ namespace Kmplete
             _UpdateParameters();
             SetPixelSize(DefaultFontPixelSize);
 
-            KMP_PROFILE_CONSTRUCTOR_END()
-
             KMP_ASSERT(_freetypeFace);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

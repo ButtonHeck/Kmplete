@@ -2,6 +2,7 @@
 
 #include "Kmplete/Graphics/camera.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -12,6 +13,7 @@ namespace Kmplete
         class OrthographicCamera : public Camera
         {
             KMP_LOG_CLASSNAME(OrthographicCamera)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API explicit OrthographicCamera(Type type) noexcept;

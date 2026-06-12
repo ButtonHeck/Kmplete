@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/orthographic_camera.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -8,24 +9,30 @@ namespace Kmplete
     {
         OrthographicCamera::OrthographicCamera(Type type) noexcept
             : Camera(type, Projection::Orthographic)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _left(0.0f)
             , _right(0.0f)
             , _top(0.0f)
             , _bottom(0.0f)
             , _scale(1.0f)
             , _applyAspectRatioFix(false)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         OrthographicCamera::OrthographicCamera(const Math::Point3F& position, Type type) noexcept
             : Camera(position, type, Projection::Orthographic)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _left(0.0f)
             , _right(0.0f)
             , _top(0.0f)
             , _bottom(0.0f)
             , _scale(1.0f)
             , _applyAspectRatioFix(false)
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
         void OrthographicCamera::SetOrthographicParameters(float left, float right, float top, float bottom, float zNear, float zFar) noexcept
@@ -106,7 +113,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void OrthographicCamera::_UpdateProjectionMatrix()
+        void OrthographicCamera::_UpdateProjectionMatrix() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             const auto scaledLeft = _left * _scale;
             const auto scaledRight = _right * _scale;
@@ -121,7 +128,7 @@ namespace Kmplete
             {
                 _projectionMatrix = glm::orthoLH(scaledLeft, scaledRight, scaledBottom, scaledTop, _zNear, _zFar);
             }
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }

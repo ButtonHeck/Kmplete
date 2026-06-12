@@ -1,10 +1,10 @@
 #include "Kmplete/Graphics/image.h"
-#include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/assertion.h"
-#include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Math/math.h"
+#include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <stb_image.h>
 
@@ -21,15 +21,14 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         Image::Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically /*= false*/)
-            : _loadedFromFile(true)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _loadedFromFile(true)
             , _width(0)
             , _height(0)
             , _channels(desiredChannels)
             , _pixels(nullptr)
             , _dataSize(0)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             stbi_set_flip_vertically_on_load(flipVertically);
 
             auto channelsInFile = 0;
@@ -48,19 +47,20 @@ namespace Kmplete
             KMP_ASSERT(_channels != ImageChannels::Unknown);
 
             KMP_LOG_INFO("created [{}x{}] ({} channels) from '{}'", _width, _height, static_cast<int>(_channels), filepath);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         Image::Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels)
-            : _loadedFromFile(false)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _loadedFromFile(false)
             , _width(size.x)
             , _height(size.y)
             , _channels(channels)
             , _pixels(nullptr)
             , _dataSize(0)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (pixelBuffer == nullptr)
             {
                 KMP_LOG_ERROR("given pixel buffer is nullptr");
@@ -87,19 +87,20 @@ namespace Kmplete
             KMP_ASSERT(_channels != ImageChannels::Unknown);
 
             KMP_LOG_INFO("created [{}x{}] ({} channels) from pixel buffer", _width, _height, static_cast<int>(_channels));
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         Image::Image(const UByte* fileBuffer, int bufferSize, ImageChannels desiredChannels, bool flipVertically /*= false*/)
-            : _loadedFromFile(true)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _loadedFromFile(true)
             , _width(0)
             , _height(0)
             , _channels(desiredChannels)
             , _pixels(nullptr)
             , _dataSize(0)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             if (fileBuffer == nullptr)
             {
                 KMP_LOG_ERROR("given file buffer is nullptr");
@@ -130,6 +131,8 @@ namespace Kmplete
             KMP_ASSERT(_channels != ImageChannels::Unknown);
 
             KMP_LOG_INFO("created [{}x{}] ({} channels) from file buffer", _width, _height, static_cast<int>(_channels));
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
@@ -140,7 +143,8 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         Image::Image(Image&& rhs) noexcept
-            : _loadedFromFile(rhs._loadedFromFile)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _loadedFromFile(rhs._loadedFromFile)
             , _width(rhs._width)
             , _height(rhs._height)
             , _channels(rhs._channels)
@@ -151,6 +155,7 @@ namespace Kmplete
             rhs._dataSize = 0;
 
             KMP_ASSERT(_channels != ImageChannels::Unknown);
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 

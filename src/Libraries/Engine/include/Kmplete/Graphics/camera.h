@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Log/log_class_macro.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -14,6 +15,7 @@ namespace Kmplete
         class Camera
         {
             KMP_LOG_CLASSNAME(Camera)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             using MovementMask = UInt8;

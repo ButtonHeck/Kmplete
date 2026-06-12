@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Math/geometry.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -18,6 +19,7 @@ namespace Kmplete
         {
             KMP_LOG_CLASSNAME(Image)
             KMP_DISABLE_COPY(Image)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
             KMP_API explicit Image(const Filepath& filepath, bool flipVertically = false);

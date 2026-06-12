@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/camera.h"
 #include "Kmplete/Math/math.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -13,7 +14,8 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         Camera::Camera(const Math::Point3F& position, Type type, Projection projection) noexcept
-            : _type(type)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _type(type)
             , _projection(projection)
             , _position(position)
             , _rotation(Math::Vec3F(0.0f, 0.0f, 0.0f))
@@ -28,10 +30,12 @@ namespace Kmplete
             , _up(Math::UnitVectorY)
             , _viewMatrix(Math::Mat4())
             , _projectionMatrix(Math::Mat4())
-        {}
+        {
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
         //--------------------------------------------------------------------------
 
-        void Camera::Update(float delta)
+        void Camera::Update(float delta) KMP_PROFILING(ProfileLevelImportant)
         {
             if (IsMoving())
             {
@@ -66,7 +70,7 @@ namespace Kmplete
             }
 
             _UpdateViewMatrix();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void Camera::Move(MovementMaskBits direction, bool moving) noexcept
@@ -88,11 +92,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void Camera::SetTranslation(const Math::Point3F& translation) noexcept
+        void Camera::SetTranslation(const Math::Point3F& translation) noexcept KMP_PROFILING(ProfileLevelImportant)
         {
             _position = translation;
             _UpdateViewMatrix();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void Camera::Translate(const Math::Point3F& delta) noexcept
@@ -107,14 +111,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void Camera::SetRotation(const Math::Vec3F& rotation) noexcept
+        void Camera::SetRotation(const Math::Vec3F& rotation) noexcept KMP_PROFILING(ProfileLevelImportant)
         {
             _rotation = rotation;
             _rotation.x = Math::Clamp(_rotation.x, -89.0f, 89.0f);
 
             _UpdateViewVectors();
             _UpdateViewMatrix();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         void Camera::Rotate(const Math::Vec3F& delta) noexcept
@@ -228,13 +232,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void Camera::_UpdateViewMatrix()
+        void Camera::_UpdateViewMatrix() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             _viewMatrix = glm::lookAtLH(_position, _position + _front, _up);
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void Camera::_UpdateViewVectors()
+        void Camera::_UpdateViewVectors() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             _front.x = glm::cos(glm::radians(_rotation.x)) * glm::sin(glm::radians(_rotation.y));
             _front.y = glm::sin(glm::radians(_rotation.x));
@@ -243,7 +247,7 @@ namespace Kmplete
 
             _right = glm::normalize(glm::cross(Math::UnitVectorY, _front));
             _up = glm::normalize(glm::cross(_front, _right));
-        }
+        }}
         //--------------------------------------------------------------------------
     }
 }
