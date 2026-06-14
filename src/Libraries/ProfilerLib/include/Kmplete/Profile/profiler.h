@@ -211,10 +211,6 @@ namespace Kmplete
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS() \
     _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("")) ,
 
-//! Shortcut macro for profiling non-copyable objects' constructors without initializer lists
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST() \
-    _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
-
 //! Shortcut macro for profiling non-copyable derived objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS() \
     , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
@@ -223,10 +219,6 @@ namespace Kmplete
 //! Shortcut macro for profiling copyable objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_COPYABLE() \
     _constructorProfilerTimer(CreatePtr<ProfilerTimer>("")) ,
-
-//! Shortcut macro for profiling copyable objects' constructors without initializer lists
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST_COPYABLE() \
-    _constructorProfilerTimer(CreatePtr<ProfilerTimer>(""))
 
 //! Shortcut macro for profiling copyable derived objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS_COPYABLE() \
@@ -284,11 +276,9 @@ namespace Kmplete
 #define KMP_PROFILING(level) {
 
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST()
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
 #define KMP_PROFILE_CONSTRUCTOR_END()
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_COPYABLE()
-#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST_COPYABLE()
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS_COPYABLE()
 #define KMP_PROFILE_CONSTRUCTOR_END_COPYABLE()
 #endif
