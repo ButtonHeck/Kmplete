@@ -16,6 +16,7 @@ namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "WindowApplication";
     static constexpr auto IconifiedFPSStr = "IconifiedFPS";
+    static constexpr auto GraphicsBackendTypeStr = "GraphicsBackendType";
     static constexpr auto IconifiedFPSMin = UInt32(10);
     static constexpr auto IconifiedFPSMax = UInt32(60);
 
@@ -30,6 +31,7 @@ namespace Kmplete
         , _frameListenerManager(nullptr)
         , _frameClock()
         , _iconifiedFPS(IconifiedFPSMin)
+        , _graphicsBackendType(Graphics::GraphicsBackendType::Vulkan)
     {
         _Initialize(parameters);
 
@@ -92,7 +94,12 @@ namespace Kmplete
             KMP_LOG_WARN("failed to get settings entry for loading");
         }
 
-        _windowBackend = WindowBackend::Create();
+        if (settings.has_value())
+        {
+            _LoadSettings(*settings);
+        }
+
+        _windowBackend = WindowBackend::Create(_graphicsBackendType);
         KMP_ASSERT(_windowBackend);
         if (settings.has_value())
         {
@@ -127,11 +134,6 @@ namespace Kmplete
             return true;
         });
 #endif
-
-        if (settings.has_value())
-        {
-            _LoadSettings(*settings);
-        }
 
         _frameClock.Mark();
     }
@@ -233,6 +235,7 @@ namespace Kmplete
         }
 
         settings.value().get().SaveUInt(IconifiedFPSStr, _iconifiedFPS);
+        settings.value().get().SaveString(GraphicsBackendTypeStr, Graphics::GraphicsBackendTypeToString(_graphicsBackendType));
         
         _windowBackend->SaveSettings(*settings);
         _graphicsBackend->SaveSettings(*settings);
@@ -263,6 +266,8 @@ namespace Kmplete
             KMP_LOG_WARN("iconified FPS ({} from settings) required to be in range from 10 to 60, value will be clamped", _iconifiedFPS);
             _iconifiedFPS = Math::Clamp(_iconifiedFPS, IconifiedFPSMin, IconifiedFPSMax);
         }
+
+        _graphicsBackendType = Graphics::StringToGraphicsBackendType(settingsDocument.GetString(GraphicsBackendTypeStr, Graphics::DefaultAPIStr));
     }}
     //--------------------------------------------------------------------------
 }

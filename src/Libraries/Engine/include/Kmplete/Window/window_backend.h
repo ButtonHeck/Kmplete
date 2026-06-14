@@ -25,7 +25,6 @@ namespace Kmplete
 
     protected:
         static constexpr auto SettingsEntryName = "WindowBackend";
-        static constexpr auto GraphicsBackendTypeStr = "GraphicsBackendType";
         static constexpr auto MainWindowStr = "MainWindow";
         static constexpr auto AuxWindowsStr = "AuxWindows";
 
@@ -38,10 +37,10 @@ namespace Kmplete
         };
 
     public:
-        KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create();
+        KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create(Graphics::GraphicsBackendType graphicsBackendType);
 
     public:
-        KMP_API WindowBackend();
+        KMP_API explicit WindowBackend(Graphics::GraphicsBackendType graphicsBackendType);
         virtual ~WindowBackend() = default;
 
         KMP_NODISCARD KMP_API virtual Window& CreateMainWindow() = 0;
@@ -63,9 +62,6 @@ namespace Kmplete
 
         KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
         KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
-
-        KMP_API void SetGraphicsBackendType(Graphics::GraphicsBackendType type) noexcept;
-        KMP_NODISCARD KMP_API Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
 
     protected:
         Graphics::GraphicsBackendType _graphicsBackendType;

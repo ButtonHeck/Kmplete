@@ -50,7 +50,7 @@ struct TestStartResult
 
     static TestStartResult InitializeTestData()
     {
-        auto windowBackend = Kmplete::WindowBackend::Create();
+        auto windowBackend = Kmplete::WindowBackend::Create(Kmplete::Graphics::GraphicsBackendType::Vulkan);
         auto& mainWindow = windowBackend->CreateMainWindow();
 
         return TestStartResult{ std::move(windowBackend), mainWindow, mainWindow.GetName() == "Main" };
@@ -100,7 +100,7 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
         "Press Y if window is 200x200, otherwise - any other key",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
+    const auto windowBackend = Kmplete::WindowBackend::Create(Kmplete::Graphics::GraphicsBackendType::Vulkan);
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings;
@@ -132,7 +132,7 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
         "Close this window",
         Kmplete::FileDialogs::MessageChoice::Ok);
 
-    const auto windowBackend = Kmplete::WindowBackend::Create();
+    const auto windowBackend = Kmplete::WindowBackend::Create(Kmplete::Graphics::GraphicsBackendType::Vulkan);
     REQUIRE(windowBackend);
 
     Kmplete::Window::WindowSettings settings;

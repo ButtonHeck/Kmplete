@@ -45,10 +45,13 @@ namespace Kmplete
     static constexpr auto MainWindowName = "Main";
 
 
-    WindowBackendGlfw::WindowBackendGlfw() KMP_PROFILING(ProfileLevelAlways)
+    WindowBackendGlfw::WindowBackendGlfw(Graphics::GraphicsBackendType graphicsBackendType)
+        : WindowBackend(graphicsBackendType)
     {
+        KMP_PROFILE_FUNCTION(ProfileLevelAlways);
+
         _Initialize();
-    }}
+    }
     //--------------------------------------------------------------------------
 
     WindowBackendGlfw::~WindowBackendGlfw() KMP_PROFILING(ProfileLevelAlways)
@@ -336,7 +339,6 @@ namespace Kmplete
     void WindowBackendGlfw::SaveSettings(SettingsDocument& settings) const KMP_PROFILING(ProfileLevelImportant)
     {
         settings.StartSaveObject(SettingsEntryName);
-        settings.SaveString(GraphicsBackendTypeStr, Graphics::GraphicsBackendTypeToString(_graphicsBackendType));
 
         _SaveMainWindowSettings(settings);
         _SaveAuxWindowsSettings(settings);
@@ -379,7 +381,6 @@ namespace Kmplete
     void WindowBackendGlfw::LoadSettings(SettingsDocument& settings) KMP_PROFILING(ProfileLevelImportant)
     {
         settings.StartLoadObject(SettingsEntryName);
-        _graphicsBackendType = Graphics::StringToGraphicsBackendType(settings.GetString(GraphicsBackendTypeStr, Graphics::DefaultAPIStr));
 
         _LoadMainWindowSettings(settings);
         _LoadAuxWindowsSettings(settings);

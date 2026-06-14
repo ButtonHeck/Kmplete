@@ -13,8 +13,7 @@ using namespace Kmplete::Graphics;
 
 TEST_CASE("Graphics backend initialization error type", "[graphics]")
 {
-    auto windowBackend = Kmplete::WindowBackend::Create();
-    windowBackend->SetGraphicsBackendType(GraphicsBackendType::Unknown);
+    auto windowBackend = Kmplete::WindowBackend::Create(GraphicsBackendType::Unknown);
     auto& mainWindow = windowBackend->CreateMainWindow();
 
     UPtr<GraphicsBackend> backend;
@@ -25,8 +24,7 @@ TEST_CASE("Graphics backend initialization error type", "[graphics]")
 
 TEST_CASE("Graphics backend initialization Vulkan", "[graphics]")
 {
-    auto windowBackend = Kmplete::WindowBackend::Create();
-    windowBackend->SetGraphicsBackendType(GraphicsBackendType::Vulkan);
+    auto windowBackend = Kmplete::WindowBackend::Create(GraphicsBackendType::Vulkan);
     auto& mainWindow = windowBackend->CreateMainWindow();
 
     UPtr<GraphicsBackend> backend;

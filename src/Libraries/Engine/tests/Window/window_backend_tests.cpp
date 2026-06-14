@@ -5,7 +5,7 @@
 
 TEST_CASE("Window backend monitor functions", "[core][window_backend][monitor]")
 {
-    const auto windowBackend = Kmplete::WindowBackend::Create();
+    const auto windowBackend = Kmplete::WindowBackend::Create(Kmplete::Graphics::GraphicsBackendType::Vulkan);
     REQUIRE(windowBackend);
 
     const auto monitorsCount = windowBackend->GetMonitorCount();
@@ -63,7 +63,7 @@ TEST_CASE("Window backend monitor functions", "[core][window_backend][monitor]")
 
 TEST_CASE("Window backend primary monitor DPI scale", "[core][window_backend][monitor]")
 {
-    const auto windowBackend = Kmplete::WindowBackend::Create();
+    const auto windowBackend = Kmplete::WindowBackend::Create(Kmplete::Graphics::GraphicsBackendType::Vulkan);
     REQUIRE(windowBackend);
 
     auto dpi = 0.0f;

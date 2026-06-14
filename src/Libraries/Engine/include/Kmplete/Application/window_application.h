@@ -83,6 +83,7 @@ namespace Kmplete
     private:
         Time::Clock _frameClock;
         UInt32 _iconifiedFPS;
+        Graphics::GraphicsBackendType _graphicsBackendType;
     };
     //--------------------------------------------------------------------------
 }

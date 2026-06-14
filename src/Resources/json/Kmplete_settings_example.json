@@ -16,8 +16,8 @@
     },
     "WindowApplication": {
         "IconifiedFPS": 10,
+        "GraphicsBackendType": "Vulkan",
         "WindowBackend": {
-            "GraphicsBackendType": "Vulkan",
             "MainWindow": {
                 "Name": "Main",
                 "X": 100,

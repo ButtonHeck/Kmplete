@@ -19,8 +19,7 @@ using namespace Kmplete::Graphics;
 
 static UPtr<GraphicsBackend> prepareBackend(GraphicsBackendType type)
 {
-    auto windowBackend = Kmplete::WindowBackend::Create();
-    windowBackend->SetGraphicsBackendType(type);
+    auto windowBackend = Kmplete::WindowBackend::Create(type);
     auto& mainWindow = windowBackend->CreateMainWindow();
 
     return GraphicsBackend::Create(mainWindow);
