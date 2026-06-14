@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Localization/localization_manager.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <catch2/catch_test_macros.hpp>
 

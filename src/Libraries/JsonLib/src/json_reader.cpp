@@ -1,5 +1,6 @@
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <rapidjson/pointer.h>
 
