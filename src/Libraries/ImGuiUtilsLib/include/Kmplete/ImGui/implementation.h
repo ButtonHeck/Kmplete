@@ -5,6 +5,7 @@
 #include "Kmplete/Base/string_id.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/ImGui/context.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 #include <imgui.h>
 
@@ -18,6 +19,7 @@ namespace Kmplete
         class ImGuiImplementation
         {
             KMP_DISABLE_COPY_MOVE(ImGuiImplementation)
+            KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         protected:
             static constexpr auto DefaultFontSize = 18;

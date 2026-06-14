@@ -1,5 +1,6 @@
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -17,6 +18,7 @@ namespace Kmplete
             , _commandBuffer(VK_NULL_HANDLE)
         {
             _Initialize();
+
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
@@ -54,7 +56,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_Initialize() const KMP_PROFILING(ProfileLevelAlways)
+        void ImGuiImplementationGlfwVulkan::_Initialize() const
         {
             const auto window = reinterpret_cast<GLFWwindow*>(_context->window);
             ImGui_ImplGlfw_InitForVulkan(window, "install callbacks"_true);
@@ -63,16 +65,16 @@ namespace Kmplete
             ImGui_ImplVulkan_InitInfo initInfo = contextVulkan->initInfo;
 
             ImGui_ImplVulkan_Init(&initInfo);
-        }}
+        }
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementationGlfwVulkan::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+        void ImGuiImplementationGlfwVulkan::_Finalize()
         {
             _textureMap.clear();
 
             ImGui_ImplVulkan_Shutdown();
             ImGui_ImplGlfw_Shutdown();
-        }}
+        }
         //--------------------------------------------------------------------------
 
         void ImGuiImplementationGlfwVulkan::_NewFrameImpl() const KMP_PROFILING(ProfileLevelImportant)

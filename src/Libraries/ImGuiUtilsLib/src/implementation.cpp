@@ -28,10 +28,9 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         ImGuiImplementation::ImGuiImplementation(Context* implementationContext)
-            : _context(implementationContext)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _context(implementationContext)
         {
-            KMP_PROFILE_FUNCTION(ProfileLevelAlways);
-
             IMGUI_CHECKVERSION();
             ImGui::CreateContext();
             auto& io = ImGui::GetIO();
@@ -49,6 +48,8 @@ namespace Kmplete
             io.IniFilename = _context->configName;
 
             Stylize(implementationContext->baseScale);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
@@ -58,18 +59,18 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::NewFrame() const
+        void ImGuiImplementation::NewFrame() const KMP_PROFILING(ProfileLevelImportant)
         {
             _NewFrameImpl();
             ImGui::NewFrame();
-        }
+        }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::Render() const
+        void ImGuiImplementation::Render() const KMP_PROFILING(ProfileLevelImportant)
         {
             ImGui::Render();
             _RenderImpl();
-        }
+        }}
         //--------------------------------------------------------------------------
 
         bool ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
