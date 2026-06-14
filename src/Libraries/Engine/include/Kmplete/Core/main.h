@@ -86,7 +86,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     Kmplete::Profiler::Get().SetLevel(programOptions.GetProfilingLevel());
 #endif
 
-    KMP_MB_UNUSED const auto startupSessionCapacity = 400;
+    KMP_MB_UNUSED const auto startupSessionCapacity = 600;
     KMP_PROFILE_BEGIN_SESSION("Startup", Kmplete::Utils::Concatenate(Kmplete::ApplicationProfileSessionPrefix(), "-Profile-Startup.json"), startupSessionCapacity);
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();
