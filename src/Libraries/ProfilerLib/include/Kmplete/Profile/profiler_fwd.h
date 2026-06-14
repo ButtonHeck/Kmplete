@@ -14,10 +14,12 @@ namespace Kmplete
     class ProfilerTimer;
 }
 
+//! Helper macro for declaring profiler timer for non-copyable objects' constructors, should be added before any other class member
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE() \
     private:\
     UPtr<ProfilerTimer> _constructorProfilerTimer;
 
+//! Helper macro for declaring profiler timer for copyable objects' constructors, should be added before any other class member
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE_COPYABLE() \
     private:\
     Ptr<ProfilerTimer> _constructorProfilerTimer;

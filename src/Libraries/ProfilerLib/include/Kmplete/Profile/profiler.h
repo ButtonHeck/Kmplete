@@ -202,30 +202,38 @@ namespace Kmplete
 #define KMP_PROFILE_SCOPE(name, level) _KMP_PROFILE_SCOPE_LINE(name, __LINE__, level)
 #define KMP_PROFILE_FUNCTION(level) KMP_PROFILE_SCOPE(KMP_FUNC_SIG, level)
 
+//! Codestyle-friendly wrapper for insertion profiling macro at the beginning of the function,
+//! Do not forget to add closing curly bracket at the end
 #define KMP_PROFILING(level) { KMP_PROFILE_FUNCTION(level);
 
 
-//! Shortcut macros for profiling objects' constructors including members initializer lists stage
+//! Shortcut macro for profiling non-copyable objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS() \
     _constructorProfilerTimer(CreateUPtr<ProfilerTimer>("")) ,
 
+//! Shortcut macro for profiling non-copyable objects' constructors without initializer lists
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST() \
     _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
 
+//! Shortcut macro for profiling non-copyable derived objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS() \
     , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
 
-//! Shortcut macros for profiling copyable objects' constructors including members initializer lists stage
+
+//! Shortcut macro for profiling copyable objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_COPYABLE() \
     _constructorProfilerTimer(CreatePtr<ProfilerTimer>("")) ,
 
+//! Shortcut macro for profiling copyable objects' constructors without initializer lists
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST_COPYABLE() \
     _constructorProfilerTimer(CreatePtr<ProfilerTimer>(""))
 
+//! Shortcut macro for profiling copyable derived objects' constructors including members initializer lists stage
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS_COPYABLE() \
     , _constructorProfilerTimer(CreatePtr<ProfilerTimer>(""))
 
-//! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for constructors
+
+//! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for non-copyable objects' constructors
 #define KMP_PROFILE_CONSTRUCTOR_END() \
     constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(KMP_FUNC_SIG, "__cdecl ", "");\
     constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
@@ -246,7 +254,7 @@ namespace Kmplete
     _constructorProfilerTimer->SetName(fixedNameKHR_T##line.data);\
     _constructorProfilerTimer.reset(nullptr);
 
-//! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for constructors (for copyable objects with shared_ptr of profiler timer)
+//! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for copyable objects' constructors
 #define KMP_PROFILE_CONSTRUCTOR_END_COPYABLE() \
     constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(KMP_FUNC_SIG, "__cdecl ", "");\
     constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
