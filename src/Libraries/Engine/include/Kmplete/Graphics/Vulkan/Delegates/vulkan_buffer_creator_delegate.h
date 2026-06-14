@@ -25,6 +25,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanBufferCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
+            ~VulkanBufferCreatorDelegate() = default;
 
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(const VulkanBufferParameters& parameters) const;
             KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> CreateBufferPtr(const VulkanBufferParameters& parameters) const;

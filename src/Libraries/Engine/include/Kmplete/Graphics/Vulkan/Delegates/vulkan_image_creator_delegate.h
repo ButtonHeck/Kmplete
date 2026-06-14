@@ -25,6 +25,7 @@ namespace Kmplete
 
         public:
             KMP_API VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
+            ~VulkanImageCreatorDelegate() = default;
 
             KMP_NODISCARD KMP_API VkImage CreateVkImage(const VkImageCreateInfo& creationParameters) const;
 

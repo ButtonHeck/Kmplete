@@ -16,6 +16,7 @@ namespace Kmplete
 
         KMP_API UUID();
         KMP_API explicit UUID(UInt64 uuid) noexcept;
+        ~UUID() = default;
 
         KMP_NODISCARD KMP_API operator UInt64() const noexcept;
 

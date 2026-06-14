@@ -42,6 +42,7 @@ namespace Kmplete
 
             public:
                 explicit AssetsCompiler(CompilerParameters&& parameters) noexcept;
+                ~AssetsCompiler() = default;
 
                 KMP_NODISCARD ReturnCode Run() const;
 

@@ -27,6 +27,7 @@ namespace Kmplete
             KMP_API VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
             KMP_API VulkanVertexBuffer(VulkanVertexBuffer&& other) noexcept;
             KMP_API VulkanVertexBuffer& operator=(VulkanVertexBuffer&& other) noexcept;
+            ~VulkanVertexBuffer() = default;
 
             KMP_API void AddLayout(const BufferLayout& layout);
             KMP_NODISCARD KMP_API UInt32 LayoutCount() const noexcept;

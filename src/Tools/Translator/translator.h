@@ -49,6 +49,7 @@ namespace Kmplete
 
         public:
             explicit TranslatorProcessor(TranslatorParameters&& parameters) noexcept;
+            ~TranslatorProcessor() = default;
 
             KMP_NODISCARD ReturnCode Run() const;
 

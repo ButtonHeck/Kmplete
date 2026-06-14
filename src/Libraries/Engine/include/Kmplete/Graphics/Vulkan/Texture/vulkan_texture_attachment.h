@@ -36,6 +36,7 @@ namespace Kmplete
             KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
                                             VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
             KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters);
+            ~VulkanTextureAttachment() = default;
 
             KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;
             KMP_NODISCARD KMP_API Parameters GetParameters() const noexcept;

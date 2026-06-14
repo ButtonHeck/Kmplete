@@ -17,6 +17,7 @@ namespace Kmplete
         public:
             KMP_API explicit PerspectiveCamera(Type type, float fov) noexcept;
             KMP_API explicit PerspectiveCamera(const Math::Point3F& position, Type type, float fov) noexcept;
+            ~PerspectiveCamera() = default;
 
             KMP_API void SetFOV(float fov) noexcept;
             KMP_API void SetFOVDelta(float delta) noexcept;

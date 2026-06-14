@@ -38,6 +38,7 @@ namespace Kmplete
     public:
         EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
                            const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const ImGuiUtils::ImGuiImplementation& imguiImpl);
+        ~EditorUICompositor() = default;
 
         void ComposeMainArea();
         void ComposeStatusBar(Time::Timer& metricsTimer);

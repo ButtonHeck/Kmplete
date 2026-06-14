@@ -16,6 +16,7 @@ namespace Kmplete
     {
     public:
         KMP_API ProgramOptions() noexcept;
+        ~ProgramOptions() = default;
 
 #if defined (KMP_PLATFORM_WINDOWS)
         //! WinMain entryPoint

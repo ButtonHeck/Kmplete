@@ -28,6 +28,7 @@ namespace Kmplete
 
         public:
             KMP_API explicit VulkanMemoryTypeDelegate(VkPhysicalDeviceMemoryProperties memoryProperties) noexcept;
+            ~VulkanMemoryTypeDelegate() = default;
 
             KMP_NODISCARD KMP_API MemoryContext GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const;
             KMP_NODISCARD KMP_API MemoryContext GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const;

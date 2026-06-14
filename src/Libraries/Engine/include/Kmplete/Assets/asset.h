@@ -18,6 +18,7 @@ namespace Kmplete
 
         public:
             KMP_API Asset(AssetType type, StringID sid) noexcept;
+            ~Asset() = default;
 
             KMP_NODISCARD KMP_API AssetType GetType() const noexcept;
             KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;

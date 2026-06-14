@@ -41,6 +41,8 @@ namespace Kmplete
                 , _typeName(_handler.target_type().name())
             {}
 
+            ~EventHandlerWrapperImpl() = default;
+
             bool ProcessEvent(Event& event) const override
             {
                 if (event.GetTypeID() == EventClass::TypeID)

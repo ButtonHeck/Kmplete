@@ -36,6 +36,7 @@ namespace Kmplete
             static constexpr StringID ErrorTextureSID = 0;
 
             KMP_API explicit TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend);
+            ~TextureAssetManager() = default;
 
             KMP_API bool CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically = false);
             KMP_API bool CreateAsset(StringID textureSid, const Graphics::Image& image);

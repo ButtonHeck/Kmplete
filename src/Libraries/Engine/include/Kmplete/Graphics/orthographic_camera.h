@@ -18,6 +18,7 @@ namespace Kmplete
         public:
             KMP_API explicit OrthographicCamera(Type type) noexcept;
             KMP_API explicit OrthographicCamera(const Math::Point3F& position, Type type) noexcept;
+            ~OrthographicCamera() = default;
 
             KMP_API void SetOrthographicParameters(float left, float right, float top, float bottom, float zNear, float zFar) noexcept;
             KMP_API void SetLeft(float left) noexcept;

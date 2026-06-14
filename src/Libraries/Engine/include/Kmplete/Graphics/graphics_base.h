@@ -79,6 +79,7 @@ namespace Kmplete
         public:
             BufferLayout() = default;
             KMP_API explicit BufferLayout(InitializerList<BufferElement> elements, bool isInstanced = false);
+            ~BufferLayout() = default;
 
             KMP_NODISCARD KMP_API UInt32 GetStride() const noexcept;
             KMP_NODISCARD KMP_API bool IsInstanced() const noexcept;

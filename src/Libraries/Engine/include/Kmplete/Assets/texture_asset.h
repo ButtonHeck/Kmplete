@@ -23,6 +23,7 @@ namespace Kmplete
 
         public:
             KMP_API TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept;
+            ~TextureAsset() = default;
 
             KMP_NODISCARD KMP_API const Graphics::Texture& GetTexture() const noexcept;
             KMP_NODISCARD KMP_API Graphics::Texture& GetTexture() noexcept;

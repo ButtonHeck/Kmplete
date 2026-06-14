@@ -18,6 +18,7 @@ namespace Kmplete
 
         public:
             ContextVulkan(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, float baseScale, ImGui_ImplVulkan_InitInfo initInfo);
+            ~ContextVulkan() = default;
 
             ImGui_ImplVulkan_InitInfo initInfo;
         };

@@ -21,6 +21,7 @@ namespace Kmplete
 
         public:
             KMP_API explicit VulkanFormatDelegate(VkPhysicalDevice physicalDevice) noexcept;
+            ~VulkanFormatDelegate() = default;
 
             KMP_NODISCARD KMP_API VkFormatProperties GetFormatProperties(VkFormat format) const;
             KMP_NODISCARD KMP_API VkFormat FindImageFormat(const Vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const;

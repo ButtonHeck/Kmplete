@@ -25,6 +25,7 @@ namespace Kmplete
         public:
             KMP_API FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
             KMP_API FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath);
+            ~FontAsset() = default;
 
             KMP_NODISCARD KMP_API const Graphics::Font& GetFont() const noexcept;
             KMP_NODISCARD KMP_API Graphics::Font& GetFont() noexcept;

@@ -39,6 +39,7 @@ namespace Kmplete
 
         public:
             KMP_API InputManager() noexcept;
+            ~InputManager() = default;
 
             KMP_API void ProcessInputEvents(Events::Event& event);
             KMP_API void PropagateActionEvents();
