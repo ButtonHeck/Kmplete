@@ -215,6 +215,16 @@ namespace Kmplete
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS() \
     , _constructorProfilerTimer(CreateUPtr<ProfilerTimer>(""))
 
+//! Shortcut macros for profiling copyable objects' constructors including members initializer lists stage
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_COPYABLE() \
+    _constructorProfilerTimer(CreatePtr<ProfilerTimer>("")) ,
+
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST_COPYABLE() \
+    _constructorProfilerTimer(CreatePtr<ProfilerTimer>(""))
+
+#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS_COPYABLE() \
+    , _constructorProfilerTimer(CreatePtr<ProfilerTimer>(""))
+
 //! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for constructors
 #define KMP_PROFILE_CONSTRUCTOR_END() \
     constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(KMP_FUNC_SIG, "__cdecl ", "");\
@@ -236,6 +246,27 @@ namespace Kmplete
     _constructorProfilerTimer->SetName(fixedNameKHR_T##line.data);\
     _constructorProfilerTimer.reset(nullptr);
 
+//! Analogous to _KMP_PROFILE_SCOPE_LINE2 macro for constructors (for copyable objects with shared_ptr of profiler timer)
+#define KMP_PROFILE_CONSTRUCTOR_END_COPYABLE() \
+    constexpr auto fixedNameCdecl##line      = ::Kmplete::ProfilerUtils::ReplaceString(KMP_FUNC_SIG, "__cdecl ", "");\
+    constexpr auto fixedNameKmplete##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameCdecl##line.data, "Kmplete::", "");\
+    constexpr auto fixedNameUPtr##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameKmplete##line.data, "std::unique_ptr", "UPtr");\
+    constexpr auto fixedNamePtr##line        = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameUPtr##line.data, "std::shared_ptr", "Ptr");\
+    constexpr auto fixedNameString##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePtr##line.data, "std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >", "String");\
+    constexpr auto fixedNameWString##line    = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameString##line.data, "std::basic_string<wchar_t,struct std::char_traits<wchar_t>,class std::allocator<wchar_t> >", "WString");\
+    constexpr auto fixedNameInt64##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameWString##line.data, "__int64", "int64");\
+    constexpr auto fixedNamePath##line       = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameInt64##line.data, "std::filesystem::path", "Filepath");\
+    constexpr auto fixedNameArray##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNamePath##line.data, "std::array", "Array");\
+    constexpr auto fixedNameClass##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameArray##line.data, "class ", "");\
+    constexpr auto fixedNameStruct##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameClass##line.data, "struct ", "");\
+    constexpr auto fixedNameVector##line     = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameStruct##line.data, "std::vector", "Vector");\
+    constexpr auto fixedNameVoidParams##line = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVector##line.data, "(void)", "()");\
+    constexpr auto fixedNameRapidjson##line  = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameVoidParams##line.data, "rapidjson::GenericDocument<rapidjson::UTF8<char>,rapidjson::MemoryPoolAllocator<rapidjson::CrtAllocator>,rapidjson::CrtAllocator>", "rapidjson::Document");\
+    constexpr auto fixedName_T##line         = ::Kmplete::ProfilerUtils::ReplaceString(fixedNameRapidjson##line.data, "_T *", "");\
+    constexpr auto fixedNameKHR_T##line      = ::Kmplete::ProfilerUtils::ReplaceString(fixedName_T##line.data, "KHR_T *", "");\
+    _constructorProfilerTimer->SetName(fixedNameKHR_T##line.data);\
+    _constructorProfilerTimer.reset();
+
 #else
 #define KMP_PROFILE_BEGIN_SESSION(name, filepath, storageSize)
 #define KMP_PROFILE_END_SESSION()
@@ -244,9 +275,12 @@ namespace Kmplete
 #define KMP_PROFILE_FUNCTION(level)
 #define KMP_PROFILING(level) {
 
-#define KMP_PROFILE_CONSTRUCTOR_DECLARE()
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
 #define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST()
 #define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
 #define KMP_PROFILE_CONSTRUCTOR_END()
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_COPYABLE()
+#define KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_NO_INIT_LIST_COPYABLE()
+#define KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS_COPYABLE()
+#define KMP_PROFILE_CONSTRUCTOR_END_COPYABLE()
 #endif

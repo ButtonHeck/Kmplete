@@ -78,11 +78,14 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         BufferLayout::BufferLayout(InitializerList<BufferElement> elements, bool isInstanced /*= false*/)
-            : _elements(elements)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS_COPYABLE()
+              _elements(elements)
             , _stride(0)
             , _instanced(isInstanced)
         {
             _CalculateLayout();
+
+            KMP_PROFILE_CONSTRUCTOR_END_COPYABLE()
         }
         //--------------------------------------------------------------------------
 

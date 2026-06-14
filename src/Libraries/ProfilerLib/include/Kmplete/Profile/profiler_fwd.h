@@ -17,8 +17,14 @@ namespace Kmplete
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE() \
     private:\
     UPtr<ProfilerTimer> _constructorProfilerTimer;
+
+#define KMP_PROFILE_CONSTRUCTOR_DECLARE_COPYABLE() \
+    private:\
+    Ptr<ProfilerTimer> _constructorProfilerTimer;
+
 #else
 #define KMP_PROFILE_CONSTRUCTOR_DECLARE()
+#define KMP_PROFILE_CONSTRUCTOR_DECLARE_COPYABLE()
 #endif
 
 

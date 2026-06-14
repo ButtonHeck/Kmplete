@@ -2,6 +2,7 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete
@@ -73,6 +74,8 @@ namespace Kmplete
         //TODO: comments
         class BufferLayout
         {
+            KMP_PROFILE_CONSTRUCTOR_DECLARE_COPYABLE()
+
         public:
             BufferLayout() = default;
             KMP_API explicit BufferLayout(InitializerList<BufferElement> elements, bool isInstanced = false);
