@@ -5,7 +5,7 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Event/window_events.h"
 #include "Kmplete/ImGui/implementation.h"
-#include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 
 
 namespace Kmplete

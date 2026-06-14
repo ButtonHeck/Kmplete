@@ -21,6 +21,7 @@
 #include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -61,7 +62,7 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager) KMP_PROFILING(ProfileLevelAlways)
+    void EditorFrameListener::_Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
     {
         _InitializeGraphics();
         _InitializeImGui(_mainWindow.GetDPIScale());
@@ -69,10 +70,10 @@ namespace Kmplete
         _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, *_imguiImpl.get()));
 
         _metricsTimer.Mark();
-    }}
+    }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_InitializeGraphics() KMP_PROFILING(ProfileLevelAlways)
+    void EditorFrameListener::_InitializeGraphics() KMP_PROFILING(ProfileLevelImportant)
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
@@ -84,7 +85,7 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_InitializeImGui(float dpiScale)
+    void EditorFrameListener::_InitializeImGui(float dpiScale) KMP_PROFILING(ProfileLevelImportant)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -138,13 +139,13 @@ namespace Kmplete
         }
 
         _AddImGuiFonts(dpiScale);
-    }
+    }}
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+    void EditorFrameListener::_Finalize()
     {
         _imguiImpl.reset();
-    }}
+    }
     //--------------------------------------------------------------------------
 
     void EditorFrameListener::Update(float /*frameTimestep*/, bool /*applicationIsIconified*/) KMP_PROFILING(ProfileLevelImportant)

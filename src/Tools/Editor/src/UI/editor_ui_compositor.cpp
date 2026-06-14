@@ -15,6 +15,7 @@
 #include "Kmplete/ImGui/helper_functions.h"
 #include "Kmplete/ImGui/scope_guards.h"
 #include "Kmplete/Event/event_queue.h"
+#include "Kmplete/Profile/profiler.h"
 
 #include <imgui_internal.h> // for ImGui::DockBuilder api
 #include <misc/cpp/imgui_stdlib.h> // for ImGui::InputText wrappers for std::string

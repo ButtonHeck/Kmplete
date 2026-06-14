@@ -10,8 +10,8 @@
 #include "Kmplete/Time/timer.h"
 #include "Kmplete/Event/window_events.h"
 #include "Kmplete/Event/event_handler_guard.h"
-#include "Kmplete/Profile/profiler.h"
 #include "Kmplete/ImGui/implementation.h"
+#include "Kmplete/Profile/profiler_fwd.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 

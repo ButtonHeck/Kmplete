@@ -2,6 +2,7 @@
 
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete
@@ -27,7 +28,7 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorApplication::_Initialize() KMP_PROFILING(ProfileLevelAlways)
+    void EditorApplication::_Initialize()
     {
         _mainWindow.SetTitle(_applicationName.c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
@@ -42,15 +43,15 @@ namespace Kmplete
         _uiFrameListener.reset(new EditorFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend, *_assetsManager, *_localizationManager, *_systemMetricsManager, *_inputManager));
 
         _LoadSettings();
-    }}
+    }
     //--------------------------------------------------------------------------
 
-    void EditorApplication::_Finalize() KMP_PROFILING(ProfileLevelAlways)
+    void EditorApplication::_Finalize()
     {
         _SaveSettings();
 
         _uiFrameListener.reset();
-    }}
+    }
     //--------------------------------------------------------------------------
 
     void EditorApplication::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
