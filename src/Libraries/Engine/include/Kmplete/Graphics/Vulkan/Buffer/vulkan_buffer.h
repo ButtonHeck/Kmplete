@@ -47,6 +47,18 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkBuffer GetVkBuffer() const noexcept;
             KMP_NODISCARD KMP_API VkDeviceSize GetSize() const noexcept;
             KMP_NODISCARD KMP_API void* GetMappedPtr() const noexcept;
+            KMP_NODISCARD KMP_API VkBufferUsageFlags GetUsageFlags() const noexcept;
+
+            KMP_NODISCARD KMP_API bool IsTransferSourceBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsTransferDestinationBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsUniformTexelBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsStorageTexelBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsUniformBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsStorageBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsIndexBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsVertexBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsIndirectBuffer() const noexcept;
+            KMP_NODISCARD KMP_API bool IsShaderDeviceAddressBuffer() const noexcept;
 
         private:
             void _Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters);

@@ -171,6 +171,72 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        VkBufferUsageFlags VulkanBuffer::GetUsageFlags() const noexcept
+        {
+            return _usageFlags;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsTransferSourceBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_TransferSrc;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsTransferDestinationBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_TransferDst;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsUniformTexelBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_UniformTexel;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsStorageTexelBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_StorageTexel;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsUniformBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_Uniform;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsStorageBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_Storage;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsIndexBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_Index;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsVertexBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_Vertex;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsIndirectBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_Indirect;
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanBuffer::IsShaderDeviceAddressBuffer() const noexcept
+        {
+            return _usageFlags & VK_BufferUsage_ShaderDeviceAddress;
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanBuffer::_Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters)
         {
             KMP_ASSERT(_device);
@@ -183,7 +249,7 @@ namespace Kmplete
 
             auto bufferMemoryContext = memoryTypeDelegate.GetBufferMemoryContext(_device, _buffer, parameters.memoryPropertyFlags);
             VkMemoryAllocateFlagsInfoKHR allocateFlagsInfo = VKUtils::InitVkMemoryAllocateFlagsInfoKHR();
-            if (_usageFlags & VK_BufferUsage_ShaderDeviceAddress)
+            if (IsShaderDeviceAddressBuffer())
             {
                 allocateFlagsInfo.flags = VK_MemoryAllocate_DeviceAddress;
                 bufferMemoryContext.allocateInfo.pNext = &allocateFlagsInfo;
