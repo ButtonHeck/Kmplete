@@ -9,6 +9,7 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_descriptor_set_manager.h"
+#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer_manager.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.h"
@@ -82,6 +83,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanTextureAttachmentManager& GetTextureAttachmentManager() noexcept;
             KMP_NODISCARD KMP_API const VulkanShaderManager& GetShaderManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanShaderManager& GetShaderManager() noexcept;
+            KMP_NODISCARD KMP_API const VulkanBufferManager& GetBufferManager() const noexcept;
+            KMP_NODISCARD KMP_API VulkanBufferManager& GetBufferManager() noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
 
@@ -106,6 +109,9 @@ namespace Kmplete
 
             void _CreateBufferCreatorDelegate();
             void _DeleteBufferCreatorDelegate();
+
+            void _CreateBufferManager();
+            void _DeleteBufferManager();
 
             void _CreateSamplersStorage();
             void _DeleteSamplersStorage();
@@ -147,6 +153,7 @@ namespace Kmplete
             UPtr<VulkanSwapchain> _swapchain;
             UPtr<VulkanPipelineManager> _pipelineManager;
             UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
+            UPtr<VulkanBufferManager> _bufferManager;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
             bool _vSync;

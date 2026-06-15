@@ -120,8 +120,10 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Core"
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Buffer"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Buffer/vulkan_buffer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Buffer/vulkan_buffer_manager.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Command"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Command/vulkan_command_pool.h
