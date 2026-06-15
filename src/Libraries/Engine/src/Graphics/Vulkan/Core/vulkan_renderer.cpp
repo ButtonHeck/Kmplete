@@ -27,29 +27,15 @@ namespace Kmplete
             , _drawCommandBuffers()
             , _currentCommandBuffer(VK_NULL_HANDLE)
         {
-            KMP_ASSERT(_device);
+            _Initialize(graphicsFamilyIndex);
 
-            _commandPool.reset(new VulkanCommandPool(device, graphicsFamilyIndex));
-            KMP_ASSERT(_commandPool);
-
-            _drawCommandBuffers.reserve(NumConcurrentFrames);
-            for (size_t i = 0; i < NumConcurrentFrames; i++)
-            {
-                _drawCommandBuffers.emplace_back(device, _commandPool->GetVkCommandPool());
-            }
-
-            _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
-            KMP_ASSERT(_currentCommandBuffer);
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanRenderer::~VulkanRenderer() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_ASSERT(_commandPool && !_drawCommandBuffers.empty());
-
-            _drawCommandBuffers.clear();
-            _commandPool.reset();
+            _Finalize();
         }}
         //--------------------------------------------------------------------------
 
@@ -716,6 +702,33 @@ namespace Kmplete
             KMP_ASSERT(_currentCommandBuffer);
 
             return _currentCommandBuffer;
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::_Initialize(UInt32 graphicsFamilyIndex)
+        {
+            KMP_ASSERT(_device);
+
+            _commandPool.reset(new VulkanCommandPool(_device, graphicsFamilyIndex));
+            KMP_ASSERT(_commandPool);
+
+            _drawCommandBuffers.reserve(NumConcurrentFrames);
+            for (size_t i = 0; i < NumConcurrentFrames; i++)
+            {
+                _drawCommandBuffers.emplace_back(_device, _commandPool->GetVkCommandPool());
+            }
+
+            _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
+            KMP_ASSERT(_currentCommandBuffer);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::_Finalize()
+        {
+            KMP_ASSERT(_commandPool && !_drawCommandBuffers.empty());
+
+            _drawCommandBuffers.clear();
+            _commandPool.reset();
         }
         //--------------------------------------------------------------------------
     }

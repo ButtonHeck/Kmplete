@@ -222,36 +222,15 @@ namespace Kmplete
             , _memoryTypeDelegate(nullptr)
             , _logicalDevice(nullptr)
         {
-            KMP_ASSERT(_instance && _surface);
+            _Initialize();
 
-            Vector<VkPhysicalDevice> devices = _GetListOfPhysicalDevices();
-            _PickSuitablePhysicalDevice(devices);
-
-            if (_physicalDevice == VK_NULL_HANDLE)
-            {
-                KMP_LOG_CRITICAL("failed to find a suitable GPU");
-                throw RuntimeError("VulkanPhysicalDevice: failed to find a suitable GPU");
-            }
-
-            _QueryGPUInfo();
-            PrintGPUInfo();
-
-            _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_vulkanContext.memoryProperties));
-            KMP_ASSERT(_memoryTypeDelegate);
-
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
-            KMP_ASSERT(_logicalDevice);
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
 
         VulkanPhysicalDevice::~VulkanPhysicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_ASSERT(_logicalDevice && _memoryTypeDelegate && _formatDelegate);
-
-            _logicalDevice.reset();
-            _memoryTypeDelegate.reset();
-            _formatDelegate.reset();
+            _Finalize();
         }}
         //--------------------------------------------------------------------------
 
@@ -323,6 +302,40 @@ namespace Kmplete
             KMP_ASSERT(_memoryTypeDelegate);
 
             return *_memoryTypeDelegate.get();
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_Initialize()
+        {
+            KMP_ASSERT(_instance && _surface);
+
+            Vector<VkPhysicalDevice> devices = _GetListOfPhysicalDevices();
+            _PickSuitablePhysicalDevice(devices);
+
+            if (_physicalDevice == VK_NULL_HANDLE)
+            {
+                KMP_LOG_CRITICAL("failed to find a suitable GPU");
+                throw RuntimeError("VulkanPhysicalDevice: failed to find a suitable GPU");
+            }
+
+            _QueryGPUInfo();
+            PrintGPUInfo();
+
+            _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_vulkanContext.memoryProperties));
+            KMP_ASSERT(_memoryTypeDelegate);
+
+            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
+            KMP_ASSERT(_logicalDevice);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_Finalize()
+        {
+            KMP_ASSERT(_logicalDevice && _memoryTypeDelegate && _formatDelegate);
+
+            _logicalDevice.reset();
+            _memoryTypeDelegate.reset();
+            _formatDelegate.reset();
         }
         //--------------------------------------------------------------------------
 

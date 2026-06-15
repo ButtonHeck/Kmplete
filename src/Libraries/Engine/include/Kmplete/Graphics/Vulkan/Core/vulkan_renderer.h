@@ -117,6 +117,10 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;
 
         private:
+            void _Initialize(UInt32 graphicsFamilyIndex);
+            void _Finalize();
+
+        private:
             const UInt32& _currentBufferIndex;
             const VulkanPipelineManager& _pipelineManager;
             const VulkanShaderManager& _shaderManager;
