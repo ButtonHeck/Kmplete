@@ -415,7 +415,7 @@ namespace Kmplete
 
         _matrixShaderData.viewMatrix = _camera.GetViewMatrix();
         _matrixShaderData.projectionMatrix = _camera.GetProjectionMatrix();
-        _matrixShaderData.modelMatrix = Math::Mat4(1.0f);
+        _matrixShaderData.modelMatrix = Math::IdentityMatrix;
 
         _uniformBuffers[vulkanGraphicsBackend.GetCurrentBufferIndex()]->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 

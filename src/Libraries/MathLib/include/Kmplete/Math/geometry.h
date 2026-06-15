@@ -140,5 +140,7 @@ namespace Kmplete
         using Mat3 = glm::mat3;
         using Mat4 = glm::mat4;
         //--------------------------------------------------------------------------
+
+        static constexpr Mat4 IdentityMatrix = Mat4(1.0f);
     }
 }

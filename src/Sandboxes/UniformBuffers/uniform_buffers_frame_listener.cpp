@@ -184,7 +184,7 @@ namespace Kmplete
 
             _uniformBuffersInstanced.emplace_back(vulkanBufferCreator.CreateUniformBufferPtr({ 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, instanceBufferSize }));
             _uniformBuffersInstanced[i]->Map();
-            descriptorSetManager.SetUniformBufferDynamicDescriptor(MatricesDS_SID, 0, "per frame"_true, i, _uniformBuffersInstanced[i].get()->GetVkBuffer(), _dynamicAlignment, 0, ModelInstanceMatricesBindingIndex);
+            descriptorSetManager.SetUniformBufferDynamicDescriptor(MatricesDS_SID, 0, "per frame"_true, i, *_uniformBuffersInstanced[i].get(), _dynamicAlignment, 0, ModelInstanceMatricesBindingIndex);
         }
     }
     //--------------------------------------------------------------------------
@@ -259,7 +259,7 @@ namespace Kmplete
                 const auto index = r * GridDimension + c;
                 auto* modelMatrix = (Math::Mat4*)((UInt64(_instanceShaderData->model) + (index * _dynamicAlignment)));
                 const auto position = Math::Vec3F(c * 2.5f - 5.0f, r * 2.5 - 5.0f, 0.0);
-                *modelMatrix = glm::translate(Math::Mat4(1.0f), position);
+                *modelMatrix = glm::translate(Math::IdentityMatrix, position);
                 *modelMatrix = glm::rotate(*modelMatrix, _rotationsAngles[index], glm::vec3(0.0f, 0.0f, 1.0f));
             }
         }

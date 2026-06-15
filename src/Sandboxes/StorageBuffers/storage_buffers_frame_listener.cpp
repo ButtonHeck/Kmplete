@@ -227,7 +227,7 @@ namespace Kmplete
         for (auto m = 0; m < InstancesCount; m++)
         {
             auto& modelMatrix = _matricesShaderData.models[m];
-            modelMatrix = glm::translate(Math::Mat4(1.0f), Math::Vec3F(rng.Generate(), rng.Generate(), rng.Generate()));
+            modelMatrix = glm::translate(Math::IdentityMatrix, Math::Vec3F(rng.Generate(), rng.Generate(), rng.Generate()));
         }
         for (auto c = 0; c < ColorsInstancesCount; c++)
         {

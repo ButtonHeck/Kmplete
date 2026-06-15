@@ -28,8 +28,8 @@ namespace Kmplete
             , _front(Math::UnitVectorZ)
             , _right(Math::UnitVectorX)
             , _up(Math::UnitVectorY)
-            , _viewMatrix(Math::Mat4())
-            , _projectionMatrix(Math::Mat4())
+            , _viewMatrix(Math::IdentityMatrix)
+            , _projectionMatrix(Math::IdentityMatrix)
         {
             KMP_PROFILE_CONSTRUCTOR_END()
         }
