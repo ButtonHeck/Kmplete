@@ -5,8 +5,6 @@
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/perspective_camera.h"
-#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.h"
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Event/window_events.h"
 #include "Kmplete/Event/mouse_events.h"
@@ -36,7 +34,7 @@ namespace Kmplete
 
     public:
         StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
-        ~StorageBuffersFrameListener();
+        ~StorageBuffersFrameListener() = default;
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;
@@ -47,7 +45,6 @@ namespace Kmplete
         void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
         void _InitializeStorageBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
-        void _Finalize();
 
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
         bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
@@ -79,10 +76,6 @@ namespace Kmplete
         Graphics::GraphicsBackend& _graphicsBackend;
         Input::InputManager* _inputManager;
 
-        UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
-        UPtr<Graphics::VulkanBuffer> _indexBuffer;
-        Vector<UPtr<Graphics::VulkanBuffer>> _matricesStorageBuffers;
-        Vector<UPtr<Graphics::VulkanBuffer>> _colorsStorageBuffers;
         UInt32 _indexCount;
         MatricesShaderData _matricesShaderData;
         UPtr<ColorShaderData> _colorsShaderData;
