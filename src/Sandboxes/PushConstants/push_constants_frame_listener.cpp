@@ -22,6 +22,8 @@ namespace Kmplete
     static constexpr auto VertexShaderModule_SID = "vertex_shader"_sid;
     static constexpr auto FragmentShaderModule_SID = "fragment_shader"_sid;
 
+    static constexpr auto VertexBuffer_SID = "vertex_buffer"_sid;
+
 
     namespace
     {
@@ -38,16 +40,9 @@ namespace Kmplete
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
-        , _vertexBuffer(nullptr)
         , _pushConstantsArray()
     {
         _Initialize();
-    }
-    //--------------------------------------------------------------------------
-
-    PushConstantsFrameListener::~PushConstantsFrameListener()
-    {
-        _Finalize();
     }
     //--------------------------------------------------------------------------
 
@@ -63,7 +58,7 @@ namespace Kmplete
 
     void PushConstantsFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
-        const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
+        auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
         const auto& renderer = vulkanDevice.GetRenderer();
 
         const Vector<Vertex> vertices{
@@ -73,18 +68,19 @@ namespace Kmplete
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
-        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize });
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferManager.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize });
         stagingBuffer.Map();
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        _vertexBuffer.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize }));
-        _vertexBuffer->AddLayout(Graphics::BufferLayout{
+        vulkanBufferManager.CreateVertexBufferPtr(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
+        auto vertexBuffer = vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID);
+        vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex }
         });
 
         renderer.CopyBuffers(stagingBuffer, {
-            { *_vertexBuffer.get(), 0, 0, vertexBufferSize }
+            { *vertexBuffer, 0, 0, vertexBufferSize }
         }, vulkanDevice.GetGraphicsQueue());
 
         for (auto i = 0; i < InstancesCount; i++)
@@ -117,16 +113,10 @@ namespace Kmplete
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddShaderStages(shaderStages);
-        pipelineParams.AddVertexBufferAttributesBindings(*_vertexBuffer, VertexBufferBinding);
+        pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
-    }
-    //--------------------------------------------------------------------------
-
-    void PushConstantsFrameListener::_Finalize()
-    {
-        _vertexBuffer.reset();
     }
     //--------------------------------------------------------------------------
 
@@ -143,7 +133,7 @@ namespace Kmplete
         renderer.SetScissor(drawArea);
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
         renderer.BindGraphicsPipeline(Pipeline_SID);
-        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBuffer->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { 0 });
 
         auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
         renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment), imageBarrierParameters);
