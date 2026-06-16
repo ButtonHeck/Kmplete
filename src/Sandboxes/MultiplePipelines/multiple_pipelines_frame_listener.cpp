@@ -25,6 +25,9 @@ namespace Kmplete
     static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
     static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
 
+    static constexpr auto VertexBufferFixed_SID = "vertex_buffer_fixed"_sid;
+    static constexpr auto VertexBufferBuffered_SID = "vertex_buffer_buffered"_sid;
+
 
     namespace
     {
@@ -47,16 +50,8 @@ namespace Kmplete
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
-        , _vertexBufferFixedColor(nullptr)
-        , _vertexBufferBufferedColor(nullptr)
     {
         _Initialize();
-    }
-    //--------------------------------------------------------------------------
-
-    MultiplePipelinesFrameListener::~MultiplePipelinesFrameListener()
-    {
-        _Finalize();
     }
     //--------------------------------------------------------------------------
 
@@ -72,7 +67,7 @@ namespace Kmplete
 
     void MultiplePipelinesFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
-        const auto& vulkanBufferCreator = vulkanDevice.GetVulkanBufferCreatorDelegate();
+        auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
         const auto& renderer = vulkanDevice.GetRenderer();
 
         const Vector<FixedColorVertex> fixedColorVertices{
@@ -101,32 +96,36 @@ namespace Kmplete
         };
         const auto bufferedColorBufferSize = UInt32(bufferedColorVertices.size() * sizeof(BufferedColorVertex));
 
-        Graphics::VulkanBuffer stagingBuffer = vulkanBufferCreator.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, fixedColorBufferSize + bufferedColorBufferSize });
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferManager.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, fixedColorBufferSize + bufferedColorBufferSize });
         stagingBuffer.Map();
         stagingBuffer.CopyToMappedMemory(0, (char*)fixedColorVertices.data(), fixedColorBufferSize);
         stagingBuffer.CopyToMappedMemory(fixedColorBufferSize, (char*)bufferedColorVertices.data(), bufferedColorBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        _vertexBufferFixedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, fixedColorBufferSize }));
-        _vertexBufferFixedColor->AddLayout(Graphics::BufferLayout{
+        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferFixed_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, fixedColorBufferSize });
+        auto vertexBufferFixedColor = vulkanBufferManager.GetVertexBuffer(VertexBufferFixed_SID);
+        vertexBufferFixedColor->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 }
         });
 
-        _vertexBufferBufferedColor.reset(vulkanBufferCreator.CreateVertexBufferPtr({ VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize }));
-        _vertexBufferBufferedColor->AddLayout(Graphics::BufferLayout{
+        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferBuffered_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize });
+        auto vertexBufferBufferedColor = vulkanBufferManager.GetVertexBuffer(VertexBufferBuffered_SID);
+        vertexBufferBufferedColor->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 },
             Graphics::BufferElement{ Graphics::ShaderDataType::Float4, 1 },
         });
 
         renderer.CopyBuffers(stagingBuffer, {
-            { *_vertexBufferFixedColor.get(), 0, 0, fixedColorBufferSize },
-            { *_vertexBufferBufferedColor.get(), fixedColorBufferSize, 0, bufferedColorBufferSize }
+            { *vertexBufferFixedColor, 0, 0, fixedColorBufferSize },
+            { *vertexBufferBufferedColor, fixedColorBufferSize, 0, bufferedColorBufferSize }
         }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 
     void MultiplePipelinesFrameListener::_InitializePipelines(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
+
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
@@ -155,7 +154,7 @@ namespace Kmplete
         pipelineFixedColorFillParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
         pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineFixedColorFillParams.AddShaderStages(fixedColorShaderStages);
-        pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferFixedColor, VertexBufferBinding);
+        pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBufferFixed_SID), VertexBufferBinding);
         pipelineFixedColorFillParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
         auto pipelineFixedColorLineParams = Graphics::VulkanGraphicsPipelineParameters::CopyFrom(pipelineFixedColorFillParams, 
@@ -167,7 +166,7 @@ namespace Kmplete
             Graphics::VulkanGraphicsPipelineParameters::CopyParameters::ColorAttachmentInfos |
             Graphics::VulkanGraphicsPipelineParameters::CopyParameters::DynamicStates
         );
-        pipelineBufferedColorFillParams.AddVertexBufferAttributesBindings(*_vertexBufferBufferedColor, VertexBufferBinding);
+        pipelineBufferedColorFillParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBufferBuffered_SID), VertexBufferBinding);
         pipelineBufferedColorFillParams.AddShaderStages(bufferedColorShaderStages);
 
         auto pipelineBufferedColorLineParams = Graphics::VulkanGraphicsPipelineParameters::CopyFrom(pipelineBufferedColorFillParams,
@@ -185,17 +184,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void MultiplePipelinesFrameListener::_Finalize()
-    {
-        _vertexBufferFixedColor.reset();
-        _vertexBufferBufferedColor.reset();
-    }
-    //--------------------------------------------------------------------------
-
     void MultiplePipelinesFrameListener::Render()
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
+        const auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
         const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
         const auto& renderer = vulkanDevice.GetRenderer();
         const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
@@ -220,14 +213,14 @@ namespace Kmplete
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
         // fixed color drawing
-        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBufferFixedColor->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { vulkanBufferManager.GetVertexBuffer(VertexBufferFixed_SID)->GetVkBuffer()}, {0});
         renderer.BindGraphicsPipeline(Pipeline_FixedColor_Fill_SID);
         renderer.Draw(3, 1, 0, 0);
         renderer.BindGraphicsPipeline(Pipeline_FixedColor_Line_SID);
         renderer.Draw(3, 1, 3, 0);
 
         // buffered color drawing
-        renderer.BindVertexBuffers(VertexBufferBinding, { _vertexBufferBufferedColor->GetVkBuffer() }, { 0 });
+        renderer.BindVertexBuffers(VertexBufferBinding, { vulkanBufferManager.GetVertexBuffer(VertexBufferBuffered_SID)->GetVkBuffer() }, { 0 });
         renderer.BindGraphicsPipeline(Pipeline_BufferedColor_Fill_SID);
         renderer.Draw(3, 1, 0, 0);
         renderer.BindGraphicsPipeline(Pipeline_BufferedColor_Line_SID);
