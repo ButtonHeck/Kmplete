@@ -8,8 +8,6 @@
 #include "Kmplete/Graphics/graphics_backend.h"
 #include "Kmplete/Graphics/orthographic_camera.h"
 #include "Kmplete/Graphics/perspective_camera.h"
-#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h"
-#include "Kmplete/Graphics/Vulkan/Buffer/vulkan_vertex_buffer.h"
 #include "Kmplete/ImGui/implementation.h"
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Event/window_events.h"
@@ -42,7 +40,7 @@ namespace Kmplete
 
     public:
         TriangleFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager);
-        ~TriangleFrameListener();
+        ~TriangleFrameListener() = default;
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
         void Render() override;
@@ -54,7 +52,6 @@ namespace Kmplete
         void _InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
         void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _InitializeImGui(float dpiScale);
-        void _Finalize();
 
         void _RenderTriangle();
         void _RenderImGui();
@@ -84,10 +81,6 @@ namespace Kmplete
         Graphics::GraphicsBackend& _graphicsBackend;
         Input::InputManager* _inputManager;
 
-        UPtr<Graphics::VulkanVertexBuffer> _vertexBuffer;
-        UPtr<Graphics::VulkanBuffer> _indexBuffer;
-        Vector<UPtr<Graphics::VulkanBuffer>> _uniformBuffers;
-        Vector<UPtr<Graphics::VulkanBuffer>> _matrixUniformBuffers;
         UInt32 _indexCount;
         Assets::AssetsManager& _assetsManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
