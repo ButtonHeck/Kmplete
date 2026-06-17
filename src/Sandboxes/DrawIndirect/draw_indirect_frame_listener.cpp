@@ -147,23 +147,23 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + instanceBufferSize + indexBufferSize + drawInstancedBufferSize, (char*)drawIndexedIndirectCommands.data(), drawIndexedInstanceBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
         auto vertexBuffer = vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID);
         vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex }
         });
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferInstanced_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, instanceBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBufferInstanced_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, instanceBufferSize });
         auto vertexBufferInstanced = vulkanBufferManager.GetVertexBuffer(VertexBufferInstanced_SID);
         vertexBufferInstanced->AddLayout(Graphics::BufferLayout({
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexInstancePositionAttributeIndex },
             Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexInstanceColorAttributeIndex },
         }, "instanced"_true));
 
-        vulkanBufferManager.CreateIndexBufferPtr(IndexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize });
+        vulkanBufferManager.CreateIndexBuffer(IndexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize });
         auto indexBuffer = vulkanBufferManager.GetBuffer(IndexBuffer_SID);
 
-        vulkanBufferManager.CreateIndirectBufferPtr(IndirectBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, drawInstancedBufferSize + drawIndexedInstanceBufferSize });
+        vulkanBufferManager.CreateIndirectBuffer(IndirectBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, drawInstancedBufferSize + drawIndexedInstanceBufferSize });
         auto indirectBuffer = vulkanBufferManager.GetBuffer(IndirectBuffer_SID);
 
         renderer.CopyBuffers(stagingBuffer, {

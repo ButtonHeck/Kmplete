@@ -102,13 +102,13 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(fixedColorBufferSize, (char*)bufferedColorVertices.data(), bufferedColorBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferFixed_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, fixedColorBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBufferFixed_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, fixedColorBufferSize });
         auto vertexBufferFixedColor = vulkanBufferManager.GetVertexBuffer(VertexBufferFixed_SID);
         vertexBufferFixedColor->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 }
         });
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferBuffered_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBufferBuffered_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, bufferedColorBufferSize });
         auto vertexBufferBufferedColor = vulkanBufferManager.GetVertexBuffer(VertexBufferBuffered_SID);
         vertexBufferBufferedColor->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, 0 },

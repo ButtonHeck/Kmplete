@@ -34,7 +34,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanBufferManager::CreateBufferPtr(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanBufferManager::CreateBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
             {
@@ -79,7 +79,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanBufferManager::CreateVertexBufferPtr(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanBufferManager::CreateVertexBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
             {
@@ -124,7 +124,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanBufferManager::CreateIndexBufferPtr(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanBufferManager::CreateIndexBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
             {
@@ -169,7 +169,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanBufferManager::CreateUniformBufferPtr(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanBufferManager::CreateUniformBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
             {
@@ -214,7 +214,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanBufferManager::CreateStorageBufferPtr(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanBufferManager::CreateStorageBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
             {
@@ -259,7 +259,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanBufferManager::CreateIndirectBufferPtr(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanBufferManager::CreateIndirectBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame /*= false*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (perFrame)
             {
@@ -359,20 +359,20 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferManager::_CreateBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanBuffer VulkanBufferManager::_CreateBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, parameters);
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, parameters);
         }}
         //--------------------------------------------------------------------------
 
 
-        VulkanVertexBuffer VulkanBufferManager::_CreateVertexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanVertexBuffer VulkanBufferManager::_CreateVertexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Vertex | parameters.usageFlags,
@@ -382,7 +382,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanVertexBuffer*> VulkanBufferManager::_CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanVertexBuffer*> VulkanBufferManager::_CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return new VulkanVertexBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Vertex | parameters.usageFlags,
@@ -393,7 +393,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferManager::_CreateIndexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanBuffer VulkanBufferManager::_CreateIndexBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Index | parameters.usageFlags,
@@ -403,7 +403,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Index | parameters.usageFlags,
@@ -414,7 +414,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferManager::_CreateUniformBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanBuffer VulkanBufferManager::_CreateUniformBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Uniform | parameters.usageFlags,
@@ -424,7 +424,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Uniform | parameters.usageFlags,
@@ -435,7 +435,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferManager::_CreateStorageBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanBuffer VulkanBufferManager::_CreateStorageBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Storage | parameters.usageFlags,
@@ -445,7 +445,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateStorageBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateStorageBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Storage | parameters.usageFlags,
@@ -456,7 +456,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VulkanBuffer VulkanBufferManager::_CreateIndirectBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        VulkanBuffer VulkanBufferManager::_CreateIndirectBuffer(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Indirect | parameters.usageFlags,
@@ -466,7 +466,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateIndirectBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanBuffer*> VulkanBufferManager::_CreateIndirectBufferPtr(const VulkanBufferParameters& parameters) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             return new VulkanBuffer(_memoryTypeDelegate, _device, VulkanBufferParameters{
                 .usageFlags = VK_BufferUsage_Indirect | parameters.usageFlags,

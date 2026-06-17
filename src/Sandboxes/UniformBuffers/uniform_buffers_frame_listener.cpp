@@ -138,7 +138,7 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
         auto vertexBuffer = vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID);
         vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float3, VertexPositionAttributeIndex }
@@ -172,8 +172,8 @@ namespace Kmplete
         const auto matricesLayout = descriptorSetManager.AddDescriptorSetLayout(MatricesDSLayout_SID, { viewProjectionLayoutBinding, instanceModelsLayoutBinding });
         descriptorSetManager.AllocateDescriptorSets(matricesLayout, MatricesDS_SID, 1, "per frame"_true);
 
-        vulkanBufferManager.CreateUniformBufferPtr(UniformBufferCommon_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(CommonShaderData) }, "per frame"_true);
-        vulkanBufferManager.CreateUniformBufferPtr(UniformBufferInstanced_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, instanceBufferSize }, "per frame"_true);
+        vulkanBufferManager.CreateUniformBuffer(UniformBufferCommon_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(CommonShaderData) }, "per frame"_true);
+        vulkanBufferManager.CreateUniformBuffer(UniformBufferInstanced_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, instanceBufferSize }, "per frame"_true);
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             auto uniformBufferCommon = vulkanBufferManager.GetBuffer(UniformBufferCommon_SID, i);

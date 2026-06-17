@@ -129,25 +129,25 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(vertexBufferSize + vertexInstancedBufferSize + vertexColorsInstancedBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
         auto vertexBuffer = vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID);
         vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex }
         });
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferPosInstanced_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexInstancedBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBufferPosInstanced_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexInstancedBufferSize });
         auto vertexBufferPosInstanced = vulkanBufferManager.GetVertexBuffer(VertexBufferPosInstanced_SID);
         vertexBufferPosInstanced->AddLayout(Graphics::BufferLayout({
             Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionInstancedAttributeIndex }
         }, "instanced"_true));
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBufferColorsInstanced_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexColorsInstancedBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBufferColorsInstanced_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexColorsInstancedBufferSize });
         auto vertexBufferColorsInstanced = vulkanBufferManager.GetVertexBuffer(VertexBufferColorsInstanced_SID);
         vertexBufferColorsInstanced->AddLayout(Graphics::BufferLayout({
             Graphics::BufferElement{ Graphics::ShaderDataType::Float4, VertexColorInstancedAttributeIndex }
         }, "instanced"_true));
 
-        vulkanBufferManager.CreateIndexBufferPtr(IndexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize });
+        vulkanBufferManager.CreateIndexBuffer(IndexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize });
         auto indexBuffer = vulkanBufferManager.GetBuffer(IndexBuffer_SID);
 
         renderer.CopyBuffers(stagingBuffer, {

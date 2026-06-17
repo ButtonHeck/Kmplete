@@ -183,13 +183,13 @@ namespace Kmplete
         stagingBuffer.CopyToMappedMemory(vertexBufferSize, (char*)indices.data(), indexBufferSize);
         stagingBuffer.Unmap("flush"_true);
 
-        vulkanBufferManager.CreateVertexBufferPtr(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
+        vulkanBufferManager.CreateVertexBuffer(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
         auto vertexBuffer = vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID);
         vertexBuffer->AddLayout(Graphics::BufferLayout{
             Graphics::BufferElement{ Graphics::ShaderDataType::Float3, VertexPositionAttributeIndex }
         });
 
-        vulkanBufferManager.CreateIndexBufferPtr(IndexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize });
+        vulkanBufferManager.CreateIndexBuffer(IndexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, indexBufferSize });
         auto indexBuffer = vulkanBufferManager.GetBuffer(IndexBuffer_SID);
 
         vulkanRenderer.CopyBuffers(stagingBuffer, {
@@ -235,8 +235,8 @@ namespace Kmplete
             color->a = 1.0f;
         }
 
-        vulkanBufferManager.CreateStorageBufferPtr(StorageBuffersMatrices_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(MatricesShaderData) }, "per frame"_true);
-        vulkanBufferManager.CreateStorageBufferPtr(StorageBuffersColors_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, colorsInstanceBufferSize }, "per frame"_true);
+        vulkanBufferManager.CreateStorageBuffer(StorageBuffersMatrices_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(MatricesShaderData) }, "per frame"_true);
+        vulkanBufferManager.CreateStorageBuffer(StorageBuffersColors_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, colorsInstanceBufferSize }, "per frame"_true);
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             auto storageBufferMatrices = vulkanBufferManager.GetBuffer(StorageBuffersMatrices_SID, i);
