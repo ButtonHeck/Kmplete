@@ -17,6 +17,7 @@ namespace Kmplete
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _applicationName(parameters.applicationName)
         , _applicationPath(Filesystem::GetCurrentFilepath())
+        , _dataPath(_applicationPath / "Data")
         , _running(false)
         , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
@@ -52,6 +53,10 @@ namespace Kmplete
         if (!Filesystem::FilepathExists(_applicationPath))
         {
             throw RuntimeError("Application filepath initialization failed");
+        }
+        if (!Filesystem::FilepathExists(_dataPath))
+        {
+            throw RuntimeError("Application data filepath initialization failed");
         }
 
         _systemMetricsManager = CreateUPtr<SystemMetricsManager>();

@@ -121,7 +121,7 @@ namespace Kmplete
         _inputManager = CreateUPtr<Input::InputManager>();
         KMP_ASSERT(_inputManager);
 
-        _assetsManager = CreateUPtr<Assets::AssetsManager>(_applicationPath, *_graphicsBackend.get());
+        _assetsManager = CreateUPtr<Assets::AssetsManager>(_dataPath, *_graphicsBackend.get());
         KMP_ASSERT(_assetsManager);
 
         _frameListenerManager = CreateUPtr<FrameListenerManager>();

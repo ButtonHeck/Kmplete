@@ -10,9 +10,6 @@ namespace Kmplete
 {
     namespace Assets
     {
-        static constexpr auto AssetsFolder = "Data";
-
-
         enum class AssetType : UByte
         {
             Texture,

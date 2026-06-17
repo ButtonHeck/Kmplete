@@ -12,9 +12,9 @@ namespace Kmplete
 {
     namespace Assets
     {
-        AssetsManager::AssetsManager(const Filepath& applicationPath, Graphics::GraphicsBackend& graphicsBackend)
+        AssetsManager::AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
-              _dataPath(applicationPath / AssetsFolder)
+              _dataPath(dataPath)
             , _graphicsBackend(graphicsBackend)
             , _textureAssetManager(nullptr)
             , _fontAssetManager(nullptr)
@@ -149,12 +149,6 @@ namespace Kmplete
 
         void AssetsManager::_Initialize()
         {
-            if (!Filesystem::FilepathExists(_dataPath))
-            {
-                KMP_LOG_CRITICAL("cannot create due to data path '{}' does not exist", _dataPath);
-                throw RuntimeError("AssetsManager: cannot create due to data path does not exist");
-            }
-
             _textureAssetManager.reset(new TextureAssetManager(_graphicsBackend));
             KMP_ASSERT(_textureAssetManager);
 
