@@ -18,7 +18,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        class VulkanBufferCreatorDelegate;
+        class VulkanMemoryTypeDelegate;
 
 
         //TODO: comments
@@ -29,7 +29,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanBufferManager(VkDevice device, const VulkanBufferCreatorDelegate& bufferCreatorDelegate);
+            KMP_API VulkanBufferManager(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
             ~VulkanBufferManager() = default;
 
             KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(const VulkanBufferParameters& parameters) const;
@@ -56,8 +56,27 @@ namespace Kmplete
             KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> GetVertexBuffer(StringID bufferSid, UInt32 index) const noexcept;
 
         private:
+            KMP_NODISCARD VulkanBuffer _CreateBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD Nullable<VulkanBuffer*> _CreateBufferPtr(const VulkanBufferParameters& parameters) const;
+
+            KMP_NODISCARD VulkanVertexBuffer _CreateVertexBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD Nullable<VulkanVertexBuffer*> _CreateVertexBufferPtr(const VulkanBufferParameters& parameters) const;
+
+            KMP_NODISCARD VulkanBuffer _CreateIndexBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD Nullable<VulkanBuffer*> _CreateIndexBufferPtr(const VulkanBufferParameters& parameters) const;
+
+            KMP_NODISCARD VulkanBuffer _CreateUniformBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD Nullable<VulkanBuffer*> _CreateUniformBufferPtr(const VulkanBufferParameters& parameters) const;
+
+            KMP_NODISCARD VulkanBuffer _CreateStorageBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD Nullable<VulkanBuffer*> _CreateStorageBufferPtr(const VulkanBufferParameters& parameters) const;
+
+            KMP_NODISCARD VulkanBuffer _CreateIndirectBuffer(const VulkanBufferParameters& parameters) const;
+            KMP_NODISCARD Nullable<VulkanBuffer*> _CreateIndirectBufferPtr(const VulkanBufferParameters& parameters) const;
+
+        private:
             VkDevice _device;
-            const VulkanBufferCreatorDelegate& _bufferCreatorDelegate;
+            const VulkanMemoryTypeDelegate& _memoryTypeDelegate;
 
             StringIDHashMap<UPtr<VulkanBuffer>> _buffers;
             StringIDHashMap<UPtr<VulkanVertexBuffer>> _vertexBuffers;

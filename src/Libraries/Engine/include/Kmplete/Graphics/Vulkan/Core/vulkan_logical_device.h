@@ -19,7 +19,6 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_memory_type_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_format_delegate.h"
-#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_buffer_creator_delegate.h"
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/nullability.h"
@@ -71,7 +70,6 @@ namespace Kmplete
             KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
             KMP_NODISCARD KMP_API const VulkanQueue& GetPresentationQueue() const noexcept;
             KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanBufferCreatorDelegate& GetVulkanBufferCreatorDelegate() const noexcept;
             KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
             KMP_NODISCARD KMP_API const VkExtent2D& GetCurrentExtent() const noexcept;
             KMP_NODISCARD KMP_API const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
@@ -106,9 +104,6 @@ namespace Kmplete
 
             void _CreatePipelineManager();
             void _DeletePipelineManager();
-
-            void _CreateBufferCreatorDelegate();
-            void _DeleteBufferCreatorDelegate();
 
             void _CreateBufferManager();
             void _DeleteBufferManager();
@@ -152,7 +147,6 @@ namespace Kmplete
             Vector<VulkanFence> _waitFences;
             UPtr<VulkanSwapchain> _swapchain;
             UPtr<VulkanPipelineManager> _pipelineManager;
-            UPtr<VulkanBufferCreatorDelegate> _bufferCreatorDelegate;
             UPtr<VulkanBufferManager> _bufferManager;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;

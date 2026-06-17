@@ -49,7 +49,6 @@ namespace Kmplete
             , _waitFences()
             , _swapchain(nullptr)
             , _pipelineManager(nullptr)
-            , _bufferCreatorDelegate(nullptr)
             , _bufferManager(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SampleCount_1)
@@ -66,7 +65,6 @@ namespace Kmplete
             _CreateSynchronizationObjects();
             _CreateSwapchain();
             _CreatePipelineManager();
-            _CreateBufferCreatorDelegate();
             _CreateBufferManager();
             _CreateSamplersStorage();
             _CreateDescriptorSetManager();
@@ -88,7 +86,6 @@ namespace Kmplete
             _DeleteDescriptorSetManager();
             _DeleteSamplersStorage();
             _DeleteBufferManager();
-            _DeleteBufferCreatorDelegate();
             _DeletePipelineManager();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
@@ -239,14 +236,6 @@ namespace Kmplete
             KMP_ASSERT(_imageCreatorDelegate);
 
             return *_imageCreatorDelegate.get();
-        }
-        //--------------------------------------------------------------------------
-
-        const VulkanBufferCreatorDelegate& VulkanLogicalDevice::GetVulkanBufferCreatorDelegate() const noexcept
-        {
-            KMP_ASSERT(_bufferCreatorDelegate);
-
-            return *_bufferCreatorDelegate.get();
         }
         //--------------------------------------------------------------------------
 
@@ -496,28 +485,11 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::_CreateBufferManager() KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
-            _bufferCreatorDelegate.reset(new VulkanBufferCreatorDelegate(_device, _memoryTypeDelegate));
-            KMP_ASSERT(_bufferCreatorDelegate);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_DeleteBufferCreatorDelegate() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_bufferCreatorDelegate);
-
-            _bufferCreatorDelegate.reset();
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::_CreateBufferManager() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device && _bufferCreatorDelegate);
-
-            _bufferManager.reset(new VulkanBufferManager(_device, *_bufferCreatorDelegate.get()));
+            _bufferManager.reset(new VulkanBufferManager(_device, _memoryTypeDelegate));
             KMP_ASSERT(_bufferManager);
         }}
         //--------------------------------------------------------------------------
