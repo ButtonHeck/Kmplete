@@ -135,9 +135,11 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Pipeline"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline_parameters.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Pipeline/vulkan_pipeline_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Pipeline/vulkan_pipeline_cache.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline_parameters.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Pipeline/vulkan_pipeline_manager.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Pipeline/vulkan_pipeline_cache.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Shader"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Shader/vulkan_shader_module.h

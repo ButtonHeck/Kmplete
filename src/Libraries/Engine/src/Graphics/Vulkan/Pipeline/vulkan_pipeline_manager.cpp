@@ -10,9 +10,10 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanPipelineManager::VulkanPipelineManager(VkDevice device)
+        VulkanPipelineManager::VulkanPipelineManager(VkDevice device, const VulkanContext& context)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _device(device)
+            , _context(context)
             , _pipelines()
         {
             KMP_ASSERT(_device);

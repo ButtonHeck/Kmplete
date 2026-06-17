@@ -7,6 +7,7 @@
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline.h"
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_graphics_pipeline_parameters.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_context.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Profile/profiler_fwd.h"
 
@@ -25,7 +26,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit VulkanPipelineManager(VkDevice device);
+            KMP_API VulkanPipelineManager(VkDevice device, const VulkanContext& context);
             KMP_API ~VulkanPipelineManager();
 
             KMP_API bool AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges);
@@ -37,6 +38,7 @@ namespace Kmplete
 
         private:
             VkDevice _device;
+            const VulkanContext& _context;
             StringIDHashMap<VkPipelineLayout> _layouts;
             StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
         };

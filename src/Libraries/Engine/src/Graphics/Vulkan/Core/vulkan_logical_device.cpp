@@ -472,7 +472,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            _pipelineManager.reset(new VulkanPipelineManager(_device));
+            _pipelineManager.reset(new VulkanPipelineManager(_device, _vulkanContext));
             KMP_ASSERT(_pipelineManager);
         }}
         //--------------------------------------------------------------------------
