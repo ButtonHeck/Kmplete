@@ -23,7 +23,7 @@ namespace Kmplete
         _mainWindow.SetTitle(_applicationName.c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
-        _mainFrameListener.reset(new StorageBuffersFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), _inputManager.get()));
+        _mainFrameListener.reset(new StorageBuffersFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), _inputManager.get(), _dataPath));
     }
     //--------------------------------------------------------------------------
 

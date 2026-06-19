@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Kmplete/Base/kmplete_api.h"
+#include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Graphics/graphics_backend.h"
@@ -28,7 +29,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(UniformBuffersFrameListener)
 
     public:
-        UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
+        UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager, const Filepath& dataPath);
         ~UniformBuffersFrameListener() = default;
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
@@ -68,6 +69,7 @@ namespace Kmplete
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
         Input::InputManager* _inputManager;
+        const Filepath& _dataPath;
 
         CommonShaderData _commonShaderData;
         UPtr<InstanceShaderData> _instanceShaderData;

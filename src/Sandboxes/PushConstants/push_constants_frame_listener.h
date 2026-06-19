@@ -23,7 +23,7 @@ namespace Kmplete
         static constexpr auto InstancesCount = 8;
 
     public:
-        PushConstantsFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend);
+        PushConstantsFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath);
         ~PushConstantsFrameListener() = default;
 
         void Render() override;
@@ -43,6 +43,7 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
+        const Filepath& _dataPath;
 
         Array<PushConstantsData, InstancesCount> _pushConstantsArray;
     };

@@ -36,10 +36,11 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    PushConstantsFrameListener::PushConstantsFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+    PushConstantsFrameListener::PushConstantsFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _dataPath(dataPath)
         , _pushConstantsArray()
     {
         _Initialize();
@@ -98,9 +99,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {
-            { VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData) }
-        });
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {}, { { VK_ShaderStage_Vertex, 0, sizeof(PushConstantsData) } });
 
         const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.vert.spv"));
         const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("push_constants.frag.spv"));
@@ -116,7 +116,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "push_constants_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

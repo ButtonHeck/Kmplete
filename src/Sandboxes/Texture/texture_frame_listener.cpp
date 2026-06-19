@@ -72,11 +72,13 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    TextureFrameListener::TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
+    TextureFrameListener::TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
+                                               Assets::AssetsManager& assetsManager, Input::InputManager* inputManager, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
+        , _dataPath(dataPath)
         , _indexCount(0)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
@@ -253,7 +255,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { 
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesAndTextureDSLayout_SID),
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(SamplerDSLayout_SID)
         }, {});
@@ -323,7 +326,7 @@ namespace Kmplete
         vulkanDevice.GetShaderManager().AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
         vulkanDevice.GetShaderManager().AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "texture_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

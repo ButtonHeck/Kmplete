@@ -37,7 +37,8 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(TextureFrameListener)
 
     public:
-        TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager);
+        TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
+                             Assets::AssetsManager& assetsManager, Input::InputManager* inputManager, const Filepath& dataPath);
         ~TextureFrameListener() = default;
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
@@ -73,6 +74,7 @@ namespace Kmplete
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
         Input::InputManager* _inputManager;
+        const Filepath& _dataPath;
 
         UInt32 _indexCount;
         Assets::AssetsManager& _assetsManager;

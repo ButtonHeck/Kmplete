@@ -62,11 +62,12 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    StorageBuffersFrameListener::StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager)
+    StorageBuffersFrameListener::StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
+        , _dataPath(dataPath)
         , _indexCount(0)
         , _matricesShaderData()
         , _colorsShaderData(nullptr)
@@ -258,7 +259,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(DSLayout_SID) }, {});
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, { vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(DSLayout_SID) }, {});
 
         const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShader_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.vert.spv"));
         const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShader_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.frag.spv"));
@@ -275,7 +277,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "storage_buffers_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

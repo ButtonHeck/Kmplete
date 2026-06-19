@@ -62,11 +62,12 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    UniformBuffersFrameListener::UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager)
+    UniformBuffersFrameListener::UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
+        , _dataPath(dataPath)
         , _commonShaderData()
         , _instanceShaderData(nullptr)
         , _dynamicAlignment(0ULL)
@@ -195,7 +196,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { 
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID)
         }, {});
 
@@ -213,7 +215,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "uniform_buffers_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

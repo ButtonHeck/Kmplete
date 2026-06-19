@@ -68,11 +68,13 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    TriangleFrameListener::TriangleFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
+    TriangleFrameListener::TriangleFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
+                                                 Assets::AssetsManager& assetsManager, Input::InputManager* inputManager, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
+        , _dataPath(dataPath)
         , _indexCount(0)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
@@ -270,7 +272,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, { 
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(MatricesDSLayout_SID),
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(ColorMultiplierDSLayout_SID)
         }, {});
@@ -355,7 +358,7 @@ namespace Kmplete
         vulkanDevice.GetShaderManager().AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "triangle_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

@@ -49,10 +49,11 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    DrawIndirectFrameListener::DrawIndirectFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+    DrawIndirectFrameListener::DrawIndirectFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _dataPath(dataPath)
         , _indexCount(0)
     {
         _Initialize();
@@ -182,7 +183,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {});
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {}, {});
 
         const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.vert.spv"));
         const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.frag.spv"));
@@ -202,7 +204,7 @@ namespace Kmplete
         });
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "draw_indirect_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

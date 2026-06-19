@@ -46,10 +46,11 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    MultiplePipelinesFrameListener::MultiplePipelinesFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+    MultiplePipelinesFrameListener::MultiplePipelinesFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _dataPath(dataPath)
     {
         _Initialize();
     }
@@ -130,7 +131,8 @@ namespace Kmplete
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
 
-        vulkanDevice.GetPipelineManager().AddPipelineLayout(PipelineLayout_SID, {}, {});
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {}, {});
 
         const auto fixedColorVertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.vert.spv");
         const auto fixedColorFragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.frag.spv");
@@ -177,10 +179,10 @@ namespace Kmplete
         pipelineBufferedColorLineParams.SetLineWidth(8.0f);
         pipelineBufferedColorLineParams.SetLineStipple(true, 1, 1);
 
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, PipelineLayout_SID, pipelineFixedColorFillParams);
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, PipelineLayout_SID, pipelineFixedColorLineParams);
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, PipelineLayout_SID, pipelineBufferedColorFillParams);
-        vulkanDevice.GetPipelineManager().AddGraphicsPipeline(Pipeline_BufferedColor_Line_SID, PipelineLayout_SID, pipelineBufferedColorLineParams);
+        pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, PipelineLayout_SID, pipelineFixedColorFillParams, _dataPath / "multiple_pipelines_fixed_color_fill_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, PipelineLayout_SID, pipelineFixedColorLineParams, _dataPath / "multiple_pipelines_fixed_color_line_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, PipelineLayout_SID, pipelineBufferedColorFillParams, _dataPath / "multiple_pipelines_buffered_color_fill_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Line_SID, PipelineLayout_SID, pipelineBufferedColorLineParams, _dataPath / "multiple_pipelines_buffered_color_line_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

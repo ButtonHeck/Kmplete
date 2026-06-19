@@ -28,7 +28,7 @@ namespace Kmplete
             KMP_LOG_ERROR("failed to load TextureSandbox assets");
         }
 
-        _mainFrameListener.reset(new TextureFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), _inputManager.get()));
+        _mainFrameListener.reset(new TextureFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), _inputManager.get(), _dataPath));
     }
     //--------------------------------------------------------------------------
 
