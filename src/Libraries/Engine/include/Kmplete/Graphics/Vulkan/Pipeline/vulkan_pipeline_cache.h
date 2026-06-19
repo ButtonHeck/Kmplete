@@ -32,12 +32,18 @@ namespace Kmplete
                 UInt32 headerLength;
                 UInt32 headerVersion;
                 UInt32 vendorID;
+                UInt32 deviceID;
                 UInt8 pipelineCacheUUID[VK_UUID_SIZE];
             };
 
         private:
             void _Initialize();
             void _Finalize();
+
+            void _SerializeCache();
+            void _DestroyCache();
+
+            KMP_NODISCARD bool _LoadedCacheIsValid(const BinaryBuffer& cacheBuffer) const;
 
         private:
             VkDevice _device;
