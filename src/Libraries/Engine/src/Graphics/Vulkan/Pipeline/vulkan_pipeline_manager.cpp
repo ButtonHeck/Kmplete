@@ -94,6 +94,20 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool VulkanPipelineManager::AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters, const Filepath& cacheBinaryPath)
+        {
+            AddPipelineCache(pipelineSid, cacheBinaryPath);
+            return AddGraphicsPipeline(pipelineSid, layoutSid, parameters);
+        }
+        //--------------------------------------------------------------------------
+
+        bool VulkanPipelineManager::AddGraphicsPipeline(StringID pipelineSid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters, const Filepath& cacheBinaryPath)
+        {
+            AddPipelineCache(pipelineSid, cacheBinaryPath);
+            return AddGraphicsPipeline(pipelineSid, layout, parameters);
+        }
+        //--------------------------------------------------------------------------
+
         bool VulkanPipelineManager::AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters)
         {
             return AddGraphicsPipeline(pipelineSid, GetPipelineLayout(layoutSid), parameters);
