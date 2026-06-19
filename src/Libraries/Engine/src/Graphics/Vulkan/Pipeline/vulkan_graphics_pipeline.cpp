@@ -10,14 +10,14 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters)
+        VulkanGraphicsPipeline::VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, VkPipelineCache cache, const VulkanGraphicsPipelineParameters& parameters)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _device(device)
             , _sid(sid)
             , _pipeline(VK_NULL_HANDLE)
             , _parameters(parameters)
         {
-            _Initialize(layout);
+            _Initialize(layout, cache);
 
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -43,7 +43,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsPipeline::_Initialize(VkPipelineLayout layout)
+        void VulkanGraphicsPipeline::_Initialize(VkPipelineLayout layout, VkPipelineCache cache)
         {
             KMP_ASSERT(_device);
 
@@ -84,7 +84,7 @@ namespace Kmplete
             pipelineCI.pStages = _parameters._shadersStages.data();
             pipelineCI.pNext = &_parameters._renderingCreateInfo;
 
-            const auto result = vkCreateGraphicsPipelines(_device, VK_NULL_HANDLE, 1, &pipelineCI, nullptr, &_pipeline);
+            const auto result = vkCreateGraphicsPipelines(_device, cache, 1, &pipelineCI, nullptr, &_pipeline);
             VKUtils::CheckResult(result, "VulkanGraphicsPipeline: failed to build graphics pipeline");
             KMP_ASSERT(_pipeline);
         }

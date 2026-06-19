@@ -15,6 +15,7 @@ namespace Kmplete
               _device(device)
             , _context(context)
             , _pipelines()
+            , _pipelineCaches()
         {
             KMP_ASSERT(_device);
             KMP_PROFILE_CONSTRUCTOR_END()
@@ -25,6 +26,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
+            _pipelineCaches.clear();
             _pipelines.clear();
 
             for (const auto& [sid, layout] : _layouts)
@@ -79,6 +81,19 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        bool VulkanPipelineManager::AddPipelineCache(StringID pipelineSid, const Filepath& binaryPath) KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (_pipelineCaches.contains(pipelineSid))
+            {
+                KMP_LOG_WARN("pipeline cache with sid '{}' has already been added", pipelineSid);
+                return true;
+            }
+
+            const auto [iterator, hasEmplaced] = _pipelineCaches.emplace(pipelineSid, CreateUPtr<VulkanPipelineCache>(_device, _context, binaryPath));
+            return hasEmplaced;
+        }}
+        //--------------------------------------------------------------------------
+
         bool VulkanPipelineManager::AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters)
         {
             return AddGraphicsPipeline(pipelineSid, GetPipelineLayout(layoutSid), parameters);
@@ -101,7 +116,13 @@ namespace Kmplete
                 return false;
             }
 
-            const auto [iterator, hasEmplaced] = _pipelines.emplace(pipelineSid, CreateUPtr<VulkanGraphicsPipeline>(_device, pipelineSid, layout, parameters));
+            VkPipelineCache pipelineCache = VK_NULL_HANDLE;
+            if (_pipelineCaches.contains(pipelineSid))
+            {
+                pipelineCache = _pipelineCaches.at(pipelineSid)->GetVkPipelineCache();
+            }
+
+            const auto [iterator, hasEmplaced] = _pipelines.emplace(pipelineSid, CreateUPtr<VulkanGraphicsPipeline>(_device, pipelineSid, layout, pipelineCache, parameters));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------
