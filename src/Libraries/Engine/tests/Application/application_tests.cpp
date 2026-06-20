@@ -1,4 +1,5 @@
 #include "Kmplete/Application/application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Utils/function_utils.h"
 
@@ -62,7 +63,7 @@ TEST_CASE("Test application name", "[application]")
     const auto application = Kmplete::CreateUPtr<Kmplete::MetricsTestApplication>(Kmplete::ApplicationParameters("MetricsTestApplication", "", "Kmplete_unit_tests_settings.json"));
     REQUIRE(application);
     Kmplete::String appName = "";
-    REQUIRE_NOTHROW(appName = application->GetApplicationName());
+    REQUIRE_NOTHROW(appName = Kmplete::ApplicationContext::GetApplicationName());
     REQUIRE(!appName.empty());
 }
 //--------------------------------------------------------------------------

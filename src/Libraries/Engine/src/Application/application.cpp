@@ -1,4 +1,5 @@
 #include "Kmplete/Application/application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
@@ -11,29 +12,6 @@
 namespace Kmplete
 {
     static constexpr auto SettingsEntryName = "Application";
-
-
-    /*static*/ String Application::_applicationName;
-    /*static*/ Filepath Application::_applicationPath;
-    /*static*/ Filepath Application::_dataPath;
-
-    const String& Application::GetApplicationName() noexcept
-    {
-        return _applicationName;
-    }
-    //--------------------------------------------------------------------------
-
-    const Filepath& Application::GetApplicationPath() noexcept
-    {
-        return _applicationPath;
-    }
-    //--------------------------------------------------------------------------
-
-    const Filepath& Application::GetApplicationDataPath() noexcept
-    {
-        return _dataPath;
-    }
-    //--------------------------------------------------------------------------
 
 
     Application::Application(const ApplicationParameters& parameters)
@@ -57,22 +35,24 @@ namespace Kmplete
 
     void Application::_Initialize(const ApplicationParameters& parameters)
     {
-        _applicationName = parameters.applicationName;
-        _applicationPath = Filesystem::GetCurrentFilepath();
-        _dataPath = _applicationPath / "Data";
+        ApplicationContext::_Initialize(parameters);
+
+        const auto& applicationName = ApplicationContext::GetApplicationName();
+        const auto& applicationPath = ApplicationContext::GetApplicationPath();
+        const auto& applicationDataPath = ApplicationContext::GetApplicationDataPath();
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger boot", ProfileLevelAlways);
-            Log::Boot(_applicationName);
+            Log::Boot(applicationName);
         }
 #endif
 
-        if (!Filesystem::FilepathExists(_applicationPath))
+        if (!Filesystem::FilepathExists(applicationPath))
         {
             throw RuntimeError("Application filepath initialization failed");
         }
-        if (!Filesystem::FilepathExists(_dataPath))
+        if (!Filesystem::FilepathExists(applicationDataPath))
         {
             throw RuntimeError("Application data filepath initialization failed");
         }
@@ -83,14 +63,14 @@ namespace Kmplete
         _localizationManager = CreateUPtr<LocalizationManager>();
         KMP_ASSERT(_localizationManager);
 
-        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(_applicationPath / LocalesDirectory);
+        const auto defaultTranslationsPath = Filesystem::ToGenericU8String(applicationPath / LocalesDirectory);
         KMP_ASSERT(defaultTranslationsPath != LocalesDirectory);
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
         const auto engineDomainAdded = _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
         KMP_ASSERT(engineDomainAdded);
 
         _settingsManager = CreateUPtr<SettingsManager>(parameters.settingsFilepath.empty()
-            ? _applicationPath / parameters.defaultSettingsFileName
+            ? applicationPath / parameters.defaultSettingsFileName
             : parameters.settingsFilepath);
         KMP_ASSERT(_settingsManager);
 
@@ -99,7 +79,7 @@ namespace Kmplete
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger initialization", ProfileLevelAlways);
-            Log::Initialize(_applicationName);
+            Log::Initialize(applicationName);
         }
 #endif
 

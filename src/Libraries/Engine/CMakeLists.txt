@@ -26,11 +26,13 @@ AddTargetSourcesGroup(Kmplete "Core"
 )
 AddTargetSourcesGroup(Kmplete "Application"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/application_context.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/window_application.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/frame_listener.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/frame_listener_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Application/frame_listener_command.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/application.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Application/application_context.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/window_application.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/frame_listener.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Application/frame_listener_manager.cpp

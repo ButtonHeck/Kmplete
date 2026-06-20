@@ -1,4 +1,5 @@
 #include "Kmplete/Application/window_application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Internal/default_window_icon_data.h"
 #include "Kmplete/Window/window.h"
 #include "Kmplete/Core/assertion.h"
@@ -48,7 +49,7 @@ namespace Kmplete
     void WindowApplication::Run()
     {
         KMP_ASSERT(!_running && _windowBackend);
-        KMP_LOG_INFO_FN("'{}' main loop started...", GetApplicationName());
+        KMP_LOG_INFO_FN("'{}' main loop started...", ApplicationContext::GetApplicationName());
 
         _running = true;
 
@@ -62,7 +63,7 @@ namespace Kmplete
             }
         }
 
-        KMP_LOG_INFO_FN("'{}' main loop finished", GetApplicationName());
+        KMP_LOG_INFO_FN("'{}' main loop finished", ApplicationContext::GetApplicationName());
     }
     //--------------------------------------------------------------------------
 
@@ -121,7 +122,7 @@ namespace Kmplete
         _inputManager = CreateUPtr<Input::InputManager>();
         KMP_ASSERT(_inputManager);
 
-        _assetsManager = CreateUPtr<Assets::AssetsManager>(GetApplicationDataPath(), *_graphicsBackend.get());
+        _assetsManager = CreateUPtr<Assets::AssetsManager>(ApplicationContext::GetApplicationDataPath(), *_graphicsBackend.get());
         KMP_ASSERT(_assetsManager);
 
         _frameListenerManager = CreateUPtr<FrameListenerManager>();
