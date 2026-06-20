@@ -30,7 +30,7 @@ namespace Kmplete
 
     void EditorApplication::_Initialize()
     {
-        _mainWindow.SetTitle(_applicationName.c_str());
+        _mainWindow.SetTitle(GetApplicationName().c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
         if (!_assetsManager->LoadAssetFile("editor_assets.kmpdata"))

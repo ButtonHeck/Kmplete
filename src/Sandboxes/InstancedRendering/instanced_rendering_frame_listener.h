@@ -22,7 +22,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(InstancedRenderingFrameListener)
 
     public:
-        InstancedRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath);
+        InstancedRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend);
         ~InstancedRenderingFrameListener() = default;
 
         void Render() override;
@@ -35,7 +35,6 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
-        const Filepath& _dataPath;
 
         UInt32 _indexCount;
     };

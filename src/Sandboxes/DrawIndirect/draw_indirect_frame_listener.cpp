@@ -1,5 +1,6 @@
 #include "draw_indirect_frame_listener.h"
 
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
@@ -49,11 +50,10 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    DrawIndirectFrameListener::DrawIndirectFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath)
+    DrawIndirectFrameListener::DrawIndirectFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
-        , _dataPath(dataPath)
         , _indexCount(0)
     {
         _Initialize();
@@ -204,7 +204,7 @@ namespace Kmplete
         });
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "draw_indirect_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, Application::GetApplicationDataPath() / "draw_indirect_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

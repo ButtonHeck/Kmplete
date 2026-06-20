@@ -1,5 +1,6 @@
 #include "storage_buffers_frame_listener.h"
 
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Core/rng.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
@@ -62,12 +63,11 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    StorageBuffersFrameListener::StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager, const Filepath& dataPath)
+    StorageBuffersFrameListener::StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
-        , _dataPath(dataPath)
         , _indexCount(0)
         , _matricesShaderData()
         , _colorsShaderData(nullptr)
@@ -277,7 +277,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "storage_buffers_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, Application::GetApplicationDataPath() / "storage_buffers_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

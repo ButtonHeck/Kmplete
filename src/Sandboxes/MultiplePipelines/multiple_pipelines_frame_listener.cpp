@@ -1,5 +1,6 @@
 #include "multiple_pipelines_frame_listener.h"
 
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
@@ -46,11 +47,10 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    MultiplePipelinesFrameListener::MultiplePipelinesFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath)
+    MultiplePipelinesFrameListener::MultiplePipelinesFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
-        , _dataPath(dataPath)
     {
         _Initialize();
     }
@@ -179,10 +179,11 @@ namespace Kmplete
         pipelineBufferedColorLineParams.SetLineWidth(8.0f);
         pipelineBufferedColorLineParams.SetLineStipple(true, 1, 1);
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, PipelineLayout_SID, pipelineFixedColorFillParams, _dataPath / "multiple_pipelines_fixed_color_fill_pipeline_cache.bin");
-        pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, PipelineLayout_SID, pipelineFixedColorLineParams, _dataPath / "multiple_pipelines_fixed_color_line_pipeline_cache.bin");
-        pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, PipelineLayout_SID, pipelineBufferedColorFillParams, _dataPath / "multiple_pipelines_buffered_color_fill_pipeline_cache.bin");
-        pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Line_SID, PipelineLayout_SID, pipelineBufferedColorLineParams, _dataPath / "multiple_pipelines_buffered_color_line_pipeline_cache.bin");
+        const auto& applicationDataPath = Application::GetApplicationDataPath();
+        pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, PipelineLayout_SID, pipelineFixedColorFillParams, applicationDataPath / "multiple_pipelines_fixed_color_fill_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, PipelineLayout_SID, pipelineFixedColorLineParams, applicationDataPath / "multiple_pipelines_fixed_color_line_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, PipelineLayout_SID, pipelineBufferedColorFillParams, applicationDataPath / "multiple_pipelines_buffered_color_fill_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Line_SID, PipelineLayout_SID, pipelineBufferedColorLineParams, applicationDataPath / "multiple_pipelines_buffered_color_line_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

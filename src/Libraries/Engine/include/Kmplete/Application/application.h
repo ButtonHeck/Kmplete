@@ -35,10 +35,13 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(Application)
 
     public:
+        KMP_NODISCARD KMP_API static const String& GetApplicationName() noexcept;
+        KMP_NODISCARD KMP_API static const Filepath& GetApplicationPath() noexcept;
+        KMP_NODISCARD KMP_API static const Filepath& GetApplicationDataPath() noexcept;
+
+    public:
         KMP_API explicit Application(const ApplicationParameters& parameters);
         KMP_API virtual ~Application();
-
-        KMP_NODISCARD KMP_API const String& GetApplicationName() const noexcept;
 
         KMP_API virtual void Run() = 0;
 
@@ -51,10 +54,12 @@ namespace Kmplete
 
         void _FillDictionary();
 
+    private:
+        static String _applicationName;
+        static Filepath _applicationPath;
+        static Filepath _dataPath;
+
     protected:
-        const String _applicationName;
-        const Filepath _applicationPath;
-        const Filepath _dataPath;
         bool _running;
 
         UPtr<SystemMetricsManager> _systemMetricsManager;

@@ -22,7 +22,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(MultiplePipelinesFrameListener)
 
     public:
-        MultiplePipelinesFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, const Filepath& dataPath);
+        MultiplePipelinesFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend);
         ~MultiplePipelinesFrameListener() = default;
 
         void Render() override;
@@ -35,7 +35,6 @@ namespace Kmplete
     private:
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
-        const Filepath& _dataPath;
     };
     //--------------------------------------------------------------------------
 }

@@ -29,7 +29,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(UniformBuffersFrameListener)
 
     public:
-        UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager, const Filepath& dataPath);
+        UniformBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
         ~UniformBuffersFrameListener() = default;
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
@@ -69,7 +69,6 @@ namespace Kmplete
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
         Input::InputManager* _inputManager;
-        const Filepath& _dataPath;
 
         CommonShaderData _commonShaderData;
         UPtr<InstanceShaderData> _instanceShaderData;

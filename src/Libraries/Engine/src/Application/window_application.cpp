@@ -48,7 +48,7 @@ namespace Kmplete
     void WindowApplication::Run()
     {
         KMP_ASSERT(!_running && _windowBackend);
-        KMP_LOG_INFO_FN("'{}' main loop started...", _applicationName);
+        KMP_LOG_INFO_FN("'{}' main loop started...", GetApplicationName());
 
         _running = true;
 
@@ -62,7 +62,7 @@ namespace Kmplete
             }
         }
 
-        KMP_LOG_INFO_FN("'{}' main loop finished", _applicationName);
+        KMP_LOG_INFO_FN("'{}' main loop finished", GetApplicationName());
     }
     //--------------------------------------------------------------------------
 
@@ -121,7 +121,7 @@ namespace Kmplete
         _inputManager = CreateUPtr<Input::InputManager>();
         KMP_ASSERT(_inputManager);
 
-        _assetsManager = CreateUPtr<Assets::AssetsManager>(_dataPath, *_graphicsBackend.get());
+        _assetsManager = CreateUPtr<Assets::AssetsManager>(GetApplicationDataPath(), *_graphicsBackend.get());
         KMP_ASSERT(_assetsManager);
 
         _frameListenerManager = CreateUPtr<FrameListenerManager>();

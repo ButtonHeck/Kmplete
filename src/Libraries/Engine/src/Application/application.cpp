@@ -13,12 +13,32 @@ namespace Kmplete
     static constexpr auto SettingsEntryName = "Application";
 
 
+    /*static*/ String Application::_applicationName;
+    /*static*/ Filepath Application::_applicationPath;
+    /*static*/ Filepath Application::_dataPath;
+
+    const String& Application::GetApplicationName() noexcept
+    {
+        return _applicationName;
+    }
+    //--------------------------------------------------------------------------
+
+    const Filepath& Application::GetApplicationPath() noexcept
+    {
+        return _applicationPath;
+    }
+    //--------------------------------------------------------------------------
+
+    const Filepath& Application::GetApplicationDataPath() noexcept
+    {
+        return _dataPath;
+    }
+    //--------------------------------------------------------------------------
+
+
     Application::Application(const ApplicationParameters& parameters)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
-          _applicationName(parameters.applicationName)
-        , _applicationPath(Filesystem::GetCurrentFilepath())
-        , _dataPath(_applicationPath / "Data")
-        , _running(false)
+          _running(false)
         , _systemMetricsManager(nullptr)
         , _localizationManager(nullptr)
         , _settingsManager(nullptr)
@@ -35,14 +55,12 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    const String& Application::GetApplicationName() const noexcept
-    {
-        return _applicationName;
-    }
-    //--------------------------------------------------------------------------
-
     void Application::_Initialize(const ApplicationParameters& parameters)
     {
+        _applicationName = parameters.applicationName;
+        _applicationPath = Filesystem::GetCurrentFilepath();
+        _dataPath = _applicationPath / "Data";
+
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger boot", ProfileLevelAlways);

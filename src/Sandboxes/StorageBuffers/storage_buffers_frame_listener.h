@@ -33,7 +33,7 @@ namespace Kmplete
         static constexpr auto ColorsInstancesCount = 100;
 
     public:
-        StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager, const Filepath& dataPath);
+        StorageBuffersFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Input::InputManager* inputManager);
         ~StorageBuffersFrameListener() = default;
 
         void Update(float frameTimestep, bool applicationIsIconified) override;
@@ -75,7 +75,6 @@ namespace Kmplete
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
         Input::InputManager* _inputManager;
-        const Filepath& _dataPath;
 
         UInt32 _indexCount;
         MatricesShaderData _matricesShaderData;

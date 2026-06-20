@@ -1,5 +1,6 @@
 #include "texture_frame_listener.h"
 
+#include "Kmplete/Application/application.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
@@ -73,12 +74,11 @@ namespace Kmplete
 
 
     TextureFrameListener::TextureFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
-                                               Assets::AssetsManager& assetsManager, Input::InputManager* inputManager, const Filepath& dataPath)
+                                               Assets::AssetsManager& assetsManager, Input::InputManager* inputManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
-        , _dataPath(dataPath)
         , _indexCount(0)
         , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
@@ -326,7 +326,7 @@ namespace Kmplete
         vulkanDevice.GetShaderManager().AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
         vulkanDevice.GetShaderManager().AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, _dataPath / "texture_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, Application::GetApplicationDataPath() / "texture_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 
