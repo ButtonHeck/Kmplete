@@ -44,6 +44,22 @@ void TerminationHandler()
 //--------------------------------------------------------------------------
 
 
+#if defined (KMP_PLATFORM_WINDOWS)
+#include <Windows.h>
+//! Wrapper function for handling uncaught exceptions
+LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS exceptionInfo)
+{
+#if defined(KMP_PROFILE)
+    Kmplete::Profiler::Get().EndSession();
+#endif
+
+    KMP_LOG_CRITICAL_FN("UnhandledExceptionHandler: uncaught exception has occured, ExceptionCode - {}", exceptionInfo->ExceptionRecord->ExceptionCode);
+    std::exit(3);
+}
+//--------------------------------------------------------------------------
+#endif
+
+
 int Main(const Kmplete::ProgramOptions& programOptions);
 
 #if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN) 
@@ -51,6 +67,7 @@ int Main(const Kmplete::ProgramOptions& programOptions);
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 {
     std::set_terminate(TerminationHandler);
+    AddVectoredExceptionHandler(1, UnhandledExceptionHandler);
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(lpCmdLine);
@@ -63,6 +80,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 int main(int argc, char** argv)
 {
     std::set_terminate(TerminationHandler);
+#if defined (KMP_PLATFORM_WINDOWS)
+    AddVectoredExceptionHandler(1, UnhandledExceptionHandler);
+#endif
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(argc, argv);
