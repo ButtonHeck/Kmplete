@@ -13,6 +13,8 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
+#include <cpptrace/cpptrace.hpp>
+
 
 //! Wrapper function that tries to flush all the profiler data
 //! during program termination and rethrows an exception (if any)
@@ -53,8 +55,10 @@ LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS exceptionInfo)
     Kmplete::Profiler::Get().EndSession();
 #endif
 
-    KMP_LOG_CRITICAL_FN("UnhandledExceptionHandler: uncaught exception has occured, ExceptionCode - {}", exceptionInfo->ExceptionRecord->ExceptionCode);
-    std::exit(3);
+    KMP_LOG_ERROR_FN("UnhandledExceptionHandler: uncaught exception has occured");
+    cpptrace::generate_trace().print();
+
+    return EXCEPTION_CONTINUE_SEARCH;
 }
 //--------------------------------------------------------------------------
 #endif
@@ -67,7 +71,7 @@ int Main(const Kmplete::ProgramOptions& programOptions);
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 {
     std::set_terminate(TerminationHandler);
-    AddVectoredExceptionHandler(1, UnhandledExceptionHandler);
+    SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(lpCmdLine);
@@ -81,7 +85,7 @@ int main(int argc, char** argv)
 {
     std::set_terminate(TerminationHandler);
 #if defined (KMP_PLATFORM_WINDOWS)
-    AddVectoredExceptionHandler(1, UnhandledExceptionHandler);
+    SetUnhandledExceptionFilter(UnhandledExceptionHandler);
 #endif
 
     Kmplete::ProgramOptions programOptions;

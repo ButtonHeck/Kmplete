@@ -249,11 +249,13 @@ target_link_libraries(Kmplete
     PUBLIC AssetsInterfaceLib
     PUBLIC $<IF:$<CONFIG:Production>,ProfilerInterfaceLib,ProfilerLib>
     PUBLIC TimeLib
+
     PUBLIC glfw
+    PUBLIC cpptrace-lib
+    PUBLIC Vulkan::Vulkan
     
     PRIVATE stb_image
     PRIVATE freetype
-    PUBLIC Vulkan::Vulkan
 )
 
 if(UNIX)

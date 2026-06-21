@@ -203,6 +203,29 @@ if(NOT GSL_POPULATED)
 endif()
 
 
+# cpptrace
+message("---- Kmplete dependencies: cpptrace")
+FetchContent_Declare(cpptrace
+    GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
+    GIT_TAG v1.0.4
+)
+FetchContent_GetProperties(cpptrace)
+
+if(NOT cpptrace_POPULATED)
+    FetchContent_Populate(cpptrace)
+    
+    set(CPPTRACE_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+    
+    add_subdirectory(${cpptrace_SOURCE_DIR} ${cpptrace_BINARY_DIR})
+    
+    set_target_properties(cpptrace-lib PROPERTIES FOLDER Dependencies/cpptrace)
+    
+    target_compile_options(cpptrace-lib PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
+endif()
+
+
 # FreeType
 message("---- Kmplete dependencies: FreeType")
 FetchContent_Declare(freetype
