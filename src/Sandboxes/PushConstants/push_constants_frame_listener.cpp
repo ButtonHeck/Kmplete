@@ -1,6 +1,6 @@
 #include "push_constants_frame_listener.h"
 
-#include "Kmplete/Application/application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
@@ -116,7 +116,7 @@ namespace Kmplete
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, Application::GetApplicationDataPath() / "push_constants_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "push_constants_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

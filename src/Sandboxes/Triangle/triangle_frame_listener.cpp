@@ -1,6 +1,6 @@
 #include "triangle_frame_listener.h"
 
-#include "Kmplete/Application/application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
@@ -358,7 +358,7 @@ namespace Kmplete
         vulkanDevice.GetShaderManager().AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, Application::GetApplicationDataPath() / "triangle_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "triangle_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

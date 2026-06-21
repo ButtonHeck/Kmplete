@@ -1,6 +1,6 @@
 #include "instanced_rendering_frame_listener.h"
 
-#include "Kmplete/Application/application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
@@ -186,7 +186,7 @@ namespace Kmplete
         pipelineParams.AddVertexInputBindingsDivisors({ { InstanceColorBufferBinding, 2 } }); // only color divisor set to 2, position divisor default 1 is ok
         pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
 
-        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, Application::GetApplicationDataPath() / "instanced_rendering_pipeline_cache.bin");
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "instanced_rendering_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 

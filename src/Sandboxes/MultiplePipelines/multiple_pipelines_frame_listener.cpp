@@ -1,6 +1,6 @@
 #include "multiple_pipelines_frame_listener.h"
 
-#include "Kmplete/Application/application.h"
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
@@ -179,7 +179,7 @@ namespace Kmplete
         pipelineBufferedColorLineParams.SetLineWidth(8.0f);
         pipelineBufferedColorLineParams.SetLineStipple(true, 1, 1);
 
-        const auto& applicationDataPath = Application::GetApplicationDataPath();
+        const auto& applicationDataPath = ApplicationContext::GetApplicationDataPath();
         pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Fill_SID, PipelineLayout_SID, pipelineFixedColorFillParams, applicationDataPath / "multiple_pipelines_fixed_color_fill_pipeline_cache.bin");
         pipelineManager.AddGraphicsPipeline(Pipeline_FixedColor_Line_SID, PipelineLayout_SID, pipelineFixedColorLineParams, applicationDataPath / "multiple_pipelines_fixed_color_line_pipeline_cache.bin");
         pipelineManager.AddGraphicsPipeline(Pipeline_BufferedColor_Fill_SID, PipelineLayout_SID, pipelineBufferedColorFillParams, applicationDataPath / "multiple_pipelines_buffered_color_fill_pipeline_cache.bin");

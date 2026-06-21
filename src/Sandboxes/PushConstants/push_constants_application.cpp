@@ -1,5 +1,7 @@
 #include "push_constants_application.h"
 
+#include "Kmplete/Application/application_context.h"
+
 
 namespace Kmplete
 {
@@ -20,7 +22,7 @@ namespace Kmplete
 
     void PushConstantsApplication::_Initialize()
     {
-        _mainWindow.SetTitle(GetApplicationName().c_str());
+        _mainWindow.SetTitle(ApplicationContext::GetApplicationName().c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
         _mainFrameListener.reset(new PushConstantsFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get()));

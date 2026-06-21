@@ -1,5 +1,6 @@
 #include "Application/editor_application.h"
 
+#include "Kmplete/Application/application_context.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -30,7 +31,7 @@ namespace Kmplete
 
     void EditorApplication::_Initialize()
     {
-        _mainWindow.SetTitle(GetApplicationName().c_str());
+        _mainWindow.SetTitle(ApplicationContext::GetApplicationName().c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
         if (!_assetsManager->LoadAssetFile("editor_assets.kmpdata"))

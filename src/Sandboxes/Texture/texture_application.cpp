@@ -1,5 +1,7 @@
 #include "texture_application.h"
 
+#include "Kmplete/Application/application_context.h"
+
 
 namespace Kmplete
 {
@@ -20,7 +22,7 @@ namespace Kmplete
 
     void TextureApplication::_Initialize()
     {
-        _mainWindow.SetTitle(GetApplicationName().c_str());
+        _mainWindow.SetTitle(ApplicationContext::GetApplicationName().c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
         if (!_assetsManager->LoadAssetFile("TextureSandbox_assets.kmpdata"))
