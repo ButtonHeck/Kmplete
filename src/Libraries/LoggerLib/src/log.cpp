@@ -20,7 +20,7 @@ namespace Kmplete
     static std::stringstream stringStream;
 
 
-    Ptr<spdlog::logger> Log::_logger;
+    /*static*/ Ptr<spdlog::logger> Log::_logger;
 
 
     namespace
