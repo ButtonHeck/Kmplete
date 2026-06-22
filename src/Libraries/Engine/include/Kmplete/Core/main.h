@@ -9,11 +9,10 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/memory_checker.h"
+#include "Kmplete/Core/stacktrace.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-
-#include <cpptrace/cpptrace.hpp>
 
 
 //! Wrapper function that tries to flush all the profiler data
@@ -49,14 +48,14 @@ void TerminationHandler()
 #if defined (KMP_PLATFORM_WINDOWS)
 #include <Windows.h>
 //! Wrapper function for handling uncaught exceptions
-LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS exceptionInfo)
+LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS)
 {
 #if defined(KMP_PROFILE)
     Kmplete::Profiler::Get().EndSession();
 #endif
 
     KMP_LOG_ERROR_FN("UnhandledExceptionHandler: uncaught exception has occured");
-    cpptrace::generate_trace().print();
+    Kmplete::DumpStacktrace();
 
     return EXCEPTION_CONTINUE_SEARCH;
 }
