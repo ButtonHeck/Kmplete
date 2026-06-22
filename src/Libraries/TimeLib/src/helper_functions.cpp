@@ -10,7 +10,7 @@ namespace Kmplete
 {
     namespace Time
     {
-        String GetCurrentTimeString(const char* format /*= "%F %T"*/)
+        String GetCurrentTimeString(const char* format /*= "%Y-%m-%d %T"*/)
         {
             if (format == nullptr)
             {
