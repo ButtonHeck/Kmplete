@@ -40,6 +40,7 @@ namespace Kmplete
         const auto& applicationName = ApplicationContext::GetApplicationName();
         const auto& applicationPath = ApplicationContext::GetApplicationPath();
         const auto& applicationDataPath = ApplicationContext::GetApplicationDataPath();
+        const auto& applicationLogPath = ApplicationContext::GetApplicationLogPath();
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
@@ -79,7 +80,7 @@ namespace Kmplete
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger initialization", ProfileLevelAlways);
-            Log::Initialize(applicationName);
+            Log::Initialize(applicationName, applicationLogPath);
         }
 #endif
 

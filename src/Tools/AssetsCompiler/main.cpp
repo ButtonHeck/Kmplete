@@ -129,7 +129,7 @@ namespace Kmplete
                 logSettings.level = 0;
                 logSettings.levelFlush = 0;
                 Log::SetSettings(logSettings);
-                Log::Initialize("Kmplete Assets compiler");
+                Log::Initialize("Kmplete Assets compiler", Filesystem::GetCurrentFilepath() / "Logs");
             }
 #endif
 

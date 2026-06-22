@@ -141,7 +141,7 @@ namespace Kmplete
                 logSettings.level = 0;
                 logSettings.levelFlush = 0;
                 Log::SetSettings(logSettings);
-                Log::Initialize("Kmplete Translator");
+                Log::Initialize("Kmplete Translator", Filesystem::GetCurrentFilepath() / "Logs");
             }
 #endif
 

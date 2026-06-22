@@ -8,6 +8,7 @@ namespace Kmplete
     /*static*/ String ApplicationContext::_applicationName;
     /*static*/ Filepath ApplicationContext::_applicationPath;
     /*static*/ Filepath ApplicationContext::_dataPath;
+    /*static*/ Filepath ApplicationContext::_logPath;
 
 
     const String& ApplicationContext::GetApplicationName() noexcept
@@ -28,11 +29,18 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    const Filepath& ApplicationContext::GetApplicationLogPath() noexcept
+    {
+        return _logPath;
+    }
+    //--------------------------------------------------------------------------
+
     void ApplicationContext::_Initialize(const ApplicationParameters& parameters)
     {
         _applicationName = parameters.applicationName;
         _applicationPath = Filesystem::GetCurrentFilepath();
         _dataPath = _applicationPath / "Data";
+        _logPath = _applicationPath / "Logs";
     }
     //--------------------------------------------------------------------------
 }

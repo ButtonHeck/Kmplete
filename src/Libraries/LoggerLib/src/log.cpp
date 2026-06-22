@@ -75,7 +75,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void Log::Initialize(const String& programName)
+    void Log::Initialize(const String& programName, const Filepath& logsDirectory)
     {
         spdlog::drop_all();
         spdlog::init_thread_pool(1024, 1);
@@ -93,7 +93,7 @@ namespace Kmplete
 
             if (logSettings.outputFile)
             {
-                const auto fileSink = CreatePtr<spdlog::sinks::basic_file_sink_mt>(logSettings.filename, logSettings.truncate);
+                const auto fileSink = CreatePtr<spdlog::sinks::basic_file_sink_mt>((logsDirectory / logSettings.filename).generic_u8string(), logSettings.truncate);
                 fileSink->set_pattern("%T.%e %L \"%n\" | %v");
                 logSinks.push_back(fileSink);
             }
@@ -141,7 +141,7 @@ namespace Kmplete
 
         if (logSettings.outputFile)
         {
-            Info("logging to a file '{}'", logSettings.filename);
+            Info("logging to a file '{}'", logsDirectory / logSettings.filename);
         }
     }
     //--------------------------------------------------------------------------

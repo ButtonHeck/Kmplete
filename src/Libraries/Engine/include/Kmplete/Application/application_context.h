@@ -18,6 +18,7 @@ namespace Kmplete
         KMP_NODISCARD KMP_API static const String& GetApplicationName() noexcept;
         KMP_NODISCARD KMP_API static const Filepath& GetApplicationPath() noexcept;
         KMP_NODISCARD KMP_API static const Filepath& GetApplicationDataPath() noexcept;
+        KMP_NODISCARD KMP_API static const Filepath& GetApplicationLogPath() noexcept;
 
     private:
         friend class Application;
@@ -27,6 +28,7 @@ namespace Kmplete
         static String _applicationName;
         static Filepath _applicationPath;
         static Filepath _dataPath;
+        static Filepath _logPath;
     };
     //--------------------------------------------------------------------------
 }
