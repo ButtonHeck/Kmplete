@@ -31,6 +31,9 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API String ReadFileAsText(const Filepath& filepath);
         KMP_NODISCARD KMP_API BinaryBuffer ReadFileAsBinary(const Filepath& filepath);
+
+        KMP_NODISCARD KMP_API bool WriteFile(const Filepath& filepath, const String& string, bool append);
+        KMP_NODISCARD KMP_API bool WriteFile(const Filepath& filepath, const BinaryBuffer& binaryBuffer, bool append);
     };
     //--------------------------------------------------------------------------
 }

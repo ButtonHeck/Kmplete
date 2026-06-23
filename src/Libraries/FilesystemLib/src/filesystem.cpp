@@ -249,6 +249,70 @@ namespace Kmplete
             return BinaryBuffer((std::istreambuf_iterator<char>(fileStream)), (std::istreambuf_iterator<char>()));
         }}
         //--------------------------------------------------------------------------
+
+        bool WriteFile(const Filepath& filepath, const String& string, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (string.empty())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot write empty string to a file '{}'", filepath);
+                return false;
+            }
+
+            if (!FilepathExists(filepath))
+            {
+                const auto fileCreated = CreateFile(filepath);
+                if (!fileCreated)
+                {
+                    KMP_LOG_ERROR_FN("Filesystem: cannot write string to a file '{}' - file creation failed", filepath);
+                    return false;
+                }
+            }
+
+            std::ofstream fileStream(filepath, append ? std::ios::app : std::ios::trunc);
+            if (!fileStream.is_open())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot write string to a file '{}' - failed to open file", filepath);
+                return false;
+            }
+
+            fileStream << string;
+            fileStream.close();
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        bool WriteFile(const Filepath& filepath, const BinaryBuffer& binaryBuffer, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (binaryBuffer.empty())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot write empty binary buffer to a file '{}'", filepath);
+                return false;
+            }
+
+            if (!FilepathExists(filepath))
+            {
+                const auto fileCreated = CreateFile(filepath);
+                if (!fileCreated)
+                {
+                    KMP_LOG_ERROR_FN("Filesystem: cannot write binary buffer to a file '{}' - file creation failed", filepath);
+                    return false;
+                }
+            }
+
+            std::ofstream fileStream(filepath, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
+            if (!fileStream.is_open())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot write binary buffer to a file '{}' - failed to open file", filepath);
+                return false;
+            }
+
+            fileStream.write(reinterpret_cast<const char*>(binaryBuffer.data()), binaryBuffer.size());
+            fileStream.close();
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
     }
 }
 

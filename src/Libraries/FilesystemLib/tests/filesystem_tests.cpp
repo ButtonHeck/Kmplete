@@ -354,3 +354,137 @@ TEST_CASE("Filesystem read binary files functions", "[core][filesystem]")
     }
 }
 //--------------------------------------------------------------------------
+
+
+TEST_CASE("Filesystem write string function", "[core][filesystem]")
+{
+    SECTION("WriteFile empty string")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_empty.txt";
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::String emptyString;
+        REQUIRE_FALSE(Kmplete::Filesystem::WriteFile(path, emptyString, true));
+    }
+
+    SECTION("WriteFile valid string and path")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_new.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(path));
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::String string = "string";
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, string, true));
+    }
+
+    SECTION("WriteFile invalid file valid string")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "invalid::path.txt";
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::String string = "string";
+        REQUIRE_FALSE(Kmplete::Filesystem::WriteFile(path, string, true));
+    }
+    SECTION("WriteFile append string")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_new.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(path));
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::String string = "string";
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, string, true));
+
+        Kmplete::String contentToRead;
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsText(path));
+        REQUIRE(contentToRead == string);
+
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, string, true));
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsText(path));
+        REQUIRE(contentToRead == "stringstring");
+    }
+    SECTION("WriteFile truncate string")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_new.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(path));
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::String string = "string";
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, string, false));
+
+        Kmplete::String contentToRead;
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsText(path));
+        REQUIRE(contentToRead == string);
+
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, string, false));
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsText(path));
+        REQUIRE(contentToRead == string);
+    }
+}
+//--------------------------------------------------------------------------
+
+
+TEST_CASE("Filesystem write binary buffer function", "[core][filesystem]")
+{
+    SECTION("WriteFile empty binary buffer")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_empty.txt";
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::BinaryBuffer emptyBuffer;
+        REQUIRE_FALSE(Kmplete::Filesystem::WriteFile(path, emptyBuffer, true));
+    }
+
+    SECTION("WriteFile valid buffer and path")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_new.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(path));
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::BinaryBuffer binaryBuffer = { 10, 11, 12, 13 };
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, binaryBuffer, true));
+    }
+
+    SECTION("WriteFile invalid file valid buffer")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "invalid::path.txt";
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::BinaryBuffer binaryBuffer = { 10, 11, 12, 13 };
+        REQUIRE_FALSE(Kmplete::Filesystem::WriteFile(path, binaryBuffer, true));
+    }
+    SECTION("WriteFile append binary buffer")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_new.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(path));
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::BinaryBuffer binaryBuffer = { 10, 11, 12, 13 };
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, binaryBuffer, true));
+
+        Kmplete::Vector<Kmplete::UByte> contentToRead;
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsBinary(path));
+        REQUIRE(contentToRead.size() == 4ULL);
+
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, binaryBuffer, true));
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsBinary(path));
+        REQUIRE(contentToRead.size() == 8ULL);
+    }
+    SECTION("WriteFile truncate binary buffer")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath() / "WriteFile_new.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(path));
+        REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(path));
+
+        Kmplete::BinaryBuffer binaryBuffer = { 10, 11, 12, 13 };
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, binaryBuffer, false));
+
+        Kmplete::Vector<Kmplete::UByte> contentToRead;
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsBinary(path));
+        REQUIRE(contentToRead.size() == 4ULL);
+
+        REQUIRE(Kmplete::Filesystem::WriteFile(path, binaryBuffer, false));
+        REQUIRE_NOTHROW(contentToRead = Kmplete::Filesystem::ReadFileAsBinary(path));
+        REQUIRE(contentToRead.size() == 4ULL);
+    }
+}
+//--------------------------------------------------------------------------
