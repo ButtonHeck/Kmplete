@@ -202,7 +202,8 @@ namespace Kmplete
                 VK_EXT_VERTEX_INPUT_DYNAMIC_STATE_EXTENSION_NAME,
                 VK_EXT_SHADER_OBJECT_EXTENSION_NAME,
                 VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME,
-                VK_EXT_GRAPHICS_PIPELINE_LIBRARY_EXTENSION_NAME
+                VK_EXT_GRAPHICS_PIPELINE_LIBRARY_EXTENSION_NAME,
+                VK_EXT_MEMORY_BUDGET_EXTENSION_NAME
             };
 
             return deviceExtensions;
