@@ -517,16 +517,12 @@ namespace Kmplete
             return false;
         }
 
-        std::ofstream outputStream(_filepath, std::ios::out | std::ios::trunc);
-        if (!outputStream.is_open() || !outputStream.good())
+        if (!Filesystem::WriteFile(_filepath, buffer.GetString(), "append"_false))
         {
-            KMP_LOG_WARN("failed to open file stream for saving in '{}'", _filepath);
+            KMP_LOG_WARN("failed to write document in '{}'", _filepath);
             _error = true;
             return false;
         }
-
-        outputStream << buffer.GetString();
-        outputStream.close();
 
         KMP_LOG_INFO("document written successfully in '{}'", _filepath);
         _error = false;

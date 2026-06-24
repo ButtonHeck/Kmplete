@@ -7,8 +7,6 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
-#include <fstream>
-
 
 namespace Kmplete
 {
@@ -100,14 +98,10 @@ namespace Kmplete
             BinaryBuffer cacheData(cacheSize);
             vkGetPipelineCacheData(_device, _cache, &cacheSize, cacheData.data());
 
-            std::ofstream outputFile(_binaryPath, std::ios::binary);
-            if (!outputFile.is_open())
+            if (!Filesystem::WriteFile(_binaryPath, cacheData, "append"_false))
             {
-                KMP_LOG_WARN("cache serialization failed - cannot open file '{}'", _binaryPath);
-                return;
+                KMP_LOG_WARN("cache serialization to '{}' failed", _binaryPath);
             }
-
-            outputFile.write(reinterpret_cast<const char*>(cacheData.data()), cacheSize);
         }}
         //--------------------------------------------------------------------------
 

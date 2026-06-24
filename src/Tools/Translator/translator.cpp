@@ -4,11 +4,11 @@
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Utils/vector_utils.h"
+#include "Kmplete/Base/named_bool.h"
 
 #include <boost/process.hpp>
 
 #include <algorithm>
-#include <fstream>
 #include <streambuf>
 #include <numeric>
 
@@ -105,9 +105,11 @@ namespace Kmplete
 
                 potFileContent = Utils::RegexReplace(potFileContent, "CHARSET", "UTF-8");
 
-                std::ofstream potFileOutStream(poTemplateFile, std::ios::trunc);
-                potFileOutStream << potFileContent;
-                potFileOutStream.close();
+                if (!Filesystem::WriteFile(poTemplateFile, potFileContent, "append"_false))
+                {
+                    KMP_LOG_ERROR("Update: failed to write .pot file '{}'", poTemplateFile);
+                    return ReturnCode::ProcessorCreatePotFailed;
+                }
 
                 // 4. invoke msginit if necessary for creation of .po file
                 const auto poFile = Utils::RegexReplace(poTemplateFile, ".pot", ".po");
