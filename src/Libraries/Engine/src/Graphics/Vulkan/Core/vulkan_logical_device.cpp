@@ -58,6 +58,7 @@ namespace Kmplete
             , _textureAttachmentManager(nullptr)
             , _shaderManager(nullptr)
             , _renderer(nullptr)
+            , _metricsManager(nullptr)
         {
             _CreateLogicalDeviceObject();
             _CreateDeviceQueues();
@@ -71,6 +72,7 @@ namespace Kmplete
             _CreateTextureAttachmentManager();
             _CreateShaderManager();
             _CreateRenderer();
+            _CreateMetricsManager();
 
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -80,6 +82,7 @@ namespace Kmplete
         {
             WaitIdle();
 
+            _DeleteMetricsManager();
             _DeleteRenderer();
             _DeleteShaderManager();
             _DeleteTextureAttachmentManager();
@@ -341,6 +344,22 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
+        const VulkanMetricsManager& VulkanLogicalDevice::GetMetricsManager() const noexcept
+        {
+            KMP_ASSERT(_metricsManager);
+
+            return *_metricsManager.get();
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanMetricsManager& VulkanLogicalDevice::GetMetricsManager() noexcept
+        {
+            KMP_ASSERT(_metricsManager);
+
+            return *_metricsManager.get();
+        }
+        //--------------------------------------------------------------------------
+
         void VulkanLogicalDevice::_CreateLogicalDeviceObject() KMP_PROFILING(ProfileLevelImportant)
         {
             _graphicsParameters.reset(new VulkanGraphicsParameters());
@@ -599,6 +618,23 @@ namespace Kmplete
 
             _renderer.reset();
         }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_CreateMetricsManager()
+        {
+            KMP_ASSERT(_physicalDevice);
+
+            _metricsManager.reset(new VulkanMetricsManager(_physicalDevice));
+            KMP_ASSERT(_metricsManager);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_DeleteMetricsManager()
+        {
+            KMP_ASSERT(_metricsManager);
+
+            _metricsManager.reset();
+        }
         //--------------------------------------------------------------------------
 
         Vector<VkDeviceQueueCreateInfo> VulkanLogicalDevice::_CreateQueueCreateInfos() const KMP_PROFILING(ProfileLevelImportant)

@@ -9,6 +9,7 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_renderer.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_samplers_storage.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_descriptor_set_manager.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_metrics_manager.h"
 #include "Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer_manager.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
@@ -83,6 +84,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VulkanShaderManager& GetShaderManager() noexcept;
             KMP_NODISCARD KMP_API const VulkanBufferManager& GetBufferManager() const noexcept;
             KMP_NODISCARD KMP_API VulkanBufferManager& GetBufferManager() noexcept;
+            KMP_NODISCARD KMP_API const VulkanMetricsManager& GetMetricsManager() const noexcept;
+            KMP_NODISCARD KMP_API VulkanMetricsManager& GetMetricsManager() noexcept;
 
             KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
 
@@ -123,6 +126,9 @@ namespace Kmplete
             void _CreateRenderer();
             void _DeleteRenderer();
 
+            void _CreateMetricsManager();
+            void _DeleteMetricsManager();
+
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
             void _RecreateSwapchain();
@@ -156,6 +162,7 @@ namespace Kmplete
             UPtr<VulkanTextureAttachmentManager> _textureAttachmentManager;
             UPtr<VulkanShaderManager> _shaderManager;
             UPtr<VulkanRenderer> _renderer;
+            UPtr<VulkanMetricsManager> _metricsManager;
         };
         //--------------------------------------------------------------------------
     }

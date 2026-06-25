@@ -28,6 +28,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPhysicalDeviceShaderObjectFeaturesEXT InitVkPhysicalDeviceShaderObjectFeaturesEXT();
             KMP_NODISCARD KMP_API VkPhysicalDeviceLineRasterizationFeaturesEXT InitVkPhysicalDeviceLineRasterizationFeaturesEXT();
             KMP_NODISCARD KMP_API VkPhysicalDeviceVertexAttributeDivisorFeatures InitVkPhysicalDeviceVertexAttributeDivisorFeatures();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceMemoryProperties2 InitVkPhysicalDeviceMemoryProperties2();
+            KMP_NODISCARD KMP_API VkPhysicalDeviceMemoryBudgetPropertiesEXT InitVkPhysicalDeviceMemoryBudgetPropertiesEXT();
 
             KMP_NODISCARD KMP_API VkDeviceCreateInfo InitVkDeviceCreateInfo();
             KMP_NODISCARD KMP_API VkSemaphoreCreateInfo InitVkSemaphoreCreateInfo();

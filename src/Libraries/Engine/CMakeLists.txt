@@ -108,6 +108,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Core"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Core/vulkan_renderer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Core/vulkan_samplers_storage.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Core/vulkan_swapchain.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Core/vulkan_metrics_manager.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_graphics_surface.cpp
@@ -120,6 +121,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Core"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_renderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_samplers_storage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_swapchain.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Core/vulkan_metrics_manager.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Buffer"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Buffer/vulkan_buffer.h

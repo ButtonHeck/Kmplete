@@ -142,6 +142,22 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkPhysicalDeviceMemoryProperties2 InitVkPhysicalDeviceMemoryProperties2()
+            {
+                return VkPhysicalDeviceMemoryProperties2{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_PROPERTIES_2
+                };
+            }
+            //--------------------------------------------------------------------------
+
+            VkPhysicalDeviceMemoryBudgetPropertiesEXT InitVkPhysicalDeviceMemoryBudgetPropertiesEXT()
+            {
+                return VkPhysicalDeviceMemoryBudgetPropertiesEXT{
+                    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MEMORY_BUDGET_PROPERTIES_EXT
+                };
+            }
+            //--------------------------------------------------------------------------
+
 
             VkDeviceCreateInfo InitVkDeviceCreateInfo()
             {
