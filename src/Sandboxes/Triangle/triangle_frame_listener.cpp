@@ -88,7 +88,6 @@ namespace Kmplete
         , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMultisamplingChangeEvent))
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowResizeEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnWindowContentScaleEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TriangleFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
@@ -172,6 +171,19 @@ namespace Kmplete
             return true;
         });
 #endif
+
+        _inputManager->MapInputToCallback({ Input::Code::Mouse_ButtonRight, Input::PressNoModsCondition }, "switch_camera"_sid, [this](Input::InputControlValue) {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+
+            return true;
+        });
     }
     //--------------------------------------------------------------------------
 
@@ -624,24 +636,6 @@ namespace Kmplete
 
         _imguiImpl.reset();
         _InitializeImGui(scale);
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TriangleFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
 
         return true;
     }

@@ -47,7 +47,6 @@ namespace Kmplete
         void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
 
         bool _OnWindowResizeEvent(Events::WindowResizeEvent& evt);
-        bool _OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt);
         bool _OnMouseScrollEvent(Events::MouseScrollEvent& evt);
 
     private:
@@ -85,7 +84,6 @@ namespace Kmplete
         Graphics::PerspectiveCamera _camera;
 
         Events::EventHandlerGuard<Events::WindowResizeEvent> _windowResizeHandler;
-        Events::EventHandlerGuard<Events::MouseButtonPressEvent> _mouseButtonPressedHandler;
         Events::EventHandlerGuard<Events::MouseScrollEvent> _mouseScrollHandler;
     };
     //--------------------------------------------------------------------------

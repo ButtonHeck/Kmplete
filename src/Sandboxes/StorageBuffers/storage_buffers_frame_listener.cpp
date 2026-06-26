@@ -75,7 +75,6 @@ namespace Kmplete
         , _colorRandomizingTimer(1000)
         , _camera(Graphics::Camera::Type::FirstPerson, 75.0f)
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnWindowResizeEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(StorageBuffersFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
@@ -139,6 +138,19 @@ namespace Kmplete
 
             const auto rotationValue = std::get<Math::Point2I>(value);
             _camera.Rotate(Math::Vec3F(-rotationValue.y * _camera.GetRotationSpeed(), rotationValue.x * _camera.GetRotationSpeed(), 0.0f));
+            return true;
+        });
+
+        _inputManager->MapInputToCallback({ Input::Code::Mouse_ButtonRight, Input::PressNoModsCondition }, "switch_camera"_sid, [this](Input::InputControlValue) {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+
             return true;
         });
     }
@@ -352,24 +364,6 @@ namespace Kmplete
         {
             _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
         }
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool StorageBuffersFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
-
         return true;
     }
     //--------------------------------------------------------------------------

@@ -90,7 +90,6 @@ namespace Kmplete
 #endif
         , _windowResizeHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowResizeEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnWindowContentScaleEvent))
-        , _mouseButtonPressedHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseButtonPressedEvent))
         , _mouseScrollHandler(_eventDispatcher, KMP_BIND(TextureFrameListener::_OnMouseScrollEvent))
     {
         _Initialize();
@@ -174,6 +173,19 @@ namespace Kmplete
             return true;
         });
 #endif
+
+        _inputManager->MapInputToCallback({ Input::Code::Mouse_ButtonRight, Input::PressNoModsCondition }, "switch_camera"_sid, [this](Input::InputControlValue) {
+            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
+            }
+            else
+            {
+                _mainWindow.SetCursorMode(Window::CursorMode::Default);
+            }
+
+            return true;
+        });
     }
     //--------------------------------------------------------------------------
 
@@ -589,24 +601,6 @@ namespace Kmplete
 
         _imguiImpl.reset();
         _InitializeImGui(scale);
-
-        return true;
-    }
-    //--------------------------------------------------------------------------
-
-    bool TextureFrameListener::_OnMouseButtonPressedEvent(Events::MouseButtonPressEvent& evt)
-    {
-        if (evt.GetMouseButton() == Input::Code::Mouse_ButtonRight)
-        {
-            if (_mainWindow.GetCursorMode() == Window::CursorMode::Default)
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Disabled);
-            }
-            else
-            {
-                _mainWindow.SetCursorMode(Window::CursorMode::Default);
-            }
-        }
 
         return true;
     }
