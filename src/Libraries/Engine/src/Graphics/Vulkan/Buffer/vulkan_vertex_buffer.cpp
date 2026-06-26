@@ -17,7 +17,10 @@ namespace Kmplete
             : VulkanBuffer(memoryTypeDelegate, device, parameters)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _layouts()
+            , _cache()
         {
+            _cache.valid = false;
+
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
@@ -26,6 +29,7 @@ namespace Kmplete
             : VulkanBuffer(std::move(other))
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _layouts(std::move(other._layouts))
+            , _cache(std::move(other._cache))
         {
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -41,6 +45,7 @@ namespace Kmplete
             VulkanBuffer::operator=(std::move(other));
 
             _layouts = std::move(other._layouts);
+            _cache = std::move(other._cache);
 
             return *this;
         }}
@@ -49,6 +54,7 @@ namespace Kmplete
         void VulkanVertexBuffer::AddLayout(const BufferLayout& layout)
         {
             _layouts.push_back(layout);
+            _cache.valid = false;
         }
         //--------------------------------------------------------------------------
 
@@ -90,7 +96,22 @@ namespace Kmplete
 
         Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> VulkanVertexBuffer::GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinor)
         {
-            //TODO: cache structures during buffer creation and update bindings only
+            if (_cache.valid)
+            {
+                for (size_t i = 0; i < _layouts.size(); i++)
+                {
+                    const auto binding = UInt32(baseBinding + i);
+
+                    _cache.bindingDescriptions[i].binding = binding;
+
+                    for (auto& attributeDescription : _cache.attributeDescriptions)
+                    {
+                        attributeDescription.binding = binding;
+                    }
+                }
+
+                return { _cache.bindingDescriptions, _cache.attributeDescriptions };
+            }
 
             Vector<VkVertexInputBindingDescription2EXT> inputBindingsDescriptions;
             Vector<VkVertexInputAttributeDescription2EXT> attributeDescriptions;
@@ -118,6 +139,10 @@ namespace Kmplete
                     attributeDescriptions.push_back(attributeDescription);
                 }
             }
+
+            _cache.bindingDescriptions = inputBindingsDescriptions;
+            _cache.attributeDescriptions = attributeDescriptions;
+            _cache.valid = true;
 
             return { inputBindingsDescriptions, attributeDescriptions };
         }}

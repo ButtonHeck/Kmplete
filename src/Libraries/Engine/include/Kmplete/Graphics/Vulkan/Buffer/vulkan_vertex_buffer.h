@@ -36,7 +36,16 @@ namespace Kmplete
             KMP_NODISCARD KMP_API Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept;
 
         private:
+            struct DescriptionsCache
+            {
+                Vector<VkVertexInputBindingDescription2EXT> bindingDescriptions;
+                Vector<VkVertexInputAttributeDescription2EXT> attributeDescriptions;
+                bool valid;
+            };
+
+        private:
             Vector<BufferLayout> _layouts;
+            mutable DescriptionsCache _cache;
         };
         //--------------------------------------------------------------------------
 
