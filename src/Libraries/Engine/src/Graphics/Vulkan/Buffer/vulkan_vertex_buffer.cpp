@@ -19,8 +19,6 @@ namespace Kmplete
             , _layouts()
             , _cache()
         {
-            _cache.valid = false;
-
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
@@ -98,21 +96,33 @@ namespace Kmplete
         {
             if (_cache.valid)
             {
-                for (size_t i = 0; i < _layouts.size(); i++)
-                {
-                    const auto binding = UInt32(baseBinding + i);
-
-                    _cache.bindingDescriptions[i].binding = binding;
-
-                    for (auto& attributeDescription : _cache.attributeDescriptions)
-                    {
-                        attributeDescription.binding = binding;
-                    }
-                }
-
-                return { _cache.bindingDescriptions, _cache.attributeDescriptions };
+                return _GetDynamicBindingsDescriptionsFromCache(baseBinding);
             }
 
+            return _GetDynamicBindingsDescriptions(baseBinding);
+        }}
+        //--------------------------------------------------------------------------
+
+        Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> VulkanVertexBuffer::_GetDynamicBindingsDescriptionsFromCache(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
+        {
+            for (size_t i = 0; i < _layouts.size(); i++)
+            {
+                const auto binding = UInt32(baseBinding + i);
+
+                _cache.bindingDescriptions[i].binding = binding;
+
+                for (auto& attributeDescription : _cache.attributeDescriptions)
+                {
+                    attributeDescription.binding = binding;
+                }
+            }
+
+            return { _cache.bindingDescriptions, _cache.attributeDescriptions };
+        }}
+        //--------------------------------------------------------------------------
+
+        Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> VulkanVertexBuffer::_GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
+        {
             Vector<VkVertexInputBindingDescription2EXT> inputBindingsDescriptions;
             Vector<VkVertexInputAttributeDescription2EXT> attributeDescriptions;
 

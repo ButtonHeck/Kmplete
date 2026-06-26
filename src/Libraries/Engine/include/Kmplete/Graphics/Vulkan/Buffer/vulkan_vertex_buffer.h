@@ -40,8 +40,12 @@ namespace Kmplete
             {
                 Vector<VkVertexInputBindingDescription2EXT> bindingDescriptions;
                 Vector<VkVertexInputAttributeDescription2EXT> attributeDescriptions;
-                bool valid;
+                bool valid = false;
             };
+
+        private:
+            KMP_NODISCARD Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> _GetDynamicBindingsDescriptionsFromCache(UInt32 baseBinding) const noexcept;
+            KMP_NODISCARD Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> _GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept;
 
         private:
             Vector<BufferLayout> _layouts;
