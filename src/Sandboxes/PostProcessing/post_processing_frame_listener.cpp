@@ -1,6 +1,7 @@
 #include "post_processing_frame_listener.h"
 
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
@@ -27,6 +28,10 @@ namespace Kmplete
     static constexpr auto ColorAttachmentResolve = "color_attachment_resolve"_sid;
     static constexpr auto DepthStencilAttachmentResolve = "depth_attachment_resolve"_sid;
 
+    static constexpr auto TextureBindingIndex = 0;
+    static constexpr auto SamplerBindingIndex = 1;
+    static constexpr auto UniformBufferIndex = 2;
+
     static constexpr auto VertexShaderModule_SID = "vertex_shader"_sid;
     static constexpr auto FragmentShaderModule_SID = "fragment_shader"_sid;
     static constexpr auto VertexShaderResolveModule_SID = "vertex_shader_resolve"_sid;
@@ -34,6 +39,7 @@ namespace Kmplete
 
     static constexpr auto VertexBuffer_SID = "vertex_buffer"_sid;
     static constexpr auto VertexBufferResolve_SID = "vertex_buffer_resolve"_sid;
+    static constexpr auto UniformBuffersResolve_SID = "uniform_buffers_resolve"_sid;
 
 
     namespace
@@ -66,10 +72,11 @@ namespace Kmplete
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
+        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
 
         _InitializeBuffers(vulkanDevice);
-        _InitializeUniformBuffers(vulkanDevice);
-        _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+        _InitializeUniformBuffers(vulkanDevice, vulkanContext);
+        _InitializePipeline(vulkanDevice, vulkanContext);
     }
     //--------------------------------------------------------------------------
 
@@ -122,21 +129,43 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void PostProcessingFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& /*vulkanDevice*/)
+    void PostProcessingFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
+        auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
+        const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
+
+        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(DepthStencilAttachmentResolve, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+
+        VkDescriptorSetLayoutBinding textureLayoutBinding{ TextureBindingIndex, VK_DescriptorType_SampledImage, 1, VK_ShaderStage_Fragment };
+        VkDescriptorSetLayoutBinding samplerLayoutBinding{ SamplerBindingIndex, VK_DescriptorType_Sampler, 1, VK_ShaderStage_Fragment };
+        VkDescriptorSetLayoutBinding uboLayoutBinding{ UniformBufferIndex, VK_DescriptorType_UniformBuffer, 1, VK_ShaderStage_Fragment };
+        const auto postProcessingUniformsLayout = descriptorSetManager.AddDescriptorSetLayout(PostProcessingDSLayout_SID, { textureLayoutBinding, samplerLayoutBinding, uboLayoutBinding });
+        descriptorSetManager.AllocateDescriptorSets(postProcessingUniformsLayout, PostProcessingSet_SID, 1, "per frame"_true);
+
+        vulkanBufferManager.CreateUniformBuffer(UniformBuffersResolve_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(float) * 2 }, "per frame"_true);
+        for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
+        {
+            auto uniformBuffer = vulkanBufferManager.GetBuffer(UniformBuffersResolve_SID, i);
+            uniformBuffer->Map();
+
+            descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, i, textureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve)->get().GetVkImageView(), TextureBindingIndex);
+            descriptorSetManager.SetSamplerDescriptor(PostProcessingSet_SID, 0, "per frame"_true, i, samplersStorage.GetSampler(Graphics::SamplerDefaultNearestSid), SamplerBindingIndex);
+            descriptorSetManager.SetUniformBufferDescriptor(PostProcessingSet_SID, 0, "per frame"_true, i, *uniformBuffer, uniformBuffer->GetSize(), 0, UniformBufferIndex);
+        }
     }
     //--------------------------------------------------------------------------
 
     void PostProcessingFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
-        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
-        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
-        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
-        textureAttachmentManager.AddTextureAttachment(DepthStencilAttachmentResolve, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
-
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
-        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {}, {});
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
+            vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(PostProcessingDSLayout_SID)
+        }, {});
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.frag.spv");
