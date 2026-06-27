@@ -27,7 +27,12 @@ namespace Kmplete
                 vulkanParameters.features13.dynamicRendering = VK_TRUE;
                 vulkanParameters.features13.synchronization2 = VK_TRUE;
 
-                vulkanParameters.maxDescriptorSets = 2;
+                vulkanParameters.descriptorPoolSizes = {
+                    { VKBits::VK_DescriptorType_UniformBuffer, 1 },
+                    { VKBits::VK_DescriptorType_SampledImage, 1 },
+                    { VKBits::VK_DescriptorType_Sampler, 1 }
+                };
+                vulkanParameters.maxDescriptorSets = 2 * NumConcurrentFrames;
             }
         }
         //--------------------------------------------------------------------------

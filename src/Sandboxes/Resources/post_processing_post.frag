@@ -1,5 +1,7 @@
 #version 450
 
+layout (location = 0) in vec2 inTexCoord;
+
 layout (set = 0, binding = 0) uniform texture2D frameTexture;
 layout (set = 0, binding = 1) uniform sampler textureSampler;
 layout (set = 0, binding = 2) uniform UBO
@@ -29,7 +31,7 @@ void make_kernel(inout vec4 n[9], texture2D tex, sampler smp, vec2 coord)
 void main(void) 
 {
 	vec4 n[9];
-	make_kernel(n, frameTexture, textureSampler, gl_TexCoord[0].st);
+	make_kernel(n, frameTexture, textureSampler, inTexCoord.st);
 
 	vec4 sobel_edge_h = n[2] + (2.0*n[5]) + n[8] - (n[0] + (2.0*n[3]) + n[6]);
   	vec4 sobel_edge_v = n[0] + (2.0*n[1]) + n[2] - (n[6] + (2.0*n[7]) + n[8]);

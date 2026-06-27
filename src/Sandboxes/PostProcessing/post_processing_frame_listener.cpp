@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
+#include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Base/named_bool.h"
 
 
@@ -22,6 +23,7 @@ namespace Kmplete
 
     static constexpr auto VertexPositionAttributeIndex = 0;
     static constexpr auto VertexColorAttributeIndex = 1;
+    static constexpr auto VertexTexCoordAttributeIndex = 1;
 
     static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
     static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
@@ -53,6 +55,7 @@ namespace Kmplete
         struct VertexResolve
         {
             float position[2];
+            float texCoord[2];
         };
     }
 
@@ -93,13 +96,13 @@ namespace Kmplete
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
         const Vector<VertexResolve> verticesResolve{
-            { -1.0f,  1.0f },
-            {  1.0f,  1.0f },
-            { -1.0f, -1.0f },
+            { { -1.0f,  1.0f }, { 0.0f, 1.0f } },
+            { {  1.0f,  1.0f }, { 1.0f, 1.0f } },
+            { { -1.0f, -1.0f }, { 0.0f, 0.0f } },
 
-            { -1.0f, -1.0f },
-            {  1.0f,  1.0f },
-            {  1.0f, -1.0f }
+            { { -1.0f, -1.0f }, { 0.0f, 0.0f } },
+            { {  1.0f,  1.0f }, { 1.0f, 1.0f } },
+            { {  1.0f, -1.0f }, { 1.0f, 0.0f } }
         };
         const auto verticesResolveBufferSize = UInt32(verticesResolve.size() * sizeof(VertexResolve));
 
@@ -119,7 +122,8 @@ namespace Kmplete
         vulkanBufferManager.CreateVertexBuffer(VertexBufferResolve_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, verticesResolveBufferSize });
         auto vertexBufferResolve = vulkanBufferManager.GetVertexBuffer(VertexBufferResolve_SID);
         vertexBufferResolve->AddLayout(Graphics::BufferLayout{
-            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex }
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex },
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexTexCoordAttributeIndex }
         });
 
         renderer.CopyBuffers(stagingBuffer, {
@@ -138,8 +142,8 @@ namespace Kmplete
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
         textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
         textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
-        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
-        textureAttachmentManager.AddTextureAttachment(DepthStencilAttachmentResolve, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
+        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent()), VK_SampleCount_1, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color, "fixed samples"_true);
+        textureAttachmentManager.AddTextureAttachment(DepthStencilAttachmentResolve, vulkanContext.defaultDepthFormat, Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent()), VK_SampleCount_1, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil, "fixed samples"_true);
 
         VkDescriptorSetLayoutBinding textureLayoutBinding{ TextureBindingIndex, VK_DescriptorType_SampledImage, 1, VK_ShaderStage_Fragment };
         VkDescriptorSetLayoutBinding samplerLayoutBinding{ SamplerBindingIndex, VK_DescriptorType_Sampler, 1, VK_ShaderStage_Fragment };
@@ -188,6 +192,27 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_RasterizationSamples);
 
         pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "post_processing_pipeline_cache.bin");
+
+
+        const auto vertexPostShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_post.vert.spv");
+        const auto fragmentPostShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_post.frag.spv");
+        const auto vertexShaderPostModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderResolveModule_SID, vertexPostShaderPath);
+        const auto fragmentShaderPostModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderResolveModule_SID, fragmentPostShaderPath);
+        const auto shaderPostStages = Vector<VkPipelineShaderStageCreateInfo>{
+            vertexShaderPostModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
+            fragmentShaderPostModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
+        };
+
+        auto pipelinePostParams = Graphics::VulkanGraphicsPipelineParameters();
+        pipelinePostParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipelinePostParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelinePostParams.AddShaderStages(shaderPostStages);
+        pipelinePostParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBufferResolve_SID), VertexBufferBinding);
+        pipelinePostParams.AddDynamicState(VK_Dynamic_Viewport);
+        pipelinePostParams.AddDynamicState(VK_Dynamic_Scissor);
+        pipelinePostParams.AddDynamicState(VK_Dynamic_RasterizationSamples);
+
+        pipelineManager.AddGraphicsPipeline(PipelineResolve_SID, PipelineLayout_SID, pipelinePostParams, ApplicationContext::GetApplicationDataPath() / "post_processing_post_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 
