@@ -26,9 +26,7 @@ namespace Kmplete
     static constexpr auto VertexTexCoordAttributeIndex = 1;
 
     static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
-    static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
     static constexpr auto ColorAttachmentResolve = "color_attachment_resolve"_sid;
-    static constexpr auto DepthStencilAttachmentResolve = "depth_attachment_resolve"_sid;
 
     static constexpr auto TextureBindingIndex = 0;
     static constexpr auto SamplerBindingIndex = 1;
@@ -75,11 +73,10 @@ namespace Kmplete
     {
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
-        const auto& vulkanContext = vulkanPhysicalDevice.GetVulkanContext();
 
         _InitializeBuffers(vulkanDevice);
-        _InitializeUniformBuffers(vulkanDevice, vulkanContext);
-        _InitializePipeline(vulkanDevice, vulkanContext);
+        _InitializeUniformBuffers(vulkanDevice);
+        _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
     }
     //--------------------------------------------------------------------------
 
@@ -133,17 +130,11 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void PostProcessingFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
+    void PostProcessingFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
         auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
         auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
         const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
-
-        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
-        textureAttachmentManager.AddTextureAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil);
-        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent()), VK_SampleCount_1, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color, "fixed samples"_true);
-        textureAttachmentManager.AddTextureAttachment(DepthStencilAttachmentResolve, vulkanContext.defaultDepthFormat, Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent()), VK_SampleCount_1, VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil, "fixed samples"_true);
 
         VkDescriptorSetLayoutBinding textureLayoutBinding{ TextureBindingIndex, VK_DescriptorType_SampledImage, 1, VK_ShaderStage_Fragment };
         VkDescriptorSetLayoutBinding samplerLayoutBinding{ SamplerBindingIndex, VK_DescriptorType_Sampler, 1, VK_ShaderStage_Fragment };
@@ -151,13 +142,12 @@ namespace Kmplete
         const auto postProcessingUniformsLayout = descriptorSetManager.AddDescriptorSetLayout(PostProcessingDSLayout_SID, { textureLayoutBinding, samplerLayoutBinding, uboLayoutBinding });
         descriptorSetManager.AllocateDescriptorSets(postProcessingUniformsLayout, PostProcessingSet_SID, 1, "per frame"_true);
 
-        vulkanBufferManager.CreateUniformBuffer(UniformBuffersResolve_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(float) * 2 }, "per frame"_true);
+        vulkanBufferManager.CreateUniformBuffer(UniformBuffersResolve_SID, { 0, VK_Memory_HostVisible | VK_Memory_HostCoherent, sizeof(VkExtent2D) }, "per frame"_true);
         for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
         {
             auto uniformBuffer = vulkanBufferManager.GetBuffer(UniformBuffersResolve_SID, i);
             uniformBuffer->Map();
 
-            descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, i, textureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve)->get().GetVkImageView(), TextureBindingIndex);
             descriptorSetManager.SetSamplerDescriptor(PostProcessingSet_SID, 0, "per frame"_true, i, samplersStorage.GetSampler(Graphics::SamplerDefaultNearestSid), SamplerBindingIndex);
             descriptorSetManager.SetUniformBufferDescriptor(PostProcessingSet_SID, 0, "per frame"_true, i, *uniformBuffer, uniformBuffer->GetSize(), 0, UniformBufferIndex);
         }
@@ -166,6 +156,11 @@ namespace Kmplete
 
     void PostProcessingFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
+        const auto attachmentsExtent = Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent());
+        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
+        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, attachmentsExtent, VK_SampleCount_1, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color, "fixed samples"_true);
+
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
             vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(PostProcessingDSLayout_SID)
@@ -224,34 +219,28 @@ namespace Kmplete
         const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
         const auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
         const auto& renderer = vulkanDevice.GetRenderer();
-        const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
+        const auto& currentExtent = vulkanDevice.GetCurrentExtent();
+        const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, currentExtent };
         const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
         const auto currentMSAA = vulkanDevice.GetMultisampling();
-        const auto& currentExtent = vulkanDevice.GetCurrentExtent();
+        const auto colorAttachmentMS = vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment);
+        const auto colorAttachmentResolve = vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve);
 
         renderer.SetViewport(viewport);
         renderer.SetScissor(drawArea);
 
-        // 1. Render plain triangle into offscreen texture
+        // 1.1 Start with the offscreen pipeline rendering
         renderer.BindGraphicsPipeline(Pipeline_SID);
         renderer.BindVertexBuffers(VertexBufferBinding, { vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { 0 });
         renderer.SetRasterizationSamples(currentMSAA);
 
+        // 1.2 Prepare color attachments and insert memory barriers for writing to attachment (and use single sampled resolve texture when MSAA > 1)
         VkRenderingAttachmentInfo colorAttachmentInfo{};
+        auto colorMemoryBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareWriting;
         if (currentMSAA == VK_SampleCount_1)
         {
-            Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParametersPre{
-                .srcAccessMask = VK_Access_None,
-                .dstAccessMask = VK_Access_ColorAttachmentWrite,
-                .oldImageLayout = VK_ImageLayout_Undefined,
-                .newImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment), colorAttachmentResolveBarrierParametersPre);
-
+            renderer.InsertImageMemoryBarrier(colorAttachmentMS, colorMemoryBarrierParameters);
             colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
                 Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
                 MS_ColorAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_ColorAttachmentOptimal
@@ -259,83 +248,52 @@ namespace Kmplete
         }
         else
         {
-            Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParametersPre{
-                .srcAccessMask = VK_Access_None,
-                .dstAccessMask = VK_Access_ColorAttachmentWrite,
-                .oldImageLayout = VK_ImageLayout_Undefined,
-                .newImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve), colorAttachmentResolveBarrierParametersPre);
-
+            renderer.InsertImageMemoryBarrier(colorAttachmentResolve, colorMemoryBarrierParameters);
             colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
                 Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
                 MS_ColorAttachment, ColorAttachmentResolve, VK_Resolve_Average, VK_ImageLayout_ColorAttachmentOptimal
             );
         }
 
+        // 1.3 Render RGB triangle to the attachment
         renderer.BeginRendering(drawArea, { colorAttachmentInfo });
         renderer.Draw(3, 1, 0, 0);
         renderer.EndRendering();
 
 
-        // 2. Transit image to shader read and write to the swapchain image
+        // 2.1 Bind actual screen rendering pipeline
         renderer.BindGraphicsPipeline(PipelineResolve_SID);
         renderer.BindVertexBuffers(VertexBufferBinding, { vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBufferResolve_SID)->GetVkBuffer() }, { 0 });
-        renderer.SetRasterizationSamples(VK_SampleCount_1);
+        renderer.SetRasterizationSamples(VK_SampleCount_1); // either single sampled image or a swapchain image is used here - always sample count 1
 
+        // 2.2 Prepare color attachments and insert memory barriers for reading previously written image from shader (use resolve texture when MSAA > 1)
         VkRenderingAttachmentInfo colorAttachmentResolveInfo{};
+        auto colorShaderReadMemoryBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareReadFromShader;
         if (currentMSAA == VK_SampleCount_1)
         {
-            Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParameters{
-                .srcAccessMask = VK_Access_ColorAttachmentWrite,
-                .dstAccessMask = VK_Access_ShaderRead,
-                .oldImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
-                .newImageLayout = VK_ImageLayout_ShaderReadOnlyOptimal,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_FragmentShader,
-                .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment), colorAttachmentResolveBarrierParameters);
-
+            renderer.InsertImageMemoryBarrier(colorAttachmentMS, colorShaderReadMemoryBarrierParameters);
             colorAttachmentResolveInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
                 Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
                 MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
             );
+            descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, currentBufferIndex, colorAttachmentMS->get().GetVkImageView(), TextureBindingIndex);
         }
         else
         {
-            Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParameters{
-                .srcAccessMask = VK_Access_ColorAttachmentWrite,
-                .dstAccessMask = VK_Access_ShaderRead,
-                .oldImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
-                .newImageLayout = VK_ImageLayout_ShaderReadOnlyOptimal,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_FragmentShader,
-                .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve), colorAttachmentResolveBarrierParameters);
-
+            renderer.InsertImageMemoryBarrier(colorAttachmentResolve, colorShaderReadMemoryBarrierParameters);
             colorAttachmentResolveInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
                 Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
                 ColorAttachmentResolve, 0ULL, VK_Resolve_None, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
             );
+            descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, currentBufferIndex, colorAttachmentResolve->get().GetVkImageView(), TextureBindingIndex);
         }
 
+        // 2.3 Update uniform buffer data
         Vector<float> uboData = { float(currentExtent.width), float(currentExtent.height) };
-        vulkanBufferManager.GetBuffer(UniformBuffersResolve_SID, currentBufferIndex)->CopyToMappedMemory(0, uboData.data(), sizeof(float) * 2);
+        vulkanBufferManager.GetBuffer(UniformBuffersResolve_SID, currentBufferIndex)->CopyToMappedMemory(0, uboData.data(), sizeof(VkExtent2D));
 
+        // 2.4 Render screen quad with an offscreen attachment as texture
         renderer.BeginRendering(drawArea, { colorAttachmentResolveInfo });
-        if (currentMSAA == VK_SampleCount_1)
-        {
-            descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, currentBufferIndex, vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment)->get().GetVkImageView(), TextureBindingIndex);
-        }
-        else
-        {
-            descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, currentBufferIndex, vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve)->get().GetVkImageView(), TextureBindingIndex);
-        }
         renderer.BindDescriptorSets(PipelineLayout_SID, 0, {
             descriptorSetManager.GetDescriptorSet(PostProcessingSet_SID, 0, "per frame"_true)
         });
