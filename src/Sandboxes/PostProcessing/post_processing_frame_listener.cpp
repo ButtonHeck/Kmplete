@@ -230,18 +230,17 @@ namespace Kmplete
 
         renderer.SetViewport(viewport);
         renderer.SetScissor(drawArea);
-        renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
+
+        // 1. Render plain triangle into offscreen texture
         renderer.BindGraphicsPipeline(Pipeline_SID);
         renderer.BindVertexBuffers(VertexBufferBinding, { vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { 0 });
-
-        auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
-        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment), imageBarrierParameters);
+        renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
         Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParametersPre{
             .srcAccessMask = VK_Access_None,
             .dstAccessMask = VK_Access_ColorAttachmentWrite,
             .oldImageLayout = VK_ImageLayout_Undefined,
-            .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+            .newImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
             .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
             .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
             .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
@@ -250,7 +249,7 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, ColorAttachmentResolve, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal
+            MS_ColorAttachment, ColorAttachmentResolve, VK_Resolve_Average, VK_ImageLayout_ColorAttachmentOptimal
         );
 
         renderer.BeginRendering(drawArea, { colorAttachmentInfo });
@@ -262,7 +261,7 @@ namespace Kmplete
         Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParameters{
             .srcAccessMask = VK_Access_ColorAttachmentWrite,
             .dstAccessMask = VK_Access_ShaderRead,
-            .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
+            .oldImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
             .newImageLayout = VK_ImageLayout_ShaderReadOnlyOptimal,
             .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
             .dstStageMask = VK_PipelineStage_FragmentShader,
@@ -278,12 +277,13 @@ namespace Kmplete
         vulkanBufferManager.GetBuffer(UniformBuffersResolve_SID, currentBufferIndex)->CopyToMappedMemory(0, uboData.data(), sizeof(float) * 2);
 
         const auto colorAttachmentResolveInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
-            Graphics::VKPresets::RenderingAttachmentInfo_Color_LoadStore,
+            Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
             ColorAttachmentResolve, 0ULL, VK_Resolve_None, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
         );
 
         renderer.BeginRendering(drawArea, { colorAttachmentResolveInfo });
         renderer.SetRasterizationSamples(VK_SampleCount_1);
+        descriptorSetManager.SetSampledImageDescriptor(PostProcessingSet_SID, 0, "per frame"_true, currentBufferIndex, vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve)->get().GetVkImageView(), TextureBindingIndex);
         renderer.BindDescriptorSets(PipelineLayout_SID, 0, {
             descriptorSetManager.GetDescriptorSet(PostProcessingSet_SID, 0, "per frame"_true)
         });
