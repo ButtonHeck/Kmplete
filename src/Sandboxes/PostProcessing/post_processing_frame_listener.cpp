@@ -220,10 +220,13 @@ namespace Kmplete
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
+        const auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
         const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        const auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
         const auto& renderer = vulkanDevice.GetRenderer();
         const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
         const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
+        const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
 
         renderer.SetViewport(viewport);
         renderer.SetScissor(drawArea);
@@ -234,17 +237,57 @@ namespace Kmplete
         auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
         renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment), imageBarrierParameters);
 
+        Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParametersPre{
+            .srcAccessMask = VK_Access_None,
+            .dstAccessMask = VK_Access_ColorAttachmentWrite,
+            .oldImageLayout = VK_ImageLayout_Undefined,
+            .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+            .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+            .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
+            .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+        };
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve), colorAttachmentResolveBarrierParametersPre);
+
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
-        );
-        const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
-            Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,
-            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare
+            MS_ColorAttachment, ColorAttachmentResolve, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal
         );
 
-        renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
+        renderer.BeginRendering(drawArea, { colorAttachmentInfo });
         renderer.Draw(3, 1, 0, 0);
+        renderer.EndRendering();
+
+
+
+        Graphics::VKUtils::MemoryBarrierParameters colorAttachmentResolveBarrierParameters{
+            .srcAccessMask = VK_Access_ColorAttachmentWrite,
+            .dstAccessMask = VK_Access_ShaderRead,
+            .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
+            .newImageLayout = VK_ImageLayout_ShaderReadOnlyOptimal,
+            .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+            .dstStageMask = VK_PipelineStage_FragmentShader,
+            .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+        };
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve), colorAttachmentResolveBarrierParameters);
+
+        renderer.BindGraphicsPipeline(PipelineResolve_SID);
+        renderer.BindVertexBuffers(VertexBufferBinding, { vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBufferResolve_SID)->GetVkBuffer() }, { 0 });
+
+        const auto& currentExtent = vulkanDevice.GetCurrentExtent();
+        Vector<float> uboData = { float(currentExtent.width), float(currentExtent.height) };
+        vulkanBufferManager.GetBuffer(UniformBuffersResolve_SID, currentBufferIndex)->CopyToMappedMemory(0, uboData.data(), sizeof(float) * 2);
+
+        const auto colorAttachmentResolveInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
+            Graphics::VKPresets::RenderingAttachmentInfo_Color_LoadStore,
+            ColorAttachmentResolve, 0ULL, VK_Resolve_None, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+        );
+
+        renderer.BeginRendering(drawArea, { colorAttachmentResolveInfo });
+        renderer.SetRasterizationSamples(VK_SampleCount_1);
+        renderer.BindDescriptorSets(PipelineLayout_SID, 0, {
+            descriptorSetManager.GetDescriptorSet(PostProcessingSet_SID, 0, "per frame"_true)
+        });
+        renderer.Draw(6, 1, 0, 0);
         renderer.EndRendering();
     }
     //--------------------------------------------------------------------------
