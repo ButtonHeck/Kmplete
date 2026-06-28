@@ -230,6 +230,28 @@ namespace Kmplete
                 .subresourceRange = ImageSubresourceRange_DepthStencil_Layer1_Level1
             };
             //--------------------------------------------------------------------------
+
+            static constexpr VKUtils::MemoryBarrierParameters MemoryBarrierParameters_ColorAttachment_PrepareWriting{
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_ColorAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .subresourceRange = ImageSubresourceRange_Color_Layer1_Level1
+            };
+            //--------------------------------------------------------------------------
+
+            static constexpr VKUtils::MemoryBarrierParameters MemoryBarrierParameters_ColorAttachment_PrepareReadFromShader{
+                .srcAccessMask = VK_Access_ColorAttachmentWrite,
+                .dstAccessMask = VK_Access_ShaderRead,
+                .oldImageLayout = VK_ImageLayout_ColorAttachmentOptimal,
+                .newImageLayout = VK_ImageLayout_ShaderReadOnlyOptimal,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_FragmentShader,
+                .subresourceRange = Graphics::VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+            };
+            //--------------------------------------------------------------------------
         }
     }
 }
