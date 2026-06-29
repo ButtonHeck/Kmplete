@@ -171,8 +171,8 @@ namespace Kmplete
     {
         const auto attachmentsExtent = Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent());
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color);
-        textureAttachmentManager.AddTextureAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, attachmentsExtent, VK_SampleCount_1, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color, "fixed samples"_true);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment);
+        textureAttachmentManager.AddTextureColorAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, attachmentsExtent, VK_SampleCount_1, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, "fixed samples"_true);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
