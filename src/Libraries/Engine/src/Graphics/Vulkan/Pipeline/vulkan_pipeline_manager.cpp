@@ -41,15 +41,7 @@ namespace Kmplete
 
         bool VulkanPipelineManager::AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges /*= {}*/) KMP_PROFILING(ProfileLevelImportant)
         {
-            Vector<VkDescriptorSetLayout> descriptorSetLayouts;
-            descriptorSetLayouts.reserve(descriptorSetLayoutsSids.size());
-
-            for (const auto& descriptorSetLayoutSid : descriptorSetLayoutsSids)
-            {
-                descriptorSetLayouts.push_back(_descriptorSetManager.GetDescriptorSetLayout(descriptorSetLayoutSid));
-            }
-
-            return AddPipelineLayout(layoutSid, descriptorSetLayouts, pushConstantRanges);
+            return AddPipelineLayout(layoutSid, _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetLayoutsSids), pushConstantRanges);
         }}
         //--------------------------------------------------------------------------
 
