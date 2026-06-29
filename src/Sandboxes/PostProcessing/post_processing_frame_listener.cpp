@@ -1,13 +1,21 @@
 #include "post_processing_frame_listener.h"
 
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
 #include "Kmplete/Graphics/Vulkan/Utils/presets.h"
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
+#include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/ImGui/helper_functions.h"
+#include "Kmplete/ImGui/scope_guards.h"
+#include "Kmplete/ImGui/context_vulkan.h"
+#include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Event/event_queue.h"
+#include "Kmplete/Assets/assets_manager.h"
 
 
 namespace Kmplete
@@ -60,10 +68,14 @@ namespace Kmplete
     using namespace Graphics::VKBits;
 
 
-    PostProcessingFrameListener::PostProcessingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend)
+    PostProcessingFrameListener::PostProcessingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, Assets::AssetsManager& assetsManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
+        , _assetsManager(assetsManager)
+        , _imguiImpl(nullptr)
+        , _multisamplingChangeHandler(_eventDispatcher, KMP_BIND(PostProcessingFrameListener::_OnMultisamplingChangeEvent))
+        , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(PostProcessingFrameListener::_OnWindowContentScaleEvent))
     {
         _Initialize();
     }
@@ -77,6 +89,7 @@ namespace Kmplete
         _InitializeBuffers(vulkanDevice);
         _InitializeUniformBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
+        _InitializeImGui(_mainWindow.GetDPIScale());
     }
     //--------------------------------------------------------------------------
 
@@ -211,7 +224,66 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    void PostProcessingFrameListener::_InitializeImGui(float dpiScale)
+    {
+        ImGuiUtils::Context* context = nullptr;
+        if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
+        {
+            const auto& vulkanBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
+            auto& physicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
+            auto& logicalDevice = dynamic_cast<Graphics::VulkanLogicalDevice&>(physicalDevice.GetLogicalDevice());
+
+            logicalDevice.GetDescriptorSetManager().AllocateAuxDescriptorPool("ImGui_Pool"_sid, 100, {
+                { VK_DescriptorType_Sampler, 100 },
+                { VK_DescriptorType_CombinedImageSampler, 100 },
+                { VK_DescriptorType_SampledImage, 100 },
+                { VK_DescriptorType_StorageImage, 100 },
+                { VK_DescriptorType_UniformTexelBuffer, 100 },
+                { VK_DescriptorType_StorageTexelBuffer, 100 },
+                { VK_DescriptorType_UniformBuffer, 100 },
+                { VK_DescriptorType_StorageBuffer, 100 },
+                { VK_DescriptorType_UniformBufferDynamic, 100 },
+                { VK_DescriptorType_StorageBufferDynamic, 100 },
+                { VK_DescriptorType_InputAttachment, 100 }
+                });
+
+            ImGui_ImplVulkan_InitInfo initInfo{};
+            initInfo.Instance = vulkanBackend.GetVkInstance();
+            initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
+            initInfo.Device = logicalDevice.GetVkDevice();
+            initInfo.QueueFamily = physicalDevice.GetVulkanContext().graphicsFamilyIndex;
+            initInfo.Queue = logicalDevice.GetGraphicsQueue().GetVkQueue();
+            initInfo.PipelineCache = VK_NULL_HANDLE;
+            initInfo.DescriptorPool = logicalDevice.GetDescriptorSetManager().GetAuxDescriptorPool("ImGui_Pool"_sid);
+            initInfo.Allocator = VK_NULL_HANDLE;
+            initInfo.MinImageCount = Graphics::NumConcurrentFrames;
+            initInfo.ImageCount = Graphics::NumConcurrentFrames;
+            initInfo.CheckVkResultFn = nullptr;
+            initInfo.UseDynamicRendering = true;
+            initInfo.MSAASamples = VK_SampleCount_1; // always draw on single sampled attachment
+            initInfo.PipelineRenderingCreateInfo = Graphics::VKUtils::InitVkPipelineRenderingCreateInfoKHR();
+            initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, "viewports"_true, dpiScale, initInfo);
+            context->configName = "PostProcessingSandbox_imgui.ini";
+        }
+        _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
+
+        const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
+    }
+    //--------------------------------------------------------------------------
+
     void PostProcessingFrameListener::Render()
+    {
+        _RenderTriangle();
+        _RenderImGui();
+    }
+    //--------------------------------------------------------------------------
+
+    void PostProcessingFrameListener::_RenderTriangle()
     {
         auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
         const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
@@ -299,6 +371,96 @@ namespace Kmplete
         });
         renderer.Draw(6, 1, 0, 0);
         renderer.EndRendering();
+    }
+    //--------------------------------------------------------------------------
+
+    void PostProcessingFrameListener::_RenderImGui()
+    {
+        auto& vulkanLogicalDevice = dynamic_cast<const Graphics::VulkanLogicalDevice&>(_graphicsBackend.GetPhysicalDevice().GetLogicalDevice());
+        const auto& vulkanTextureAttachmentManager = vulkanLogicalDevice.GetTextureAttachmentManager();
+        auto commandBuffer = vulkanLogicalDevice.GetRenderer().GetCurrentCommandBuffer();
+        auto* vulkanImGuiUtils = dynamic_cast<ImGuiUtils::ImGuiImplementationGlfwVulkan*>(_imguiImpl.get());
+        const auto& renderer = vulkanLogicalDevice.GetRenderer();
+        const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanLogicalDevice.GetCurrentExtent() };
+
+        _imguiImpl->NewFrame();
+
+        static constexpr auto applicationWindowFlags =
+            ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus |
+            ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize;
+
+        const auto imguiScale = ImGui::GetMainViewport()->DpiScale;
+        const auto imguiViewportPos = ImGui::GetMainViewport()->WorkPos;
+        const auto imguiWindowPos = ImVec2{ imguiViewportPos.x + 16, imguiViewportPos.y + 16 };
+        ImGui::SetNextWindowPos(imguiWindowPos, ImGuiCond_Always);
+        ImGui::Begin("PostProcessing sandbox", nullptr, applicationWindowFlags);
+        ImGui::SetWindowSize(ImVec2(120 * imguiScale, 100 * imguiScale));
+
+        if (ImGui::Button("Multisampling 1"))
+        {
+            _SetMultisampling(1);
+        }
+        if (ImGui::Button("Multisampling 2"))
+        {
+            _SetMultisampling(2);
+        }
+        if (ImGui::Button("Multisampling 4"))
+        {
+            _SetMultisampling(4);
+        }
+
+        ImGui::End();
+
+        const auto currentMSAA = vulkanLogicalDevice.GetMultisampling();
+
+        VkRenderingAttachmentInfo colorAttachmentInfo{};
+        if (currentMSAA == VK_SampleCount_1)
+        {
+            colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
+                Graphics::VKPresets::RenderingAttachmentInfo_Color_LoadStore,
+                MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            );
+        }
+        else
+        {
+            colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
+                Graphics::VKPresets::RenderingAttachmentInfo_Color_LoadStore,
+                ColorAttachmentResolve, 0ULL, VK_Resolve_None, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            );
+        }
+
+        renderer.BeginRendering(drawArea, { colorAttachmentInfo } );
+        vulkanImGuiUtils->SetCommandBuffer(commandBuffer);
+        vulkanImGuiUtils->Render();
+        renderer.EndRendering();
+
+        ImGui::EndFrame();
+    }
+    //--------------------------------------------------------------------------
+
+    void PostProcessingFrameListener::_SetMultisampling(UInt32 samples)
+    {
+        Events::QueueEvent(CreateUPtr<Events::MultisamplingChangeEvent>(samples));
+    }
+    //--------------------------------------------------------------------------
+
+    bool PostProcessingFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
+    {
+        _graphicsBackend.SetMultisampling(evt.msaaSamples);
+        _imguiImpl.reset();
+        _InitializeImGui(_mainWindow.GetDPIScale());
+        return true;
+    }
+    //--------------------------------------------------------------------------
+
+    bool PostProcessingFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
+    {
+        const auto scale = event.GetScale();
+
+        _imguiImpl.reset();
+        _InitializeImGui(scale);
+
+        return true;
     }
     //--------------------------------------------------------------------------
 }

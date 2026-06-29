@@ -7,6 +7,7 @@ project(PostProcessing LANGUAGES CXX)
 set(PostProcessing_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/post_processing_application.h
     ${CMAKE_CURRENT_LIST_DIR}/post_processing_frame_listener.h
+    ${CMAKE_CURRENT_LIST_DIR}/events.h
 )
 set(PostProcessing_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp
