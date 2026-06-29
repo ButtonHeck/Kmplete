@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/Vulkan/Pipeline/vulkan_pipeline_manager.h"
+#include "Kmplete/Graphics/Vulkan/Core/vulkan_descriptor_set_manager.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Core/assertion.h"
@@ -10,10 +11,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanPipelineManager::VulkanPipelineManager(VkDevice device, const VulkanContext& context)
+        VulkanPipelineManager::VulkanPipelineManager(VkDevice device, const VulkanContext& context, const VulkanDescriptorSetManager& descriptorSetManager)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _device(device)
             , _context(context)
+            , _descriptorSetManager(descriptorSetManager)
             , _pipelines()
             , _pipelineCaches()
         {
@@ -34,6 +36,20 @@ namespace Kmplete
                 vkDestroyPipelineLayout(_device, layout, nullptr);
             }
             _layouts.clear();
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanPipelineManager::AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges) KMP_PROFILING(ProfileLevelImportant)
+        {
+            Vector<VkDescriptorSetLayout> descriptorSetLayouts;
+            descriptorSetLayouts.reserve(descriptorSetLayoutsSids.size());
+
+            for (const auto& descriptorSetLayoutSid : descriptorSetLayoutsSids)
+            {
+                descriptorSetLayouts.push_back(_descriptorSetManager.GetDescriptorSetLayout(descriptorSetLayoutSid));
+            }
+
+            return AddPipelineLayout(layoutSid, descriptorSetLayouts, pushConstantRanges);
         }}
         //--------------------------------------------------------------------------
 

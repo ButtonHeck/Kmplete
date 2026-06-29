@@ -175,9 +175,7 @@ namespace Kmplete
         textureAttachmentManager.AddTextureColorAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, attachmentsExtent, VK_SampleCount_1, VK_ImageUsage_Sampled | VK_ImageUsage_ColorAttachment, "fixed samples"_true);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
-        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {
-            vulkanDevice.GetDescriptorSetManager().GetDescriptorSetLayout(PostProcessingDSLayout_SID)
-        }, {});
+        pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { PostProcessingDSLayout_SID }, {});
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.frag.spv");

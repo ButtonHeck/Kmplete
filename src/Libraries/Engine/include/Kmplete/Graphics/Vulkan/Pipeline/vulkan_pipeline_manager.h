@@ -19,6 +19,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        class VulkanDescriptorSetManager;
+
+
         //TODO: comments
         class VulkanPipelineManager
         {
@@ -27,9 +30,10 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanPipelineManager(VkDevice device, const VulkanContext& context);
+            KMP_API VulkanPipelineManager(VkDevice device, const VulkanContext& context, const VulkanDescriptorSetManager& descriptorSetManager);
             KMP_API ~VulkanPipelineManager();
 
+            KMP_API bool AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges);
             KMP_API bool AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges);
             KMP_NODISCARD KMP_API VkPipelineLayout GetPipelineLayout(StringID layoutSid) const noexcept;
 
@@ -44,6 +48,7 @@ namespace Kmplete
         private:
             VkDevice _device;
             const VulkanContext& _context;
+            const VulkanDescriptorSetManager& _descriptorSetManager;
             StringIDHashMap<VkPipelineLayout> _layouts;
             StringIDHashMap<UPtr<VulkanGraphicsPipeline>> _pipelines;
             StringIDHashMap<UPtr<VulkanPipelineCache>> _pipelineCaches;
