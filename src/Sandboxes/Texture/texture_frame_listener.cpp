@@ -268,7 +268,7 @@ namespace Kmplete
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
-        pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { MatricesAndTextureDSLayout_SID, SamplerDSLayout_SID }, {});
+        pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { MatricesAndTextureDSLayout_SID, SamplerDSLayout_SID });
 
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.frag.spv");

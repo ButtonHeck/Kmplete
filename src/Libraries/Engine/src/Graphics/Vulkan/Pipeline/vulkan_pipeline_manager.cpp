@@ -39,7 +39,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanPipelineManager::AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanPipelineManager::AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges /*= {}*/) KMP_PROFILING(ProfileLevelImportant)
         {
             Vector<VkDescriptorSetLayout> descriptorSetLayouts;
             descriptorSetLayouts.reserve(descriptorSetLayoutsSids.size());
@@ -53,7 +53,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanPipelineManager::AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanPipelineManager::AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges /*= {}*/) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 

@@ -184,7 +184,7 @@ namespace Kmplete
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat, VK_ImageUsage_DepthStencilAttachment);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
-        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {}, {});
+        pipelineManager.AddPipelineLayout(PipelineLayout_SID, {});
 
         const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.vert.spv"));
         const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.frag.spv"));
