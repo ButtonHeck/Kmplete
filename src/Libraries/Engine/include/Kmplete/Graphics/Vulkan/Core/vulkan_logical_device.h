@@ -105,8 +105,8 @@ namespace Kmplete
             void _CreateSwapchain();
             void _DeleteSwapchain();
 
-            void _CreatePipelineManager();
-            void _DeletePipelineManager();
+            void _CreateDescriptorSetManager();
+            void _DeleteDescriptorSetManager();
 
             void _CreateBufferManager();
             void _DeleteBufferManager();
@@ -114,8 +114,8 @@ namespace Kmplete
             void _CreateSamplersStorage();
             void _DeleteSamplersStorage();
 
-            void _CreateDescriptorSetManager();
-            void _DeleteDescriptorSetManager();
+            void _CreatePipelineManager();
+            void _DeletePipelineManager();
 
             void _CreateTextureAttachmentManager();
             void _DeleteTextureAttachmentManager();
@@ -152,13 +152,13 @@ namespace Kmplete
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
             Vector<VulkanFence> _waitFences;
             UPtr<VulkanSwapchain> _swapchain;
-            UPtr<VulkanPipelineManager> _pipelineManager;
+            UPtr<VulkanDescriptorSetManager> _descriptorSetManager;
             UPtr<VulkanBufferManager> _bufferManager;
             VkExtent2D _currentExtent;
             VkSampleCountFlagBits _msaaSamples;
             bool _vSync;
             UPtr<VulkanSamplersStorage> _samplersStorage;
-            UPtr<VulkanDescriptorSetManager> _descriptorSetManager;
+            UPtr<VulkanPipelineManager> _pipelineManager;
             UPtr<VulkanTextureAttachmentManager> _textureAttachmentManager;
             UPtr<VulkanShaderManager> _shaderManager;
             UPtr<VulkanRenderer> _renderer;

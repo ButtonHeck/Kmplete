@@ -48,13 +48,13 @@ namespace Kmplete
             , _renderCompleteSemaphores()
             , _waitFences()
             , _swapchain(nullptr)
-            , _pipelineManager(nullptr)
+            , _descriptorSetManager(nullptr)
             , _bufferManager(nullptr)
             , _currentExtent(_UpdateExtent())
             , _msaaSamples(VK_SampleCount_1)
             , _vSync(true)
             , _samplersStorage(nullptr)
-            , _descriptorSetManager(nullptr)
+            , _pipelineManager(nullptr)
             , _textureAttachmentManager(nullptr)
             , _shaderManager(nullptr)
             , _renderer(nullptr)
@@ -65,10 +65,10 @@ namespace Kmplete
             _CreateImageCreatorDelegate();
             _CreateSynchronizationObjects();
             _CreateSwapchain();
-            _CreatePipelineManager();
+            _CreateDescriptorSetManager();
             _CreateBufferManager();
             _CreateSamplersStorage();
-            _CreateDescriptorSetManager();
+            _CreatePipelineManager();
             _CreateTextureAttachmentManager();
             _CreateShaderManager();
             _CreateRenderer();
@@ -86,10 +86,10 @@ namespace Kmplete
             _DeleteRenderer();
             _DeleteShaderManager();
             _DeleteTextureAttachmentManager();
-            _DeleteDescriptorSetManager();
+            _DeletePipelineManager();
             _DeleteSamplersStorage();
             _DeleteBufferManager();
-            _DeletePipelineManager();
+            _DeleteDescriptorSetManager();
             _DeleteSwapchain();
             _DeleteSyncronizationObjects();
             _DeleteImageCreatorDelegate();
@@ -487,20 +487,20 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreatePipelineManager() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::_CreateDescriptorSetManager() KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
-            _pipelineManager.reset(new VulkanPipelineManager(_device, _vulkanContext));
-            KMP_ASSERT(_pipelineManager);
+            _descriptorSetManager.reset(new VulkanDescriptorSetManager(_device, _currentBufferIndex, _graphicsParameters->maxDescriptorSets, _graphicsParameters->descriptorPoolSizes));
+            KMP_ASSERT(_descriptorSetManager);
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeletePipelineManager() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::_DeleteDescriptorSetManager() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_pipelineManager);
+            KMP_ASSERT(_descriptorSetManager);
 
-            _pipelineManager.reset();
+            _descriptorSetManager.reset();
         }}
         //--------------------------------------------------------------------------
 
@@ -552,20 +552,20 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_CreateDescriptorSetManager() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::_CreatePipelineManager() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_device);
+            KMP_ASSERT(_device && _descriptorSetManager);
 
-            _descriptorSetManager.reset(new VulkanDescriptorSetManager(_device, _currentBufferIndex, _graphicsParameters->maxDescriptorSets, _graphicsParameters->descriptorPoolSizes));
-            KMP_ASSERT(_descriptorSetManager);
+            _pipelineManager.reset(new VulkanPipelineManager(_device, _vulkanContext, *_descriptorSetManager.get()));
+            KMP_ASSERT(_pipelineManager);
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::_DeleteDescriptorSetManager() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::_DeletePipelineManager() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_descriptorSetManager);
+            KMP_ASSERT(_pipelineManager);
 
-            _descriptorSetManager.reset();
+            _pipelineManager.reset();
         }}
         //--------------------------------------------------------------------------
 
