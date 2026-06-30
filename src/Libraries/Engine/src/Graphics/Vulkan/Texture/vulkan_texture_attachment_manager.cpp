@@ -27,29 +27,29 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanTextureAttachmentManager::AddTextureColorAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, bool fixedSamples /*= false*/)
+        bool VulkanTextureAttachmentManager::AddTextureColorAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags /*= 0*/, bool fixedSamples /*= false*/)
         {
-            return AddTextureAttachment(attachmentSid, format, usageFlags, VK_ImageAspect_Color, fixedSamples);
+            return AddTextureAttachment(attachmentSid, format, usageFlags | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color, fixedSamples);
         }
         //--------------------------------------------------------------------------
 
         bool VulkanTextureAttachmentManager::AddTextureColorAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
-                                                                       VkImageUsageFlags usageFlags, bool fixedSamples /*= false*/)
+                                                                       VkImageUsageFlags usageFlags /*= 0*/, bool fixedSamples /*= false*/)
         {
-            return AddTextureAttachment(attachmentSid, format, extent, samples, usageFlags, VK_ImageAspect_Color, fixedSamples);
+            return AddTextureAttachment(attachmentSid, format, extent, samples, usageFlags | VK_ImageUsage_ColorAttachment, VK_ImageAspect_Color, fixedSamples);
         }
         //--------------------------------------------------------------------------
 
-        bool VulkanTextureAttachmentManager::AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, bool fixedSamples /*= false*/)
+        bool VulkanTextureAttachmentManager::AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags /*= 0*/, bool fixedSamples /*= false*/)
         {
-            return AddTextureAttachment(attachmentSid, format, usageFlags, VK_ImageAspect_DepthStencil, fixedSamples);
+            return AddTextureAttachment(attachmentSid, format, usageFlags | VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil, fixedSamples);
         }
         //--------------------------------------------------------------------------
 
         bool VulkanTextureAttachmentManager::AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples, 
-                                                                              VkImageUsageFlags usageFlags, bool fixedSamples /*= false*/)
+                                                                              VkImageUsageFlags usageFlags /*= 0*/, bool fixedSamples /*= false*/)
         {
-            return AddTextureAttachment(attachmentSid, format, extent, samples, usageFlags, VK_ImageAspect_DepthStencil, fixedSamples);
+            return AddTextureAttachment(attachmentSid, format, extent, samples, usageFlags | VK_ImageUsage_DepthStencilAttachment, VK_ImageAspect_DepthStencil, fixedSamples);
         }
         //--------------------------------------------------------------------------
 

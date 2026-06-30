@@ -32,13 +32,13 @@ namespace Kmplete
                                                    const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain);
             ~VulkanTextureAttachmentManager() = default;
 
-            KMP_API bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, bool fixedSamples = false);
+            KMP_API bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
             KMP_API bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
-                                                   VkImageUsageFlags usageFlags, bool fixedSamples = false);
+                                                   VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
 
-            KMP_API bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, bool fixedSamples = false);
+            KMP_API bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
             KMP_API bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
-                                                          VkImageUsageFlags usageFlags, bool fixedSamples = false);
+                                                          VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
 
             KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
             KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
