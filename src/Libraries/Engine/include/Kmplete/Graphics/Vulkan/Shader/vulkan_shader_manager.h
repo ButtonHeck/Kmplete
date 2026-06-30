@@ -28,11 +28,21 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            struct ShaderStageInfoParameters
+            {
+                StringID shaderModuleSid;
+                VkShaderStageFlagBits shaderModuleStages;
+                const char* entryPointName;
+            };
+
+        public:
             KMP_API VulkanShaderManager(VkDevice device, const VulkanDescriptorSetManager& descriptorSetManager);
             KMP_API ~VulkanShaderManager();
 
+            KMP_API bool AddShaderModules(const Vector<Pair<StringID, Filepath>>& modulesSidsAndPaths);
             KMP_API OptionalRef<VulkanShaderModule> AddShaderModule(StringID moduleSid, const Filepath& filepath);
             KMP_NODISCARD KMP_API OptionalRef<VulkanShaderModule> GetShaderModule(StringID moduleSid) const noexcept;
+            KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> GetShaderStageCreateInfos(const Vector<ShaderStageInfoParameters>& shaderModulesParameters) const noexcept;
 
             KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");

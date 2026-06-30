@@ -26,6 +26,19 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool VulkanShaderManager::AddShaderModules(const Vector<Pair<StringID, Filepath>>& modulesSidsAndPaths) KMP_PROFILING(ProfileLevelImportant)
+        {
+            bool allModulesLoaded = true;
+            for (const auto& [moduleSid, moduleSourcePath] : modulesSidsAndPaths)
+            {
+                const auto shaderModule = AddShaderModule(moduleSid, moduleSourcePath);
+                allModulesLoaded &= shaderModule.has_value();
+            }
+
+            return allModulesLoaded;
+        }}
+        //--------------------------------------------------------------------------
+
         OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModule(StringID moduleSid, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
@@ -58,6 +71,26 @@ namespace Kmplete
 
             KMP_LOG_ERROR("shader module with sid '{}' not found", moduleSid);
             return std::nullopt;
+        }}
+        //--------------------------------------------------------------------------
+
+        Vector<VkPipelineShaderStageCreateInfo> VulkanShaderManager::GetShaderStageCreateInfos(const Vector<ShaderStageInfoParameters>& shaderModulesParameters) const noexcept KMP_PROFILING(ProfileLevelImportant)
+        {
+            Vector<VkPipelineShaderStageCreateInfo> stagesCreateInfos;
+            stagesCreateInfos.reserve(shaderModulesParameters.size());
+
+            for (const auto& parameters : shaderModulesParameters)
+            {
+                const auto shaderModule = GetShaderModule(parameters.shaderModuleSid);
+                if (!shaderModule.has_value())
+                {
+                    continue;
+                }
+
+                stagesCreateInfos.push_back(shaderModule.value().get().GetShaderStageCreateInfo(parameters.shaderModuleStages, parameters.entryPointName));
+            }
+
+            return stagesCreateInfos;
         }}
         //--------------------------------------------------------------------------
 
