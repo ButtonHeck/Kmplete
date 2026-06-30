@@ -270,14 +270,17 @@ namespace Kmplete
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { MatricesAndTextureDSLayout_SID, SamplerDSLayout_SID });
 
+        auto& shaderManager = vulkanDevice.GetShaderManager();
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.frag.spv");
-        const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShader_SID, vertexShaderPath);
-        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShader_SID, fragmentShaderPath);
-        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
-        };
+        shaderManager.AddShaderModules({
+            { VertexShader_SID, vertexShaderPath },
+            { FragmentShader_SID, fragmentShaderPath }
+        });
+        const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShader_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShader_SID, VK_ShaderStage_Fragment, "main" }
+        });
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
@@ -332,8 +335,8 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_PolygonMode);               //renderer.SetPolygonMode(...)
 
         const Vector<StringID> descriptorSetsLayoutsSids = { MatricesAndTextureDSLayout_SID, SamplerDSLayout_SID };
-        vulkanDevice.GetShaderManager().AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
-        vulkanDevice.GetShaderManager().AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
+        shaderManager.AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
+        shaderManager.AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 
         pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "texture_pipeline_cache.bin");
     }

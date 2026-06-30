@@ -186,12 +186,15 @@ namespace Kmplete
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayout(PipelineLayout_SID, {});
 
-        const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.vert.spv"));
-        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.frag.spv"));
-        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
-        };
+        auto& shaderManager = vulkanDevice.GetShaderManager();
+        shaderManager.AddShaderModules({
+            { VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.vert.spv") },
+            { FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.frag.spv") }
+        });
+        const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShaderModule_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShaderModule_SID, VK_ShaderStage_Fragment, "main" }
+        });
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);

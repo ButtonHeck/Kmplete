@@ -134,23 +134,21 @@ namespace Kmplete
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayout(PipelineLayout_SID, {});
 
-        const auto fixedColorVertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.vert.spv");
-        const auto fixedColorFragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.frag.spv");
-        const auto fixedColorVertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShader_FixedColor_SID, fixedColorVertexShaderPath);
-        const auto fixedColorFragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShader_FixedColor_SID, fixedColorFragmentShaderPath);
-        const auto fixedColorShaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            fixedColorVertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fixedColorFragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
-        };
-
-        const auto bufferedColorVertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_buffered_color.vert.spv");
-        const auto bufferedColorFragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_buffered_color.frag.spv");
-        const auto bufferedColorVertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShader_BufferedColor_SID, bufferedColorVertexShaderPath);
-        const auto bufferedColorFragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShader_BufferedColor_SID, bufferedColorFragmentShaderPath);
-        const auto bufferedColorShaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            bufferedColorVertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            bufferedColorFragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
-        };
+        auto& shaderManager = vulkanDevice.GetShaderManager();
+        shaderManager.AddShaderModules({
+            { VertexShader_FixedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.vert.spv") },
+            { FragmentShader_FixedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_fixed_color.frag.spv") },
+            { VertexShader_BufferedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_buffered_color.vert.spv") },
+            { FragmentShader_BufferedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("multiple_pipelines_buffered_color.frag.spv") }
+        });
+        const auto fixedColorShaderStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShader_FixedColor_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShader_FixedColor_SID, VK_ShaderStage_Fragment, "main" }
+        });
+        const auto bufferedColorShaderStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShader_BufferedColor_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShader_BufferedColor_SID, VK_ShaderStage_Fragment, "main" }
+        });
 
         auto pipelineFixedColorFillParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineFixedColorFillParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);

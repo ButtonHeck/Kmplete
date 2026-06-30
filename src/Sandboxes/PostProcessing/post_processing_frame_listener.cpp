@@ -177,14 +177,22 @@ namespace Kmplete
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { PostProcessingDSLayout_SID });
 
-        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.vert.spv");
-        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.frag.spv");
-        const auto vertexShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderModule_SID, vertexShaderPath);
-        const auto fragmentShaderModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderModule_SID, fragmentShaderPath);
-        const auto shaderStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fragmentShaderModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
-        };
+        auto& shaderManager = vulkanDevice.GetShaderManager();
+        shaderManager.AddShaderModules({
+            { VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.vert.spv") },
+            { FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_pre.frag.spv") },
+            { VertexShaderResolveModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_post.vert.spv") },
+            { FragmentShaderResolveModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_post.frag.spv") }
+        });
+        const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShaderModule_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShaderModule_SID, VK_ShaderStage_Fragment, "main" }
+        });
+        const auto shaderPostStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShaderResolveModule_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShaderResolveModule_SID, VK_ShaderStage_Fragment, "main" }
+        });
+
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
@@ -199,15 +207,6 @@ namespace Kmplete
 
         pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "post_processing_pipeline_cache.bin");
 
-
-        const auto vertexPostShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_post.vert.spv");
-        const auto fragmentPostShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("post_processing_post.frag.spv");
-        const auto vertexShaderPostModule = vulkanDevice.GetShaderManager().AddShaderModule(VertexShaderResolveModule_SID, vertexPostShaderPath);
-        const auto fragmentShaderPostModule = vulkanDevice.GetShaderManager().AddShaderModule(FragmentShaderResolveModule_SID, fragmentPostShaderPath);
-        const auto shaderPostStages = Vector<VkPipelineShaderStageCreateInfo>{
-            vertexShaderPostModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Vertex, "main"),
-            fragmentShaderPostModule.value().get().GetShaderStageCreateInfo(VK_ShaderStage_Fragment, "main")
-        };
 
         auto pipelinePostParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelinePostParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
