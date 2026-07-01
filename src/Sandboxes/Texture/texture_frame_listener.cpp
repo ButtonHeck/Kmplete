@@ -271,8 +271,8 @@ namespace Kmplete
         pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { MatricesAndTextureDSLayout_SID, SamplerDSLayout_SID });
 
         auto& shaderManager = vulkanDevice.GetShaderManager();
-        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.vert.spv");
-        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("texture.frag.spv");
+        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/texture.vert.spv");
+        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/texture.frag.spv");
         shaderManager.AddShaderModules({
             { VertexShader_SID, vertexShaderPath },
             { FragmentShader_SID, fragmentShaderPath }

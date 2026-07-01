@@ -276,8 +276,8 @@ namespace Kmplete
 
         auto& shaderManager = vulkanDevice.GetShaderManager();
         shaderManager.AddShaderModules({
-            { VertexShader_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.vert.spv") },
-            { FragmentShader_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("storage_buffers.frag.spv") }
+            { VertexShader_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/storage_buffers.vert.spv") },
+            { FragmentShader_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/storage_buffers.frag.spv") }
         });
         const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
             { VertexShader_SID, VK_ShaderStage_Vertex, "main" },

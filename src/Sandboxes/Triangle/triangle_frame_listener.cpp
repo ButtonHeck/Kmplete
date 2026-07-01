@@ -288,8 +288,8 @@ namespace Kmplete
         pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { MatricesDSLayout_SID, ColorMultiplierDSLayout_SID });
 
         auto& shaderManager = vulkanDevice.GetShaderManager();
-        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.vert.spv");
-        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("triangle.frag.spv");
+        const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/triangle.vert.spv");
+        const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/triangle.frag.spv");
         shaderManager.AddShaderModules({
             { VertexShader_SID, vertexShaderPath },
             { FragmentShader_SID, fragmentShaderPath }
