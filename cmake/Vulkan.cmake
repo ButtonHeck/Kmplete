@@ -6,4 +6,5 @@
 
 find_package(Vulkan COMPONENTS
     glslc
+    shaderc_combined
 )

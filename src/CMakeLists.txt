@@ -32,6 +32,7 @@ add_subdirectory(Libraries/TranslatorInterfaceLib)
 add_subdirectory(Libraries/AssetsInterfaceLib)
 add_subdirectory(Libraries/AssetsCompilerInterfaceLib)
 add_subdirectory(Libraries/TimeLib)
+add_subdirectory(Libraries/ShaderCompilerLib)
 
 add_subdirectory(Tools/Editor)
 add_subdirectory(Tools/Translator)

@@ -1,0 +1,97 @@
+#include "Kmplete/ShaderCompiler/compile.h"
+#include "Kmplete/Filesystem/filesystem.h"
+#include "Kmplete/Profile/profiler.h"
+#include "Kmplete/Log/log.h"
+
+#include <shaderc/shaderc.hpp>
+
+
+namespace Kmplete
+{
+    namespace ShaderCompiler
+    {
+        namespace
+        {
+            String ShaderTypeToString(ShaderType shaderType)
+            {
+                switch (shaderType)
+                {
+                case ShaderType::Vertex:
+                    return "Vertex";
+                case ShaderType::Fragment:
+                    return "Fragment";
+                case ShaderType::Compute:
+                    return "Compute";
+                case ShaderType::RayTracing:
+                    return "RayTracing";
+                default:
+                    return "Unknown";
+                }
+            }
+            //--------------------------------------------------------------------------
+
+            shaderc_shader_kind ShaderTypeToShadercNative(ShaderType shaderType)
+            {
+                switch (shaderType)
+                {
+                case ShaderType::Vertex:
+                    return shaderc_glsl_vertex_shader;
+                case ShaderType::Fragment:
+                    return shaderc_glsl_fragment_shader;
+                case ShaderType::Compute:
+                    return shaderc_glsl_compute_shader;
+                default:
+                    return shaderc_glsl_raygen_shader;
+                }
+            }
+            //--------------------------------------------------------------------------
+        }
+
+
+        Vector<UInt32> CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (!shaderCode.empty())
+            {
+                KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: cannot compile shader - code is empty (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
+                return Vector<UInt32>();
+            }
+
+            shaderc::Compiler compiler;
+            if (!compiler.IsValid())
+            {
+                KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: failed to create shaderc compiler instance (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
+                return Vector<UInt32>();
+            }
+
+            shaderc::CompileOptions options;
+            if (optimize)
+            {
+                options.SetOptimizationLevel(shaderc_optimization_level_performance);
+            }
+
+            const auto result = compiler.CompileGlslToSpv(shaderCode, ShaderTypeToShadercNative(shaderType), sourceName.c_str(), options);
+            if (result.GetCompilationStatus() != shaderc_compilation_status_success)
+            {
+                KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: shader compilation failed (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
+                return Vector<UInt32>();
+            }
+
+            KMP_LOG_INFO_FN("CompileGLSLToSpirvFromSource: successfully compiled '{}' shader named '{}'", ShaderTypeToString(shaderType), sourceName);
+            return Vector<UInt32>({ result.cbegin(), result.cend() });
+        }}
+        //--------------------------------------------------------------------------
+
+        Vector<UInt32> CompileGLSLToSpirvFromFile(const String& sourceName, ShaderType shaderType, const Filepath& shaderFile, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            const auto shaderCode = Filesystem::ReadFileAsText(shaderFile);
+            if (shaderCode.empty())
+            {
+                KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromFile: failed to read shader code from '{}' (compiling '{}' shader named '{}')", shaderFile, ShaderTypeToString(shaderType), sourceName);
+                return Vector<UInt32>();
+            }
+
+            return CompileGLSLToSpirvFromSource(sourceName, shaderType, shaderCode, optimize);
+        }}
+        //--------------------------------------------------------------------------
+    }
+}
