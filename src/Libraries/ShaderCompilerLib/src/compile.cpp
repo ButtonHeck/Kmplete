@@ -48,19 +48,19 @@ namespace Kmplete
         }
 
 
-        Vector<UInt32> CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
+        BinaryBuffer32 CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
         {
             if (!shaderCode.empty())
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: cannot compile shader - code is empty (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
-                return Vector<UInt32>();
+                return BinaryBuffer32();
             }
 
             shaderc::Compiler compiler;
             if (!compiler.IsValid())
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: failed to create shaderc compiler instance (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
-                return Vector<UInt32>();
+                return BinaryBuffer32();
             }
 
             shaderc::CompileOptions options;
@@ -73,21 +73,21 @@ namespace Kmplete
             if (result.GetCompilationStatus() != shaderc_compilation_status_success)
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: shader compilation failed (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
-                return Vector<UInt32>();
+                return BinaryBuffer32();
             }
 
             KMP_LOG_INFO_FN("CompileGLSLToSpirvFromSource: successfully compiled '{}' shader named '{}'", ShaderTypeToString(shaderType), sourceName);
-            return Vector<UInt32>({ result.cbegin(), result.cend() });
+            return BinaryBuffer32({ result.cbegin(), result.cend() });
         }}
         //--------------------------------------------------------------------------
 
-        Vector<UInt32> CompileGLSLToSpirvFromFile(const String& sourceName, ShaderType shaderType, const Filepath& shaderFile, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
+        BinaryBuffer32 CompileGLSLToSpirvFromFile(const String& sourceName, ShaderType shaderType, const Filepath& shaderFile, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
         {
             const auto shaderCode = Filesystem::ReadFileAsText(shaderFile);
             if (shaderCode.empty())
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromFile: failed to read shader code from '{}' (compiling '{}' shader named '{}')", shaderFile, ShaderTypeToString(shaderType), sourceName);
-                return Vector<UInt32>();
+                return BinaryBuffer32();
             }
 
             return CompileGLSLToSpirvFromSource(sourceName, shaderType, shaderCode, optimize);

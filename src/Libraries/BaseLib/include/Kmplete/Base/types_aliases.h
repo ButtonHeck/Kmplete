@@ -58,6 +58,7 @@ namespace Kmplete
     using Int64 = int64_t;
 
     using BinaryBuffer = Vector<UByte>;
+    using BinaryBuffer32 = Vector<UInt32>;
 
     template<typename Value>
     using InitializerList = std::initializer_list<Value>;

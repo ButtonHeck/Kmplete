@@ -18,7 +18,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        KMP_NODISCARD KMP_API Vector<UInt32> CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize = true);
-        KMP_NODISCARD KMP_API Vector<UInt32> CompileGLSLToSpirvFromFile(const String& sourceName, ShaderType shaderType, const Filepath& shaderFile, bool optimize = true);
+        KMP_NODISCARD KMP_API BinaryBuffer32 CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize = true);
+        KMP_NODISCARD KMP_API BinaryBuffer32 CompileGLSLToSpirvFromFile(const String& sourceName, ShaderType shaderType, const Filepath& shaderFile, bool optimize = true);
     }
 }
