@@ -50,7 +50,7 @@ namespace Kmplete
 
         BinaryBuffer32 CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
         {
-            if (!shaderCode.empty())
+            if (shaderCode.empty())
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: cannot compile shader - code is empty (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
                 return BinaryBuffer32();
