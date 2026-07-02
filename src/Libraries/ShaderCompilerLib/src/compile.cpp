@@ -5,6 +5,10 @@
 
 #include <shaderc/shaderc.hpp>
 
+#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC)
+    #include <crtdbg.h>
+#endif
+
 
 namespace Kmplete
 {
@@ -56,7 +60,18 @@ namespace Kmplete
                 return BinaryBuffer32();
             }
 
+#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC)
+            // bypass intentional memory leak due to unreleased GlslangInitializer
+            // https://github.com/google/shaderc/issues/1052
+            int oldFlag = _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+            int newFlag = oldFlag & ~_CRTDBG_ALLOC_MEM_DF;
+            _CrtSetDbgFlag(newFlag);
+#endif
             shaderc::Compiler compiler;
+#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC)
+            _CrtSetDbgFlag(oldFlag);
+#endif
+
             if (!compiler.IsValid())
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: failed to create shaderc compiler instance (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
