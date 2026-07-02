@@ -21,7 +21,8 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanShaderModule(VkDevice device, const Filepath& filepath);
+            KMP_API VulkanShaderModule(VkDevice device, const Filepath& filepathBinary);
+            KMP_API VulkanShaderModule(VkDevice device, const BinaryBuffer32& shaderBinary);
             KMP_API VulkanShaderModule(VulkanShaderModule&& other) noexcept;
             KMP_API VulkanShaderModule& operator=(VulkanShaderModule&& other) noexcept;
             KMP_API ~VulkanShaderModule();
@@ -29,7 +30,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPipelineShaderStageCreateInfo GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName = "main") const noexcept;
 
         private:
-            void _Initialize(const Filepath& filepath);
+            void _Initialize(const Filepath& filepathBinary);
+            void _Initialize(const BinaryBuffer32& shaderBinary);
             void _Finalize();
 
         private:

@@ -151,6 +151,7 @@ AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Shader"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Shader/vulkan_shader_module.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Shader/vulkan_shader_object.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Shader/vulkan_shader_manager.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Shader/vulkan_shader_load_parameters.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Shader/vulkan_shader_module.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Shader/vulkan_shader_object.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/Vulkan/Shader/vulkan_shader_manager.cpp
@@ -253,6 +254,7 @@ target_link_libraries(Kmplete
     PUBLIC AssetsInterfaceLib
     PUBLIC $<IF:$<CONFIG:Production>,ProfilerInterfaceLib,ProfilerLib>
     PUBLIC TimeLib
+    PUBLIC ShaderCompilerLib
 
     PUBLIC glfw
     PUBLIC Vulkan::Vulkan

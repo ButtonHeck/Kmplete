@@ -12,14 +12,27 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanShaderModule::VulkanShaderModule(VkDevice device, const Filepath& filepath)
+        VulkanShaderModule::VulkanShaderModule(VkDevice device, const Filepath& filepathBinary)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _device(device)
             , _shaderModule(VK_NULL_HANDLE)
         {
             KMP_ASSERT(_device);
 
-            _Initialize(filepath);
+            _Initialize(filepathBinary);
+
+            KMP_PROFILE_CONSTRUCTOR_END()
+        }
+        //--------------------------------------------------------------------------
+
+        VulkanShaderModule::VulkanShaderModule(VkDevice device, const BinaryBuffer32& shaderBinary)
+            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
+              _device(device)
+            , _shaderModule(VK_NULL_HANDLE)
+        {
+            KMP_ASSERT(_device);
+
+            _Initialize(shaderBinary);
 
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -77,30 +90,48 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanShaderModule::_Initialize(const Filepath& filepath)
+        void VulkanShaderModule::_Initialize(const Filepath& filepathBinary)
         {
-            if (!Filesystem::FilepathExists(filepath))
+            if (!Filesystem::FilepathExists(filepathBinary))
             {
-                KMP_LOG_ERROR("shader file not found '{}'", filepath);
+                KMP_LOG_ERROR("shader file not found '{}'", filepathBinary);
                 throw RuntimeError("VulkanShaderModule: shader file not found");
             }
 
-            const auto shaderBinary = Filesystem::ReadFileAsBinary(filepath);
+            const auto shaderBinary = Filesystem::ReadFileAsBinary(filepathBinary);
             if (shaderBinary.empty())
             {
-                KMP_LOG_ERROR("failed to load shader binary from '{}'", filepath);
+                KMP_LOG_ERROR("failed to load shader binary from '{}'", filepathBinary);
                 throw RuntimeError("VulkanShaderModule: failed to load shader binary");
             }
 
             if (shaderBinary.size() % 4 != 0)
             {
-                KMP_LOG_ERROR("shader binary size is not multiple of 4 '{}'", filepath);
+                KMP_LOG_ERROR("shader binary size is not multiple of 4 '{}'", filepathBinary);
                 throw RuntimeError("VulkanShaderModule: shader binary size is not multiple of 4");
             }
 
             auto shaderModuleCreateInfo = VKUtils::InitVkShaderModuleCreateInfo();
             shaderModuleCreateInfo.codeSize = shaderBinary.size();
             shaderModuleCreateInfo.pCode = reinterpret_cast<const UInt32*>(shaderBinary.data());
+
+            auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
+            VKUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");
+            KMP_ASSERT(_shaderModule);
+        }
+        //--------------------------------------------------------------------------
+
+        void VulkanShaderModule::_Initialize(const BinaryBuffer32& shaderBinary)
+        {
+            if (shaderBinary.empty())
+            {
+                KMP_LOG_ERROR("failed to load shader binary - buffer is empty");
+                throw RuntimeError("VulkanShaderModule: failed to load shader binary");
+            }
+
+            auto shaderModuleCreateInfo = VKUtils::InitVkShaderModuleCreateInfo();
+            shaderModuleCreateInfo.codeSize = shaderBinary.size() * sizeof(UInt32);
+            shaderModuleCreateInfo.pCode = shaderBinary.data();
 
             auto result = vkCreateShaderModule(_device, &shaderModuleCreateInfo, nullptr, &_shaderModule);
             VKUtils::CheckResult(result, "VulkanShaderModule: failed to create shader module");

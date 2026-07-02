@@ -7,6 +7,7 @@
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_object.h"
 #include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_module.h"
+#include "Kmplete/Graphics/Vulkan/Shader/vulkan_shader_load_parameters.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Profile/profiler_fwd.h"
 
@@ -39,8 +40,10 @@ namespace Kmplete
             KMP_API VulkanShaderManager(VkDevice device, const VulkanDescriptorSetManager& descriptorSetManager);
             KMP_API ~VulkanShaderManager();
 
-            KMP_API bool AddShaderModules(const Vector<Pair<StringID, Filepath>>& modulesSidsAndPaths);
-            KMP_API OptionalRef<VulkanShaderModule> AddShaderModule(StringID moduleSid, const Filepath& filepath);
+            KMP_API bool AddShaderModules(const Vector<ShaderLoadParameters>& shadersParameters);
+            KMP_API OptionalRef<VulkanShaderModule> AddShaderModuleFromBinaryFile(StringID moduleSid, const Filepath& filepath);
+            KMP_API OptionalRef<VulkanShaderModule> AddShaderModuleFromBinaryCode(StringID moduleSid, const BinaryBuffer32& shaderBinary);
+
             KMP_NODISCARD KMP_API OptionalRef<VulkanShaderModule> GetShaderModule(StringID moduleSid) const noexcept;
             KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> GetShaderStageCreateInfos(const Vector<ShaderStageInfoParameters>& shaderModulesParameters) const noexcept;
 
@@ -49,6 +52,9 @@ namespace Kmplete
             KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
             KMP_NODISCARD KMP_API VkShaderEXT GetVkShader(StringID shaderSid) const noexcept;
+
+        private:
+            KMP_NODISCARD bool _AddShaderModule(const ShaderLoadParameters& parameters);
             
         private:
             VkDevice _device;

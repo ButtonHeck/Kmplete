@@ -2,6 +2,8 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_descriptor_set_manager.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -26,20 +28,19 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanShaderManager::AddShaderModules(const Vector<Pair<StringID, Filepath>>& modulesSidsAndPaths) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanShaderManager::AddShaderModules(const Vector<ShaderLoadParameters>& shadersParameters) KMP_PROFILING(ProfileLevelImportant)
         {
             bool allModulesLoaded = true;
-            for (const auto& [moduleSid, moduleSourcePath] : modulesSidsAndPaths)
+            for (const auto& parameters : shadersParameters)
             {
-                const auto shaderModule = AddShaderModule(moduleSid, moduleSourcePath);
-                allModulesLoaded &= shaderModule.has_value();
+                allModulesLoaded &= _AddShaderModule(parameters);
             }
 
             return allModulesLoaded;
         }}
         //--------------------------------------------------------------------------
 
-        OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModule(StringID moduleSid, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
+        OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModuleFromBinaryFile(StringID moduleSid, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
@@ -57,6 +58,29 @@ namespace Kmplete
             catch (KMP_MB_UNUSED const RuntimeError& er)
             {
                 KMP_LOG_ERROR("failed to create shader module with sid '{}' from '{}'", moduleSid, filepath);
+                return std::nullopt;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModuleFromBinaryCode(StringID moduleSid, const BinaryBuffer32& shaderBinary) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            if (_shaderModules.contains(moduleSid))
+            {
+                KMP_LOG_WARN("shader module with sid '{}' has already been created", moduleSid);
+                return *_shaderModules.at(moduleSid).get();
+            }
+
+            try
+            {
+                const auto [iterator, hasEmplaced] = _shaderModules.emplace(moduleSid, CreateUPtr<VulkanShaderModule>(_device, shaderBinary));
+                return *iterator->second.get();
+            }
+            catch (KMP_MB_UNUSED const RuntimeError& er)
+            {
+                KMP_LOG_ERROR("failed to create shader module with sid '{}' from binary", moduleSid);
                 return std::nullopt;
             }
         }}
@@ -162,6 +186,64 @@ namespace Kmplete
             KMP_LOG_ERROR("shader object with sid '{}' not found", shaderSid);
             return VK_NULL_HANDLE;
         }
+        //--------------------------------------------------------------------------
+
+        bool VulkanShaderManager::_AddShaderModule(const ShaderLoadParameters& parameters) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            auto shaderModule = OptionalRef<VulkanShaderModule>();
+
+            if (parameters.sourceType == ShaderSourceType::BinaryFile)
+            {
+                if (!std::holds_alternative<Filepath>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader module '{}' from binary file - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                shaderModule = AddShaderModuleFromBinaryFile(parameters.sid, std::get<Filepath>(parameters.source));
+            }
+            else if (parameters.sourceType == ShaderSourceType::SourceFile)
+            {
+                if (!std::holds_alternative<Filepath>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader module '{}' from source file - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                const auto shaderSourceFile = std::get<Filepath>(parameters.source);
+                const auto shaderSourceFileName = Filesystem::ToNativeString(shaderSourceFile.filename());
+                const auto shaderBinary = ShaderCompiler::CompileGLSLToSpirvFromFile(shaderSourceFileName, parameters.shaderType, shaderSourceFile, "optimize"_true);
+                shaderModule = AddShaderModuleFromBinaryCode(parameters.sid, shaderBinary);
+            }
+            else if (parameters.sourceType == ShaderSourceType::BinaryCode)
+            {
+                if (!std::holds_alternative<BinaryBuffer32>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader module '{}' from binary code - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                shaderModule = AddShaderModuleFromBinaryCode(parameters.sid, std::get<BinaryBuffer32>(parameters.source));
+            }
+            else if (parameters.sourceType == ShaderSourceType::SourceCode)
+            {
+                if (!std::holds_alternative<String>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader module '{}' from source code - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                const auto shaderBinary = ShaderCompiler::CompileGLSLToSpirvFromSource("", parameters.shaderType, std::get<String>(parameters.source), "optimize"_true);
+                shaderModule = AddShaderModuleFromBinaryCode(parameters.sid, shaderBinary);
+            }
+            else
+            {
+                KMP_LOG_ERROR("cannot load shader module '{}' - unknown or not implemented loading from given source type", parameters.sid);
+                return false;
+            }
+
+            return shaderModule.has_value();
+        }}
         //--------------------------------------------------------------------------
     }
 }
