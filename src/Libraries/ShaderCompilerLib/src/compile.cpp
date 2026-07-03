@@ -87,7 +87,7 @@ namespace Kmplete
             const auto result = compiler.CompileGlslToSpv(shaderCode, ShaderTypeToShadercNative(shaderType), sourceName.c_str(), options);
             if (result.GetCompilationStatus() != shaderc_compilation_status_success)
             {
-                KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: shader compilation failed (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
+                KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: shader compilation failed (compiling '{}' shader named '{}')\n\t{}", ShaderTypeToString(shaderType), sourceName, result.GetErrorMessage());
                 return BinaryBuffer32();
             }
 
