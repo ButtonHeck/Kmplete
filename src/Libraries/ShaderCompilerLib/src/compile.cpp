@@ -60,7 +60,7 @@ namespace Kmplete
                 return BinaryBuffer32();
             }
 
-#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC)
+#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC) && defined (KMP_CONFIG_TYPE_DEBUG)
             // bypass intentional memory leak due to unreleased GlslangInitializer
             // https://github.com/google/shaderc/issues/1052
             int oldFlag = _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -68,7 +68,7 @@ namespace Kmplete
             _CrtSetDbgFlag(newFlag);
 #endif
             shaderc::Compiler compiler;
-#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC)
+#if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_COMPILER_MSVC) && defined (KMP_CONFIG_TYPE_DEBUG)
             _CrtSetDbgFlag(oldFlag);
 #endif
 
