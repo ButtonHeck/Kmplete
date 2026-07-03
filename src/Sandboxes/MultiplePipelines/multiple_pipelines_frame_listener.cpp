@@ -136,10 +136,10 @@ namespace Kmplete
 
         auto& shaderManager = vulkanDevice.GetShaderManager();
         shaderManager.AddShaderModules({
-            { VertexShader_FixedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_fixed_color.vert.spv") },
-            { FragmentShader_FixedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_fixed_color.frag.spv") },
-            { VertexShader_BufferedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_buffered_color.vert.spv") },
-            { FragmentShader_BufferedColor_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_buffered_color.frag.spv") }
+            { VertexShader_FixedColor_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_fixed_color.vert.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShader_FixedColor_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_fixed_color.frag.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment },
+            { VertexShader_BufferedColor_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_buffered_color.vert.spv"),  Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShader_BufferedColor_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/multiple_pipelines_buffered_color.frag.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment }
         });
         const auto fixedColorShaderStages = shaderManager.GetShaderStageCreateInfos({
             { VertexShader_FixedColor_SID, VK_ShaderStage_Vertex, "main" },

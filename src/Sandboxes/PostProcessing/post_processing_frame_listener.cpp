@@ -179,10 +179,10 @@ namespace Kmplete
 
         auto& shaderManager = vulkanDevice.GetShaderManager();
         shaderManager.AddShaderModules({
-            { VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_pre.vert.spv") },
-            { FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_pre.frag.spv") },
-            { VertexShaderResolveModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_post.vert.spv") },
-            { FragmentShaderResolveModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_post.frag.spv") }
+            { VertexShaderModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_pre.vert.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShaderModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_pre.frag.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment },
+            { VertexShaderResolveModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_post.vert.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShaderResolveModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/post_processing_post.frag.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment }
         });
         const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
             { VertexShaderModule_SID, VK_ShaderStage_Vertex, "main" },

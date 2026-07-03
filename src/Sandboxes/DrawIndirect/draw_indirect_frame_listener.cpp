@@ -187,10 +187,19 @@ namespace Kmplete
         pipelineManager.AddPipelineLayout(PipelineLayout_SID, {});
 
         auto& shaderManager = vulkanDevice.GetShaderManager();
+
+#define LOAD_SHADERS_FROM_SPIRV true
+#if LOAD_SHADERS_FROM_SPIRV
         shaderManager.AddShaderModules({
-            { VertexShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/draw_indirect.vert.spv") },
-            { FragmentShaderModule_SID, String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/draw_indirect.frag.spv") }
+            { VertexShaderModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/draw_indirect.vert.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShaderModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/draw_indirect.frag.spv"), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment }
         });
+#else
+        shaderManager.AddShaderModules({
+            { VertexShaderModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.vert"), Graphics::ShaderSourceType::SourceFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShaderModule_SID, Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("draw_indirect.frag"), Graphics::ShaderSourceType::SourceFile, ShaderCompiler::ShaderType::Fragment }
+        });
+#endif
         const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
             { VertexShaderModule_SID, VK_ShaderStage_Vertex, "main" },
             { FragmentShaderModule_SID, VK_ShaderStage_Fragment, "main" }

@@ -291,8 +291,8 @@ namespace Kmplete
         const auto vertexShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/triangle.vert.spv");
         const auto fragmentShaderPath = String(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/triangle.frag.spv");
         shaderManager.AddShaderModules({
-            { VertexShader_SID, vertexShaderPath },
-            { FragmentShader_SID, fragmentShaderPath }
+            { VertexShader_SID, Filepath(vertexShaderPath), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShader_SID, Filepath(fragmentShaderPath), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment }
         });
         const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
             { VertexShader_SID, VK_ShaderStage_Vertex, "main" },
