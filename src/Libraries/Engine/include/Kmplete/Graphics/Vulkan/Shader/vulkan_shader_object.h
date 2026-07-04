@@ -21,13 +21,22 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanShaderObject(VkDevice device, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
+            KMP_API VulkanShaderObject(VkDevice device, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                       const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            KMP_API VulkanShaderObject(VkDevice device, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                        const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
             KMP_API VulkanShaderObject(VulkanShaderObject&& other) noexcept;
             KMP_API VulkanShaderObject& operator=(VulkanShaderObject&& other) noexcept;
             KMP_API ~VulkanShaderObject();
 
             KMP_NODISCARD KMP_API VkShaderEXT GetVkShader() const noexcept;
+
+        private:
+            void _Initialize(const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                             const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            void _Initialize(const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                             const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            void _Finalize();
 
         private:
             VkDevice _device;

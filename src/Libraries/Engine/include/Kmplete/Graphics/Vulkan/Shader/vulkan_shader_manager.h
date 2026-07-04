@@ -41,15 +41,15 @@ namespace Kmplete
             KMP_API ~VulkanShaderManager();
 
             KMP_API bool AddShaderModules(const Vector<ShaderLoadParameters>& shadersParameters);
-            KMP_API OptionalRef<VulkanShaderModule> AddShaderModuleFromBinaryFile(StringID moduleSid, const Filepath& filepath);
+            KMP_API OptionalRef<VulkanShaderModule> AddShaderModuleFromBinaryFile(StringID moduleSid, const Filepath& filepathBinary);
             KMP_API OptionalRef<VulkanShaderModule> AddShaderModuleFromBinaryCode(StringID moduleSid, const BinaryBuffer32& shaderBinary);
 
             KMP_NODISCARD KMP_API OptionalRef<VulkanShaderModule> GetShaderModule(StringID moduleSid) const noexcept;
             KMP_NODISCARD KMP_API Vector<VkPipelineShaderStageCreateInfo> GetShaderStageCreateInfos(const Vector<ShaderStageInfoParameters>& shaderModulesParameters) const noexcept;
 
-            KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+            KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
-            KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+            KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
             KMP_NODISCARD KMP_API VkShaderEXT GetVkShader(StringID shaderSid) const noexcept;
 

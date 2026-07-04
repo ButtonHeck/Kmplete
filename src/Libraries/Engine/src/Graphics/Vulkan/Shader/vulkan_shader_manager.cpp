@@ -40,7 +40,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModuleFromBinaryFile(StringID moduleSid, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
+        OptionalRef<VulkanShaderModule> VulkanShaderManager::AddShaderModuleFromBinaryFile(StringID moduleSid, const Filepath& filepathBinary) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
@@ -52,12 +52,12 @@ namespace Kmplete
 
             try
             {
-                const auto [iterator, hasEmplaced] = _shaderModules.emplace(moduleSid, CreateUPtr<VulkanShaderModule>(_device, filepath));
+                const auto [iterator, hasEmplaced] = _shaderModules.emplace(moduleSid, CreateUPtr<VulkanShaderModule>(_device, filepathBinary));
                 return *iterator->second.get();
             }
             catch (KMP_MB_UNUSED const RuntimeError& er)
             {
-                KMP_LOG_ERROR("failed to create shader module with sid '{}' from '{}'", moduleSid, filepath);
+                KMP_LOG_ERROR("failed to create shader module with sid '{}' from '{}'", moduleSid, filepathBinary);
                 return std::nullopt;
             }
         }}
@@ -118,7 +118,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                                   const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
@@ -131,18 +131,18 @@ namespace Kmplete
 
             try
             {
-                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
+                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, filepathBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
                 return hasEmplaced;
             }
             catch (KMP_MB_UNUSED const RuntimeError& er)
             {
-                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", shaderSid, filepath);
+                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", shaderSid, filepathBinary);
                 return false;
             }
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepath, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                                   const Vector<StringID>& descriptorSetsLayoutsSids, const char* name) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
@@ -156,12 +156,12 @@ namespace Kmplete
             try
             {
                 const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
-                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, filepath, stage, nextStage, linked, descriptorSetsLayouts, name));
+                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, filepathBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
                 return hasEmplaced;
             }
             catch (KMP_MB_UNUSED const RuntimeError& er)
             {
-                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", shaderSid, filepath);
+                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", shaderSid, filepathBinary);
                 return false;
             }
         }}
