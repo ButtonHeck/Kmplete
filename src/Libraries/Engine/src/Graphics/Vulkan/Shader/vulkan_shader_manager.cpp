@@ -118,6 +118,79 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool VulkanShaderManager::AddShaderObject(const ShaderLoadParameters& parameters, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
+            return AddShaderObject(parameters, stage, nextStage, linked, descriptorSetsLayouts, name);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanShaderManager::AddShaderObject(const ShaderLoadParameters& parameters, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
+                                                  const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            if (parameters.sourceType == ShaderSourceType::BinaryFile)
+            {
+                if (!std::holds_alternative<Filepath>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader object '{}' from binary file - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                return AddShaderObject(parameters.sid, std::get<Filepath>(parameters.source), stage, nextStage, linked, descriptorSetsLayouts, name);
+            }
+            else if (parameters.sourceType == ShaderSourceType::SourceFile)
+            {
+                if (!std::holds_alternative<Filepath>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader object '{}' from source file - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                const auto shaderSourceFile = std::get<Filepath>(parameters.source);
+                const auto shaderSourceFileName = Filesystem::ToNativeString(shaderSourceFile.filename());
+                const auto shaderBinary = ShaderCompiler::CompileGLSLToSpirvFromFile(shaderSourceFileName, parameters.shaderType, shaderSourceFile, "optimize"_true);
+                return AddShaderObject(parameters.sid, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name);
+            }
+            else if (parameters.sourceType == ShaderSourceType::BinaryCode)
+            {
+                if (!std::holds_alternative<BinaryBuffer32>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader object '{}' from binary code - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                return AddShaderObject(parameters.sid, std::get<BinaryBuffer32>(parameters.source), stage, nextStage, linked, descriptorSetsLayouts, name);
+            }
+            else if (parameters.sourceType == ShaderSourceType::SourceCode)
+            {
+                if (!std::holds_alternative<String>(parameters.source))
+                {
+                    KMP_LOG_ERROR("cannot load shader object '{}' from source code - source and type parameters mismatch", parameters.sid);
+                    return false;
+                }
+
+                const auto shaderBinary = ShaderCompiler::CompileGLSLToSpirvFromSource("", parameters.shaderType, std::get<String>(parameters.source), "optimize"_true);
+                return AddShaderObject(parameters.sid, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name);
+            }
+            else
+            {
+                KMP_LOG_ERROR("cannot load shader object '{}' - unknown or not implemented loading from given source type", parameters.sid);
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
+            return AddShaderObject(shaderSid, filepathBinary, stage, nextStage, linked, descriptorSetsLayouts, name);
+        }}
+        //--------------------------------------------------------------------------
+
         bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                                   const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
         {
@@ -142,28 +215,11 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
                                                   const Vector<StringID>& descriptorSetsLayoutsSids, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_device);
-
-            if (_shaderObjects.contains(shaderSid))
-            {
-                KMP_LOG_WARN("shader object with sid '{}' has already been created", shaderSid);
-                return true;
-            }
-
-            try
-            {
-                const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
-                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, filepathBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
-                return hasEmplaced;
-            }
-            catch (KMP_MB_UNUSED const RuntimeError& er)
-            {
-                KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", shaderSid, filepathBinary);
-                return false;
-            }
+            const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
+            return AddShaderObject(shaderSid, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name);
         }}
         //--------------------------------------------------------------------------
 
@@ -180,31 +236,6 @@ namespace Kmplete
 
             try
             {
-                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
-                return hasEmplaced;
-            }
-            catch (KMP_MB_UNUSED const RuntimeError& er)
-            {
-                KMP_LOG_ERROR("failed to create shader object with sid '{}' from binary buffer", shaderSid);
-                return false;
-            }
-        }}
-        //--------------------------------------------------------------------------
-
-        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
-                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_device);
-
-            if (_shaderObjects.contains(shaderSid))
-            {
-                KMP_LOG_WARN("shader object with sid '{}' has already been created", shaderSid);
-                return true;
-            }
-
-            try
-            {
-                const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
                 const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
                 return hasEmplaced;
             }
