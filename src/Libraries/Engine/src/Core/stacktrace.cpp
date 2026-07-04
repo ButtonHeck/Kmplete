@@ -4,6 +4,7 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Base/named_bool.h"
+#include "Kmplete/Log/log.h"
 
 #include <cpptrace/cpptrace.hpp>
 
@@ -15,14 +16,14 @@ namespace Kmplete
         const auto stacktrace = cpptrace::generate_trace();
         stacktrace.print();
 
-        String dumpName = ApplicationContext::GetApplicationName();
-        dumpName += " stacktrace ";
-        dumpName += Time::GetCurrentTimeString();
-        dumpName += ".txt";
+        auto dumpName = Utils::Concatenate(ApplicationContext::GetApplicationName(), " stacktrace ", Time::GetCurrentTimeString(), ".txt");
         dumpName = Utils::RegexReplace(dumpName, ":", "_");
         const auto dumpFile = ApplicationContext::GetApplicationLogPath() / dumpName;
 
-        Filesystem::WriteFile(dumpFile, stacktrace.to_string(), "append"_false);
+        if (Filesystem::WriteFile(dumpFile, stacktrace.to_string(), "append"_false))
+        {
+            KMP_LOG_ERROR_FN("stacktrace written to a file '{}'", dumpFile);
+        }
     }
     //--------------------------------------------------------------------------
 }
