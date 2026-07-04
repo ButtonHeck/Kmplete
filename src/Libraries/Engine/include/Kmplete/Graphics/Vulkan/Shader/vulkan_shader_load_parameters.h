@@ -22,11 +22,13 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        using ShaderSource = std::variant<Filepath, String, BinaryBuffer32>;
+
         //TODO: comments
         struct ShaderLoadParameters
         {
             StringID sid;
-            std::variant<Filepath, String, BinaryBuffer32> source;
+            ShaderSource source;
             ShaderSourceType sourceType;
             ShaderCompiler::ShaderType shaderType;
         };
