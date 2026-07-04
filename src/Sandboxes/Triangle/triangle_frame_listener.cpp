@@ -366,8 +366,8 @@ namespace Kmplete
         pipelineParams.AddDynamicState(VK_Dynamic_ProvokingVertexMode);       //renderer.SetProvokingVertexMode(...)
 
         const Vector<StringID> descriptorSetsLayoutsSids = { MatricesDSLayout_SID, ColorMultiplierDSLayout_SID };
-        shaderManager.AddShaderObject(VertexShader_SID, vertexShaderPath, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
-        shaderManager.AddShaderObject(FragmentShader_SID, fragmentShaderPath, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
+        shaderManager.AddShaderObject({ VertexShader_SID, Filepath(vertexShaderPath), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex }, VK_ShaderStage_Vertex, VK_ShaderStage_Fragment, "linked"_true, descriptorSetsLayoutsSids);
+        shaderManager.AddShaderObject({ FragmentShader_SID, Filepath(fragmentShaderPath), Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment }, VK_ShaderStage_Fragment, 0, "linked"_true, descriptorSetsLayoutsSids);
 #endif
 
         pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "triangle_pipeline_cache.bin");
