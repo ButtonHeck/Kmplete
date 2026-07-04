@@ -51,6 +51,11 @@ namespace Kmplete
                                          const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
             KMP_API bool AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                          const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
+            KMP_API bool AddShaderObject(StringID shaderSid, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                         const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            KMP_API bool AddShaderObject(StringID shaderSid, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                                         const Vector<StringID>& descriptorSetsLayoutsSids, const char* name = "main");
+
             KMP_NODISCARD KMP_API VkShaderEXT GetVkShader(StringID shaderSid) const noexcept;
 
         private:

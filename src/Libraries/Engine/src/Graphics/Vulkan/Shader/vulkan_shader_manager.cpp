@@ -119,7 +119,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                                  const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name) KMP_PROFILING(ProfileLevelImportant)
+                                                  const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
@@ -143,7 +143,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name) KMP_PROFILING(ProfileLevelImportant)
+                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device);
 
@@ -162,6 +162,55 @@ namespace Kmplete
             catch (KMP_MB_UNUSED const RuntimeError& er)
             {
                 KMP_LOG_ERROR("failed to create shader object with sid '{}' from '{}'", shaderSid, filepathBinary);
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
+                                                  const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            if (_shaderObjects.contains(shaderSid))
+            {
+                KMP_LOG_WARN("shader object with sid '{}' has already been created", shaderSid);
+                return true;
+            }
+
+            try
+            {
+                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
+                return hasEmplaced;
+            }
+            catch (KMP_MB_UNUSED const RuntimeError& er)
+            {
+                KMP_LOG_ERROR("failed to create shader object with sid '{}' from binary buffer", shaderSid);
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanShaderManager::AddShaderObject(StringID shaderSid, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked, 
+                                                  const Vector<StringID>& descriptorSetsLayoutsSids, const char* name /*= "main"*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_device);
+
+            if (_shaderObjects.contains(shaderSid))
+            {
+                KMP_LOG_WARN("shader object with sid '{}' has already been created", shaderSid);
+                return true;
+            }
+
+            try
+            {
+                const auto descriptorSetsLayouts = _descriptorSetManager.GetDescriptorSetLayouts(descriptorSetsLayoutsSids);
+                const auto [iterator, hasEmplaced] = _shaderObjects.emplace(shaderSid, CreateUPtr<VulkanShaderObject>(_device, shaderBinary, stage, nextStage, linked, descriptorSetsLayouts, name));
+                return hasEmplaced;
+            }
+            catch (KMP_MB_UNUSED const RuntimeError& er)
+            {
+                KMP_LOG_ERROR("failed to create shader object with sid '{}' from binary buffer", shaderSid);
                 return false;
             }
         }}
