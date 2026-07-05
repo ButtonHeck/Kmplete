@@ -12,6 +12,7 @@ namespace Kmplete
         {
             Vertex,
             Fragment,
+            Geometry,
             Compute,
             RayTracing
         };

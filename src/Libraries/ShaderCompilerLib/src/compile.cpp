@@ -24,6 +24,8 @@ namespace Kmplete
                     return "Vertex";
                 case ShaderType::Fragment:
                     return "Fragment";
+                case ShaderType::Geometry:
+                    return "Geometry";
                 case ShaderType::Compute:
                     return "Compute";
                 case ShaderType::RayTracing:
@@ -42,6 +44,8 @@ namespace Kmplete
                     return shaderc_glsl_vertex_shader;
                 case ShaderType::Fragment:
                     return shaderc_glsl_fragment_shader;
+                case ShaderType::Geometry:
+                    return shaderc_glsl_geometry_shader;
                 case ShaderType::Compute:
                     return shaderc_glsl_compute_shader;
                 default:
