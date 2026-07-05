@@ -16,26 +16,6 @@ namespace Kmplete
     {
         namespace
         {
-            String ShaderTypeToString(ShaderType shaderType)
-            {
-                switch (shaderType)
-                {
-                case ShaderType::Vertex:
-                    return "Vertex";
-                case ShaderType::Fragment:
-                    return "Fragment";
-                case ShaderType::Geometry:
-                    return "Geometry";
-                case ShaderType::Compute:
-                    return "Compute";
-                case ShaderType::RayTracing:
-                    return "RayTracing";
-                default:
-                    return "Unknown";
-                }
-            }
-            //--------------------------------------------------------------------------
-
             shaderc_shader_kind ShaderTypeToShadercNative(ShaderType shaderType)
             {
                 switch (shaderType)
@@ -55,6 +35,54 @@ namespace Kmplete
             //--------------------------------------------------------------------------
         }
 
+
+        static constexpr auto VertexShaderTypeString = "Vertex";
+        static constexpr auto FragmentShaderTypeString = "Fragment";
+        static constexpr auto GeometryShaderTypeString = "Geometry";
+        static constexpr auto ComputeShaderTypeString = "Compute";
+        static constexpr auto RayTracingShaderTypeString = "RayTracing";
+        static constexpr auto UnknownShaderTypeString = "Unknown";
+
+
+        String ShaderTypeToString(ShaderType shaderType) noexcept
+        {
+            switch (shaderType)
+            {
+            case ShaderType::Vertex:
+                return VertexShaderTypeString;
+            case ShaderType::Fragment:
+                return FragmentShaderTypeString;
+            case ShaderType::Geometry:
+                return GeometryShaderTypeString;
+            case ShaderType::Compute:
+                return ComputeShaderTypeString;
+            case ShaderType::RayTracing:
+                return RayTracingShaderTypeString;
+            default:
+                return UnknownShaderTypeString;
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        Optional<ShaderType> StringToShaderType(const String& shaderTypeString) noexcept
+        {
+            if (shaderTypeString == VertexShaderTypeString)
+                return ShaderType::Vertex;
+            else if (shaderTypeString == FragmentShaderTypeString)
+                return ShaderType::Fragment;
+            else if (shaderTypeString == GeometryShaderTypeString)
+                return ShaderType::Geometry;
+            else if (shaderTypeString == ComputeShaderTypeString)
+                return ShaderType::Compute;
+            else if (shaderTypeString == RayTracingShaderTypeString)
+                return ShaderType::RayTracing;
+            else
+            {
+                KMP_LOG_ERROR_FN("StringToShaderType: shader type for string '{}' not found", shaderTypeString);
+                return std::nullopt;
+            }
+        }
+        //--------------------------------------------------------------------------
 
         BinaryBuffer32 CompileGLSLToSpirvFromSource(const String& sourceName, ShaderType shaderType, const String& shaderCode, bool optimize /*= true*/) KMP_PROFILING(ProfileLevelImportant)
         {
