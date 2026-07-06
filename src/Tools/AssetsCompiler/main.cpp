@@ -17,7 +17,7 @@ namespace Kmplete
     {
         void PrintUsage(const bpo::options_description& description);
         bpo::options_description CreateOptionsDescription();
-        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::Assets::Compiler::CompilerParameters& compilerParameters);
+        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Compiler::CompilerParameters& compilerParameters);
     }
 }
 //--------------------------------------------------------------------------
@@ -112,7 +112,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::Assets::Compiler::CompilerParameters& compilerParameters)
+        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Compiler::CompilerParameters& compilerParameters)
         {
             using namespace Compiler;
 

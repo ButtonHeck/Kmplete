@@ -18,7 +18,7 @@ namespace Kmplete
         void PrintUsage(const bpo::options_description& description);
         bool WorkModeIsValid(const Kmplete::String& workMode);
         bpo::options_description CreateOptionsDescription();
-        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::Translator::TranslatorParameters& translatorParameters);
+        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, TranslatorParameters& translatorParameters);
     }
 }
 //--------------------------------------------------------------------------
@@ -126,7 +126,7 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, Kmplete::Translator::TranslatorParameters& translatorParameters)
+        int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, TranslatorParameters& translatorParameters)
         {
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
             // logging parsing
