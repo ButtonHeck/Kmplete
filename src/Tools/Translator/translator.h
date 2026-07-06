@@ -11,7 +11,7 @@ namespace Kmplete
     namespace Translator
     {
         //! Representation of the Translator program arguments
-        //! --mode
+        //! --mode [Update/Compile]
         //! --input_directories
         //! --extensions
         //! --recursive
