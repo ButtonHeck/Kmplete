@@ -250,22 +250,36 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool WriteFile(const Filepath& filepath, const String& string, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
-        {
-            if (string.empty())
-            {
-                KMP_LOG_ERROR_FN("Filesystem: cannot write empty string to a file '{}'", filepath);
-                return false;
-            }
 
-            if (!FilepathExists(filepath))
+        namespace
+        {
+            KMP_NODISCARD bool WriteFileCheckCondition(const Filepath& filepath, bool condition, const char* contentType)
             {
-                const auto fileCreated = CreateFile(filepath);
-                if (!fileCreated)
+                if (!condition)
                 {
-                    KMP_LOG_ERROR_FN("Filesystem: cannot write string to a file '{}' - file creation failed", filepath);
+                    KMP_LOG_ERROR_FN("Filesystem: cannot write empty {} to a file '{}'", contentType, filepath);
                     return false;
                 }
+
+                if (!FilepathExists(filepath))
+                {
+                    if (!CreateFile(filepath))
+                    {
+                        KMP_LOG_ERROR_FN("Filesystem: cannot write {} to a file '{}' - file creation failed", contentType, filepath);
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+        }
+        //--------------------------------------------------------------------------
+
+        bool WriteFile(const Filepath& filepath, const String& string, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (!WriteFileCheckCondition(filepath, !string.empty(), "string"))
+            {
+                return false;
             }
 
             std::ofstream fileStream(filepath, append ? std::ios::app : std::ios::trunc);
@@ -284,20 +298,9 @@ namespace Kmplete
 
         bool WriteFile(const Filepath& filepath, const BinaryBuffer& binaryBuffer, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (binaryBuffer.empty())
+            if (!WriteFileCheckCondition(filepath, !binaryBuffer.empty(), "binary buffer"))
             {
-                KMP_LOG_ERROR_FN("Filesystem: cannot write empty binary buffer to a file '{}'", filepath);
                 return false;
-            }
-
-            if (!FilepathExists(filepath))
-            {
-                const auto fileCreated = CreateFile(filepath);
-                if (!fileCreated)
-                {
-                    KMP_LOG_ERROR_FN("Filesystem: cannot write binary buffer to a file '{}' - file creation failed", filepath);
-                    return false;
-                }
             }
 
             std::ofstream fileStream(filepath, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
@@ -308,6 +311,27 @@ namespace Kmplete
             }
 
             fileStream.write(reinterpret_cast<const char*>(binaryBuffer.data()), binaryBuffer.size());
+            fileStream.close();
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        bool WriteFile(const Filepath& filepath, const BinaryBuffer32& binaryBuffer, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (!WriteFileCheckCondition(filepath, !binaryBuffer.empty(), "binary buffer"))
+            {
+                return false;
+            }
+
+            std::ofstream fileStream(filepath, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
+            if (!fileStream.is_open())
+            {
+                KMP_LOG_ERROR_FN("Filesystem: cannot write binary buffer to a file '{}' - failed to open file", filepath);
+                return false;
+            }
+
+            fileStream.write(reinterpret_cast<const char*>(binaryBuffer.data()), binaryBuffer.size() * sizeof(UInt32));
             fileStream.close();
 
             return true;

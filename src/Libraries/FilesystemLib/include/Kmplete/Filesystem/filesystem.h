@@ -34,6 +34,7 @@ namespace Kmplete
 
         KMP_NODISCARD KMP_API bool WriteFile(const Filepath& filepath, const String& string, bool append);
         KMP_NODISCARD KMP_API bool WriteFile(const Filepath& filepath, const BinaryBuffer& binaryBuffer, bool append);
+        KMP_NODISCARD KMP_API bool WriteFile(const Filepath& filepath, const BinaryBuffer32& binaryBuffer, bool append);
     };
     //--------------------------------------------------------------------------
 }
