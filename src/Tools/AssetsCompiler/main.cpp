@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 
     Compiler::CompilerParameters compilerParameters;
     const auto parseParametersResult = ParseParameters(optionsDescription, vm, compilerParameters);
-    if (parseParametersResult != 0)
+    if (parseParametersResult != Compiler::ReturnCode::Ok)
     {
         std::cerr << "AssetsCompiler: failed to parse parameters\n";
 

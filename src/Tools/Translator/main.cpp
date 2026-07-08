@@ -53,7 +53,7 @@ int main(int argc, char** argv)
 
     TranslatorParameters translatorParameters;
     const auto parseParametersResult = ParseParameters(optionsDescription, vm, translatorParameters);
-    if (parseParametersResult != 0)
+    if (parseParametersResult != ReturnCode::Ok)
     {
         std::cerr << "Translator: failed to parse parameters\n";
 
