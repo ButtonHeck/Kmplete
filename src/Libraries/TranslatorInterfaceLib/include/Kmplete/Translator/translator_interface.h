@@ -46,7 +46,7 @@ namespace Kmplete
             ProcessorMsginitError = -101,
             ProcessorMsgattribError = -102,
             ProcessorMsgmergeError = -103,
-            ProcessorMsgfmtError = -104,
+            ProcessorMsgfmtError = -104
         };
     }
     //--------------------------------------------------------------------------
