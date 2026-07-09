@@ -5,7 +5,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Json/json_reader.h"
 #include "Kmplete/Json/json_writer.h"
-#include "Kmplete/Profile/profiler_fwd.h"
+#include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 #include <rapidjson/fwd.h>

@@ -253,7 +253,7 @@ namespace Kmplete
 
         namespace
         {
-            KMP_NODISCARD bool WriteFileCheckCondition(const Filepath& filepath, bool condition, const char* contentType)
+            KMP_NODISCARD bool WriteFileCheckCondition(const Filepath& filepath, bool condition, KMP_MB_UNUSED const char* contentType)
             {
                 if (!condition)
                 {
