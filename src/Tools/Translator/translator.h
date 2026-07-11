@@ -34,9 +34,14 @@ namespace Kmplete
         //! The proccessor that takes directories containing files with sources needed to translate
         //! and updates/compiles translations to a single .mo file. Uses gettext family of programs
         //! as backend (ran as sub-processses). This processor is capable of running in one of two modes:
-        //! 1) updating translations - recursively gathering all files (with suitable extensions) from source 
-        //! directories and creating .po template files and 2) compiling translations - using .po files to create .mo files 
-        //! with translations. Between those steps translations must be somehow added in text form.
+        //! 1) Update mode - recursively gathering all files (with suitable extensions) from source 
+        //! directories and creating .po template files
+        //! example usage:
+        //! --mode=Update --input_directories "dir1" "dir2" --extensions .cpp .h --recursive --output_directory "path/to/outputDir" --output_file_name "MyTranslations"
+        //! 2) Compile mode - using .po files to create .mo files with translations.
+        //! example usage:
+        //! --mode=Compile --output_directory "path/to/outputDir" --output_file_name "MyTranslations"
+        //! Between those steps translations must be somehow added in text form.
         //! Overall translation process looks like this:
         //! 1) invoke Translator with --mode=Update --other_params=...
         //! 2) add translations in files generated from previous step (via Notepad or any other editor)

@@ -36,6 +36,21 @@ namespace Kmplete
             //! metadata and put both assets headers and its binaries to the output file.
             //! At the moment this class only capable of parsing single input file and writing
             //! single output file. Duplication of StringIDs leads to an error and stops further processing.
+            //! example source json:
+            //! {
+            //!     "Assets": [
+            //!         {
+            //!             "File": "texture1.png",
+            //!             "Type": 0,
+            //!             "Name": "texture1"
+            //!         },
+            //!         {
+            //!             "File": "font.ttf",
+            //!             "Type": 1,
+            //!             "Name": "font1.ttf"
+            //!         }
+            //!     ]
+            //! }
             class AssetsCompiler
             {
                 KMP_LOG_CLASSNAME(AssetsCompiler)
