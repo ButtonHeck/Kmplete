@@ -253,6 +253,142 @@ TEST_CASE("Filesystem files functions", "[core][filesystem]")
 //--------------------------------------------------------------------------
 
 
+TEST_CASE("Filesystem renaming tests", "[core][filesystem]")
+{
+    SECTION("Rename valid case no overwrite")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "test_file_to_rename.txt";
+        const auto to = path / "test_file_to_rename2.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, false));
+        REQUIRE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+    }
+
+    SECTION("Rename invalid source valid destination")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "test_file_to_rename.txt";
+        const auto to = path / "test_file_to_rename2.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, false));
+        REQUIRE_FALSE(renamed);
+    }
+
+    SECTION("Rename valid source invalid destination")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "test_file_to_rename.txt";
+        const auto to = path / "::invalid.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, false));
+        REQUIRE_FALSE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+    }
+
+    SECTION("Rename valid source existing destination no overwrite")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "test_file_to_rename.txt";
+        const auto to = path / "test_file_to_rename2.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateFile(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, false));
+        REQUIRE_FALSE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+    }
+
+    SECTION("Rename valid source existing destination overwrite")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "test_file_to_rename.txt";
+        const auto to = path / "test_file_to_rename2.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateFile(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, true));
+        REQUIRE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+    }
+
+    SECTION("Rename source directory to destination file")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path;
+        const auto to = path / "test_file_to_rename2.txt";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, true));
+        REQUIRE_FALSE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(to));
+    }
+
+    SECTION("Rename source file to destination directory")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "test_file_to_rename.txt";
+        const auto to = path;
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, true));
+        REQUIRE_FALSE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveFile(from));
+    }
+
+    SECTION("Rename existing directory to non-existing directory")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "renaming_dir";
+        const auto to = path / "renaming_dir_2";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateDirectories(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveDirectories(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to));
+        REQUIRE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveDirectories(from));
+    }
+
+    SECTION("Rename existing directory to existing directory no overwrite")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "renaming_dir";
+        const auto to = path / "renaming_dir_2";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateDirectories(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateDirectories(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, false));
+        REQUIRE_FALSE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveDirectories(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveDirectories(to));
+    }
+
+    SECTION("Rename existing directory to existing directory overwrite")
+    {
+        const auto path = Kmplete::Filesystem::GetCurrentFilepath();
+        const auto from = path / "renaming_dir";
+        const auto to = path / "renaming_dir_2";
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateDirectories(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::CreateDirectories(to));
+        bool renamed = false;
+        REQUIRE_NOTHROW(renamed = Kmplete::Filesystem::Rename(from, to, true));
+        REQUIRE(renamed);
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveDirectories(from));
+        REQUIRE_NOTHROW(Kmplete::Filesystem::RemoveDirectories(to));
+    }
+}
+//--------------------------------------------------------------------------
+
+
 TEST_CASE("Filesystem read text files functions", "[core][filesystem]")
 {
     SECTION("ReadFileAsText non-existing file")

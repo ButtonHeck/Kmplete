@@ -54,6 +54,35 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
+        bool Rename(const Filepath& oldPath, const Filepath& newPath, bool overwrite /*= false*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            try
+            {
+                if (!overwrite && FilepathExists(newPath))
+                {
+                    KMP_LOG_WARN_FN("Filesystem: renaming '{}' to '{}' stopped - new path already exists and overwrite is prohibited", oldPath, newPath);
+                    return false;
+                }
+                if (overwrite && FilepathExists(newPath) && IsDirectory(oldPath) && IsDirectory(newPath))
+                {
+                    if (!RemoveDirectories(newPath))
+                    {
+                        KMP_LOG_ERROR_FN("Filesystem: renaming '{}' to '{}' failed - cannot remove destination directory for overwrite", oldPath, newPath);
+                        return false;
+                    }
+                }
+
+                std::filesystem::rename(oldPath, newPath);
+                return FilepathExists(newPath);
+            }
+            catch (KMP_MB_UNUSED const FilesystemError& fe)
+            {
+                KMP_LOG_ERROR_FN("Filesystem: renaming '{}' to '{}' failed: '{}'", oldPath, newPath, fe.what());
+                return false;
+            }
+        }}
+        //--------------------------------------------------------------------------
+
         bool CreateDirectories(const Filepath& filepath, bool pathIsFile /*= false*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             try
@@ -154,7 +183,7 @@ namespace Kmplete
             }
             catch (KMP_MB_UNUSED const FilesystemError& fe)
             {
-                KMP_LOG_ERROR_FN("Filesystem: remove file failed: '{}'", fe.what());
+                KMP_LOG_ERROR_FN("Filesystem: removing file '{}' failed: '{}'", filepath, fe.what());
                 return false;
             }
         }}

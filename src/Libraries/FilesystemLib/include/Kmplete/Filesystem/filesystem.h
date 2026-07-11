@@ -13,6 +13,7 @@ namespace Kmplete
         
         KMP_NODISCARD KMP_API bool FilepathExists(const Filepath& filepath) noexcept;
         KMP_NODISCARD KMP_API bool FilepathIsValid(const Filepath& filepath) noexcept;
+        KMP_NODISCARD KMP_API bool Rename(const Filepath& oldPath, const Filepath& newPath, bool overwrite = false) noexcept;
 
         KMP_NODISCARD KMP_API bool CreateDirectories(const Filepath& filepath, bool pathIsFile = false) noexcept;
         KMP_NODISCARD KMP_API bool RemoveDirectories(const Filepath& filepath) noexcept;
