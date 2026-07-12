@@ -1,7 +1,6 @@
 #include "UI/editor_ui_compositor.h"
 #include "UI/ui_identifiers.h"
 #include "Application/localization_base.h"
-#include "Application/events.h"
 
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Core/system_metrics_manager.h"
@@ -180,7 +179,7 @@ namespace Kmplete
         auto isWindowedFullscreen = _mainWindow.IsWindowedFullscreen();
         if (ImGui::MenuItem(_localizationManager.Translation(SidTrDomainEditor, "Fullscreen"_sid).c_str(), "Alt+Enter", &isWindowedFullscreen))
         {
-            Events::QueueEvent(CreateUPtr<Events::EditorFullscreenEvent>(isWindowedFullscreen ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed));
+            Events::QueueEvent(CreateUPtr<Events::WindowScreenModeEvent>(isWindowedFullscreen ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed));
         }
     }}
     //--------------------------------------------------------------------------

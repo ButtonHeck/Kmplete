@@ -1,7 +1,6 @@
 #pragma once
 
 #include "UI/editor_ui_compositor.h"
-#include "Application/events.h"
 
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
@@ -72,7 +71,7 @@ namespace Kmplete
 
         KMP_NODISCARD bool _OnWindowCloseEvent(Events::WindowCloseEvent& event);
         KMP_NODISCARD bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
-        KMP_NODISCARD bool _OnEditorFullscreenEvent(Events::EditorFullscreenEvent& event);
+        KMP_NODISCARD bool _OnWindowScreenModeEvent(Events::WindowScreenModeEvent& event);
 
         void _AddImGuiFonts(float scale);
         void _RenderImGui();
@@ -88,7 +87,7 @@ namespace Kmplete
 
         Events::EventHandlerGuard<Events::WindowCloseEvent> _windowCloseHandler;
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
-        Events::EventHandlerGuard<Events::EditorFullscreenEvent> _editorFullscreenHandler;
+        Events::EventHandlerGuard<Events::WindowScreenModeEvent> _windowScreenModeHandler;
     };
     //--------------------------------------------------------------------------
 }

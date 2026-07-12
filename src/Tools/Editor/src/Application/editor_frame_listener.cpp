@@ -48,7 +48,7 @@ namespace Kmplete
         , _metricsTimer(1000)
         , _windowCloseHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowCloseEvent))
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowContentScaleEvent))
-        , _editorFullscreenHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnEditorFullscreenEvent))
+        , _windowScreenModeHandler(_eventDispatcher, KMP_BIND(EditorFrameListener::_OnWindowScreenModeEvent))
     {
         _Initialize(localizationManager, systemMetricsManager, inputManager);
 
@@ -205,9 +205,9 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::_OnEditorFullscreenEvent(Events::EditorFullscreenEvent& event)
+    bool EditorFrameListener::_OnWindowScreenModeEvent(Events::WindowScreenModeEvent& event)
     {
-        _mainWindow.SetScreenMode(event.screenMode);
+        _mainWindow.SetScreenMode(event.GetScreenMode());
         return true;
     }
     //--------------------------------------------------------------------------

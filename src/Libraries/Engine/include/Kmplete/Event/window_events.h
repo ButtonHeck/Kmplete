@@ -2,6 +2,7 @@
 
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Window/window.h"
 
 
 namespace Kmplete
@@ -18,6 +19,7 @@ namespace Kmplete
         static constexpr auto WindowFramebufferResizeEventTypeStr = "WindowFramebufferResizeEvent";
         static constexpr auto WindowFramebufferRefreshEventTypeStr = "WindowFramebufferRefreshEvent";
         static constexpr auto WindowContentScaleEventTypeStr = "WindowContentScaleEvent";
+        static constexpr auto WindowScreenModeEventTypeStr = "WindowScreenModeEvent";
 
         static constexpr auto WindowResizeEventTypeID = "WindowResizeEvent"_sid;
         static constexpr auto WindowMoveEventTypeID = "WindowMoveEvent"_sid;
@@ -27,6 +29,7 @@ namespace Kmplete
         static constexpr auto WindowFramebufferResizeEventTypeID = "WindowFramebufferResizeEvent"_sid;
         static constexpr auto WindowFramebufferRefreshEventTypeID = "WindowFramebufferRefreshEvent"_sid;
         static constexpr auto WindowContentScaleEventTypeID = "WindowContentScaleEvent"_sid;
+        static constexpr auto WindowScreenModeEventTypeID = "WindowScreenModeEvent"_sid;
 
 
         struct WindowEvent : public Event
@@ -200,7 +203,7 @@ namespace Kmplete
         {
             EVENT_CLASS_TYPE(WindowContentScaleEventTypeStr)
 
-            WindowContentScaleEvent(float scale) noexcept
+            explicit WindowContentScaleEvent(float scale) noexcept
                 : _scale(scale)
             {}
 
@@ -216,6 +219,30 @@ namespace Kmplete
 
         private:
             const float _scale;
+        };
+        //--------------------------------------------------------------------------
+
+
+        struct WindowScreenModeEvent : public WindowEvent
+        {
+            EVENT_CLASS_TYPE(WindowScreenModeEventTypeStr)
+
+            explicit WindowScreenModeEvent(Window::ScreenMode mode) noexcept
+                : _screenMode(mode)
+            {}
+
+            KMP_NODISCARD Window::ScreenMode GetScreenMode() const noexcept
+            {
+                return _screenMode;
+            }
+
+            KMP_NODISCARD String ToString() const override
+            {
+                return Utils::Concatenate("WindowScreenModeEvent: ", Window::ScreenModeToString(_screenMode));
+            }
+
+        private:
+            const Window::ScreenMode _screenMode;
         };
         //--------------------------------------------------------------------------
     }
