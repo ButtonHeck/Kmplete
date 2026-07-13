@@ -14,4 +14,6 @@ namespace Kmplete
     unsigned int GetKmpleteVersionTweak();
     
     const char* GetKmpleteGitHash();
+    const char* GetKmpleteGitHashShort();
+    const char* GetKmpleteGitBranch();
 }

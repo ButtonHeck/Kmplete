@@ -7,29 +7,47 @@ namespace Kmplete
     {
         return "@Kmplete_VERSION@";
     }
+    //--------------------------------------------------------------------------
 
     unsigned int GetKmpleteVersionMajor()
     {
         return @Kmplete_VERSION_MAJOR@;
     }
+    //--------------------------------------------------------------------------
     
     unsigned int GetKmpleteVersionMinor()
     {
         return @Kmplete_VERSION_MINOR@ + 0;
     }
+    //--------------------------------------------------------------------------
     
     unsigned int GetKmpleteVersionPatch()
     {
         return @Kmplete_VERSION_PATCH@ + 0;
     }
+    //--------------------------------------------------------------------------
     
     unsigned int GetKmpleteVersionTweak()
     {
         return @Kmplete_VERSION_TWEAK@ + 0;
     }
+    //--------------------------------------------------------------------------
     
     const char* GetKmpleteGitHash()
     {
         return "@Kmplete_GIT_HASH@";
     }
+    //--------------------------------------------------------------------------
+
+    const char* GetKmpleteGitHashShort()
+    {
+        return "@Kmplete_GIT_HASH_SHORT@";
+    }
+    //--------------------------------------------------------------------------
+    
+    const char* GetKmpleteGitBranch()
+    {
+        return "@Kmplete_GIT_BRANCH@";
+    }
+    //--------------------------------------------------------------------------
 }
