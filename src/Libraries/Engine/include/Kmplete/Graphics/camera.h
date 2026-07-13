@@ -11,7 +11,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Base class for cameras, uses Euler angles approach for view matrices calculation.
+        //! Projection matrices should be calculated in implementation subclasses
         class Camera
         {
             KMP_LOG_CLASSNAME(Camera)

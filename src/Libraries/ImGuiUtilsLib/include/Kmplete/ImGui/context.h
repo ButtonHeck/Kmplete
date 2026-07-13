@@ -7,7 +7,7 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        //TODO: comments
+        //! Base class of an ImGUI instance properties and settings
         struct Context
         {
             static constexpr auto ConfigurationFileName = "imgui.ini";

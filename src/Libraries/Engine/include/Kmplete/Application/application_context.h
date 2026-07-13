@@ -9,7 +9,9 @@ namespace Kmplete
     struct ApplicationParameters;
 
 
-    //TODO: comments
+    //! Singleton collection of common application's properties. These properties may be
+    //! viewed from any code after the base Application class was instantiated.
+    //! @see Application
     class ApplicationContext
     {
         KMP_DISABLE_COPY_MOVE(ApplicationContext)

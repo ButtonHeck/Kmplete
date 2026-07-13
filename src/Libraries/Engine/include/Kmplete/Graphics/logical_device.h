@@ -15,7 +15,7 @@ namespace Kmplete
         class Image;
 
 
-        //TODO: comments
+        //! Base class of a graphics API logical device abstraction
         class LogicalDevice
         {
             KMP_DISABLE_COPY_MOVE(LogicalDevice)

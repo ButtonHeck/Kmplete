@@ -11,7 +11,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Base class of a graphics API physical device abstraction
         class PhysicalDevice
         {
             KMP_DISABLE_COPY_MOVE(PhysicalDevice)

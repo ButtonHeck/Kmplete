@@ -11,7 +11,7 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        //TODO: comments
+        //! ImGUI Vulkan API implementation context
         struct ContextVulkan : public Context
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()

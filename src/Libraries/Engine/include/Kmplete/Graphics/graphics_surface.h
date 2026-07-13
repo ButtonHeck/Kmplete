@@ -10,7 +10,7 @@ namespace Kmplete
 
     namespace Graphics
     {
-        //TODO: comments
+        //! Base class of a graphics API surface abstraction
         class GraphicsSurface
         {
             KMP_DISABLE_COPY_MOVE(GraphicsSurface)

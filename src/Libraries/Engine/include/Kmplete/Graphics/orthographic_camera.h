@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Implementation of an orthographic projection camera
         class OrthographicCamera : public Camera
         {
             KMP_LOG_CLASSNAME(OrthographicCamera)

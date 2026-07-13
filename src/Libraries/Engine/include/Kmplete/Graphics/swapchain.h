@@ -7,7 +7,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Base class of a graphics API swapchain abstraction
         class Swapchain
         {
             KMP_DISABLE_COPY_MOVE(Swapchain)

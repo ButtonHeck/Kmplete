@@ -9,6 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        //! Enumeration of image color channels
         enum ImageChannels
         {
             Unknown = 0,
@@ -20,6 +21,7 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! Enumeration of the graphics backend APIs supported be the engine
         enum class GraphicsBackendType
         {
             Vulkan,
@@ -36,10 +38,15 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
+        //! Global constant value for number of buffers (or concurrent frames) used
+        //! during rendering (1 buffer/frame is used for presentation and other(s) are used
+        //! for rendering)
         static constexpr auto NumConcurrentFrames = 2;
 
 
-        //TODO: comments
+        //! Enumeration of primitive types used in shaders, e.g. in a shader string:
+        //! layout (location = 0) in vec3 inPos;
+        //! vec3 maps to Float3
         enum class ShaderDataType
         {
             None = 0,
@@ -53,7 +60,12 @@ namespace Kmplete
         KMP_NODISCARD KMP_API UInt32 ShaderDataTypeSize(ShaderDataType type) noexcept;
         KMP_NODISCARD KMP_API UInt32 GetComponentCount(ShaderDataType type) noexcept;
 
-        //TODO: comments
+        //! A shader's attribute description representation stored in a vertex buffer, e.g. in a shader string:
+        //! layout (location = 0) in vec3 inPos;
+        //! 1) "type" == Float3
+        //! 2) "location" == 0
+        //! 3) "offset" is calculated manually in vertex buffer
+        //! 4) "normalized" depends on the value provided
         struct BufferElement
         {
             ShaderDataType type;
@@ -71,7 +83,9 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
-        //TODO: comments
+        //! A collection of BufferElements stored in a vertex buffer.
+        //! These elements may not be ordered by their location values, but supposed to be
+        //! contiguously stored in a vertex buffer (uses tightly packed approach)
         class BufferLayout
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE_COPYABLE()

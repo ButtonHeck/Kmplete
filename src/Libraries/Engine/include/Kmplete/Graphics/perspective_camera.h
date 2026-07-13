@@ -9,7 +9,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Implementation of a perspective projection camera
         class PerspectiveCamera : public Camera
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()

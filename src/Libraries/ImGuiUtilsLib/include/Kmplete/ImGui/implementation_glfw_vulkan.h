@@ -15,7 +15,8 @@ namespace Kmplete
 {
     namespace ImGuiUtils
     {
-        //TODO: comments
+        //! Implementation of an ImGUI instance with Vulkan graphics API. Each ImGUI rendering
+        //! invocation should be prepended with SetCommandBuffer call.
         class ImGuiImplementationGlfwVulkan : public ImGuiImplementation
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
