@@ -113,14 +113,6 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        VkResult VulkanBuffer::Bind(VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_device && _buffer && _memory);
-
-            return vkBindBufferMemory(_device, _buffer, _memory, offset);
-        }}
-        //--------------------------------------------------------------------------
-
         VkResult VulkanBuffer::Flush(VkDeviceSize size /*= VK_WHOLE_SIZE*/, VkDeviceSize offset /*= 0*/) KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_device && _memory);
@@ -259,7 +251,7 @@ namespace Kmplete
             VKUtils::CheckResult(result, "VulkanBuffer: failed to allocate buffer memory");
             KMP_ASSERT(_memory);
 
-            result = Bind();
+            result = vkBindBufferMemory(_device, _buffer, _memory, 0);
             VKUtils::CheckResult(result, "VulkanBuffer: failed to bind buffer");
         }
         //--------------------------------------------------------------------------

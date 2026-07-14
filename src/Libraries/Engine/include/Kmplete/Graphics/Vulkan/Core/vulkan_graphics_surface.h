@@ -14,7 +14,7 @@ namespace Kmplete
 
     namespace Graphics
     {
-        //TODO: comments
+        //! Simple Vulkan API graphics surface object wrapper
         class VulkanGraphicsSurface : public GraphicsSurface
         {
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsSurface)

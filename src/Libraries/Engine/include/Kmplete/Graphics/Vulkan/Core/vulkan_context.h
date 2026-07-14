@@ -11,7 +11,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Vulkan context state object that stores Vulkan objects, structs and attributes
+        //! referenced and used by other Vulkan related classes.
         struct VulkanContext
         {
             KMP_LOG_CLASSNAME(VulkanContext)

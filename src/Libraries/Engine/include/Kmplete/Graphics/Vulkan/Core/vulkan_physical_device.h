@@ -20,7 +20,7 @@ namespace Kmplete
 
     namespace Graphics
     {
-        //TODO: comments
+        //! Vulkan API physical device object wrapper implementation
         class VulkanPhysicalDevice : public PhysicalDevice
         {
             KMP_DISABLE_COPY_MOVE(VulkanPhysicalDevice)

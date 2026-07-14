@@ -43,7 +43,8 @@ namespace Kmplete
         struct VulkanGraphicsParameters;
 
 
-        //TODO: comments
+        //! Vulkan API logical device wrapper object. Additionally represents the storage for every other Vulkan related
+        //! objects that somehow depends on logical device.
         class VulkanLogicalDevice : public LogicalDevice
         {
             KMP_DISABLE_COPY_MOVE(VulkanLogicalDevice)

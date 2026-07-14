@@ -11,13 +11,14 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Utility class for tracking memory usage by Vulkan API
         class VulkanMetricsManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanMetricsManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            //! Memory usage metrics struct
             struct Metrics
             {
                 Vector<UInt64> heapBudgets;

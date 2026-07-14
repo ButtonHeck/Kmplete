@@ -17,7 +17,9 @@ namespace Kmplete
 
     namespace Graphics
     {
-        //TODO: comments
+        //! Vulkan API backend class implementation. Responsible for initializing
+        //! top-level Vulkan objects such as instance, physical device, surface,
+        //! tracking current buffer index that is used by dependent objects.
         class VulkanGraphicsBackend : public GraphicsBackend
         {
             KMP_LOG_CLASSNAME(VulkanGraphicsBackend)

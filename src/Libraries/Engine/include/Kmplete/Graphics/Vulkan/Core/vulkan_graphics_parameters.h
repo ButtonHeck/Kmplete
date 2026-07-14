@@ -12,7 +12,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Vulkan API graphics application parameters implementation
         struct VulkanGraphicsParameters : public GraphicsParameters
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()

@@ -16,7 +16,11 @@ namespace Kmplete
         class VulkanImageCreatorDelegate;
 
 
-        //TODO: comments
+        //! Vulkan sampler objects storage wrapper. Simplest linear/nearest filtering 
+        //! samplers already registered by a logical device object during its creation.
+        //! Sampler objects are referenced by StringID.
+        //! @see VulkanLogicalDevice
+        //! @see StringID
         class VulkanSamplersStorage
         {
             KMP_DISABLE_COPY_MOVE(VulkanSamplersStorage)
@@ -24,7 +28,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit VulkanSamplersStorage(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API VulkanSamplersStorage(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             KMP_API ~VulkanSamplersStorage();
 
             KMP_API VkSampler AddSampler(StringID sid, const VkSamplerCreateInfo& createInfo);

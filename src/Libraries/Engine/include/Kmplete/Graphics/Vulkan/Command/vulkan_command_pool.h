@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Simple Vulkan command pool object wrapper
         class VulkanCommandPool : public CommandPool
         {
             KMP_DISABLE_COPY_MOVE(VulkanCommandPool)

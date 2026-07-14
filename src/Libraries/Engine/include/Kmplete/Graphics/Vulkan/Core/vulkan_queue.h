@@ -16,7 +16,8 @@ namespace Kmplete
         class VulkanCommandBuffer;
 
 
-        //TODO: comments
+        //! Simple Vulkan queue object wrapper that supports basic functions like waiting, 
+        //! submitting (with optional synchronization) and presentation (is queue object supports it)
         class VulkanQueue
         {
             KMP_DISABLE_COPY(VulkanQueue)

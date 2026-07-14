@@ -11,7 +11,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Simple Vulkan command buffer object wrapper
         class VulkanCommandBuffer
         {
             KMP_DISABLE_COPY(VulkanCommandBuffer)

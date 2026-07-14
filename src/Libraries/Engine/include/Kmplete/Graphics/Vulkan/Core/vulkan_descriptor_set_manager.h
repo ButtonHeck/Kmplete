@@ -17,7 +17,14 @@ namespace Kmplete
         class VulkanBuffer;
 
 
-        //TODO: comments
+        //! Manager of Vulkan descriptor sets, pools and layouts objects. Responsible for storing, creating,
+        //! deleting these objects, providing interface to interact with them. By default a single descriptor pool
+        //! object is allocated during manager creation, but auxiliary pools can be allocated on demand (e.g. a separate pool for ImGUI).
+        //! Descriptor sets, layouts and auxiliary pools stored in hashmaps (by StringID as a key). Similar to VulkanBufferManager
+        //! this manager separates descriptor sets by per-frame usage and plain descriptor sets.
+        //! A set may be updated using either it's StringID or just a VkDescriptorSet handle.
+        //! @see VulkanBufferManager
+        //! @see StringID
         class VulkanDescriptorSetManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanDescriptorSetManager)
@@ -25,6 +32,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            //! Shortcut alias for a collection of descriptor sets objects
             using DescriptorSetStorage = StringIDHashMap<Vector<VkDescriptorSet>>;
 
         public:

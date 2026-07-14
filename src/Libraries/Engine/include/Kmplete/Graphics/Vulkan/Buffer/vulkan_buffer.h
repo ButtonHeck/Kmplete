@@ -15,7 +15,8 @@ namespace Kmplete
         class VulkanMemoryTypeDelegate;
 
 
-        //TODO: comments
+        //! Helper struct for storing Vulkan buffer creation parameters
+        //! @see VulkanBuffer
         struct VulkanBufferParameters
         {
             VkBufferUsageFlags usageFlags;
@@ -25,7 +26,9 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        //TODO: comments
+        //! Base class of a Vulkan buffer object, supports memory management functionality such as: (un)mapping,
+        //! flushing, invalidation, copying. Buffer's intentional usage can be acquired either by using VkBufferUsageFlags getter or 
+        //! by an exact type getter.
         class VulkanBuffer
         {
             KMP_DISABLE_COPY(VulkanBuffer)
@@ -39,7 +42,6 @@ namespace Kmplete
 
             KMP_API VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_API VkResult Unmap(bool flush = false, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-            KMP_API VkResult Bind(VkDeviceSize offset = 0);
             KMP_API VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_API VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
             KMP_API void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);

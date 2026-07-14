@@ -21,7 +21,13 @@ namespace Kmplete
         class VulkanMemoryTypeDelegate;
 
 
-        //TODO: comments
+        //! Manager class for creating and storing Vulkan buffer objects.
+        //! All the buffers stored as pointers in StringIDHashMap-s and are split into two categories:
+        //! 1) ones which don't need to be bound and used during a frame preparation 
+        //! and rendering - e.g. vertex/index buffers to store static geometry
+        //! 2) ones which are supposed to be updated and acquired during each frame - e.g. uniform/storage
+        //! buffers with MVP or other per-frame related data.
+        //! @see StringID
         class VulkanBufferManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanBufferManager)
