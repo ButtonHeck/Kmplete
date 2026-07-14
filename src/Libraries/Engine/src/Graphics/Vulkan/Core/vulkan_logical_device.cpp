@@ -523,9 +523,9 @@ namespace Kmplete
 
         void VulkanLogicalDevice::_CreateSamplersStorage() KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(_device && _imageCreatorDelegate);
+            KMP_ASSERT(_device);
 
-            _samplersStorage.reset(new VulkanSamplersStorage(_device, *_imageCreatorDelegate.get()));
+            _samplersStorage.reset(new VulkanSamplersStorage(_device));
             KMP_ASSERT(_samplersStorage);
 
             auto sampler = _samplersStorage->AddSampler(SamplerDefaultNearestSid, VKPresets::SamplerCreateInfo_Nearest_MipNearest_Repeat_NoAnisotropy);

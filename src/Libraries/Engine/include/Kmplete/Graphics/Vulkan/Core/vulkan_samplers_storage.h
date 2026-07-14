@@ -13,9 +13,6 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        class VulkanImageCreatorDelegate;
-
-
         //! Vulkan sampler objects storage wrapper. Simplest linear/nearest filtering 
         //! samplers already registered by a logical device object during its creation.
         //! Sampler objects are referenced by StringID.
@@ -28,14 +25,13 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanSamplersStorage(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            KMP_API explicit VulkanSamplersStorage(VkDevice device);
             KMP_API ~VulkanSamplersStorage();
 
             KMP_API VkSampler AddSampler(StringID sid, const VkSamplerCreateInfo& createInfo);
             KMP_NODISCARD KMP_API VkSampler GetSampler(StringID sid) const noexcept;
 
         private:
-            const VulkanImageCreatorDelegate& _imageCreatorDelegate;
             VkDevice _device;
 
             StringIDHashMap<VkSampler> _samplers;

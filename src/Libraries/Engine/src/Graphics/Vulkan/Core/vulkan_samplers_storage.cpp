@@ -1,6 +1,6 @@
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_samplers_storage.h"
-#include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
+#include "Kmplete/Graphics/Vulkan/Utils/result_description.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
@@ -11,10 +11,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        VulkanSamplersStorage::VulkanSamplersStorage(VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate)
+        VulkanSamplersStorage::VulkanSamplersStorage(VkDevice device)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
-              _imageCreatorDelegate(imageCreatorDelegate)
-            , _device(device)
+              _device(device)
         {
             KMP_ASSERT(_device);
             KMP_PROFILE_CONSTRUCTOR_END()
@@ -44,7 +43,10 @@ namespace Kmplete
 
             try
             {
-                auto sampler = _imageCreatorDelegate.CreateVkSampler(createInfo);
+                VkSampler sampler;
+                const auto result = vkCreateSampler(_device, &createInfo, nullptr, &sampler);
+                VKUtils::CheckResult(result, "VulkanSamplersStorage: failed to create sampler");
+
                 _samplers[sid] = sampler;
                 return sampler;
             }

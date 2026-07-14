@@ -140,16 +140,6 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
 
-        VkSampler VulkanImageCreatorDelegate::CreateVkSampler(const VkSamplerCreateInfo& creationParameters) const KMP_PROFILING(ProfileLevelMinor)
-        {
-            VkSampler sampler;
-            const auto result = vkCreateSampler(_device, &creationParameters, nullptr, &sampler);
-            VKUtils::CheckResult(result, "VulkanImageCreatorDelegate: failed to create sampler");
-
-            return sampler;
-        }}
-        //--------------------------------------------------------------------------
-
         VulkanBuffer VulkanImageCreatorDelegate::CreateStagingImageBuffer(const Image& image) const KMP_PROFILING(ProfileLevelMinor)
         {
             auto buffer = VulkanBuffer(_memoryTypeDelegate, _device, { VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, image.GetDataSize() });
