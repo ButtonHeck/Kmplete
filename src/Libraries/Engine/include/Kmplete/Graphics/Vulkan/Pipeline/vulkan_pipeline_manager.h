@@ -22,7 +22,9 @@ namespace Kmplete
         class VulkanDescriptorSetManager;
 
 
-        //TODO: comments
+        //! Manager of Vulkan pipeline objects, pipeline caches and pipeline layouts.
+        //! @see VulkanGraphicsPipeline
+        //! @see VulkanPipelineCache
         class VulkanPipelineManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanPipelineManager)

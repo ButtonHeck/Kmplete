@@ -12,7 +12,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Helper delegate class for checking or finding Vulkan formats properties in
+        //! places where it is necessary to pick a format based on some criteria (e.g. image creation)
         class VulkanFormatDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanFormatDelegate)

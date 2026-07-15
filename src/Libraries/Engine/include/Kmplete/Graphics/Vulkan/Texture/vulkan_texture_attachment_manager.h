@@ -20,7 +20,12 @@ namespace Kmplete
         class VulkanImageCreatorDelegate;
 
 
-        //TODO: comments
+        //! Manager of Vulkan texture attachments. It is capable of recreating non sample-fixed
+        //! attachments in case multisampling count was changed and recreate all attachments in case
+        //! render area size was changed. Coupled with VulkanSwapchain in order to get its' texture
+        //! attachment in cases when a separate attachment is unnecessary
+        //! @see VulkanTextureAttachment
+        //! @see VulkanSwapchain
         class VulkanTextureAttachmentManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachmentManager)

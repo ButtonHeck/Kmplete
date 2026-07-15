@@ -12,6 +12,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        //! Simple Vulkan API fence object wrapper
         class VulkanFence
         {
             KMP_DISABLE_COPY(VulkanFence)

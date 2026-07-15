@@ -17,7 +17,8 @@ namespace Kmplete
         class VulkanVertexBuffer;
 
 
-        //TODO: comments
+        //! Simple Vulkan API graphics pipeline wrapper
+        //! @see VulkanGraphicsPipelineParameters
         class VulkanGraphicsPipeline
         {
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsPipeline)

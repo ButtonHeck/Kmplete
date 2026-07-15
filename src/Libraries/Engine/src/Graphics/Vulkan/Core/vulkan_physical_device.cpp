@@ -19,7 +19,8 @@ namespace Kmplete
 
         namespace
         {
-            //TODO: comments
+            //! Utility struct for storing Vulkan's queues families indices
+            //! for filtering suitable physical devices
             struct QueueFamilyIndices
             {
                 Optional<UInt32> graphicsFamilyIndex{};
@@ -33,7 +34,8 @@ namespace Kmplete
             //--------------------------------------------------------------------------
 
 
-            //TODO: comments
+            //! Utility struct for storing Vulkan's surface properties
+            //! for filtering suitable physical devices
             struct SurfaceAndPresentModeProperties
             {
                 VkSurfaceCapabilitiesKHR surfaceCapabilities{};

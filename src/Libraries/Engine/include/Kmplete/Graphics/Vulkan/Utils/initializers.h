@@ -11,6 +11,8 @@ namespace Kmplete
     {
         namespace VKUtils
         {
+            //! Utility functions to create premade Vulkan structs with filled ".sType" fields
+
             KMP_NODISCARD KMP_API VkDebugUtilsMessengerCreateInfoEXT InitVkDebugUtilsMessengerCreateInfo();
             KMP_NODISCARD KMP_API VkApplicationInfo InitVkApplicationInfo();
             KMP_NODISCARD KMP_API VkInstanceCreateInfo InitVkInstanceCreateInfo(const VkApplicationInfo& applicationInfo);

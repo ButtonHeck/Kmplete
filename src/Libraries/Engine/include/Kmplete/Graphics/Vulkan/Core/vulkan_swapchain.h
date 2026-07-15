@@ -20,7 +20,7 @@ namespace Kmplete
         class VulkanImageCreatorDelegate;
 
 
-        //! Vulkan swapchain object implementation
+        //! Vulkan API swapchain object implementation
         class VulkanSwapchain : public Swapchain
         {
             KMP_DISABLE_COPY_MOVE(VulkanSwapchain)

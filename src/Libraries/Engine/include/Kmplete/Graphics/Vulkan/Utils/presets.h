@@ -15,6 +15,7 @@ namespace Kmplete
         using namespace VKBits;
 
 
+        //! Shortcut for commonly used partially-completed presets of Vulkan parameters structures
         namespace VKPresets
         {
             /*

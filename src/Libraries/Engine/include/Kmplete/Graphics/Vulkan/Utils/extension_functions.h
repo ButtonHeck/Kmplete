@@ -9,7 +9,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Utility struct containing all necessary aliased Vulkan extension functions pointers.
+        //! All aliases named as Vulkan defined typedef without "PFN_vk" part
         struct VKCommands
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)

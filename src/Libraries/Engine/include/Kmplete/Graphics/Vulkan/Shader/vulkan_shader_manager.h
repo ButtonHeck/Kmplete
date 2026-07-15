@@ -21,7 +21,10 @@ namespace Kmplete
         class VulkanDescriptorSetManager;
 
 
-        //TODO: comments
+        //! Manager of Vulkan shader objects/modules
+        //! @see VulkanShaderModule
+        //! @see VulkanShaderObject
+        //! @see ShaderLoadParameters
         class VulkanShaderManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanShaderManager)
@@ -29,6 +32,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            //! Wrapper for shader module stage properties for pipeline creation
             struct ShaderStageInfoParameters
             {
                 StringID shaderModuleSid;

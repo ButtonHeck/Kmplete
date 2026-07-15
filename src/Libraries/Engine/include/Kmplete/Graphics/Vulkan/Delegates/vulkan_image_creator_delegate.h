@@ -17,7 +17,11 @@ namespace Kmplete
         class Image;
 
 
-        //TODO: comments
+        //! Helper delegate class for creating Vulkan images (raw VkImage or VulkanImage wrappers), 
+        //! image views and staging Vulkan buffers for texture creation, uses VulkanMemoryTypeDelegate object
+        //! for delegating memory properties requirements during staging buffer creation.
+        //! @see VulkanImage
+        //! @see VulkanMemoryTypeDelegate
         class VulkanImageCreatorDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanImageCreatorDelegate)

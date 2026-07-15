@@ -14,12 +14,16 @@ namespace Kmplete
         class VulkanVertexBuffer;
 
 
-        //TODO: comments
+        //! Vulkan API graphics pipeline creation parameters wrapper to simplify pipeline stages
+        //! construction. A premade parameters object could be used as a reference for copying
+        //! to another parameters object with optional stage categories mask.
+        //! @see VulkanGraphicsPipeline
         class VulkanGraphicsPipelineParameters
         {
             KMP_LOG_CLASSNAME(VulkanGraphicsPipelineParameters)
 
         public:
+            //! Enumeration of categories of pipeline stages to copy from source object
             enum CopyParameters
             {
                 OnlyParameters          = 0,
@@ -70,6 +74,8 @@ namespace Kmplete
             KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
 
         private:
+            VulkanGraphicsPipelineParameters(const VulkanGraphicsPipelineParameters&) = default;
+
             void _SetDefaults() noexcept;
 
         private:

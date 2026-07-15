@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Vulkan pipeline cache object wrapper
         class VulkanPipelineCache
         {
             KMP_DISABLE_COPY_MOVE(VulkanPipelineCache)
@@ -27,6 +27,7 @@ namespace Kmplete
             KMP_NODISCARD KMP_API VkPipelineCache GetVkPipelineCache() const noexcept;
 
         private:
+            //! Vulkan cache header wrapper struct
             struct PipelineCacheHeader
             {
                 UInt32 headerLength;

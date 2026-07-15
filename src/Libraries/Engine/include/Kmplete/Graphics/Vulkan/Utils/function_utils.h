@@ -15,7 +15,7 @@ namespace Kmplete
 
         namespace VKUtils
         {
-            // TODO: comments
+            //! Helper parameters struct for memory barrier insertion functions
             struct MemoryBarrierParameters
             {
                 VkCommandBuffer cmdbuffer;
@@ -31,7 +31,8 @@ namespace Kmplete
             //--------------------------------------------------------------------------
 
 
-            //TODO: comments
+            //! Helper parameters struct for copy buffers regions
+            //! @see VulkanBuffer
             struct BufferCopyParameters
             {
                 VulkanBuffer& destinationBuffer;

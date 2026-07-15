@@ -15,7 +15,7 @@ namespace Kmplete
         class VulkanMemoryTypeDelegate;
 
 
-        //TODO: comments
+        //! Vulkan API image object wrapper
         class VulkanImage
         {
             KMP_DISABLE_COPY(VulkanImage)

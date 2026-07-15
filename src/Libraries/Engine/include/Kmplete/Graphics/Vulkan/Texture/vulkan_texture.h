@@ -17,7 +17,9 @@ namespace Kmplete
         class VulkanImageCreatorDelegate;
 
 
-        //TODO: comments
+        //! Vulkan plain texture implementation. Such textures intended to be
+        //! used in shaders, i.e. everything that user sees directly (albedo texture)
+        //! or indirectly (normal maps, height maps, etc.)
         class VulkanTexture : public Texture, public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTexture)

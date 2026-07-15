@@ -15,7 +15,9 @@ namespace Kmplete
         class VulkanImageCreatorDelegate;
 
 
-        //TODO: comments
+        //! Base class for Vulkan textures containing both an image object
+        //! and a single image view associated with that image
+        //! @see VulkanImage
         class VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureBase)

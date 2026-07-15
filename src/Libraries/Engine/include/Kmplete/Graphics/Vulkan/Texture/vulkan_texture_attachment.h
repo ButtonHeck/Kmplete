@@ -15,13 +15,17 @@ namespace Kmplete
         class VulkanImageCreatorDelegate;
 
 
-        //TODO: comments
+        //! Vulkan attachment texture implementation. Such textures intended to be used
+        //! as render targets or attachments for rendering sessions
         class VulkanTextureAttachment : public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachment)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            //! Attachment parameters wrapper, a texture attachment can be either be sample-fixed
+            //! (e.g. a multisample resolve texture attachment with single sample) or not - plain 
+            //! color/depth/stencil attachment for multisampled rendering
             struct Parameters
             {
                 VkFormat format;

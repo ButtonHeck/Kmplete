@@ -11,7 +11,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Enumeration of possible sources of shaders objects/modules
         enum class ShaderSourceType
         {
             SourceFile,
@@ -24,7 +24,8 @@ namespace Kmplete
 
         using ShaderSource = std::variant<Filepath, String, BinaryBuffer32>;
 
-        //TODO: comments
+        //! Helper struct of shader object/module loading parameters
+        //! @see VulkanShaderManager
         struct ShaderLoadParameters
         {
             StringID sid;

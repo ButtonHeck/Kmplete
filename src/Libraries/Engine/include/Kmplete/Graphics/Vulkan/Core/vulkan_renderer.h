@@ -25,6 +25,9 @@ namespace Kmplete
 {
     namespace Graphics
     {
+        //! Vulkan API renderer that is responsible for all the rendering-related commands, such as:
+        //! beginning/ending rendering (dynamic), drawing, queue submission, 
+        //! settings rendering dynamic states values, binding objects, copying buffers
         class VulkanRenderer
         {
             KMP_DISABLE_COPY_MOVE(VulkanRenderer)

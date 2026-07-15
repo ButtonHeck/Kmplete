@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Simple Vulkan API shader object wrapper used for dynamic rendering
         class VulkanShaderObject
         {
             KMP_DISABLE_COPY(VulkanShaderObject)

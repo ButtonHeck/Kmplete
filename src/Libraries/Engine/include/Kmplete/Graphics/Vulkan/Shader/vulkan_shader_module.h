@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Simple Vulkan API shader module wrapper
         class VulkanShaderModule
         {
             KMP_DISABLE_COPY(VulkanShaderModule)

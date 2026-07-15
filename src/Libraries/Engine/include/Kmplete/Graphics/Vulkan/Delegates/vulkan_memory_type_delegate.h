@@ -12,7 +12,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        //TODO: comments
+        //! Helper delegate class for handling memory requirements functions during
+        //! image or buffer creation, finding suitable memory type for required properties
         class VulkanMemoryTypeDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanMemoryTypeDelegate)
@@ -20,6 +21,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
+            //! Memory allocation information wrapper struct
             struct MemoryContext
             {
                 VkMemoryRequirements requirements{};
