@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Base/types_aliases.h"
+#include "Kmplete/Base/type_traits.h"
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Log/log_class_macro.h"
 #include "Kmplete/Math/geometry.h"
@@ -50,5 +51,8 @@ namespace Kmplete
             UInt64 _dataSize;
         };
         //--------------------------------------------------------------------------
+
+        static_assert(IsMoveConstructible<Image>::value);
+        static_assert(IsMoveAssignable<Image>::value);
     }
 }
