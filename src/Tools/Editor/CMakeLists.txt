@@ -169,7 +169,7 @@ install(DIRECTORY locale
     COMPONENT ${KmpleteInstallEditorComponentName}
     FILES_MATCHING PATTERN "*.mo"
 )
-install(DIRECTORY ${exeDir}/Data
-    DESTINATION ${CMAKE_INSTALL_BINDIR} 
+install(FILES "${exeDir}/Data/editor_assets.kmpdata"
+    DESTINATION ${CMAKE_INSTALL_BINDIR}/Data
     COMPONENT ${KmpleteInstallEditorComponentName}
 )
