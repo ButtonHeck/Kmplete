@@ -142,13 +142,15 @@ configure_file(editor_assets.json.in editor_assets.json @ONLY)
 # Assets compiler invocation
 # --------------------------
 
+set(AssetsDataFilename "editor_assets.kmpdata")
+
 add_custom_target(Editor_compile_assets
     COMMAND ${CMAKE_COMMAND} -E echo "Compiling assets for Editor done"
 )
 add_custom_command(TARGET Editor_compile_assets PRE_BUILD
     COMMAND AssetsCompiler 
     "--input_file_name=\"${CMAKE_CURRENT_BINARY_DIR}/editor_assets.json\"" 
-    "--output_file_name=\"${exeDir}/Data/editor_assets.kmpdata\""
+    "--output_file_name=\"${exeDir}/Data/${AssetsDataFilename}\""
 )
 set_target_properties(Editor_compile_assets PROPERTIES
     FOLDER Kmplete/Tools/Editor
@@ -169,7 +171,7 @@ install(DIRECTORY locale
     COMPONENT ${KmpleteInstallEditorComponentName}
     FILES_MATCHING PATTERN "*.mo"
 )
-install(FILES "${exeDir}/Data/editor_assets.kmpdata"
+install(FILES "${exeDir}/Data/${AssetsDataFilename}"
     DESTINATION ${CMAKE_INSTALL_BINDIR}/Data
     COMPONENT ${KmpleteInstallEditorComponentName}
 )
