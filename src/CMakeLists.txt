@@ -11,7 +11,6 @@
 cmake_minimum_required(VERSION 3.24)
 
 set(KmpleteResourcesFolder ${CMAKE_CURRENT_LIST_DIR}/Resources)
-set(KmpleteInstallEditorComponentName KmpleteInstallEditor)
 
 if(${KMPLETE_BUILD_TESTS})
     list(APPEND CMAKE_MODULE_PATH ${Catch2_SOURCE_DIR}/extras)

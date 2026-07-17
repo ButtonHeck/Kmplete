@@ -48,4 +48,22 @@ add_subdirectory(dependencies)
 
 
 # Kmplete main targets
+set(KmpleteInstallEditorComponentName KmpleteInstallEditor)
 add_subdirectory(src)
+
+
+# Packaging
+set(CPACK_PACKAGE_NAME "Kmplete Editor")
+set(CPACK_PACKAGE_VENDOR "Buttonheck")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Kmplete engine editor")
+set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+set(CPACK_COMPONENTS_ALL KmpleteInstallEditor)
+set(CPACK_COMPONENT_INSTALL ON)
+
+if(UNIX)
+    set(CPACK_GENERATOR "DEB")
+else()
+    set(CPACK_GENERATOR "NSIS")
+endif()
+
+include(CPack)
