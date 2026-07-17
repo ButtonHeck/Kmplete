@@ -41,3 +41,12 @@ if(MSVC)
     )
 
 endif()
+
+
+# Installation
+# --------------------------
+
+install(TARGETS AssetsCompiler
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
