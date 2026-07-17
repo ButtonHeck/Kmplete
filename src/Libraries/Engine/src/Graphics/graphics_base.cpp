@@ -48,6 +48,7 @@ namespace Kmplete
                 case ShaderDataType::Float4:   return 4 * 4;
                 case ShaderDataType::Mat3:     return 4 * 3 * 3;
                 case ShaderDataType::Mat4:     return 4 * 4 * 4;
+                default: break;
             }
 
             KMP_LOG_ERROR_FN("GraphicsBase: unknown ShaderDataType");
@@ -70,6 +71,7 @@ namespace Kmplete
                 case ShaderDataType::Float4:   return 4;
                 case ShaderDataType::Mat3:     return 3 * 3;
                 case ShaderDataType::Mat4:     return 4 * 4;
+                default: break;
             }
 
             KMP_LOG_ERROR_FN("GraphicsBase: unknown ShaderDataType");

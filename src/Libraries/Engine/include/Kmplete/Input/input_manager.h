@@ -98,8 +98,7 @@ namespace Kmplete
             }}
             //--------------------------------------------------------------------------
 
-            template<>
-            KMP_NODISCARD Math::Point2I GetActionValue<Math::Point2I>(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
+            KMP_NODISCARD Math::Point2I GetActionValue(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
             {
                 if (!_actionToInputCodesMap.contains(actionId))
                 {

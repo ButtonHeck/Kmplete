@@ -74,7 +74,7 @@ namespace Kmplete
                 return position + size / static_cast<decltype(size.x)>(2);
             }
 
-            KMP_NODISCARD bool ContainsPoint(const PositionType& point, const typename PositionType::value_type& offset = PositionType::value_type()) const noexcept
+            KMP_NODISCARD bool ContainsPoint(const PositionType& point, const typename PositionType::value_type& offset = typename PositionType::value_type()) const noexcept
             {
                 const auto [minX, maxX] = std::minmax({ position.x, position.x + size.x });
                 const auto [minY, maxY] = std::minmax({ position.y, position.y + size.y });
@@ -112,7 +112,7 @@ namespace Kmplete
                 return position + size / static_cast<decltype(size.x)>(2);
             }
 
-            KMP_NODISCARD bool ContainsPoint(const PositionType& point, const typename PositionType::value_type& offset = PositionType::value_type()) const noexcept
+            KMP_NODISCARD bool ContainsPoint(const PositionType& point, const typename PositionType::value_type& offset = typename PositionType::value_type()) const noexcept
             {
                 const auto [minX, maxX] = std::minmax({ position.x, position.x + size.x });
                 const auto [minY, maxY] = std::minmax({ position.y, position.y + size.y });
