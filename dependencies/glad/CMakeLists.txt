@@ -1,6 +1,6 @@
 ## ~/dependencies/glad/CMakeLists.txt
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.24)
 
 project(glad)
 add_library(glad src/glad.c)
