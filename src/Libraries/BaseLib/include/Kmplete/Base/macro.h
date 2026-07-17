@@ -71,8 +71,10 @@
 #if defined (KMP_CONFIG_TYPE_DEBUG)
     #if defined (KMP_COMPILER_MSVC) || defined (KMP_COMPILER_MINGW)
         #define KMP_DEBUGBREAK __debugbreak()
-    #elif defined (KMP_COMPILER_CLANG) || defined (KMP_COMPILER_GCC)
+    #elif defined (KMP_COMPILER_CLANG)
         #define KMP_DEBUGBREAK __builtin_debugtrap()
+    #elif defined (KMP_COMPILER_GCC)
+        #define KMP_DEBUGBREAK __builtin_trap()
     #endif
 #else
     #define KMP_DEBUGBREAK

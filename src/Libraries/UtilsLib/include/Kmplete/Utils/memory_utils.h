@@ -2,6 +2,8 @@
 
 #include "Kmplete/Base/kmplete_api.h"
 
+#include <cstddef>
+
 
 namespace Kmplete
 {

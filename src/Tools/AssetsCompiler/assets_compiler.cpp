@@ -141,7 +141,7 @@ namespace Kmplete
                     return ReturnCode::InputFileFormatError;
                 }
 
-                const auto assetSid = ToStringID(assetName);
+                const auto assetSid = ToStringID(KMP_SID_PARAM(assetName));
                 if (assetSid == 0)
                 {
                     KMP_LOG_ERROR("failed to get asset's sid at index {}", assetIndex);

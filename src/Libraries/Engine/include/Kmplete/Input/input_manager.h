@@ -98,38 +98,6 @@ namespace Kmplete
             }}
             //--------------------------------------------------------------------------
 
-            template<>
-            KMP_NODISCARD Math::Point2I GetActionValue<Math::Point2I>(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
-            {
-                if (!_actionToInputCodesMap.contains(actionId))
-                {
-                    return Math::Point2I();
-                }
-
-                const auto& codes = _actionToInputCodesMap[actionId];
-                InputControlValue resultValue = Math::Point2I();
-                for (const auto& codeWithCondition : codes)
-                {
-                    const auto code = codeWithCondition.code;
-                    if (!_IsValidInputCode(code))
-                    {
-                        continue;
-                    }
-
-                    const auto& currentValue = _controlStates[code];
-                    const auto& currentUnderlyingValue = std::get<Math::Point2I>(currentValue);
-
-                    if (currentUnderlyingValue != Math::Point2I())
-                    {
-                        resultValue = currentValue;
-                        break;
-                    }
-                }
-
-                return std::get<Math::Point2I>(resultValue);
-            }}
-            //--------------------------------------------------------------------------
-
         private:
             void _ProcessMouseMoveEvent(const Events::MouseMoveEvent& mouseMoveEvent);
             void _ProcessMouseButtonPressEvent(const Events::MouseButtonPressEvent& mouseButtonPressEvent);
@@ -159,6 +127,38 @@ namespace Kmplete
 
             Vector<ActionEvent> _actionEvents;
         };
+        //--------------------------------------------------------------------------
+
+        template<>
+        KMP_NODISCARD inline Math::Point2I InputManager::GetActionValue<Math::Point2I>(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (!_actionToInputCodesMap.contains(actionId))
+            {
+                return Math::Point2I();
+            }
+
+            const auto& codes = _actionToInputCodesMap[actionId];
+            InputControlValue resultValue = Math::Point2I();
+            for (const auto& codeWithCondition : codes)
+            {
+                const auto code = codeWithCondition.code;
+                if (!_IsValidInputCode(code))
+                {
+                    continue;
+                }
+
+                const auto& currentValue = _controlStates[code];
+                const auto& currentUnderlyingValue = std::get<Math::Point2I>(currentValue);
+
+                if (currentUnderlyingValue != Math::Point2I())
+                {
+                    resultValue = currentValue;
+                    break;
+                }
+            }
+
+            return std::get<Math::Point2I>(resultValue);
+        }}
         //--------------------------------------------------------------------------
     }
 }
