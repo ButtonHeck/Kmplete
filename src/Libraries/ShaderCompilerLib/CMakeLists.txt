@@ -21,9 +21,13 @@ target_link_libraries(ShaderCompilerLib
     PUBLIC BaseLib
     PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
     PUBLIC $<IF:$<CONFIG:Production>,ProfilerInterfaceLib,ProfilerLib>
-    
+
     PRIVATE FilesystemLib
     PRIVATE Vulkan::shaderc_combined
+    PRIVATE glslang
+    PRIVATE SPIRV
+    PRIVATE SPIRV-Tools-opt
+    PRIVATE SPIRV-Tools
 )
 
 target_compile_definitions(ShaderCompilerLib

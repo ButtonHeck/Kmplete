@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.24)
 
 project(ImGuiUtilsLib LANGUAGES CXX)
 
+# force compiler definition for ImGui own sources
+add_compile_definitions(GLFW_INCLUDE_NONE)
+
 aux_source_directory("${imgui_SOURCE_DIR}" IMGUI_SOURCES)
 source_group("Imgui" FILES
     ${IMGUI_SOURCES}
