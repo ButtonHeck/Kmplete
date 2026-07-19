@@ -13,6 +13,7 @@
 #include "Kmplete/Profile/profiler.h"
 
 #if defined (KMP_WINDOW_BACKEND_GLFW)
+    #define GLFW_INCLUDE_NONE
     #include <GLFW/glfw3.h>
 #endif
 

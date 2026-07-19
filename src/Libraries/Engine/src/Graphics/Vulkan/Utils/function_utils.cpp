@@ -44,6 +44,8 @@ namespace Kmplete
                     return array ? VK_ImageView_2DArray : VK_ImageView_2D;
                 case VK_Image_3D:
                     return VK_ImageView_3D;
+                default:
+                    break;
                 }
 
                 return VK_ImageView_2D;

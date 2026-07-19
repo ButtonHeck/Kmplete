@@ -4,6 +4,8 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/type_traits.h"
 
+#include <algorithm>
+
 
 namespace Kmplete
 {

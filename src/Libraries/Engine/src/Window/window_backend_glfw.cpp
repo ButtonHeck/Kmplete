@@ -7,6 +7,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 

@@ -6,6 +6,8 @@
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Profile/profiler.h"
 
+#include <cstring>
+
 
 namespace Kmplete
 {

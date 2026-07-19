@@ -8,6 +8,9 @@
 
 cmake_minimum_required(VERSION 3.24)
 
+# Force cmake pre 3.30 policy for calling FetchContent_Populate
+cmake_policy(SET CMP0169 OLD)
+
 ## Dependencies without FetchContent
 # stb_image
 message("---- Kmplete dependencies: stb_image")
@@ -215,6 +218,7 @@ if(NOT cpptrace_POPULATED)
     FetchContent_Populate(cpptrace)
     
     set(CPPTRACE_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+    set(CPPTRACE_USE_EXTERNAL_ZSTD ON CACHE BOOL "" FORCE)
     
     add_subdirectory(${cpptrace_SOURCE_DIR} ${cpptrace_BINARY_DIR})
     
