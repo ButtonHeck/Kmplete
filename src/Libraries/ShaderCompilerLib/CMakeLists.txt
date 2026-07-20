@@ -24,10 +24,10 @@ target_link_libraries(ShaderCompilerLib
 
     PRIVATE FilesystemLib
     PRIVATE Vulkan::shaderc_combined
-    PRIVATE glslang
-    PRIVATE SPIRV
-    PRIVATE SPIRV-Tools-opt
-    PRIVATE SPIRV-Tools
+    PRIVATE $<$<BOOL:${UNIX}>:glslang>
+    PRIVATE $<$<BOOL:${UNIX}>:SPIRV>
+    PRIVATE $<$<BOOL:${UNIX}>:SPIRV-Tools-opt>
+    PRIVATE $<$<BOOL:${UNIX}>:SPIRV-Tools>
 )
 
 target_compile_definitions(ShaderCompilerLib

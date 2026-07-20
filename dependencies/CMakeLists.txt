@@ -9,7 +9,9 @@
 cmake_minimum_required(VERSION 3.24)
 
 # Force cmake pre 3.30 policy for calling FetchContent_Populate
-cmake_policy(SET CMP0169 OLD)
+if (POLICY CMP0169)
+    cmake_policy(SET CMP0169 OLD)
+endif()
 
 ## Dependencies without FetchContent
 # stb_image

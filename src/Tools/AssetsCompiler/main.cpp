@@ -9,6 +9,17 @@
 #include <iostream>
 
 
+#if defined (CreateFile)
+    #pragma push_macro("CreateFile")
+    #undef CreateFile
+    #define KMP_UNDEF_CreateFile
+#endif
+#if defined (CopyFile)
+    #pragma push_macro("CopyFile")
+    #undef CopyFile
+    #define KMP_UNDEF_CopyFile
+#endif
+
 namespace bpo = boost::program_options;
 
 namespace Kmplete
@@ -176,3 +187,12 @@ namespace Kmplete
         //--------------------------------------------------------------------------
     }
 }
+
+#if defined (KMP_UNDEF_CreateFile)
+    #pragma pop_macro("CreateFile")
+    #undef KMP_UNDEF_CreateFile
+#endif
+#if defined (KMP_UNDEF_CopyFile)
+    #pragma pop_macro("CopyFile")
+    #undef KMP_UNDEF_CopyFile
+#endif

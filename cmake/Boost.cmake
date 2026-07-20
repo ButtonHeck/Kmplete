@@ -7,18 +7,24 @@
 ############################################################################
 
 # Force cmake pre 3.30 policy for handling Boost finding
-cmake_policy(SET CMP0167 OLD)
+if (POLICY CMP0167)
+    cmake_policy(SET CMP0167 OLD)
+endif()
 
-set(Boost_NO_SYSTEM_PATHS ${KMPLETE_IGNORE_SYSTEM_BOOST})
 set(Boost_USE_MULTITHREADED ON)
-if (BUILD_SHARED_LIBS)
-    set(Boost_USE_STATIC_LIBS OFF)
-    set(Boost_USE_SHARED_LIBS ON)
+set(Boost_NO_WARN_NEW_VERSIONS ON)
+set(Boost_NO_SYSTEM_PATHS ${KMPLETE_IGNORE_SYSTEM_BOOST})
+if (UNIX)
+    if (BUILD_SHARED_LIBS)
+        set(Boost_USE_STATIC_LIBS OFF)
+        set(Boost_USE_SHARED_LIBS ON)
+    else()
+        set(Boost_USE_STATIC_LIBS ON)
+        set(Boost_USE_SHARED_LIBS OFF)
+    endif()
 else()
     set(Boost_USE_STATIC_LIBS ON)
-    set(Boost_USE_SHARED_LIBS OFF)
 endif()
-set(Boost_NO_WARN_NEW_VERSIONS ON)
 
 find_package(Boost REQUIRED COMPONENTS 
     locale 
