@@ -9,6 +9,7 @@
 #include "Kmplete/Utils/string_utils.h"
 
 #include <catch2/catch_test_macros.hpp>
+#define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
 

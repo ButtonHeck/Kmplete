@@ -26,7 +26,7 @@ target_include_directories(LoggerLib
 target_link_libraries(LoggerLib 
     PUBLIC BaseLib
     PUBLIC TimeLib
-    PUBLIC spdlog
+    PUBLIC spdlog_header_only
 )
 
 target_compile_definitions(LoggerLib

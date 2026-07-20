@@ -3,13 +3,15 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Time/helper_functions.h"
 
-#include "spdlog/async.h"
+#include <spdlog/async.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/ostream_sink.h>
 #include <spdlog/sinks/basic_file_sink.h>
 #include <spdlog/sinks/null_sink.h>
 #include <spdlog/sinks/callback_sink.h>
+#include <spdlog/sinks/base_sink.h>
 #include <spdlog/details/log_msg.h>
+#include <spdlog/details/null_mutex.h>
 
 #include <iostream>
 

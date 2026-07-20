@@ -80,8 +80,8 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
         , _indexCount(0)
-        , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
+        , _imguiImpl(nullptr)
         , _matrixShaderData()
 #if USE_ORTHOGRAPHIC_CAMERA
         , _camera({ 0.0f, 0.0f, -2.0f }, Graphics::Camera::Type::FirstPerson)

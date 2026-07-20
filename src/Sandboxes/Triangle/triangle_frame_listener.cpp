@@ -76,8 +76,8 @@ namespace Kmplete
         , _graphicsBackend(graphicsBackend)
         , _inputManager(inputManager)
         , _indexCount(0)
-        , _imguiImpl(nullptr)
         , _assetsManager(assetsManager)
+        , _imguiImpl(nullptr)
         , _matrixShaderData()
         , _shaderData(ShaderData{ .colorMultiplier = 1.0f })
 #if USE_ORTHOGRAPHIC_CAMERA
