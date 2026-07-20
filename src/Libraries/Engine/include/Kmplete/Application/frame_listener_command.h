@@ -26,6 +26,7 @@ namespace Kmplete
         StringID sid;
     };
     static_assert(IsMoveConstructible<FrameListenerCommand>::value);
+    static_assert(IsMoveAssignable<FrameListenerCommand>::value);
 
     using FrameListenerCommandBuffer = Vector<FrameListenerCommand>;
     //--------------------------------------------------------------------------
