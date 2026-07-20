@@ -22,7 +22,7 @@ namespace Kmplete
     //! 2) creation and deletion of frame listeners delegated to the outer handler function that should be set by the client application (Create/Delete command codes)
     //! @see FrameListener
     //! @see WindowApplication
-    class FrameListenerManager
+    class KMP_API FrameListenerManager
     {
         KMP_LOG_CLASSNAME(FrameListenerManager)
         KMP_DISABLE_COPY_MOVE(FrameListenerManager)
@@ -31,16 +31,16 @@ namespace Kmplete
         using FrameCreateDeleteListenerCommandBufferHandler = Function<void(const FrameListenerCommandBuffer&)>;
 
     public:
-        KMP_API FrameListenerManager() = default;
-        KMP_API ~FrameListenerManager();
+        FrameListenerManager() = default;
+        ~FrameListenerManager();
 
-        KMP_API void SetCreateDeleteCommandBufferHandler(const FrameCreateDeleteListenerCommandBufferHandler& commandBufferHandler);
-        KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
+        void SetCreateDeleteCommandBufferHandler(const FrameCreateDeleteListenerCommandBufferHandler& commandBufferHandler);
+        void PushCommand(FrameListenerCommand&& command) noexcept;
 
-        KMP_API bool AddFrameListener(NonNull<FrameListener*> frameListener);
-        KMP_API bool RemoveFrameListener(NonNull<FrameListener*> frameListener);
+        bool AddFrameListener(NonNull<FrameListener*> frameListener);
+        bool RemoveFrameListener(NonNull<FrameListener*> frameListener);
 
-        KMP_NODISCARD KMP_API size_t FrameListenersCount() const noexcept;
+        KMP_NODISCARD size_t FrameListenersCount() const noexcept;
 
     private:
         friend class WindowApplication;

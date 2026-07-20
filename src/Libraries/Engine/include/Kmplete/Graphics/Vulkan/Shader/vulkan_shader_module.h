@@ -14,20 +14,20 @@ namespace Kmplete
     namespace Graphics
     {
         //! Simple Vulkan API shader module wrapper
-        class VulkanShaderModule
+        class KMP_API VulkanShaderModule
         {
             KMP_DISABLE_COPY(VulkanShaderModule)
             KMP_LOG_CLASSNAME(VulkanShaderModule)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanShaderModule(VkDevice device, const Filepath& filepathBinary);
-            KMP_API VulkanShaderModule(VkDevice device, const BinaryBuffer32& shaderBinary);
-            KMP_API VulkanShaderModule(VulkanShaderModule&& other) noexcept;
-            KMP_API VulkanShaderModule& operator=(VulkanShaderModule&& other) noexcept;
-            KMP_API ~VulkanShaderModule();
+            VulkanShaderModule(VkDevice device, const Filepath& filepathBinary);
+            VulkanShaderModule(VkDevice device, const BinaryBuffer32& shaderBinary);
+            VulkanShaderModule(VulkanShaderModule&& other) noexcept;
+            VulkanShaderModule& operator=(VulkanShaderModule&& other) noexcept;
+            ~VulkanShaderModule();
 
-            KMP_NODISCARD KMP_API VkPipelineShaderStageCreateInfo GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName = "main") const noexcept;
+            KMP_NODISCARD VkPipelineShaderStageCreateInfo GetShaderStageCreateInfo(VkShaderStageFlagBits stage, const char* entryPointName = "main") const noexcept;
 
         private:
             void _Initialize(const Filepath& filepathBinary);

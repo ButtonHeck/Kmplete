@@ -24,7 +24,7 @@ namespace Kmplete
 
         //! Base class/factory for graphics backend - an object that should do necessary API initialization
         //! for graphics-related functions
-        class GraphicsBackend
+        class KMP_API GraphicsBackend
         {
             KMP_DISABLE_COPY_MOVE(GraphicsBackend)
             KMP_LOG_CLASSNAME(GraphicsBackend)
@@ -35,33 +35,33 @@ namespace Kmplete
             static constexpr auto VSyncStr = "VSync";
 
         public:
-            KMP_NODISCARD KMP_API static UPtr<GraphicsBackend> Create(Window& window);
+            KMP_NODISCARD static UPtr<GraphicsBackend> Create(Window& window);
 
         public:
-            KMP_API explicit GraphicsBackend(Window& window);
+            explicit GraphicsBackend(Window& window);
             virtual ~GraphicsBackend() = default;
 
-            KMP_NODISCARD KMP_API GraphicsBackendType GetType() const noexcept;
+            KMP_NODISCARD GraphicsBackendType GetType() const noexcept;
 
-            KMP_NODISCARD KMP_API virtual const GraphicsSurface& GetGraphicsSurface() const noexcept = 0;
-            KMP_NODISCARD KMP_API virtual const PhysicalDevice& GetPhysicalDevice() const noexcept = 0;
-            KMP_NODISCARD KMP_API virtual PhysicalDevice& GetPhysicalDevice() noexcept = 0;
+            KMP_NODISCARD virtual const GraphicsSurface& GetGraphicsSurface() const noexcept = 0;
+            KMP_NODISCARD virtual const PhysicalDevice& GetPhysicalDevice() const noexcept = 0;
+            KMP_NODISCARD virtual PhysicalDevice& GetPhysicalDevice() noexcept = 0;
 
-            KMP_API virtual void StartFrame(float frameTimestep) = 0;
-            KMP_API virtual void EndFrame() = 0;
-            KMP_API virtual void HandleWindowResize() = 0;
+            virtual void StartFrame(float frameTimestep) = 0;
+            virtual void EndFrame() = 0;
+            virtual void HandleWindowResize() = 0;
 
-            KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, bool flipVertically = false);
-            KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Image& image) = 0;
+            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, bool flipVertically = false);
+            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image) = 0;
 
-            KMP_NODISCARD KMP_API virtual UInt32 GetMultisampling() const = 0;
-            KMP_API virtual void SetMultisampling(UInt32 samples) = 0;
+            KMP_NODISCARD virtual UInt32 GetMultisampling() const = 0;
+            virtual void SetMultisampling(UInt32 samples) = 0;
 
-            KMP_NODISCARD KMP_API virtual bool IsVSync() const = 0;
-            KMP_API virtual void SetVSync(bool vSync) = 0;
+            KMP_NODISCARD virtual bool IsVSync() const = 0;
+            virtual void SetVSync(bool vSync) = 0;
 
-            KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
-            KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
+            virtual void SaveSettings(SettingsDocument& settings) const = 0;
+            virtual void LoadSettings(SettingsDocument& settings) = 0;
 
         protected:
             Window& _window;

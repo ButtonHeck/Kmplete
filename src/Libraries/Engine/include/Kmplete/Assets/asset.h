@@ -12,18 +12,18 @@ namespace Kmplete
     {
         //! Base class for all the assets used by application. 
         //! Just as simple as a pair of type enumerator and asset identifier
-        class Asset
+        class KMP_API Asset
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API Asset(AssetType type, StringID sid) noexcept;
+            Asset(AssetType type, StringID sid) noexcept;
             ~Asset() = default;
 
-            KMP_NODISCARD KMP_API AssetType GetType() const noexcept;
-            KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;
+            KMP_NODISCARD AssetType GetType() const noexcept;
+            KMP_NODISCARD StringID GetStringID() const noexcept;
 
-            KMP_NODISCARD KMP_API bool operator==(const Asset& other) const;
+            KMP_NODISCARD bool operator==(const Asset& other) const;
 
         protected:
             AssetType _type;

@@ -12,7 +12,7 @@ namespace Kmplete
     namespace Graphics
     {
         //! Base class of a graphics API physical device abstraction
-        class PhysicalDevice
+        class KMP_API PhysicalDevice
         {
             KMP_DISABLE_COPY_MOVE(PhysicalDevice)
             KMP_LOG_CLASSNAME(PhysicalDevice)
@@ -29,15 +29,15 @@ namespace Kmplete
             PhysicalDevice() noexcept;
             virtual ~PhysicalDevice() = default;
 
-            KMP_NODISCARD KMP_API const GPUInfo& GetGPUInfo() const noexcept;
-            KMP_API void PrintGPUInfo() const noexcept;
+            KMP_NODISCARD const GPUInfo& GetGPUInfo() const noexcept;
+            void PrintGPUInfo() const noexcept;
 
-            KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
-            KMP_API virtual void EndFrame() {};
-            KMP_API virtual void HandleWindowResize() {};
+            virtual void StartFrame(float /*frameTimestep*/) {};
+            virtual void EndFrame() {};
+            virtual void HandleWindowResize() {};
 
-            KMP_NODISCARD KMP_API virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;
-            KMP_NODISCARD KMP_API virtual LogicalDevice& GetLogicalDevice() noexcept = 0;
+            KMP_NODISCARD virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;
+            KMP_NODISCARD virtual LogicalDevice& GetLogicalDevice() noexcept = 0;
 
         protected:
             virtual void _QueryGPUInfo() = 0;

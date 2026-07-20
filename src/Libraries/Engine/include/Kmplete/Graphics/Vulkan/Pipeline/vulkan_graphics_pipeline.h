@@ -19,18 +19,18 @@ namespace Kmplete
 
         //! Simple Vulkan API graphics pipeline wrapper
         //! @see VulkanGraphicsPipelineParameters
-        class VulkanGraphicsPipeline
+        class KMP_API VulkanGraphicsPipeline
         {
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsPipeline)
             KMP_LOG_CLASSNAME(VulkanGraphicsPipeline)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, VkPipelineCache cache, const VulkanGraphicsPipelineParameters& parameters);
-            KMP_API ~VulkanGraphicsPipeline();
+            VulkanGraphicsPipeline(VkDevice device, StringID sid, VkPipelineLayout layout, VkPipelineCache cache, const VulkanGraphicsPipelineParameters& parameters);
+            ~VulkanGraphicsPipeline();
 
-            KMP_NODISCARD KMP_API VkPipeline GetVkPipeline() const noexcept;
-            KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
+            KMP_NODISCARD VkPipeline GetVkPipeline() const noexcept;
+            KMP_NODISCARD UInt32 GetColorAttachmentsCount() const noexcept;
 
         private:
             void _Initialize(VkPipelineLayout layout, VkPipelineCache cache);

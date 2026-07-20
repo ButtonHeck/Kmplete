@@ -9,13 +9,13 @@ namespace Kmplete
 {
     //! Utility struct to keep track which node is currently used for
     //! reading or writing
-    struct JsonScope
+    struct KMP_API JsonScope
     {
         KMP_LOG_CLASSNAME(JsonScope)
 
     public:
-        KMP_API void Push(const String& entry);
-        KMP_NODISCARD KMP_API bool Pop();
+        void Push(const String& entry);
+        KMP_NODISCARD bool Pop();
 
         StringVector scope;
         String scopeString;

@@ -28,7 +28,7 @@ namespace Kmplete
     //! @see localization_translator.h
     //! @see localization_base.h
     //! @see LocalizationLibrary
-    class LocalizationManager
+    class KMP_API LocalizationManager
     {
         KMP_LOG_CLASSNAME(LocalizationManager)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -38,45 +38,45 @@ namespace Kmplete
         using LocaleChangeCallback = Function<void()>;
 
     public:
-        KMP_API LocalizationManager() noexcept;
+        LocalizationManager() noexcept;
         ~LocalizationManager() = default;
 
-        KMP_API bool SetLocale(const LocaleStr& localeString);
-        KMP_NODISCARD KMP_API const LocaleStr& GetLocale() const noexcept;
+        bool SetLocale(const LocaleStr& localeString);
+        KMP_NODISCARD const LocaleStr& GetLocale() const noexcept;
 
-        KMP_API void AddMessagesPath(const String& path);
+        void AddMessagesPath(const String& path);
 
-        KMP_API bool AddMessagesDomain(const DomainStr& domain);
-        KMP_API bool RemoveMessagesDomain(const DomainStr& domain);
+        bool AddMessagesDomain(const DomainStr& domain);
+        bool RemoveMessagesDomain(const DomainStr& domain);
 
-        KMP_API void AddLocaleChangedCallback(const LocaleChangeCallback& callback);
+        void AddLocaleChangedCallback(const LocaleChangeCallback& callback);
 
         void SaveSettings(SettingsDocument& settings) const;
         void LoadSettings(SettingsDocument& settings);
 
-        KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& source);
-        KMP_API TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count);
-        KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context);
-        KMP_API TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context);
+        TranslationStr Translate(const DomainStr& domain, const SourceStr& source);
+        TranslationStr Translate(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count);
+        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context);
+        TranslationStr TranslateCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context);
 
-        KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const;
-        KMP_NODISCARD KMP_API const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
-                                                                const SourceStrSID& sourceSidPlural, int count) const;
-        KMP_NODISCARD KMP_API TranslationStr TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
-                                                                  const SourceStrSID& sourceSidPlural, int count) const;
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
-                                                                   const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const;
-        KMP_NODISCARD KMP_API TranslationStr TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
-                                                                     const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const;
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const;
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& fallback) const;
-        KMP_NODISCARD KMP_API const TranslationStr& TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, 
-                                                                             const ContextStrSID& contextSid, const TranslationStr& fallback) const;
+        KMP_NODISCARD const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const;
+        KMP_NODISCARD const TranslationStr& Translation(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                        const SourceStrSID& sourceSidPlural, int count) const;
+        KMP_NODISCARD TranslationStr TranslationFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                          const SourceStrSID& sourceSidPlural, int count) const;
+        KMP_NODISCARD const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                           const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD TranslationStr TranslationCtxFormatted(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                             const SourceStrSID& sourceSidPlural, int count, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD const TranslationStr& TranslationCtx(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD const TranslationStr& TranslationOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& fallback) const;
+        KMP_NODISCARD const TranslationStr& TranslationCtxOrFallback(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, 
+                                                                     const ContextStrSID& contextSid, const TranslationStr& fallback) const;
 
-        KMP_NODISCARD KMP_API TranslationStr Translation(const DomainStr& domain, const SourceStr& source, const LocaleStr& localeString);
-        KMP_NODISCARD KMP_API TranslationStr Translation(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const LocaleStr& localeString);
-        KMP_NODISCARD KMP_API TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const LocaleStr& localeString);
-        KMP_NODISCARD KMP_API TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString);
+        KMP_NODISCARD TranslationStr Translation(const DomainStr& domain, const SourceStr& source, const LocaleStr& localeString);
+        KMP_NODISCARD TranslationStr Translation(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const LocaleStr& localeString);
+        KMP_NODISCARD TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& source, const ContextStr& context, const LocaleStr& localeString);
+        KMP_NODISCARD TranslationStr TranslationCtx(const DomainStr& domain, const SourceStr& sourceSingular, const SourceStr& sourcePlural, int count, const ContextStr& context, const LocaleStr& localeString);
 
     private:
         void _ImbueLocale() const;

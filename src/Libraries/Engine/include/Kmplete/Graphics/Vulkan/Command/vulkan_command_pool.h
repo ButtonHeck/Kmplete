@@ -14,17 +14,17 @@ namespace Kmplete
     namespace Graphics
     {
         //! Simple Vulkan command pool object wrapper
-        class VulkanCommandPool : public CommandPool
+        class KMP_API VulkanCommandPool : public CommandPool
         {
             KMP_DISABLE_COPY_MOVE(VulkanCommandPool)
             KMP_LOG_CLASSNAME(VulkanCommandPool)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanCommandPool(VkDevice device, UInt32 graphicsQueueIndex);
-            KMP_API ~VulkanCommandPool();
+            VulkanCommandPool(VkDevice device, UInt32 graphicsQueueIndex);
+            ~VulkanCommandPool();
 
-            KMP_NODISCARD KMP_API VkCommandPool GetVkCommandPool() const noexcept;
+            KMP_NODISCARD VkCommandPool GetVkCommandPool() const noexcept;
 
         private:
             VkDevice _device;

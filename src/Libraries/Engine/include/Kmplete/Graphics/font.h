@@ -16,7 +16,7 @@ namespace Kmplete
     {
         //! Font object class, wrapper for FreeType library "Face" type, can be created both from
         //! a file or from a binary buffer.
-        class Font
+        class KMP_API Font
         {
             KMP_LOG_CLASSNAME(Font)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -56,16 +56,16 @@ namespace Kmplete
             };
 
         public:
-            KMP_API Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
-            KMP_API Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath);
-            KMP_API ~Font();
+            Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
+            Font(FT_LibraryRec_& freetypeLib, const Filepath& filepath);
+            ~Font();
 
-            KMP_API bool SetPointSize(UInt8 size, UInt32 dpi = 0);
-            KMP_API bool SetPixelSize(UInt8 size);
+            bool SetPointSize(UInt8 size, UInt32 dpi = 0);
+            bool SetPixelSize(UInt8 size);
 
-            KMP_NODISCARD KMP_API const BinaryBuffer& GetBuffer() const noexcept;
-            KMP_NODISCARD KMP_API const Parameters& GetParameters() const noexcept;
-            KMP_NODISCARD KMP_API bool HasStyle(Parameters::Style flag) const noexcept;
+            KMP_NODISCARD const BinaryBuffer& GetBuffer() const noexcept;
+            KMP_NODISCARD const Parameters& GetParameters() const noexcept;
+            KMP_NODISCARD bool HasStyle(Parameters::Style flag) const noexcept;
 
         private:
             void _UpdateParameters() noexcept;

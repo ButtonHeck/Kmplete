@@ -21,31 +21,31 @@ namespace Kmplete
 
 
         //! Vulkan API swapchain object implementation
-        class VulkanSwapchain : public Swapchain
+        class KMP_API VulkanSwapchain : public Swapchain
         {
             KMP_DISABLE_COPY_MOVE(VulkanSwapchain)
             KMP_LOG_CLASSNAME(VulkanSwapchain)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, 
-                                    bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
-                                    const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
-            KMP_API ~VulkanSwapchain();
+            VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, 
+                            bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
+                            const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
+            ~VulkanSwapchain();
 
-            KMP_API void StartFrame(float frameTimestep) override;
-            KMP_API void EndFrame() override;
+            void StartFrame(float frameTimestep) override;
+            void EndFrame() override;
 
-            KMP_API void Recreate(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
-                                  const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
+            void Recreate(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
+                          const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
 
-            KMP_API VkResult AcquireNextImage();
-            KMP_API void QueuePresent();
+            VkResult AcquireNextImage();
+            void QueuePresent();
 
-            KMP_NODISCARD KMP_API UInt32 GetImageIndex() const noexcept;
-            KMP_NODISCARD KMP_API UInt32 GetImageCount() const noexcept;
-            KMP_NODISCARD KMP_API VkImage GetCurrentImage() const;
-            KMP_NODISCARD KMP_API VkImageView GetCurrentImageView() const;
+            KMP_NODISCARD UInt32 GetImageIndex() const noexcept;
+            KMP_NODISCARD UInt32 GetImageCount() const noexcept;
+            KMP_NODISCARD VkImage GetCurrentImage() const;
+            KMP_NODISCARD VkImageView GetCurrentImageView() const;
 
         private:
             void _Initialize(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,

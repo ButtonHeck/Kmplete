@@ -15,16 +15,16 @@ namespace Kmplete
     namespace Graphics
     {
         //! Simple Vulkan API graphics surface object wrapper
-        class VulkanGraphicsSurface : public GraphicsSurface
+        class KMP_API VulkanGraphicsSurface : public GraphicsSurface
         {
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsSurface)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanGraphicsSurface(Window& window, VkInstance instance);
-            KMP_API ~VulkanGraphicsSurface();
+            VulkanGraphicsSurface(Window& window, VkInstance instance);
+            ~VulkanGraphicsSurface();
 
-            KMP_NODISCARD KMP_API VkSurfaceKHR GetVkSurface() const noexcept;
+            KMP_NODISCARD VkSurfaceKHR GetVkSurface() const noexcept;
 
         private:
             VkInstance _instance;

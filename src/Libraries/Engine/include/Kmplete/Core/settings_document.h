@@ -13,66 +13,66 @@ namespace Kmplete
     //! responsible for managing lifetime of the contained document object and
     //! delegating read/write commands to it.
     //! @see JsonDocument
-    class SettingsDocument
+    class KMP_API SettingsDocument
     {
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(SettingsDocument)
 
     public:
-        KMP_API SettingsDocument(const String& name, Ptr<JsonDocument> document);
-        KMP_API explicit SettingsDocument(const String& name);
+        SettingsDocument(const String& name, Ptr<JsonDocument> document);
+        explicit SettingsDocument(const String& name);
         ~SettingsDocument() = default;
 
-        KMP_NODISCARD KMP_API const String& GetName() const noexcept;
+        KMP_NODISCARD const String& GetName() const noexcept;
 
-        KMP_API bool StartSaveObject(const char* objectName);
-        KMP_API bool StartSaveObject(int index);
-        KMP_API bool EndSaveObject();
+        bool StartSaveObject(const char* objectName);
+        bool StartSaveObject(int index);
+        bool EndSaveObject();
 
-        KMP_API bool StartSaveArray(const char* arrayName, bool overwrite = true);
-        KMP_API bool StartSaveArray(int index, bool overwrite = true);
-        KMP_API bool EndSaveArray();
+        bool StartSaveArray(const char* arrayName, bool overwrite = true);
+        bool StartSaveArray(int index, bool overwrite = true);
+        bool EndSaveArray();
 
-        KMP_API bool SaveBool(int index, bool value);
-        KMP_API bool SaveBool(const char* name, bool value);
-        KMP_API bool SaveInt(int index, int value);
-        KMP_API bool SaveInt(const char* name, int value);
-        KMP_API bool SaveUInt(int index, unsigned int value);
-        KMP_API bool SaveUInt(const char* name, unsigned int value);
-        KMP_API bool SaveInt64(int index, Int64 value);
-        KMP_API bool SaveInt64(const char* name, Int64 value);
-        KMP_API bool SaveUInt64(int index, UInt64 value);
-        KMP_API bool SaveUInt64(const char* name, UInt64 value);
-        KMP_API bool SaveDouble(int index, double value);
-        KMP_API bool SaveDouble(const char* name, double value);
-        KMP_API bool SaveString(int index, const String& value);
-        KMP_API bool SaveString(const char* name, const String& value);
+        bool SaveBool(int index, bool value);
+        bool SaveBool(const char* name, bool value);
+        bool SaveInt(int index, int value);
+        bool SaveInt(const char* name, int value);
+        bool SaveUInt(int index, unsigned int value);
+        bool SaveUInt(const char* name, unsigned int value);
+        bool SaveInt64(int index, Int64 value);
+        bool SaveInt64(const char* name, Int64 value);
+        bool SaveUInt64(int index, UInt64 value);
+        bool SaveUInt64(const char* name, UInt64 value);
+        bool SaveDouble(int index, double value);
+        bool SaveDouble(const char* name, double value);
+        bool SaveString(int index, const String& value);
+        bool SaveString(const char* name, const String& value);
 
-        KMP_NODISCARD KMP_API const JsonDocument& GetDocument() const;
+        KMP_NODISCARD const JsonDocument& GetDocument() const;
 
 
-        KMP_API bool StartLoadObject(const char* objectName);
-        KMP_API bool StartLoadObject(int index);
-        KMP_API bool EndLoadObject();
+        bool StartLoadObject(const char* objectName);
+        bool StartLoadObject(int index);
+        bool EndLoadObject();
 
-        KMP_API int StartLoadArray(const char* arrayName);
-        KMP_API int StartLoadArray(int index);
-        KMP_API bool EndLoadArray();
+        int StartLoadArray(const char* arrayName);
+        int StartLoadArray(int index);
+        bool EndLoadArray();
 
-        KMP_NODISCARD KMP_API bool GetBool(int index, bool defaultValue = false);
-        KMP_NODISCARD KMP_API bool GetBool(const char* name, bool defaultValue = false);
-        KMP_NODISCARD KMP_API int GetInt(int index, int defaultValue = 0);
-        KMP_NODISCARD KMP_API int GetInt(const char* name, int defaultValue = 0);
-        KMP_NODISCARD KMP_API unsigned int GetUInt(int index, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API Int64 GetInt64(int index, Int64 defaultValue = 0);
-        KMP_NODISCARD KMP_API Int64 GetInt64(const char* name, Int64 defaultValue = 0);
-        KMP_NODISCARD KMP_API UInt64 GetUInt64(int index, UInt64 defaultValue = 0);
-        KMP_NODISCARD KMP_API UInt64 GetUInt64(const char* name, UInt64 defaultValue = 0);
-        KMP_NODISCARD KMP_API double GetDouble(int index, double defaultValue = 0.0);
-        KMP_NODISCARD KMP_API double GetDouble(const char* name, double defaultValue = 0.0);
-        KMP_NODISCARD KMP_API String GetString(int index, const String& defaultValue = "");
-        KMP_NODISCARD KMP_API String GetString(const char* name, const String& defaultValue = "");
+        KMP_NODISCARD bool GetBool(int index, bool defaultValue = false);
+        KMP_NODISCARD bool GetBool(const char* name, bool defaultValue = false);
+        KMP_NODISCARD int GetInt(int index, int defaultValue = 0);
+        KMP_NODISCARD int GetInt(const char* name, int defaultValue = 0);
+        KMP_NODISCARD unsigned int GetUInt(int index, unsigned int defaultValue = 0);
+        KMP_NODISCARD unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
+        KMP_NODISCARD Int64 GetInt64(int index, Int64 defaultValue = 0);
+        KMP_NODISCARD Int64 GetInt64(const char* name, Int64 defaultValue = 0);
+        KMP_NODISCARD UInt64 GetUInt64(int index, UInt64 defaultValue = 0);
+        KMP_NODISCARD UInt64 GetUInt64(const char* name, UInt64 defaultValue = 0);
+        KMP_NODISCARD double GetDouble(int index, double defaultValue = 0.0);
+        KMP_NODISCARD double GetDouble(const char* name, double defaultValue = 0.0);
+        KMP_NODISCARD String GetString(int index, const String& defaultValue = "");
+        KMP_NODISCARD String GetString(const char* name, const String& defaultValue = "");
 
     private:
         const String _name;

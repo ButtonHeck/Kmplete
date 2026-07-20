@@ -28,17 +28,17 @@ namespace Kmplete
     //! initialization, settings saving and loading of the subsystems
     //! that do not require window creation, additionally it handles logging
     //! initialization and its settings management
-    class Application
+    class KMP_API Application
     {
         KMP_LOG_CLASSNAME(Application)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(Application)
 
     public:
-        KMP_API explicit Application(const ApplicationParameters& parameters);
-        KMP_API virtual ~Application();
+        explicit Application(const ApplicationParameters& parameters);
+        virtual ~Application();
 
-        KMP_API virtual void Run() = 0;
+        virtual void Run() = 0;
 
     private:
         void _Initialize(const ApplicationParameters& parameters);

@@ -29,38 +29,38 @@ namespace Kmplete
         //! Base class of a Vulkan buffer object, supports memory management functionality such as: (un)mapping,
         //! flushing, invalidation, copying. Buffer's intentional usage can be acquired either by using VkBufferUsageFlags getter or 
         //! by an exact type getter.
-        class VulkanBuffer
+        class KMP_API VulkanBuffer
         {
             KMP_DISABLE_COPY(VulkanBuffer)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
-            KMP_API VulkanBuffer(VulkanBuffer&& other) noexcept;
-            KMP_API VulkanBuffer& operator=(VulkanBuffer&& other) noexcept;
-            KMP_API virtual ~VulkanBuffer();
+            VulkanBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
+            VulkanBuffer(VulkanBuffer&& other) noexcept;
+            VulkanBuffer& operator=(VulkanBuffer&& other) noexcept;
+            virtual ~VulkanBuffer();
 
-            KMP_API VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-            KMP_API VkResult Unmap(bool flush = false, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-            KMP_API VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-            KMP_API VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
-            KMP_API void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);
+            VkResult Map(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+            VkResult Unmap(bool flush = false, VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+            VkResult Flush(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+            VkResult Invalidate(VkDeviceSize size = VK_WHOLE_SIZE, VkDeviceSize offset = 0);
+            void CopyToMappedMemory(UInt32 mappedOffset, void* data, VkDeviceSize size);
 
-            KMP_NODISCARD KMP_API VkBuffer GetVkBuffer() const noexcept;
-            KMP_NODISCARD KMP_API VkDeviceSize GetSize() const noexcept;
-            KMP_NODISCARD KMP_API void* GetMappedPtr() const noexcept;
-            KMP_NODISCARD KMP_API VkBufferUsageFlags GetUsageFlags() const noexcept;
+            KMP_NODISCARD VkBuffer GetVkBuffer() const noexcept;
+            KMP_NODISCARD VkDeviceSize GetSize() const noexcept;
+            KMP_NODISCARD void* GetMappedPtr() const noexcept;
+            KMP_NODISCARD VkBufferUsageFlags GetUsageFlags() const noexcept;
 
-            KMP_NODISCARD KMP_API bool IsTransferSourceBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsTransferDestinationBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsUniformTexelBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsStorageTexelBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsUniformBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsStorageBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsIndexBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsVertexBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsIndirectBuffer() const noexcept;
-            KMP_NODISCARD KMP_API bool IsShaderDeviceAddressBuffer() const noexcept;
+            KMP_NODISCARD bool IsTransferSourceBuffer() const noexcept;
+            KMP_NODISCARD bool IsTransferDestinationBuffer() const noexcept;
+            KMP_NODISCARD bool IsUniformTexelBuffer() const noexcept;
+            KMP_NODISCARD bool IsStorageTexelBuffer() const noexcept;
+            KMP_NODISCARD bool IsUniformBuffer() const noexcept;
+            KMP_NODISCARD bool IsStorageBuffer() const noexcept;
+            KMP_NODISCARD bool IsIndexBuffer() const noexcept;
+            KMP_NODISCARD bool IsVertexBuffer() const noexcept;
+            KMP_NODISCARD bool IsIndirectBuffer() const noexcept;
+            KMP_NODISCARD bool IsShaderDeviceAddressBuffer() const noexcept;
 
         private:
             void _Initialize(const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanBufferParameters& parameters);

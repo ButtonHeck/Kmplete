@@ -10,28 +10,28 @@ namespace Kmplete
     namespace Graphics
     {
         //! Implementation of an orthographic projection camera
-        class OrthographicCamera : public Camera
+        class KMP_API OrthographicCamera : public Camera
         {
             KMP_LOG_CLASSNAME(OrthographicCamera)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit OrthographicCamera(Type type) noexcept;
-            KMP_API explicit OrthographicCamera(const Math::Point3F& position, Type type) noexcept;
+            explicit OrthographicCamera(Type type) noexcept;
+            explicit OrthographicCamera(const Math::Point3F& position, Type type) noexcept;
             ~OrthographicCamera() = default;
 
-            KMP_API void SetOrthographicParameters(float left, float right, float top, float bottom, float zNear, float zFar) noexcept;
-            KMP_API void SetLeft(float left) noexcept;
-            KMP_API void SetRight(float right) noexcept;
-            KMP_API void SetTop(float top) noexcept;
-            KMP_API void SetBottom(float bottom) noexcept;
+            void SetOrthographicParameters(float left, float right, float top, float bottom, float zNear, float zFar) noexcept;
+            void SetLeft(float left) noexcept;
+            void SetRight(float right) noexcept;
+            void SetTop(float top) noexcept;
+            void SetBottom(float bottom) noexcept;
 
-            KMP_API void SetScale(float scale) noexcept;
-            KMP_API void SetScaleDelta(float delta) noexcept;
-            KMP_NODISCARD KMP_API float GetScale() const noexcept;
+            void SetScale(float scale) noexcept;
+            void SetScaleDelta(float delta) noexcept;
+            KMP_NODISCARD float GetScale() const noexcept;
 
-            KMP_API void SetApplyAspectRatioFix(bool applyAspect) noexcept;
-            KMP_NODISCARD KMP_API bool IsAspectRatioFixApplied() const noexcept;
+            void SetApplyAspectRatioFix(bool applyAspect) noexcept;
+            KMP_NODISCARD bool IsAspectRatioFixApplied() const noexcept;
 
         private:
             void _UpdateProjectionMatrix() override;

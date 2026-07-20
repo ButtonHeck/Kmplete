@@ -43,19 +43,19 @@ namespace Kmplete
     //! @see WindowBackend
     //! @see Window
     //! @see FrameListenerManager
-    class WindowApplication : public Application
+    class KMP_API WindowApplication : public Application
     {
         KMP_LOG_CLASSNAME(WindowApplication)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(WindowApplication)
 
     public:
-        KMP_API explicit WindowApplication(const WindowApplicationParameters& parameters);
-        KMP_API virtual ~WindowApplication();
+        explicit WindowApplication(const WindowApplicationParameters& parameters);
+        virtual ~WindowApplication();
 
-        KMP_API void Run() override;
+        void Run() override;
 
-        KMP_NODISCARD KMP_API virtual bool ConfirmExit();
+        KMP_NODISCARD virtual bool ConfirmExit();
 
     protected:
         void OnEvent(Events::Event& event);

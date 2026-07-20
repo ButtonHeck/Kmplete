@@ -56,22 +56,22 @@ namespace Kmplete
     //! @see ProfilingSession
     //! @see ProfileResult
     //! @see ProfilerTimer
-    class Profiler
+    class KMP_API Profiler
     {
         KMP_LOG_CLASSNAME(Profiler)
         KMP_DISABLE_COPY_MOVE(Profiler)
 
     public:
-        KMP_NODISCARD KMP_API static Profiler& Get();
+        KMP_NODISCARD static Profiler& Get();
 
-        KMP_API void SetLevel(unsigned int level);
-        KMP_NODISCARD KMP_API unsigned int GetLevel() const;
+        void SetLevel(unsigned int level);
+        KMP_NODISCARD unsigned int GetLevel() const;
 
-        KMP_API void SetActive(bool active);
-        KMP_NODISCARD KMP_API bool IsActive() const;
+        void SetActive(bool active);
+        KMP_NODISCARD bool IsActive() const;
 
-        KMP_API void BeginSession(const String& name, const Filepath& filepath, int storageSize);
-        KMP_API void EndSession();
+        void BeginSession(const String& name, const Filepath& filepath, int storageSize);
+        void EndSession();
 
     private:
         Profiler() noexcept;
@@ -109,15 +109,15 @@ namespace Kmplete
     //! than the level set for profiling or the profiler is currently inactive,
     //! this object's timing is skipped.
     //! @see Profiler
-    class ProfilerTimer
+    class KMP_API ProfilerTimer
     {
         KMP_DISABLE_COPY_MOVE(ProfilerTimer)
 
     public:
-        KMP_API explicit ProfilerTimer(const char* name, unsigned int level = ProfileLevelAlways);
-        KMP_API ~ProfilerTimer();
+        explicit ProfilerTimer(const char* name, unsigned int level = ProfileLevelAlways);
+        ~ProfilerTimer();
 
-        KMP_API void SetName(const char* name);
+        void SetName(const char* name);
 
     private:
         const char* _name;

@@ -25,27 +25,27 @@ namespace Kmplete
         //! Manager of Vulkan pipeline objects, pipeline caches and pipeline layouts.
         //! @see VulkanGraphicsPipeline
         //! @see VulkanPipelineCache
-        class VulkanPipelineManager
+        class KMP_API VulkanPipelineManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanPipelineManager)
             KMP_LOG_CLASSNAME(VulkanPipelineManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanPipelineManager(VkDevice device, const VulkanContext& context, const VulkanDescriptorSetManager& descriptorSetManager);
-            KMP_API ~VulkanPipelineManager();
+            VulkanPipelineManager(VkDevice device, const VulkanContext& context, const VulkanDescriptorSetManager& descriptorSetManager);
+            ~VulkanPipelineManager();
 
-            KMP_API bool AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges = {});
-            KMP_API bool AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges = {});
-            KMP_NODISCARD KMP_API VkPipelineLayout GetPipelineLayout(StringID layoutSid) const noexcept;
+            bool AddPipelineLayoutWithSetsSids(StringID layoutSid, const Vector<StringID>& descriptorSetLayoutsSids, const Vector<VkPushConstantRange>& pushConstantRanges = {});
+            bool AddPipelineLayout(StringID layoutSid, const Vector<VkDescriptorSetLayout>& descriptorSetLayouts, const Vector<VkPushConstantRange>& pushConstantRanges = {});
+            KMP_NODISCARD VkPipelineLayout GetPipelineLayout(StringID layoutSid) const noexcept;
 
-            KMP_API bool AddPipelineCache(StringID pipelineSid, const Filepath& binaryPath);
+            bool AddPipelineCache(StringID pipelineSid, const Filepath& binaryPath);
 
-            KMP_API bool AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters, const Filepath& cacheBinaryPath);
-            KMP_API bool AddGraphicsPipeline(StringID pipelineSid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters, const Filepath& cacheBinaryPath);
-            KMP_API bool AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters);
-            KMP_API bool AddGraphicsPipeline(StringID pipelineSid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters);
-            KMP_NODISCARD KMP_API OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID pipelineSid) const;
+            bool AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters, const Filepath& cacheBinaryPath);
+            bool AddGraphicsPipeline(StringID pipelineSid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters, const Filepath& cacheBinaryPath);
+            bool AddGraphicsPipeline(StringID pipelineSid, StringID layoutSid, const VulkanGraphicsPipelineParameters& parameters);
+            bool AddGraphicsPipeline(StringID pipelineSid, VkPipelineLayout layout, const VulkanGraphicsPipelineParameters& parameters);
+            KMP_NODISCARD OptionalRef<VulkanGraphicsPipeline> GetGraphicsPipeline(StringID pipelineSid) const;
 
         private:
             VkDevice _device;

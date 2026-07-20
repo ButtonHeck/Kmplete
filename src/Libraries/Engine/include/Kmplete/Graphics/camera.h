@@ -13,7 +13,7 @@ namespace Kmplete
     {
         //! Base class for cameras, uses Euler angles approach for view matrices calculation.
         //! Projection matrices should be calculated in implementation subclasses
-        class Camera
+        class KMP_API Camera
         {
             KMP_LOG_CLASSNAME(Camera)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -41,44 +41,44 @@ namespace Kmplete
             };
 
         public:
-            KMP_API Camera(Type type, Projection projection) noexcept;
-            KMP_API Camera(const Math::Point3F& position, Type type, Projection projection) noexcept;
-            KMP_API virtual ~Camera() = default;
+            Camera(Type type, Projection projection) noexcept;
+            Camera(const Math::Point3F& position, Type type, Projection projection) noexcept;
+            virtual ~Camera() = default;
 
-            KMP_API virtual void Update(float delta);
+            virtual void Update(float delta);
 
-            KMP_API void Move(MovementMaskBits direction, bool moving) noexcept;
-            KMP_NODISCARD KMP_API bool IsMoving() const noexcept;
+            void Move(MovementMaskBits direction, bool moving) noexcept;
+            KMP_NODISCARD bool IsMoving() const noexcept;
 
-            KMP_API void SetTranslation(const Math::Point3F& translation) noexcept;
-            KMP_API void Translate(const Math::Point3F& delta) noexcept;
-            KMP_NODISCARD KMP_API const Math::Point3F& GetPosition() const noexcept;
+            void SetTranslation(const Math::Point3F& translation) noexcept;
+            void Translate(const Math::Point3F& delta) noexcept;
+            KMP_NODISCARD const Math::Point3F& GetPosition() const noexcept;
 
-            KMP_API void SetRotation(const Math::Vec3F& rotation) noexcept;
-            KMP_API void Rotate(const Math::Vec3F& delta) noexcept;
-            KMP_NODISCARD KMP_API const Math::Vec3F& GetRotation() const noexcept;
+            void SetRotation(const Math::Vec3F& rotation) noexcept;
+            void Rotate(const Math::Vec3F& delta) noexcept;
+            KMP_NODISCARD const Math::Vec3F& GetRotation() const noexcept;
 
-            KMP_API void SetMovementSpeed(float movementSpeed) noexcept;
-            KMP_NODISCARD KMP_API float GetMovementSpeed() const noexcept;
+            void SetMovementSpeed(float movementSpeed) noexcept;
+            KMP_NODISCARD float GetMovementSpeed() const noexcept;
 
-            KMP_API void SetRotationSpeed(float rotationSpeed) noexcept;
-            KMP_NODISCARD KMP_API float GetRotationSpeed() const noexcept;
+            void SetRotationSpeed(float rotationSpeed) noexcept;
+            KMP_NODISCARD float GetRotationSpeed() const noexcept;
 
-            KMP_API void SetZNear(float zNear) noexcept;
-            KMP_NODISCARD KMP_API float GetZNear() const noexcept;
+            void SetZNear(float zNear) noexcept;
+            KMP_NODISCARD float GetZNear() const noexcept;
 
-            KMP_API void SetZFar(float zFar) noexcept;
-            KMP_NODISCARD KMP_API float GetZFar() const noexcept;
+            void SetZFar(float zFar) noexcept;
+            KMP_NODISCARD float GetZFar() const noexcept;
 
-            KMP_API void SetAspectRatio(float aspectRatio) noexcept;
-            KMP_NODISCARD KMP_API float GetAspectRatio() const noexcept;
+            void SetAspectRatio(float aspectRatio) noexcept;
+            KMP_NODISCARD float GetAspectRatio() const noexcept;
 
-            KMP_NODISCARD KMP_API const Math::Mat4& GetViewMatrix() const noexcept;
-            KMP_NODISCARD KMP_API const Math::Mat4& GetProjectionMatrix() const noexcept;
+            KMP_NODISCARD const Math::Mat4& GetViewMatrix() const noexcept;
+            KMP_NODISCARD const Math::Mat4& GetProjectionMatrix() const noexcept;
 
-            KMP_NODISCARD KMP_API const Math::Vec3F& GetFront() const noexcept;
-            KMP_NODISCARD KMP_API const Math::Vec3F& GetRight() const noexcept;
-            KMP_NODISCARD KMP_API const Math::Vec3F& GetUp() const noexcept;
+            KMP_NODISCARD const Math::Vec3F& GetFront() const noexcept;
+            KMP_NODISCARD const Math::Vec3F& GetRight() const noexcept;
+            KMP_NODISCARD const Math::Vec3F& GetUp() const noexcept;
 
         protected:
             virtual void _UpdateProjectionMatrix() = 0;

@@ -21,7 +21,7 @@ namespace Kmplete
         //! If this manager has been successfully created - then there is the asset with StringID = 0 that holds
         //! the "default" font (which font is used depends on the platform - Arial or Ubuntu with size 18)
         //! @see Assets::FontAsset
-        class FontAssetManager
+        class KMP_API FontAssetManager
         {
             KMP_LOG_CLASSNAME(FontAssetManager)
             KMP_DISABLE_COPY_MOVE(FontAssetManager)
@@ -30,19 +30,19 @@ namespace Kmplete
         public:
             static constexpr StringID DefaultFontSID = 0;
 
-            KMP_API FontAssetManager();
-            KMP_API ~FontAssetManager();
+            FontAssetManager();
+            ~FontAssetManager();
 
-            KMP_API bool CreateAsset(StringID fontSid, BinaryBuffer&& fontData);
-            KMP_API bool CreateAsset(StringID fontSid, const Filepath& filepath);
+            bool CreateAsset(StringID fontSid, BinaryBuffer&& fontData);
+            bool CreateAsset(StringID fontSid, const Filepath& filepath);
 
-            KMP_NODISCARD KMP_API const Assets::FontAsset& GetAsset(StringID fontSid) const;
-            KMP_NODISCARD KMP_API Assets::FontAsset& GetAsset(StringID fontSid);
+            KMP_NODISCARD const Assets::FontAsset& GetAsset(StringID fontSid) const;
+            KMP_NODISCARD Assets::FontAsset& GetAsset(StringID fontSid);
 
-            KMP_API void RemoveAssets(const Vector<StringID>& sids);
-            KMP_NODISCARD KMP_API bool RemoveAsset(StringID sid);
+            void RemoveAssets(const Vector<StringID>& sids);
+            KMP_NODISCARD bool RemoveAsset(StringID sid);
 
-            KMP_NODISCARD KMP_API UInt64 GetAssetsCount() const noexcept;
+            KMP_NODISCARD UInt64 GetAssetsCount() const noexcept;
 
         private:
             void _Initialize();

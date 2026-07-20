@@ -12,22 +12,22 @@ namespace Kmplete
     namespace Graphics
     {
         //! Simple Vulkan command buffer object wrapper
-        class VulkanCommandBuffer
+        class KMP_API VulkanCommandBuffer
         {
             KMP_DISABLE_COPY(VulkanCommandBuffer)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanCommandBuffer(VkDevice device, VkCommandPool commandPool);
-            KMP_API VulkanCommandBuffer(VulkanCommandBuffer&& other) noexcept;
-            KMP_API VulkanCommandBuffer& operator=(VulkanCommandBuffer&& other) noexcept;
-            KMP_API ~VulkanCommandBuffer();
+            VulkanCommandBuffer(VkDevice device, VkCommandPool commandPool);
+            VulkanCommandBuffer(VulkanCommandBuffer&& other) noexcept;
+            VulkanCommandBuffer& operator=(VulkanCommandBuffer&& other) noexcept;
+            ~VulkanCommandBuffer();
 
-            KMP_API void Begin(VkCommandBufferUsageFlags flags = 0) const;
-            KMP_API void End() const;
-            KMP_API void Reset() const;
+            void Begin(VkCommandBufferUsageFlags flags = 0) const;
+            void End() const;
+            void Reset() const;
 
-            KMP_NODISCARD KMP_API VkCommandBuffer GetVkCommandBuffer() const noexcept;
+            KMP_NODISCARD VkCommandBuffer GetVkCommandBuffer() const noexcept;
 
         private:
             void _Initialize();

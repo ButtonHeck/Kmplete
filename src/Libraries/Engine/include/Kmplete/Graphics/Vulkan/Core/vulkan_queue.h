@@ -18,27 +18,27 @@ namespace Kmplete
 
         //! Simple Vulkan queue object wrapper that supports basic functions like waiting, 
         //! submitting (with optional synchronization) and presentation (is queue object supports it)
-        class VulkanQueue
+        class KMP_API VulkanQueue
         {
             KMP_DISABLE_COPY(VulkanQueue)
             KMP_LOG_CLASSNAME(VulkanQueue)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanQueue(VkDevice device, UInt32 familyIndex, bool supportPresentation);
-            KMP_API VulkanQueue(VulkanQueue&& other) noexcept;
-            KMP_API VulkanQueue& operator=(VulkanQueue&& other) noexcept;
+            VulkanQueue(VkDevice device, UInt32 familyIndex, bool supportPresentation);
+            VulkanQueue(VulkanQueue&& other) noexcept;
+            VulkanQueue& operator=(VulkanQueue&& other) noexcept;
             ~VulkanQueue() = default;
 
-            KMP_API void WaitIdle() const;
-            KMP_API void Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const;
-            KMP_API void Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const;
-            KMP_API void SyncSubmit(const VulkanCommandBuffer& commandBuffer) const;
-            KMP_API void SyncSubmit(const Vector<VkSubmitInfo>& submits) const;
-            KMP_API void Present(const VkPresentInfoKHR& presentationInfo) const;
+            void WaitIdle() const;
+            void Submit(const VulkanCommandBuffer& commandBuffer, VkFence fence) const;
+            void Submit(const Vector<VkSubmitInfo>& submits, VkFence fence) const;
+            void SyncSubmit(const VulkanCommandBuffer& commandBuffer) const;
+            void SyncSubmit(const Vector<VkSubmitInfo>& submits) const;
+            void Present(const VkPresentInfoKHR& presentationInfo) const;
 
-            KMP_NODISCARD KMP_API bool SupportsPresentation() const noexcept;
-            KMP_NODISCARD KMP_API VkQueue GetVkQueue() const noexcept;
+            KMP_NODISCARD bool SupportsPresentation() const noexcept;
+            KMP_NODISCARD VkQueue GetVkQueue() const noexcept;
 
         private:
             VkDevice _device;

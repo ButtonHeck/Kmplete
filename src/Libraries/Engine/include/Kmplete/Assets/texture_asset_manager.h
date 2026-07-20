@@ -26,7 +26,7 @@ namespace Kmplete
         //! If this manager has successfully been created - then there is the asset with StringID = 0 that holds
         //! "Error" texture (little pink/black square)
         //! @see Assets::TextureAsset
-        class TextureAssetManager
+        class KMP_API TextureAssetManager
         {
             KMP_LOG_CLASSNAME(TextureAssetManager)
             KMP_DISABLE_COPY_MOVE(TextureAssetManager)
@@ -35,19 +35,19 @@ namespace Kmplete
         public:
             static constexpr StringID ErrorTextureSID = 0;
 
-            KMP_API explicit TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend);
+            explicit TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend);
             ~TextureAssetManager() = default;
 
-            KMP_API bool CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically = false);
-            KMP_API bool CreateAsset(StringID textureSid, const Graphics::Image& image);
+            bool CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically = false);
+            bool CreateAsset(StringID textureSid, const Graphics::Image& image);
 
-            KMP_NODISCARD KMP_API const Assets::TextureAsset& GetAsset(StringID textureSid) const;
-            KMP_NODISCARD KMP_API Assets::TextureAsset& GetAsset(StringID textureSid);
+            KMP_NODISCARD const Assets::TextureAsset& GetAsset(StringID textureSid) const;
+            KMP_NODISCARD Assets::TextureAsset& GetAsset(StringID textureSid);
 
-            KMP_API void RemoveAssets(const Vector<StringID>& sids);
-            KMP_NODISCARD KMP_API bool RemoveAsset(StringID sid);
+            void RemoveAssets(const Vector<StringID>& sids);
+            KMP_NODISCARD bool RemoveAsset(StringID sid);
 
-            KMP_NODISCARD KMP_API UInt64 GetAssetsCount() const noexcept;
+            KMP_NODISCARD UInt64 GetAssetsCount() const noexcept;
 
         private:
             KMP_NODISCARD bool _CreateErrorTextureAsset();

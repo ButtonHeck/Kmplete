@@ -19,80 +19,80 @@ namespace Kmplete
     //! Reading and writing operations are delegated to separate JsonReader/JsonWriter objects
     //! @see JsonReader
     //! @see JsonWriter
-    class JsonDocument
+    class KMP_API JsonDocument
     {
         KMP_LOG_CLASSNAME(JsonDocument)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(JsonDocument)
 
     public:
-        KMP_API JsonDocument();
-        KMP_API explicit JsonDocument(rapidjson::Document&& document);
-        KMP_API explicit JsonDocument(const Filepath& filepath);
+        JsonDocument();
+        explicit JsonDocument(rapidjson::Document&& document);
+        explicit JsonDocument(const Filepath& filepath);
         ~JsonDocument() = default;
 
-        KMP_API void SetFilepath(const Filepath& filepath) noexcept;
-        KMP_NODISCARD KMP_API const Filepath& GetFilepath() const noexcept;
+        void SetFilepath(const Filepath& filepath) noexcept;
+        KMP_NODISCARD const Filepath& GetFilepath() const noexcept;
 
-        KMP_NODISCARD KMP_API bool Load(const Filepath& filepath);
-        KMP_NODISCARD KMP_API bool Load();
-        KMP_NODISCARD KMP_API bool Save(const Filepath& filepath, bool pretty = true);
-        KMP_NODISCARD KMP_API bool Save(bool pretty = true);
-        KMP_NODISCARD KMP_API String ToString(bool pretty = true);
+        KMP_NODISCARD bool Load(const Filepath& filepath);
+        KMP_NODISCARD bool Load();
+        KMP_NODISCARD bool Save(const Filepath& filepath, bool pretty = true);
+        KMP_NODISCARD bool Save(bool pretty = true);
+        KMP_NODISCARD String ToString(bool pretty = true);
 
-        KMP_NODISCARD KMP_API bool HasError() const noexcept;
-        KMP_NODISCARD KMP_API String ErrorDescription() const noexcept;
+        KMP_NODISCARD bool HasError() const noexcept;
+        KMP_NODISCARD String ErrorDescription() const noexcept;
 
-        KMP_API bool AddChildDocument(const String& name, const JsonDocument& child, bool overwrite = true);
-        KMP_NODISCARD KMP_API Vector<Pair<String, Ptr<JsonDocument>>> GetChildren(bool onlyObjects = true) const;
-
-
-        KMP_API bool StartSetObject(const char* objectName);
-        KMP_API bool StartSetObject(int index);
-        KMP_API bool EndSetObject();
-
-        KMP_API bool StartSetArray(const char* arrayName, bool overwrite = true);
-        KMP_API bool StartSetArray(int index, bool overwrite = true);
-        KMP_API bool EndSetArray();
-
-        KMP_API bool SetBool(int index, bool value);
-        KMP_API bool SetBool(const char* name, bool value);
-        KMP_API bool SetInt(int index, int value);
-        KMP_API bool SetInt(const char* name, int value);
-        KMP_API bool SetUInt(int index, unsigned int value);
-        KMP_API bool SetUInt(const char* name, unsigned int value);
-        KMP_API bool SetInt64(int index, Int64 value);
-        KMP_API bool SetInt64(const char* name, Int64 value);
-        KMP_API bool SetUInt64(int index, UInt64 value);
-        KMP_API bool SetUInt64(const char* name, UInt64 value);
-        KMP_API bool SetDouble(int index, double value);
-        KMP_API bool SetDouble(const char* name, double value);
-        KMP_API bool SetString(int index, const String& value);
-        KMP_API bool SetString(const char* name, const String& value);
+        bool AddChildDocument(const String& name, const JsonDocument& child, bool overwrite = true);
+        KMP_NODISCARD Vector<Pair<String, Ptr<JsonDocument>>> GetChildren(bool onlyObjects = true) const;
 
 
-        KMP_API bool StartGetObject(const char* objectName);
-        KMP_API bool StartGetObject(int index);
-        KMP_API bool EndGetObject();
+        bool StartSetObject(const char* objectName);
+        bool StartSetObject(int index);
+        bool EndSetObject();
 
-        KMP_API int StartGetArray(const char* arrayName);
-        KMP_API int StartGetArray(int index);
-        KMP_API bool EndGetArray();
+        bool StartSetArray(const char* arrayName, bool overwrite = true);
+        bool StartSetArray(int index, bool overwrite = true);
+        bool EndSetArray();
 
-        KMP_NODISCARD KMP_API bool GetBool(int index, bool defaultValue = false);
-        KMP_NODISCARD KMP_API bool GetBool(const char* name, bool defaultValue = false);
-        KMP_NODISCARD KMP_API int GetInt(int index, int defaultValue = 0);
-        KMP_NODISCARD KMP_API int GetInt(const char* name, int defaultValue = 0);
-        KMP_NODISCARD KMP_API unsigned int GetUInt(int index, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
-        KMP_NODISCARD KMP_API Int64 GetInt64(int index, Int64 defaultValue = 0);
-        KMP_NODISCARD KMP_API Int64 GetInt64(const char* name, Int64 defaultValue = 0);
-        KMP_NODISCARD KMP_API UInt64 GetUInt64(int index, UInt64 defaultValue = 0);
-        KMP_NODISCARD KMP_API UInt64 GetUInt64(const char* name, UInt64 defaultValue = 0);
-        KMP_NODISCARD KMP_API double GetDouble(int index, double defaultValue = 0.0);
-        KMP_NODISCARD KMP_API double GetDouble(const char* name, double defaultValue = 0.0);
-        KMP_NODISCARD KMP_API String GetString(int index, const String& defaultValue = "");
-        KMP_NODISCARD KMP_API String GetString(const char* name, const String& defaultValue = "");
+        bool SetBool(int index, bool value);
+        bool SetBool(const char* name, bool value);
+        bool SetInt(int index, int value);
+        bool SetInt(const char* name, int value);
+        bool SetUInt(int index, unsigned int value);
+        bool SetUInt(const char* name, unsigned int value);
+        bool SetInt64(int index, Int64 value);
+        bool SetInt64(const char* name, Int64 value);
+        bool SetUInt64(int index, UInt64 value);
+        bool SetUInt64(const char* name, UInt64 value);
+        bool SetDouble(int index, double value);
+        bool SetDouble(const char* name, double value);
+        bool SetString(int index, const String& value);
+        bool SetString(const char* name, const String& value);
+
+
+        bool StartGetObject(const char* objectName);
+        bool StartGetObject(int index);
+        bool EndGetObject();
+
+        int StartGetArray(const char* arrayName);
+        int StartGetArray(int index);
+        bool EndGetArray();
+
+        KMP_NODISCARD bool GetBool(int index, bool defaultValue = false);
+        KMP_NODISCARD bool GetBool(const char* name, bool defaultValue = false);
+        KMP_NODISCARD int GetInt(int index, int defaultValue = 0);
+        KMP_NODISCARD int GetInt(const char* name, int defaultValue = 0);
+        KMP_NODISCARD unsigned int GetUInt(int index, unsigned int defaultValue = 0);
+        KMP_NODISCARD unsigned int GetUInt(const char* name, unsigned int defaultValue = 0);
+        KMP_NODISCARD Int64 GetInt64(int index, Int64 defaultValue = 0);
+        KMP_NODISCARD Int64 GetInt64(const char* name, Int64 defaultValue = 0);
+        KMP_NODISCARD UInt64 GetUInt64(int index, UInt64 defaultValue = 0);
+        KMP_NODISCARD UInt64 GetUInt64(const char* name, UInt64 defaultValue = 0);
+        KMP_NODISCARD double GetDouble(int index, double defaultValue = 0.0);
+        KMP_NODISCARD double GetDouble(const char* name, double defaultValue = 0.0);
+        KMP_NODISCARD String GetString(int index, const String& defaultValue = "");
+        KMP_NODISCARD String GetString(const char* name, const String& defaultValue = "");
 
     private:
         KMP_NODISCARD bool _SaveToFile(const rapidjson::StringBuffer& buffer);

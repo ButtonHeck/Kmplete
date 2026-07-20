@@ -20,37 +20,37 @@ namespace Kmplete
         //! Vulkan API backend class implementation. Responsible for initializing
         //! top-level Vulkan objects such as instance, physical device, surface,
         //! tracking current buffer index that is used by dependent objects.
-        class VulkanGraphicsBackend : public GraphicsBackend
+        class KMP_API VulkanGraphicsBackend : public GraphicsBackend
         {
             KMP_LOG_CLASSNAME(VulkanGraphicsBackend)
             KMP_DISABLE_COPY_MOVE(VulkanGraphicsBackend)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit VulkanGraphicsBackend(Window& window);
-            KMP_API ~VulkanGraphicsBackend();
+            explicit VulkanGraphicsBackend(Window& window);
+            ~VulkanGraphicsBackend();
 
-            KMP_NODISCARD KMP_API const GraphicsSurface& GetGraphicsSurface() const noexcept override;
-            KMP_NODISCARD KMP_API const VulkanPhysicalDevice& GetPhysicalDevice() const noexcept override;
-            KMP_NODISCARD KMP_API VulkanPhysicalDevice& GetPhysicalDevice() noexcept override;
+            KMP_NODISCARD const GraphicsSurface& GetGraphicsSurface() const noexcept override;
+            KMP_NODISCARD const VulkanPhysicalDevice& GetPhysicalDevice() const noexcept override;
+            KMP_NODISCARD VulkanPhysicalDevice& GetPhysicalDevice() noexcept override;
 
-            KMP_API void StartFrame(float frameTimestep) override;
-            KMP_API void EndFrame() override;
-            KMP_API void HandleWindowResize() override;
+            void StartFrame(float frameTimestep) override;
+            void EndFrame() override;
+            void HandleWindowResize() override;
 
-            KMP_NODISCARD KMP_API Nullable<Texture*> CreateTexture(const Image& image) override;
+            KMP_NODISCARD Nullable<Texture*> CreateTexture(const Image& image) override;
 
-            KMP_NODISCARD KMP_API UInt32 GetMultisampling() const override;
-            KMP_API void SetMultisampling(UInt32 samples) override;
+            KMP_NODISCARD UInt32 GetMultisampling() const override;
+            void SetMultisampling(UInt32 samples) override;
 
-            KMP_NODISCARD KMP_API bool IsVSync() const override;
-            KMP_API void SetVSync(bool vSync) override;
+            KMP_NODISCARD bool IsVSync() const override;
+            void SetVSync(bool vSync) override;
 
-            KMP_API void SaveSettings(SettingsDocument& settings) const override;
-            KMP_API void LoadSettings(SettingsDocument& settings) override;
+            void SaveSettings(SettingsDocument& settings) const override;
+            void LoadSettings(SettingsDocument& settings) override;
 
-            KMP_NODISCARD KMP_API VkInstance GetVkInstance() const noexcept;
-            KMP_NODISCARD KMP_API UInt32 GetCurrentBufferIndex() const noexcept;
+            KMP_NODISCARD VkInstance GetVkInstance() const noexcept;
+            KMP_NODISCARD UInt32 GetCurrentBufferIndex() const noexcept;
 
         private:
             void _Initialize();

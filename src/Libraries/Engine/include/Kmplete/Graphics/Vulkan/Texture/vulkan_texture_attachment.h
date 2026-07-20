@@ -17,7 +17,7 @@ namespace Kmplete
 
         //! Vulkan attachment texture implementation. Such textures intended to be used
         //! as render targets or attachments for rendering sessions
-        class VulkanTextureAttachment : public VulkanTextureBase
+        class KMP_API VulkanTextureAttachment : public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachment)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -37,13 +37,13 @@ namespace Kmplete
             };
 
         public:
-            KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
-                                            VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
-            KMP_API VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters);
+            VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkFormat format, const VkExtent3D& extent, 
+                                    VkSampleCountFlagBits samples, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples);
+            VulkanTextureAttachment(StringID sid, VkDevice device, const VulkanImageCreatorDelegate& imageCreatorDelegate, const Parameters& parameters);
             ~VulkanTextureAttachment() = default;
 
-            KMP_NODISCARD KMP_API StringID GetStringID() const noexcept;
-            KMP_NODISCARD KMP_API Parameters GetParameters() const noexcept;
+            KMP_NODISCARD StringID GetStringID() const noexcept;
+            KMP_NODISCARD Parameters GetParameters() const noexcept;
 
         private:
             StringID _sid;

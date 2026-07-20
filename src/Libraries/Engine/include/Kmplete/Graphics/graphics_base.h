@@ -86,18 +86,18 @@ namespace Kmplete
         //! A collection of BufferElements stored in a vertex buffer.
         //! These elements may not be ordered by their location values, but supposed to be
         //! contiguously stored in a vertex buffer (uses tightly packed approach)
-        class BufferLayout
+        class KMP_API BufferLayout
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE_COPYABLE()
 
         public:
             BufferLayout() = default;
-            KMP_API explicit BufferLayout(InitializerList<BufferElement> elements, bool isInstanced = false);
+            explicit BufferLayout(InitializerList<BufferElement> elements, bool isInstanced = false);
             ~BufferLayout() = default;
 
-            KMP_NODISCARD KMP_API UInt32 GetStride() const noexcept;
-            KMP_NODISCARD KMP_API bool IsInstanced() const noexcept;
-            KMP_NODISCARD KMP_API const Vector<BufferElement>& GetElements() const noexcept;
+            KMP_NODISCARD UInt32 GetStride() const noexcept;
+            KMP_NODISCARD bool IsInstanced() const noexcept;
+            KMP_NODISCARD const Vector<BufferElement>& GetElements() const noexcept;
 
         private:
             void _CalculateLayout();

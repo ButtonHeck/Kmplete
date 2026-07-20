@@ -16,27 +16,27 @@ namespace Kmplete
     {
         //! An image object that merely represents a pixel buffer with some common parameters, such as width,
         //! height, channels count. Backed by stb_image
-        class Image
+        class KMP_API Image
         {
             KMP_LOG_CLASSNAME(Image)
             KMP_DISABLE_COPY(Image)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit Image(const Filepath& filepath, bool flipVertically = false);
-            KMP_API Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically = false);
-            KMP_API Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);
-            KMP_API Image(const UByte* fileBuffer, int bufferSize, ImageChannels desiredChannels, bool flipVertically = false);
-            KMP_API ~Image();
-            KMP_API Image(Image&& rhs) noexcept;
-            KMP_API Image& operator=(Image&& rhs) noexcept;
+            explicit Image(const Filepath& filepath, bool flipVertically = false);
+            Image(const Filepath& filepath, ImageChannels desiredChannels, bool flipVertically = false);
+            Image(const UByte* pixelBuffer, int bufferSize, const Math::Size2I& size, ImageChannels channels);
+            Image(const UByte* fileBuffer, int bufferSize, ImageChannels desiredChannels, bool flipVertically = false);
+            ~Image();
+            Image(Image&& rhs) noexcept;
+            Image& operator=(Image&& rhs) noexcept;
 
-            KMP_NODISCARD KMP_API int GetWidth() const noexcept;
-            KMP_NODISCARD KMP_API int GetHeight() const noexcept;
-            KMP_NODISCARD KMP_API int GetChannels() const noexcept;
-            KMP_NODISCARD KMP_API Nullable<UByte*> GetPixels() const noexcept;
-            KMP_NODISCARD KMP_API UInt64 GetDataSize() const noexcept;
-            KMP_NODISCARD KMP_API UInt32 GetMipLevels() const noexcept;
+            KMP_NODISCARD int GetWidth() const noexcept;
+            KMP_NODISCARD int GetHeight() const noexcept;
+            KMP_NODISCARD int GetChannels() const noexcept;
+            KMP_NODISCARD Nullable<UByte*> GetPixels() const noexcept;
+            KMP_NODISCARD UInt64 GetDataSize() const noexcept;
+            KMP_NODISCARD UInt32 GetMipLevels() const noexcept;
 
         private:
             void _DeleteData();

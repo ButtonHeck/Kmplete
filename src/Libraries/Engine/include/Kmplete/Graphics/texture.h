@@ -9,7 +9,7 @@ namespace Kmplete
     namespace Graphics
     {
         //! Base class for texture objects backed by graphics API
-        class Texture
+        class KMP_API Texture
         {
             KMP_DISABLE_COPY_MOVE(Texture)
 

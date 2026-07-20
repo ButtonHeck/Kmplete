@@ -21,22 +21,22 @@ namespace Kmplete
         //! storing one or more BufferLayout-s which are used for calculating 
         //! bindings and attributes descriptions for rendering
         //! @see BufferLayout
-        class VulkanVertexBuffer : public VulkanBuffer
+        class KMP_API VulkanVertexBuffer : public VulkanBuffer
         {
             KMP_DISABLE_COPY(VulkanVertexBuffer)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
-            KMP_API VulkanVertexBuffer(VulkanVertexBuffer&& other) noexcept;
-            KMP_API VulkanVertexBuffer& operator=(VulkanVertexBuffer&& other) noexcept;
+            VulkanVertexBuffer(const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkDevice device, const VulkanBufferParameters& parameters);
+            VulkanVertexBuffer(VulkanVertexBuffer&& other) noexcept;
+            VulkanVertexBuffer& operator=(VulkanVertexBuffer&& other) noexcept;
             ~VulkanVertexBuffer() = default;
 
-            KMP_API void AddLayout(const BufferLayout& layout);
-            KMP_NODISCARD KMP_API UInt32 LayoutCount() const noexcept;
+            void AddLayout(const BufferLayout& layout);
+            KMP_NODISCARD UInt32 LayoutCount() const noexcept;
 
-            KMP_NODISCARD KMP_API Pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> GetBindingsDescriptions(UInt32 baseBinding) const noexcept;
-            KMP_NODISCARD KMP_API Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept;
+            KMP_NODISCARD Pair<Vector<VkVertexInputBindingDescription>, Vector<VkVertexInputAttributeDescription>> GetBindingsDescriptions(UInt32 baseBinding) const noexcept;
+            KMP_NODISCARD Pair<Vector<VkVertexInputBindingDescription2EXT>, Vector<VkVertexInputAttributeDescription2EXT>> GetDynamicBindingsDescriptions(UInt32 baseBinding) const noexcept;
 
         private:
             //! Helper struct to store precalculated description objects for dynamic rendering.

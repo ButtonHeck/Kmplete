@@ -22,15 +22,15 @@ namespace Kmplete
         //! and hiding possibility of accidental stealing events from any other part of code on the other hand.
         //! @see FrameListenerManager
         //! @see Events::Event
-        class EventQueue
+        class KMP_API EventQueue
         {
             KMP_DISABLE_COPY_MOVE(EventQueue)
 
         public:
-            KMP_NODISCARD KMP_API static EventQueue& Get();
+            KMP_NODISCARD static EventQueue& Get();
 
         public:
-            KMP_API void QueueEvent(UPtr<Event>&& event);
+            void QueueEvent(UPtr<Event>&& event);
 
         private:
             EventQueue() = default;

@@ -22,38 +22,38 @@ namespace Kmplete
         //! for delegating memory properties requirements during staging buffer creation.
         //! @see VulkanImage
         //! @see VulkanMemoryTypeDelegate
-        class VulkanImageCreatorDelegate
+        class KMP_API VulkanImageCreatorDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanImageCreatorDelegate)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
+            VulkanImageCreatorDelegate(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
             ~VulkanImageCreatorDelegate() = default;
 
-            KMP_NODISCARD KMP_API VkImage CreateVkImage(const VkImageCreateInfo& creationParameters) const;
+            KMP_NODISCARD VkImage CreateVkImage(const VkImageCreateInfo& creationParameters) const;
 
-            KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
-                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
-            KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
-                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
-            KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
-                                                                VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
-            KMP_NODISCARD KMP_API VulkanImage CreateVulkanImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD VulkanImage CreateVulkanImage(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format, 
+                                                        VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD VulkanImage CreateVulkanImage(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                        VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD VulkanImage CreateVulkanImage(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                        VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD VulkanImage CreateVulkanImage(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const;
 
-            KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
-                                                                              VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
-                                                                              VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
-                                                                              VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
-            KMP_NODISCARD KMP_API Nullable<VulkanImage*> CreateVulkanImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD Nullable<VulkanImage*> CreateVulkanImagePtr(const VkExtent2D& extent, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                                      VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD Nullable<VulkanImage*> CreateVulkanImagePtr(UInt32 width, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                                      VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD Nullable<VulkanImage*> CreateVulkanImagePtr(UInt32 width, UInt32 height, UInt32 mipLevels, VkSampleCountFlagBits numSamples, VkFormat format,
+                                                                      VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags memoryProperties) const;
+            KMP_NODISCARD Nullable<VulkanImage*> CreateVulkanImagePtr(const VkImageCreateInfo& creationParameters, VkMemoryPropertyFlags memoryProperties) const;
 
-            KMP_NODISCARD KMP_API VkImageView CreateVkImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const;
-            KMP_NODISCARD KMP_API VkImageView CreateVkImageView(VkImage image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const;
-            KMP_NODISCARD KMP_API VkImageView CreateVkImageView(const VkImageViewCreateInfo& creationParameters) const;
+            KMP_NODISCARD VkImageView CreateVkImageView(const VulkanImage& image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const;
+            KMP_NODISCARD VkImageView CreateVkImageView(VkImage image, VkImageViewType viewType, VkFormat format, const VkImageSubresourceRange& subresourceRange) const;
+            KMP_NODISCARD VkImageView CreateVkImageView(const VkImageViewCreateInfo& creationParameters) const;
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateStagingImageBuffer(const Image& image) const;
+            KMP_NODISCARD VulkanBuffer CreateStagingImageBuffer(const Image& image) const;
 
         private:
             const VulkanMemoryTypeDelegate& _memoryTypeDelegate;

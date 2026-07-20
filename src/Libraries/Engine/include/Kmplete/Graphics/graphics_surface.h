@@ -11,12 +11,12 @@ namespace Kmplete
     namespace Graphics
     {
         //! Base class of a graphics API surface abstraction
-        class GraphicsSurface
+        class KMP_API GraphicsSurface
         {
             KMP_DISABLE_COPY_MOVE(GraphicsSurface)
 
         public:
-            KMP_API explicit GraphicsSurface(Window& window);
+            explicit GraphicsSurface(Window& window);
             virtual ~GraphicsSurface() = default;
 
         protected:

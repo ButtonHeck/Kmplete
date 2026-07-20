@@ -53,23 +53,23 @@ namespace Kmplete
 
     //! Base class of plurality dispatcher that is responsible for checking what form a word should
     //! have based on the numeral used for this word 
-    struct PluralityFormDispatcher
+    struct KMP_API PluralityFormDispatcher
     {
-        KMP_NODISCARD KMP_API virtual PluralityForm GetPluralityForm(int count) const noexcept = 0;
+        KMP_NODISCARD virtual PluralityForm GetPluralityForm(int count) const noexcept = 0;
     };
     //--------------------------------------------------------------------------
 
     //! Dispatcher for English translations
-    struct PluralityFormDispatcherEn : public PluralityFormDispatcher
+    struct KMP_API PluralityFormDispatcherEn : public PluralityFormDispatcher
     {
-        KMP_NODISCARD KMP_API PluralityForm GetPluralityForm(int count) const noexcept override;
+        KMP_NODISCARD PluralityForm GetPluralityForm(int count) const noexcept override;
     };
     //--------------------------------------------------------------------------
 
     //! Dispatcher for Russian translations
-    struct PluralityFormDispatcherRu : public PluralityFormDispatcher
+    struct KMP_API PluralityFormDispatcherRu : public PluralityFormDispatcher
     {
-        KMP_NODISCARD KMP_API PluralityForm GetPluralityForm(int count) const noexcept override;
+        KMP_NODISCARD PluralityForm GetPluralityForm(int count) const noexcept override;
     };
     //--------------------------------------------------------------------------
 

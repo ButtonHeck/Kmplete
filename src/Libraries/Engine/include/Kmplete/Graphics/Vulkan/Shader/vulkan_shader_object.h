@@ -14,22 +14,22 @@ namespace Kmplete
     namespace Graphics
     {
         //! Simple Vulkan API shader object wrapper used for dynamic rendering
-        class VulkanShaderObject
+        class KMP_API VulkanShaderObject
         {
             KMP_DISABLE_COPY(VulkanShaderObject)
             KMP_LOG_CLASSNAME(VulkanShaderObject)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanShaderObject(VkDevice device, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                       const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
-            KMP_API VulkanShaderObject(VkDevice device, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
-                                       const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
-            KMP_API VulkanShaderObject(VulkanShaderObject&& other) noexcept;
-            KMP_API VulkanShaderObject& operator=(VulkanShaderObject&& other) noexcept;
-            KMP_API ~VulkanShaderObject();
+            VulkanShaderObject(VkDevice device, const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                               const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            VulkanShaderObject(VkDevice device, const BinaryBuffer32& shaderBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
+                               const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name = "main");
+            VulkanShaderObject(VulkanShaderObject&& other) noexcept;
+            VulkanShaderObject& operator=(VulkanShaderObject&& other) noexcept;
+            ~VulkanShaderObject();
 
-            KMP_NODISCARD KMP_API VkShaderEXT GetVkShader() const noexcept;
+            KMP_NODISCARD VkShaderEXT GetVkShader() const noexcept;
 
         private:
             void _Initialize(const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,

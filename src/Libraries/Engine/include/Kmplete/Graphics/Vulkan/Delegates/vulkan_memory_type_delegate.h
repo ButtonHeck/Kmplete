@@ -14,7 +14,7 @@ namespace Kmplete
     {
         //! Helper delegate class for handling memory requirements functions during
         //! image or buffer creation, finding suitable memory type for required properties
-        class VulkanMemoryTypeDelegate
+        class KMP_API VulkanMemoryTypeDelegate
         {
             KMP_DISABLE_COPY_MOVE(VulkanMemoryTypeDelegate)
             KMP_LOG_CLASSNAME(VulkanMemoryTypeDelegate)
@@ -29,12 +29,12 @@ namespace Kmplete
             };
 
         public:
-            KMP_API explicit VulkanMemoryTypeDelegate(VkPhysicalDeviceMemoryProperties memoryProperties) noexcept;
+            explicit VulkanMemoryTypeDelegate(VkPhysicalDeviceMemoryProperties memoryProperties) noexcept;
             ~VulkanMemoryTypeDelegate() = default;
 
-            KMP_NODISCARD KMP_API MemoryContext GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const;
-            KMP_NODISCARD KMP_API MemoryContext GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const;
-            KMP_NODISCARD KMP_API UInt32 FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const;
+            KMP_NODISCARD MemoryContext GetBufferMemoryContext(VkDevice device, VkBuffer buffer, VkMemoryPropertyFlags properties) const;
+            KMP_NODISCARD MemoryContext GetImageMemoryContext(VkDevice device, VkImage image, VkMemoryPropertyFlags properties) const;
+            KMP_NODISCARD UInt32 FindMemoryType(UInt32 typeFilter, VkMemoryPropertyFlags properties) const;
 
         private:
             VkPhysicalDeviceMemoryProperties _memoryProperties;

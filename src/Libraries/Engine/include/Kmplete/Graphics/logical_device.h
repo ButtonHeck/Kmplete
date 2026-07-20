@@ -16,7 +16,7 @@ namespace Kmplete
 
 
         //! Base class of a graphics API logical device abstraction
-        class LogicalDevice
+        class KMP_API LogicalDevice
         {
             KMP_DISABLE_COPY_MOVE(LogicalDevice)
 
@@ -24,13 +24,13 @@ namespace Kmplete
             LogicalDevice() = default;
             virtual ~LogicalDevice() = default;
 
-            KMP_API virtual void StartFrame(float /*frameTimestep*/) {};
-            KMP_API virtual void EndFrame() {};
-            KMP_API virtual void HandleWindowResize() {};
+            virtual void StartFrame(float /*frameTimestep*/) {};
+            virtual void EndFrame() {};
+            virtual void HandleWindowResize() {};
 
-            KMP_NODISCARD KMP_API virtual const Swapchain& GetSwapchain() const noexcept = 0;
+            KMP_NODISCARD virtual const Swapchain& GetSwapchain() const noexcept = 0;
 
-            KMP_NODISCARD KMP_API virtual Nullable<Texture*> CreateTexture(const Image& image) const = 0;
+            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image) const = 0;
         };
         //--------------------------------------------------------------------------
     }

@@ -18,20 +18,20 @@ namespace Kmplete
         //! Base class for Vulkan textures containing both an image object
         //! and a single image view associated with that image
         //! @see VulkanImage
-        class VulkanTextureBase
+        class KMP_API VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureBase)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, VkImageViewCreateInfo imageViewCreateInfo,
-                                      const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
-            KMP_API virtual ~VulkanTextureBase();
+            VulkanTextureBase(VkDevice device, const VkImageCreateInfo& imageCreateInfo, VkImageViewCreateInfo imageViewCreateInfo,
+                              const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);
+            virtual ~VulkanTextureBase();
 
-            KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
-            KMP_NODISCARD KMP_API VkImageView GetVkImageView() const noexcept;
-            KMP_NODISCARD KMP_API VkFormat GetVkFormat() const noexcept;
-            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetSamples() const noexcept;
+            KMP_NODISCARD VkImage GetVkImage() const noexcept;
+            KMP_NODISCARD VkImageView GetVkImageView() const noexcept;
+            KMP_NODISCARD VkFormat GetVkFormat() const noexcept;
+            KMP_NODISCARD VkSampleCountFlagBits GetSamples() const noexcept;
 
         private:
             void _InitializeImage(const VkImageCreateInfo& imageCreateInfo, const VulkanImageCreatorDelegate& imageCreatorDelegate, VkMemoryPropertyFlagBits memoryPropertiesFlags);

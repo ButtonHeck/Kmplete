@@ -11,14 +11,14 @@ namespace Kmplete
     {
         //! A simple clock object for calculating difference between timestamps
         //! in milliseconds
-        class Clock
+        class KMP_API Clock
         {
         public:
-            KMP_API Clock() noexcept;
+            Clock() noexcept;
             ~Clock() = default;
 
-            KMP_API float Mark() noexcept;
-            KMP_NODISCARD KMP_API float Peek() const noexcept;
+            float Mark() noexcept;
+            KMP_NODISCARD float Peek() const noexcept;
 
         protected:
             std::chrono::high_resolution_clock::time_point _timePoint;

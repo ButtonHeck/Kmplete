@@ -17,22 +17,22 @@ namespace Kmplete
 
 
         //! Vulkan API image object wrapper
-        class VulkanImage
+        class KMP_API VulkanImage
         {
             KMP_DISABLE_COPY(VulkanImage)
             KMP_LOG_CLASSNAME(VulkanImage)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanImage(VkDevice device, const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
-            KMP_API VulkanImage(VulkanImage&& other) noexcept;
-            KMP_API VulkanImage& operator=(VulkanImage&& other) noexcept;
-            KMP_API ~VulkanImage();
+            VulkanImage(VkDevice device, const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);
+            VulkanImage(VulkanImage&& other) noexcept;
+            VulkanImage& operator=(VulkanImage&& other) noexcept;
+            ~VulkanImage();
 
-            KMP_NODISCARD KMP_API VkImage GetVkImage() const noexcept;
-            KMP_NODISCARD KMP_API VkDeviceSize GetMemorySize() const noexcept;
-            KMP_NODISCARD KMP_API VkFormat GetVkFormat() const noexcept;
-            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetSamples() const noexcept;
+            KMP_NODISCARD VkImage GetVkImage() const noexcept;
+            KMP_NODISCARD VkDeviceSize GetMemorySize() const noexcept;
+            KMP_NODISCARD VkFormat GetVkFormat() const noexcept;
+            KMP_NODISCARD VkSampleCountFlagBits GetSamples() const noexcept;
 
         private:
             void _Initialize(const VkImageCreateInfo& creationParameters, const VulkanMemoryTypeDelegate& memoryTypeDelegate, VkMemoryPropertyFlags memoryProperties);

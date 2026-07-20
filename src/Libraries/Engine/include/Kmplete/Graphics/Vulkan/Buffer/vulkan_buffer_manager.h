@@ -28,38 +28,38 @@ namespace Kmplete
         //! 2) ones which are supposed to be updated and acquired during each frame - e.g. uniform/storage
         //! buffers with MVP or other per-frame related data.
         //! @see StringID
-        class VulkanBufferManager
+        class KMP_API VulkanBufferManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanBufferManager)
             KMP_LOG_CLASSNAME(VulkanBufferManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanBufferManager(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
+            VulkanBufferManager(VkDevice device, const VulkanMemoryTypeDelegate& memoryTypeDelegate);
             ~VulkanBufferManager() = default;
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_API bool CreateBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
+            KMP_NODISCARD VulkanBuffer CreateBuffer(const VulkanBufferParameters& parameters) const;
+            bool CreateBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
 
-            KMP_NODISCARD KMP_API VulkanVertexBuffer CreateVertexBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_API bool CreateVertexBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
+            KMP_NODISCARD VulkanVertexBuffer CreateVertexBuffer(const VulkanBufferParameters& parameters) const;
+            bool CreateVertexBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateIndexBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_API bool CreateIndexBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
+            KMP_NODISCARD VulkanBuffer CreateIndexBuffer(const VulkanBufferParameters& parameters) const;
+            bool CreateIndexBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_API bool CreateUniformBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
+            KMP_NODISCARD VulkanBuffer CreateUniformBuffer(const VulkanBufferParameters& parameters) const;
+            bool CreateUniformBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateStorageBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_API bool CreateStorageBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
+            KMP_NODISCARD VulkanBuffer CreateStorageBuffer(const VulkanBufferParameters& parameters) const;
+            bool CreateStorageBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
 
-            KMP_NODISCARD KMP_API VulkanBuffer CreateIndirectBuffer(const VulkanBufferParameters& parameters) const;
-            KMP_API bool CreateIndirectBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
+            KMP_NODISCARD VulkanBuffer CreateIndirectBuffer(const VulkanBufferParameters& parameters) const;
+            bool CreateIndirectBuffer(StringID bufferSid, const VulkanBufferParameters& parameters, bool perFrame = false);
 
-            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> GetBuffer(StringID bufferSid) const noexcept;
-            KMP_NODISCARD KMP_API Nullable<VulkanBuffer*> GetBuffer(StringID bufferSid, UInt32 index) const noexcept;
-            KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> GetVertexBuffer(StringID bufferSid) const noexcept;
-            KMP_NODISCARD KMP_API Nullable<VulkanVertexBuffer*> GetVertexBuffer(StringID bufferSid, UInt32 index) const noexcept;
+            KMP_NODISCARD Nullable<VulkanBuffer*> GetBuffer(StringID bufferSid) const noexcept;
+            KMP_NODISCARD Nullable<VulkanBuffer*> GetBuffer(StringID bufferSid, UInt32 index) const noexcept;
+            KMP_NODISCARD Nullable<VulkanVertexBuffer*> GetVertexBuffer(StringID bufferSid) const noexcept;
+            KMP_NODISCARD Nullable<VulkanVertexBuffer*> GetVertexBuffer(StringID bufferSid, UInt32 index) const noexcept;
 
         private:
             KMP_NODISCARD VulkanBuffer _CreateBuffer(const VulkanBufferParameters& parameters) const;

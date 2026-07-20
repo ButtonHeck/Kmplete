@@ -25,7 +25,7 @@ namespace Kmplete
     //! Wrapper for code assertions, may work as standard termination with logging (KMP_ASSERT) or
     //! may just log an error without termination in Release build (KMP_CHECK). Additionally may log other variables
     //! during condition check (_WATCH versions). Excluded from "Production" builds
-    class Assertion
+    class KMP_API Assertion
     {
         KMP_LOG_CLASSNAME(Assertion)
 
@@ -37,10 +37,10 @@ namespace Kmplete
         };
 
     public:
-        KMP_API Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence = Consequence::Terminate);
-        KMP_API ~Assertion();
+        Assertion(const String& expression, const String& file, const String& function, int line, Consequence consequence = Consequence::Terminate);
+        ~Assertion();
 
-        KMP_API Assertion& Message(const String& message);
+        Assertion& Message(const String& message);
 
         template<typename T>
         Assertion& Watch(T&& val, const char* name)

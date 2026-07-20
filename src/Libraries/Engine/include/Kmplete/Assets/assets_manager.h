@@ -18,26 +18,26 @@ namespace Kmplete
         //! assets loading and unloading, loading assets files. All asset files are supposed to be placed in
         //! the Data directory relative to the application executable directory
         //! @see assets_interface.h
-        class AssetsManager
+        class KMP_API AssetsManager
         {
             KMP_LOG_CLASSNAME(AssetsManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
         public:
-            KMP_API AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend);
-            KMP_API ~AssetsManager();
+            AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend);
+            ~AssetsManager();
 
-            KMP_NODISCARD KMP_API const TextureAssetManager& GetTextureAssetManager() const noexcept;
-            KMP_NODISCARD KMP_API TextureAssetManager& GetTextureAssetManager() noexcept;
+            KMP_NODISCARD const TextureAssetManager& GetTextureAssetManager() const noexcept;
+            KMP_NODISCARD TextureAssetManager& GetTextureAssetManager() noexcept;
 
-            KMP_NODISCARD KMP_API const FontAssetManager& GetFontAssetManager() const noexcept;
-            KMP_NODISCARD KMP_API FontAssetManager& GetFontAssetManager() noexcept;
+            KMP_NODISCARD const FontAssetManager& GetFontAssetManager() const noexcept;
+            KMP_NODISCARD FontAssetManager& GetFontAssetManager() noexcept;
 
-            KMP_NODISCARD KMP_API bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
+            KMP_NODISCARD bool LoadAssetFile(const Filepath& filepath, bool loadBinaries = true);
 
-            KMP_NODISCARD KMP_API bool LoadAssets(const Vector<StringID>& assetsSids);
-            KMP_NODISCARD KMP_API bool UnloadAssets(const Vector<StringID>& assetsSids);
+            KMP_NODISCARD bool LoadAssets(const Vector<StringID>& assetsSids);
+            KMP_NODISCARD bool UnloadAssets(const Vector<StringID>& assetsSids);
 
         private:
             void _Initialize();

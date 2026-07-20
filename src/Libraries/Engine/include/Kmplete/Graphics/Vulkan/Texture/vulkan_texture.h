@@ -20,15 +20,15 @@ namespace Kmplete
         //! Vulkan plain texture implementation. Such textures intended to be
         //! used in shaders, i.e. everything that user sees directly (albedo texture)
         //! or indirectly (normal maps, height maps, etc.)
-        class VulkanTexture : public Texture, public VulkanTextureBase
+        class KMP_API VulkanTexture : public Texture, public VulkanTextureBase
         {
             KMP_DISABLE_COPY_MOVE(VulkanTexture)
             KMP_LOG_CLASSNAME(VulkanTexture)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanTexture(VkImageType imageType, VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, 
-                                  const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
+            VulkanTexture(VkImageType imageType, VkFormat format, UInt32 mipLevels, VkDevice device, VkCommandBuffer commandBuffer, 
+                          const VulkanBuffer& stagingBuffer, const VkExtent3D& extent, const VulkanImageCreatorDelegate& imageCreatorDelegate);
             ~VulkanTexture() = default;
 
         private:

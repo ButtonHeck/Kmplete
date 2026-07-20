@@ -28,96 +28,96 @@ namespace Kmplete
         //! Vulkan API renderer that is responsible for all the rendering-related commands, such as:
         //! beginning/ending rendering (dynamic), drawing, queue submission, 
         //! settings rendering dynamic states values, binding objects, copying buffers
-        class VulkanRenderer
+        class KMP_API VulkanRenderer
         {
             KMP_DISABLE_COPY_MOVE(VulkanRenderer)
             KMP_LOG_CLASSNAME(VulkanRenderer)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
-                                   const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
-            KMP_API ~VulkanRenderer();
+            VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
+                           const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
+            ~VulkanRenderer();
 
-            KMP_API void StartFrame();
-            KMP_API void EndFrame();
+            void StartFrame();
+            void EndFrame();
 
-            KMP_API void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments) const;
-            KMP_API void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments, const VkRenderingAttachmentInfo& depthStencilAttachment) const;
-            KMP_API void BeginRendering(const VkRenderingInfo& renderingInfo) const;
-            KMP_API void EndRendering() const;
-            KMP_API void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
+            void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments) const;
+            void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments, const VkRenderingAttachmentInfo& depthStencilAttachment) const;
+            void BeginRendering(const VkRenderingInfo& renderingInfo) const;
+            void EndRendering() const;
+            void SubmitToQueue(const VulkanQueue& queue, const Vector<VkSemaphore>& waitSemaphores, const Vector<VkSemaphore>& signalSemaphores, VkFence fence);
 
-            KMP_API void InsertImageMemoryBarrier(const OptionalRef<VulkanTextureAttachment>& attachment, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
-            KMP_API void InsertImageMemoryBarrier(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
+            void InsertImageMemoryBarrier(const OptionalRef<VulkanTextureAttachment>& attachment, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
+            void InsertImageMemoryBarrier(VkImage image, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const;
 
-            KMP_API void SetDepthTestEnabled(bool enabled) const;
-            KMP_API void SetDepthWriteEnabled(bool enabled) const;
-            KMP_API void SetDepthCompareOp(VkCompareOp comparison) const;
-            KMP_API void SetDepthBiasEnabled(bool enabled) const;
-            KMP_API void SetDepthBias(float constantFactor, float clamp, float slopeFactor) const;
-            KMP_API void SetDepthBoundsEnabled(bool enabled) const;
-            KMP_API void SetDepthBounds(float min, float max) const;
-            KMP_API void SetDepthClipEnabled(bool enabled) const;
-            KMP_API void SetStencilTestEnabled(bool enabled) const;
-            KMP_API void SetStencilOp(VkStencilFaceFlags faceMask, VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp comparison) const;
-            KMP_API void SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const;
-            KMP_API void SetStencilWriteMask(VkStencilFaceFlags faceMask, UInt32 writeMask) const;
-            KMP_API void SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const;
-            KMP_API void SetViewport(const VkViewport& viewport) const;
-            KMP_API void SetScissor(const VkRect2D& scissorRect) const;
-            KMP_API void SetViewportWithCount(const Vector<VkViewport>& viewports) const;
-            KMP_API void SetScissorWithCount(const Vector<VkRect2D>& scissors) const;
-            KMP_API void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
-            KMP_API void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
-            KMP_API void SetPrimitiveRestartEnabled(bool enabled) const;
-            KMP_API void SetLineWidth(float lineWidth) const;
-            KMP_API void SetLineStippleEnabled(bool enabled) const;
-            KMP_API void SetLineStipple(UInt32 lineStippleFactor, UInt16 lineStipplePattern) const;
-            KMP_API void SetLineRasterizationMode(VkLineRasterizationModeEXT lineRasterizationMode) const;
-            KMP_API void SetCullMode(VkCullModeFlags cullMode) const;
-            KMP_API void SetFrontFace(VkFrontFace frontFace) const;
-            KMP_API void SetBlendConstants(const Array<float, 4> constants) const;
-            KMP_API void SetRasterizerDiscardEnabled(bool enabled) const;
-            KMP_API void SetSampleLocationsEnabled(bool enabled) const;
-            KMP_API void SetSampleLocations(const Vector<VkSampleLocationsInfoEXT>& sampleLocationInfos) const;
-            KMP_API void SetSampleMask(VkSampleCountFlagBits samples, const Vector<VkSampleMask>& sampleMasks) const;
-            KMP_API void SetFragmentShadingRate(const VkExtent2D& fragmentSize, const Array<VkFragmentShadingRateCombinerOpKHR, 2>& combinerOps) const;
-            KMP_API void SetColorWriteEnabled(UInt32 attachmentCount, const Vector<VkBool32>& colorWritesEnables) const;
-            KMP_API void SetColorWriteMask(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorComponentFlags>& colorWritesMasks) const;
-            KMP_API void SetColorBlendEnabled(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkBool32>& colorBlendsEnables) const;
-            KMP_API void SetColorBlendEquation(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorBlendEquationEXT>& colorBlendsEquations) const;
-            KMP_API void SetPolygonMode(VkPolygonMode polygonMode) const;
-            KMP_API void SetAlphaToCoverageEnabled(bool enabled) const;
-            KMP_API void SetAlphaToOneEnabled(bool enabled) const;
-            KMP_API void SetLogicOpEnabled(bool enabled) const;
-            KMP_API void SetLogicOp(VkLogicOp logicOp) const;
-            KMP_API void SetProvokingVertexMode(VkProvokingVertexModeEXT mode) const;
-            KMP_API void SetVertexInput(const Vector<VkVertexInputBindingDescription2EXT>& vertexBindingsDescriptions, const Vector<VkVertexInputAttributeDescription2EXT>& vertexAttributeDescriptions) const;
+            void SetDepthTestEnabled(bool enabled) const;
+            void SetDepthWriteEnabled(bool enabled) const;
+            void SetDepthCompareOp(VkCompareOp comparison) const;
+            void SetDepthBiasEnabled(bool enabled) const;
+            void SetDepthBias(float constantFactor, float clamp, float slopeFactor) const;
+            void SetDepthBoundsEnabled(bool enabled) const;
+            void SetDepthBounds(float min, float max) const;
+            void SetDepthClipEnabled(bool enabled) const;
+            void SetStencilTestEnabled(bool enabled) const;
+            void SetStencilOp(VkStencilFaceFlags faceMask, VkStencilOp failOp, VkStencilOp passOp, VkStencilOp depthFailOp, VkCompareOp comparison) const;
+            void SetStencilCompareMask(VkStencilFaceFlags faceMask, UInt32 compareMask) const;
+            void SetStencilWriteMask(VkStencilFaceFlags faceMask, UInt32 writeMask) const;
+            void SetStencilReference(VkStencilFaceFlags faceMask, UInt32 reference) const;
+            void SetViewport(const VkViewport& viewport) const;
+            void SetScissor(const VkRect2D& scissorRect) const;
+            void SetViewportWithCount(const Vector<VkViewport>& viewports) const;
+            void SetScissorWithCount(const Vector<VkRect2D>& scissors) const;
+            void SetRasterizationSamples(VkSampleCountFlagBits samples) const;
+            void SetPrimitiveTopology(VkPrimitiveTopology topology) const;
+            void SetPrimitiveRestartEnabled(bool enabled) const;
+            void SetLineWidth(float lineWidth) const;
+            void SetLineStippleEnabled(bool enabled) const;
+            void SetLineStipple(UInt32 lineStippleFactor, UInt16 lineStipplePattern) const;
+            void SetLineRasterizationMode(VkLineRasterizationModeEXT lineRasterizationMode) const;
+            void SetCullMode(VkCullModeFlags cullMode) const;
+            void SetFrontFace(VkFrontFace frontFace) const;
+            void SetBlendConstants(const Array<float, 4> constants) const;
+            void SetRasterizerDiscardEnabled(bool enabled) const;
+            void SetSampleLocationsEnabled(bool enabled) const;
+            void SetSampleLocations(const Vector<VkSampleLocationsInfoEXT>& sampleLocationInfos) const;
+            void SetSampleMask(VkSampleCountFlagBits samples, const Vector<VkSampleMask>& sampleMasks) const;
+            void SetFragmentShadingRate(const VkExtent2D& fragmentSize, const Array<VkFragmentShadingRateCombinerOpKHR, 2>& combinerOps) const;
+            void SetColorWriteEnabled(UInt32 attachmentCount, const Vector<VkBool32>& colorWritesEnables) const;
+            void SetColorWriteMask(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorComponentFlags>& colorWritesMasks) const;
+            void SetColorBlendEnabled(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkBool32>& colorBlendsEnables) const;
+            void SetColorBlendEquation(UInt32 firstAttachment, UInt32 attachmentCount, const Vector<VkColorBlendEquationEXT>& colorBlendsEquations) const;
+            void SetPolygonMode(VkPolygonMode polygonMode) const;
+            void SetAlphaToCoverageEnabled(bool enabled) const;
+            void SetAlphaToOneEnabled(bool enabled) const;
+            void SetLogicOpEnabled(bool enabled) const;
+            void SetLogicOp(VkLogicOp logicOp) const;
+            void SetProvokingVertexMode(VkProvokingVertexModeEXT mode) const;
+            void SetVertexInput(const Vector<VkVertexInputBindingDescription2EXT>& vertexBindingsDescriptions, const Vector<VkVertexInputAttributeDescription2EXT>& vertexAttributeDescriptions) const;
 
-            KMP_API bool BindGraphicsPipeline(StringID pipelineSid) const;
-            KMP_API bool BindDescriptorSets(StringID layoutSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets = Vector<UInt32>()) const;
-            KMP_API void PushConstants(StringID layoutSid, VkShaderStageFlags shaderStagesFlags, UInt32 offset, UInt32 size, const void* data) const;
-            KMP_API bool BindVertexBuffers(UInt32 firstBinding, const Vector<VkBuffer>& vertexBuffers, const Vector<VkDeviceSize>& offsets) const;
-            KMP_API void BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const;
-            KMP_API void BindIndexBuffer(const VulkanBuffer& indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
-            KMP_API void BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
-            KMP_API void BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const;
+            bool BindGraphicsPipeline(StringID pipelineSid) const;
+            bool BindDescriptorSets(StringID layoutSid, UInt32 firstSetIndex, const Vector<VkDescriptorSet>& descriptorSets, const Vector<UInt32>& dynamicOffsets = Vector<UInt32>()) const;
+            void PushConstants(StringID layoutSid, VkShaderStageFlags shaderStagesFlags, UInt32 offset, UInt32 size, const void* data) const;
+            bool BindVertexBuffers(UInt32 firstBinding, const Vector<VkBuffer>& vertexBuffers, const Vector<VkDeviceSize>& offsets) const;
+            void BindVertexBuffers2(UInt32 firstBinding, const Vector<VkBuffer>& buffers, const Vector<VkDeviceSize>& offsets, const Vector<VkDeviceSize>& sizes, const Vector<VkDeviceSize>& strides) const;
+            void BindIndexBuffer(const VulkanBuffer& indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
+            void BindIndexBuffer(VkBuffer indexBuffer, VkDeviceSize offset = 0, VkIndexType indexType = VKBits::VK_Index_UInt32) const;
+            void BindShaderObjects(const Vector<VkShaderStageFlagBits>& stages, const Vector<StringID>& shadersSids) const;
 
-            KMP_API void Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const;
-            KMP_API void DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const;
-            KMP_API void DrawIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndirectCommand)) const;
-            KMP_API void DrawIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndirectCommand)) const;
-            KMP_API void DrawIndexedIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndexedIndirectCommand)) const;
-            KMP_API void DrawIndexedIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndexedIndirectCommand)) const;
+            void Draw(UInt32 vertexCount, UInt32 instanceCount, UInt32 firstVertex, UInt32 firstInstance) const;
+            void DrawIndexed(UInt32 indexCount, UInt32 instanceCount, UInt32 firstIndex, Int32 vertexOffset, UInt32 firstInstance) const;
+            void DrawIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndirectCommand)) const;
+            void DrawIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndirectCommand)) const;
+            void DrawIndexedIndirect(const VulkanBuffer& indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndexedIndirectCommand)) const;
+            void DrawIndexedIndirect(VkBuffer indirectBuffer, VkDeviceSize offset, UInt32 drawCount, UInt32 stride = sizeof(VkDrawIndexedIndirectCommand)) const;
 
-            KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const;
-            KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const;
-            KMP_API void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const;
-            KMP_API void CopyBuffers(const VulkanBuffer& stagingBuffer, const Vector<VKUtils::BufferCopyParameters>& copyParameters, const VulkanQueue& queue) const;
+            void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, VkDeviceSize srcOffset, VkDeviceSize dstOffset, VkDeviceSize size) const;
+            void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const VkBufferCopy& copyRegion) const;
+            void CopyBuffer(const VulkanCommandBuffer& commandBuffer, const VulkanBuffer& sourceBuffer, const VulkanBuffer& destinationBuffer, const Vector<VkBufferCopy>& copyRegions) const;
+            void CopyBuffers(const VulkanBuffer& stagingBuffer, const Vector<VKUtils::BufferCopyParameters>& copyParameters, const VulkanQueue& queue) const;
 
-            KMP_NODISCARD KMP_API VulkanCommandBuffer CreateCommandBuffer() const;
-            KMP_NODISCARD KMP_API VkCommandBuffer GetCurrentCommandBuffer() const noexcept;
+            KMP_NODISCARD VulkanCommandBuffer CreateCommandBuffer() const;
+            KMP_NODISCARD VkCommandBuffer GetCurrentCommandBuffer() const noexcept;
 
         private:
             void _Initialize(UInt32 graphicsFamilyIndex);

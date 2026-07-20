@@ -8,7 +8,7 @@ namespace Kmplete
     namespace Graphics
     {
         //! Base class of a graphics API command pool abstraction
-        class CommandPool
+        class KMP_API CommandPool
         {
             KMP_DISABLE_COPY_MOVE(CommandPool)
 

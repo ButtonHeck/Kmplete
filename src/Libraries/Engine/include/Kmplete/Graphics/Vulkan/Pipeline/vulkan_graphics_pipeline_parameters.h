@@ -18,7 +18,7 @@ namespace Kmplete
         //! construction. A premade parameters object could be used as a reference for copying
         //! to another parameters object with optional stage categories mask.
         //! @see VulkanGraphicsPipeline
-        class VulkanGraphicsPipelineParameters
+        class KMP_API VulkanGraphicsPipelineParameters
         {
             KMP_LOG_CLASSNAME(VulkanGraphicsPipelineParameters)
 
@@ -37,41 +37,41 @@ namespace Kmplete
                 All                     = ColorAttachmentInfos | DynamicStates | VertexInputs | ShaderStages | PushConstantRanges
             };
 
-            KMP_NODISCARD KMP_API static VulkanGraphicsPipelineParameters CopyFrom(const VulkanGraphicsPipelineParameters& source, int copyParametersMask = OnlyParameters) noexcept;
+            KMP_NODISCARD static VulkanGraphicsPipelineParameters CopyFrom(const VulkanGraphicsPipelineParameters& source, int copyParametersMask = OnlyParameters) noexcept;
 
         public:
-            KMP_API VulkanGraphicsPipelineParameters();
+            VulkanGraphicsPipelineParameters();
             ~VulkanGraphicsPipelineParameters() = default;
 
-            KMP_API VulkanGraphicsPipelineParameters& SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable);
-            KMP_API VulkanGraphicsPipelineParameters& SetPolygonMode(VkPolygonMode polygonMode);
-            KMP_API VulkanGraphicsPipelineParameters& SetCulling(VkCullModeFlags cullMode, VkFrontFace frontFace);
-            KMP_API VulkanGraphicsPipelineParameters& SetDepthBiasParameters(bool biasEnabled, float constantFactor, float clamp, float slopeFactor);
-            KMP_API VulkanGraphicsPipelineParameters& SetRasterizerDiscard(bool enabled);
-            KMP_API VulkanGraphicsPipelineParameters& SetLineWidth(float lineWidth);
-            KMP_API VulkanGraphicsPipelineParameters& SetColorBlendConstants(Array<float, 4> constants);
-            KMP_API VulkanGraphicsPipelineParameters& SetDepthTest(bool enabled);
-            KMP_API VulkanGraphicsPipelineParameters& SetDepthWrite(bool enabled);
-            KMP_API VulkanGraphicsPipelineParameters& SetDepthComparison(VkCompareOp compareOp);
-            KMP_API VulkanGraphicsPipelineParameters& SetDepthBoundsTest(bool enabled, float min = 0.0f, float max = 1.0f);
-            KMP_API VulkanGraphicsPipelineParameters& SetStencilTest(bool enabled);
-            KMP_API VulkanGraphicsPipelineParameters& SetStencilStates(VkStencilOpState frontFaceState, VkStencilOpState backFaceState);
-            KMP_API VulkanGraphicsPipelineParameters& SetMultisamplingSamples(VkSampleCountFlagBits samples);
-            KMP_API VulkanGraphicsPipelineParameters& SetMultisamplingSampleShading(bool enabled, float minSampleShading);
-            KMP_API VulkanGraphicsPipelineParameters& SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
-            KMP_API VulkanGraphicsPipelineParameters& SetLineRasterizationMode(VkLineRasterizationMode mode);
-            KMP_API VulkanGraphicsPipelineParameters& SetLineStipple(bool enabled, UInt32 factor, UInt16 pattern);
+            VulkanGraphicsPipelineParameters& SetInputAssembly(VkPrimitiveTopology topology, bool primitiveRestartEnable);
+            VulkanGraphicsPipelineParameters& SetPolygonMode(VkPolygonMode polygonMode);
+            VulkanGraphicsPipelineParameters& SetCulling(VkCullModeFlags cullMode, VkFrontFace frontFace);
+            VulkanGraphicsPipelineParameters& SetDepthBiasParameters(bool biasEnabled, float constantFactor, float clamp, float slopeFactor);
+            VulkanGraphicsPipelineParameters& SetRasterizerDiscard(bool enabled);
+            VulkanGraphicsPipelineParameters& SetLineWidth(float lineWidth);
+            VulkanGraphicsPipelineParameters& SetColorBlendConstants(Array<float, 4> constants);
+            VulkanGraphicsPipelineParameters& SetDepthTest(bool enabled);
+            VulkanGraphicsPipelineParameters& SetDepthWrite(bool enabled);
+            VulkanGraphicsPipelineParameters& SetDepthComparison(VkCompareOp compareOp);
+            VulkanGraphicsPipelineParameters& SetDepthBoundsTest(bool enabled, float min = 0.0f, float max = 1.0f);
+            VulkanGraphicsPipelineParameters& SetStencilTest(bool enabled);
+            VulkanGraphicsPipelineParameters& SetStencilStates(VkStencilOpState frontFaceState, VkStencilOpState backFaceState);
+            VulkanGraphicsPipelineParameters& SetMultisamplingSamples(VkSampleCountFlagBits samples);
+            VulkanGraphicsPipelineParameters& SetMultisamplingSampleShading(bool enabled, float minSampleShading);
+            VulkanGraphicsPipelineParameters& SetRenderingDepthStencilFormats(VkFormat depthFormat, VkFormat stencilFormat);
+            VulkanGraphicsPipelineParameters& SetLineRasterizationMode(VkLineRasterizationMode mode);
+            VulkanGraphicsPipelineParameters& SetLineStipple(bool enabled, UInt32 factor, UInt16 pattern);
 
-            KMP_API VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
-            KMP_API VulkanGraphicsPipelineParameters& AddDynamicState(VkDynamicState dynamicState);
-            KMP_API VulkanGraphicsPipelineParameters& AddDynamicStates(InitializerList<VkDynamicState> dynamicStates);
-            KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions);
-            KMP_API VulkanGraphicsPipelineParameters& AddVertexInputBindingsDivisors(const Vector<VkVertexInputBindingDivisorDescription>& inputBindingDivisorsDescriptions);
-            KMP_API VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
-            KMP_API VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
-            KMP_API VulkanGraphicsPipelineParameters& AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages);
+            VulkanGraphicsPipelineParameters& AddColorAttachmentInfo(VkFormat attachmentFormat, VkPipelineColorBlendAttachmentState colorBlendAttachment);
+            VulkanGraphicsPipelineParameters& AddDynamicState(VkDynamicState dynamicState);
+            VulkanGraphicsPipelineParameters& AddDynamicStates(InitializerList<VkDynamicState> dynamicStates);
+            VulkanGraphicsPipelineParameters& AddVertexInputBindings(const Vector<VkVertexInputBindingDescription>& inputBindingDescriptions);
+            VulkanGraphicsPipelineParameters& AddVertexInputBindingsDivisors(const Vector<VkVertexInputBindingDivisorDescription>& inputBindingDivisorsDescriptions);
+            VulkanGraphicsPipelineParameters& AddVertexAttributesDescriptions(const Vector<VkVertexInputAttributeDescription>& attributesDescriptions);
+            VulkanGraphicsPipelineParameters& AddVertexBufferAttributesBindings(const VulkanVertexBuffer& vertexBuffer, UInt32 baseBinding);
+            VulkanGraphicsPipelineParameters& AddShaderStages(const Vector<VkPipelineShaderStageCreateInfo>& shaderStages);
 
-            KMP_NODISCARD KMP_API UInt32 GetColorAttachmentsCount() const noexcept;
+            KMP_NODISCARD UInt32 GetColorAttachmentsCount() const noexcept;
 
         private:
             VulkanGraphicsPipelineParameters(const VulkanGraphicsPipelineParameters&) = default;

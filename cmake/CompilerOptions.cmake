@@ -10,7 +10,7 @@ function(SetupCompilerOptions target)
     target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror -Wno-missing-field-initializers>
         $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror -Wno-missing-field-initializers>
-        $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX /we4388 $<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+        $<$<CXX_COMPILER_ID:MSVC>:-std:c++20 /Zc:char8_t- /Zc:preprocessor /W4 /WX /we4388 /wd4251 $<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
     )
     
     target_compile_definitions(${target}

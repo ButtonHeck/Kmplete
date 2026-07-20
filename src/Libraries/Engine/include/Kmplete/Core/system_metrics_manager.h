@@ -11,7 +11,7 @@ namespace Kmplete
     //! Manager of the system metrics such as CPU usage, RAM usage, threads and CPUs count, stack memory usage.
     //! Responsible for updating/fetching different metrics values on demand, which metrics to fetch
     //! are determined by mode flags
-    class SystemMetricsManager
+    class KMP_API SystemMetricsManager
     {
         KMP_LOG_CLASSNAME(SystemMetricsManager)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -46,11 +46,11 @@ namespace Kmplete
         };
 
     public:
-        KMP_API SystemMetricsManager();
+        SystemMetricsManager();
         ~SystemMetricsManager() = default;
 
-        KMP_API bool Update(SystemMetricsUpdateMode updateMode);
-        KMP_NODISCARD KMP_API const SystemMetrics& GetMetrics() const noexcept;
+        bool Update(SystemMetricsUpdateMode updateMode);
+        KMP_NODISCARD const SystemMetrics& GetMetrics() const noexcept;
 
     private:
         void _Initialize();

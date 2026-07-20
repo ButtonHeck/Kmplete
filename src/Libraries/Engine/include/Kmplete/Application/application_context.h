@@ -12,15 +12,15 @@ namespace Kmplete
     //! Singleton collection of common application's properties. These properties may be
     //! viewed from any code after the base Application class was instantiated.
     //! @see Application
-    class ApplicationContext
+    class KMP_API ApplicationContext
     {
         KMP_DISABLE_COPY_MOVE(ApplicationContext)
 
     public:
-        KMP_NODISCARD KMP_API static const String& GetApplicationName() noexcept;
-        KMP_NODISCARD KMP_API static const Filepath& GetApplicationPath() noexcept;
-        KMP_NODISCARD KMP_API static const Filepath& GetApplicationDataPath() noexcept;
-        KMP_NODISCARD KMP_API static const Filepath& GetApplicationLogPath() noexcept;
+        KMP_NODISCARD static const String& GetApplicationName() noexcept;
+        KMP_NODISCARD static const Filepath& GetApplicationPath() noexcept;
+        KMP_NODISCARD static const Filepath& GetApplicationDataPath() noexcept;
+        KMP_NODISCARD static const Filepath& GetApplicationLogPath() noexcept;
 
     private:
         friend class Application;

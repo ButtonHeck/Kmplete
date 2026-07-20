@@ -13,22 +13,22 @@ namespace Kmplete
     namespace Graphics
     {
         //! Simple Vulkan API fence object wrapper
-        class VulkanFence
+        class KMP_API VulkanFence
         {
             KMP_DISABLE_COPY(VulkanFence)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit VulkanFence(VkDevice device, bool signaled = true);
-            KMP_API VulkanFence(VulkanFence&& other) noexcept;
-            KMP_API VulkanFence& operator=(VulkanFence&& other) noexcept;
-            KMP_API ~VulkanFence();
+            explicit VulkanFence(VkDevice device, bool signaled = true);
+            VulkanFence(VulkanFence&& other) noexcept;
+            VulkanFence& operator=(VulkanFence&& other) noexcept;
+            ~VulkanFence();
 
-            KMP_API void Wait() const;
-            KMP_API void Wait(UInt64 timeout) const;
-            KMP_API void Reset() const;
+            void Wait() const;
+            void Wait(UInt64 timeout) const;
+            void Reset() const;
 
-            KMP_NODISCARD KMP_API VkFence GetVkFence() const noexcept;
+            KMP_NODISCARD VkFence GetVkFence() const noexcept;
 
         private:
             void _Initialize(bool signaled);

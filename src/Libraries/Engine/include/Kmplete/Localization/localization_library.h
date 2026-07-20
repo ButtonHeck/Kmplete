@@ -18,37 +18,37 @@ namespace Kmplete
     //! supposed to be used as a delegate for LocalizationManager class.
     //! @see LocalizationManager
     //! @see LocalizationDictionary
-    class LocalizationLibrary
+    class KMP_API LocalizationLibrary
     {
         KMP_LOG_CLASSNAME(LocalizationLibrary)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(LocalizationLibrary)
 
     public:
-        KMP_API LocalizationLibrary() noexcept;
+        LocalizationLibrary() noexcept;
         ~LocalizationLibrary() = default;
 
-        KMP_API void SetLocale(const LocaleStrSID& localeSid) noexcept;
-        KMP_API void SetLocale(const LocaleStr& locale) noexcept;
+        void SetLocale(const LocaleStrSID& localeSid) noexcept;
+        void SetLocale(const LocaleStr& locale) noexcept;
 
-        KMP_NODISCARD KMP_API bool AddDictionary(const DomainStrSID& domainSid);
-        KMP_NODISCARD KMP_API bool AddDictionary(const DomainStr& domain);
-        KMP_NODISCARD KMP_API bool RemoveDictionary(const DomainStrSID& domainSid) noexcept;
-        KMP_NODISCARD KMP_API bool RemoveDictionary(const DomainStr& domain) noexcept;
+        KMP_NODISCARD bool AddDictionary(const DomainStrSID& domainSid);
+        KMP_NODISCARD bool AddDictionary(const DomainStr& domain);
+        KMP_NODISCARD bool RemoveDictionary(const DomainStrSID& domainSid) noexcept;
+        KMP_NODISCARD bool RemoveDictionary(const DomainStr& domain) noexcept;
 
-        KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& translation);
-        KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
-                         PluralityForm pluralityForm, const TranslationStr& translation);
-        KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
-        KMP_API void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
-                         PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation);
+        void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const TranslationStr& translation);
+        void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                 PluralityForm pluralityForm, const TranslationStr& translation);
+        void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
+        void Add(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                 PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation);
 
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const;
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
-                                                        const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const;
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const;
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
-                                                        const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid) const;
+        KMP_NODISCARD const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm) const;
+        KMP_NODISCARD const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSid, const ContextStrSID& contextSid) const;
+        KMP_NODISCARD const TranslationStr& Get(const DomainStrSID& domainSid, const SourceStrSID& sourceSidSingular, 
+                                                const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm, const ContextStrSID& contextSid) const;
 
     private:
         LocaleStrSID _currentLocaleSid;

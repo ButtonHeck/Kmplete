@@ -31,40 +31,40 @@ namespace Kmplete
         //! Also available for polling user input control states (both for a simple code or an action identifier).
         //! @see input_base.h
         //! @see Events::Events
-        class InputManager
+        class KMP_API InputManager
         {
             KMP_LOG_CLASSNAME(InputManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
             KMP_DISABLE_COPY_MOVE(InputManager)
 
         public:
-            KMP_API InputManager() noexcept;
+            InputManager() noexcept;
             ~InputManager() = default;
 
-            KMP_API void ProcessInputEvents(Events::Event& event);
-            KMP_API void PropagateActionEvents();
+            void ProcessInputEvents(Events::Event& event);
+            void PropagateActionEvents();
 
-            KMP_API bool MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback);
-            KMP_API bool MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
-            KMP_API bool UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag);
+            bool MapActionToCallback(ActionIdentifier actionId, const ActionCallback& callback);
+            bool MapActionToCallback(ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
+            bool UnmapActionFromCallback(ActionIdentifier actionId, const ActionCallbackTag& callbackTag);
 
-            KMP_API bool MapInputToAction(InputCode code, ActionIdentifier actionId);
-            KMP_API bool MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
-            KMP_API bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
-            KMP_API bool RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
+            bool MapInputToAction(InputCode code, ActionIdentifier actionId);
+            bool MapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
+            bool UnmapInputFromAction(InputCode code, ActionIdentifier actionId);
+            bool RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId);
 
-            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
-            KMP_API bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback);
-            KMP_API bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
-            KMP_API bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
+            bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const ActionCallback& callback);
+            bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback);
+            bool MapInputToCallback(InputCode code, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
+            bool MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback);
 
-            KMP_NODISCARD KMP_API const Math::Point2I& GetMousePosition() const noexcept;
-            KMP_NODISCARD KMP_API bool IsMouseButtonPressed(InputCode mouseCode) const;
-            KMP_NODISCARD KMP_API KeyModifier GetKeyModifiersMask() const noexcept;
-            KMP_NODISCARD KMP_API bool IsKeyButtonPressed(InputCode keyCode) const;
+            KMP_NODISCARD const Math::Point2I& GetMousePosition() const noexcept;
+            KMP_NODISCARD bool IsMouseButtonPressed(InputCode mouseCode) const;
+            KMP_NODISCARD KeyModifier GetKeyModifiersMask() const noexcept;
+            KMP_NODISCARD bool IsKeyButtonPressed(InputCode keyCode) const;
 
-            KMP_API void ResetMouseMove() noexcept;
-            KMP_API void UpdateTimerActions(float frameTimestep);
+            void ResetMouseMove() noexcept;
+            void UpdateTimerActions(float frameTimestep);
 
             template<typename ValueType> requires (IsAnyOfType<ValueType, int, float, Math::Point2I>)
             KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
@@ -111,9 +111,9 @@ namespace Kmplete
             KMP_NODISCARD bool _ContainsTaggedCallback(const Vector<TaggedActionCallback>& callbacks, const TaggedActionCallback& taggedCallback) const;
             KMP_NODISCARD bool _ContainsActionIdentifier(const Vector<ActionIdentifier>& actionsIdentifiers, ActionIdentifier actionId) const;
 
-            KMP_NODISCARD KMP_API bool _IsValidMouseButtonCode(InputCode code) const noexcept;
-            KMP_NODISCARD KMP_API bool _IsValidKeyboardCode(InputCode code) const noexcept;
-            KMP_NODISCARD KMP_API bool _IsValidInputCode(InputCode code) const noexcept;
+            KMP_NODISCARD bool _IsValidMouseButtonCode(InputCode code) const noexcept;
+            KMP_NODISCARD bool _IsValidKeyboardCode(InputCode code) const noexcept;
+            KMP_NODISCARD bool _IsValidInputCode(InputCode code) const noexcept;
 
         private:
             Math::Point2I _mousePosition;

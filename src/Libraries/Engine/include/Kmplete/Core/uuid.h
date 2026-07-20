@@ -9,16 +9,16 @@ namespace Kmplete
     //! 64-bit unique identifier based on rng.
     //! An UUID with value 0 treated as invalid.
     //! @see rng.h
-    class UUID
+    class KMP_API UUID
     {
     public:
-        KMP_API static UUID InvalidUuid;
+        static UUID InvalidUuid;
 
-        KMP_API UUID();
-        KMP_API explicit UUID(UInt64 uuid) noexcept;
+        UUID();
+        explicit UUID(UInt64 uuid) noexcept;
         ~UUID() = default;
 
-        KMP_NODISCARD KMP_API operator UInt64() const noexcept;
+        KMP_NODISCARD operator UInt64() const noexcept;
 
     private:
         UInt64 _uuid;

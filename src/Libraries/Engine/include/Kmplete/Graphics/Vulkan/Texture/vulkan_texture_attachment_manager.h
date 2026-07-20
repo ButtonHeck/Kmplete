@@ -26,35 +26,35 @@ namespace Kmplete
         //! attachment in cases when a separate attachment is unnecessary
         //! @see VulkanTextureAttachment
         //! @see VulkanSwapchain
-        class VulkanTextureAttachmentManager
+        class KMP_API VulkanTextureAttachmentManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanTextureAttachmentManager)
             KMP_LOG_CLASSNAME(VulkanTextureAttachmentManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
-                                                   const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain);
+            VulkanTextureAttachmentManager(VkDevice device, const VkExtent3D& extent, VkSampleCountFlagBits msaaSamples, 
+                                           const VulkanImageCreatorDelegate& imageCreatorDelegate, const VulkanSwapchain& swapchain);
             ~VulkanTextureAttachmentManager() = default;
 
-            KMP_API bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
-            KMP_API bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
-                                                   VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
+            bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
+            bool AddTextureColorAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
+                                           VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
 
-            KMP_API bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
-            KMP_API bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
-                                                          VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
+            bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
+            bool AddTextureDepthStencilAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
+                                                  VkImageUsageFlags usageFlags = 0, bool fixedSamples = false);
 
-            KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
-            KMP_API bool AddTextureAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
-                                              VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
-            KMP_NODISCARD KMP_API OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID attachmentSid) const;
+            bool AddTextureAttachment(StringID attachmentSid, VkFormat format, VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
+            bool AddTextureAttachment(StringID attachmentSid, VkFormat format, const VkExtent3D& extent, VkSampleCountFlagBits samples,
+                                      VkImageUsageFlags usageFlags, VkImageAspectFlags aspectMask, bool fixedSamples = false);
+            KMP_NODISCARD OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID attachmentSid) const;
 
-            KMP_NODISCARD KMP_API VkRenderingAttachmentInfo GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
-                                                                                       VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA = false) const;
+            KMP_NODISCARD VkRenderingAttachmentInfo GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
+                                                                               VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA = false) const;
 
-            KMP_API void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);
-            KMP_API void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
+            void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);
+            void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
 
         private:
             VkDevice _device;

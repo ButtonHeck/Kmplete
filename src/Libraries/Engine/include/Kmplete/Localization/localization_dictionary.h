@@ -16,31 +16,31 @@ namespace Kmplete
     //! actual translations. Although it is not prohibited to use this class as is, dictionary is supposed
     //! to be used as a delegate for LocalizationLibrary class
     //! @see LocalizationLibrary
-    class LocalizationDictionary
+    class KMP_API LocalizationDictionary
     {
         KMP_LOG_CLASSNAME(LocalizationDictionary)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(LocalizationDictionary)
 
     public:
-        KMP_API explicit LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid = SidTrInvalidLocale) noexcept;
+        explicit LocalizationDictionary(const DomainStrSID& domain, const LocaleStrSID& localeSid = SidTrInvalidLocale) noexcept;
         ~LocalizationDictionary() = default;
 
-        KMP_NODISCARD KMP_API const DomainStrSID& GetDomain() const noexcept;
-        KMP_API void SetLocale(const LocaleStrSID& localeSid) noexcept;
+        KMP_NODISCARD const DomainStrSID& GetDomain() const noexcept;
+        void SetLocale(const LocaleStrSID& localeSid) noexcept;
 
-        KMP_API void Add(const SourceStrSID& sourceSid, const TranslationStr& translation);
-        KMP_API void Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
-                         PluralityForm pluralityForm, const TranslationStr& translation);
-        KMP_API void Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
-        KMP_API void Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
-                         PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation);
+        void Add(const SourceStrSID& sourceSid, const TranslationStr& translation);
+        void Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                 PluralityForm pluralityForm, const TranslationStr& translation);
+        void Add(const SourceStrSID& sourceSid, const ContextStrSID& contextSid, const TranslationStr& translation);
+        void Add(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                 PluralityForm pluralityForm, const ContextStrSID& contextSid, const TranslationStr& translation);
 
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSid);
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm);
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid);
-        KMP_NODISCARD KMP_API const TranslationStr& Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
-                                                        PluralityForm pluralityForm, const ContextStrSID& contextSid);
+        KMP_NODISCARD const TranslationStr& Get(const SourceStrSID& sourceSid);
+        KMP_NODISCARD const TranslationStr& Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, PluralityForm pluralityForm);
+        KMP_NODISCARD const TranslationStr& Get(const SourceStrSID& sourceSid, const ContextStrSID& contextSid);
+        KMP_NODISCARD const TranslationStr& Get(const SourceStrSID& sourceSidSingular, const SourceStrSID& sourceSidPlural, 
+                                                PluralityForm pluralityForm, const ContextStrSID& contextSid);
 
     private:
         using TranslationMap = HashMap<SourceStrSID, TranslationStr>;

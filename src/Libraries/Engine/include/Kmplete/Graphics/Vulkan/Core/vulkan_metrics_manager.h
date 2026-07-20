@@ -12,7 +12,7 @@ namespace Kmplete
     namespace Graphics
     {
         //! Utility class for tracking memory usage by Vulkan API
-        class VulkanMetricsManager
+        class KMP_API VulkanMetricsManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanMetricsManager)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -29,11 +29,11 @@ namespace Kmplete
             };
 
         public:
-            KMP_API explicit VulkanMetricsManager(VkPhysicalDevice physicalDevice);
+            explicit VulkanMetricsManager(VkPhysicalDevice physicalDevice);
             ~VulkanMetricsManager() = default;
 
-            KMP_API const Metrics& QueryMetrics();
-            KMP_NODISCARD KMP_API const Metrics& GetMetrics() const noexcept;
+            const Metrics& QueryMetrics();
+            KMP_NODISCARD const Metrics& GetMetrics() const noexcept;
 
         private:
             void _Initialize();

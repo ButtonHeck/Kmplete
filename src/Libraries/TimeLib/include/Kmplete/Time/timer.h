@@ -10,16 +10,16 @@ namespace Kmplete
     {
         //! Wrapper for a clock with a timeout, doesn't do anything itself
         //! when timeout is reached
-        class Timer : public Clock
+        class KMP_API Timer : public Clock
         {
         public:
-            KMP_API explicit Timer(unsigned int timeoutMs = 0) noexcept;
+            explicit Timer(unsigned int timeoutMs = 0) noexcept;
             ~Timer() = default;
 
-            KMP_API void SetTimeout(unsigned int timeoutMs, bool restart = true) noexcept;
-            KMP_NODISCARD KMP_API unsigned int GetTimeout() const noexcept;
+            void SetTimeout(unsigned int timeoutMs, bool restart = true) noexcept;
+            KMP_NODISCARD unsigned int GetTimeout() const noexcept;
 
-            KMP_NODISCARD KMP_API bool ReachedTimeout() const noexcept;
+            KMP_NODISCARD bool ReachedTimeout() const noexcept;
 
         protected:
             unsigned int _timeoutMs;

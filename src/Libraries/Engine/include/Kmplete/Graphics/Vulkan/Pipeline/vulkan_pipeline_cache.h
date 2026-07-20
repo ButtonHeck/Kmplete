@@ -14,17 +14,17 @@ namespace Kmplete
     namespace Graphics
     {
         //! Vulkan pipeline cache object wrapper
-        class VulkanPipelineCache
+        class KMP_API VulkanPipelineCache
         {
             KMP_DISABLE_COPY_MOVE(VulkanPipelineCache)
             KMP_LOG_CLASSNAME(VulkanPipelineCache)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanPipelineCache(VkDevice device, const VulkanContext& context, const Filepath& binaryPath);
-            KMP_API ~VulkanPipelineCache();
+            VulkanPipelineCache(VkDevice device, const VulkanContext& context, const Filepath& binaryPath);
+            ~VulkanPipelineCache();
 
-            KMP_NODISCARD KMP_API VkPipelineCache GetVkPipelineCache() const noexcept;
+            KMP_NODISCARD VkPipelineCache GetVkPipelineCache() const noexcept;
 
         private:
             //! Vulkan cache header wrapper struct

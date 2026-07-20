@@ -25,7 +25,7 @@ namespace Kmplete
         //! A set may be updated using either it's StringID or just a VkDescriptorSet handle.
         //! @see VulkanBufferManager
         //! @see StringID
-        class VulkanDescriptorSetManager
+        class KMP_API VulkanDescriptorSetManager
         {
             KMP_DISABLE_COPY_MOVE(VulkanDescriptorSetManager)
             KMP_LOG_CLASSNAME(VulkanDescriptorSetManager)
@@ -36,50 +36,50 @@ namespace Kmplete
             using DescriptorSetStorage = StringIDHashMap<Vector<VkDescriptorSet>>;
 
         public:
-            KMP_API VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
-            KMP_API ~VulkanDescriptorSetManager();
+            VulkanDescriptorSetManager(VkDevice device, const UInt32& currentBufferIndex, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
+            ~VulkanDescriptorSetManager();
 
-            KMP_NODISCARD KMP_API VkDescriptorPool GetVkDescriptorPool() const noexcept;
+            KMP_NODISCARD VkDescriptorPool GetVkDescriptorPool() const noexcept;
 
-            KMP_API void AllocateAuxDescriptorPool(StringID sid, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
-            KMP_NODISCARD KMP_API VkDescriptorPool GetAuxDescriptorPool(StringID sid) const noexcept;
+            void AllocateAuxDescriptorPool(StringID sid, UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);
+            KMP_NODISCARD VkDescriptorPool GetAuxDescriptorPool(StringID sid) const noexcept;
 
-            KMP_API VkDescriptorSetLayout AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
-            KMP_NODISCARD KMP_API VkDescriptorSetLayout GetDescriptorSetLayout(StringID layoutSid) const noexcept;
-            KMP_NODISCARD KMP_API Vector<VkDescriptorSetLayout> GetDescriptorSetLayouts(const Vector<StringID>& sids) const noexcept;
+            VkDescriptorSetLayout AddDescriptorSetLayout(StringID layoutSid, const Vector<VkDescriptorSetLayoutBinding>& bindings);
+            KMP_NODISCARD VkDescriptorSetLayout GetDescriptorSetLayout(StringID layoutSid) const noexcept;
+            KMP_NODISCARD Vector<VkDescriptorSetLayout> GetDescriptorSetLayouts(const Vector<StringID>& sids) const noexcept;
 
-            KMP_API bool AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame);
-            KMP_API bool AllocateDescriptorSets(VkDescriptorSetLayout layout, StringID setSid, UInt32 setsCount, bool perFrame);
-            KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame) const noexcept;
-            KMP_NODISCARD KMP_API VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept;
+            bool AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame);
+            bool AllocateDescriptorSets(VkDescriptorSetLayout layout, StringID setSid, UInt32 setsCount, bool perFrame);
+            KMP_NODISCARD VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame) const noexcept;
+            KMP_NODISCARD VkDescriptorSet GetDescriptorSet(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex) const noexcept;
 
-            KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetUniformBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetUniformBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
 
-            KMP_API bool SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetUniformBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetUniformBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetUniformBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
 
-            KMP_API bool SetStorageBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetStorageBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetStorageBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetStorageBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetStorageBufferDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetStorageBufferDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
 
-            KMP_API bool SetStorageBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetStorageBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
-            KMP_API bool SetStorageBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetStorageBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, const VulkanBuffer& buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetStorageBufferDynamicDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
+            bool SetStorageBufferDynamicDescriptor(VkDescriptorSet descriptorSet, VkBuffer buffer, VkDeviceSize range, VkDeviceSize offset, UInt32 binding) const;
 
-            KMP_API bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
-            KMP_API bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
-            KMP_API bool SetCombinedImageSamplerDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
+            bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
+            bool SetCombinedImageSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
+            bool SetCombinedImageSamplerDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, VkSampler sampler, UInt32 binding) const;
 
-            KMP_API bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, UInt32 binding) const;
-            KMP_API bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, UInt32 binding) const;
-            KMP_API bool SetSampledImageDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, UInt32 binding) const;
+            bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkImageView imageView, UInt32 binding) const;
+            bool SetSampledImageDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkImageView imageView, UInt32 binding) const;
+            bool SetSampledImageDescriptor(VkDescriptorSet descriptorSet, VkImageView imageView, UInt32 binding) const;
 
-            KMP_API bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkSampler sampler, UInt32 binding) const;
-            KMP_API bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkSampler sampler, UInt32 binding) const;
-            KMP_API bool SetSamplerDescriptor(VkDescriptorSet descriptorSet, VkSampler sampler, UInt32 binding) const;
+            bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, VkSampler sampler, UInt32 binding) const;
+            bool SetSamplerDescriptor(StringID setSid, UInt32 setIndex, bool perFrame, UInt32 frameIndex, VkSampler sampler, UInt32 binding) const;
+            bool SetSamplerDescriptor(VkDescriptorSet descriptorSet, VkSampler sampler, UInt32 binding) const;
 
         private:
             void _Initialize(UInt32 maxDescriptorSets, const Vector<VkDescriptorPoolSize>& descriptorPoolSizes);

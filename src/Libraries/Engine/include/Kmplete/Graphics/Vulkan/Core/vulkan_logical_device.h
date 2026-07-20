@@ -45,50 +45,50 @@ namespace Kmplete
 
         //! Vulkan API logical device wrapper object. Additionally represents the storage for every other Vulkan related
         //! objects that somehow depends on logical device.
-        class VulkanLogicalDevice : public LogicalDevice
+        class KMP_API VulkanLogicalDevice : public LogicalDevice
         {
             KMP_DISABLE_COPY_MOVE(VulkanLogicalDevice)
             KMP_LOG_CLASSNAME(VulkanLogicalDevice)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
-                                        const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
-            KMP_API ~VulkanLogicalDevice();
+            VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
+                                const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
+            ~VulkanLogicalDevice();
 
-            KMP_API void StartFrame(float frameTimestep) override;
-            KMP_API void EndFrame() override;
-            KMP_API void HandleWindowResize() override;
-            KMP_API void WaitIdle() const;
+            void StartFrame(float frameTimestep) override;
+            void EndFrame() override;
+            void HandleWindowResize() override;
+            void WaitIdle() const;
 
-            KMP_NODISCARD KMP_API VkSampleCountFlagBits GetMultisampling() const noexcept;
-            KMP_API void SetMultisampling(VkSampleCountFlagBits samples);
+            KMP_NODISCARD VkSampleCountFlagBits GetMultisampling() const noexcept;
+            void SetMultisampling(VkSampleCountFlagBits samples);
 
-            KMP_NODISCARD KMP_API bool IsVSync() const noexcept;
-            KMP_API void SetVSync(bool vSync);
+            KMP_NODISCARD bool IsVSync() const noexcept;
+            void SetVSync(bool vSync);
 
-            KMP_NODISCARD KMP_API const VulkanSwapchain& GetSwapchain() const noexcept override;
-            KMP_NODISCARD KMP_API VkDevice GetVkDevice() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanQueue& GetGraphicsQueue() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanQueue& GetPresentationQueue() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanRenderer& GetRenderer() const noexcept;
-            KMP_NODISCARD KMP_API const VkExtent2D& GetCurrentExtent() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanDescriptorSetManager& GetDescriptorSetManager() const noexcept;
-            KMP_NODISCARD KMP_API VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
-            KMP_NODISCARD KMP_API const VulkanPipelineManager& GetPipelineManager() const noexcept;
-            KMP_NODISCARD KMP_API VulkanPipelineManager& GetPipelineManager() noexcept;
-            KMP_NODISCARD KMP_API const VulkanTextureAttachmentManager& GetTextureAttachmentManager() const noexcept;
-            KMP_NODISCARD KMP_API VulkanTextureAttachmentManager& GetTextureAttachmentManager() noexcept;
-            KMP_NODISCARD KMP_API const VulkanShaderManager& GetShaderManager() const noexcept;
-            KMP_NODISCARD KMP_API VulkanShaderManager& GetShaderManager() noexcept;
-            KMP_NODISCARD KMP_API const VulkanBufferManager& GetBufferManager() const noexcept;
-            KMP_NODISCARD KMP_API VulkanBufferManager& GetBufferManager() noexcept;
-            KMP_NODISCARD KMP_API const VulkanMetricsManager& GetMetricsManager() const noexcept;
-            KMP_NODISCARD KMP_API VulkanMetricsManager& GetMetricsManager() noexcept;
+            KMP_NODISCARD const VulkanSwapchain& GetSwapchain() const noexcept override;
+            KMP_NODISCARD VkDevice GetVkDevice() const noexcept;
+            KMP_NODISCARD const VulkanQueue& GetGraphicsQueue() const noexcept;
+            KMP_NODISCARD const VulkanQueue& GetPresentationQueue() const noexcept;
+            KMP_NODISCARD const VulkanImageCreatorDelegate& GetVulkanImageCreatorDelegate() const noexcept;
+            KMP_NODISCARD const VulkanRenderer& GetRenderer() const noexcept;
+            KMP_NODISCARD const VkExtent2D& GetCurrentExtent() const noexcept;
+            KMP_NODISCARD const VulkanSamplersStorage& GetSamplersStorage() const noexcept;
+            KMP_NODISCARD const VulkanDescriptorSetManager& GetDescriptorSetManager() const noexcept;
+            KMP_NODISCARD VulkanDescriptorSetManager& GetDescriptorSetManager() noexcept;
+            KMP_NODISCARD const VulkanPipelineManager& GetPipelineManager() const noexcept;
+            KMP_NODISCARD VulkanPipelineManager& GetPipelineManager() noexcept;
+            KMP_NODISCARD const VulkanTextureAttachmentManager& GetTextureAttachmentManager() const noexcept;
+            KMP_NODISCARD VulkanTextureAttachmentManager& GetTextureAttachmentManager() noexcept;
+            KMP_NODISCARD const VulkanShaderManager& GetShaderManager() const noexcept;
+            KMP_NODISCARD VulkanShaderManager& GetShaderManager() noexcept;
+            KMP_NODISCARD const VulkanBufferManager& GetBufferManager() const noexcept;
+            KMP_NODISCARD VulkanBufferManager& GetBufferManager() noexcept;
+            KMP_NODISCARD const VulkanMetricsManager& GetMetricsManager() const noexcept;
+            KMP_NODISCARD VulkanMetricsManager& GetMetricsManager() noexcept;
 
-            KMP_NODISCARD KMP_API Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
+            KMP_NODISCARD Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
 
         private:
             void _CreateLogicalDeviceObject();

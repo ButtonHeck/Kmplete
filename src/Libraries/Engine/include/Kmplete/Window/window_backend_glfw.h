@@ -10,34 +10,34 @@ namespace Kmplete
 {
     //! GLFW implementation of the window backend
     //! @see WindowBackend
-    class WindowBackendGlfw : public WindowBackend
+    class KMP_API WindowBackendGlfw : public WindowBackend
     {
         KMP_LOG_CLASSNAME(WindowBackendGlfw)
         KMP_DISABLE_COPY_MOVE(WindowBackendGlfw)
 
     public:
-        KMP_API explicit WindowBackendGlfw(Graphics::GraphicsBackendType graphicsBackendType);
-        KMP_API ~WindowBackendGlfw();
+        explicit WindowBackendGlfw(Graphics::GraphicsBackendType graphicsBackendType);
+        ~WindowBackendGlfw();
 
-        KMP_NODISCARD KMP_API Window& CreateMainWindow() override;
-        KMP_NODISCARD KMP_API Window& GetMainWindow() override;
+        KMP_NODISCARD Window& CreateMainWindow() override;
+        KMP_NODISCARD Window& GetMainWindow() override;
 
-        KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(const String& windowName) override;
-        KMP_NODISCARD KMP_API Nullable<Window*> CreateAuxWindow(const Window::WindowSettings& windowSettings) override;
-        KMP_NODISCARD KMP_API Nullable<Window*> GetAuxWindow(const String& windowName) const override;
-        KMP_API bool DestroyAuxWindow(const String& windowName) override;
+        KMP_NODISCARD Nullable<Window*> CreateAuxWindow(const String& windowName) override;
+        KMP_NODISCARD Nullable<Window*> CreateAuxWindow(const Window::WindowSettings& windowSettings) override;
+        KMP_NODISCARD Nullable<Window*> GetAuxWindow(const String& windowName) const override;
+        bool DestroyAuxWindow(const String& windowName) override;
 
-        KMP_NODISCARD KMP_API int GetMonitorCount() const override;
-        KMP_NODISCARD KMP_API StringVector GetMonitorNames() const override;
-        KMP_NODISCARD KMP_API Vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const override;
-        KMP_NODISCARD KMP_API Vector<MonitorVideoMode> GetMonitorVideoModes(unsigned int index) const override;
-        KMP_NODISCARD KMP_API float GetPrimaryMonitorDPIScale() const override;
+        KMP_NODISCARD int GetMonitorCount() const override;
+        KMP_NODISCARD StringVector GetMonitorNames() const override;
+        KMP_NODISCARD Vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const override;
+        KMP_NODISCARD Vector<MonitorVideoMode> GetMonitorVideoModes(unsigned int index) const override;
+        KMP_NODISCARD float GetPrimaryMonitorDPIScale() const override;
 
-        KMP_NODISCARD KMP_API OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I()) override;
-        KMP_NODISCARD KMP_API OptionalRef<const WindowCursor> GetCursor(const String& name) const override;
+        KMP_NODISCARD OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I()) override;
+        KMP_NODISCARD OptionalRef<const WindowCursor> GetCursor(const String& name) const override;
 
-        KMP_API void SaveSettings(SettingsDocument& settings) const override;
-        KMP_API void LoadSettings(SettingsDocument& settings) override;
+        void SaveSettings(SettingsDocument& settings) const override;
+        void LoadSettings(SettingsDocument& settings) override;
 
     private:
         void _Initialize();

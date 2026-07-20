@@ -21,30 +21,30 @@ namespace Kmplete
     namespace Graphics
     {
         //! Vulkan API physical device object wrapper implementation
-        class VulkanPhysicalDevice : public PhysicalDevice
+        class KMP_API VulkanPhysicalDevice : public PhysicalDevice
         {
             KMP_DISABLE_COPY_MOVE(VulkanPhysicalDevice)
             KMP_LOG_CLASSNAME(VulkanPhysicalDevice)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_NODISCARD KMP_API static const Vector<const char*>& GetEnabledDeviceExtensions();
+            KMP_NODISCARD static const Vector<const char*>& GetEnabledDeviceExtensions();
 
         public:
-            KMP_API VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface);
-            KMP_API ~VulkanPhysicalDevice();
+            VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface);
+            ~VulkanPhysicalDevice();
 
-            KMP_API void StartFrame(float frameTimestep) override;
-            KMP_API void EndFrame() override;
-            KMP_API void HandleWindowResize() override;
+            void StartFrame(float frameTimestep) override;
+            void EndFrame() override;
+            void HandleWindowResize() override;
 
-            KMP_NODISCARD KMP_API const VulkanLogicalDevice& GetLogicalDevice() const noexcept override;
-            KMP_NODISCARD KMP_API VulkanLogicalDevice& GetLogicalDevice() noexcept override;
+            KMP_NODISCARD const VulkanLogicalDevice& GetLogicalDevice() const noexcept override;
+            KMP_NODISCARD VulkanLogicalDevice& GetLogicalDevice() noexcept override;
 
-            KMP_NODISCARD KMP_API VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanContext& GetVulkanContext() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanFormatDelegate& GetVulkanFormatDelegate() const noexcept;
-            KMP_NODISCARD KMP_API const VulkanMemoryTypeDelegate& GetVulkanMemoryTypeDelegate() const noexcept;
+            KMP_NODISCARD VkPhysicalDevice GetVkPhysicalDevice() const noexcept;
+            KMP_NODISCARD const VulkanContext& GetVulkanContext() const noexcept;
+            KMP_NODISCARD const VulkanFormatDelegate& GetVulkanFormatDelegate() const noexcept;
+            KMP_NODISCARD const VulkanMemoryTypeDelegate& GetVulkanMemoryTypeDelegate() const noexcept;
 
         private:
             void _Initialize();

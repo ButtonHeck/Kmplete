@@ -12,23 +12,23 @@ namespace Kmplete
     //! Wrapper for program's arguments using Boost.program_options as the parser backend, responsible
     //! for parsing incoming arguments both from main(...) and WinMain(...) entry points.
     //! @see main.h for example usage
-    class ProgramOptions
+    class KMP_API ProgramOptions
     {
     public:
-        KMP_API ProgramOptions() noexcept;
+        ProgramOptions() noexcept;
         ~ProgramOptions() = default;
 
 #if defined (KMP_PLATFORM_WINDOWS)
         //! WinMain entryPoint
-        KMP_API void ProcessCommandLine(char* lpCmdLine);
+        void ProcessCommandLine(char* lpCmdLine);
 #endif
 
         //! main entryPoint
-        KMP_API void ProcessCommandLine(int argc, char** argv);
+        void ProcessCommandLine(int argc, char** argv);
 
-        KMP_NODISCARD KMP_API const Filepath& GetSettingsFilepath() const noexcept;
-        KMP_NODISCARD KMP_API int GetProfilingLevel() const noexcept;
-        KMP_NODISCARD KMP_API bool IsProfilingOnDemand() const noexcept;
+        KMP_NODISCARD const Filepath& GetSettingsFilepath() const noexcept;
+        KMP_NODISCARD int GetProfilingLevel() const noexcept;
+        KMP_NODISCARD bool IsProfilingOnDemand() const noexcept;
 
     private:
 #if defined (KMP_PLATFORM_WINDOWS)

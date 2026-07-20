@@ -18,18 +18,18 @@ namespace Kmplete
         //! Sampler objects are referenced by StringID.
         //! @see VulkanLogicalDevice
         //! @see StringID
-        class VulkanSamplersStorage
+        class KMP_API VulkanSamplersStorage
         {
             KMP_DISABLE_COPY_MOVE(VulkanSamplersStorage)
             KMP_LOG_CLASSNAME(VulkanSamplersStorage)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API explicit VulkanSamplersStorage(VkDevice device);
-            KMP_API ~VulkanSamplersStorage();
+            explicit VulkanSamplersStorage(VkDevice device);
+            ~VulkanSamplersStorage();
 
-            KMP_API VkSampler AddSampler(StringID sid, const VkSamplerCreateInfo& createInfo);
-            KMP_NODISCARD KMP_API VkSampler GetSampler(StringID sid) const noexcept;
+            VkSampler AddSampler(StringID sid, const VkSamplerCreateInfo& createInfo);
+            KMP_NODISCARD VkSampler GetSampler(StringID sid) const noexcept;
 
         private:
             VkDevice _device;

@@ -15,59 +15,59 @@ struct GLFWmonitor;
 namespace Kmplete
 {
     //! GLFW implementation of a window object
-    class WindowGlfw : public Window
+    class KMP_API WindowGlfw : public Window
     {
         KMP_LOG_CLASSNAME(WindowGlfw)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
     public:
-        KMP_API explicit WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
-        KMP_API ~WindowGlfw();
+        explicit WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
+        ~WindowGlfw();
 
-        KMP_NODISCARD KMP_API Math::Size2I GetSize() const override;
-        KMP_NODISCARD KMP_API Math::Size2I GetWindowedSize() const override;
-        KMP_NODISCARD KMP_API bool IsIconified() const override;
+        KMP_NODISCARD Math::Size2I GetSize() const override;
+        KMP_NODISCARD Math::Size2I GetWindowedSize() const override;
+        KMP_NODISCARD bool IsIconified() const override;
 
-        KMP_NODISCARD KMP_API UInt32 GetDPI() const override;
-        KMP_NODISCARD KMP_API float GetDPIScale() const override;
+        KMP_NODISCARD UInt32 GetDPI() const override;
+        KMP_NODISCARD float GetDPIScale() const override;
 
-        KMP_API void SetTitle(const char* title) override;
-        KMP_API void SetIcon(const Graphics::Image& image) override;
-        KMP_API void SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) override;
+        void SetTitle(const char* title) override;
+        void SetIcon(const Graphics::Image& image) override;
+        void SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) override;
 
-        KMP_API void SetPosition(int x, int y) override;
-        KMP_NODISCARD KMP_API Math::Point2I GetPosition() const override;
-        KMP_API void PositionAtCurrentScreenCenter() override;
+        void SetPosition(int x, int y) override;
+        KMP_NODISCARD Math::Point2I GetPosition() const override;
+        void PositionAtCurrentScreenCenter() override;
 
-        KMP_API void SetShouldClose(bool close) override;
-        KMP_NODISCARD KMP_API bool ShouldClose() const override;
+        void SetShouldClose(bool close) override;
+        KMP_NODISCARD bool ShouldClose() const override;
 
-        KMP_API void SetScreenMode(ScreenMode screenMode) override;
-        KMP_NODISCARD KMP_API ScreenMode GetScreenMode() const override;
+        void SetScreenMode(ScreenMode screenMode) override;
+        KMP_NODISCARD ScreenMode GetScreenMode() const override;
 
-        KMP_API void SetCursor(const WindowCursor& cursor) const override;
-        KMP_API void SetCursorMode(CursorMode cursorMode) override;
-        KMP_NODISCARD KMP_API CursorMode GetCursorMode() const override;
-        KMP_NODISCARD KMP_API Math::Point2I GetCursorPosition() const override;
+        void SetCursor(const WindowCursor& cursor) const override;
+        void SetCursorMode(CursorMode cursorMode) override;
+        KMP_NODISCARD CursorMode GetCursorMode() const override;
+        KMP_NODISCARD Math::Point2I GetCursorPosition() const override;
 
-        KMP_API void SetUpdatedContinuously(bool updatedContinuously) override;
-        KMP_NODISCARD KMP_API bool IsUpdatedContinuously() const override;
+        void SetUpdatedContinuously(bool updatedContinuously) override;
+        KMP_NODISCARD bool IsUpdatedContinuously() const override;
 
-        KMP_API void SetResizable(bool resizable) override;
-        KMP_NODISCARD KMP_API bool IsResizable() const override;
+        void SetResizable(bool resizable) override;
+        KMP_NODISCARD bool IsResizable() const override;
 
-        KMP_API void SetDecorated(bool decorated) override;
-        KMP_NODISCARD KMP_API bool IsDecorated() const override;
+        void SetDecorated(bool decorated) override;
+        KMP_NODISCARD bool IsDecorated() const override;
 
-        KMP_API void SetAlwaysOnTop(bool alwaysOnTop) override;
-        KMP_NODISCARD KMP_API bool IsAlwaysOnTop() const override;
+        void SetAlwaysOnTop(bool alwaysOnTop) override;
+        KMP_NODISCARD bool IsAlwaysOnTop() const override;
 
-        KMP_API void FetchEvents() override;
-        KMP_API void SwapBuffers() const override;
-        KMP_API void SetEventCallback(const EventCallbackFn& callback) override;
+        void FetchEvents() override;
+        void SwapBuffers() const override;
+        void SetEventCallback(const EventCallbackFn& callback) override;
 
-        KMP_NODISCARD KMP_API NonNull<void*> GetImplPointer() const noexcept override;
+        KMP_NODISCARD NonNull<void*> GetImplPointer() const noexcept override;
 
     private:
         //! Helper window storage struct, injected to GLFWwindow as a user pointer

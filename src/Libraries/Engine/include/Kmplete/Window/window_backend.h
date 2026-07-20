@@ -19,7 +19,7 @@ namespace Kmplete
     //! creating/deleting window objects (by their names or settings object), cursors (by their names), interacting with monitors. 
     //! @see Window
     //! @see WindowCursor
-    class WindowBackend
+    class KMP_API WindowBackend
     {
         KMP_DISABLE_COPY_MOVE(WindowBackend)
 
@@ -37,31 +37,31 @@ namespace Kmplete
         };
 
     public:
-        KMP_NODISCARD KMP_API static UPtr<WindowBackend> Create(Graphics::GraphicsBackendType graphicsBackendType);
+        KMP_NODISCARD static UPtr<WindowBackend> Create(Graphics::GraphicsBackendType graphicsBackendType);
 
     public:
-        KMP_API explicit WindowBackend(Graphics::GraphicsBackendType graphicsBackendType);
+        explicit WindowBackend(Graphics::GraphicsBackendType graphicsBackendType);
         virtual ~WindowBackend() = default;
 
-        KMP_NODISCARD KMP_API virtual Window& CreateMainWindow() = 0;
-        KMP_NODISCARD KMP_API virtual Window& GetMainWindow() = 0;
+        KMP_NODISCARD virtual Window& CreateMainWindow() = 0;
+        KMP_NODISCARD virtual Window& GetMainWindow() = 0;
 
-        KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateAuxWindow(const String& windowName) = 0;
-        KMP_NODISCARD KMP_API virtual Nullable<Window*> CreateAuxWindow(const Window::WindowSettings& windowSettings) = 0;
-        KMP_NODISCARD KMP_API virtual Nullable<Window*> GetAuxWindow(const String& windowName) const = 0;
-        KMP_API virtual bool DestroyAuxWindow(const String& windowName) = 0;
+        KMP_NODISCARD virtual Nullable<Window*> CreateAuxWindow(const String& windowName) = 0;
+        KMP_NODISCARD virtual Nullable<Window*> CreateAuxWindow(const Window::WindowSettings& windowSettings) = 0;
+        KMP_NODISCARD virtual Nullable<Window*> GetAuxWindow(const String& windowName) const = 0;
+        virtual bool DestroyAuxWindow(const String& windowName) = 0;
 
-        KMP_NODISCARD KMP_API virtual int GetMonitorCount() const = 0;
-        KMP_NODISCARD KMP_API virtual StringVector GetMonitorNames() const = 0;
-        KMP_NODISCARD KMP_API virtual Vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const = 0;
-        KMP_NODISCARD KMP_API virtual Vector<MonitorVideoMode> GetMonitorVideoModes(unsigned int index) const = 0;
-        KMP_NODISCARD KMP_API virtual float GetPrimaryMonitorDPIScale() const = 0;
+        KMP_NODISCARD virtual int GetMonitorCount() const = 0;
+        KMP_NODISCARD virtual StringVector GetMonitorNames() const = 0;
+        KMP_NODISCARD virtual Vector<MonitorVideoMode> GetPrimaryMonitorVideoModes() const = 0;
+        KMP_NODISCARD virtual Vector<MonitorVideoMode> GetMonitorVideoModes(unsigned int index) const = 0;
+        KMP_NODISCARD virtual float GetPrimaryMonitorDPIScale() const = 0;
 
-        KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I()) = 0;
-        KMP_NODISCARD KMP_API virtual OptionalRef<const WindowCursor> GetCursor(const String& name) const = 0;
+        KMP_NODISCARD virtual OptionalRef<const WindowCursor> AddCursor(const String& name, const Filepath& filepath, const Math::Point2I& hotspot = Math::Point2I()) = 0;
+        KMP_NODISCARD virtual OptionalRef<const WindowCursor> GetCursor(const String& name) const = 0;
 
-        KMP_API virtual void SaveSettings(SettingsDocument& settings) const = 0;
-        KMP_API virtual void LoadSettings(SettingsDocument& settings) = 0;
+        virtual void SaveSettings(SettingsDocument& settings) const = 0;
+        virtual void LoadSettings(SettingsDocument& settings) = 0;
 
     protected:
         Graphics::GraphicsBackendType _graphicsBackendType;

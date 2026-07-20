@@ -26,28 +26,28 @@ namespace Kmplete
     //! @see FrameListenerManager
     //! @see FrameListenerCommand
     //! @see Events::EventDispatcher
-    class FrameListener
+    class KMP_API FrameListener
     {
         KMP_DISABLE_COPY_MOVE(FrameListener)
         KMP_LOG_CLASSNAME(FrameListener)
 
     public:
-        KMP_API FrameListener(FrameListenerManager& frameListenerManager, const StringID& sid, UInt8 priority);
-        KMP_API virtual ~FrameListener();
+        FrameListener(FrameListenerManager& frameListenerManager, const StringID& sid, UInt8 priority);
+        virtual ~FrameListener();
 
-        KMP_NODISCARD KMP_API StringID GetSID() const noexcept;
-        KMP_NODISCARD KMP_API UInt8 GetPriority() const noexcept;
+        KMP_NODISCARD StringID GetSID() const noexcept;
+        KMP_NODISCARD UInt8 GetPriority() const noexcept;
 
-        KMP_NODISCARD KMP_API bool IsActive() const noexcept;
-        KMP_API void SetActive(bool active);
+        KMP_NODISCARD bool IsActive() const noexcept;
+        void SetActive(bool active);
 
-        KMP_API virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
-        KMP_API virtual void Render() {}
-        KMP_API virtual void OnEvent(Events::Event& event);
-        KMP_API virtual void OnActivated() {}
-        KMP_API virtual void OnDeactivated() {}
+        virtual void Update(KMP_MB_UNUSED float frameTimestep, KMP_MB_UNUSED bool applicationIsIconified) {}
+        virtual void Render() {}
+        virtual void OnEvent(Events::Event& event);
+        virtual void OnActivated() {}
+        virtual void OnDeactivated() {}
 
-        KMP_API void PushCommand(FrameListenerCommand&& command) noexcept;
+        void PushCommand(FrameListenerCommand&& command) noexcept;
 
     protected:
         const StringID _sid;

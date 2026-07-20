@@ -26,7 +26,7 @@ namespace Kmplete
     //! Base class for application window. Communication with the application is
     //! done via callback mechanism. Each WindowApplication-derived class may assume
     //! that it has an already created window named "Main".
-    class Window
+    class KMP_API Window
     {
         KMP_LOG_CLASSNAME(Window)
         KMP_PROFILE_CONSTRUCTOR_DECLARE()
@@ -47,8 +47,8 @@ namespace Kmplete
         static constexpr auto WindowedFullscreenModeStr = "WindowedFullscreen";
         static constexpr auto WindowedModeStr = "Windowed";
 
-        KMP_NODISCARD KMP_API static String ScreenModeToString(ScreenMode screenMode) noexcept;
-        KMP_NODISCARD KMP_API static ScreenMode StringToScreenMode(const String& screenModeStr) noexcept;
+        KMP_NODISCARD static String ScreenModeToString(ScreenMode screenMode) noexcept;
+        KMP_NODISCARD static ScreenMode StringToScreenMode(const String& screenModeStr) noexcept;
 
         enum class CursorMode
         {
@@ -76,68 +76,68 @@ namespace Kmplete
             UInt32 dpi = 96;
             float dpiScale = 1.0f;
 
-            KMP_NODISCARD KMP_API bool IsFullscreen() const noexcept;
-            KMP_NODISCARD KMP_API bool IsWindowed() const noexcept;
-            KMP_NODISCARD KMP_API bool IsWindowedFullscreen() const noexcept;
+            KMP_NODISCARD bool IsFullscreen() const noexcept;
+            KMP_NODISCARD bool IsWindowed() const noexcept;
+            KMP_NODISCARD bool IsWindowedFullscreen() const noexcept;
 
-            KMP_API void SaveSettings(SettingsDocument& settings) const;
-            KMP_API void LoadSettings(SettingsDocument& settings);
+            void SaveSettings(SettingsDocument& settings) const;
+            void LoadSettings(SettingsDocument& settings);
         };
 
     public:
-        KMP_API Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
+        Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
         virtual ~Window() = default;
 
-        KMP_NODISCARD KMP_API const String& GetName() const noexcept;
-        KMP_NODISCARD KMP_API Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
+        KMP_NODISCARD const String& GetName() const noexcept;
+        KMP_NODISCARD Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
 
-        KMP_NODISCARD KMP_API virtual Math::Size2I GetSize() const = 0;
-        KMP_NODISCARD KMP_API virtual Math::Size2I GetWindowedSize() const = 0;
-        KMP_NODISCARD KMP_API virtual bool IsIconified() const = 0;
+        KMP_NODISCARD virtual Math::Size2I GetSize() const = 0;
+        KMP_NODISCARD virtual Math::Size2I GetWindowedSize() const = 0;
+        KMP_NODISCARD virtual bool IsIconified() const = 0;
 
-        KMP_NODISCARD KMP_API virtual UInt32 GetDPI() const = 0;
-        KMP_NODISCARD KMP_API virtual float GetDPIScale() const = 0;
+        KMP_NODISCARD virtual UInt32 GetDPI() const = 0;
+        KMP_NODISCARD virtual float GetDPIScale() const = 0;
 
-        KMP_API virtual void SetTitle(const char* title) = 0;
-        KMP_API virtual void SetIcon(const Graphics::Image& image) = 0;
-        KMP_API virtual void SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) = 0;
+        virtual void SetTitle(const char* title) = 0;
+        virtual void SetIcon(const Graphics::Image& image) = 0;
+        virtual void SetSizeLimits(const Math::Size2I& minSize, const Math::Size2I& maxSize) = 0;
 
-        KMP_API virtual void SetPosition(int x, int y) = 0;
-        KMP_NODISCARD KMP_API virtual Math::Point2I GetPosition() const = 0;
-        KMP_API virtual void PositionAtCurrentScreenCenter() = 0;
+        virtual void SetPosition(int x, int y) = 0;
+        KMP_NODISCARD virtual Math::Point2I GetPosition() const = 0;
+        virtual void PositionAtCurrentScreenCenter() = 0;
 
-        KMP_API virtual void SetShouldClose(bool close) = 0;
-        KMP_NODISCARD KMP_API virtual bool ShouldClose() const = 0;
+        virtual void SetShouldClose(bool close) = 0;
+        KMP_NODISCARD virtual bool ShouldClose() const = 0;
 
-        KMP_API virtual void SetScreenMode(ScreenMode mode) = 0;
-        KMP_NODISCARD KMP_API virtual ScreenMode GetScreenMode() const = 0;
+        virtual void SetScreenMode(ScreenMode mode) = 0;
+        KMP_NODISCARD virtual ScreenMode GetScreenMode() const = 0;
 
-        KMP_NODISCARD KMP_API bool IsFullscreen() const noexcept;
-        KMP_NODISCARD KMP_API bool IsWindowed() const noexcept;
-        KMP_NODISCARD KMP_API bool IsWindowedFullscreen() const noexcept;
+        KMP_NODISCARD bool IsFullscreen() const noexcept;
+        KMP_NODISCARD bool IsWindowed() const noexcept;
+        KMP_NODISCARD bool IsWindowedFullscreen() const noexcept;
 
-        KMP_API virtual void SetCursor(const WindowCursor& cursor) const = 0;
-        KMP_API virtual void SetCursorMode(CursorMode cursorMode) = 0;
-        KMP_NODISCARD KMP_API virtual CursorMode GetCursorMode() const = 0;
-        KMP_NODISCARD KMP_API virtual Math::Point2I GetCursorPosition() const = 0;
+        virtual void SetCursor(const WindowCursor& cursor) const = 0;
+        virtual void SetCursorMode(CursorMode cursorMode) = 0;
+        KMP_NODISCARD virtual CursorMode GetCursorMode() const = 0;
+        KMP_NODISCARD virtual Math::Point2I GetCursorPosition() const = 0;
 
-        KMP_API virtual void SetUpdatedContinuously(bool updatedContinuously) = 0;
-        KMP_NODISCARD KMP_API virtual bool IsUpdatedContinuously() const = 0;
+        virtual void SetUpdatedContinuously(bool updatedContinuously) = 0;
+        KMP_NODISCARD virtual bool IsUpdatedContinuously() const = 0;
 
-        KMP_API virtual void SetResizable(bool resizable) = 0;
-        KMP_NODISCARD KMP_API virtual bool IsResizable() const = 0;
+        virtual void SetResizable(bool resizable) = 0;
+        KMP_NODISCARD virtual bool IsResizable() const = 0;
 
-        KMP_API virtual void SetDecorated(bool decorated) = 0;
-        KMP_NODISCARD KMP_API virtual bool IsDecorated() const = 0;
+        virtual void SetDecorated(bool decorated) = 0;
+        KMP_NODISCARD virtual bool IsDecorated() const = 0;
 
-        KMP_API virtual void SetAlwaysOnTop(bool alwaysOnTop) = 0;
-        KMP_NODISCARD KMP_API virtual bool IsAlwaysOnTop() const = 0;
+        virtual void SetAlwaysOnTop(bool alwaysOnTop) = 0;
+        KMP_NODISCARD virtual bool IsAlwaysOnTop() const = 0;
 
-        KMP_API virtual void FetchEvents() = 0;
-        KMP_API virtual void SwapBuffers() const = 0;
-        KMP_API virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
+        virtual void FetchEvents() = 0;
+        virtual void SwapBuffers() const = 0;
+        virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 
-        KMP_NODISCARD KMP_API virtual NonNull<void*> GetImplPointer() const noexcept = 0;
+        KMP_NODISCARD virtual NonNull<void*> GetImplPointer() const noexcept = 0;
 
     protected:
         WindowSettings& _settings;

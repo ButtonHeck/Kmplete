@@ -1,5 +1,6 @@
 #include "Kmplete/Graphics/graphics_surface.h"
 #include "Kmplete/Window/window.h"
+#include "Kmplete/Profile/profiler.h"
 
 
 namespace Kmplete

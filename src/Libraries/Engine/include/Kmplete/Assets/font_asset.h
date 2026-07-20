@@ -18,17 +18,17 @@ namespace Kmplete
         //! Asset of a font type containing single font object
         //! @see Font
         //! @see Assets::Asset
-        class FontAsset : public Asset
+        class KMP_API FontAsset : public Asset
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
-            KMP_API FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath);
+            FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
+            FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath);
             ~FontAsset() = default;
 
-            KMP_NODISCARD KMP_API const Graphics::Font& GetFont() const noexcept;
-            KMP_NODISCARD KMP_API Graphics::Font& GetFont() noexcept;
+            KMP_NODISCARD const Graphics::Font& GetFont() const noexcept;
+            KMP_NODISCARD Graphics::Font& GetFont() noexcept;
 
         private:
             Graphics::Font _font;

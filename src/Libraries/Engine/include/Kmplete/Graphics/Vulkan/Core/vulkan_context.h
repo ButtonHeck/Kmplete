@@ -13,7 +13,7 @@ namespace Kmplete
     {
         //! Vulkan context state object that stores Vulkan objects, structs and attributes
         //! referenced and used by other Vulkan related classes.
-        struct VulkanContext
+        struct KMP_API VulkanContext
         {
             KMP_LOG_CLASSNAME(VulkanContext)
 
@@ -39,8 +39,8 @@ namespace Kmplete
             VkSurfaceFormatKHR surfaceFormat{};
 
         public:
-            KMP_API void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
-                                  const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
+            void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
+                          const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
 
         private:
             KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;

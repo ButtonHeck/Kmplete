@@ -45,7 +45,7 @@ namespace Kmplete
     //! from that storage moved to sinks according to those settings.
     //! Filtering of messages is done by a levels mechanism (from 0 to 5): level 0 keeps
     //! all the messages while level 5 keeps only critical ones.
-    class Log
+    class KMP_LOG_API Log
     {
     public:
         static constexpr auto SettingsEntryName = "Log";
@@ -71,14 +71,14 @@ namespace Kmplete
         };
 
     public:
-        KMP_LOG_API static void Boot(const String& programName);
-        KMP_LOG_API static void Initialize(const String& programName, const Filepath& logsDirectory);
-        KMP_LOG_API static void Finalize();
+        static void Boot(const String& programName);
+        static void Initialize(const String& programName, const Filepath& logsDirectory);
+        static void Finalize();
 
-        KMP_LOG_API static void SetSettings(const LogSettings& settings);
-        KMP_LOG_API static const LogSettings& GetSettings();
+        static void SetSettings(const LogSettings& settings);
+        static const LogSettings& GetSettings();
 
-        KMP_NODISCARD KMP_LOG_API static std::stringstream& StringLogOutput();
+        KMP_NODISCARD static std::stringstream& StringLogOutput();
 
         template <typename... Args>
         static void Trace(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->trace(fmt, std::forward<Args>(args)...); }
@@ -99,7 +99,7 @@ namespace Kmplete
         static void Critical(spdlog::format_string_t<Args...> fmt, Args&&... args) { if (_logger) _logger->critical(fmt, std::forward<Args>(args)...); }
 
     private:
-        KMP_LOG_API static Ptr<spdlog::logger> _logger;
+        static Ptr<spdlog::logger> _logger;
     };
     //--------------------------------------------------------------------------
 }

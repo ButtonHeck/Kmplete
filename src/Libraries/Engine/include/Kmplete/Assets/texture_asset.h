@@ -17,16 +17,16 @@ namespace Kmplete
         //! Asset of a texture type containing single Texture object
         //! @see Texture
         //! @see Assets::Asset
-        class TextureAsset : public Asset
+        class KMP_API TextureAsset : public Asset
         {
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            KMP_API TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept;
+            TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept;
             ~TextureAsset() = default;
 
-            KMP_NODISCARD KMP_API const Graphics::Texture& GetTexture() const noexcept;
-            KMP_NODISCARD KMP_API Graphics::Texture& GetTexture() noexcept;
+            KMP_NODISCARD const Graphics::Texture& GetTexture() const noexcept;
+            KMP_NODISCARD Graphics::Texture& GetTexture() noexcept;
 
         private:
             UPtr<Graphics::Texture> _texture;
