@@ -214,6 +214,17 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
+    Math::Size2I WindowGlfw::GetFramebufferSize() const KMP_PROFILING(ProfileLevelMinor)
+    {
+        KMP_ASSERT(_window);
+
+        int framebufferWidth;
+        int framebufferHeight;
+        glfwGetFramebufferSize(_window, &framebufferWidth, &framebufferHeight);
+        return Math::Size2I(framebufferWidth, framebufferHeight);
+    }}
+    //--------------------------------------------------------------------------
+
     bool WindowGlfw::IsIconified() const
     {
         const NonNull<_UserData*> userData = _GetUserPointer(_window);
