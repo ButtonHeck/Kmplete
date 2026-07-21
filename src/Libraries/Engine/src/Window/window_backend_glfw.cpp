@@ -106,6 +106,24 @@ namespace Kmplete
             throw RuntimeError("WindowBackendGlfw initialization failed");
         }
 
+        const auto platform = glfwGetPlatform();
+        if (platform == GLFW_PLATFORM_WIN32)
+        {
+            _nativePlatformType = WindowBackend::NativePlatformType::Win32;
+        }
+        else if (platform == GLFW_PLATFORM_X11)
+        {
+            _nativePlatformType = WindowBackend::NativePlatformType::X11;
+        }
+        else if (platform == GLFW_PLATFORM_WAYLAND)
+        {
+            _nativePlatformType = WindowBackend::NativePlatformType::Wayland;
+        }
+        else if (platform == GLFW_PLATFORM_COCOA)
+        {
+            _nativePlatformType = WindowBackend::NativePlatformType::Cocoa;
+        }
+
         _InitializeCallbacks();
 
         _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
