@@ -260,7 +260,7 @@ endif()
 message("---- Kmplete dependencies: OpenAL-soft")
 FetchContent_Declare(openal-soft
     GIT_REPOSITORY https://github.com/kcat/openal-soft.git
-    GIT_TAG 1.23.1 
+    GIT_TAG 1.25.2 
 )
 FetchContent_GetProperties(openal-soft)
 
@@ -276,8 +276,6 @@ if(NOT openal-soft_POPULATED)
     
     set_target_properties(alrecord PROPERTIES FOLDER Dependencies/OpenAL/Examples)
     set_target_properties(altonegen PROPERTIES FOLDER Dependencies/OpenAL/Examples)
-    set_target_properties(common PROPERTIES FOLDER Dependencies/OpenAL)
-    set_target_properties(ex-common PROPERTIES FOLDER Dependencies/OpenAL)
     set_target_properties(OpenAL PROPERTIES FOLDER Dependencies/OpenAL)
     set_target_properties(openal-info PROPERTIES FOLDER Dependencies/OpenAL)
     
