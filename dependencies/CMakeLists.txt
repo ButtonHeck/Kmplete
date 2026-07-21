@@ -268,9 +268,6 @@ if(NOT openal-soft_POPULATED)
     FetchContent_Populate(openal-soft)
     
     set(ALSOFT_UPDATE_BUILD_VERSION OFF CACHE BOOL "" FORCE)
-    if(WIN32)
-        set(ALSOFT_DLOPEN OFF CACHE BOOL "" FORCE)
-    endif()
     
     add_subdirectory(${openal-soft_SOURCE_DIR} ${openal-soft_BINARY_DIR})
     
@@ -278,6 +275,13 @@ if(NOT openal-soft_POPULATED)
     set_target_properties(altonegen PROPERTIES FOLDER Dependencies/OpenAL/Examples)
     set_target_properties(OpenAL PROPERTIES FOLDER Dependencies/OpenAL)
     set_target_properties(openal-info PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(aldebug PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(allafplay PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(alsoft.common PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(alsoft.default_hrtf_data PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(alsoft.excommon PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(alsoft.fmt PROPERTIES FOLDER Dependencies/OpenAL)
+    set_target_properties(clang-tidy-check PROPERTIES FOLDER Dependencies/OpenAL)
     
     target_compile_options(OpenAL PUBLIC
         $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
