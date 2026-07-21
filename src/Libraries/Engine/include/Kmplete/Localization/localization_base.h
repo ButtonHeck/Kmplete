@@ -8,6 +8,8 @@
 
 namespace Kmplete
 {
+    using namespace std::string_literals;
+
     static constexpr auto LocalesDirectory = "locale";
 
     static constexpr auto TranslateKeyword = "Translate";
@@ -15,9 +17,9 @@ namespace Kmplete
     static constexpr auto TranslateDeferKeyword = "TranslateDefer";
     static constexpr auto TranslateCtxDeferKeyword = "TranslateCtxDefer";
 
-    static constexpr auto LocaleEnUTF8Keyword = "en_US.UTF-8";
+    static constexpr auto LocaleEnUTF8Keyword = "en_US.UTF-8"s;
     static constexpr auto LocaleEnName = "English";
-    static constexpr auto LocaleRuUTF8Keyword = "ru_RU.UTF-8";
+    static constexpr auto LocaleRuUTF8Keyword = "ru_RU.UTF-8"s;
     static constexpr auto LocaleRuName = "Russian";
 
     static constexpr auto SidTrInvalidLocale = static_cast<StringID>(0);
