@@ -96,7 +96,7 @@ namespace Kmplete
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
-        _camera.SetAspectRatio(float(_mainWindow.GetSize().x) / float(_mainWindow.GetSize().y));
+        _camera.SetAspectRatio(float(_mainWindow.GetFramebufferSize().x) / float(_mainWindow.GetFramebufferSize().y));
         _camera.SetZNear(0.1f);
         _camera.SetZFar(10.0f);
         _camera.SetScale(16.0f);
@@ -239,7 +239,7 @@ namespace Kmplete
         const auto& renderer = vulkanDevice.GetRenderer();
         const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
         const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
-        const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
+        const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetFramebufferSize().x), .height = float(_mainWindow.GetFramebufferSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
         const auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
 

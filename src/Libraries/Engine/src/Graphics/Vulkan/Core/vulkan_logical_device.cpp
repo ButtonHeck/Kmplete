@@ -667,7 +667,7 @@ namespace Kmplete
                 return capabilities.currentExtent;
             }
 
-            const auto windowSize = _window.GetSize();
+            const auto windowSize = _window.GetFramebufferSize();
             const auto actualExtent = VkExtent2D{
                 Math::Clamp(UInt32(windowSize.x), capabilities.minImageExtent.width, capabilities.maxImageExtent.width),
                 Math::Clamp(UInt32(windowSize.y), capabilities.minImageExtent.height, capabilities.maxImageExtent.height)

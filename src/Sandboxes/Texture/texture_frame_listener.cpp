@@ -113,7 +113,7 @@ namespace Kmplete
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
-        _camera.SetAspectRatio(float(_mainWindow.GetSize().x) / float(_mainWindow.GetSize().y));
+        _camera.SetAspectRatio(float(_mainWindow.GetFramebufferSize().x) / float(_mainWindow.GetFramebufferSize().y));
         _camera.SetZNear(0.1f);
         _camera.SetZFar(10.0f);
 #if USE_ORTHOGRAPHIC_CAMERA
@@ -460,7 +460,7 @@ namespace Kmplete
         renderer.SetStencilWriteMask(VK_StencilFace_Front, 0);
         renderer.SetStencilReference(VK_StencilFace_Front, 0);
 
-        renderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f } });
+        renderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetFramebufferSize().x), .height = float(_mainWindow.GetFramebufferSize().y), .minDepth = 0.0f, .maxDepth = 1.0f } });
         renderer.SetScissorWithCount({ VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() } });
 
         renderer.SetColorWriteEnabled(1, { VK_TRUE });

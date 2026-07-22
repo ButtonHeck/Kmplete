@@ -422,6 +422,9 @@ namespace Kmplete
             const auto windowSize = _mainWindow.GetSize();
             ImGui::Text("Window size: [%4d x %4d]", windowSize.x, windowSize.y);
 
+            const auto windowFramebufferSize = _mainWindow.GetFramebufferSize();
+            ImGui::Text("Framebuffer size: [%4d x %4d]", windowFramebufferSize.x, windowFramebufferSize.y);
+
 
             const auto dpi = _mainWindow.GetDPI();
             ImGui::Text("DPI: %d", dpi);
