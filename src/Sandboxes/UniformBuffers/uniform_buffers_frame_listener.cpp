@@ -96,7 +96,7 @@ namespace Kmplete
     {
         _camera.SetMovementSpeed(0.0025f);
         _camera.SetRotationSpeed(0.1f);
-        _camera.SetAspectRatio(float(_mainWindow.GetFramebufferSize().x) / float(_mainWindow.GetFramebufferSize().y));
+        _camera.SetAspectRatio(_mainWindow.GetWindowFramebufferAspectRatio());
         _camera.SetZNear(0.1f);
         _camera.SetZFar(10.0f);
         _camera.SetScale(16.0f);

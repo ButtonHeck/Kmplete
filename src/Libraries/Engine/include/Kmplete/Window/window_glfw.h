@@ -29,6 +29,10 @@ namespace Kmplete
         KMP_NODISCARD Math::Size2I GetWindowedSize() const override;
         KMP_NODISCARD Math::Size2I GetFramebufferSize() const override;
 
+        KMP_NODISCARD float GetWindowAspectRatio() const override;
+        KMP_NODISCARD float GetWindowFramebufferAspectRatio() const override;
+        KMP_NODISCARD Math::Size2F GetFramebufferSizeToWindowSizeRatio() const override;
+
         KMP_NODISCARD bool IsIconified() const override;
 
         KMP_NODISCARD UInt32 GetDPI() const override;

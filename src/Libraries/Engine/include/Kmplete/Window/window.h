@@ -95,6 +95,10 @@ namespace Kmplete
         KMP_NODISCARD virtual Math::Size2I GetWindowedSize() const = 0;
         KMP_NODISCARD virtual Math::Size2I GetFramebufferSize() const = 0;
 
+        KMP_NODISCARD virtual float GetWindowAspectRatio() const = 0;
+        KMP_NODISCARD virtual float GetWindowFramebufferAspectRatio() const = 0;
+        KMP_NODISCARD virtual Math::Size2F GetFramebufferSizeToWindowSizeRatio() const = 0;
+
         KMP_NODISCARD virtual bool IsIconified() const = 0;
 
         KMP_NODISCARD virtual UInt32 GetDPI() const = 0;

@@ -225,6 +225,42 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
+    float WindowGlfw::GetWindowAspectRatio() const KMP_PROFILING(ProfileLevelMinor)
+    {
+        const auto windowSize = GetSize();
+        if (windowSize.y > 0)
+        {
+            return float(windowSize.x) / float(windowSize.y);
+        }
+        
+        return 0.0f;
+    }}
+    //--------------------------------------------------------------------------
+
+    float WindowGlfw::GetWindowFramebufferAspectRatio() const KMP_PROFILING(ProfileLevelMinor)
+    {
+        const auto windowFramebufferSize = GetFramebufferSize();
+        if (windowFramebufferSize.y > 0)
+        {
+            return float(windowFramebufferSize.x) / float(windowFramebufferSize.y);
+        }
+        
+        return 0.0f;
+    }}
+    //--------------------------------------------------------------------------
+
+    Math::Size2F WindowGlfw::GetFramebufferSizeToWindowSizeRatio() const KMP_PROFILING(ProfileLevelMinor)
+    {
+        const auto windowFramebufferSize = GetFramebufferSize();
+        const auto windowSize = GetSize();
+
+        return Math::Size2F(
+            float(windowFramebufferSize.x) / float(windowSize.x), 
+            float(windowFramebufferSize.y) / float(windowSize.y)
+        );
+    }}
+    //--------------------------------------------------------------------------
+
     bool WindowGlfw::IsIconified() const
     {
         const NonNull<_UserData*> userData = _GetUserPointer(_window);
