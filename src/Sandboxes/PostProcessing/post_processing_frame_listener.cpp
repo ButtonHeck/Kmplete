@@ -290,7 +290,7 @@ namespace Kmplete
         const auto& renderer = vulkanDevice.GetRenderer();
         const auto& currentExtent = vulkanDevice.GetCurrentExtent();
         const auto drawArea = VkRect2D{ VkOffset2D{ .x = 0, .y = 0 }, currentExtent };
-        const auto viewport = VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetFramebufferSize().x), .height = float(_mainWindow.GetFramebufferSize().y), .minDepth = 0.0f, .maxDepth = 1.0f };
+        const auto viewport = Graphics::VKUtils::CreateViewport(_mainWindow);
         const auto currentBufferIndex = vulkanGraphicsBackend.GetCurrentBufferIndex();
         const auto currentMSAA = vulkanDevice.GetMultisampling();
         const auto colorAttachmentMS = vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment);

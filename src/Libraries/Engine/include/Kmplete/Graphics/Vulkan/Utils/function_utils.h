@@ -8,6 +8,9 @@
 
 namespace Kmplete
 {
+    class Window;
+
+
     namespace Graphics
     {
         class VulkanBuffer;
@@ -48,6 +51,8 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkExtent3D Extent2Dto3D(const VkExtent2D& extent, UInt32 depth = 1);
             KMP_NODISCARD KMP_API VkExtent2D Extent3Dto2D(const VkExtent3D& extent);
+
+            KMP_NODISCARD KMP_API VkViewport CreateViewport(const Window& window, float x = 0.0f, float y = 0.0f, float minDepth = 0.0f, float maxDepth = 1.0f);
         }
     }
 }

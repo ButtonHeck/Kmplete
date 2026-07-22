@@ -460,7 +460,7 @@ namespace Kmplete
         renderer.SetStencilWriteMask(VK_StencilFace_Front, 0);
         renderer.SetStencilReference(VK_StencilFace_Front, 0);
 
-        renderer.SetViewportWithCount({ VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetFramebufferSize().x), .height = float(_mainWindow.GetFramebufferSize().y), .minDepth = 0.0f, .maxDepth = 1.0f } });
+        renderer.SetViewportWithCount({ Graphics::VKUtils::CreateViewport(_mainWindow) });
         renderer.SetScissorWithCount({ VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() } });
 
         renderer.SetColorWriteEnabled(1, { VK_TRUE });

@@ -1,6 +1,7 @@
 #include "Kmplete/Graphics/Vulkan/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Utils/initializers.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
+#include "Kmplete/Window/window.h"
 #include "Kmplete/Profile/profiler.h"
 
 
@@ -67,6 +68,21 @@ namespace Kmplete
                 return VkExtent2D{
                     .width = extent.width,
                     .height = extent.height
+                };
+            }
+            //--------------------------------------------------------------------------
+
+            VkViewport CreateViewport(const Window& window, float x /*= 0.0f*/, float y /*= 0.0f*/, float minDepth /*= 0.0f*/, float maxDepth /*= 1.0f*/)
+            {
+                const auto windowFramebufferSize = window.GetFramebufferSize();
+
+                return VkViewport{
+                    .x = x,
+                    .y = y,
+                    .width = float(windowFramebufferSize.x),
+                    .height = float(windowFramebufferSize.y),
+                    .minDepth = minDepth,
+                    .maxDepth = maxDepth
                 };
             }
             //--------------------------------------------------------------------------
