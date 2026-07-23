@@ -3,11 +3,13 @@
         {
             "File": "@Editor_path_flag_russian@",
             "Type": 0,
+            "SubTypeMask": 1,
             "Name": "_flag_russian"
         },
         {
             "File": "@Editor_path_flag_usa@",
             "Type": 0,
+            "SubTypeMask": 1,
             "Name": "_flag_usa"
         },
         {

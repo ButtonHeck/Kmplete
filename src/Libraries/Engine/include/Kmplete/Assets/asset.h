@@ -17,16 +17,18 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            Asset(AssetType type, StringID sid) noexcept;
+            Asset(AssetType type, StringID sid, AssetSubTypeMask subTypeMask) noexcept;
             ~Asset() = default;
 
             KMP_NODISCARD AssetType GetType() const noexcept;
+            KMP_NODISCARD AssetSubTypeMask GetSubTypeMask() const noexcept;
             KMP_NODISCARD StringID GetStringID() const noexcept;
 
             KMP_NODISCARD bool operator==(const Asset& other) const;
 
         protected:
             AssetType _type;
+            AssetSubTypeMask _subTypeMask;
             StringID _sid;
 
         private:

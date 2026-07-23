@@ -42,11 +42,13 @@ namespace Kmplete
             //!         {
             //!             "File": "texture1.png",
             //!             "Type": 0,
+            //!             "SubTypeMask": 0,
             //!             "Name": "texture1"
             //!         },
             //!         {
             //!             "File": "font.ttf",
             //!             "Type": 1,
+            //!             "SubTypeMask": 0,
             //!             "Name": "font1.ttf"
             //!         }
             //!     ]

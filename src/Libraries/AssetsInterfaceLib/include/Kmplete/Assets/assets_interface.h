@@ -19,6 +19,21 @@ namespace Kmplete
         };
         //--------------------------------------------------------------------------
 
+        using AssetSubTypeMask = UInt32;
+
+        enum TextureSubTypeMaskBits : AssetSubTypeMask
+        {
+            RGB =   0x0,
+            SRGB =  0x1
+        };
+        //--------------------------------------------------------------------------
+
+        enum FontSubTypeMaskBits : AssetSubTypeMask
+        {
+            None = 0x0
+        };
+        //--------------------------------------------------------------------------
+
 
         //! Exact representation of an asset metadata (or "header") stored in .kmpdata file
         //! These metadata stored contiguously and located in the beginning of the
@@ -26,6 +41,7 @@ namespace Kmplete
         KMP_BEGIN_PACKED_STRUCT(AssetEntryHeader)
         {
             UByte type;
+            AssetSubTypeMask subTypeMask;
             StringID sid;
             UInt64 bufferSize;
             UInt64 bufferOffset;

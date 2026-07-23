@@ -8,6 +8,7 @@
 #include "Kmplete/Graphics/graphics_surface.h"
 #include "Kmplete/Graphics/physical_device.h"
 #include "Kmplete/Graphics/texture.h"
+#include "Kmplete/Assets/assets_interface.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -51,8 +52,8 @@ namespace Kmplete
             virtual void EndFrame() = 0;
             virtual void HandleWindowResize() = 0;
 
-            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, bool flipVertically = false);
-            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image) = 0;
+            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, Assets::TextureSubTypeMaskBits subTypeMask, bool flipVertically = false);
+            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) = 0;
 
             KMP_NODISCARD virtual UInt32 GetMultisampling() const = 0;
             virtual void SetMultisampling(UInt32 samples) = 0;

@@ -36,7 +36,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData) KMP_PROFILING(ProfileLevelImportant)
+        bool FontAssetManager::CreateAsset(StringID fontSid, BinaryBuffer&& fontData, FontSubTypeMaskBits subTypeMask) KMP_PROFILING(ProfileLevelImportant)
         {
             if (fontSid == DefaultFontSID)
             {
@@ -50,13 +50,13 @@ namespace Kmplete
                 return false;
             }
 
-            return _AddFontToStorage(fontSid, std::move(fontData));
+            return _AddFontToStorage(fontSid, std::move(fontData), subTypeMask);
         }}
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::CreateAsset(StringID fontSid, const Filepath& filepath)
+        bool FontAssetManager::CreateAsset(StringID fontSid, const Filepath& filepath, FontSubTypeMaskBits subTypeMask)
         {
-            return CreateAsset(fontSid, Filesystem::ReadFileAsBinary(filepath));
+            return CreateAsset(fontSid, Filesystem::ReadFileAsBinary(filepath), subTypeMask);
         }
         //--------------------------------------------------------------------------
 
@@ -218,7 +218,7 @@ namespace Kmplete
 
             cleanupGDI();
 
-            return _AddFontToStorage(DefaultFontSID, std::move(fontData));
+            return _AddFontToStorage(DefaultFontSID, std::move(fontData), FontSubTypeMaskBits::None);
 #else
             if (!FcInit())
             {
@@ -272,16 +272,16 @@ namespace Kmplete
 
             cleanupFc();
 
-            return _AddFontToStorage(DefaultFontSID, std::move(fontData));
+            return _AddFontToStorage(DefaultFontSID, std::move(fontData), FontSubTypeMaskBits::None);
 #endif
         }}
         //--------------------------------------------------------------------------
 
-        bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData) KMP_PROFILING(ProfileLevelImportant)
+        bool FontAssetManager::_AddFontToStorage(StringID sid, BinaryBuffer&& fontData, FontSubTypeMaskBits subTypeMask) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_freetypeLibInstance);
 
-            const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Assets::FontAsset>(sid, *_freetypeLibInstance, std::move(fontData)));
+            const auto [iterator, hasEmplaced] = _fonts.emplace(sid, CreateUPtr<Assets::FontAsset>(sid, *_freetypeLibInstance, std::move(fontData), subTypeMask));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------

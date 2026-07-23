@@ -37,12 +37,12 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<Texture*> GraphicsBackend::CreateTexture(const Filepath& filepath, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
+        Nullable<Texture*> GraphicsBackend::CreateTexture(const Filepath& filepath, Assets::TextureSubTypeMaskBits subTypeMask, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
         {
             try
             {
                 Image image(filepath, flipVertically);
-                return CreateTexture(image);
+                return CreateTexture(image, subTypeMask);
             }
             catch (const Exception&)
             {

@@ -22,7 +22,7 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept;
+            TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture, TextureSubTypeMaskBits subTypeMask) noexcept;
             ~TextureAsset() = default;
 
             KMP_NODISCARD const Graphics::Texture& GetTexture() const noexcept;

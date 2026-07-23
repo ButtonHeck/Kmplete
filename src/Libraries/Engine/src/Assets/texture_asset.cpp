@@ -7,8 +7,8 @@ namespace Kmplete
 {
     namespace Assets
     {
-        TextureAsset::TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture) noexcept
-            : Asset(AssetType::Texture, sid)
+        TextureAsset::TextureAsset(StringID sid, NonNull<Graphics::Texture*> texture, TextureSubTypeMaskBits subTypeMask) noexcept
+            : Asset(AssetType::Texture, sid, subTypeMask)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _texture(texture)
         {

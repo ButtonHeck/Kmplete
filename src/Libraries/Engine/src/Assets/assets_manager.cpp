@@ -268,7 +268,7 @@ namespace Kmplete
                 try
                 {
                     const auto assetImage = Graphics::Image(fileBuffer.data() + assetHeader.bufferOffset, static_cast<int>(assetHeader.bufferSize), Graphics::ImageChannels::RGBAlpha);
-                    return _textureAssetManager->CreateAsset(assetHeader.sid, assetImage);
+                    return _textureAssetManager->CreateAsset(assetHeader.sid, assetImage, TextureSubTypeMaskBits(assetHeader.subTypeMask));
                 }
                 catch (KMP_MB_UNUSED const Exception& e)
                 {
@@ -278,7 +278,7 @@ namespace Kmplete
             }
             else if (assetHeader.type == static_cast<UByte>(AssetType::Font))
             {
-                return _fontAssetManager->CreateAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize));
+                return _fontAssetManager->CreateAsset(assetHeader.sid, BinaryBuffer(fileBuffer.data() + assetHeader.bufferOffset, fileBuffer.data() + assetHeader.bufferOffset + assetHeader.bufferSize), FontSubTypeMaskBits(assetHeader.subTypeMask));
             }
 
             KMP_LOG_ERROR("unknown asset type '{}'", assetHeader.type);

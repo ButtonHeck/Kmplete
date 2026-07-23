@@ -88,7 +88,7 @@ namespace Kmplete
             KMP_NODISCARD const VulkanMetricsManager& GetMetricsManager() const noexcept;
             KMP_NODISCARD VulkanMetricsManager& GetMetricsManager() noexcept;
 
-            KMP_NODISCARD Nullable<VulkanTexture*> CreateTexture(const Image& image) const override;
+            KMP_NODISCARD Nullable<VulkanTexture*> CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) const override;
 
         private:
             void _CreateLogicalDeviceObject();

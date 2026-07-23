@@ -38,7 +38,7 @@ namespace Kmplete
             void EndFrame() override;
             void HandleWindowResize() override;
 
-            KMP_NODISCARD Nullable<Texture*> CreateTexture(const Image& image) override;
+            KMP_NODISCARD Nullable<Texture*> CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) override;
 
             KMP_NODISCARD UInt32 GetMultisampling() const override;
             void SetMultisampling(UInt32 samples) override;

@@ -33,8 +33,8 @@ namespace Kmplete
             FontAssetManager();
             ~FontAssetManager();
 
-            bool CreateAsset(StringID fontSid, BinaryBuffer&& fontData);
-            bool CreateAsset(StringID fontSid, const Filepath& filepath);
+            bool CreateAsset(StringID fontSid, BinaryBuffer&& fontData, FontSubTypeMaskBits subTypeMask);
+            bool CreateAsset(StringID fontSid, const Filepath& filepath, FontSubTypeMaskBits subTypeMask);
 
             KMP_NODISCARD const Assets::FontAsset& GetAsset(StringID fontSid) const;
             KMP_NODISCARD Assets::FontAsset& GetAsset(StringID fontSid);
@@ -49,7 +49,7 @@ namespace Kmplete
             void _Finalize();
 
             KMP_NODISCARD bool _CreateDefaultFontAsset();
-            KMP_NODISCARD bool _AddFontToStorage(StringID sid, BinaryBuffer&& fontData);
+            KMP_NODISCARD bool _AddFontToStorage(StringID sid, BinaryBuffer&& fontData, FontSubTypeMaskBits subTypeMask);
 
         private:
             FT_LibraryRec_* _freetypeLibInstance;

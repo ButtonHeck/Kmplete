@@ -48,11 +48,11 @@ TEST_CASE("FontAssetManager default font usage", "[graphics][font_asset_manager]
     REQUIRE(defaultFontAsset->GetStringID() == FontAssetManager::DefaultFontSID); // still default font
 
     BinaryBuffer garbageBuffer;
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(FontAssetManager::DefaultFontSID, std::move(garbageBuffer)));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(FontAssetManager::DefaultFontSID, std::move(garbageBuffer), FontSubTypeMaskBits::None));
     REQUIRE_FALSE(ok);
 
     Filepath garbagePath;
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(FontAssetManager::DefaultFontSID, garbagePath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(FontAssetManager::DefaultFontSID, garbagePath, FontSubTypeMaskBits::None));
     REQUIRE_FALSE(ok);
 }
 //--------------------------------------------------------------------------
@@ -68,7 +68,7 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
     const auto fontSid = "OpenSans-Regular.ttf"_sid;
     bool ok = false;
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath, FontSubTypeMaskBits::None));
     REQUIRE(ok);
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
@@ -96,12 +96,12 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     }
 
     // try adding same font from filepath
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath, FontSubTypeMaskBits::None));
     REQUIRE_FALSE(ok);
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
     // try adding same font from binary buffer
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, std::move(fontBuffer)));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, std::move(fontBuffer), FontSubTypeMaskBits::None));
     REQUIRE_FALSE(ok);
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
@@ -113,7 +113,7 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     REQUIRE(fontAssetManager->GetAssetsCount() == 1UL);
 
     // adding font again
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, fontPath, FontSubTypeMaskBits::None));
     REQUIRE(ok);
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 
@@ -133,7 +133,7 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     REQUIRE(fontAssetManager->GetAssetsCount() == 1UL); // deleted
 
     // adding font from binary buffer
-    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, std::move(fontBuffer)));
+    REQUIRE_NOTHROW(ok = fontAssetManager->CreateAsset(fontSid, std::move(fontBuffer), FontSubTypeMaskBits::None));
     REQUIRE(ok);
     REQUIRE(fontAssetManager->GetAssetsCount() == 2UL);
 

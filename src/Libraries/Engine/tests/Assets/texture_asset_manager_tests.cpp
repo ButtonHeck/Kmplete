@@ -66,7 +66,7 @@ TEST_CASE("TextureAssetManager default texture usage", "[graphics][texture_asset
     REQUIRE(errorTextureAsset->GetStringID() == TextureAssetManager::ErrorTextureSID); // still error texture
 
     Filepath garbagePath;
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(TextureAssetManager::ErrorTextureSID, garbagePath));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(TextureAssetManager::ErrorTextureSID, garbagePath, TextureSubTypeMaskBits::SRGB));
     REQUIRE_FALSE(ok);
 }
 //--------------------------------------------------------------------------
@@ -84,7 +84,7 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
     const auto image = Image(Filepath(KMP_TEST_ICON_PATH), ImageChannels::RGBAlpha);
     const StringID imageSid = 12345UL;
     bool ok = false;
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image, TextureSubTypeMaskBits::SRGB));
     REQUIRE(ok);
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
@@ -95,12 +95,12 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
     REQUIRE(textureAsset->GetStringID() == imageSid);
 
     // try adding same texture from image
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image, TextureSubTypeMaskBits::SRGB));
     REQUIRE_FALSE(ok);
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
     // try adding same texture from filepath
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, Filepath(KMP_TEST_ICON_PATH)));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, Filepath(KMP_TEST_ICON_PATH), TextureSubTypeMaskBits::SRGB));
     REQUIRE_FALSE(ok);
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
@@ -110,7 +110,7 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
     REQUIRE(textureAssetManager->GetAssetsCount() == 1UL);
 
     // add texture again
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, image, TextureSubTypeMaskBits::SRGB));
     REQUIRE(ok);
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
@@ -130,14 +130,14 @@ TEST_CASE("TextureAssetManager texture functions", "[graphics][texture_asset_man
     REQUIRE(textureAssetManager->GetAssetsCount() == 1UL); // deleted
 
     // adding texture from filepath
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, Filepath(KMP_TEST_ICON_PATH)));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, Filepath(KMP_TEST_ICON_PATH), TextureSubTypeMaskBits::SRGB));
     REQUIRE(ok);
     REQUIRE(textureAssetManager->GetAssetsCount() == 2UL);
 
     // adding texture from non-image filepath (removing first)
     REQUIRE_NOTHROW(ok = textureAssetManager->RemoveAsset(imageSid));
     REQUIRE(ok);
-    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf")));
+    REQUIRE_NOTHROW(ok = textureAssetManager->CreateAsset(imageSid, Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf"), TextureSubTypeMaskBits::SRGB));
     REQUIRE_FALSE(ok);
     REQUIRE(textureAssetManager->GetAssetsCount() == 1UL);
 }

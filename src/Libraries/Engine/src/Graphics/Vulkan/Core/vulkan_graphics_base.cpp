@@ -10,24 +10,24 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VkFormat ImageChannelsToVkFormat(ImageChannels channels) noexcept
+        VkFormat ImageChannelsToVkFormat(ImageChannels channels, bool srgb) noexcept
         {
             switch (channels)
             {
             case ImageChannels::RGBAlpha:
-                return VK_Format_RGBA8_UNorm;
+                return srgb ? VK_Format_RGBA8_SRGB : VK_Format_RGBA8_UNorm;
             case ImageChannels::RGB:
                 KMP_LOG_WARN_FN("VulkanGraphicsBase: RGB channels will be converted to default RGBA VkFormat");
-                return VK_Format_RGBA8_UNorm;
+                return srgb ? VK_Format_RGBA8_SRGB : VK_Format_RGBA8_UNorm;
             case ImageChannels::GreyAlpha:
-                return VK_Format_RG8_UNorm;
+                return srgb ? VK_Format_RG8_SRGB : VK_Format_RG8_UNorm;
             case ImageChannels::Grey:
-                return VK_Format_R8_UNorm;
+                return srgb ? VK_Format_R8_SRGB : VK_Format_R8_UNorm;
             default:
                 break;
             }
 
-            return VK_Format_RGBA8_UNorm;
+            return srgb ? VK_Format_RGBA8_SRGB : VK_Format_RGBA8_UNorm;
         }
         //--------------------------------------------------------------------------
 

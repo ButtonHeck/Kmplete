@@ -23,8 +23,8 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer);
-            FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath);
+            FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer, FontSubTypeMaskBits subTypeMask);
+            FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath, FontSubTypeMaskBits subTypeMask);
             ~FontAsset() = default;
 
             KMP_NODISCARD const Graphics::Font& GetFont() const noexcept;

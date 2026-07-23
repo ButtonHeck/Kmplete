@@ -38,8 +38,8 @@ namespace Kmplete
             explicit TextureAssetManager(Graphics::GraphicsBackend& graphicsBackend);
             ~TextureAssetManager() = default;
 
-            bool CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically = false);
-            bool CreateAsset(StringID textureSid, const Graphics::Image& image);
+            bool CreateAsset(StringID textureSid, const Filepath& filepath, TextureSubTypeMaskBits subTypeMask, bool flipVertically = false);
+            bool CreateAsset(StringID textureSid, const Graphics::Image& image, TextureSubTypeMaskBits subTypeMask);
 
             KMP_NODISCARD const Assets::TextureAsset& GetAsset(StringID textureSid) const;
             KMP_NODISCARD Assets::TextureAsset& GetAsset(StringID textureSid);

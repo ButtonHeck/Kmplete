@@ -6,9 +6,10 @@ namespace Kmplete
 {
     namespace Assets
     {
-        Asset::Asset(AssetType type, StringID sid) noexcept
+        Asset::Asset(AssetType type, StringID sid, AssetSubTypeMask subTypeMask) noexcept
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _type(type)
+            , _subTypeMask(subTypeMask)
             , _sid(sid)
         {
             KMP_PROFILE_CONSTRUCTOR_END()
@@ -18,6 +19,12 @@ namespace Kmplete
         AssetType Asset::GetType() const noexcept
         {
             return _type;
+        }
+        //--------------------------------------------------------------------------
+
+        AssetSubTypeMask Asset::GetSubTypeMask() const noexcept
+        {
+            return _subTypeMask;
         }
         //--------------------------------------------------------------------------
 

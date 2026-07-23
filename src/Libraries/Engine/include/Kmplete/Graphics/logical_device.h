@@ -5,6 +5,7 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/command_pool.h"
 #include "Kmplete/Graphics/swapchain.h"
+#include "Kmplete/Assets/assets_interface.h"
 
 
 namespace Kmplete
@@ -30,7 +31,7 @@ namespace Kmplete
 
             KMP_NODISCARD virtual const Swapchain& GetSwapchain() const noexcept = 0;
 
-            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image) const = 0;
+            KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) const = 0;
         };
         //--------------------------------------------------------------------------
     }

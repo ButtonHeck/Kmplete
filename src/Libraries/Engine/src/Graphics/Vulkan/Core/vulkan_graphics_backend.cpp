@@ -147,11 +147,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        Nullable<Texture*> VulkanGraphicsBackend::CreateTexture(const Image& image)
+        Nullable<Texture*> VulkanGraphicsBackend::CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask)
         {
             KMP_ASSERT(_physicalDevice);
 
-            return _physicalDevice->GetLogicalDevice().CreateTexture(image);
+            return _physicalDevice->GetLogicalDevice().CreateTexture(image, subTypeMask);
         }
         //--------------------------------------------------------------------------
 

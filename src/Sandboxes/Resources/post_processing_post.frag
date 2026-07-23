@@ -38,4 +38,5 @@ void main(void)
 	vec4 sobel = sqrt((sobel_edge_h * sobel_edge_h) + (sobel_edge_v * sobel_edge_v));
 
 	outFragColor = vec4(sobel.rgb, 1.0);
+	outFragColor.rgb = pow(outFragColor.rgb, vec3(2.2));
 }

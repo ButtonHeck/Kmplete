@@ -134,6 +134,8 @@ namespace Kmplete
                     return ReturnCode::InputFileFormatError;
                 }
 
+                const auto assetSubTypeMask = static_cast<AssetSubTypeMask>(sourceJson.GetUInt(JsonConfigurationSubTypeMaskStr));
+
                 const auto assetName = sourceJson.GetString(JsonConfigurationNameStr);
                 if (assetName.empty())
                 {
@@ -163,6 +165,7 @@ namespace Kmplete
 
                 AssetEntryHeader header{
                     .type = assetType,
+                    .subTypeMask = assetSubTypeMask,
                     .sid = assetSid,
                     .bufferSize = 0,
                     .bufferOffset = 0

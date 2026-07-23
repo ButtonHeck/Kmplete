@@ -66,8 +66,8 @@ namespace Kmplete
 
             for (const auto& surfFormat : surfaceFormats)
             {
-                //TODO: add to settings in a future, use default non-SRGB
-                if (surfFormat.format == VK_Format_BGRA8_UInt && surfFormat.colorSpace == VK_ColorSpace_SRGB_Nonlinear)
+                //TODO: add to settings in a future, use default SRGB
+                if (surfFormat.format == VK_Format_BGRA8_SRGB && surfFormat.colorSpace == VK_ColorSpace_SRGB_Nonlinear)
                 {
                     return surfFormat;
                 }

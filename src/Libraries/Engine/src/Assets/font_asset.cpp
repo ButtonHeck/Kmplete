@@ -6,8 +6,8 @@ namespace Kmplete
 {
     namespace Assets
     {
-        FontAsset::FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
-            : Asset(AssetType::Font, sid)
+        FontAsset::FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer, FontSubTypeMaskBits subTypeMask)
+            : Asset(AssetType::Font, sid, subTypeMask)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _font(freetypeLib, std::move(fontBuffer))
         {
@@ -15,8 +15,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        FontAsset::FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath)
-            : Asset(AssetType::Font, sid)
+        FontAsset::FontAsset(StringID sid, FT_LibraryRec_& freetypeLib, const Filepath& filepath, FontSubTypeMaskBits subTypeMask)
+            : Asset(AssetType::Font, sid, subTypeMask)
             , _font(freetypeLib, filepath)
         {}
         //--------------------------------------------------------------------------

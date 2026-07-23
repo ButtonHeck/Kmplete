@@ -690,13 +690,14 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image) const KMP_PROFILING(ProfileLevelImportant)
+        Nullable<VulkanTexture*> VulkanLogicalDevice::CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) const KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_device && _imageCreatorDelegate && _graphicsQueue);
 
             try
             {
-                const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()));
+                const auto isSRGB = subTypeMask & Assets::TextureSubTypeMaskBits::SRGB;
+                const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()), isSRGB);
                 const auto mipLevels = _formatDelegate.IsMipmapCompatible(textureVkFormat) ? image.GetMipLevels() : 1;
                 auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
                 const auto extent = VkExtent3D{

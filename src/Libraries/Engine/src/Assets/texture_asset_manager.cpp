@@ -26,26 +26,26 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::CreateAsset(StringID textureSid, const Filepath& filepath, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
+        bool TextureAssetManager::CreateAsset(StringID textureSid, const Filepath& filepath, TextureSubTypeMaskBits subTypeMask, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
         {
             if (!_TextureSidIsValid(textureSid))
             {
                 return false;
             }
 
-            auto* texture = _graphicsBackend.CreateTexture(filepath, flipVertically);
+            auto* texture = _graphicsBackend.CreateTexture(filepath, subTypeMask, flipVertically);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture '{}'", filepath);
                 return false;
             }
 
-            const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture));
+            const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture, subTypeMask));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------
 
-        bool TextureAssetManager::CreateAsset(StringID textureSid, const Graphics::Image& image) KMP_PROFILING(ProfileLevelAlways)
+        bool TextureAssetManager::CreateAsset(StringID textureSid, const Graphics::Image& image, TextureSubTypeMaskBits subTypeMask) KMP_PROFILING(ProfileLevelAlways)
         {
             KMP_ASSERT(image.GetPixels());
 
@@ -54,14 +54,14 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = _graphicsBackend.CreateTexture(image);
+            auto* texture = _graphicsBackend.CreateTexture(image, subTypeMask);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("failed to create texture from image");
                 return false;
             }
 
-            const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture));
+            const auto [iterator, hasEmplaced] = _textures.emplace(textureSid, CreateUPtr<Assets::TextureAsset>(textureSid, texture, subTypeMask));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------
@@ -137,14 +137,14 @@ namespace Kmplete
                 return false;
             }
 
-            auto* texture = _graphicsBackend.CreateTexture(Graphics::Image(&pixelBuffer[0], 32 * 32 * 4, Math::Size2I(32, 32), Graphics::ImageChannels::RGBAlpha));
+            auto* texture = _graphicsBackend.CreateTexture(Graphics::Image(&pixelBuffer[0], 32 * 32 * 4, Math::Size2I(32, 32), Graphics::ImageChannels::RGBAlpha), TextureSubTypeMaskBits::SRGB);
             if (texture == nullptr)
             {
                 KMP_LOG_ERROR("error texture failed to load");
                 return false;
             }
 
-            const auto [iterator, hasEmplaced] = _textures.emplace(ErrorTextureSID, CreateUPtr<Assets::TextureAsset>(ErrorTextureSID, texture));
+            const auto [iterator, hasEmplaced] = _textures.emplace(ErrorTextureSID, CreateUPtr<Assets::TextureAsset>(ErrorTextureSID, texture, TextureSubTypeMaskBits::SRGB));
             return hasEmplaced;
         }}
         //--------------------------------------------------------------------------

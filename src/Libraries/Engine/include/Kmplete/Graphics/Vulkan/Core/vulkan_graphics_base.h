@@ -11,7 +11,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        KMP_NODISCARD KMP_API VkFormat ImageChannelsToVkFormat(ImageChannels channels) noexcept;
+        KMP_NODISCARD KMP_API VkFormat ImageChannelsToVkFormat(ImageChannels channels, bool srgb) noexcept;
         KMP_NODISCARD KMP_API VkFormat ShaderDataTypeToVkFormat(ShaderDataType type) noexcept;
 
         static constexpr auto SamplerDefaultNearestSid = "DefaultNearest"_sid;
