@@ -156,5 +156,11 @@ namespace Kmplete
             return _textureMap.at(sid);
         }
         //--------------------------------------------------------------------------
+
+        float ImGuiImplementation::GetCurrentScale() const noexcept
+        {
+            return _context->baseScale;
+        }
+        //--------------------------------------------------------------------------
     }
 }

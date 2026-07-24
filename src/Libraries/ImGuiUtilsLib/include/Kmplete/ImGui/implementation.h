@@ -45,6 +45,8 @@ namespace Kmplete
             virtual void RemoveTexture(StringID sid) = 0;
             KMP_NODISCARD ImTextureID GetTexture(StringID sid) const;
 
+            KMP_NODISCARD float GetCurrentScale() const noexcept;
+
         protected:
             explicit ImGuiImplementation(Context* implementationContext);
 
