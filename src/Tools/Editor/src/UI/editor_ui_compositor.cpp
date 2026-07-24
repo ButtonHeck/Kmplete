@@ -94,8 +94,8 @@ namespace Kmplete
 
     void EditorUICompositor::_ComposeMenuLanguage() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        const auto dpiScale = _mainWindow.GetDPIScale();
-        const auto iconSize = ImVec2(18 * dpiScale, 18 * dpiScale);
+        const auto contentScale = _mainWindow.GetContentScale();
+        const auto iconSize = ImVec2(18 * contentScale, 18 * contentScale);
 
         static const ImTextureID languageIcons[] = {
             static_cast<ImTextureID>(_imguiImpl.GetTexture("_flag_usa"_sid)),
@@ -231,10 +231,10 @@ namespace Kmplete
 
     void EditorUICompositor::ComposeStatusBar(Time::Timer& metricsTimer) KMP_PROFILING(ProfileLevelImportant)
     {
-        const auto dpiScale = _mainWindow.GetDPIScale();
-        const auto buttonSize = ImVec2(24 * dpiScale, 24 * dpiScale);
+        const auto contentScale = _mainWindow.GetContentScale();
+        const auto buttonSize = ImVec2(24 * contentScale, 24 * contentScale);
         ImGui::SetCursorPosX(8.0f);
-        ImGui::SetCursorPosY(2.0f * dpiScale);
+        ImGui::SetCursorPosY(2.0f * contentScale);
 
         if (ImGui::Button(ICON_FK_CLOCK_O, buttonSize))
         {

@@ -47,7 +47,7 @@ namespace Kmplete
         void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
         void _InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
         void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
-        void _InitializeImGui(float dpiScale);
+        void _InitializeImGui(float contentScale);
 
         void _RenderTriangle();
         void _RenderImGui();

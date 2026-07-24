@@ -78,7 +78,7 @@ namespace Kmplete
         textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
-        _InitializeImGui(_mainWindow.GetDPIScale());
+        _InitializeImGui(_mainWindow.GetContentScale());
 
         _inputManager->MapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
         _inputManager->MapInputToAction({ Input::Code::Key_S, Input::PressNoModsCondition }, "move_backward"_sid);
@@ -126,12 +126,12 @@ namespace Kmplete
             if (_useDefaultFont)
             {
                 const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-                _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
+                _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetContentScale(), 15);
             }
             else
             {
                 const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
-                _imguiImpl->AddFont(fontPath, _mainWindow.GetDPIScale(), 15);
+                _imguiImpl->AddFont(fontPath, _mainWindow.GetContentScale(), 15);
             }
 
             io.Fonts->Build();
@@ -430,8 +430,8 @@ namespace Kmplete
             ImGui::Text("DPI: %d", dpi);
             ImGui::SameLine(0.0f, 32.0f);
 
-            const auto dpiScale = _mainWindow.GetDPIScale();
-            ImGui::Text("DPI scale: %.2f", dpiScale);
+            const auto contentScale = _mainWindow.GetContentScale();
+            ImGui::Text("Content scale: %.2f", contentScale);
             ImGui::SameLine(0.0f, 32.0f);
 
             const auto screenModeStr = Window::ScreenModeToString(_mainWindow.GetScreenMode());
@@ -844,7 +844,7 @@ namespace Kmplete
 
     bool MainFrameListener::DPIScaleIsNotZero() const
     {
-        return _mainWindow.GetDPIScale() > 0.0f;
+        return _mainWindow.GetContentScale() > 0.0f;
     }
 
     bool MainFrameListener::DefaultSizeIsNotZero() const
@@ -953,7 +953,7 @@ namespace Kmplete
         return true;
     }
 
-    void MainFrameListener::_InitializeImGui(float dpiScale)
+    void MainFrameListener::_InitializeImGui(float contentScale)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -995,13 +995,13 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), "docking"_true, "viewport"_true, dpiScale, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), "docking"_true, "viewport"_true, contentScale, initInfo);
             context->configName = "TestWindowApplication_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), dpiScale, 15);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), contentScale, 15);
     }
 
     void MainFrameListener::_RenderImGui()

@@ -73,10 +73,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * dpiScale;
+            const auto fontSizeScaled = fontSize * contentScale;
             ImFontConfig fontConfig;
             fontConfig.FontDataOwnedByAtlas = false;
 
@@ -88,10 +88,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddFont(const Filepath& fontFilepath, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * dpiScale;
+            const auto fontSizeScaled = fontSize * contentScale;
 
             return io.Fonts->AddFontFromFileTTF(
                 Filesystem::ToGenericString(fontFilepath).c_str(), 
@@ -100,10 +100,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float dpiScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * dpiScale;
+            const auto fontSizeScaled = fontSize * contentScale;
             ImFontConfig fontConfig;
             fontConfig.MergeMode = true;
             fontConfig.GlyphMinAdvanceX = fontSizeScaled;
@@ -120,10 +120,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float dpiScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * dpiScale;
+            const auto fontSizeScaled = fontSize * contentScale;
             ImFontConfig fontConfig;
             fontConfig.MergeMode = true;
             fontConfig.GlyphMinAdvanceX = fontSizeScaled;
@@ -138,7 +138,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::Stylize(float dpiScale) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        void ImGuiImplementation::Stylize(float contentScale) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             ImGui::GetStyle() = ImGuiStyle();
 
@@ -147,7 +147,7 @@ namespace Kmplete
             style.WindowMenuButtonPosition = ImGuiDir_None;
             style.DisabledAlpha = 0.4f;
 
-            style.ScaleAllSizes(dpiScale);
+            style.ScaleAllSizes(contentScale);
         }}
         //--------------------------------------------------------------------------
 

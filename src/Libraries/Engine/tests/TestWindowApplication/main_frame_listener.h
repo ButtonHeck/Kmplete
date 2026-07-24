@@ -131,7 +131,7 @@ namespace Kmplete
         virtual bool OnVSyncChangeEvent(Events::VSyncChangeEvent& evt);
 
     private:
-        void _InitializeImGui(float dpiScale);
+        void _InitializeImGui(float contentScale);
         void _RenderImGui();
 
     private:

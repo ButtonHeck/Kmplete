@@ -74,7 +74,7 @@ namespace Kmplete
             bool updateContinuously = true;
             bool alwaysOnTop = false;
             UInt32 dpi = 96;
-            float dpiScale = 1.0f;
+            float contentScale = 1.0f;
 
             KMP_NODISCARD bool IsFullscreen() const noexcept;
             KMP_NODISCARD bool IsWindowed() const noexcept;
@@ -102,7 +102,7 @@ namespace Kmplete
         KMP_NODISCARD virtual bool IsIconified() const = 0;
 
         KMP_NODISCARD virtual UInt32 GetDPI() const = 0;
-        KMP_NODISCARD virtual float GetDPIScale() const = 0;
+        KMP_NODISCARD virtual float GetContentScale() const = 0;
 
         virtual void SetTitle(const char* title) = 0;
         virtual void SetIcon(const Graphics::Image& image) = 0;

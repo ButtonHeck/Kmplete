@@ -65,7 +65,7 @@ namespace Kmplete
     void EditorFrameListener::_Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
     {
         _InitializeGraphics();
-        _InitializeImGui(_mainWindow.GetDPIScale());
+        _InitializeImGui(_mainWindow.GetContentScale());
 
         _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, *_imguiImpl.get()));
 
@@ -85,7 +85,7 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_InitializeImGui(float dpiScale) KMP_PROFILING(ProfileLevelImportant)
+    void EditorFrameListener::_InitializeImGui(float contentScale) KMP_PROFILING(ProfileLevelImportant)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -127,7 +127,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewport"_true, dpiScale, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_true, "viewport"_true, contentScale, initInfo);
             context->configName = "Editor_imgui.ini";
 
             _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
@@ -138,7 +138,7 @@ namespace Kmplete
             _imguiImpl->AddTexture("_flag_russian"_sid, logicalDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), flagRussiaTexture.GetVkImageView());
         }
 
-        _AddImGuiFonts(dpiScale);
+        _AddImGuiFonts(contentScale);
     }}
     //--------------------------------------------------------------------------
 
@@ -316,7 +316,7 @@ namespace Kmplete
                 { ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f) }
             });
 
-            const auto statusBarHeight = 28 * _mainWindow.GetDPIScale();
+            const auto statusBarHeight = 28 * _mainWindow.GetContentScale();
             static constexpr auto workingAreaFlags =
                 ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |

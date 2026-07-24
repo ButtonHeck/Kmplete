@@ -95,13 +95,13 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void WindowGlfw::_UpdateDPIScale(const NonNull<GLFWwindow*> window) KMP_PROFILING(ProfileLevelMinor)
+    void WindowGlfw::_UpdateContentScale(const NonNull<GLFWwindow*> window) KMP_PROFILING(ProfileLevelMinor)
     {
         const NonNull<_UserData*> userData = _GetUserPointer(window);
 
         auto scale = 1.0f;
         glfwGetWindowContentScale(window, &scale, &scale);
-        userData->dpiScale = scale;
+        userData->contentScale = scale;
     }}
     //--------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ namespace Kmplete
         , windowedSize(settings.windowedSize)
         , cursorPosition(settings.cursorPosition)
         , dpi(settings.dpi)
-        , dpiScale(settings.dpiScale)
+        , contentScale(settings.contentScale)
         , iconified(false)
     {}
     //--------------------------------------------------------------------------
@@ -180,7 +180,7 @@ namespace Kmplete
         _InitializeGeometry();
         _InitializeCallbacks();
 
-        _UpdateDPIScale(_window);
+        _UpdateContentScale(_window);
         _UpdateDPI(_window);
 
         glfwShowWindow(_window);
@@ -274,9 +274,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    float WindowGlfw::GetDPIScale() const
+    float WindowGlfw::GetContentScale() const
     {
-        return _settings.dpiScale;
+        return _settings.contentScale;
     }
     //--------------------------------------------------------------------------
 
@@ -604,7 +604,7 @@ namespace Kmplete
         glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
             const NonNull<_UserData*> userData = _GetUserPointer(window);
             
-            _UpdateDPIScale(window);
+            _UpdateContentScale(window);
             _UpdateDPI(window);
 
             if (userData->eventCallback)

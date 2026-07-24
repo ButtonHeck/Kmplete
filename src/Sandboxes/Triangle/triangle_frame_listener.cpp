@@ -103,7 +103,7 @@ namespace Kmplete
         _InitializeBuffers(vulkanDevice);
         _InitializeUniformBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
-        _InitializeImGui(_mainWindow.GetDPIScale());
+        _InitializeImGui(_mainWindow.GetContentScale());
     }
     //--------------------------------------------------------------------------
 
@@ -374,7 +374,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void TriangleFrameListener::_InitializeImGui(float dpiScale)
+    void TriangleFrameListener::_InitializeImGui(float contentScale)
     {
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -416,13 +416,13 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, "viewports"_true, dpiScale, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, "viewports"_true, contentScale, initInfo);
             context->configName = "TriangleSandbox_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetDPIScale(), 15);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetContentScale(), 15);
     }
     //--------------------------------------------------------------------------
 
@@ -615,7 +615,7 @@ namespace Kmplete
     {
         _graphicsBackend.SetMultisampling(evt.msaaSamples);
         _imguiImpl.reset();
-        _InitializeImGui(_mainWindow.GetDPIScale());
+        _InitializeImGui(_mainWindow.GetContentScale());
         return true;
     }
     //--------------------------------------------------------------------------
