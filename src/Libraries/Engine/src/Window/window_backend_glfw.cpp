@@ -75,7 +75,7 @@ namespace Kmplete
                 _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
             }
 
-            _mainWindow = CreateUPtr<WindowGlfw>(*_mainWindowSettings, _graphicsBackendType);
+            _mainWindow = CreateUPtr<WindowGlfw>(*_mainWindowSettings, _graphicsBackendType, _nativePlatformType);
         }
 
         return *_mainWindow;
@@ -109,19 +109,19 @@ namespace Kmplete
         const auto platform = glfwGetPlatform();
         if (platform == GLFW_PLATFORM_WIN32)
         {
-            _nativePlatformType = WindowBackend::NativePlatformType::Win32;
+            _nativePlatformType = WindowNativePlatformType::Win32;
         }
         else if (platform == GLFW_PLATFORM_X11)
         {
-            _nativePlatformType = WindowBackend::NativePlatformType::X11;
+            _nativePlatformType = WindowNativePlatformType::X11;
         }
         else if (platform == GLFW_PLATFORM_WAYLAND)
         {
-            _nativePlatformType = WindowBackend::NativePlatformType::Wayland;
+            _nativePlatformType = WindowNativePlatformType::Wayland;
         }
         else if (platform == GLFW_PLATFORM_COCOA)
         {
-            _nativePlatformType = WindowBackend::NativePlatformType::Cocoa;
+            _nativePlatformType = WindowNativePlatformType::Cocoa;
         }
 
         _InitializeCallbacks();
@@ -181,7 +181,7 @@ namespace Kmplete
                 _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowName));
             }
 
-            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType));
+            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType, _nativePlatformType));
             return GetAuxWindow(windowName);
         }
         catch (KMP_MB_UNUSED const Exception& e)
@@ -212,7 +212,7 @@ namespace Kmplete
                 _auxWindowsSettings.emplace(windowName, CreateUPtr<Window::WindowSettings>(windowSettings));
             }
 
-            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType));
+            _auxWindows.emplace(windowName, CreateUPtr<WindowGlfw>(*_auxWindowsSettings[windowName], _graphicsBackendType, _nativePlatformType));
             return GetAuxWindow(windowName);
         }
         catch (KMP_MB_UNUSED const Exception& e)

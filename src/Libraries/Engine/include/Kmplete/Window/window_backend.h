@@ -5,6 +5,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/optional.h"
 #include "Kmplete/Window/window.h"
+#include "Kmplete/Window/window_native_platform_type.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Graphics/graphics_base.h"
 
@@ -36,15 +37,6 @@ namespace Kmplete
             int refreshRate;
         };
 
-        enum NativePlatformType
-        {
-            Win32,
-            X11,
-            Wayland,
-            Cocoa,
-            Undefined
-        };
-
     public:
         KMP_NODISCARD static UPtr<WindowBackend> Create(Graphics::GraphicsBackendType graphicsBackendType);
 
@@ -52,7 +44,7 @@ namespace Kmplete
         explicit WindowBackend(Graphics::GraphicsBackendType graphicsBackendType) noexcept;
         virtual ~WindowBackend() = default;
 
-        KMP_NODISCARD NativePlatformType GetNativePlatformType() const noexcept;
+        KMP_NODISCARD WindowNativePlatformType GetNativePlatformType() const noexcept;
 
         KMP_NODISCARD virtual Window& CreateMainWindow() = 0;
         KMP_NODISCARD virtual Window& GetMainWindow() = 0;
@@ -76,7 +68,7 @@ namespace Kmplete
 
     protected:
         Graphics::GraphicsBackendType _graphicsBackendType;
-        NativePlatformType _nativePlatformType;
+        WindowNativePlatformType _nativePlatformType;
     };
     //--------------------------------------------------------------------------
 }

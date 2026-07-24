@@ -17,11 +17,11 @@ namespace Kmplete
 
     WindowBackend::WindowBackend(Graphics::GraphicsBackendType graphicsBackendType) noexcept
         : _graphicsBackendType(graphicsBackendType)
-        , _nativePlatformType(NativePlatformType::Undefined)
+        , _nativePlatformType(WindowNativePlatformType::Undefined)
     {}
     //--------------------------------------------------------------------------
 
-    WindowBackend::NativePlatformType WindowBackend::GetNativePlatformType() const noexcept
+    WindowNativePlatformType WindowBackend::GetNativePlatformType() const noexcept
     {
         return _nativePlatformType;
     }

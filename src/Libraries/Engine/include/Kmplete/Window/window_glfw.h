@@ -22,7 +22,7 @@ namespace Kmplete
         KMP_DISABLE_COPY_MOVE(WindowGlfw)
 
     public:
-        explicit WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
+        WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType, WindowNativePlatformType nativePlatformType);
         ~WindowGlfw();
 
         KMP_NODISCARD Math::Size2I GetSize() const override;

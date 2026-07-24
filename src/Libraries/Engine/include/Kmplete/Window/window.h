@@ -5,6 +5,7 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/functional.h"
+#include "Kmplete/Window/window_native_platform_type.h"
 #include "Kmplete/Event/event.h"
 #include "Kmplete/Math/geometry.h"
 #include "Kmplete/Graphics/graphics_base.h"
@@ -85,11 +86,12 @@ namespace Kmplete
         };
 
     public:
-        Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType);
+        Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType, WindowNativePlatformType nativePlatformType);
         virtual ~Window() = default;
 
         KMP_NODISCARD const String& GetName() const noexcept;
         KMP_NODISCARD Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
+        KMP_NODISCARD WindowNativePlatformType GetNativePlatformType() const noexcept;
 
         KMP_NODISCARD virtual Math::Size2I GetSize() const = 0;
         KMP_NODISCARD virtual Math::Size2I GetWindowedSize() const = 0;
@@ -148,6 +150,9 @@ namespace Kmplete
     protected:
         WindowSettings& _settings;
         Graphics::GraphicsBackendType _graphicsBackendType;
+
+    private:
+        const WindowNativePlatformType _nativePlatformType;
     };
     //--------------------------------------------------------------------------
 }

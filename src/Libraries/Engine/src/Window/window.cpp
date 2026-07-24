@@ -20,10 +20,11 @@ namespace Kmplete
     static constexpr auto AlwaysOnTopStr = "AlwaysOnTop";
 
 
-    Window::Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType)
+    Window::Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType, WindowNativePlatformType nativePlatformType)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _settings(settings)
         , _graphicsBackendType(graphicsBackendType)
+        , _nativePlatformType(nativePlatformType)
     {
         if (settings.name.empty())
         {
@@ -44,6 +45,12 @@ namespace Kmplete
     Graphics::GraphicsBackendType Window::GetGraphicsBackendType() const noexcept
     {
         return _graphicsBackendType;
+    }
+    //--------------------------------------------------------------------------
+
+    WindowNativePlatformType Window::GetNativePlatformType() const noexcept
+    {
+        return _nativePlatformType;
     }
     //--------------------------------------------------------------------------
 

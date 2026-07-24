@@ -119,8 +119,8 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 
 
-    WindowGlfw::WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType)
-        : Window(settings, graphicsBackendType)
+    WindowGlfw::WindowGlfw(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType, WindowNativePlatformType nativePlatformType)
+        : Window(settings, graphicsBackendType, nativePlatformType)
           KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
         , _window(nullptr)
     {
