@@ -422,7 +422,7 @@ namespace Kmplete
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetContentScale(), 15);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), 15);
     }
     //--------------------------------------------------------------------------
 

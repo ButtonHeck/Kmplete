@@ -73,7 +73,7 @@ namespace Kmplete
         KMP_NODISCARD bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
         KMP_NODISCARD bool _OnWindowScreenModeEvent(Events::WindowScreenModeEvent& event);
 
-        void _AddImGuiFonts(float scale);
+        void _AddImGuiFonts();
         void _RenderImGui();
 
     private:

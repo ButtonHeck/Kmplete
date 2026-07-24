@@ -138,7 +138,7 @@ namespace Kmplete
             _imguiImpl->AddTexture("_flag_russian"_sid, logicalDevice.GetSamplersStorage().GetSampler(Graphics::SamplerDefaultLinearSid), flagRussiaTexture.GetVkImageView());
         }
 
-        _AddImGuiFonts(contentScale);
+        _AddImGuiFonts();
     }}
     //--------------------------------------------------------------------------
 
@@ -212,13 +212,13 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_AddImGuiFonts(float scale)
+    void EditorFrameListener::_AddImGuiFonts()
     {
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset("OpenSans-Regular.ttf"_sid);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), scale);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer());
 
         const auto& iconsFontAsset = _assetsManager.GetFontAssetManager().GetAsset("forkawesome-webfont.ttf"_sid);
-        _imguiImpl->AddIconsFont(iconsFontAsset.GetFont().GetBuffer(), scale);
+        _imguiImpl->AddIconsFont(iconsFontAsset.GetFont().GetBuffer());
     }
     //--------------------------------------------------------------------------
 

@@ -126,12 +126,12 @@ namespace Kmplete
             if (_useDefaultFont)
             {
                 const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-                _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), _mainWindow.GetContentScale(), 15);
+                _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), 15);
             }
             else
             {
                 const auto fontPath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
-                _imguiImpl->AddFont(fontPath, _mainWindow.GetContentScale(), 15);
+                _imguiImpl->AddFont(fontPath, 15);
             }
 
             io.Fonts->Build();
@@ -1001,7 +1001,7 @@ namespace Kmplete
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
 
         const auto& defaultFontAsset = _assetsManager->GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), contentScale, 15);
+        _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), 15);
     }
 
     void MainFrameListener::_RenderImGui()

@@ -33,12 +33,12 @@ namespace Kmplete
             void NewFrame() const;
             void Render() const;
 
-            bool AddFont(const BinaryBuffer& fontDataBuffer, float contentScale, int fontSize = DefaultFontSize) const;
-            bool AddFont(const Filepath& fontFilepath, float contentScale, int fontSize = DefaultFontSize) const;
-            bool AddIconsFont(const BinaryBuffer& fontDataBuffer, float contentScale, int fontSize = DefaultFontSize) const;
-            bool AddIconsFont(const Filepath& fontFilepath, float contentScale, int fontSize = DefaultFontSize) const;
+            bool AddFont(const BinaryBuffer& fontDataBuffer, int fontSize = DefaultFontSize) const;
+            bool AddFont(const Filepath& fontFilepath, int fontSize = DefaultFontSize) const;
+            bool AddIconsFont(const BinaryBuffer& fontDataBuffer, int fontSize = DefaultFontSize) const;
+            bool AddIconsFont(const Filepath& fontFilepath, int fontSize = DefaultFontSize) const;
 
-            void Stylize(float contentScale) const;
+            void Stylize() const;
 
             virtual void CreateFontsTexture() const = 0;
             virtual void AddTexture(StringID sid, void* sampler, void* view) = 0;

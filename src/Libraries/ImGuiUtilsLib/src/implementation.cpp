@@ -47,7 +47,7 @@ namespace Kmplete
             io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
             io.IniFilename = _context->configName;
 
-            Stylize(implementationContext->baseScale);
+            Stylize();
 
             KMP_PROFILE_CONSTRUCTOR_END()
         }
@@ -73,10 +73,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddFont(const BinaryBuffer& fontDataBuffer, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * contentScale;
+            const auto fontSizeScaled = fontSize * _context->baseScale;
             ImFontConfig fontConfig;
             fontConfig.FontDataOwnedByAtlas = false;
 
@@ -88,10 +88,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddFont(const Filepath& fontFilepath, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddFont(const Filepath& fontFilepath, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * contentScale;
+            const auto fontSizeScaled = fontSize * _context->baseScale;
 
             return io.Fonts->AddFontFromFileTTF(
                 Filesystem::ToGenericString(fontFilepath).c_str(), 
@@ -100,10 +100,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddIconsFont(const BinaryBuffer& fontDataBuffer, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * contentScale;
+            const auto fontSizeScaled = fontSize * _context->baseScale;
             ImFontConfig fontConfig;
             fontConfig.MergeMode = true;
             fontConfig.GlyphMinAdvanceX = fontSizeScaled;
@@ -120,10 +120,10 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        bool ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, float contentScale, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        bool ImGuiImplementation::AddIconsFont(const Filepath& fontFilepath, int fontSize /*= DefaultFontSize*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             auto& io = ImGui::GetIO();
-            const auto fontSizeScaled = fontSize * contentScale;
+            const auto fontSizeScaled = fontSize * _context->baseScale;
             ImFontConfig fontConfig;
             fontConfig.MergeMode = true;
             fontConfig.GlyphMinAdvanceX = fontSizeScaled;
@@ -138,7 +138,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void ImGuiImplementation::Stylize(float contentScale) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        void ImGuiImplementation::Stylize() const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             ImGui::GetStyle() = ImGuiStyle();
 
@@ -147,7 +147,7 @@ namespace Kmplete
             style.WindowMenuButtonPosition = ImGuiDir_None;
             style.DisabledAlpha = 0.4f;
 
-            style.ScaleAllSizes(contentScale);
+            style.ScaleAllSizes(_context->baseScale);
         }}
         //--------------------------------------------------------------------------
 
