@@ -105,7 +105,7 @@ namespace Kmplete
         _InitializeBuffers(vulkanDevice);
         _InitializeUniformBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
-        _InitializeImGui(_mainWindow.GetContentScale());
+        _InitializeImGui();
     }
     //--------------------------------------------------------------------------
 
@@ -342,8 +342,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void TextureFrameListener::_InitializeImGui(float contentScale)
+    void TextureFrameListener::_InitializeImGui()
     {
+        const auto contentScale = _mainWindow.GetContentScale();
+
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
@@ -595,12 +597,10 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    bool TextureFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event)
+    bool TextureFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent&)
     {
-        const auto scale = event.GetScale();
-
         _imguiImpl.reset();
-        _InitializeImGui(scale);
+        _InitializeImGui();
 
         return true;
     }

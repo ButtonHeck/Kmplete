@@ -65,7 +65,7 @@ namespace Kmplete
     void EditorFrameListener::_Initialize(LocalizationManager& localizationManager, SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
     {
         _InitializeGraphics();
-        _InitializeImGui(_mainWindow.GetContentScale());
+        _InitializeImGui();
 
         _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, *_imguiImpl.get()));
 
@@ -85,8 +85,10 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorFrameListener::_InitializeImGui(float contentScale) KMP_PROFILING(ProfileLevelImportant)
+    void EditorFrameListener::_InitializeImGui() KMP_PROFILING(ProfileLevelImportant)
     {
+        const auto contentScale = _mainWindow.GetContentScale();
+
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
@@ -194,12 +196,10 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    bool EditorFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event) KMP_PROFILING(ProfileLevelMinor)
+    bool EditorFrameListener::_OnWindowContentScaleEvent(Events::WindowContentScaleEvent&) KMP_PROFILING(ProfileLevelMinor)
     {
-        const auto scale = event.GetScale();
-
         _imguiImpl.reset();
-        _InitializeImGui(scale);
+        _InitializeImGui();
 
         return true;
     }}

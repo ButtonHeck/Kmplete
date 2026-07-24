@@ -78,7 +78,7 @@ namespace Kmplete
         textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
-        _InitializeImGui(_mainWindow.GetContentScale());
+        _InitializeImGui();
 
         _inputManager->MapInputToAction({ Input::Code::Key_W, Input::PressNoModsCondition }, "move_forward"_sid);
         _inputManager->MapInputToAction({ Input::Code::Key_S, Input::PressNoModsCondition }, "move_backward"_sid);
@@ -930,12 +930,10 @@ namespace Kmplete
         return true;
     }
 
-    bool MainFrameListener::OnWindowContentScaleEvent(Events::WindowContentScaleEvent& evt)
+    bool MainFrameListener::OnWindowContentScaleEvent(Events::WindowContentScaleEvent&)
     {
-        const auto scale = evt.GetScale();
-
         _imguiImpl.reset();
-        _InitializeImGui(scale);
+        _InitializeImGui();
 
         return true;
     }
@@ -953,8 +951,10 @@ namespace Kmplete
         return true;
     }
 
-    void MainFrameListener::_InitializeImGui(float contentScale)
+    void MainFrameListener::_InitializeImGui()
     {
+        const auto contentScale = _mainWindow.GetContentScale();
+
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend->GetType() == Graphics::GraphicsBackendType::Vulkan)
         {
