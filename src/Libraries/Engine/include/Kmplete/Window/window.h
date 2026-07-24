@@ -150,8 +150,6 @@ namespace Kmplete
     protected:
         WindowSettings& _settings;
         Graphics::GraphicsBackendType _graphicsBackendType;
-
-    private:
         const WindowNativePlatformType _nativePlatformType;
     };
     //--------------------------------------------------------------------------

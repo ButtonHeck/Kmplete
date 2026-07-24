@@ -563,9 +563,13 @@ namespace Kmplete
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
         glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
         glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
-        glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
         glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
         glfwWindowHint(GLFW_FLOATING, _settings.alwaysOnTop ? GLFW_TRUE : GLFW_FALSE);
+
+        if (_nativePlatformType == WindowNativePlatformType::Win32 || _nativePlatformType == WindowNativePlatformType::X11)
+        {
+            glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+        }
     }}
     //--------------------------------------------------------------------------
 
