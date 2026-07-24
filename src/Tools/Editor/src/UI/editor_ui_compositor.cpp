@@ -28,14 +28,13 @@ namespace Kmplete
 
 
     EditorUICompositor::EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
-                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const ImGuiUtils::ImGuiImplementation& imguiImpl)
+                                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager)
         : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
           _mainWindow(mainWindow)
         , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)
         , _systemMetricsManager(systemMetricsManager)
         , _needCheckImguiIniFile(true)
-        , _imguiImpl(imguiImpl)
     {
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(EditorUICompositor::_FillDictionary));
@@ -57,7 +56,7 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::ComposeMainArea() KMP_PROFILING(ProfileLevelImportant)
+    void EditorUICompositor::ComposeMainArea(const ImGuiUtils::ImGuiImplementation& imguiImpl) KMP_PROFILING(ProfileLevelImportant)
     {
         if (_needCheckImguiIniFile)
         {
@@ -68,7 +67,7 @@ namespace Kmplete
             }
         }
 
-        _ComposeMenu();
+        _ComposeMenu(imguiImpl);
 
         _ComposePopups();
     }}
@@ -79,11 +78,11 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::_ComposeMenu() KMP_PROFILING(ProfileLevelImportant)
+    void EditorUICompositor::_ComposeMenu(const ImGuiUtils::ImGuiImplementation& imguiImpl) KMP_PROFILING(ProfileLevelImportant)
     {
         if (ImGui::BeginMenuBar())
         {
-            _ComposeMenuLanguage();
+            _ComposeMenuLanguage(imguiImpl);
             _ComposeMenuFile();
             _ComposeMenuView();
 
@@ -92,14 +91,14 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::_ComposeMenuLanguage() KMP_PROFILING(ProfileLevelImportantVerbose)
+    void EditorUICompositor::_ComposeMenuLanguage(const ImGuiUtils::ImGuiImplementation& imguiImpl) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        const auto contentScale = _mainWindow.GetContentScale();
+        const auto contentScale = imguiImpl.GetCurrentScale();
         const auto iconSize = ImVec2(18 * contentScale, 18 * contentScale);
 
         static const ImTextureID languageIcons[] = {
-            static_cast<ImTextureID>(_imguiImpl.GetTexture("_flag_usa"_sid)),
-            static_cast<ImTextureID>(_imguiImpl.GetTexture("_flag_russian"_sid))
+            static_cast<ImTextureID>(imguiImpl.GetTexture("_flag_usa"_sid)),
+            static_cast<ImTextureID>(imguiImpl.GetTexture("_flag_russian"_sid))
         };
 
         int languageIndex = 0;
@@ -229,9 +228,9 @@ namespace Kmplete
     }}
     //--------------------------------------------------------------------------
 
-    void EditorUICompositor::ComposeStatusBar(Time::Timer& metricsTimer) KMP_PROFILING(ProfileLevelImportant)
+    void EditorUICompositor::ComposeStatusBar(Time::Timer& metricsTimer, const ImGuiUtils::ImGuiImplementation& imguiImpl) KMP_PROFILING(ProfileLevelImportant)
     {
-        const auto contentScale = _mainWindow.GetContentScale();
+        const auto contentScale = imguiImpl.GetCurrentScale();
         const auto buttonSize = ImVec2(24 * contentScale, 24 * contentScale);
         ImGui::SetCursorPosX(8.0f);
         ImGui::SetCursorPosY(2.0f * contentScale);

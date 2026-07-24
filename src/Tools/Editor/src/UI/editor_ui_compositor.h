@@ -37,11 +37,11 @@ namespace Kmplete
 
     public:
         EditorUICompositor(Window& mainWindow, Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager, 
-                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager, const ImGuiUtils::ImGuiImplementation& imguiImpl);
+                           const SystemMetricsManager& systemMetricsManager, Input::InputManager& inputManager);
         ~EditorUICompositor() = default;
 
-        void ComposeMainArea();
-        void ComposeStatusBar(Time::Timer& metricsTimer);
+        void ComposeMainArea(const ImGuiUtils::ImGuiImplementation& imguiImpl);
+        void ComposeStatusBar(Time::Timer& metricsTimer, const ImGuiUtils::ImGuiImplementation& imguiImpl);
 
         KMP_NODISCARD bool OnWindowCloseEvent(Events::WindowCloseEvent& event);
 
@@ -51,8 +51,8 @@ namespace Kmplete
     private:
         void _ComposeDefaultLayout();
 
-        void _ComposeMenu();
-        void _ComposeMenuLanguage();
+        void _ComposeMenu(const ImGuiUtils::ImGuiImplementation& imguiImpl);
+        void _ComposeMenuLanguage(const ImGuiUtils::ImGuiImplementation& imguiImpl);
         void _ComposeMenuFile();
         void _ComposeMenuView();
         void _ComposeMenuFileQuit();
@@ -86,7 +86,6 @@ namespace Kmplete
         _UIComponentsState _state;
         _UIPopupsState _popups;
         bool _needCheckImguiIniFile;
-        const ImGuiUtils::ImGuiImplementation& _imguiImpl;
     };
     //--------------------------------------------------------------------------
 }

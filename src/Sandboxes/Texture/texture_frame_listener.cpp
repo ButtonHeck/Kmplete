@@ -344,7 +344,9 @@ namespace Kmplete
 
     void TextureFrameListener::_InitializeImGui()
     {
-        const auto contentScale = _mainWindow.GetContentScale();
+        const auto windowNativePlatform = _mainWindow.GetNativePlatformType();
+        const auto isFramebufferAutoScaled = windowNativePlatform == WindowNativePlatformType::Wayland || windowNativePlatform == WindowNativePlatformType::Cocoa;
+        const auto contentScale = isFramebufferAutoScaled ? 1.0f : _mainWindow.GetContentScale();
 
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)

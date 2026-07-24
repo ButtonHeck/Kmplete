@@ -67,7 +67,7 @@ namespace Kmplete
         _InitializeGraphics();
         _InitializeImGui();
 
-        _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager, *_imguiImpl.get()));
+        _uiCompositor.reset(new EditorUICompositor(_mainWindow, _assetsManager, localizationManager, systemMetricsManager, inputManager));
 
         _metricsTimer.Mark();
     }
@@ -87,7 +87,9 @@ namespace Kmplete
 
     void EditorFrameListener::_InitializeImGui() KMP_PROFILING(ProfileLevelImportant)
     {
-        const auto contentScale = _mainWindow.GetContentScale();
+        const auto windowNativePlatform = _mainWindow.GetNativePlatformType();
+        const auto isFramebufferAutoScaled = windowNativePlatform == WindowNativePlatformType::Wayland || windowNativePlatform == WindowNativePlatformType::Cocoa;
+        const auto contentScale = isFramebufferAutoScaled ? 1.0f : _mainWindow.GetContentScale();
 
         ImGuiUtils::Context* context = nullptr;
         if (_graphicsBackend.GetType() == Graphics::GraphicsBackendType::Vulkan)
@@ -316,7 +318,7 @@ namespace Kmplete
                 { ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f) }
             });
 
-            const auto statusBarHeight = 28 * _mainWindow.GetContentScale();
+            const auto statusBarHeight = 28 * _imguiImpl->GetCurrentScale();
             static constexpr auto workingAreaFlags =
                 ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
                 ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove |
@@ -336,7 +338,7 @@ namespace Kmplete
 
     void EditorFrameListener::_ComposeMainArea() KMP_PROFILING(ProfileLevelImportant)
     {
-        _uiCompositor->ComposeMainArea();
+        _uiCompositor->ComposeMainArea(*_imguiImpl.get());
     }}
     //--------------------------------------------------------------------------
 
@@ -363,7 +365,7 @@ namespace Kmplete
 
     void EditorFrameListener::_ComposeStatusBar() KMP_PROFILING(ProfileLevelImportant)
     {
-        _uiCompositor->ComposeStatusBar(_metricsTimer);
+        _uiCompositor->ComposeStatusBar(_metricsTimer, *_imguiImpl.get());
     }}
     //--------------------------------------------------------------------------
 
