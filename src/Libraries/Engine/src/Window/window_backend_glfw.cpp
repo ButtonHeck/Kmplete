@@ -95,6 +95,7 @@ namespace Kmplete
         int glfwInitExitCode = GLFW_FALSE;
         {
             KMP_PROFILE_SCOPE("GLFW initialization", ProfileLevelAlways);
+            glfwInitHint(GLFW_WAYLAND_LIBDECOR, GLFW_WAYLAND_DISABLE_LIBDECOR);
             glfwInitExitCode = glfwInit();
         }
 
