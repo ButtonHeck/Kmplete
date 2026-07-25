@@ -142,6 +142,7 @@ namespace Kmplete
         const auto videoMode = glfwGetVideoMode(monitor);
 
         GLFWwindow* window = nullptr;
+        const auto scaleCorrection = _nativePlatformType == WindowNativePlatformType::Wayland ? _settings.contentScale : 1.0f;
 
         if (IsFullscreen())
         {
@@ -157,7 +158,7 @@ namespace Kmplete
         }
         else
         {
-            window = glfwCreateWindow(_settings.windowedSize.x, _settings.windowedSize.y, "", nullptr, nullptr);
+            window = glfwCreateWindow(_settings.windowedSize.x / scaleCorrection, _settings.windowedSize.y / scaleCorrection, "", nullptr, nullptr);
         }
 
         return window;

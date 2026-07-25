@@ -18,6 +18,7 @@ namespace Kmplete
     static constexpr auto ScreenModeStr = "ScreenMode";
     static constexpr auto UpdateContinuouslyStr = "UpdateContinuously";
     static constexpr auto AlwaysOnTopStr = "AlwaysOnTop";
+    static constexpr auto ContentScale = "ContentScale";
 
 
     Window::Window(WindowSettings& settings, Graphics::GraphicsBackendType graphicsBackendType, WindowNativePlatformType nativePlatformType)
@@ -147,6 +148,7 @@ namespace Kmplete
         settings.SaveString(ScreenModeStr, ScreenModeToString(screenMode));
         settings.SaveBool(UpdateContinuouslyStr, updateContinuously);
         settings.SaveBool(AlwaysOnTopStr, alwaysOnTop);
+        settings.SaveDouble(ContentScale, contentScale);
     }}
     //--------------------------------------------------------------------------
 
@@ -162,6 +164,7 @@ namespace Kmplete
         screenMode = StringToScreenMode(settings.GetString(ScreenModeStr, WindowedModeStr));
         updateContinuously = settings.GetBool(UpdateContinuouslyStr, true);
         alwaysOnTop = settings.GetBool(AlwaysOnTopStr, false);
+        contentScale = settings.GetDouble(ContentScale, 1.0);
     }}
     //--------------------------------------------------------------------------
 }
