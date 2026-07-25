@@ -33,6 +33,7 @@ namespace Kmplete
         , _frameClock()
         , _iconifiedFPS(IconifiedFPSMin)
         , _graphicsBackendType(Graphics::GraphicsBackendType::Vulkan)
+        , _resizing(false)
     {
         _Initialize(parameters);
 
@@ -82,7 +83,7 @@ namespace Kmplete
 
         if (event.GetTypeID() == Events::WindowFramebufferResizeEventTypeID)
         {
-            _graphicsBackend->HandleWindowResize();
+            _resizing = true;
         }
     }
     //--------------------------------------------------------------------------
@@ -161,6 +162,13 @@ namespace Kmplete
         const auto frameTimestep = Math::Clamp(_frameClock.Mark(), 0.0f, 100.0f);
 
         _ProcessEvents(window, frameTimestep);
+
+        if (_resizing)
+        {
+            KMP_LOG_INFO("handling window resize...");
+            _resizing = false;
+            _graphicsBackend->HandleWindowResize();
+        }
 
         if (window.ShouldClose())
         {

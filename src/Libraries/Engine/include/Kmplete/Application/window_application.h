@@ -84,6 +84,7 @@ namespace Kmplete
         Time::Clock _frameClock;
         UInt32 _iconifiedFPS;
         Graphics::GraphicsBackendType _graphicsBackendType;
+        bool _resizing;
     };
     //--------------------------------------------------------------------------
 }
