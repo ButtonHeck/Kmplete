@@ -415,9 +415,12 @@ namespace Kmplete
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
 
-            const auto windowPos = _mainWindow.GetPosition();
-            ImGui::Text("Window position: [%4d : %4d]", windowPos.x, windowPos.y);
-            ImGui::SameLine(0.0f, 32.0f);
+            if (_windowBackend->GetNativePlatformType() != WindowNativePlatformType::Wayland)
+            {
+                const auto windowPos = _mainWindow.GetPosition();
+                ImGui::Text("Window position: [%4d : %4d]", windowPos.x, windowPos.y);
+                ImGui::SameLine(0.0f, 32.0f);
+            }
 
             const auto windowSize = _mainWindow.GetSize();
             ImGui::Text("Window size: [%4d x %4d]", windowSize.x, windowSize.y);

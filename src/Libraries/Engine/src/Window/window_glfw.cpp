@@ -292,6 +292,11 @@ namespace Kmplete
     {
         KMP_ASSERT(image.GetPixels() && _window);
 
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return;
+        }
+
         GLFWimage icon{ image.GetWidth(), image.GetHeight(), image.GetPixels() };
 
         if (icon.pixels)
@@ -322,6 +327,11 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return;
+        }
+
         glfwSetWindowPos(_window, x, y);
     }}
     //--------------------------------------------------------------------------
@@ -329,6 +339,11 @@ namespace Kmplete
     Math::Point2I WindowGlfw::GetPosition() const KMP_PROFILING(ProfileLevelMinor)
     {
         KMP_ASSERT(_window);
+
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return Math::Point2I();
+        }
 
         int x;
         int y;
