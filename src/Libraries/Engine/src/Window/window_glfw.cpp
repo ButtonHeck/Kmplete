@@ -354,6 +354,11 @@ namespace Kmplete
 
     void WindowGlfw::PositionAtCurrentScreenCenter() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return;
+        }
+
         if (!IsWindowed())
         {
             KMP_LOG_WARN("positioning at the current screen's center applied only to windowed screen mode");
@@ -392,6 +397,11 @@ namespace Kmplete
 
     void WindowGlfw::SetScreenMode(ScreenMode screenMode) KMP_PROFILING(ProfileLevelMinor)
     {
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return;
+        }
+
         const NonNull<_UserData*> userData = _GetUserPointer(_window);
         if (userData->screenMode == screenMode)
         {
@@ -518,6 +528,11 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return;
+        }
+
         _settings.alwaysOnTop = alwaysOnTop;
         glfwSetWindowAttrib(_window, GLFW_FLOATING, alwaysOnTop ? GLFW_TRUE : GLFW_FALSE);
     }
@@ -607,18 +622,32 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
-            const NonNull<_UserData*> userData = _GetUserPointer(window);
-            userData->position.x = x;
-            userData->position.y = y;
+        if (_nativePlatformType != WindowNativePlatformType::Wayland)
+        {
+            glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
+                const NonNull<_UserData*> userData = _GetUserPointer(window);
+                userData->position.x = x;
+                userData->position.y = y;
 
-            if (userData->eventCallback)
-            {
-                Events::WindowMoveEvent event(x, y);
-                userData->eventCallback(event);
-            }
-            }
-        );
+                if (userData->eventCallback)
+                {
+                    Events::WindowMoveEvent event(x, y);
+                    userData->eventCallback(event);
+                }
+                }
+            );
+
+            glfwSetWindowIconifyCallback(_window, [](GLFWwindow* window, int iconified) {
+                const NonNull<_UserData*> userData = _GetUserPointer(window);
+                userData->iconified = (iconified == GLFW_TRUE);
+                if (userData->eventCallback)
+                {
+                    Events::WindowIconifyEvent event(iconified);
+                    userData->eventCallback(event);
+                }
+                }
+            );
+        }
 
         glfwSetWindowContentScaleCallback(_window, [](GLFWwindow* window, float xScale, float) {
             const NonNull<_UserData*> userData = _GetUserPointer(window);
@@ -639,17 +668,6 @@ namespace Kmplete
             if (userData->eventCallback)
             {
                 Events::WindowFocusEvent event(focused);
-                userData->eventCallback(event);
-            }
-            }
-        );
-
-        glfwSetWindowIconifyCallback(_window, [](GLFWwindow* window, int iconified) {
-            const NonNull<_UserData*> userData = _GetUserPointer(window);
-            userData->iconified = (iconified == GLFW_TRUE);
-            if (userData->eventCallback)
-            {
-                Events::WindowIconifyEvent event(iconified);
                 userData->eventCallback(event);
             }
             }
@@ -809,6 +827,11 @@ namespace Kmplete
     void WindowGlfw::_InitializeGeometry() KMP_PROFILING(ProfileLevelAlways)
     {
         KMP_ASSERT(_window);
+
+        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        {
+            return;
+        }
 
         const auto [isFound, monitor] = _GetSuitableMonitor(Math::Rect2I(_settings.position, _settings.size));
 
