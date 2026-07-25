@@ -14,7 +14,7 @@ namespace Kmplete
                 if (result != VK_SUCCESS)
                 {
                     const auto resultDescription = VkResultToString(result);
-                    KMP_LOG_CRITICAL_FN("{}: {}", message, resultDescription);
+                    KMP_LOG_ERROR_FN("{}: {}", message, resultDescription);
                     if (throwException)
                     {
                         throw RuntimeError(String(message).append(": ").append(resultDescription));
@@ -95,7 +95,7 @@ namespace Kmplete
                 case VK_ERROR_INVALID_EXTERNAL_HANDLE:
                     return "VK_ERROR_INVALID_EXTERNAL_HANDLE - An external handle is not a valid handle of the specified type";
                 case VK_ERROR_FRAGMENTED_POOL:
-                    return "VK_ERROR_FRAGMENTED_POOL - A pool allocation has failed due to fragmentation of the pool’s memory";
+                    return "VK_ERROR_FRAGMENTED_POOL - A pool allocation has failed due to fragmentation of the poolï¿½s memory";
                 case VK_ERROR_OUT_OF_POOL_MEMORY:
                     return "VK_ERROR_OUT_OF_POOL_MEMORY - A pool memory allocation has failed";
                 case VK_ERROR_INVALID_DEVICE_ADDRESS_EXT:
