@@ -981,6 +981,8 @@ namespace Kmplete
                 { Graphics::VKBits::VK_DescriptorType_InputAttachment, 100 }
             });
 
+            const auto viewportEnabled = windowNativePlatform != WindowNativePlatformType::Wayland;
+
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();
             initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
@@ -1000,7 +1002,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), "docking"_true, "viewport"_true, contentScale, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend->GetType()), "docking"_true, viewportEnabled, contentScale, initInfo);
             context->configName = "TestWindowApplication_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));

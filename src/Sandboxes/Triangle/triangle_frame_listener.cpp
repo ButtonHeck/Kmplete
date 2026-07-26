@@ -401,6 +401,8 @@ namespace Kmplete
                 { VK_DescriptorType_InputAttachment, 100 }
             });
 
+            const auto viewportEnabled = windowNativePlatform != WindowNativePlatformType::Wayland;
+
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();
             initInfo.PhysicalDevice = physicalDevice.GetVkPhysicalDevice();
@@ -420,7 +422,7 @@ namespace Kmplete
             initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
-            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, "viewports"_true, contentScale, initInfo);
+            context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, viewportEnabled, contentScale, initInfo);
             context->configName = "TriangleSandbox_imgui.ini";
         }
         _imguiImpl.reset(ImGuiUtils::ImGuiImplementation::CreateImpl(context));
