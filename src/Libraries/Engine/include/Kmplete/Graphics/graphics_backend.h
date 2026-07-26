@@ -48,7 +48,7 @@ namespace Kmplete
             KMP_NODISCARD virtual const PhysicalDevice& GetPhysicalDevice() const noexcept = 0;
             KMP_NODISCARD virtual PhysicalDevice& GetPhysicalDevice() noexcept = 0;
 
-            virtual void StartFrame(float frameTimestep) = 0;
+            KMP_NODISCARD virtual bool StartFrame(float frameTimestep) = 0;
             virtual void EndFrame() = 0;
             virtual void HandleWindowResize() = 0;
 

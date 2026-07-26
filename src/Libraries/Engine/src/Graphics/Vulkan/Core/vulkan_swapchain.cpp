@@ -6,6 +6,7 @@
 #include "Kmplete/Graphics/Vulkan/Delegates/vulkan_image_creator_delegate.h"
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Base/exception.h"
+#include "Kmplete/Base/named_bool.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
@@ -54,10 +55,11 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::StartFrame(float /*frameTimestep*/) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanSwapchain::StartFrame(float /*frameTimestep*/) KMP_PROFILING(ProfileLevelImportant)
         {
             const auto result = AcquireNextImage();
-            VKUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image");
+            VKUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image", "throw_exception"_false);
+            return result == VK_SUCCESS;
         }}
         //--------------------------------------------------------------------------
 

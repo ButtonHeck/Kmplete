@@ -16,7 +16,7 @@ namespace Kmplete
             Swapchain() = default;
             virtual ~Swapchain() = default;
 
-            virtual void StartFrame(float /*frameTimestep*/) {};
+            KMP_NODISCARD virtual bool StartFrame(float /*frameTimestep*/) { return true; };
             virtual void EndFrame() {};
         };
         //--------------------------------------------------------------------------

@@ -98,7 +98,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanLogicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_swapchain && _renderer);
             KMP_ASSERT(_currentBufferIndex < _waitFences.size());
@@ -106,7 +106,11 @@ namespace Kmplete
             _waitFences[_currentBufferIndex].Wait();
             _waitFences[_currentBufferIndex].Reset();
 
-            _swapchain->StartFrame(frameTimestep);
+            const auto swapchainReady = _swapchain->StartFrame(frameTimestep);
+            if (!swapchainReady)
+            {
+                return false;
+            }
 
             _renderer->StartFrame();
 
@@ -120,6 +124,8 @@ namespace Kmplete
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), imageBarrierParameters);
+
+            return true;
         }}
         //--------------------------------------------------------------------------
 

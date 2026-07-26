@@ -237,11 +237,11 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
+        bool VulkanPhysicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
         {
             KMP_ASSERT(_logicalDevice);
 
-            _logicalDevice->StartFrame(frameTimestep);
+            return _logicalDevice->StartFrame(frameTimestep);
         }}
         //--------------------------------------------------------------------------
 

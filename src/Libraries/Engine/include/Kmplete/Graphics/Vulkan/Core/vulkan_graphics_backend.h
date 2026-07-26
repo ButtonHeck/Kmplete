@@ -34,7 +34,7 @@ namespace Kmplete
             KMP_NODISCARD const VulkanPhysicalDevice& GetPhysicalDevice() const noexcept override;
             KMP_NODISCARD VulkanPhysicalDevice& GetPhysicalDevice() noexcept override;
 
-            void StartFrame(float frameTimestep) override;
+            KMP_NODISCARD bool StartFrame(float frameTimestep) override;
             void EndFrame() override;
             void HandleWindowResize() override;
 

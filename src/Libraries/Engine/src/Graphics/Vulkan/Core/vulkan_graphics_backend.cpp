@@ -118,11 +118,11 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::StartFrame(float frameTimestep)
+        bool VulkanGraphicsBackend::StartFrame(float frameTimestep)
         {
             KMP_ASSERT(_physicalDevice);
 
-            _physicalDevice->StartFrame(frameTimestep);
+            return _physicalDevice->StartFrame(frameTimestep);
         }
         //--------------------------------------------------------------------------
 

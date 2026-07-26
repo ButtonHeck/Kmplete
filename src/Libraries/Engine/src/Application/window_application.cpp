@@ -194,7 +194,12 @@ namespace Kmplete
         }
         else
         {
-            _graphicsBackend->StartFrame(frameTimestep);
+            if (!_graphicsBackend->StartFrame(frameTimestep))
+            {
+                _graphicsBackend->HandleWindowResize(); //TODO: rename
+                return true;
+            }
+
             _frameListenerManager->_RenderFrameListeners();
             _frameListenerManager->_ProcessFrameListenersCommands();
             _graphicsBackend->EndFrame();

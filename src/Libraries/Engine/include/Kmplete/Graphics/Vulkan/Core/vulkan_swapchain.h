@@ -33,7 +33,7 @@ namespace Kmplete
                             const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             ~VulkanSwapchain();
 
-            void StartFrame(float frameTimestep) override;
+            KMP_NODISCARD bool StartFrame(float frameTimestep) override;
             void EndFrame() override;
 
             void Recreate(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,

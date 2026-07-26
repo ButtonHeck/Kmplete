@@ -56,7 +56,7 @@ namespace Kmplete
                                 const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
             ~VulkanLogicalDevice();
 
-            void StartFrame(float frameTimestep) override;
+            KMP_NODISCARD bool StartFrame(float frameTimestep) override;
             void EndFrame() override;
             void HandleWindowResize() override;
             void WaitIdle() const;
