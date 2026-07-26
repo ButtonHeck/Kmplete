@@ -7,6 +7,11 @@
 ############################################################################
 
 function(SetupCompilerOptions target)
+
+    # for MSVC:
+    # /we4388 - treat signed/unsigned comparsion mismatch as error
+    # /wd4251 - disable messages for exporting DLL class with not-exported types (e.g. std::vector)
+
     target_compile_options(${target} PRIVATE
         $<$<CXX_COMPILER_ID:GNU>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror -Wno-missing-field-initializers>
         $<$<CXX_COMPILER_ID:Clang>:-std=c++20 -fno-char8_t -Wall -Wextra -Werror -Wno-missing-field-initializers>
