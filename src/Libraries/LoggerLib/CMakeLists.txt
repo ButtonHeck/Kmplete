@@ -65,7 +65,8 @@ set_target_properties(LoggerInterfaceLib PROPERTIES
 # --------------------------
 
 install(TARGETS LoggerLib
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )
 install(TARGETS spdlog

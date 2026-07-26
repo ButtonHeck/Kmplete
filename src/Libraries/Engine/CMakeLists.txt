@@ -299,6 +299,7 @@ CreateTranslationHelperTargets(
 
 install(TARGETS Kmplete
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )
 install(DIRECTORY locale
@@ -307,6 +308,12 @@ install(DIRECTORY locale
     FILES_MATCHING PATTERN "*.mo"
 )
 install(TARGETS glfw
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
+install(TARGETS freetype
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )

@@ -61,6 +61,7 @@ set_target_properties(ProfilerInterfaceLib PROPERTIES
 # --------------------------
 
 install(TARGETS ProfilerLib
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )

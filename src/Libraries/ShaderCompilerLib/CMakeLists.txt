@@ -43,6 +43,7 @@ set_target_properties(ShaderCompilerLib PROPERTIES
 # --------------------------
 
 install(TARGETS ShaderCompilerLib
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )

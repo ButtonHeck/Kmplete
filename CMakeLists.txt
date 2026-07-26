@@ -26,6 +26,12 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib/$<CONFIG>)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
 set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 
+if(APPLE)
+    set(CMAKE_INSTALL_RPATH "@loader_path/../lib;@loader_path")
+elseif(UNIX)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib:$ORIGIN/")
+endif()
+
 option(KMPLETE_BUILD_TESTS "Build catch2 tests" ON)
 option(KMPLETE_MULTIPROCESSOR_BUILD "Use multiple processors during compilation" ON)
 option(KMPLETE_USE_WINDOW_BACKEND_GLFW "Use GLFW for window management" ON)
