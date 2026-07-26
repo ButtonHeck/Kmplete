@@ -14,6 +14,8 @@ function(SetupPackaging)
 
     if(UNIX)
         set(CPACK_GENERATOR "DEB")
+        set(CPACK_DEBIAN_PACKAGE_CONTROL_EXTRA "${CMAKE_SOURCE_DIR}/scripts/Linux/postinst")
+        set(CPACK_DEBIAN_PACKAGE_CONTROL_STRICT_PERMISSION ON)
         set(CPACK_PACKAGE_CONTACT "not yet")
         set(CPACK_DEBIAN_PACKAGE_MAINTAINER "not yet")
         set(CPACK_PACKAGING_INSTALL_PREFIX "/opt/Kmplete")

@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+TARGET_USER="${SUDO_USER:-}"
+
+if [ -n "$TARGET_USER" ] && getent passwd "$TARGET_USER" > /dev/null; then
+    chown -R "$TARGET_USER:$TARGET_USER" /opt/Kmplete
+fi
+
+#DEBHELPER#
