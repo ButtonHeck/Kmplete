@@ -14,6 +14,10 @@
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
 
+#if defined (KMP_PLATFORM_LINUX)
+    #include <signal.h>
+#endif
+
 
 //! Wrapper function that tries to flush all the profiler data
 //! during program termination and rethrows an exception (if any)
@@ -47,7 +51,7 @@ void TerminationHandler()
 
 #if defined (KMP_PLATFORM_WINDOWS)
 #include <Windows.h>
-//! Wrapper function for handling uncaught exceptions
+//! Wrapper function for handling uncaught exceptions (Windows)
 LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS)
 {
 #if defined(KMP_PROFILE)
@@ -58,6 +62,22 @@ LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS)
     Kmplete::DumpStacktrace();
 
     return EXCEPTION_CONTINUE_SEARCH;
+}
+//--------------------------------------------------------------------------
+#endif
+
+#if defined (KMP_PLATFORM_LINUX)
+//! Wrapper function for handling signals (Linux)
+void SignalHandler(int signum, siginfo_t*, void*)
+{
+#if defined(KMP_PROFILE)
+    Kmplete::Profiler::Get().EndSession();
+#endif
+
+    KMP_LOG_ERROR_FN("SignalHandler: uncaught exception has occured '{}'", sigdescr_np(signum));
+    Kmplete::DumpStacktrace();
+
+    exit(signum);
 }
 //--------------------------------------------------------------------------
 #endif
@@ -85,6 +105,14 @@ int main(int argc, char** argv)
     std::set_terminate(TerminationHandler);
 #if defined (KMP_PLATFORM_WINDOWS)
     SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+#elif defined (KMP_PLATFORM_LINUX)
+    struct sigaction sa;
+    sa.sa_sigaction = SignalHandler;
+    sigemptyset(&sa.sa_mask);
+    sa.sa_flags = SA_SIGINFO;
+
+    sigaction(SIGSEGV, &sa, NULL);
+    sigaction(SIGABRT, &sa, NULL);
 #endif
 
     Kmplete::ProgramOptions programOptions;
