@@ -167,7 +167,7 @@ namespace Kmplete
         {
             KMP_LOG_INFO("handling window resize...");
             _resizing = false;
-            _graphicsBackend->HandleWindowResize();
+            _graphicsBackend->RecreateResources();
         }
 
         if (window.ShouldClose())
@@ -196,7 +196,7 @@ namespace Kmplete
         {
             if (!_graphicsBackend->StartFrame(frameTimestep))
             {
-                _graphicsBackend->HandleWindowResize(); //TODO: rename
+                _graphicsBackend->RecreateResources();
                 return true;
             }
 

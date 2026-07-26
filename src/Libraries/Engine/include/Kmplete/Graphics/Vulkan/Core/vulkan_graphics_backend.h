@@ -36,7 +36,7 @@ namespace Kmplete
 
             KMP_NODISCARD bool StartFrame(float frameTimestep) override;
             void EndFrame() override;
-            void HandleWindowResize() override;
+            void RecreateResources() override;
 
             KMP_NODISCARD Nullable<Texture*> CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) override;
 

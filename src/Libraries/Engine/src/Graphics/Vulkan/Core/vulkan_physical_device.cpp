@@ -253,12 +253,12 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanPhysicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelMinor)
+        void VulkanPhysicalDevice::RecreateResources() KMP_PROFILING(ProfileLevelMinor)
         {
             KMP_ASSERT(_logicalDevice);
 
             _UpdateSurfaceInfo();
-            _logicalDevice->HandleWindowResize();
+            _logicalDevice->RecreateResources();
         }}
         //--------------------------------------------------------------------------
 

@@ -155,7 +155,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanLogicalDevice::HandleWindowResize() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanLogicalDevice::RecreateResources() KMP_PROFILING(ProfileLevelImportant)
         {
             _currentExtent = _UpdateExtent();
 

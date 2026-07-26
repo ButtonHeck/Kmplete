@@ -34,7 +34,7 @@ namespace Kmplete
 
             KMP_NODISCARD virtual bool StartFrame(float /*frameTimestep*/) { return true; };
             virtual void EndFrame() {};
-            virtual void HandleWindowResize() {};
+            virtual void RecreateResources() {};
 
             KMP_NODISCARD virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;
             KMP_NODISCARD virtual LogicalDevice& GetLogicalDevice() noexcept = 0;

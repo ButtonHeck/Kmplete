@@ -136,13 +136,13 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        void VulkanGraphicsBackend::HandleWindowResize()
+        void VulkanGraphicsBackend::RecreateResources()
         {
             KMP_ASSERT(_physicalDevice);
 
             if (!_window.IsIconified())
             {
-                _physicalDevice->HandleWindowResize();
+                _physicalDevice->RecreateResources();
             }
         }
         //--------------------------------------------------------------------------

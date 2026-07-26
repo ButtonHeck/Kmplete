@@ -50,7 +50,7 @@ namespace Kmplete
 
             KMP_NODISCARD virtual bool StartFrame(float frameTimestep) = 0;
             virtual void EndFrame() = 0;
-            virtual void HandleWindowResize() = 0;
+            virtual void RecreateResources() = 0;
 
             KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Filepath& filepath, Assets::TextureSubTypeMaskBits subTypeMask, bool flipVertically = false);
             KMP_NODISCARD virtual Nullable<Texture*> CreateTexture(const Image& image, Assets::TextureSubTypeMaskBits subTypeMask) = 0;

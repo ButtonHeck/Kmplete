@@ -27,7 +27,7 @@ namespace Kmplete
 
             KMP_NODISCARD virtual bool StartFrame(float /*frameTimestep*/) { return true; };
             virtual void EndFrame() {};
-            virtual void HandleWindowResize() {};
+            virtual void RecreateResources() {};
 
             KMP_NODISCARD virtual const Swapchain& GetSwapchain() const noexcept = 0;
 

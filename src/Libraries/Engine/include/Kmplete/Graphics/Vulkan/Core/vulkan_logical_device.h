@@ -58,7 +58,7 @@ namespace Kmplete
 
             KMP_NODISCARD bool StartFrame(float frameTimestep) override;
             void EndFrame() override;
-            void HandleWindowResize() override;
+            void RecreateResources() override;
             void WaitIdle() const;
 
             KMP_NODISCARD VkSampleCountFlagBits GetMultisampling() const noexcept;
