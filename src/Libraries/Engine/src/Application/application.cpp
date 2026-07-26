@@ -119,7 +119,7 @@ namespace Kmplete
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
         const auto& logSettings = Log::GetSettings();
-        settings->get().StartSaveObject(SettingsEntryName);
+        settings->get().StartSaveObject(Log::SettingsEntryName);
         settings->get().SaveString(Log::FilenameStr, Utils::NarrowToUtf8(logSettings.filename));
         settings->get().SaveBool(Log::EnabledStr, logSettings.enabled);
         settings->get().SaveBool(Log::TruncateStr, logSettings.truncate);
@@ -151,7 +151,7 @@ namespace Kmplete
         }
 
 #if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-        settings->get().StartLoadObject(SettingsEntryName);
+        settings->get().StartLoadObject(Log::SettingsEntryName);
 
         Log::LogSettings logSettings;
         logSettings.filename = Utils::Utf8ToNarrow(settings->get().GetString(Log::FilenameStr, "Kmplete_log.txt"));
