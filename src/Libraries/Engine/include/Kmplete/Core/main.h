@@ -9,14 +9,10 @@
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/exception.h"
 #include "Kmplete/Core/memory_checker.h"
-#include "Kmplete/Core/stacktrace.h"
+#include "Kmplete/Core/exception_handler.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Profile/profiler.h"
 #include "Kmplete/Log/log.h"
-
-#if defined (KMP_PLATFORM_LINUX)
-    #include <signal.h>
-#endif
 
 
 //! Wrapper function that tries to flush all the profiler data
@@ -49,40 +45,6 @@ void TerminationHandler()
 //--------------------------------------------------------------------------
 
 
-#if defined (KMP_PLATFORM_WINDOWS)
-#include <Windows.h>
-//! Wrapper function for handling uncaught exceptions (Windows)
-LONG WINAPI UnhandledExceptionHandler(PEXCEPTION_POINTERS)
-{
-#if defined(KMP_PROFILE)
-    Kmplete::Profiler::Get().EndSession();
-#endif
-
-    KMP_LOG_ERROR_FN("UnhandledExceptionHandler: uncaught exception has occured");
-    Kmplete::DumpStacktrace();
-
-    return EXCEPTION_CONTINUE_SEARCH;
-}
-//--------------------------------------------------------------------------
-#endif
-
-#if defined (KMP_PLATFORM_LINUX)
-//! Wrapper function for handling signals (Linux)
-void SignalHandler(int signum, siginfo_t*, void*)
-{
-#if defined(KMP_PROFILE)
-    Kmplete::Profiler::Get().EndSession();
-#endif
-
-    KMP_LOG_ERROR_FN("SignalHandler: uncaught exception has occured '{}'", sigdescr_np(signum));
-    Kmplete::DumpStacktrace();
-
-    exit(signum);
-}
-//--------------------------------------------------------------------------
-#endif
-
-
 int Main(const Kmplete::ProgramOptions& programOptions);
 
 #if defined (KMP_PLATFORM_WINDOWS) && defined (KMP_WINMAIN) 
@@ -90,7 +52,7 @@ int Main(const Kmplete::ProgramOptions& programOptions);
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 {
     std::set_terminate(TerminationHandler);
-    SetUnhandledExceptionFilter(UnhandledExceptionHandler);
+    SetExceptionHandler();
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(lpCmdLine);
@@ -103,17 +65,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR lpCmdLine, int)
 int main(int argc, char** argv)
 {
     std::set_terminate(TerminationHandler);
-#if defined (KMP_PLATFORM_WINDOWS)
-    SetUnhandledExceptionFilter(UnhandledExceptionHandler);
-#elif defined (KMP_PLATFORM_LINUX)
-    struct sigaction sa;
-    sa.sa_sigaction = SignalHandler;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = SA_SIGINFO;
-
-    sigaction(SIGSEGV, &sa, NULL);
-    sigaction(SIGABRT, &sa, NULL);
-#endif
+    SetExceptionHandler();
 
     Kmplete::ProgramOptions programOptions;
     programOptions.ProcessCommandLine(argc, argv);
