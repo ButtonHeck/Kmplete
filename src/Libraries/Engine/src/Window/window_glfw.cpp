@@ -158,7 +158,9 @@ namespace Kmplete
         }
         else
         {
-            window = glfwCreateWindow(_settings.windowedSize.x / scaleCorrection, _settings.windowedSize.y / scaleCorrection, "", nullptr, nullptr);
+            const auto width = int(float(_settings.windowedSize.x) / scaleCorrection);
+            const auto height = int(float(_settings.windowedSize.y) / scaleCorrection);
+            window = glfwCreateWindow(width, height, "", nullptr, nullptr);
         }
 
         return window;

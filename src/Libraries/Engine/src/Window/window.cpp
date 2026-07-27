@@ -164,7 +164,7 @@ namespace Kmplete
         screenMode = StringToScreenMode(settings.GetString(ScreenModeStr, WindowedModeStr));
         updateContinuously = settings.GetBool(UpdateContinuouslyStr, true);
         alwaysOnTop = settings.GetBool(AlwaysOnTopStr, false);
-        contentScale = settings.GetDouble(ContentScale, 1.0);
+        contentScale = float(settings.GetDouble(ContentScale, 1.0));
     }}
     //--------------------------------------------------------------------------
 }
