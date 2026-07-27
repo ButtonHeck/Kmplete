@@ -3,7 +3,7 @@
 ############################################################################
 # CMake module for including Boost components e.g.:
 # "SetupBoost(someTarget)" - include and link boost libraries to someTarget.
-# Boost v1.83.0 is used during development
+# Boost v1.90.0 is used during development
 ############################################################################
 
 # Force cmake pre 3.30 policy for handling Boost finding

@@ -6,7 +6,7 @@
 #include "Kmplete/Utils/vector_utils.h"
 #include "Kmplete/Base/named_bool.h"
 
-#include <boost/process.hpp>
+#include <boost/process/v1/child.hpp>
 
 #include <algorithm>
 #include <streambuf>
@@ -86,7 +86,7 @@ namespace Kmplete
                     poTemplateFile,
                     " ",
                     filesList);
-                auto xgettextProcess = boost::process::child(xgettextCommand);
+                auto xgettextProcess = boost::process::v1::child(xgettextCommand);
                 xgettextProcess.wait();
                 const auto xgettextExitCode = xgettextProcess.exit_code();
                 if (xgettextExitCode != 0)
@@ -126,7 +126,7 @@ namespace Kmplete
                         locale,
                         ".UTF-8"
                     );
-                    auto msginitProcess = boost::process::child(msginitCommand);
+                    auto msginitProcess = boost::process::v1::child(msginitCommand);
                     msginitProcess.wait();
                     const auto msginitExitCode = msginitProcess.exit_code();
                     if (msginitExitCode != 0)
@@ -146,7 +146,7 @@ namespace Kmplete
                     " ",
                     poFile
                 );
-                auto msgattribProcessStep1 = boost::process::child(msgattribCommand);
+                auto msgattribProcessStep1 = boost::process::v1::child(msgattribCommand);
                 msgattribProcessStep1.wait();
                 const auto msgattribStep1ExitCode = msgattribProcessStep1.exit_code();
                 if (msgattribStep1ExitCode != 0)
@@ -163,7 +163,7 @@ namespace Kmplete
                     " ",
                     poFile
                 );
-                auto msgattribProcessStep2 = boost::process::child(msgattribCommand);
+                auto msgattribProcessStep2 = boost::process::v1::child(msgattribCommand);
                 msgattribProcessStep2.wait();
                 const auto msgattribStep2ExitCode = msgattribProcessStep2.exit_code();
                 if (msgattribStep2ExitCode != 0)
@@ -182,7 +182,7 @@ namespace Kmplete
                     " ",
                     poTemplateFile
                 );
-                auto msgmergeProcess = boost::process::child(msgmergeCommand);
+                auto msgmergeProcess = boost::process::v1::child(msgmergeCommand);
                 msgmergeProcess.wait();
                 const auto msgmergeExitCode = msgmergeProcess.exit_code();
                 if (msgmergeExitCode != 0)
@@ -235,7 +235,7 @@ namespace Kmplete
                     " ",
                     poTemplateFile.string()
                 );
-                auto msgfmtProcess = boost::process::child(msgfmtCommand);
+                auto msgfmtProcess = boost::process::v1::child(msgfmtCommand);
                 msgfmtProcess.wait();
                 const auto msgfmtExitCode = msgfmtProcess.exit_code();
                 if (msgfmtExitCode != 0)

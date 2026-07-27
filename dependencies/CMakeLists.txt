@@ -221,6 +221,7 @@ if(NOT cpptrace_POPULATED)
     
     set(CPPTRACE_BUILD_SHARED OFF CACHE BOOL "" FORCE)
     set(CPPTRACE_USE_EXTERNAL_ZSTD ON CACHE BOOL "" FORCE)
+    set(CPPTRACE_DISABLE_CXX_20_MODULES ON CACHE BOOL "" FORCE)
     
     add_subdirectory(${cpptrace_SOURCE_DIR} ${cpptrace_BINARY_DIR})
     
@@ -245,6 +246,8 @@ if(NOT freetype_POPULATED)
     
     set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
     set(FT_DISABLE_BROTLI ON CACHE BOOL "" FORCE)
+    set(FT_DISABLE_PNG ON CACHE BOOL "" FORCE)
+    set(FT_DISABLE_ZLIB ON CACHE BOOL "" FORCE)
     
     add_subdirectory(${freetype_SOURCE_DIR} ${freetype_BINARY_DIR})
     
