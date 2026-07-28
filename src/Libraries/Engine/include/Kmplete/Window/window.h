@@ -91,7 +91,12 @@ namespace Kmplete
 
         KMP_NODISCARD const String& GetName() const noexcept;
         KMP_NODISCARD Graphics::GraphicsBackendType GetGraphicsBackendType() const noexcept;
+
         KMP_NODISCARD WindowNativePlatformType GetNativePlatformType() const noexcept;
+        KMP_NODISCARD bool IsWindowsWindow() const noexcept;
+        KMP_NODISCARD bool IsX11Window() const noexcept;
+        KMP_NODISCARD bool IsWaylandWindow() const noexcept;
+        KMP_NODISCARD bool IsCocoaWindow() const noexcept;
 
         KMP_NODISCARD virtual Math::Size2I GetSize() const = 0;
         KMP_NODISCARD virtual Math::Size2I GetWindowedSize() const = 0;

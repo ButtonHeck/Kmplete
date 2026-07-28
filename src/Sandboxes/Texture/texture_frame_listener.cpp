@@ -344,8 +344,7 @@ namespace Kmplete
 
     void TextureFrameListener::_InitializeImGui()
     {
-        const auto windowNativePlatform = _mainWindow.GetNativePlatformType();
-        const auto isFramebufferAutoScaled = windowNativePlatform == WindowNativePlatformType::Wayland || windowNativePlatform == WindowNativePlatformType::Cocoa;
+        const auto isFramebufferAutoScaled = _mainWindow.IsWaylandWindow() || _mainWindow.IsCocoaWindow();
         const auto contentScale = isFramebufferAutoScaled ? 1.0f : _mainWindow.GetContentScale();
 
         ImGuiUtils::Context* context = nullptr;
@@ -369,7 +368,7 @@ namespace Kmplete
                 { VK_DescriptorType_InputAttachment, 100 }
             });
 
-            const auto viewportEnabled = windowNativePlatform != WindowNativePlatformType::Wayland;
+            const auto viewportEnabled = !_mainWindow.IsWaylandWindow();
 
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();

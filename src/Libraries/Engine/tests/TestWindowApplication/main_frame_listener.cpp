@@ -415,7 +415,7 @@ namespace Kmplete
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
 
-            if (_windowBackend->GetNativePlatformType() != WindowNativePlatformType::Wayland)
+            if (!_mainWindow.IsWaylandWindow())
             {
                 const auto windowPos = _mainWindow.GetPosition();
                 ImGui::Text("Window position: [%4d : %4d]", windowPos.x, windowPos.y);
@@ -956,8 +956,7 @@ namespace Kmplete
 
     void MainFrameListener::_InitializeImGui()
     {
-        const auto windowNativePlatform = _mainWindow.GetNativePlatformType();
-        const auto isFramebufferAutoScaled = windowNativePlatform == WindowNativePlatformType::Wayland || windowNativePlatform == WindowNativePlatformType::Cocoa;
+        const auto isFramebufferAutoScaled = _mainWindow.IsWaylandWindow() || _mainWindow.IsCocoaWindow();
         const auto contentScale = isFramebufferAutoScaled ? 1.0f : _mainWindow.GetContentScale();
 
         ImGuiUtils::Context* context = nullptr;
@@ -981,7 +980,7 @@ namespace Kmplete
                 { Graphics::VKBits::VK_DescriptorType_InputAttachment, 100 }
             });
 
-            const auto viewportEnabled = windowNativePlatform != WindowNativePlatformType::Wayland;
+            const auto viewportEnabled = !_mainWindow.IsWaylandWindow();
 
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();

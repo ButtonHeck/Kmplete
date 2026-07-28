@@ -142,7 +142,7 @@ namespace Kmplete
         const auto videoMode = glfwGetVideoMode(monitor);
 
         GLFWwindow* window = nullptr;
-        const auto scaleCorrection = _nativePlatformType == WindowNativePlatformType::Wayland ? _settings.contentScale : 1.0f;
+        const auto scaleCorrection = IsWaylandWindow() ? _settings.contentScale : 1.0f;
 
         if (IsFullscreen())
         {
@@ -295,7 +295,7 @@ namespace Kmplete
     {
         KMP_ASSERT(image.GetPixels() && _window);
 
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return;
         }
@@ -330,7 +330,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return;
         }
@@ -343,7 +343,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return Math::Point2I();
         }
@@ -357,7 +357,7 @@ namespace Kmplete
 
     void WindowGlfw::PositionAtCurrentScreenCenter() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return;
         }
@@ -400,7 +400,7 @@ namespace Kmplete
 
     void WindowGlfw::SetScreenMode(ScreenMode screenMode) KMP_PROFILING(ProfileLevelMinor)
     {
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return;
         }
@@ -531,7 +531,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return;
         }
@@ -625,7 +625,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        if (_nativePlatformType != WindowNativePlatformType::Wayland)
+        if (!IsWaylandWindow())
         {
             glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
                 const NonNull<_UserData*> userData = _GetUserPointer(window);
@@ -831,7 +831,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        if (_nativePlatformType == WindowNativePlatformType::Wayland)
+        if (IsWaylandWindow())
         {
             return;
         }

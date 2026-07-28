@@ -55,6 +55,30 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    bool Window::IsWindowsWindow() const noexcept
+    {
+        return _nativePlatformType == WindowNativePlatformType::Win32;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::IsX11Window() const noexcept
+    {
+        return _nativePlatformType == WindowNativePlatformType::X11;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::IsWaylandWindow() const noexcept
+    {
+        return _nativePlatformType == WindowNativePlatformType::Wayland;
+    }
+    //--------------------------------------------------------------------------
+
+    bool Window::IsCocoaWindow() const noexcept
+    {
+        return _nativePlatformType == WindowNativePlatformType::Cocoa;
+    }
+    //--------------------------------------------------------------------------
+
     String Window::ScreenModeToString(ScreenMode screenMode) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
     {
         switch (screenMode)
