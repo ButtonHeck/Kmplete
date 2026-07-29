@@ -92,7 +92,7 @@ namespace Kmplete
 
         void VulkanShaderModule::_Initialize(const Filepath& filepathBinary)
         {
-            if (!Filesystem::FilepathExists(filepathBinary))
+            if (not Filesystem::FilepathExists(filepathBinary))
             {
                 KMP_LOG_ERROR("shader file not found '{}'", filepathBinary);
                 throw RuntimeError("VulkanShaderModule: shader file not found");

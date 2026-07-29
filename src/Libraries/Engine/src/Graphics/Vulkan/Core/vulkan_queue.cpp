@@ -127,7 +127,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_queue);
 
-            if (!_supportPresentation)
+            if (not _supportPresentation)
             {
                 KMP_LOG_ERROR("current queue does not support presentation");
                 return;

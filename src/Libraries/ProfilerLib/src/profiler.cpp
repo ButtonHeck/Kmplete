@@ -183,7 +183,7 @@ namespace Kmplete
 
                 outputFileStream << intermediateBuffer.str();
 
-                if (!std::filesystem::remove(intermediateStoragePath))
+                if (not std::filesystem::remove(intermediateStoragePath))
                 {
                     KMP_LOG_WARN("failed to remove temporary intermediate file '{}'", intermediateStoragePath);
                 }
@@ -226,7 +226,7 @@ namespace Kmplete
 
     ProfilerTimer::ProfilerTimer(const char* name, unsigned int level /*= ProfileLevelAlways*/)
         : _name(name)
-        , _skip(Profiler::Get().GetLevel() < level || !Profiler::Get().IsActive())
+        , _skip(Profiler::Get().GetLevel() < level || not Profiler::Get().IsActive())
         , _start(_skip ? std::chrono::high_resolution_clock::time_point() : std::chrono::high_resolution_clock::now())
     {}
     //--------------------------------------------------------------------------
@@ -242,7 +242,7 @@ namespace Kmplete
 
         auto& profiler = Profiler::Get();
 
-        if (!profiler._currentSession)
+        if (not profiler._currentSession)
         {
             return;
         }

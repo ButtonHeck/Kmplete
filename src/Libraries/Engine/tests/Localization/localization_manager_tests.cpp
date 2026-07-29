@@ -172,7 +172,7 @@ TEST_CASE("Localization manager set/get locale", "[localization][locale]")
     REQUIRE(ok);
     REQUIRE_NOTHROW(localeStr = localizationManager.GetLocale());
     REQUIRE(localeStr != LocaleRuUTF8Keyword);
-    REQUIRE(!localeStr.empty());
+    REQUIRE(not localeStr.empty());
 
     // set invalid locale
     REQUIRE_NOTHROW(ok = localizationManager.SetLocale("jkrjtkjer"));

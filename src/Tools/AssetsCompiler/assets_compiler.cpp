@@ -38,7 +38,7 @@ namespace Kmplete
                 }
 
                 std::ofstream outputFile(_parameters.outputDataFile, std::ios::binary);
-                if (!outputFile.is_open())
+                if (not outputFile.is_open())
                 {
                     KMP_LOG_ERROR("failed to open output file '{}'", _parameters.outputDataFile);
                     return ReturnCode::OutputFileOpeningFailed;
@@ -51,7 +51,7 @@ namespace Kmplete
 
                 auto cleanup = [&]() {
                     outputFile.close();
-                    if (!Filesystem::RemoveFile(_parameters.outputDataFile))
+                    if (not Filesystem::RemoveFile(_parameters.outputDataFile))
                     {
                         KMP_LOG_ERROR("failed to remove output file '{}'", _parameters.outputDataFile);
                     }
@@ -65,7 +65,7 @@ namespace Kmplete
                     return writeHeadersResult;
                 }
 
-                if (!sourceJson.EndGetArray())
+                if (not sourceJson.EndGetArray())
                 {
                     KMP_LOG_ERROR("failed to end assets array");
                     cleanup();
@@ -107,7 +107,7 @@ namespace Kmplete
 
             ReturnCode AssetsCompiler::_WriteHeader(UInt32 assetIndex, JsonDocument& sourceJson, std::ofstream& outputFile, FilepathVector& assetsFilepaths, BinaryBuffer& assetsTypes) const
             {
-                if (!sourceJson.StartGetObject(assetIndex))
+                if (not sourceJson.StartGetObject(assetIndex))
                 {
                     KMP_LOG_ERROR("failed to get asset json object at index {}", assetIndex);
                     return ReturnCode::InputFileFormatError;
@@ -121,7 +121,7 @@ namespace Kmplete
                 }
 
                 const auto assetFilepath = Filepath(assetFilename);
-                if (!Filesystem::FilepathExists(assetFilepath))
+                if (not Filesystem::FilepathExists(assetFilepath))
                 {
                     KMP_LOG_ERROR("asset's filepath '{}' does not exist", assetFilepath);
                     return ReturnCode::InputFileFormatError;
@@ -151,13 +151,13 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _processedSids.emplace(assetSid);
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("asset with sid '{}' has already been processsed, duplication is forbidden", assetSid);
                     return ReturnCode::InputFileDuplicationsError;
                 }
 
-                if (!sourceJson.EndGetObject())
+                if (not sourceJson.EndGetObject())
                 {
                     KMP_LOG_ERROR("failed to end asset json object at index {}", assetIndex);
                     return ReturnCode::InputFileFormatError;

@@ -39,10 +39,10 @@ namespace Kmplete
     bool SystemMetricsManager::Update(SystemMetricsUpdateMode updateMode) KMP_PROFILING(ProfileLevelImportant)
     {
 #if defined (KMP_PLATFORM_WINDOWS)
-        if (!_windowsProcessHandle)
+        if (not _windowsProcessHandle)
         {
             _windowsProcessHandle = GetCurrentProcess();
-            if (!_windowsProcessHandle)
+            if (not _windowsProcessHandle)
             {
                 KMP_LOG_ERROR("update failed on GetCurrentProcess handle");
                 return false;
@@ -52,7 +52,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::NumThreads)
         {
-            if (!_UpdateNumThreads())
+            if (not _UpdateNumThreads())
             {
                 return false;
             }
@@ -60,7 +60,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::MemoryUsed)
         {
-            if (!_UpdateMemoryUsed())
+            if (not _UpdateMemoryUsed())
             {
                 return false;
             }
@@ -68,7 +68,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::CPUUsed)
         {
-            if (!_UpdateCPUUsed())
+            if (not _UpdateCPUUsed())
             {
                 return false;
             }
@@ -76,7 +76,7 @@ namespace Kmplete
 
         if (updateMode & SystemMetricsManager::SystemMetricsUpdateMode::StackUsed)
         {
-            if (!_UpdateCurrentThreadStackUsed())
+            if (not _UpdateCurrentThreadStackUsed())
             {
                 return false;
             }
@@ -98,27 +98,27 @@ namespace Kmplete
         static_assert(sizeof(ULARGE_INTEGER) == sizeof(decltype(_lastCPUTimestamp)));
 #endif
 
-        if (!_InitializeProcessId())
+        if (not _InitializeProcessId())
         {
             return;
         }
 
-        if (!_InitializeTotalMemory())
+        if (not _InitializeTotalMemory())
         {
             return;
         }
 
-        if (!_InitializeNumProcessors())
+        if (not _InitializeNumProcessors())
         {
             return;
         }
 
-        if (!_InitializeWindowsProcessHandle())
+        if (not _InitializeWindowsProcessHandle())
         {
             return;
         }
 
-        if (!_InitializeCPUTimestamps())
+        if (not _InitializeCPUTimestamps())
         {
             return;
         }
@@ -149,7 +149,7 @@ namespace Kmplete
 #if defined (KMP_PLATFORM_WINDOWS)
         MEMORYSTATUSEX memoryInfo;
         memoryInfo.dwLength = sizeof(MEMORYSTATUSEX);
-        if (!static_cast<bool>(GlobalMemoryStatusEx(&memoryInfo)))
+        if (not static_cast<bool>(GlobalMemoryStatusEx(&memoryInfo)))
         {
             KMP_LOG_ERROR("initialization failed on GlobalMemoryStatusEx, error {}", GetLastError());
             return false;
@@ -200,7 +200,7 @@ namespace Kmplete
     {
 #if defined (KMP_PLATFORM_WINDOWS)
         _windowsProcessHandle = GetCurrentProcess();
-        if (!_windowsProcessHandle)
+        if (not _windowsProcessHandle)
         {
             KMP_LOG_ERROR("initialization failed on GetCurrentProcess handle");
             return false;
@@ -220,7 +220,7 @@ namespace Kmplete
         GetSystemTimeAsFileTime(&fTime);
         memcpy(&_lastCPUTimestamp, &fTime, filetimeSize);
 
-        if (!static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
+        if (not static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
         {
             KMP_LOG_ERROR("initialization failed on GetProcessTimes, error {}", GetLastError());
             return false;
@@ -256,7 +256,7 @@ namespace Kmplete
             THREADENTRY32 threadEntry; 
             threadEntry.dwSize = sizeof(THREADENTRY32);
 
-            if (!Thread32First(threadSnapHandle, &threadEntry))
+            if (not Thread32First(threadSnapHandle, &threadEntry))
             {
                 KMP_LOG_WARN("failed to retrieve information about the first thread");
                 CloseHandle(threadSnapHandle);
@@ -315,7 +315,7 @@ namespace Kmplete
 #if defined (KMP_PLATFORM_WINDOWS)
         static constexpr auto MibDivisor = 1024.0 * 1024.0;
         PROCESS_MEMORY_COUNTERS_EX pmc;
-        if (!static_cast<bool>(GetProcessMemoryInfo(reinterpret_cast<HANDLE>(_windowsProcessHandle), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))))
+        if (not static_cast<bool>(GetProcessMemoryInfo(reinterpret_cast<HANDLE>(_windowsProcessHandle), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc))))
         {
             KMP_LOG_ERROR("update failed on GetProcessMemoryInfo, error {}", GetLastError());
             return false;
@@ -388,7 +388,7 @@ namespace Kmplete
             return false;
         }
 
-        if (!static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
+        if (not static_cast<bool>(GetProcessTimes(reinterpret_cast<HANDLE>(_windowsProcessHandle), &fTime, &fTime, &fSystem, &fUser)))
         {
             KMP_LOG_ERROR("update failed on GetProcessTimes, error {}", GetLastError());
             return false;

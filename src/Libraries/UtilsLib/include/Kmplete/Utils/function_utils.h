@@ -3,7 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/platform.h"
 
-#if !defined (KMP_COMPILER_MSVC)
+#if not defined (KMP_COMPILER_MSVC)
     #include <cstddef>
 #endif
 

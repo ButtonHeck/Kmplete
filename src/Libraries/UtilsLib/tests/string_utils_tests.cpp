@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-#if !defined (KMP_COMPILER_MSVC)
+#if not defined (KMP_COMPILER_MSVC)
     #include <cstddef>
 #endif
 
@@ -52,7 +52,7 @@ TEST_CASE("Concatenate", "[utils][string]")
 
     result = Kmplete::String("");
     result = Kmplete::Utils::Concatenate(&result);
-    REQUIRE(!result.empty());
+    REQUIRE(not result.empty());
 }
 //--------------------------------------------------------------------------
 
@@ -215,7 +215,7 @@ TEST_CASE("ToSStream", "[utils][string]")
     oss.str("");
     Kmplete::Utils::ToSStream(oss, &result);
     result = oss.str();
-    REQUIRE(!result.empty());
+    REQUIRE(not result.empty());
 }
 //--------------------------------------------------------------------------
 

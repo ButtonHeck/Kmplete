@@ -67,7 +67,7 @@ int main(int argc, char** argv)
     {
         std::cerr << "AssetsCompiler: failed to parse parameters\n";
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         if (vm.count(Compiler::CompilerArgumentLogging))
         {
             Kmplete::Log::Finalize();
@@ -83,7 +83,7 @@ int main(int argc, char** argv)
     Compiler::AssetsCompiler compiler(std::move(compilerParameters));
     const auto compilerReturnCode = compiler.Run();
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
     if (vm.count(Compiler::CompilerArgumentLogging))
     {
         Kmplete::Log::Finalize();
@@ -127,7 +127,7 @@ namespace Kmplete
         {
             using namespace Compiler;
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             // logging parsing
             const bool loggingEnabled = vm.count(CompilerArgumentLogging);
             compilerParameters.logging = loggingEnabled;
@@ -154,7 +154,7 @@ namespace Kmplete
             }
 
             const auto inputFileNamePath = Filepath(inputFileNameStr);
-            if (!Filesystem::FilepathExists(inputFileNamePath) || !Filesystem::IsFile(inputFileNamePath))
+            if (not Filesystem::FilepathExists(inputFileNamePath) || not Filesystem::IsFile(inputFileNamePath))
             {
                 KMP_LOG_ERROR_FN("AssetsCompiler: input file '{}' does not exist or is not of a file type", inputFileNamePath);
                 PrintUsage(optionsDescription);
@@ -173,7 +173,7 @@ namespace Kmplete
             }
 
             const auto outputFileNamePath = Filepath(outputFileNameStr);
-            if (!Filesystem::CreateFile(outputFileNamePath))
+            if (not Filesystem::CreateFile(outputFileNamePath))
             {
                 KMP_LOG_ERROR_FN("AssetsCompiler: cannot create output file '{}'", outputFileNamePath);
                 PrintUsage(optionsDescription);

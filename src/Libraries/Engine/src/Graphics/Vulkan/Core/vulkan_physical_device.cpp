@@ -44,7 +44,7 @@ namespace Kmplete
 
                 inline bool IsValid() const noexcept
                 {
-                    return !surfaceFormats.empty() && !presentModes.empty();
+                    return not surfaceFormats.empty() && not presentModes.empty();
                 }
             };
             //--------------------------------------------------------------------------
@@ -127,8 +127,8 @@ namespace Kmplete
                     requiredExtensions.erase(extension.extensionName);
                 }
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
-                if (!requiredExtensions.empty())
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
+                if (not requiredExtensions.empty())
                 {
                     auto properties2 = VKUtils::InitVkPhysicalDeviceProperties2();
                     vkGetPhysicalDeviceProperties2(device, &properties2);
@@ -150,21 +150,21 @@ namespace Kmplete
                 vkGetPhysicalDeviceProperties2(device, &properties2);
 
                 const auto queueFamiliesIndices = QueryQueueFamiliesIndices(device, surface);
-                if (!queueFamiliesIndices.IsValid())
+                if (not queueFamiliesIndices.IsValid())
                 {
                     KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - queue families indices are invalid", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
                 }
 
                 const auto extensionsSupported = QueryDeviceExtensionSupport(device, enabledExtensions);
-                if (!extensionsSupported)
+                if (not extensionsSupported)
                 {
                     KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - required extensions are not supported", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
                 }
 
                 const auto surfaceAndPresentModeProperties = QuerySurfaceAndPresentModeProperties(device, surface);
-                if (!surfaceAndPresentModeProperties.IsValid())
+                if (not surfaceAndPresentModeProperties.IsValid())
                 {
                     KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - surface and present modes properties are invalid", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };
@@ -172,9 +172,9 @@ namespace Kmplete
 
                 VkPhysicalDeviceFeatures supportedFeatures;
                 vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
-                if (!supportedFeatures.samplerAnisotropy ||
-                    !supportedFeatures.independentBlend ||
-                    !supportedFeatures.depthBounds)
+                if (not supportedFeatures.samplerAnisotropy ||
+                    not supportedFeatures.independentBlend ||
+                    not supportedFeatures.depthBounds)
                 {
                     KMP_LOG_WARN_FN("VulkanPhysicalDevice::IsDeviceSuitable: '{}' is not suitable - some device features are not supported", properties2.properties.deviceName);
                     return { "device suitable"_false, {} };

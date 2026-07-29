@@ -96,7 +96,7 @@ namespace Kmplete
                     }
                 }
 
-                if (!sourceJson.EndGetArray())
+                if (not sourceJson.EndGetArray())
                 {
                     KMP_LOG_ERROR("failed to end shader compiling descriptions array");
                     return ReturnCode::ShaderJsonFileFormatError;
@@ -108,7 +108,7 @@ namespace Kmplete
 
             ReturnCode ShaderCompilerProcessor::_ProcessSingleShader(JsonDocument& sourceJson, KMP_MB_UNUSED int shaderIndex) const
             {
-                if (!sourceJson.StartGetObject(shaderIndex))
+                if (not sourceJson.StartGetObject(shaderIndex))
                 {
                     KMP_LOG_ERROR("failed to get shader description json object at index {}", shaderIndex);
                     return ReturnCode::ShaderJsonFileFormatError;
@@ -120,7 +120,7 @@ namespace Kmplete
                     KMP_LOG_ERROR("failed to get shader description source filename at index {}", shaderIndex);
                     return ReturnCode::ShaderJsonFileDataError;
                 }
-                if (!Filesystem::FilepathExists(shaderSourceFilename) || !Filesystem::IsFile(shaderSourceFilename))
+                if (not Filesystem::FilepathExists(shaderSourceFilename) || not Filesystem::IsFile(shaderSourceFilename))
                 {
                     KMP_LOG_ERROR("shader source file '{}', does not exist of is not of a file type", shaderSourceFilename);
                     return ReturnCode::ShaderJsonFileDataError;
@@ -135,13 +135,13 @@ namespace Kmplete
 
                 const auto shaderTypeStr = sourceJson.GetString(JsonConfigurationShaderTypeStr);
                 const auto shaderType = StringToShaderType(shaderTypeStr);
-                if (!shaderType.has_value())
+                if (not shaderType.has_value())
                 {
                     KMP_LOG_ERROR("failed to get shader description shader type at index {}", shaderIndex);
                     return ReturnCode::ShaderJsonFileDataError;
                 }
 
-                if (!sourceJson.EndGetObject())
+                if (not sourceJson.EndGetObject())
                 {
                     KMP_LOG_ERROR("failed to end shader description json object at index {}", shaderIndex);
                     return ReturnCode::ShaderJsonFileFormatError;
@@ -174,7 +174,7 @@ namespace Kmplete
                 }
 
                 const auto writeSuccessful = Filesystem::WriteFile(destination, shaderBinary, "append"_false);
-                if (!writeSuccessful)
+                if (not writeSuccessful)
                 {
                     KMP_LOG_ERROR("shader binary failed to save to a file '{}'", destination);
                     return ReturnCode::ShaderBinaryWriteFileFailed;

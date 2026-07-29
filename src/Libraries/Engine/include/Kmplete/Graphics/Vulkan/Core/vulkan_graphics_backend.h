@@ -60,7 +60,7 @@ namespace Kmplete
             KMP_NODISCARD Vector<const char*> _GetRequiredExtensionsNames() const;
             KMP_NODISCARD VkInstanceCreateInfo _CreateInstanceCreateInfo(const VkApplicationInfo& applicationInfo, Vector<const char*>& extensionsNames) const;
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             KMP_NODISCARD bool _CheckValidationLayerSupport() const;
             void _AttachDebugMessengerInfo(VkInstanceCreateInfo& instanceCreateInfo, VkDebugUtilsMessengerCreateInfoEXT& debugMessengerCreateInfo) const;
             void _PrintAvailableExtensions() const;

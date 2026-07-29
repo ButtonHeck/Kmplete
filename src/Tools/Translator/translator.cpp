@@ -105,7 +105,7 @@ namespace Kmplete
 
                 potFileContent = Utils::RegexReplace(potFileContent, "CHARSET", "UTF-8");
 
-                if (!Filesystem::WriteFile(poTemplateFile, potFileContent, "append"_false))
+                if (not Filesystem::WriteFile(poTemplateFile, potFileContent, "append"_false))
                 {
                     KMP_LOG_ERROR("Update: failed to write .pot file '{}'", poTemplateFile);
                     return ReturnCode::ProcessorCreatePotFailed;
@@ -114,7 +114,7 @@ namespace Kmplete
                 // 4. invoke msginit if necessary for creation of .po file
                 const auto poFile = Utils::RegexReplace(poTemplateFile, ".pot", ".po");
 
-                if (!Filesystem::FilepathExists(poFile))
+                if (not Filesystem::FilepathExists(poFile))
                 {
                     const auto msginitCommand = Utils::Concatenate(
                         MSGINIT_EXECUTABLE_PATH,
@@ -192,7 +192,7 @@ namespace Kmplete
                 }
 
                 // 8. remove .pot file
-                if (!Filesystem::RemoveFile(poTemplateFile))
+                if (not Filesystem::RemoveFile(poTemplateFile))
                 {
                     KMP_LOG_WARN("Update: failed to remove '{}'", poTemplateFile);
                 }
@@ -210,7 +210,7 @@ namespace Kmplete
                 outputDirectory /= locale;
                 outputDirectory /= "LC_MESSAGES";
 
-                if (!Filesystem::FilepathExists(outputDirectory))
+                if (not Filesystem::FilepathExists(outputDirectory))
                 {
                     KMP_LOG_ERROR("Compile: output directory for locale '{}' not found", locale);
                     continue;
@@ -219,7 +219,7 @@ namespace Kmplete
                 auto poTemplateFile = outputDirectory;
                 poTemplateFile /= (_parameters.outputFileName + ".po");
 
-                if (!Filesystem::FilepathExists(poTemplateFile))
+                if (not Filesystem::FilepathExists(poTemplateFile))
                 {
                     KMP_LOG_ERROR("Compile: source .pot file not found '{}'", poTemplateFile);
                     continue;
@@ -282,7 +282,7 @@ namespace Kmplete
 
         bool TranslatorProcessor::_IsDirectoryEntryAcceptable(const std::filesystem::directory_entry& directoryEntry, const StringVector& filesExtensions) const
         {
-            if (directoryEntry.is_directory() || !directoryEntry.is_regular_file() || !directoryEntry.path().has_extension())
+            if (directoryEntry.is_directory() || not directoryEntry.is_regular_file() || not directoryEntry.path().has_extension())
             {
                 return false;
             }
@@ -299,7 +299,7 @@ namespace Kmplete
             poTemplateFilePath /= locale;
             poTemplateFilePath /= "LC_MESSAGES";
 
-            if (!Filesystem::CreateDirectories(poTemplateFilePath))
+            if (not Filesystem::CreateDirectories(poTemplateFilePath))
             {
                 KMP_LOG_ERROR("Update: cannot create .pot file directory hierarchy '{}'", poTemplateFilePath);
                 return String();
@@ -308,7 +308,7 @@ namespace Kmplete
             poTemplateFilePath /= parameters.outputFileName;
             const auto poTemplateFileName = poTemplateFilePath.string().append(".pot");
 
-            if (!Filesystem::CreateFile(poTemplateFileName))
+            if (not Filesystem::CreateFile(poTemplateFileName))
             {
                 KMP_LOG_ERROR("Update: failed to create .pot file '{}'", poTemplateFileName);
                 return String();

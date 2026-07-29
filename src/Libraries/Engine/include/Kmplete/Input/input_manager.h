@@ -69,7 +69,7 @@ namespace Kmplete
             template<typename ValueType> requires (IsAnyOfType<ValueType, int, float, Math::Point2I>)
             KMP_NODISCARD ValueType GetActionValue(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
             {
-                if (!_actionToInputCodesMap.contains(actionId))
+                if (not _actionToInputCodesMap.contains(actionId))
                 {
                     return ValueType();
                 }
@@ -79,7 +79,7 @@ namespace Kmplete
                 for (const auto& codeWithCondition : codes)
                 {
                     const auto& code = codeWithCondition.code;
-                    if (!_IsValidInputCode(code))
+                    if (not _IsValidInputCode(code))
                     {
                         continue;
                     }
@@ -132,7 +132,7 @@ namespace Kmplete
         template<>
         KMP_NODISCARD inline Math::Point2I InputManager::GetActionValue<Math::Point2I>(ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!_actionToInputCodesMap.contains(actionId))
+            if (not _actionToInputCodesMap.contains(actionId))
             {
                 return Math::Point2I();
             }
@@ -142,7 +142,7 @@ namespace Kmplete
             for (const auto& codeWithCondition : codes)
             {
                 const auto code = codeWithCondition.code;
-                if (!_IsValidInputCode(code))
+                if (not _IsValidInputCode(code))
                 {
                     continue;
                 }

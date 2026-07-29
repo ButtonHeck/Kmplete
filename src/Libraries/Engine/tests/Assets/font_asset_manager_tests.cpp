@@ -79,11 +79,11 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     REQUIRE(fontAsset->GetStringID() == fontSid);
     
     BinaryBuffer fontBuffer = fontAsset->GetFont().GetBuffer();
-    REQUIRE(!fontBuffer.empty());
+    REQUIRE(not fontBuffer.empty());
 
     {
         auto& fontParams = fontAsset->GetFont().GetParameters();
-        REQUIRE(!fontParams.familyName.empty());
+        REQUIRE(not fontParams.familyName.empty());
         REQUIRE(fontParams.numGlyphs > 0);
         REQUIRE(fontParams.unitsPerEM > 0);
         REQUIRE(fontParams.lineHeight != 0);
@@ -144,11 +144,11 @@ TEST_CASE("FontAssetManager font functions", "[graphics][font_asset_manager][ass
     REQUIRE(fontAsset->GetStringID() == fontSid);
 
     fontBuffer = fontAsset->GetFont().GetBuffer();
-    REQUIRE(!fontBuffer.empty());
+    REQUIRE(not fontBuffer.empty());
 
     {
         auto& fontParams = fontAsset->GetFont().GetParameters();
-        REQUIRE(!fontParams.familyName.empty());
+        REQUIRE(not fontParams.familyName.empty());
         REQUIRE(fontParams.numGlyphs > 0);
         REQUIRE(fontParams.unitsPerEM > 0);
         REQUIRE(fontParams.lineHeight != 0);

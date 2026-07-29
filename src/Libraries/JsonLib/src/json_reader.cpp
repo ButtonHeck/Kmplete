@@ -19,25 +19,25 @@ namespace Kmplete
 
     bool JsonReader::StartObject(const char* objectName) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object is null", objectName);
             return false;
         }
 
-        if (!objectName || *objectName == '\0')
+        if (not objectName || *objectName == '\0')
         {
             KMP_LOG_ERROR("cannot start object - object's name is empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object '{}' is not of object type", objectName, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(objectName) || !(*_currentObject)[objectName].IsObject())
+        if (not _currentObject->HasMember(objectName) || not (*_currentObject)[objectName].IsObject())
         {
             KMP_LOG_ERROR("cannot find member '{}', or the member is not an object type", objectName);
             return false;
@@ -52,12 +52,12 @@ namespace Kmplete
 
     bool JsonReader::StartObject(int index) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return false;
         }
 
-        if (!(*_currentObject)[index].IsObject())
+        if (not (*_currentObject)[index].IsObject())
         {
             KMP_LOG_ERROR("'{}[{}]' is not of object type", _scope.scopeString, index);
             return false;
@@ -84,25 +84,25 @@ namespace Kmplete
 
     int JsonReader::StartArray(const char* arrayName) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object is null", arrayName);
             return 0;
         }
 
-        if (!arrayName || *arrayName == '\0')
+        if (not arrayName || *arrayName == '\0')
         {
             KMP_LOG_ERROR("cannot start array - array's name should not be empty");
             return 0;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object '{}' is not of object type", arrayName, _scope.scopeString);
             return 0;
         }
 
-        if (!_currentObject->HasMember(arrayName) || !(*_currentObject)[arrayName].IsArray())
+        if (not _currentObject->HasMember(arrayName) || not (*_currentObject)[arrayName].IsArray())
         {
             KMP_LOG_ERROR("cannot find member '{}', or the member is not an array type", arrayName);
             return 0;
@@ -117,12 +117,12 @@ namespace Kmplete
 
     int JsonReader::StartArray(int index) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return 0;
         }
 
-        if (!(*_currentObject)[index].IsArray())
+        if (not (*_currentObject)[index].IsArray())
         {
             KMP_LOG_ERROR("'{}[{}]' is not of array type", _scope.scopeString, index);
             return 0;
@@ -137,13 +137,13 @@ namespace Kmplete
 
     bool JsonReader::EndArray() KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot end array - current object is null");
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot end array - current object '{}' is not of array type", _scope.scopeString);
             return false;
@@ -155,12 +155,12 @@ namespace Kmplete
 
     bool JsonReader::GetBool(int index, bool defaultValue /*= false*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsBool())
+        if (not (*_currentObject)[index].IsBool())
         {
             KMP_LOG_ERROR("'{}[{}]' is not a bool", _scope.scopeString, index);
             return defaultValue;
@@ -172,13 +172,13 @@ namespace Kmplete
 
     bool JsonReader::GetBool(const char* name, bool defaultValue /*= false*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get bool '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsBool())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsBool())
         {
             KMP_LOG_ERROR("cannot find bool for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -190,12 +190,12 @@ namespace Kmplete
 
     int JsonReader::GetInt(int index, int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsInt())
+        if (not (*_currentObject)[index].IsInt())
         {
             KMP_LOG_ERROR("'{}[{}]' is not an int", _scope.scopeString, index);
             return defaultValue;
@@ -207,13 +207,13 @@ namespace Kmplete
 
     int JsonReader::GetInt(const char* name, int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get int '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsInt())
         {
             KMP_LOG_ERROR("cannot find int for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -225,12 +225,12 @@ namespace Kmplete
 
     unsigned int JsonReader::GetUInt(int index, unsigned int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsUint())
+        if (not (*_currentObject)[index].IsUint())
         {
             KMP_LOG_ERROR("'{}[{}]' is not an unsigned int", _scope.scopeString, index);
             return defaultValue;
@@ -242,13 +242,13 @@ namespace Kmplete
 
     unsigned int JsonReader::GetUInt(const char* name, unsigned int defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get unsigned int '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsUint())
         {
             KMP_LOG_ERROR("cannot find unsigned int for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -260,12 +260,12 @@ namespace Kmplete
 
     Int64 JsonReader::GetInt64(int index, Int64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsInt64())
+        if (not (*_currentObject)[index].IsInt64())
         {
             KMP_LOG_ERROR("'{}[{}]' is not an int64", _scope.scopeString, index);
             return defaultValue;
@@ -277,13 +277,13 @@ namespace Kmplete
 
     Int64 JsonReader::GetInt64(const char* name, Int64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get int64 '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt64())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsInt64())
         {
             KMP_LOG_ERROR("cannot find int64 for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -295,12 +295,12 @@ namespace Kmplete
 
     UInt64 JsonReader::GetUInt64(int index, UInt64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsUint64())
+        if (not (*_currentObject)[index].IsUint64())
         {
             KMP_LOG_ERROR("'{}[{}]' is not an unsigned int64", _scope.scopeString, index);
             return defaultValue;
@@ -312,13 +312,13 @@ namespace Kmplete
 
     UInt64 JsonReader::GetUInt64(const char* name, UInt64 defaultValue /*= 0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get unsigned int64 '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint64())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsUint64())
         {
             KMP_LOG_ERROR("cannot find unsigned int64 for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -330,12 +330,12 @@ namespace Kmplete
 
     double JsonReader::GetDouble(int index, double defaultValue /*= 0.0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsDouble())
+        if (not (*_currentObject)[index].IsDouble())
         {
             KMP_LOG_ERROR("'{}[{}]' is not a double", _scope.scopeString, index);
             return defaultValue;
@@ -347,13 +347,13 @@ namespace Kmplete
 
     double JsonReader::GetDouble(const char* name, double defaultValue /*= 0.0*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get double '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsDouble())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsDouble())
         {
             KMP_LOG_ERROR("cannot find double for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -365,12 +365,12 @@ namespace Kmplete
 
     String JsonReader::GetString(int index, const String& defaultValue /*= ""*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_ValidToGetFromArray(index))
+        if (not _ValidToGetFromArray(index))
         {
             return defaultValue;
         }
 
-        if (!(*_currentObject)[index].IsString())
+        if (not (*_currentObject)[index].IsString())
         {
             KMP_LOG_ERROR("'{}[{}]' is not a string", _scope.scopeString, index);
             return defaultValue;
@@ -382,13 +382,13 @@ namespace Kmplete
 
     String JsonReader::GetString(const char* name, const String& defaultValue /*= ""*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject || !_currentObject->IsObject())
+        if (not _currentObject || not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot get string '{}' - current object is null or is not of object type", name);
             return defaultValue;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsString())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsString())
         {
             KMP_LOG_ERROR("cannot find string for '{}/{}'", _scope.scopeString, name);
             return defaultValue;
@@ -400,12 +400,12 @@ namespace Kmplete
 
     bool JsonReader::_ValidToGetFromArray(int index) const KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("current object '{}' is not an array", _scope.scopeString);
             return false;

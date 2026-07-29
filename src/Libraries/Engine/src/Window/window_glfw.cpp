@@ -173,7 +173,7 @@ namespace Kmplete
 
         _window = _CreateGLFWwindow();
 
-        if (!_window)
+        if (not _window)
         {
             KMP_LOG_ERROR("creation failed");
             throw RuntimeError("WindowGlfw creation failed");
@@ -362,7 +362,7 @@ namespace Kmplete
             return;
         }
 
-        if (!IsWindowed())
+        if (not IsWindowed())
         {
             KMP_LOG_WARN("positioning at the current screen's center applied only to windowed screen mode");
             return;
@@ -625,7 +625,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_window);
 
-        if (!IsWaylandWindow())
+        if (not IsWaylandWindow())
         {
             glfwSetWindowPosCallback(_window, [](GLFWwindow* window, int x, int y) {
                 const NonNull<_UserData*> userData = _GetUserPointer(window);

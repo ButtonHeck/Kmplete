@@ -12,7 +12,7 @@ TEST_CASE("File dialog open single file - OPEN", "[file_dialogs][open]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto file = Kmplete::FileDialogs::OpenFile("Open any single file", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE(Kmplete::Filesystem::FilepathExists(file));
 }
@@ -29,7 +29,7 @@ TEST_CASE("File dialog open single file - OPEN json", "[file_dialogs][open]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto file = Kmplete::FileDialogs::OpenFile("Open any single json file", Kmplete::Filesystem::GetCurrentFilepath(), { "JSON Files", "*.json" });
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::ToGenericString(file).ends_with(".json"));
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE(Kmplete::Filesystem::FilepathExists(file));
@@ -41,7 +41,7 @@ TEST_CASE("File dialog open single file - OPEN manual name non-existent", "[file
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto file = Kmplete::FileDialogs::OpenFile("Open any manually entered non-existing file", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(file));
 }
@@ -52,7 +52,7 @@ TEST_CASE("File dialog open single file - OPEN manual name existing", "[file_dia
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto file = Kmplete::FileDialogs::OpenFile("Open any manually entered existing file", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE(Kmplete::Filesystem::FilepathExists(file));
 }
@@ -63,7 +63,7 @@ TEST_CASE("File dialog open single file - OPEN manual name existing non-match fi
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto file = Kmplete::FileDialogs::OpenFile("Open any manually entered existing file that do not match filter", Kmplete::Filesystem::GetCurrentFilepath(), { "JSON Files", "*.json" });
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE(Kmplete::Filesystem::FilepathExists(file));
 }
@@ -76,14 +76,14 @@ TEST_CASE("File dialog open multiple files - OPEN", "[file_dialogs][open]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto files = Kmplete::FileDialogs::OpenFiles("Open any multiple files", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!files.empty());
+    REQUIRE(not files.empty());
     bool ok = true;
     for (const auto& file : files)
     {
         ok &= Kmplete::Filesystem::FilepathIsValid(file);
         ok &= Kmplete::Filesystem::FilepathExists(file);
 
-        if (!ok)
+        if (not ok)
         {
             WARN(file);
             break;
@@ -105,7 +105,7 @@ TEST_CASE("File dialog open multiple files - OPEN json", "[file_dialogs][open]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto files = Kmplete::FileDialogs::OpenFiles("Open any multiple json files", Kmplete::Filesystem::GetCurrentFilepath(), { "JSON Files", "*.json" });
-    REQUIRE(!files.empty());
+    REQUIRE(not files.empty());
     bool ok = true;
     for (const auto& file : files)
     {
@@ -113,7 +113,7 @@ TEST_CASE("File dialog open multiple files - OPEN json", "[file_dialogs][open]")
         ok &= Kmplete::Filesystem::FilepathExists(file);
         ok &= Kmplete::Filesystem::ToGenericString(file).ends_with(".json");
 
-        if (!ok)
+        if (not ok)
         {
             WARN(file);
             break;
@@ -129,14 +129,14 @@ TEST_CASE("File dialog open multiple files - OPEN manual names non-existent", "[
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto files = Kmplete::FileDialogs::OpenFiles("Open any manually entered non-existing files", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!files.empty());
+    REQUIRE(not files.empty());
     bool ok = true;
     for (const auto& file : files)
     {
         ok &= Kmplete::Filesystem::FilepathIsValid(file);
-        ok &= !Kmplete::Filesystem::FilepathExists(file);
+        ok &= not Kmplete::Filesystem::FilepathExists(file);
 
-        if (!ok)
+        if (not ok)
         {
             WARN(file);
             break;
@@ -152,14 +152,14 @@ TEST_CASE("File dialog open multiple files - OPEN manual names existent", "[file
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto files = Kmplete::FileDialogs::OpenFiles("Open any manually entered existing files", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!files.empty());
+    REQUIRE(not files.empty());
     bool ok = true;
     for (const auto& file : files)
     {
         ok &= Kmplete::Filesystem::FilepathIsValid(file);
         ok &= Kmplete::Filesystem::FilepathExists(file);
 
-        if (!ok)
+        if (not ok)
         {
             WARN(file);
             break;
@@ -178,7 +178,7 @@ TEST_CASE("File dialog save file - SAVE new", "[file_dialogs][save]")
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any new file", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(file));
 }
@@ -197,7 +197,7 @@ TEST_CASE("File dialog save file - SAVE overwrite", "[file_dialogs][save]")
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any existing file", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to any existing file", Kmplete::Filesystem::GetCurrentFilepath(), { "Any files", "*.*" }, true);
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathExists(file));
     REQUIRE(Kmplete::Filesystem::IsFile(file));
 }
@@ -209,7 +209,7 @@ TEST_CASE("File dialog save file - SAVE new non-matching filter", "[file_dialogs
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to any new file that do not match filter", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to any new file that do not match filter", Kmplete::Filesystem::GetCurrentFilepath(), { "JSON files", "*.json" });
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
     REQUIRE_FALSE(Kmplete::Filesystem::FilepathExists(file));
 }
@@ -221,7 +221,7 @@ TEST_CASE("File dialog save file - Cyrillic characters", "[file_dialogs][open]")
 
     KMP_MB_UNUSED const auto res = Kmplete::FileDialogs::OpenMessage("File dialog save", "In the next dialog save to new file with cyrillic characters", Kmplete::FileDialogs::MessageChoice::Ok);
     const auto file = Kmplete::FileDialogs::SaveFile("Save to new file with cyrillic characters", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!file.empty());
+    REQUIRE(not file.empty());
     REQUIRE(Kmplete::Filesystem::FilepathIsValid(file));
 }
 //--------------------------------------------------------------------------
@@ -233,7 +233,7 @@ TEST_CASE("File dialog open folder - OPEN", "[file_dialogs][folder]")
     localizationManager.SetLocale("ru_RU.UTF8");
 
     const auto folder = Kmplete::FileDialogs::OpenDirectory("Open any directory", Kmplete::Filesystem::GetCurrentFilepath());
-    REQUIRE(!folder.empty());
+    REQUIRE(not folder.empty());
     REQUIRE(Kmplete::Filesystem::IsDirectory(folder));
 }
 

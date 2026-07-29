@@ -49,7 +49,7 @@ namespace Kmplete
 
     void WindowApplication::Run()
     {
-        KMP_ASSERT(!_running && _windowBackend);
+        KMP_ASSERT(not _running && _windowBackend);
         KMP_LOG_INFO_FN("'{}' main loop started...", ApplicationContext::GetApplicationName());
 
         _running = true;
@@ -58,7 +58,7 @@ namespace Kmplete
 
         while (_running)
         {
-            if (!_RunFrameIteration(mainWindow))
+            if (not _RunFrameIteration(mainWindow))
             {
                 break;
             }
@@ -91,7 +91,7 @@ namespace Kmplete
     void WindowApplication::_Initialize(const WindowApplicationParameters& parameters)
     {
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
-        if (!settings)
+        if (not settings)
         {
             KMP_LOG_WARN("failed to get settings entry for loading");
         }
@@ -132,7 +132,7 @@ namespace Kmplete
 #if defined KMP_PROFILE
         _inputManager->MapInputToCallback({ Input::Code::Key_F11, { Input::ButtonPressedValue, Input::Modifier::Alt } }, "switch_profiler_activity"_sid, [this](Input::InputControlValue) {
             const auto isProfilerActive = Profiler::Get().IsActive();
-            Profiler::Get().SetActive(!isProfilerActive);
+            Profiler::Get().SetActive(not isProfilerActive);
             return true;
         });
 #endif
@@ -194,7 +194,7 @@ namespace Kmplete
         }
         else
         {
-            if (!_graphicsBackend->StartFrame(frameTimestep))
+            if (not _graphicsBackend->StartFrame(frameTimestep))
             {
                 _graphicsBackend->RecreateResources();
                 return true;
@@ -242,7 +242,7 @@ namespace Kmplete
         KMP_ASSERT(_settingsManager && _windowBackend && _graphicsBackend);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
-        if (!settings)
+        if (not settings)
         {
             KMP_LOG_WARN("failed to create settings entry for saving");
             return;

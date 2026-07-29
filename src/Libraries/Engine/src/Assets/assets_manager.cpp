@@ -66,7 +66,7 @@ namespace Kmplete
         bool AssetsManager::LoadAssetFile(const Filepath& filepath, bool loadBinaries /*= true*/) KMP_PROFILING(ProfileLevelImportant)
         {
             const auto fullPath = _dataPath / filepath;
-            if (!Filesystem::FilepathExists(fullPath))
+            if (not Filesystem::FilepathExists(fullPath))
             {
                 KMP_LOG_ERROR("cannot load asset file from '{}' - file not found", filepath);
                 return false;
@@ -116,7 +116,7 @@ namespace Kmplete
 
             for (const auto& sid : assetsSids)
             {
-                if (!_lookupMap.contains(sid))
+                if (not _lookupMap.contains(sid))
                 {
                     KMP_LOG_WARN("cannot unload asset with sid '{}' - not found", sid);
                     continue;
@@ -133,12 +133,12 @@ namespace Kmplete
                 }
             }
 
-            if (!textureSidsToRemove.empty())
+            if (not textureSidsToRemove.empty())
             {
                 _textureAssetManager->RemoveAssets(textureSidsToRemove);
             }
 
-            if (!fontsSidsToRemove.empty())
+            if (not fontsSidsToRemove.empty())
             {
                 _fontAssetManager->RemoveAssets(fontsSidsToRemove);
             }
@@ -168,7 +168,7 @@ namespace Kmplete
 
         void AssetsManager::_LoadAssetFileHeaders(const BinaryBuffer& fileBuffer, AssetCount assetCount, const Filepath& filepath) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(!fileBuffer.empty());
+            KMP_ASSERT(not fileBuffer.empty());
 
             for (AssetCount i = 0; i < assetCount; i++)
             {
@@ -180,7 +180,7 @@ namespace Kmplete
                     .header = assetHeader
                 });
 
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("Asset SID duplication detected - file '{}' already registered asset with SID '{}' as currently processed file '{}'", _lookupMap[assetHeader.sid].filepath, assetHeader.sid, filepath);
                 }
@@ -190,7 +190,7 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetFileBinaries(const BinaryBuffer& fileBuffer, AssetCount assetCount) KMP_PROFILING(ProfileLevelImportant)
         {
-            KMP_ASSERT(!fileBuffer.empty());
+            KMP_ASSERT(not fileBuffer.empty());
 
             auto loadedOk = true;
             for (AssetCount i = 0; i < assetCount; i++)
@@ -212,7 +212,7 @@ namespace Kmplete
 
             for (const auto& sid : assetsSids)
             {
-                if (!_lookupMap.contains(sid))
+                if (not _lookupMap.contains(sid))
                 {
                     KMP_LOG_WARN("cannot load asset with sid '{}' - not found", sid);
                     continue;
@@ -256,7 +256,7 @@ namespace Kmplete
 
         bool AssetsManager::_LoadAssetEntryBinary(const BinaryBuffer& fileBuffer, const AssetEntryHeader& assetHeader) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            KMP_ASSERT(_textureAssetManager && _fontAssetManager && !fileBuffer.empty());
+            KMP_ASSERT(_textureAssetManager && _fontAssetManager && not fileBuffer.empty());
 
             if (fileBuffer.size() < assetHeader.bufferOffset + assetHeader.bufferSize) {
                 KMP_LOG_ERROR("asset buffer overflow - file too small for asset data");

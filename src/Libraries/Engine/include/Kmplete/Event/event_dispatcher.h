@@ -31,7 +31,7 @@ namespace Kmplete
             template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
             bool AddHandler(const EventHandler<EventClass>& newHandler)
             {
-                if (!_handlersMap.contains(EventClass::TypeID))
+                if (not _handlersMap.contains(EventClass::TypeID))
                 {
                     _handlersMap.emplace(EventClass::TypeID, Vector<UPtr<EventHandlerWrapper>>());
                 }
@@ -57,7 +57,7 @@ namespace Kmplete
             template<typename EventClass> requires (IsBaseClass<Event, EventClass>::value)
             bool RemoveHandler(const EventHandler<EventClass>& handler)
             {
-                if (!_handlersMap.contains(EventClass::TypeID))
+                if (not _handlersMap.contains(EventClass::TypeID))
                 {
                     KMP_LOG_WARN("cannot removed handler because its event TypeName '{}' has not been registered", EventClass::TypeName);
                     return false;
@@ -83,7 +83,7 @@ namespace Kmplete
             bool Dispatch(Event& event)
             {
                 const auto eventTypeID = event.GetTypeID();
-                if (!_handlersMap.contains(eventTypeID) || event.handled)
+                if (not _handlersMap.contains(eventTypeID) || event.handled)
                 {
                     return false;
                 }

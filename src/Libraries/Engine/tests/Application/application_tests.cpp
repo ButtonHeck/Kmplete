@@ -48,7 +48,7 @@ TEST_CASE("Test application initialize", "[application]")
         const auto application = Kmplete::CreateUPtr<Kmplete::TestApplication>(Kmplete::ApplicationParameters("TestApplication", "", "Kmplete_unit_tests_settings.json"));
 
         REQUIRE(application);
-        REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
+        REQUIRE(not Kmplete::Filesystem::GetCurrentFilepath().empty());
     }
 
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_unit_tests_settings.json");
@@ -64,7 +64,7 @@ TEST_CASE("Test application name", "[application]")
     REQUIRE(application);
     Kmplete::String appName = "";
     REQUIRE_NOTHROW(appName = Kmplete::ApplicationContext::GetApplicationName());
-    REQUIRE(!appName.empty());
+    REQUIRE(not appName.empty());
 }
 //--------------------------------------------------------------------------
 

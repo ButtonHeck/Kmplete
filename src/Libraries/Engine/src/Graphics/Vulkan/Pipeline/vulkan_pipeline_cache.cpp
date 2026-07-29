@@ -42,7 +42,7 @@ namespace Kmplete
             KMP_ASSERT(_device);
 
             bool emptyCache = false;
-            if (!Filesystem::FilepathExists(_binaryPath))
+            if (not Filesystem::FilepathExists(_binaryPath))
             {
                 KMP_LOG_WARN("cannot load pipeline cache from '{}' - file not found", _binaryPath);
                 emptyCache = true;
@@ -58,7 +58,7 @@ namespace Kmplete
                 pipelineCacheCreateInfo.initialDataSize = 0;
                 pipelineCacheCreateInfo.pInitialData = nullptr;
             }
-            else if (!_LoadedCacheIsValid(cacheBuffer))
+            else if (not _LoadedCacheIsValid(cacheBuffer))
             {
                 KMP_LOG_WARN("pipeline cache loaded from '{}' is not compatible", _binaryPath);
                 pipelineCacheCreateInfo.initialDataSize = 0;
@@ -79,7 +79,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device);
 
-            if (!_cache)
+            if (not _cache)
             {
                 KMP_LOG_WARN("cache serialization failed - cache object is null");
                 return;
@@ -98,7 +98,7 @@ namespace Kmplete
             BinaryBuffer cacheData(cacheSize);
             vkGetPipelineCacheData(_device, _cache, &cacheSize, cacheData.data());
 
-            if (!Filesystem::WriteFile(_binaryPath, cacheData, "append"_false))
+            if (not Filesystem::WriteFile(_binaryPath, cacheData, "append"_false))
             {
                 KMP_LOG_WARN("cache serialization to '{}' failed", _binaryPath);
             }

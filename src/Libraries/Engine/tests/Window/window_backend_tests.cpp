@@ -12,7 +12,7 @@ TEST_CASE("Window backend monitor functions", "[core][window_backend][monitor]")
     REQUIRE(monitorsCount > 0);
 
     const auto monitorNames = windowBackend->GetMonitorNames();
-    REQUIRE(!monitorNames.empty());
+    REQUIRE(not monitorNames.empty());
 
     bool monitorNamesNotEmpty = true;
     for (const auto& monitorName : monitorNames)
@@ -26,7 +26,7 @@ TEST_CASE("Window backend monitor functions", "[core][window_backend][monitor]")
     REQUIRE(monitorNamesNotEmpty);
 
     const auto primaryMonitorModes = windowBackend->GetPrimaryMonitorVideoModes();
-    REQUIRE(!primaryMonitorModes.empty());
+    REQUIRE(not primaryMonitorModes.empty());
 
     auto primaryMonitorModesDataValid = true;
     for (const auto& monitorMode : primaryMonitorModes)
@@ -41,7 +41,7 @@ TEST_CASE("Window backend monitor functions", "[core][window_backend][monitor]")
 
     // assume previous test for primary monitor is ok
     const auto firstMonitorVideoModes = windowBackend->GetMonitorVideoModes(0);
-    REQUIRE(!firstMonitorVideoModes.empty());
+    REQUIRE(not firstMonitorVideoModes.empty());
 
     auto firstMonitorVideoModesDataValid = true;
     for (const auto& monitorMode : firstMonitorVideoModes)

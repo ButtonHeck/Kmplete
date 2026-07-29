@@ -170,7 +170,7 @@ namespace Kmplete
                 throw RuntimeError("VulkanSwapchain: unable to get available present mode");
             }
 
-            if (!vSync && Utils::VectorContains(presentModes, VK_PresentMode_Immediate))
+            if (not vSync && Utils::VectorContains(presentModes, VK_PresentMode_Immediate))
             {
                 return VK_PresentMode_Immediate;
             }

@@ -72,12 +72,12 @@ TEST_CASE("Multiple windows test", "[core][window_backend][window]")
     REQUIRE(auxWindow);
     auxWindow->SetTitle("Aux window");
 
-    while (!mainWindow.ShouldClose())
+    while (not mainWindow.ShouldClose())
     {
         mainWindow.FetchEvents();
         mainWindow.SwapBuffers();
 
-        if (auxWindow && !auxWindow->ShouldClose())
+        if (auxWindow && not auxWindow->ShouldClose())
         {
             auxWindow->FetchEvents();
             auxWindow->SwapBuffers();
@@ -115,7 +115,7 @@ TEST_CASE("Window create via existing valid WindowSettings", "[core][window_back
 
     WindowCallbackUserSingleCondition windowCb(*window);
 
-    while (!window->ShouldClose())
+    while (not window->ShouldClose())
     {
         window->FetchEvents();
         window->SwapBuffers();
@@ -149,7 +149,7 @@ TEST_CASE("Window create via existing invalid WindowSettings", "[core][window_ba
     REQUIRE_NOTHROW(window = windowBackend->CreateAuxWindow(settings2));
     REQUIRE(window);
 
-    while (!window->ShouldClose())
+    while (not window->ShouldClose())
     {
         window->FetchEvents();
         window->SwapBuffers();

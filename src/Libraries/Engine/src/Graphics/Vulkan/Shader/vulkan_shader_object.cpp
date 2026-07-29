@@ -94,7 +94,7 @@ namespace Kmplete
         void VulkanShaderObject::_Initialize(const Filepath& filepathBinary, VkShaderStageFlagBits stage, VkShaderStageFlags nextStage, bool linked,
                                              const Vector<VkDescriptorSetLayout>& descriptorSetsLayouts, const char* name /*= "main"*/)
         {
-            if (!Filesystem::FilepathExists(filepathBinary))
+            if (not Filesystem::FilepathExists(filepathBinary))
             {
                 KMP_LOG_ERROR("shader file not found '{}'", filepathBinary);
                 throw RuntimeError("VulkanShaderObject: shader file not found");

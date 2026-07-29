@@ -53,7 +53,7 @@ namespace Kmplete
         , _reader(new JsonReader(_document))
         , _writer(new JsonWriter(_document))
     {
-        if (!Load(_filepath))
+        if (not Load(_filepath))
         {
             KMP_LOG_ERROR("creation from '{}' failed", _filepath);
         }
@@ -66,7 +66,7 @@ namespace Kmplete
     {
         _filepath = filepath;
 
-        if (!Filesystem::FilepathIsValid(_filepath))
+        if (not Filesystem::FilepathIsValid(_filepath))
         {
             KMP_LOG_WARN("invalid filepath was set '{}'", _filepath);
         }
@@ -89,7 +89,7 @@ namespace Kmplete
     bool JsonDocument::Load() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
         _error = false;
-        if (!Filesystem::FilepathExists(_filepath))
+        if (not Filesystem::FilepathExists(_filepath))
         {
             KMP_LOG_WARN("failed to load due to insufficient filepath '{}'", _filepath);
             _error = true;
@@ -99,7 +99,7 @@ namespace Kmplete
         KMP_LOG_INFO("loading from '{}'", _filepath);
 
         std::ifstream inputStream(_filepath);
-        if (!inputStream.is_open() || !inputStream.good())
+        if (not inputStream.is_open() || not inputStream.good())
         {
             _error = true;
             return false;
@@ -230,7 +230,7 @@ namespace Kmplete
         }
 
         auto& childDocument = child._document;
-        if (!childDocument.IsObject() || childDocument.HasParseError())
+        if (not childDocument.IsObject() || childDocument.HasParseError())
         {
             KMP_LOG_ERROR("cannot add '{}' child document - not an object or has errors", name);
             return false;
@@ -250,7 +250,7 @@ namespace Kmplete
         children.reserve(_document.MemberCount());
         for (auto child = _document.MemberBegin(); child != _document.MemberEnd(); child++)
         {
-            if (onlyObjects && !child->value.IsObject())
+            if (onlyObjects && not child->value.IsObject())
             {
                 continue;
             }
@@ -509,14 +509,14 @@ namespace Kmplete
 
     bool JsonDocument::_SaveToFile(const rapidjson::StringBuffer& buffer) KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        if (!Filesystem::CreateDirectories(_filepath, "is file"_true))
+        if (not Filesystem::CreateDirectories(_filepath, "is file"_true))
         {
             KMP_LOG_WARN("failed to create directories for '{}'", _filepath);
             _error = true;
             return false;
         }
 
-        if (!Filesystem::WriteFile(_filepath, buffer.GetString(), "append"_false))
+        if (not Filesystem::WriteFile(_filepath, buffer.GetString(), "append"_false))
         {
             KMP_LOG_WARN("failed to write document in '{}'", _filepath);
             _error = true;

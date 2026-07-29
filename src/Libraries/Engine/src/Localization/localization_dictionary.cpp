@@ -54,7 +54,7 @@ namespace Kmplete
         auto& currentLocaleTranslations = _translationPluralMap[_currentLocaleSid]; 
         const auto isPluralSourceAdded = currentLocaleTranslations.contains(pluralSource);
         if (isPluralSourceAdded && 
-            !currentLocaleTranslations[pluralSource][pluralityForm].empty() && 
+            not currentLocaleTranslations[pluralSource][pluralityForm].empty() &&
             currentLocaleTranslations[pluralSource][pluralityForm] != translation)
         {
             KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"/\"{}\" (plural form \"{}\")",
@@ -62,7 +62,7 @@ namespace Kmplete
             return;
         }
 
-        if (!isPluralSourceAdded)
+        if (not isPluralSourceAdded)
         {
             PluralTranslations pluralTranslations;
             pluralTranslations[pluralityForm] = translation;
@@ -104,7 +104,7 @@ namespace Kmplete
         auto& currentLocaleTranslations = _translationCtxPluralMap[_currentLocaleSid];
         const auto isContextedPluralSourceAdded = currentLocaleTranslations.contains(contextedPluralSource); 
         if (isContextedPluralSourceAdded &&
-            !currentLocaleTranslations[contextedPluralSource][pluralityForm].empty() &&
+            not currentLocaleTranslations[contextedPluralSource][pluralityForm].empty() &&
             currentLocaleTranslations[contextedPluralSource][pluralityForm] != translation)
         {
             KMP_LOG_WARN("\"{}\" possible duplicate \"{}\"/\"{}\" (context \"{}\" plural form \"{}\")",
@@ -112,7 +112,7 @@ namespace Kmplete
             return;
         }
 
-        if (!isContextedPluralSourceAdded)
+        if (not isContextedPluralSourceAdded)
         {
             PluralTranslations pluralTranslations;
             pluralTranslations[pluralityForm] = translation;

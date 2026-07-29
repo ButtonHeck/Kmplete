@@ -1,6 +1,6 @@
 #pragma once
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
 
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/macro.h"
@@ -11,7 +11,7 @@
 #include <sstream>
 
 
-#if !defined (KMP_ASSERTS_ACTIVE)
+#if not defined (KMP_ASSERTS_ACTIVE)
     #if defined NDEBUG
         #define KMP_ASSERTS_ACTIVE false
     #else
@@ -59,7 +59,7 @@ namespace Kmplete
     //--------------------------------------------------------------------------
 }
 
-#define KMP_ASSERT(expr) (!KMP_ASSERTS_ACTIVE || bool(expr)) \
+#define KMP_ASSERT(expr) (not KMP_ASSERTS_ACTIVE || bool(expr)) \
     ? (void)0 \
     : (void)Kmplete::Assertion{ KMP_M_STRINGIFY(expr), __FILE__, __FUNCTION__, __LINE__ }
 

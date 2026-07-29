@@ -57,40 +57,40 @@ namespace Kmplete
         bool VKCommands::LoadExtensionFunctions(VkInstance instance) KMP_PROFILING(ProfileLevelAlways)
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
-            if (!LoadExtensionFunction<PFN_vkCreateDebugUtilsMessengerEXT>(CreateDebugUtilsMessengerEXT, instance, "vkCreateDebugUtilsMessengerEXT") ||
-                !LoadExtensionFunction<PFN_vkDestroyDebugUtilsMessengerEXT>(DestroyDebugUtilsMessengerEXT, instance, "vkDestroyDebugUtilsMessengerEXT"))
+            if (not LoadExtensionFunction<PFN_vkCreateDebugUtilsMessengerEXT>(CreateDebugUtilsMessengerEXT, instance, "vkCreateDebugUtilsMessengerEXT") ||
+                not LoadExtensionFunction<PFN_vkDestroyDebugUtilsMessengerEXT>(DestroyDebugUtilsMessengerEXT, instance, "vkDestroyDebugUtilsMessengerEXT"))
             {
                 return false;
             }
 #endif
 
-            if (!LoadExtensionFunction<PFN_vkCmdSetRasterizationSamplesEXT>(CmdSetRasterizationSamplesEXT, instance, "vkCmdSetRasterizationSamplesEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetDepthClampEnableEXT>(CmdSetDepthClampEnableEXT, instance, "vkCmdSetDepthClampEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetDepthClipEnableEXT>(CmdSetDepthClipEnableEXT, instance, "vkCmdSetDepthClipEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetDepthClampRangeEXT>(CmdSetDepthClampRangeEXT, instance, "vkCmdSetDepthClampRangeEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetLineStippleEnableEXT>(CmdSetLineStippleEnableEXT, instance, "vkCmdSetLineStippleEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetLineRasterizationModeEXT>(CmdSetLineRasterizationModeEXT, instance, "vkCmdSetLineRasterizationModeEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleEnableEXT>(CmdSetDiscardRectangleEnableEXT, instance, "vkCmdSetDiscardRectangleEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleEXT>(CmdSetDiscardRectangleEXT, instance, "vkCmdSetDiscardRectangleEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleModeEXT>(CmdSetDiscardRectangleModeEXT, instance, "vkCmdSetDiscardRectangleModeEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetSampleLocationsEnableEXT>(CmdSetSampleLocationsEnableEXT, instance, "vkCmdSetSampleLocationsEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetSampleLocationsEXT>(CmdSetSampleLocationsEXT, instance, "vkCmdSetSampleLocationsEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetSampleMaskEXT>(CmdSetSampleMaskEXT, instance, "vkCmdSetSampleMaskEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetFragmentShadingRateKHR>(CmdSetFragmentShadingRateKHR, instance, "vkCmdSetFragmentShadingRateKHR") ||
-                !LoadExtensionFunction<PFN_vkCmdSetColorWriteEnableEXT>(CmdSetColorWriteEnableEXT, instance, "vkCmdSetColorWriteEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetColorWriteMaskEXT>(CmdSetColorWriteMaskEXT, instance, "vkCmdSetColorWriteMaskEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetColorBlendEnableEXT>(CmdSetColorBlendEnableEXT, instance, "vkCmdSetColorBlendEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetColorBlendEquationEXT>(CmdSetColorBlendEquationEXT, instance, "vkCmdSetColorBlendEquationEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetPolygonModeEXT>(CmdSetPolygonModeEXT, instance, "vkCmdSetPolygonModeEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetAlphaToCoverageEnableEXT>(CmdSetAlphaToCoverageEnableEXT, instance, "vkCmdSetAlphaToCoverageEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetAlphaToOneEnableEXT>(CmdSetAlphaToOneEnableEXT, instance, "vkCmdSetAlphaToOneEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetLogicOpEnableEXT>(CmdSetLogicOpEnableEXT, instance, "vkCmdSetLogicOpEnableEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetLogicOpEXT>(CmdSetLogicOpEXT, instance, "vkCmdSetLogicOpEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetProvokingVertexModeEXT>(CmdSetProvokingVertexModeEXT, instance, "vkCmdSetProvokingVertexModeEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdSetVertexInputEXT>(CmdSetVertexInputEXT, instance, "vkCmdSetVertexInputEXT") ||
-                !LoadExtensionFunction<PFN_vkCreateShadersEXT>(CreateShadersEXT, instance, "vkCreateShadersEXT") ||
-                !LoadExtensionFunction<PFN_vkDestroyShaderEXT>(DestroyShaderEXT, instance, "vkDestroyShaderEXT") ||
-                !LoadExtensionFunction<PFN_vkCmdBindShadersEXT>(CmdBindShadersEXT, instance, "vkCmdBindShadersEXT"))
+            if (not LoadExtensionFunction<PFN_vkCmdSetRasterizationSamplesEXT>(CmdSetRasterizationSamplesEXT, instance, "vkCmdSetRasterizationSamplesEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetDepthClampEnableEXT>(CmdSetDepthClampEnableEXT, instance, "vkCmdSetDepthClampEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetDepthClipEnableEXT>(CmdSetDepthClipEnableEXT, instance, "vkCmdSetDepthClipEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetDepthClampRangeEXT>(CmdSetDepthClampRangeEXT, instance, "vkCmdSetDepthClampRangeEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetLineStippleEnableEXT>(CmdSetLineStippleEnableEXT, instance, "vkCmdSetLineStippleEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetLineRasterizationModeEXT>(CmdSetLineRasterizationModeEXT, instance, "vkCmdSetLineRasterizationModeEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleEnableEXT>(CmdSetDiscardRectangleEnableEXT, instance, "vkCmdSetDiscardRectangleEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleEXT>(CmdSetDiscardRectangleEXT, instance, "vkCmdSetDiscardRectangleEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetDiscardRectangleModeEXT>(CmdSetDiscardRectangleModeEXT, instance, "vkCmdSetDiscardRectangleModeEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetSampleLocationsEnableEXT>(CmdSetSampleLocationsEnableEXT, instance, "vkCmdSetSampleLocationsEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetSampleLocationsEXT>(CmdSetSampleLocationsEXT, instance, "vkCmdSetSampleLocationsEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetSampleMaskEXT>(CmdSetSampleMaskEXT, instance, "vkCmdSetSampleMaskEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetFragmentShadingRateKHR>(CmdSetFragmentShadingRateKHR, instance, "vkCmdSetFragmentShadingRateKHR") ||
+                not LoadExtensionFunction<PFN_vkCmdSetColorWriteEnableEXT>(CmdSetColorWriteEnableEXT, instance, "vkCmdSetColorWriteEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetColorWriteMaskEXT>(CmdSetColorWriteMaskEXT, instance, "vkCmdSetColorWriteMaskEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetColorBlendEnableEXT>(CmdSetColorBlendEnableEXT, instance, "vkCmdSetColorBlendEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetColorBlendEquationEXT>(CmdSetColorBlendEquationEXT, instance, "vkCmdSetColorBlendEquationEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetPolygonModeEXT>(CmdSetPolygonModeEXT, instance, "vkCmdSetPolygonModeEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetAlphaToCoverageEnableEXT>(CmdSetAlphaToCoverageEnableEXT, instance, "vkCmdSetAlphaToCoverageEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetAlphaToOneEnableEXT>(CmdSetAlphaToOneEnableEXT, instance, "vkCmdSetAlphaToOneEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetLogicOpEnableEXT>(CmdSetLogicOpEnableEXT, instance, "vkCmdSetLogicOpEnableEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetLogicOpEXT>(CmdSetLogicOpEXT, instance, "vkCmdSetLogicOpEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetProvokingVertexModeEXT>(CmdSetProvokingVertexModeEXT, instance, "vkCmdSetProvokingVertexModeEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdSetVertexInputEXT>(CmdSetVertexInputEXT, instance, "vkCmdSetVertexInputEXT") ||
+                not LoadExtensionFunction<PFN_vkCreateShadersEXT>(CreateShadersEXT, instance, "vkCreateShadersEXT") ||
+                not LoadExtensionFunction<PFN_vkDestroyShaderEXT>(DestroyShaderEXT, instance, "vkDestroyShaderEXT") ||
+                not LoadExtensionFunction<PFN_vkCmdBindShadersEXT>(CmdBindShadersEXT, instance, "vkCmdBindShadersEXT"))
             {
                 return false;
             }

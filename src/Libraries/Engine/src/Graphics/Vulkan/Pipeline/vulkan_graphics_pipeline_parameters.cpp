@@ -249,7 +249,7 @@ namespace Kmplete
 
         VulkanGraphicsPipelineParameters& VulkanGraphicsPipelineParameters::AddDynamicState(VkDynamicState dynamicState)
         {
-            if (!Utils::VectorContains(_dynamicStates, dynamicState))
+            if (not Utils::VectorContains(_dynamicStates, dynamicState))
             {
                 _dynamicStates.push_back(dynamicState);
             }
@@ -271,7 +271,7 @@ namespace Kmplete
         {
             for (const auto& state : dynamicStates)
             {
-                if (!Utils::VectorContains(_dynamicStates, state))
+                if (not Utils::VectorContains(_dynamicStates, state))
                 {
                     _dynamicStates.push_back(state);
                 }

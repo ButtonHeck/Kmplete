@@ -5,9 +5,9 @@
 
 TEST_CASE("Assertion exception", "[core][assertion]")
 {
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
     const auto var = 10;
-#if !KMP_ASSERTS_ACTIVE
+#if not KMP_ASSERTS_ACTIVE
     REQUIRE_NOTHROW(KMP_ASSERT(var != 10));
 #endif
 
@@ -21,7 +21,7 @@ TEST_CASE("Assertion exception", "[core][assertion]")
 
 TEST_CASE("Assertion nothrows", "[core][assertion]")
 {
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
     const auto var = 10;
     REQUIRE_NOTHROW(KMP_ASSERT(var == 10));
 #else
@@ -33,7 +33,7 @@ TEST_CASE("Assertion nothrows", "[core][assertion]")
 
 TEST_CASE("Assertion chain watch", "[core][assertion]")
 {
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
     const auto var = 10;
     const auto var2 = 88;
     REQUIRE_NOTHROW(KMP_ASSERT_WATCH(var == 10 && var2 == 88, var, var2));

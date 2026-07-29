@@ -24,7 +24,7 @@ TEST_CASE("Filesystem Current path", "[core][filesystem]")
     SECTION("Current path is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
-        REQUIRE(!path.empty());
+        REQUIRE(not path.empty());
     }
 
     SECTION("Current path exists")
@@ -48,28 +48,28 @@ TEST_CASE("Filesystem string conversions", "[core][filesystem]")
     {
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToGenericU8String(path);
-        REQUIRE(!pathStr.empty());
+        REQUIRE(not pathStr.empty());
     }
 
     SECTION("Current path ToGenericString is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToGenericString(path);
-        REQUIRE(!pathStr.empty());
+        REQUIRE(not pathStr.empty());
     }
 
     SECTION("Current path ToNativeU8String is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToNativeU8String(path);
-        REQUIRE(!pathStr.empty());
+        REQUIRE(not pathStr.empty());
     }
 
     SECTION("Current path ToNativeString is not empty")
     {
         const auto path = Kmplete::Filesystem::GetCurrentFilepath();
         const auto pathStr = Kmplete::Filesystem::ToNativeString(path);
-        REQUIRE(!pathStr.empty());
+        REQUIRE(not pathStr.empty());
     }
 }
 //--------------------------------------------------------------------------

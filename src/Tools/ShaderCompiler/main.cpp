@@ -58,7 +58,7 @@ int main(int argc, char** argv)
     {
         std::cerr << "ShaderCompilerTool: failed to parse parameters\n";
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         if (vm.count(ShaderCompilerTool::CompilerArgumentLogging))
         {
             Kmplete::Log::Finalize();
@@ -74,7 +74,7 @@ int main(int argc, char** argv)
     ShaderCompilerTool::ShaderCompilerProcessor processor(std::move(compilerParameters));
     const auto processorResultCode = processor.Run();
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
     if (vm.count(ShaderCompilerTool::CompilerArgumentLogging))
     {
         Kmplete::Log::Finalize();
@@ -129,7 +129,7 @@ namespace Kmplete
         {
             using namespace ShaderCompilerTool;
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             // logging parsing
             const bool loggingEnabled = vm.count(CompilerArgumentLogging);
             compilerParameters.logging = loggingEnabled;
@@ -154,7 +154,7 @@ namespace Kmplete
                 PrintUsage(optionsDescription);
                 return ReturnCode::WorkModeIsNotSet;
             }
-            if (!WorkModeIsValid(workMode))
+            if (not WorkModeIsValid(workMode))
             {
                 KMP_LOG_ERROR_FN("ShaderCompilerTool: work mode '{}' is not valid", workMode);
                 PrintUsage(optionsDescription);
@@ -178,7 +178,7 @@ namespace Kmplete
                 for (const auto& sourceJsonFileStr : sourceJsonFileStrings)
                 {
                     const auto sourceJsonFilePath = Filepath(sourceJsonFileStr);
-                    if (!Filesystem::FilepathExists(sourceJsonFilePath) || !Filesystem::IsFile(sourceJsonFilePath))
+                    if (not Filesystem::FilepathExists(sourceJsonFilePath) || not Filesystem::IsFile(sourceJsonFilePath))
                     {
                         KMP_LOG_ERROR_FN("ShaderCompilerTool: one of source files '{}' does not exist or is not of a file type", sourceJsonFilePath);
                         PrintUsage(optionsDescription);
@@ -205,7 +205,7 @@ namespace Kmplete
                 for (const auto& shaderSourceFileStr : shaderSourceFilesStrings)
                 {
                     const auto shaderSourceFilePath = Filepath(shaderSourceFileStr);
-                    if (!Filesystem::FilepathExists(shaderSourceFilePath) || !Filesystem::IsFile(shaderSourceFilePath))
+                    if (not Filesystem::FilepathExists(shaderSourceFilePath) || not Filesystem::IsFile(shaderSourceFilePath))
                     {
                         KMP_LOG_ERROR_FN("ShaderCompilerTool: one of shader source files '{}', does not exist of is not of a file type", shaderSourceFilePath);
                         PrintUsage(optionsDescription);
@@ -249,7 +249,7 @@ namespace Kmplete
                 for (const auto& shaderTypeStr : shaderTypeStrings)
                 {
                     const auto shaderType = StringToShaderType(shaderTypeStr);
-                    if (!shaderType.has_value())
+                    if (not shaderType.has_value())
                     {
                         KMP_LOG_ERROR_FN("ShaderCompilerTool: shader type conversion failed");
                         PrintUsage(optionsDescription);

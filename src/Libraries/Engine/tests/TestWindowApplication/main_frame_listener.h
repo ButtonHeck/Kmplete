@@ -68,12 +68,12 @@ namespace Kmplete
 
         bool DuplicateSidFrameListenerCheck() const
         {
-            return !_duplicateSidFrameListenerCheckActivated || _duplicateSidFrameListenerCheckSuccess;
+            return not _duplicateSidFrameListenerCheckActivated || _duplicateSidFrameListenerCheckSuccess;
         }
 
         bool DuplicatePriorityFrameListenerCheck() const
         {
-            return !_duplicatePriorityFrameListenerCheckActivated || _duplicatePriorityFrameListenerCheckSuccess;
+            return not _duplicatePriorityFrameListenerCheckActivated || _duplicatePriorityFrameListenerCheckSuccess;
         }
 
         bool ActionDefaultTagCallbackDoubleRegistrationCheck() const

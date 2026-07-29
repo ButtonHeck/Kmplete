@@ -86,7 +86,7 @@ namespace Kmplete
         _inputManager->MapInputToAction({ Input::Code::Key_D, Input::PressNoModsCondition }, "move_right"_sid);
         _inputManager->MapInputToCallback({ Input::Code::Key_LeftControl, Input::PressNoModsCondition }, "crouch"_sid, [this](Input::InputControlValue) {
             _emulatorPlayerCrawling = false;
-            _emulatorPlayerCrouching = !_emulatorPlayerCrouching;
+            _emulatorPlayerCrouching = not _emulatorPlayerCrouching;
             return true;
         });
         _inputManager->MapInputToCallback({ Input::Code::Key_LeftControl, { Input::ButtonPressedValue, Input::Modifier::None, 1000.0f } }, "crawl"_sid, [this](Input::InputControlValue) {
@@ -193,7 +193,7 @@ namespace Kmplete
     void MainFrameListener::SwitchFonts()
     {
         _switchFontRequested = true;
-        _useDefaultFont = !_useDefaultFont;
+        _useDefaultFont = not _useDefaultFont;
     }
 
     void MainFrameListener::Render()
@@ -415,7 +415,7 @@ namespace Kmplete
             ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 
 
-            if (!_mainWindow.IsWaylandWindow())
+            if (not _mainWindow.IsWaylandWindow())
             {
                 const auto windowPos = _mainWindow.GetPosition();
                 ImGui::Text("Window position: [%4d : %4d]", windowPos.x, windowPos.y);
@@ -478,7 +478,7 @@ namespace Kmplete
                 keyModsStringVector.push_back(Input::GetKeyModifierName(Input::Modifier::Super));
             }
             String keyModsString = "";
-            if (!keyModsStringVector.empty())
+            if (not keyModsStringVector.empty())
             {
                 keyModsString = Utils::StringVectorToString(keyModsStringVector, '+', false);
             }
@@ -518,7 +518,7 @@ namespace Kmplete
                 mouseButtonsPressed.push_back(Input::GetCodeName(Input::Code::Mouse_Button7));
             }
             String mouseButtonsString = "";
-            if (!mouseButtonsPressed.empty())
+            if (not mouseButtonsPressed.empty())
             {
                 mouseButtonsString = Utils::StringVectorToString(mouseButtonsPressed, '+', false);
             }
@@ -530,7 +530,7 @@ namespace Kmplete
             {
                 keysPressedStringVector.push_back(Input::GetCodeName(key));
             }
-            if (!keysPressedStringVector.empty())
+            if (not keysPressedStringVector.empty())
             {
                 keysPressedString = Utils::StringVectorToString(keysPressedStringVector, ',', false);
             }
@@ -980,7 +980,7 @@ namespace Kmplete
                 { Graphics::VKBits::VK_DescriptorType_InputAttachment, 100 }
             });
 
-            const auto viewportEnabled = !_mainWindow.IsWaylandWindow();
+            const auto viewportEnabled = not _mainWindow.IsWaylandWindow();
 
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();

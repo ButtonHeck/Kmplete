@@ -85,7 +85,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     Kmplete::MemoryChecker::Prepare();
 
 #if defined(KMP_PROFILE)
-    Kmplete::Profiler::Get().SetActive(!programOptions.IsProfilingOnDemand());
+    Kmplete::Profiler::Get().SetActive(not programOptions.IsProfilingOnDemand());
     Kmplete::Profiler::Get().SetLevel(programOptions.GetProfilingLevel());
 #endif
 
@@ -94,7 +94,7 @@ int Main(const Kmplete::ProgramOptions& programOptions)
     auto app = Kmplete::CreateApplication(programOptions);
     KMP_PROFILE_END_SESSION();
 
-    if (!app)
+    if (not app)
     {
         return 1;
     }

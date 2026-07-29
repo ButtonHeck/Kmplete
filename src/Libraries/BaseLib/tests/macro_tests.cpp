@@ -95,7 +95,7 @@ TEST_CASE("Dispatch VA_ARGS macro", "[core][macro]")
 TEST_CASE("Funcsig macro", "[core][macro]")
 {
     const auto functionString = std::string(KMP_FUNC_SIG);
-    REQUIRE(!functionString.empty());
+    REQUIRE(not functionString.empty());
 }
 //--------------------------------------------------------------------------
 

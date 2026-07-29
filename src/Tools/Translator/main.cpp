@@ -57,7 +57,7 @@ int main(int argc, char** argv)
     {
         std::cerr << "Translator: failed to parse parameters\n";
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         if (vm.count(ProcessorArgumentLogging))
         {
             Kmplete::Log::Finalize();
@@ -73,7 +73,7 @@ int main(int argc, char** argv)
     TranslatorProcessor processor(std::move(translatorParameters));
     const auto translatorResultCode = processor.Run();
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
     if (vm.count(ProcessorArgumentLogging))
     {
         Kmplete::Log::Finalize();
@@ -128,7 +128,7 @@ namespace Kmplete
 
         int ParseParameters(const bpo::options_description& optionsDescription, bpo::variables_map& vm, TranslatorParameters& translatorParameters)
         {
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             // logging parsing
             const bool loggingEnabled = vm.count(ProcessorArgumentLogging);
             translatorParameters.logging = loggingEnabled;
@@ -153,7 +153,7 @@ namespace Kmplete
                 PrintUsage(optionsDescription);
                 return ReturnCode::WorkModeIsNotSet;
             }
-            if (!WorkModeIsValid(workMode))
+            if (not WorkModeIsValid(workMode))
             {
                 KMP_LOG_ERROR_FN("Translator: work mode '{}' is not valid", workMode);
                 PrintUsage(optionsDescription);
@@ -177,7 +177,7 @@ namespace Kmplete
                 for (const auto& sourceDirectoryStr : sourceDirectoryStrings)
                 {
                     const auto sourceDirectory = Filepath(sourceDirectoryStr);
-                    if (!Filesystem::FilepathExists(sourceDirectory) || !Filesystem::IsDirectory(sourceDirectory))
+                    if (not Filesystem::FilepathExists(sourceDirectory) || not Filesystem::IsDirectory(sourceDirectory))
                     {
                         KMP_LOG_ERROR_FN("Translator: one of source directories '{}' does not exist or is not of a directory type", sourceDirectory);
                         PrintUsage(optionsDescription);
@@ -215,7 +215,7 @@ namespace Kmplete
             }
             const auto outputDirectory = Filepath(outputDirectoryStr);
 
-            if (!Filesystem::CreateDirectories(outputDirectory))
+            if (not Filesystem::CreateDirectories(outputDirectory))
             {
                 KMP_LOG_ERROR_FN("Translator: cannot create output directory '{}'", outputDirectory);
                 PrintUsage(optionsDescription);

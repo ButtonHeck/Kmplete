@@ -106,7 +106,7 @@ namespace Kmplete
             for (const auto& parameters : shaderModulesParameters)
             {
                 const auto shaderModule = GetShaderModule(parameters.shaderModuleSid);
-                if (!shaderModule.has_value())
+                if (not shaderModule.has_value())
                 {
                     continue;
                 }
@@ -133,7 +133,7 @@ namespace Kmplete
 
             if (parameters.sourceType == ShaderSourceType::BinaryFile)
             {
-                if (!std::holds_alternative<Filepath>(parameters.source))
+                if (not std::holds_alternative<Filepath>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader object '{}' from binary file - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -143,7 +143,7 @@ namespace Kmplete
             }
             else if (parameters.sourceType == ShaderSourceType::SourceFile)
             {
-                if (!std::holds_alternative<Filepath>(parameters.source))
+                if (not std::holds_alternative<Filepath>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader object '{}' from source file - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -156,7 +156,7 @@ namespace Kmplete
             }
             else if (parameters.sourceType == ShaderSourceType::BinaryCode)
             {
-                if (!std::holds_alternative<BinaryBuffer32>(parameters.source))
+                if (not std::holds_alternative<BinaryBuffer32>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader object '{}' from binary code - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -166,7 +166,7 @@ namespace Kmplete
             }
             else if (parameters.sourceType == ShaderSourceType::SourceCode)
             {
-                if (!std::holds_alternative<String>(parameters.source))
+                if (not std::holds_alternative<String>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader object '{}' from source code - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -274,7 +274,7 @@ namespace Kmplete
 
             if (parameters.sourceType == ShaderSourceType::BinaryFile)
             {
-                if (!std::holds_alternative<Filepath>(parameters.source))
+                if (not std::holds_alternative<Filepath>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader module '{}' from binary file - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -284,7 +284,7 @@ namespace Kmplete
             }
             else if (parameters.sourceType == ShaderSourceType::SourceFile)
             {
-                if (!std::holds_alternative<Filepath>(parameters.source))
+                if (not std::holds_alternative<Filepath>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader module '{}' from source file - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -297,7 +297,7 @@ namespace Kmplete
             }
             else if (parameters.sourceType == ShaderSourceType::BinaryCode)
             {
-                if (!std::holds_alternative<BinaryBuffer32>(parameters.source))
+                if (not std::holds_alternative<BinaryBuffer32>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader module '{}' from binary code - source and type parameters mismatch", parameters.sid);
                     return false;
@@ -307,7 +307,7 @@ namespace Kmplete
             }
             else if (parameters.sourceType == ShaderSourceType::SourceCode)
             {
-                if (!std::holds_alternative<String>(parameters.source))
+                if (not std::holds_alternative<String>(parameters.source))
                 {
                     KMP_LOG_ERROR("cannot load shader module '{}' from source code - source and type parameters mismatch", parameters.sid);
                     return false;

@@ -10,7 +10,7 @@ TEST_CASE("SettingsManager basic test", "[core][settings_document][manager]")
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsFilepath);
 
-    REQUIRE(!settingsManager.GetFilepath().empty());
+    REQUIRE(not settingsManager.GetFilepath().empty());
     REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettingsDocument("NonExisting");
@@ -41,7 +41,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings_document][mana
     const auto settingsFilepath = Kmplete::Filesystem::GetCurrentFilepath().append("Kmplete_settings_unit_tests.json");
     Kmplete::SettingsManager settingsManager(settingsFilepath);
 
-    REQUIRE(!settingsManager.GetFilepath().empty());
+    REQUIRE(not settingsManager.GetFilepath().empty());
     REQUIRE(settingsManager.LoadSettings());
 
     auto settings = settingsManager.GetSettingsDocument("ObjA");
@@ -54,7 +54,7 @@ TEST_CASE("SettingsManager read/write and back", "[core][settings_document][mana
 
 
     Kmplete::SettingsManager swapSettingsManager(swapSettingsPath);
-    REQUIRE(!swapSettingsManager.GetFilepath().empty());
+    REQUIRE(not swapSettingsManager.GetFilepath().empty());
     REQUIRE(swapSettingsManager.LoadSettings());
 
     settings = swapSettingsManager.GetSettingsDocument("ObjA");

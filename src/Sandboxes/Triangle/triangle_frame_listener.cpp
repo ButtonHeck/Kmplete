@@ -304,7 +304,7 @@ namespace Kmplete
         pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
         pipelineParams.AddShaderStages(shaderStages);
 
-#if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
+#if not TRIANGLE_VULKAN_DYNAMIC_RENDERING
         const auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddDynamicState(VK_Dynamic_Viewport);
@@ -400,7 +400,7 @@ namespace Kmplete
                 { VK_DescriptorType_InputAttachment, 100 }
             });
 
-            const auto viewportEnabled = !_mainWindow.IsWaylandWindow();
+            const auto viewportEnabled = not _mainWindow.IsWaylandWindow();
 
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();
@@ -483,7 +483,7 @@ namespace Kmplete
         renderer.BindIndexBuffer(*vulkanBufferManager.GetBuffer(IndexBuffer_SID));
         renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
 
-#if !TRIANGLE_VULKAN_DYNAMIC_RENDERING
+#if not TRIANGLE_VULKAN_DYNAMIC_RENDERING
         renderer.BindVertexBuffers(VertexBufferBinding, { vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { VkDeviceSize{ 0 } } );
         renderer.SetViewport(VkViewport{ .x = 0, .y = 0, .width = float(_mainWindow.GetSize().x), .height = float(_mainWindow.GetSize().y), .minDepth = 0.0f, .maxDepth = 1.0f });
         renderer.SetScissor(VkRect2D{ .offset = VkOffset2D{ .x = 0, .y = 0 }, .extent = vulkanDevice.GetCurrentExtent() });

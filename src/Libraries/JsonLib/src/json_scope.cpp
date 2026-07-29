@@ -15,7 +15,7 @@ namespace Kmplete
 
     bool JsonScope::Pop() KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!scope.empty())
+        if (not scope.empty())
         {
             scope.pop_back();
             scopeString = scope.empty() ? "" : Utils::StringVectorToString(scope, '/');

@@ -45,7 +45,7 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _perFrameBuffers.emplace(bufferSid, Array<UPtr<VulkanBuffer>, NumConcurrentFrames>{});
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace '{}' per-frame buffers with sid '{}'", NumConcurrentFrames, bufferSid);
                     return false;
@@ -90,7 +90,7 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _perFrameVertexBuffers.emplace(bufferSid, Array<UPtr<VulkanVertexBuffer>, NumConcurrentFrames>{});
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace '{}' per-frame vertex buffers with sid '{}'", NumConcurrentFrames, bufferSid);
                     return false;
@@ -135,7 +135,7 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _perFrameBuffers.emplace(bufferSid, Array<UPtr<VulkanBuffer>, NumConcurrentFrames>{});
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace '{}' per-frame index buffers with sid '{}'", NumConcurrentFrames, bufferSid);
                     return false;
@@ -180,7 +180,7 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _perFrameBuffers.emplace(bufferSid, Array<UPtr<VulkanBuffer>, NumConcurrentFrames>{});
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace '{}' per-frame uniform buffers with sid '{}'", NumConcurrentFrames, bufferSid);
                     return false;
@@ -225,7 +225,7 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _perFrameBuffers.emplace(bufferSid, Array<UPtr<VulkanBuffer>, NumConcurrentFrames>{});
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace '{}' per-frame storage buffers with sid '{}'", NumConcurrentFrames, bufferSid);
                     return false;
@@ -270,7 +270,7 @@ namespace Kmplete
                 }
 
                 const auto [iterator, hasEmplaced] = _perFrameBuffers.emplace(bufferSid, Array<UPtr<VulkanBuffer>, NumConcurrentFrames>{});
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace '{}' per-frame indirect buffers with sid '{}'", NumConcurrentFrames, bufferSid);
                     return false;

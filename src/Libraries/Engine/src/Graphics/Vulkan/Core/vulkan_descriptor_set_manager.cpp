@@ -71,7 +71,7 @@ namespace Kmplete
 
         VkDescriptorPool VulkanDescriptorSetManager::GetAuxDescriptorPool(StringID sid) const noexcept
         {
-            if (!_auxDescriptorPools.contains(sid))
+            if (not _auxDescriptorPools.contains(sid))
             {
                 KMP_LOG_ERROR("aux descriptor pool with sid '{}' not found", sid);
                 return VK_NULL_HANDLE;
@@ -101,7 +101,7 @@ namespace Kmplete
                 VKUtils::CheckResult(result, "VulkanDescriptorSetManager: failed to create descriptor set layout");
 
                 const auto [iterator, hasEmplaced] = _descriptorSetLayouts.emplace(layoutSid, layout);
-                if (!hasEmplaced)
+                if (not hasEmplaced)
                 {
                     KMP_LOG_ERROR("failed to emplace descriptor set layout to the storage");
                     return VK_NULL_HANDLE;
@@ -144,7 +144,7 @@ namespace Kmplete
 
         bool VulkanDescriptorSetManager::AllocateDescriptorSets(StringID layoutSid, StringID setSid, UInt32 setsCount, bool perFrame) 
         {
-            if (!_descriptorSetLayouts.contains(layoutSid))
+            if (not _descriptorSetLayouts.contains(layoutSid))
             {
                 KMP_LOG_ERROR("cannot allocate '{}' descriptor sets with sid '{}' for layout '{}' - layout with given sid not found", setsCount, setSid, layoutSid);
                 return false;
@@ -168,7 +168,7 @@ namespace Kmplete
             {
                 for (auto& descriptorsPerFrameStorage : _descriptorsPerFrame)
                 {
-                    if (!_AllocateDescriptorSets(layouts, setSid, setsCount, descriptorsPerFrameStorage))
+                    if (not _AllocateDescriptorSets(layouts, setSid, setsCount, descriptorsPerFrameStorage))
                     {
                         return false;
                     }
@@ -363,7 +363,7 @@ namespace Kmplete
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
                     const auto descriptorSet = _GetDescriptorSet(descriptors, setSid, setIndex);
-                    if (!SetCombinedImageSamplerDescriptor(descriptorSet, imageView, sampler, binding))
+                    if (not SetCombinedImageSamplerDescriptor(descriptorSet, imageView, sampler, binding))
                     {
                         return false;
                     }
@@ -422,7 +422,7 @@ namespace Kmplete
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
                     const auto descriptorSet = _GetDescriptorSet(descriptors, setSid, setIndex);
-                    if (!SetSampledImageDescriptor(descriptorSet, imageView, binding))
+                    if (not SetSampledImageDescriptor(descriptorSet, imageView, binding))
                     {
                         return false;
                     }
@@ -475,7 +475,7 @@ namespace Kmplete
                 for (auto& descriptors : _descriptorsPerFrame)
                 {
                     const auto descriptorSet = _GetDescriptorSet(descriptors, setSid, setIndex);
-                    if (!SetSamplerDescriptor(descriptorSet, sampler, binding))
+                    if (not SetSamplerDescriptor(descriptorSet, sampler, binding))
                     {
                         return false;
                     }
@@ -573,7 +573,7 @@ namespace Kmplete
                 return false;
             }
 
-            if (!storage.contains(setSid))
+            if (not storage.contains(setSid))
             {
                 storage.emplace(setSid, newDesriptorSets);
             }
@@ -589,7 +589,7 @@ namespace Kmplete
 
         VkDescriptorSet VulkanDescriptorSetManager::_GetDescriptorSet(const DescriptorSetStorage& storage, StringID setSid, UInt32 setIndex) const noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!storage.contains(setSid))
+            if (not storage.contains(setSid))
             {
                 KMP_LOG_ERROR("cannot find descriptor set with sid '{}' - sid not found", setSid);
                 return VK_NULL_HANDLE;

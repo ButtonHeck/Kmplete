@@ -9,7 +9,7 @@ TEST_CASE("GetCurrentTimeString default format", "[time][clock]")
 {
     Kmplete::String result;
     REQUIRE_NOTHROW(result = Kmplete::Time::GetCurrentTimeString());
-    REQUIRE(!result.empty());
+    REQUIRE(not result.empty());
 }
 
 TEST_CASE("GetCurrentTimeString nullptr format", "[time][clock]")
@@ -30,7 +30,7 @@ TEST_CASE("GetCurrentTimeString invalid format", "[time][clock]")
 {
     Kmplete::String result;
     REQUIRE_NOTHROW(result = Kmplete::Time::GetCurrentTimeString("garbage"));
-    REQUIRE(!result.empty());
+    REQUIRE(not result.empty());
     REQUIRE(result == "garbage");
 }
 //--------------------------------------------------------------------------

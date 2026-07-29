@@ -20,7 +20,7 @@ namespace Kmplete
         {
             Vector<WindowBackend::MonitorVideoMode> outputModes;
 
-            if (!monitor)
+            if (not monitor)
             {
                 return outputModes;
             }
@@ -69,7 +69,7 @@ namespace Kmplete
         }
         else
         {
-            if (!_mainWindowSettings)
+            if (not _mainWindowSettings)
             {
                 KMP_LOG_WARN("main window settings were not found, provide default");
                 _mainWindowSettings = CreateUPtr<Window::WindowSettings>(MainWindowName);
@@ -165,7 +165,7 @@ namespace Kmplete
 
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const String& windowName) KMP_PROFILING(ProfileLevelImportant)
     {
-        if (!_IsAuxWindowNameAcceptable(windowName))
+        if (not _IsAuxWindowNameAcceptable(windowName))
         {
             return nullptr;
         }
@@ -196,7 +196,7 @@ namespace Kmplete
     Nullable<Window*> WindowBackendGlfw::CreateAuxWindow(const Window::WindowSettings& windowSettings) KMP_PROFILING(ProfileLevelImportant)
     {
         const auto& windowName = windowSettings.name;
-        if (!_IsAuxWindowNameAcceptable(windowName))
+        if (not _IsAuxWindowNameAcceptable(windowName))
         {
             return nullptr;
         }
@@ -346,7 +346,7 @@ namespace Kmplete
 
     OptionalRef<const WindowCursor> WindowBackendGlfw::GetCursor(const String& name) const KMP_PROFILING(ProfileLevelMinor)
     {
-        if (!_cursors.contains(name))
+        if (not _cursors.contains(name))
         {
             KMP_LOG_WARN("cannot find cursor named '{}'", name);
             return std::nullopt;
@@ -413,7 +413,7 @@ namespace Kmplete
     {
         KMP_ASSERT(_mainWindowSettings);
 
-        if (!settings.StartLoadObject(MainWindowStr))
+        if (not settings.StartLoadObject(MainWindowStr))
         {
             KMP_LOG_WARN("main window settings were not found");
         }

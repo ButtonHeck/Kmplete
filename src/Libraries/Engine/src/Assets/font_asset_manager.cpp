@@ -62,7 +62,7 @@ namespace Kmplete
 
         const Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) const KMP_PROFILING(ProfileLevelMinor)
         {
-            if (!_fonts.contains(fontSid))
+            if (not _fonts.contains(fontSid))
             {
                 KMP_LOG_ERROR("font '{}' not found", fontSid);
                 return *_fonts.at(DefaultFontSID);
@@ -74,7 +74,7 @@ namespace Kmplete
 
         Assets::FontAsset& FontAssetManager::GetAsset(StringID fontSid) KMP_PROFILING(ProfileLevelMinor)
         {
-            if (!_fonts.contains(fontSid))
+            if (not _fonts.contains(fontSid))
             {
                 KMP_LOG_ERROR("font '{}' not found", fontSid);
                 return *_fonts.at(DefaultFontSID);
@@ -92,7 +92,7 @@ namespace Kmplete
                 ok &= RemoveAsset(sid);
             }
 
-            if (!ok)
+            if (not ok)
             {
                 KMP_LOG_WARN("some fonts were not removed");
             }
@@ -133,13 +133,13 @@ namespace Kmplete
             }
             KMP_ASSERT(_freetypeLibInstance);
 
-            if (!_CreateDefaultFontAsset())
+            if (not _CreateDefaultFontAsset())
             {
                 KMP_LOG_CRITICAL("default font loading failed");
                 throw RuntimeError("FontAssetManager: default font loading failed");
             }
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             FT_Int freetypeVersionMajor = 0;
             FT_Int freetypeVersionMinor = 0;
             FT_Int freetypeVersionPatch = 0;
@@ -175,7 +175,7 @@ namespace Kmplete
 
 #if defined (KMP_PLATFORM_WINDOWS)
             auto hdc = GetDC(NULL);
-            if (!hdc)
+            if (not hdc)
             {
                 KMP_LOG_ERROR("failed to get device context");
                 return false;
@@ -186,7 +186,7 @@ namespace Kmplete
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                 DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial");
 
-            if (!fontDescriptor)
+            if (not fontDescriptor)
             {
                 KMP_LOG_ERROR("failed to create default font descriptor");
                 ReleaseDC(NULL, hdc);
@@ -220,7 +220,7 @@ namespace Kmplete
 
             return _AddFontToStorage(DefaultFontSID, std::move(fontData), FontSubTypeMaskBits::None);
 #else
-            if (!FcInit())
+            if (not FcInit())
             {
                 KMP_LOG_ERROR("failed to initialize Fontconfig library");
                 return false;
@@ -246,7 +246,7 @@ namespace Kmplete
                 FcFini();
             };
 
-            if (!match)
+            if (not match)
             {
                 KMP_LOG_ERROR("failed to find default 'ubuntu' font");
                 cleanupFc();

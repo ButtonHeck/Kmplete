@@ -61,7 +61,7 @@ namespace Kmplete
 
         VkSampler VulkanSamplersStorage::GetSampler(StringID sid) const noexcept
         {
-            if (!_samplers.contains(sid))
+            if (not _samplers.contains(sid))
             {
                 KMP_LOG_ERROR("sampler with sid '{}' not found", sid);
                 return VK_NULL_HANDLE;

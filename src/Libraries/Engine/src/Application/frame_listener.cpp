@@ -12,7 +12,7 @@ namespace Kmplete
         , _frameListenerManager(frameListenerManager)
         , _active(true)
     {
-        if (!_frameListenerManager.AddFrameListener(this))
+        if (not _frameListenerManager.AddFrameListener(this))
         {
             KMP_LOG_ERROR("failed to attach frame listener '{}' to manager", sid);
             throw RuntimeError("FrameListener: failed to attach to frame listener manager");
@@ -46,7 +46,7 @@ namespace Kmplete
 
     void FrameListener::SetActive(bool active)
     {
-        if ((active && IsActive()) || (!active && !IsActive()))
+        if ((active && IsActive()) || (not active && not IsActive()))
         {
             return;
         }
@@ -69,7 +69,7 @@ namespace Kmplete
 
     void FrameListener::_SetActive(bool active)
     {
-        if ((active && IsActive()) || (!active && !IsActive()))
+        if ((active && IsActive()) || (not active && not IsActive()))
         {
             return;
         }

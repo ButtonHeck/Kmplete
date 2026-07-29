@@ -1,4 +1,4 @@
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
 
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Time/helper_functions.h"

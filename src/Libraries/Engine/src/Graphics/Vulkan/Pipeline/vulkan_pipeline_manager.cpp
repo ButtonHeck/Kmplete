@@ -56,13 +56,13 @@ namespace Kmplete
             }
 
             VkPipelineLayoutCreateInfo layoutCreateInfo = VKUtils::InitVkPipelineLayoutCreateInfo();
-            if (!descriptorSetLayouts.empty())
+            if (not descriptorSetLayouts.empty())
             {
                 layoutCreateInfo.setLayoutCount = UInt32(descriptorSetLayouts.size());
                 layoutCreateInfo.pSetLayouts = descriptorSetLayouts.data();
             }
 
-            if (!pushConstantRanges.empty())
+            if (not pushConstantRanges.empty())
             {
                 layoutCreateInfo.pushConstantRangeCount = UInt32(pushConstantRanges.size());
                 layoutCreateInfo.pPushConstantRanges = pushConstantRanges.data();

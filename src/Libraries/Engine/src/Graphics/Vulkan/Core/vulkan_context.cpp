@@ -52,7 +52,7 @@ namespace Kmplete
 
             surfaceFormat = _FindSurfaceFormat();
 
-            KMP_ASSERT(!supportedSampleCounts.empty());
+            KMP_ASSERT(not supportedSampleCounts.empty());
         }}
         //--------------------------------------------------------------------------
 

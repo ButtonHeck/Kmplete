@@ -140,7 +140,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_physicalDevice);
 
-            if (!_window.IsIconified())
+            if (not _window.IsIconified())
             {
                 _physicalDevice->RecreateResources();
             }
@@ -167,7 +167,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_physicalDevice);
 
-            if (!Math::IsPowerOf2(samples))
+            if (not Math::IsPowerOf2(samples))
             {
                 KMP_LOG_WARN("samples value (given {}) will be converted to nearest power of two", samples);
                 samples = Math::NearestPowerOf2(samples);
@@ -243,7 +243,7 @@ namespace Kmplete
         void VulkanGraphicsBackend::_Initialize()
         {
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
-            if (!_CheckValidationLayerSupport())
+            if (not _CheckValidationLayerSupport())
             {
                 KMP_LOG_CRITICAL("{} layer requested but not found", ValidationLayerName);
                 throw RuntimeError("VulkanGraphicsBackend: failed to initialize");
@@ -266,7 +266,7 @@ namespace Kmplete
 
             KMP_LOG_INFO("instance object successfully created");
 
-            if (!VKCommands::LoadExtensionFunctions(_instance))
+            if (not VKCommands::LoadExtensionFunctions(_instance))
             {
                 KMP_LOG_CRITICAL("extension functions failed to load");
                 throw RuntimeError("VulkanGraphicsBackend: extension functions failed to load");
@@ -322,7 +322,7 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         bool VulkanGraphicsBackend::_CheckValidationLayerSupport() const KMP_PROFILING(ProfileLevelImportant)
         {
             UInt32 layerCount;

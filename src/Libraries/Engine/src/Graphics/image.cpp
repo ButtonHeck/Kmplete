@@ -34,7 +34,7 @@ namespace Kmplete
             auto channelsInFile = 0;
             _pixels = stbi_load(Filesystem::ToGenericString(filepath).c_str(), &_width, &_height, &channelsInFile, desiredChannels);
 
-            if (!_pixels)
+            if (not _pixels)
             {
                 KMP_LOG_ERROR("'{}' loading error", filepath);
                 throw RuntimeError("Image: failed to load from file");
@@ -118,7 +118,7 @@ namespace Kmplete
             auto channelsInFile = 0;
             _pixels = stbi_load_from_memory(fileBuffer, bufferSize, &_width, &_height, &channelsInFile, desiredChannels);
 
-            if (!_pixels)
+            if (not _pixels)
             {
                 KMP_LOG_ERROR("file buffer loading error");
                 throw RuntimeError("Image: failed to load from file buffer");

@@ -135,7 +135,7 @@ namespace Kmplete
         {
             for (auto& [code, timerCondition] : _inputCodeToTimedConditionsMap)
             {
-                if (!_IsValidInputCode(code))
+                if (not _IsValidInputCode(code))
                 {
                     KMP_LOG_WARN("UpdateTimerActions accepts only codes in range [ Mouse_Button0 (0) ; Key_Menu (348) ], but given value is '{}'", code);
                     continue;
@@ -248,7 +248,7 @@ namespace Kmplete
 
         bool InputManager::RemapInputToAction(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!_actionToInputCodesMap.contains(actionId))
+            if (not _actionToInputCodesMap.contains(actionId))
             {
                 KMP_LOG_WARN("action '{}' is not registered", actionId);
                 return false;
@@ -274,7 +274,7 @@ namespace Kmplete
         bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const ActionCallback& callback) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
-            if (!inputMapped)
+            if (not inputMapped)
             {
                 return false;
             }
@@ -292,7 +292,7 @@ namespace Kmplete
         bool InputManager::MapInputToCallback(InputCodeWithCondition codeWithCondition, ActionIdentifier actionId, const TaggedActionCallback& taggedCallback) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             const auto inputMapped = MapInputToAction(codeWithCondition, actionId);
-            if (!inputMapped)
+            if (not inputMapped)
             {
                 return false;
             }
@@ -349,7 +349,7 @@ namespace Kmplete
             _controlStates[keyCode] = ButtonPressedValue;
             _modifiersMask = modifiers;
 
-            if (!keyPressEvent.IsRepeat())
+            if (not keyPressEvent.IsRepeat())
             {
                 _UpdateActionEvents(keyCode, ButtonPressedValue, "activation"_true);
             }
@@ -386,7 +386,7 @@ namespace Kmplete
         Vector<ActionEvent> InputManager::_CreateActionEvents(InputCode code, InputControlValue value) const KMP_PROFILING(ProfileLevelImportant)
         {
             Vector<ActionEvent> actionEvents;
-            if (!_inputCodeToActionsMap.contains(code))
+            if (not _inputCodeToActionsMap.contains(code))
             {
                 return actionEvents;
             }

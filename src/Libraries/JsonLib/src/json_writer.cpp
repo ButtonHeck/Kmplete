@@ -13,7 +13,7 @@ namespace Kmplete
         , _scope()
         , _currentObject(rapidjson::Pointer("").Get(_document))
     {
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             _currentObject->SetObject();
         }
@@ -24,19 +24,19 @@ namespace Kmplete
 
     bool JsonWriter::StartObject(const char* objectName) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object is null", objectName);
             return false;
         }
 
-        if (!objectName || *objectName == '\0')
+        if (not objectName || *objectName == '\0')
         {
             KMP_LOG_ERROR("cannot start object - object's name is empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object '{}' is not of object type", objectName, _scope.scopeString);
             return false;
@@ -44,7 +44,7 @@ namespace Kmplete
 
         _scope.Push(objectName);
 
-        if (!_currentObject->HasMember(objectName) || !(*_currentObject)[objectName].IsObject())
+        if (not _currentObject->HasMember(objectName) || not (*_currentObject)[objectName].IsObject())
         {
             KMP_LOG_DEBUG("creating new object '{}' in '{}'", objectName, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetObject();
@@ -58,13 +58,13 @@ namespace Kmplete
 
     bool JsonWriter::StartObject(int index) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot start object '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -104,19 +104,19 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(const char* arrayName, bool overwrite /*= true*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object is null", arrayName);
             return false;
         }
 
-        if (!arrayName || *arrayName == '\0')
+        if (not arrayName || *arrayName == '\0')
         {
             KMP_LOG_ERROR("cannot start array - array's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object '{}' is not of object type", arrayName, _scope.scopeString);
             return false;
@@ -124,7 +124,7 @@ namespace Kmplete
 
         _scope.Push(arrayName);
 
-        if (!_currentObject->HasMember(arrayName) || !(*_currentObject)[arrayName].IsArray() || overwrite)
+        if (not _currentObject->HasMember(arrayName) || not (*_currentObject)[arrayName].IsArray() || overwrite)
         {
             KMP_LOG_DEBUG("creating new array '{}' in '{}'", arrayName, _scope.scopeString);
             rapidjson::Pointer(_scope.scopeString.c_str()).Create(_document).SetArray();
@@ -138,13 +138,13 @@ namespace Kmplete
 
     bool JsonWriter::StartArray(int index, bool overwrite /*= true*/) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot start array '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -172,13 +172,13 @@ namespace Kmplete
 
     bool JsonWriter::EndArray() KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot end array - current object is null");
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot end array - current object '{}' is not of array type", _scope.scopeString);
             return false;
@@ -190,13 +190,13 @@ namespace Kmplete
 
     bool JsonWriter::SetBool(int index, bool value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set bool '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set bool '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -224,25 +224,25 @@ namespace Kmplete
 
     bool JsonWriter::SetBool(const char* name, bool value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set bool '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set bool - bool's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set bool '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsBool())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsBool())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new bool '{}' in '{}'", name, _scope.scopeString);
@@ -259,13 +259,13 @@ namespace Kmplete
 
     bool JsonWriter::SetInt(int index, int value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set int '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set int '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -293,25 +293,25 @@ namespace Kmplete
 
     bool JsonWriter::SetInt(const char* name, int value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set int '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set int - int's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set int '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsInt())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new int '{}' in '{}'", name, _scope.scopeString);
@@ -328,13 +328,13 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt(int index, unsigned int value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set unsigned int '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set unsigned int '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -362,25 +362,25 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt(const char* name, unsigned int value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set unsigned int '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set unsigned int - unsigned int's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set unsigned int '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsUint())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new unsigned int '{}' in '{}'", name, _scope.scopeString);
@@ -397,13 +397,13 @@ namespace Kmplete
 
     bool JsonWriter::SetInt64(int index, Int64 value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set int64 '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set int64 '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -431,25 +431,25 @@ namespace Kmplete
 
     bool JsonWriter::SetInt64(const char* name, Int64 value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set int64 '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set int64 - int64's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set int64 '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsInt64())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsInt64())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new int64 '{}' in '{}'", name, _scope.scopeString);
@@ -466,13 +466,13 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt64(int index, UInt64 value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set unsigned int64 '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set unsigned int64 '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -500,25 +500,25 @@ namespace Kmplete
 
     bool JsonWriter::SetUInt64(const char* name, UInt64 value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set unsigned int64 '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set unsigned int64 - unsigned int64's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set unsigned int64 '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsUint64())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsUint64())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new unsigned int64 '{}' in '{}'", name, _scope.scopeString);
@@ -535,13 +535,13 @@ namespace Kmplete
 
     bool JsonWriter::SetDouble(int index, double value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set double '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set double '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -569,25 +569,25 @@ namespace Kmplete
 
     bool JsonWriter::SetDouble(const char* name, double value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set double '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set double - double's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set double '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsDouble())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsDouble())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new double '{}' in '{}'", name, _scope.scopeString);
@@ -604,13 +604,13 @@ namespace Kmplete
 
     bool JsonWriter::SetString(int index, const String& value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set string '{}' - current object is null", index);
             return false;
         }
 
-        if (!_currentObject->IsArray())
+        if (not _currentObject->IsArray())
         {
             KMP_LOG_ERROR("cannot set string '{}' - current object '{}' is not of array type", index, _scope.scopeString);
             return false;
@@ -639,26 +639,26 @@ namespace Kmplete
 
     bool JsonWriter::SetString(const char* name, const String& value) KMP_PROFILING(ProfileLevelMinorVerbose)
     {
-        if (!_currentObject)
+        if (not _currentObject)
         {
             KMP_LOG_ERROR("cannot set string '{}' - current object is null", name);
             return false;
         }
 
-        if (!name || *name == '\0')
+        if (not name || *name == '\0')
         {
             KMP_LOG_ERROR("cannot set string - string's name should not be empty");
             return false;
         }
 
-        if (!_currentObject->IsObject())
+        if (not _currentObject->IsObject())
         {
             KMP_LOG_ERROR("cannot set string '{}' - current object '{}' is not of object type", name, _scope.scopeString);
             return false;
         }
 
         const auto size = static_cast<rapidjson::SizeType>(value.length());
-        if (!_currentObject->HasMember(name) || !(*_currentObject)[name].IsString())
+        if (not _currentObject->HasMember(name) || not (*_currentObject)[name].IsString())
         {
             const auto newScope = _scope.scopeString + "/" + name;
             KMP_LOG_DEBUG("creating new string '{}' in '{}'", name, _scope.scopeString);

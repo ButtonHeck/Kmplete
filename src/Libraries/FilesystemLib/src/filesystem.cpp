@@ -55,7 +55,7 @@ namespace Kmplete
 
         bool FilepathIsValid(const Filepath& filepath) noexcept KMP_PROFILING(ProfileLevelMinorVerbose)
         {
-            return !filepath.empty() && filepath.has_filename();
+            return not filepath.empty() && filepath.has_filename();
         }}
         //--------------------------------------------------------------------------
 
@@ -63,14 +63,14 @@ namespace Kmplete
         {
             try
             {
-                if (!overwrite && FilepathExists(newPath))
+                if (not overwrite && FilepathExists(newPath))
                 {
                     KMP_LOG_WARN_FN("Filesystem: renaming '{}' to '{}' stopped - new path already exists and overwrite is prohibited", oldPath, newPath);
                     return false;
                 }
                 if (overwrite && FilepathExists(newPath) && IsDirectory(oldPath) && IsDirectory(newPath))
                 {
-                    if (!RemoveDirectories(newPath))
+                    if (not RemoveDirectories(newPath))
                     {
                         KMP_LOG_ERROR_FN("Filesystem: renaming '{}' to '{}' failed - cannot remove destination directory for overwrite", oldPath, newPath);
                         return false;
@@ -119,7 +119,7 @@ namespace Kmplete
 
         bool CopyDirectories(const Filepath& from, const Filepath& to, std::filesystem::copy_options copyOptions /*= std::filesystem::copy_options::recursive*/) noexcept KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!IsDirectory(from))
+            if (not IsDirectory(from))
             {
                 KMP_LOG_ERROR_FN("Filesystem: CopyDirectories failed: '{}' is not a directory", from);
                 return false;
@@ -163,7 +163,7 @@ namespace Kmplete
                     return true;
                 }
 
-                if (!CreateDirectories(filepath, "path is file"_true))
+                if (not CreateDirectories(filepath, "path is file"_true))
                 {
                     KMP_LOG_ERROR_FN("CreateFile - cannot create directories for file '{}'", filepath);
                     return false;
@@ -248,14 +248,14 @@ namespace Kmplete
 
         String ReadFileAsText(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!FilepathExists(filepath))
+            if (not FilepathExists(filepath))
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
                 return String();
             }
 
             std::ifstream fileStream(filepath);
-            if (!fileStream.is_open() || !fileStream.good())
+            if (not fileStream.is_open() || not fileStream.good())
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
                 return String();
@@ -267,14 +267,14 @@ namespace Kmplete
 
         BinaryBuffer ReadFileAsBinary(const Filepath& filepath) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!FilepathExists(filepath))
+            if (not FilepathExists(filepath))
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - not found", filepath);
                 return BinaryBuffer();
             }
 
             std::ifstream fileStream(filepath, std::ios::binary);
-            if (!fileStream.is_open() || !fileStream.good())
+            if (not fileStream.is_open() || not fileStream.good())
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot read file '{}' - failed to open", filepath);
                 return BinaryBuffer();
@@ -289,15 +289,15 @@ namespace Kmplete
         {
             KMP_NODISCARD bool WriteFileCheckCondition(const Filepath& filepath, bool condition, KMP_MB_UNUSED const char* contentType)
             {
-                if (!condition)
+                if (not condition)
                 {
                     KMP_LOG_ERROR_FN("Filesystem: cannot write empty {} to a file '{}'", contentType, filepath);
                     return false;
                 }
 
-                if (!FilepathExists(filepath))
+                if (not FilepathExists(filepath))
                 {
-                    if (!CreateFile(filepath))
+                    if (not CreateFile(filepath))
                     {
                         KMP_LOG_ERROR_FN("Filesystem: cannot write {} to a file '{}' - file creation failed", contentType, filepath);
                         return false;
@@ -311,13 +311,13 @@ namespace Kmplete
 
         bool WriteFile(const Filepath& filepath, const String& string, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!WriteFileCheckCondition(filepath, !string.empty(), "string"))
+            if (not WriteFileCheckCondition(filepath, not string.empty(), "string"))
             {
                 return false;
             }
 
             std::ofstream fileStream(filepath, append ? std::ios::app : std::ios::trunc);
-            if (!fileStream.is_open())
+            if (not fileStream.is_open())
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot write string to a file '{}' - failed to open file", filepath);
                 return false;
@@ -332,13 +332,13 @@ namespace Kmplete
 
         bool WriteFile(const Filepath& filepath, const BinaryBuffer& binaryBuffer, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!WriteFileCheckCondition(filepath, !binaryBuffer.empty(), "binary buffer"))
+            if (not WriteFileCheckCondition(filepath, not binaryBuffer.empty(), "binary buffer"))
             {
                 return false;
             }
 
             std::ofstream fileStream(filepath, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
-            if (!fileStream.is_open())
+            if (not fileStream.is_open())
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot write binary buffer to a file '{}' - failed to open file", filepath);
                 return false;
@@ -353,13 +353,13 @@ namespace Kmplete
 
         bool WriteFile(const Filepath& filepath, const BinaryBuffer32& binaryBuffer, bool append) KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!WriteFileCheckCondition(filepath, !binaryBuffer.empty(), "binary buffer"))
+            if (not WriteFileCheckCondition(filepath, not binaryBuffer.empty(), "binary buffer"))
             {
                 return false;
             }
 
             std::ofstream fileStream(filepath, std::ios::binary | (append ? std::ios::app : std::ios::trunc));
-            if (!fileStream.is_open())
+            if (not fileStream.is_open())
             {
                 KMP_LOG_ERROR_FN("Filesystem: cannot write binary buffer to a file '{}' - failed to open file", filepath);
                 return false;

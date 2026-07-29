@@ -116,9 +116,9 @@ TEST_CASE("Json document from simple rapidjson document", "[json][reader][writer
 
     // check document string
     auto documentString = jsonDocument.ToString(); //pretty
-    REQUIRE(!documentString.empty());
+    REQUIRE(not documentString.empty());
     documentString = jsonDocument.ToString(false); // oneline
-    REQUIRE(!documentString.empty());
+    REQUIRE(not documentString.empty());
 }
 //--------------------------------------------------------------------------
 

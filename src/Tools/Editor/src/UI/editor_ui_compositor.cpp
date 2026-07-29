@@ -61,7 +61,7 @@ namespace Kmplete
         if (_needCheckImguiIniFile)
         {
             _needCheckImguiIniFile = false;
-            if (!Filesystem::FilepathExists(Filesystem::GetCurrentFilepath().append(ImGui::GetIO().IniFilename)))
+            if (not Filesystem::FilepathExists(Filesystem::GetCurrentFilepath().append(ImGui::GetIO().IniFilename)))
             {
                 _ComposeDefaultLayout();
             }
@@ -218,13 +218,13 @@ namespace Kmplete
 
     void EditorUICompositor::_SwitchFullscreen() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        _mainWindow.SetScreenMode(!_mainWindow.IsWindowedFullscreen() ? Window::ScreenMode::WindowedFullscreen : Window::ScreenMode::Windowed);
+        _mainWindow.SetScreenMode(_mainWindow.IsWindowedFullscreen() ? Window::ScreenMode::Windowed : Window::ScreenMode::WindowedFullscreen);
     }}
     //--------------------------------------------------------------------------
 
     void EditorUICompositor::_SwitchAlwaysOnTop() KMP_PROFILING(ProfileLevelImportantVerbose)
     {
-        _mainWindow.SetAlwaysOnTop(!_mainWindow.IsAlwaysOnTop());
+        _mainWindow.SetAlwaysOnTop(not _mainWindow.IsAlwaysOnTop());
     }}
     //--------------------------------------------------------------------------
 
@@ -261,7 +261,7 @@ namespace Kmplete
             ImGuiUtils::StyleColorGuard colorGuard({ { ImGuiCol_Border, _state.metricsFractional ? ImVec4(1, 1, 1, 1) : ImGui::GetStyleColorVec4(ImGuiCol_Border) } });
             if (ImGui::Button(ICON_FK_PERCENT, buttonSize))
             {
-                _state.metricsFractional = !_state.metricsFractional;
+                _state.metricsFractional = not _state.metricsFractional;
             }
         }
         ImGuiUtils::SetItemTooltip(_localizationManager.Translation(SidTrDomainEditor, "Show fractional"_sid).c_str());

@@ -70,7 +70,7 @@ namespace Kmplete
 
         for (const auto& [settingsEntryName, settingsEntry] : _namedSettingsDocuments)
         {
-            if (!settingsEntry)
+            if (not settingsEntry)
             {
                 KMP_LOG_ERROR("settings entry named '{}' is nullptr - save settings will be incompleted", settingsEntryName);
             }

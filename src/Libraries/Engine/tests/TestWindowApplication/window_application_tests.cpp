@@ -71,7 +71,7 @@ namespace Kmplete
                 {
                     _frameListener1.reset(nullptr);
                 }
-                else if (command.code == FrameListenerCommandCode::Create && command.sid == 1ULL && !_frameListener1)
+                else if (command.code == FrameListenerCommandCode::Create && command.sid == 1ULL && not _frameListener1)
                 {
                     _frameListener1.reset(new TestFrameListener1(*_frameListenerManager.get(), _sharedState));
                 }
@@ -80,7 +80,7 @@ namespace Kmplete
                 {
                     _frameListener2.reset(nullptr);
                 }
-                else if (command.code == FrameListenerCommandCode::Create && command.sid == 2ULL && !_frameListener2)
+                else if (command.code == FrameListenerCommandCode::Create && command.sid == 2ULL && not _frameListener2)
                 {
                     _frameListener2.reset(new TestFrameListener2(*_frameListenerManager.get(), _sharedState));
                 }
@@ -89,7 +89,7 @@ namespace Kmplete
                 {
                     _frameListener3.reset(nullptr);
                 }
-                else if (command.code == FrameListenerCommandCode::Create && command.sid == 3ULL && !_frameListener3)
+                else if (command.code == FrameListenerCommandCode::Create && command.sid == 3ULL && not _frameListener3)
                 {
                     _frameListener3.reset(new TestFrameListener3(*_frameListenerManager.get(), _sharedState));
                 }
@@ -98,7 +98,7 @@ namespace Kmplete
                 {
                     _frameListener4.reset(nullptr);
                 }
-                else if (command.code == FrameListenerCommandCode::Create && command.sid == 4ULL && !_frameListener4)
+                else if (command.code == FrameListenerCommandCode::Create && command.sid == 4ULL && not _frameListener4)
                 {
                     _frameListener4.reset(new TestFrameListener4(*_frameListenerManager.get(), _sharedState));
                 }
@@ -134,7 +134,7 @@ TEST_CASE("Test window application", "[window_application][application][window][
     auto application = Kmplete::CreateUPtr<Kmplete::TestWindowApplication>(Kmplete::WindowApplicationParameters{ .applicationParameters{"TestWindowApplication", "", KMP_TEST_SETTINGS_JSON}, .resizable = true });
 
     REQUIRE(application);
-    REQUIRE(!Kmplete::Filesystem::GetCurrentFilepath().empty());
+    REQUIRE(not Kmplete::Filesystem::GetCurrentFilepath().empty());
 
     REQUIRE(application->FrameListenersCountOk());
     REQUIRE_FALSE(application->mainFrameListener->IsKeyPressEventInvoked());

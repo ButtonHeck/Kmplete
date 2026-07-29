@@ -141,7 +141,7 @@ TEST_CASE("Image from valid image file buffer", "[graphics][image]")
 
     const auto filepath = Filepath(KMP_TEST_ICON_PATH);
     const auto iconFileBinaryBuffer = Filesystem::ReadFileAsBinary(filepath);
-    REQUIRE(!iconFileBinaryBuffer.empty());
+    REQUIRE(not iconFileBinaryBuffer.empty());
 
     REQUIRE_NOTHROW(image = CreateUPtr<Image>(iconFileBinaryBuffer.data(), int(iconFileBinaryBuffer.size()), ImageChannels::RGB));
     REQUIRE_NOTHROW(width = image->GetWidth());
@@ -162,7 +162,7 @@ TEST_CASE("Image from valid file buffer not an image", "[graphics][image]")
 
     const auto filepath = Utils::Concatenate(KMP_FONTS_FOLDER, "OpenSans-Regular.ttf");
     const auto iconFileBinaryBuffer = Filesystem::ReadFileAsBinary(filepath);
-    REQUIRE(!iconFileBinaryBuffer.empty());
+    REQUIRE(not iconFileBinaryBuffer.empty());
 
     REQUIRE_THROWS(image = CreateUPtr<Image>(iconFileBinaryBuffer.data(), int(iconFileBinaryBuffer.size()), ImageChannels::RGB));
 }

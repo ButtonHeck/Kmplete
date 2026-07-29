@@ -107,7 +107,7 @@ namespace Kmplete
             _waitFences[_currentBufferIndex].Reset();
 
             const auto swapchainReady = _swapchain->StartFrame(frameTimestep);
-            if (!swapchainReady)
+            if (not swapchainReady)
             {
                 return false;
             }

@@ -40,18 +40,18 @@ namespace Kmplete
         const auto& applicationPath = ApplicationContext::GetApplicationPath();
         const auto& applicationDataPath = ApplicationContext::GetApplicationDataPath();
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger boot", ProfileLevelAlways);
             Log::Boot(ApplicationContext::GetApplicationName());
         }
 #endif
 
-        if (!Filesystem::FilepathExists(applicationPath))
+        if (not Filesystem::FilepathExists(applicationPath))
         {
             throw RuntimeError("Application filepath initialization failed");
         }
-        if (!Filesystem::FilepathExists(applicationDataPath))
+        if (not Filesystem::FilepathExists(applicationDataPath))
         {
             throw RuntimeError("Application data filepath initialization failed");
         }
@@ -75,7 +75,7 @@ namespace Kmplete
 
         _LoadSettings();
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger initialization", ProfileLevelAlways);
             Log::Initialize(ApplicationContext::GetApplicationName(), ApplicationContext::GetApplicationLogPath());
@@ -97,7 +97,7 @@ namespace Kmplete
         _localizationManager.reset();
         _systemMetricsManager.reset();
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         {
             KMP_PROFILE_SCOPE("Application logger finalization", ProfileLevelAlways);
             Log::Finalize();
@@ -111,13 +111,13 @@ namespace Kmplete
         KMP_ASSERT(_settingsManager && _localizationManager);
 
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
-        if (!settings)
+        if (not settings)
         {
             KMP_LOG_WARN("failed to create settings entry for saving");
             return;
         }
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         const auto& logSettings = Log::GetSettings();
         settings->get().StartSaveObject(Log::SettingsEntryName);
         settings->get().SaveString(Log::FilenameStr, Utils::NarrowToUtf8(logSettings.filename));
@@ -144,13 +144,13 @@ namespace Kmplete
         _settingsManager->LoadSettings();
 
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
-        if (!settings)
+        if (not settings)
         {
             KMP_LOG_WARN("failed to get settings entry for loading");
             return;
         }
 
-#if !defined (KMP_CONFIG_TYPE_PRODUCTION)
+#if not defined (KMP_CONFIG_TYPE_PRODUCTION)
         settings->get().StartLoadObject(Log::SettingsEntryName);
 
         Log::LogSettings logSettings;

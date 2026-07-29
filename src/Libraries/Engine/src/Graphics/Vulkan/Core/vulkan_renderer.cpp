@@ -122,7 +122,7 @@ namespace Kmplete
 
         void VulkanRenderer::InsertImageMemoryBarrier(const OptionalRef<VulkanTextureAttachment>& attachment, VKUtils::MemoryBarrierParameters& memoryBarrierParameters) const
         {
-            if (!attachment.has_value())
+            if (not attachment.has_value())
             {
                 KMP_LOG_ERROR("cannot insert memory barrier for texture attachment wrapper with no value");
                 return;
@@ -491,7 +491,7 @@ namespace Kmplete
             KMP_ASSERT(_currentCommandBuffer);
 
             const auto pipeline = _pipelineManager.GetGraphicsPipeline(pipelineSid);
-            if (!pipeline.has_value())
+            if (not pipeline.has_value())
             {
                 KMP_LOG_ERROR("cannot bind pipeline with sid '{}' - pipeline not found", pipelineSid);
                 return false;
@@ -560,8 +560,8 @@ namespace Kmplete
             KMP_ASSERT(_currentCommandBuffer);
 
             if (buffers.size() != offsets.size() ||
-                ((buffers.size() != sizes.size()) && !sizes.empty()) ||
-                ((buffers.size() != strides.size()) && !strides.empty()) ||
+                ((buffers.size() != sizes.size()) && not sizes.empty()) ||
+                ((buffers.size() != strides.size()) && not strides.empty()) ||
                 buffers.empty())
             {
                 KMP_LOG_ERROR("failed to bind vertex buffers - vertex buffers size doesn't match size of the offsets/sizes/strides or vertex buffers are empty");
@@ -725,7 +725,7 @@ namespace Kmplete
 
         void VulkanRenderer::_Finalize()
         {
-            KMP_ASSERT(_commandPool && !_drawCommandBuffers.empty());
+            KMP_ASSERT(_commandPool && not _drawCommandBuffers.empty());
 
             _drawCommandBuffers.clear();
             _commandPool.reset();

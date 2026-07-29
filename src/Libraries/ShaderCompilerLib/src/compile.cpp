@@ -104,7 +104,7 @@ namespace Kmplete
             _CrtSetDbgFlag(oldFlag);
 #endif
 
-            if (!compiler.IsValid())
+            if (not compiler.IsValid())
             {
                 KMP_LOG_ERROR_FN("CompileGLSLToSpirvFromSource: failed to create shaderc compiler instance (compiling '{}' shader named '{}')", ShaderTypeToString(shaderType), sourceName);
                 return BinaryBuffer32();

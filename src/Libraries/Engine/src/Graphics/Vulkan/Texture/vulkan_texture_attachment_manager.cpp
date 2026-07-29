@@ -90,7 +90,7 @@ namespace Kmplete
         VkRenderingAttachmentInfo VulkanTextureAttachmentManager::GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
                                                                                              VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA /*= false*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
-            if (!_textureAttachments.contains(imageViewAttachmentSid))
+            if (not _textureAttachments.contains(imageViewAttachmentSid))
             {
                 KMP_LOG_ERROR("texture attachment for image view with sid '{}' not found", imageViewAttachmentSid);
                 return preset;
@@ -117,7 +117,7 @@ namespace Kmplete
                 }
                 else
                 {
-                    if (!_textureAttachments.contains(resolveImageViewAttachmentSid))
+                    if (not _textureAttachments.contains(resolveImageViewAttachmentSid))
                     {
                         KMP_LOG_ERROR("texture attachment for resolve image view with sid '{}' not found", resolveImageViewAttachmentSid);
                         return preset;

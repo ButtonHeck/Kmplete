@@ -34,7 +34,7 @@ namespace Kmplete
         _mainWindow.SetTitle(ApplicationContext::GetApplicationName().c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
-        if (!_assetsManager->LoadAssetFile("editor_assets.kmpdata"))
+        if (not _assetsManager->LoadAssetFile("editor_assets.kmpdata"))
         {
             KMP_LOG_ERROR("failed to load editor assets");
         }
@@ -58,7 +58,7 @@ namespace Kmplete
     void EditorApplication::_SaveSettings() const KMP_PROFILING(ProfileLevelImportant)
     {
         auto settings = _settingsManager->PutSettingsDocument(SettingsEntryName);
-        if (!settings)
+        if (not settings)
         {
             KMP_LOG_WARN("failed to create settings entry for saving");
             return;
@@ -71,7 +71,7 @@ namespace Kmplete
     void EditorApplication::_LoadSettings() KMP_PROFILING(ProfileLevelImportant)
     {
         const auto settings = _settingsManager->GetSettingsDocument(SettingsEntryName);
-        if (!settings)
+        if (not settings)
         {
             KMP_LOG_WARN("failed to get setting entry for loading");
             return;

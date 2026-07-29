@@ -16,7 +16,7 @@ namespace Kmplete
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _graphicsBackend(graphicsBackend)
         {
-            if (!_CreateErrorTextureAsset())
+            if (not _CreateErrorTextureAsset())
             {
                 KMP_LOG_CRITICAL("error texture loading failed");
                 throw RuntimeError("TextureAssetManager: error texture loading failed");
@@ -28,7 +28,7 @@ namespace Kmplete
 
         bool TextureAssetManager::CreateAsset(StringID textureSid, const Filepath& filepath, TextureSubTypeMaskBits subTypeMask, bool flipVertically /*= false*/) KMP_PROFILING(ProfileLevelAlways)
         {
-            if (!_TextureSidIsValid(textureSid))
+            if (not _TextureSidIsValid(textureSid))
             {
                 return false;
             }
@@ -49,7 +49,7 @@ namespace Kmplete
         {
             KMP_ASSERT(image.GetPixels());
 
-            if (!_TextureSidIsValid(textureSid))
+            if (not _TextureSidIsValid(textureSid))
             {
                 return false;
             }
@@ -68,7 +68,7 @@ namespace Kmplete
 
         const Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid) const KMP_PROFILING(ProfileLevelImportant)
         {
-            if (!_textures.contains(textureSid))
+            if (not _textures.contains(textureSid))
             {
                 KMP_LOG_WARN("texture '{}' not found", textureSid);
                 return *_textures.at(ErrorTextureSID);
@@ -80,7 +80,7 @@ namespace Kmplete
 
         Assets::TextureAsset& TextureAssetManager::GetAsset(StringID textureSid) KMP_PROFILING(ProfileLevelImportant)
         {
-            if (!_textures.contains(textureSid))
+            if (not _textures.contains(textureSid))
             {
                 KMP_LOG_WARN("texture '{}' not found", textureSid);
                 return *_textures.at(ErrorTextureSID);
@@ -98,7 +98,7 @@ namespace Kmplete
                 ok &= RemoveAsset(sid);
             }
 
-            if (!ok)
+            if (not ok)
             {
                 KMP_LOG_WARN("some textures were not removed");
             }

@@ -368,7 +368,7 @@ namespace Kmplete
                 { VK_DescriptorType_InputAttachment, 100 }
             });
 
-            const auto viewportEnabled = !_mainWindow.IsWaylandWindow();
+            const auto viewportEnabled = not _mainWindow.IsWaylandWindow();
 
             ImGui_ImplVulkan_InitInfo initInfo{};
             initInfo.Instance = vulkanBackend.GetVkInstance();
