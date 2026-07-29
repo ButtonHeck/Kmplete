@@ -46,7 +46,7 @@ namespace Kmplete
 
     void FrameListener::SetActive(bool active)
     {
-        if ((active && IsActive()) || (not active && not IsActive()))
+        if (active == _active)
         {
             return;
         }
@@ -69,7 +69,7 @@ namespace Kmplete
 
     void FrameListener::_SetActive(bool active)
     {
-        if ((active && IsActive()) || (not active && not IsActive()))
+        if (active == _active)
         {
             return;
         }
