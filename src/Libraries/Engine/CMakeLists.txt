@@ -77,6 +77,8 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_parameters.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_backend.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_surface.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_chain_unit.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/graphics_chain_handler.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/physical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/logical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/swapchain.h
@@ -90,6 +92,8 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_surface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_chain_unit.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_chain_handler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
