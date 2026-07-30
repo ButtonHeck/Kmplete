@@ -6,11 +6,11 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        GraphicsChainUnit::GraphicsChainUnit(GraphicsChainHandler& handler, StringID sid)
-            : _handler(handler)
+        GraphicsChainUnit::GraphicsChainUnit(GraphicsChainHandler& chainHandler, StringID sid)
+            : _chainHandler(chainHandler)
             , _sid(sid)
         {
-            _handler.AddHandler(this);
+            _chainHandler.AddHandler(this);
         }
         //--------------------------------------------------------------------------
     }

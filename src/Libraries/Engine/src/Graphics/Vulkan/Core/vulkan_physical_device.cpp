@@ -212,8 +212,8 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VulkanPhysicalDevice::VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface)
-            : PhysicalDevice()
+        VulkanPhysicalDevice::VulkanPhysicalDevice(GraphicsChainHandler& chainHandler, const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface)
+            : PhysicalDevice(chainHandler)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _window(window)
             , _currentBufferIndex(currentBufferIndex)
@@ -234,22 +234,6 @@ namespace Kmplete
         VulkanPhysicalDevice::~VulkanPhysicalDevice() KMP_PROFILING(ProfileLevelAlways)
         {
             _Finalize();
-        }}
-        //--------------------------------------------------------------------------
-
-        bool VulkanPhysicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_logicalDevice);
-
-            return _logicalDevice->StartFrame(frameTimestep);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanPhysicalDevice::EndFrame() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_logicalDevice);
-
-            _logicalDevice->EndFrame();
         }}
         //--------------------------------------------------------------------------
 
@@ -327,7 +311,7 @@ namespace Kmplete
             _memoryTypeDelegate.reset(new VulkanMemoryTypeDelegate(_vulkanContext.memoryProperties));
             KMP_ASSERT(_memoryTypeDelegate);
 
-            _logicalDevice.reset(new VulkanLogicalDevice(_physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
+            _logicalDevice.reset(new VulkanLogicalDevice(_chainHandler, _physicalDevice, _surface, _vulkanContext, *_memoryTypeDelegate.get(), *_formatDelegate.get(), _window, _currentBufferIndex));
             KMP_ASSERT(_logicalDevice);
         }
         //--------------------------------------------------------------------------
@@ -340,6 +324,22 @@ namespace Kmplete
             _memoryTypeDelegate.reset();
             _formatDelegate.reset();
         }
+        //--------------------------------------------------------------------------
+
+        bool VulkanPhysicalDevice::_StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_logicalDevice);
+
+            return _chainHandler.HandleStartFrame(GraphicsChainHandler::LogicalDeviceUnitSID, frameTimestep);
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanPhysicalDevice::_EndFrame() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_logicalDevice);
+
+            _chainHandler.HandleEndFrame(GraphicsChainHandler::LogicalDeviceUnitSID);
+        }}
         //--------------------------------------------------------------------------
 
         Vector<VkPhysicalDevice> VulkanPhysicalDevice::_GetListOfPhysicalDevices() const KMP_PROFILING(ProfileLevelImportant)

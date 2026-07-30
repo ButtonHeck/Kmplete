@@ -28,9 +28,9 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanLogicalDevice::VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
-                                                 const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
-            : LogicalDevice()
+        VulkanLogicalDevice::VulkanLogicalDevice(GraphicsChainHandler& chainHandler, VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext,
+                                                 const VulkanMemoryTypeDelegate& memoryTypeDelegate,const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex)
+            : LogicalDevice(chainHandler)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _vulkanContext(vulkanContext)
             , _memoryTypeDelegate(memoryTypeDelegate)
@@ -95,63 +95,6 @@ namespace Kmplete
             _DeleteImageCreatorDelegate();
             _DeleteDeviceQueues();
             _DeleteLogicalDeviceObject();
-        }}
-        //--------------------------------------------------------------------------
-
-        bool VulkanLogicalDevice::StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_swapchain && _renderer);
-            KMP_ASSERT(_currentBufferIndex < _waitFences.size());
-
-            _waitFences[_currentBufferIndex].Wait();
-            _waitFences[_currentBufferIndex].Reset();
-
-            const auto swapchainReady = _swapchain->StartFrame(frameTimestep);
-            if (not swapchainReady)
-            {
-                return false;
-            }
-
-            _renderer->StartFrame();
-
-            VKUtils::MemoryBarrierParameters imageBarrierParameters = {
-                .srcAccessMask = VK_Access_None,
-                .dstAccessMask = VK_Access_ColorAttachmentWrite,
-                .oldImageLayout = VK_ImageLayout_Undefined,
-                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), imageBarrierParameters);
-
-            return true;
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanLogicalDevice::EndFrame() KMP_PROFILING(ProfileLevelImportant)
-        {
-            KMP_ASSERT(_swapchain && _renderer && _graphicsQueue);
-            KMP_ASSERT(_currentBufferIndex < _waitFences.size());
-            KMP_ASSERT(_currentBufferIndex < _presentCompleteSemaphores.size());
-            KMP_ASSERT(_currentBufferIndex < _renderCompleteSemaphores.size());
-
-            VKUtils::MemoryBarrierParameters memoryBarrierParameters = {
-                .srcAccessMask = VK_Access_ColorAttachmentWrite,
-                .dstAccessMask = VK_Access_None,
-                .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
-                .newImageLayout = VK_ImageLayout_PresentKHR,
-                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
-                .dstStageMask = VK_PipelineStage_BottomOfPipe,
-                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
-            };
-            _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), memoryBarrierParameters);
-            _renderer->EndFrame();
-            _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
-
-            _swapchain->EndFrame();
-
-            WaitIdle();
         }}
         //--------------------------------------------------------------------------
 
@@ -480,7 +423,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device && _imageCreatorDelegate);
 
-            _swapchain.reset(new VulkanSwapchain(_device, *_presentQueue.get(), _vulkanContext, _currentExtent, _vSync, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
+            _swapchain.reset(new VulkanSwapchain(_chainHandler, _device, *_presentQueue.get(), _vulkanContext, _currentExtent, _vSync, *_imageCreatorDelegate.get(), _currentBufferIndex, _presentCompleteSemaphores, _renderCompleteSemaphores));
             KMP_ASSERT(_swapchain);
         }}
         //--------------------------------------------------------------------------
@@ -693,6 +636,63 @@ namespace Kmplete
             _CreateSynchronizationObjects();
 
             _swapchain->Recreate(_currentExtent, _vSync, _presentCompleteSemaphores, _renderCompleteSemaphores);
+        }}
+        //--------------------------------------------------------------------------
+
+        bool VulkanLogicalDevice::_StartFrame(float frameTimestep) KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_swapchain && _renderer);
+            KMP_ASSERT(_currentBufferIndex < _waitFences.size());
+
+            _waitFences[_currentBufferIndex].Wait();
+            _waitFences[_currentBufferIndex].Reset();
+
+            const auto swapchainReady = _chainHandler.HandleStartFrame(GraphicsChainHandler::SwapchainUnitSID, frameTimestep);
+            if (not swapchainReady)
+            {
+                return false;
+            }
+
+            _renderer->StartFrame();
+
+            VKUtils::MemoryBarrierParameters imageBarrierParameters = {
+                .srcAccessMask = VK_Access_None,
+                .dstAccessMask = VK_Access_ColorAttachmentWrite,
+                .oldImageLayout = VK_ImageLayout_Undefined,
+                .newImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+            };
+            _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), imageBarrierParameters);
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanLogicalDevice::_EndFrame() KMP_PROFILING(ProfileLevelImportant)
+        {
+            KMP_ASSERT(_swapchain && _renderer && _graphicsQueue);
+            KMP_ASSERT(_currentBufferIndex < _waitFences.size());
+            KMP_ASSERT(_currentBufferIndex < _presentCompleteSemaphores.size());
+            KMP_ASSERT(_currentBufferIndex < _renderCompleteSemaphores.size());
+
+            VKUtils::MemoryBarrierParameters memoryBarrierParameters = {
+                .srcAccessMask = VK_Access_ColorAttachmentWrite,
+                .dstAccessMask = VK_Access_None,
+                .oldImageLayout = VK_ImageLayout_AttachmentOptimal,
+                .newImageLayout = VK_ImageLayout_PresentKHR,
+                .srcStageMask = VK_PipelineStage_ColorAttachmentOutput,
+                .dstStageMask = VK_PipelineStage_BottomOfPipe,
+                .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
+            };
+            _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), memoryBarrierParameters);
+            _renderer->EndFrame();
+            _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
+
+            _chainHandler.HandleEndFrame(GraphicsChainHandler::SwapchainUnitSID);
+
+            WaitIdle();
         }}
         //--------------------------------------------------------------------------
 

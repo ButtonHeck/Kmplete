@@ -31,11 +31,9 @@ namespace Kmplete
             KMP_NODISCARD static const Vector<const char*>& GetEnabledDeviceExtensions();
 
         public:
-            VulkanPhysicalDevice(const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface);
+            VulkanPhysicalDevice(GraphicsChainHandler& chainHandler, const Window& window, const UInt32& currentBufferIndex, VkInstance instance, VkSurfaceKHR surface);
             ~VulkanPhysicalDevice();
 
-            KMP_NODISCARD bool StartFrame(float frameTimestep) override;
-            void EndFrame() override;
             void RecreateResources() override;
 
             KMP_NODISCARD const VulkanLogicalDevice& GetLogicalDevice() const noexcept override;
@@ -49,6 +47,9 @@ namespace Kmplete
         private:
             void _Initialize();
             void _Finalize();
+
+            KMP_NODISCARD bool _StartFrame(float frameTimestep) override;
+            void _EndFrame() override;
 
             KMP_NODISCARD Vector<VkPhysicalDevice> _GetListOfPhysicalDevices() const;
             void _PickSuitablePhysicalDevice(const Vector<VkPhysicalDevice>& physicalDevices);

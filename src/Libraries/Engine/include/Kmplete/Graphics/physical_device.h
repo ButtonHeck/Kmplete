@@ -4,6 +4,8 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Graphics/logical_device.h"
+#include "Kmplete/Graphics/graphics_chain_unit.h"
+#include "Kmplete/Graphics/graphics_chain_handler.h"
 #include "Kmplete/Log/log_class_macro.h"
 
 
@@ -12,7 +14,7 @@ namespace Kmplete
     namespace Graphics
     {
         //! Base class of a graphics API physical device abstraction
-        class KMP_API PhysicalDevice
+        class KMP_API PhysicalDevice : public GraphicsChainUnit
         {
             KMP_DISABLE_COPY_MOVE(PhysicalDevice)
             KMP_LOG_CLASSNAME(PhysicalDevice)
@@ -26,14 +28,12 @@ namespace Kmplete
             };
 
         public:
-            PhysicalDevice() noexcept;
+            explicit PhysicalDevice(GraphicsChainHandler& chainHandler) noexcept;
             virtual ~PhysicalDevice() = default;
 
             KMP_NODISCARD const GPUInfo& GetGPUInfo() const noexcept;
             void PrintGPUInfo() const noexcept;
 
-            KMP_NODISCARD virtual bool StartFrame(float /*frameTimestep*/) { return true; };
-            virtual void EndFrame() {};
             virtual void RecreateResources() {};
 
             KMP_NODISCARD virtual const LogicalDevice& GetLogicalDevice() const noexcept = 0;

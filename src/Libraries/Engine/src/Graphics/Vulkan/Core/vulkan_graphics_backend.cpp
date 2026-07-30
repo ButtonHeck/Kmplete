@@ -120,17 +120,17 @@ namespace Kmplete
 
         bool VulkanGraphicsBackend::StartFrame(float frameTimestep)
         {
-            KMP_ASSERT(_physicalDevice);
+            KMP_ASSERT(_physicalDevice && _chainHandler);
 
-            return _physicalDevice->StartFrame(frameTimestep);
+            return _chainHandler->HandleStartFrame(GraphicsChainHandler::PhysicalDeviceUnitSID, frameTimestep);
         }
         //--------------------------------------------------------------------------
 
         void VulkanGraphicsBackend::EndFrame()
         {
-            KMP_ASSERT(_physicalDevice);
+            KMP_ASSERT(_physicalDevice && _chainHandler);
 
-            _physicalDevice->EndFrame();
+            _chainHandler->HandleEndFrame(GraphicsChainHandler::PhysicalDeviceUnitSID);
 
             _currentBufferIndex = (_currentBufferIndex + 1) % NumConcurrentFrames;
         }
@@ -242,6 +242,8 @@ namespace Kmplete
 
         void VulkanGraphicsBackend::_Initialize()
         {
+            KMP_ASSERT(_chainHandler);
+
 #if not defined (KMP_CONFIG_TYPE_PRODUCTION)
             if (not _CheckValidationLayerSupport())
             {
@@ -279,7 +281,7 @@ namespace Kmplete
             _surface.reset(new VulkanGraphicsSurface(_window, _instance));
             KMP_ASSERT(_surface);
 
-            _physicalDevice.reset(new VulkanPhysicalDevice(_window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
+            _physicalDevice.reset(new VulkanPhysicalDevice(*_chainHandler.get(), _window, _currentBufferIndex, _instance, _surface->GetVkSurface()));
             KMP_ASSERT(_physicalDevice);
         }
         //--------------------------------------------------------------------------

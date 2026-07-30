@@ -28,6 +28,7 @@ namespace Kmplete
 
         GraphicsBackend::GraphicsBackend(Window& window)
             : _window(window)
+            , _chainHandler(CreateUPtr<GraphicsChainHandler>())
         {}
         //--------------------------------------------------------------------------
 

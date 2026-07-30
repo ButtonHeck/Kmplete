@@ -6,7 +6,8 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        PhysicalDevice::PhysicalDevice() noexcept
+        PhysicalDevice::PhysicalDevice(GraphicsChainHandler& chainHandler) noexcept
+            : GraphicsChainUnit(chainHandler, GraphicsChainHandler::PhysicalDeviceUnitSID)
         {
             _gpuInfo.vendor = "Unknown";
             _gpuInfo.name = "Unknown";

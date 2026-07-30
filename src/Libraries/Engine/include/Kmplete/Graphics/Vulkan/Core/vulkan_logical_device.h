@@ -52,12 +52,10 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            VulkanLogicalDevice(VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext, const VulkanMemoryTypeDelegate& memoryTypeDelegate,
-                                const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
+            VulkanLogicalDevice(GraphicsChainHandler& chainHandler, VkPhysicalDevice physicalDevice, VkSurfaceKHR surface, const VulkanContext& vulkanContext,
+                                const VulkanMemoryTypeDelegate& memoryTypeDelegate, const VulkanFormatDelegate& formatDelegate, const Window& window, const UInt32& currentBufferIndex);
             ~VulkanLogicalDevice();
 
-            KMP_NODISCARD bool StartFrame(float frameTimestep) override;
-            void EndFrame() override;
             void RecreateResources() override;
             void WaitIdle() const;
 
@@ -133,6 +131,9 @@ namespace Kmplete
             KMP_NODISCARD Vector<VkDeviceQueueCreateInfo> _CreateQueueCreateInfos() const;
             KMP_NODISCARD VkExtent2D _UpdateExtent() const;
             void _RecreateSwapchain();
+
+            KMP_NODISCARD bool _StartFrame(float frameTimestep) override;
+            void _EndFrame() override;
 
         private:
             const VulkanContext& _vulkanContext;

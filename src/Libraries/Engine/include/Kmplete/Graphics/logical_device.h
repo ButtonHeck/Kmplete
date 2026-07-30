@@ -5,6 +5,8 @@
 #include "Kmplete/Base/nullability.h"
 #include "Kmplete/Graphics/command_pool.h"
 #include "Kmplete/Graphics/swapchain.h"
+#include "Kmplete/Graphics/graphics_chain_unit.h"
+#include "Kmplete/Graphics/graphics_chain_handler.h"
 #include "Kmplete/Assets/assets_interface.h"
 
 
@@ -17,16 +19,14 @@ namespace Kmplete
 
 
         //! Base class of a graphics API logical device abstraction
-        class KMP_API LogicalDevice
+        class KMP_API LogicalDevice : public GraphicsChainUnit
         {
             KMP_DISABLE_COPY_MOVE(LogicalDevice)
 
         public:
-            LogicalDevice() = default;
+            explicit LogicalDevice(GraphicsChainHandler& chainHandler);
             virtual ~LogicalDevice() = default;
 
-            KMP_NODISCARD virtual bool StartFrame(float /*frameTimestep*/) { return true; };
-            virtual void EndFrame() {};
             virtual void RecreateResources() {};
 
             KMP_NODISCARD virtual const Swapchain& GetSwapchain() const noexcept = 0;

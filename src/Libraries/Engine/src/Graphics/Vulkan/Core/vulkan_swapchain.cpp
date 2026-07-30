@@ -21,10 +21,10 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanSwapchain::VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, 
+        VulkanSwapchain::VulkanSwapchain(GraphicsChainHandler& chainHandler, VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                                          bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                                          const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores)
-            : Swapchain()
+            : Swapchain(chainHandler)
               KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
             , _currentBufferIndex(currentBufferIndex)
             , _presentationQueue(presentationQueue)
@@ -52,20 +52,6 @@ namespace Kmplete
         VulkanSwapchain::~VulkanSwapchain() KMP_PROFILING(ProfileLevelAlways)
         {
             _Finalize();
-        }}
-        //--------------------------------------------------------------------------
-
-        bool VulkanSwapchain::StartFrame(float /*frameTimestep*/) KMP_PROFILING(ProfileLevelImportant)
-        {
-            const auto result = AcquireNextImage();
-            VKUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image", "throw_exception"_false);
-            return result == VK_SUCCESS;
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanSwapchain::EndFrame() KMP_PROFILING(ProfileLevelImportant)
-        {
-            QueuePresent();
         }}
         //--------------------------------------------------------------------------
 
@@ -160,6 +146,20 @@ namespace Kmplete
 
             vkDestroySwapchainKHR(_device, _swapchain, nullptr);
         }
+        //--------------------------------------------------------------------------
+
+        bool VulkanSwapchain::_StartFrame(float /*frameTimestep*/) KMP_PROFILING(ProfileLevelImportant)
+        {
+            const auto result = AcquireNextImage();
+            VKUtils::CheckResult(result, "VulkanSwapchain: failed to acquire next image", "throw_exception"_false);
+            return result == VK_SUCCESS;
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_EndFrame() KMP_PROFILING(ProfileLevelImportant)
+        {
+            QueuePresent();
+        }}
         //--------------------------------------------------------------------------
 
         VkPresentModeKHR VulkanSwapchain::_ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const

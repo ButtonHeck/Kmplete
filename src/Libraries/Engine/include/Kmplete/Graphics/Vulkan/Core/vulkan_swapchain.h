@@ -28,13 +28,10 @@ namespace Kmplete
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            VulkanSwapchain(VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent, 
+            VulkanSwapchain(GraphicsChainHandler& chainHandler, VkDevice device, const VulkanQueue& presentationQueue, const VulkanContext& vulkanContext, const VkExtent2D& swapchainExtent,
                             bool vSync, const VulkanImageCreatorDelegate& imageCreatorDelegate, const UInt32& currentBufferIndex,
                             const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores, const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             ~VulkanSwapchain();
-
-            KMP_NODISCARD bool StartFrame(float frameTimestep) override;
-            void EndFrame() override;
 
             void Recreate(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
                           const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
@@ -51,6 +48,9 @@ namespace Kmplete
             void _Initialize(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
                              const Array<VkSemaphore, NumConcurrentFrames>& renderCompleteSemaphores);
             void _Finalize();
+
+            KMP_NODISCARD bool _StartFrame(float frameTimestep) override;
+            void _EndFrame() override;
 
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const;
             void _CreateSwapchainObject(bool vSync);

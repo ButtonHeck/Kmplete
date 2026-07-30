@@ -95,6 +95,8 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_chain_unit.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_chain_handler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/physical_device.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/logical_device.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/swapchain.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/camera.cpp

@@ -7,6 +7,7 @@
 #include "Kmplete/Graphics/graphics_base.h"
 #include "Kmplete/Graphics/graphics_surface.h"
 #include "Kmplete/Graphics/physical_device.h"
+#include "Kmplete/Graphics/graphics_chain_handler.h"
 #include "Kmplete/Graphics/texture.h"
 #include "Kmplete/Assets/assets_interface.h"
 #include "Kmplete/Log/log_class_macro.h"
@@ -66,6 +67,7 @@ namespace Kmplete
 
         protected:
             Window& _window;
+            UPtr<GraphicsChainHandler> _chainHandler;
         };
         //--------------------------------------------------------------------------
     }

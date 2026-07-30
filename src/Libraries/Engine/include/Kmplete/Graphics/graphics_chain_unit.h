@@ -17,7 +17,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(GraphicsChainUnit)
 
         public:
-            GraphicsChainUnit(GraphicsChainHandler& handler, StringID sid);
+            GraphicsChainUnit(GraphicsChainHandler& chainHandler, StringID sid);
             virtual ~GraphicsChainUnit() = default;
 
         protected:
@@ -27,7 +27,7 @@ namespace Kmplete
             virtual void _EndFrame() = 0;
 
         protected:
-            GraphicsChainHandler& _handler;
+            GraphicsChainHandler& _chainHandler;
             const StringID _sid;
         };
         //--------------------------------------------------------------------------
