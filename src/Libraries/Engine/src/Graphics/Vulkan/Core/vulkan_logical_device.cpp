@@ -556,7 +556,7 @@ namespace Kmplete
         {
             KMP_ASSERT(_device && _swapchain);
 
-            _renderer.reset(new VulkanRenderer(_device, _currentBufferIndex, *_pipelineManager.get(), *_shaderManager.get(), _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
+            _renderer.reset(new VulkanRenderer(_chainHandler, _device, _currentBufferIndex, *_pipelineManager.get(), *_shaderManager.get(), _vulkanContext.graphicsFamilyIndex, *_swapchain.get()));
             KMP_ASSERT(_renderer);
         }}
         //--------------------------------------------------------------------------
@@ -653,7 +653,11 @@ namespace Kmplete
                 return false;
             }
 
-            _renderer->StartFrame();
+            const auto rendererReady = _chainHandler.HandleStartFrame(GraphicsChainHandler::RendererUnitSID, frameTimestep);
+            if (not rendererReady)
+            {
+                return false;
+            }
 
             VKUtils::MemoryBarrierParameters imageBarrierParameters = {
                 .srcAccessMask = VK_Access_None,
@@ -687,7 +691,7 @@ namespace Kmplete
                 .subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1
             };
             _renderer->InsertImageMemoryBarrier(_swapchain->GetCurrentImage(), memoryBarrierParameters);
-            _renderer->EndFrame();
+            _chainHandler.HandleEndFrame(GraphicsChainHandler::RendererUnitSID);
             _renderer->SubmitToQueue(*_graphicsQueue.get(), { _presentCompleteSemaphores[_currentBufferIndex] }, { _renderCompleteSemaphores[_currentBufferIndex] }, _waitFences[_currentBufferIndex].GetVkFence());
 
             _chainHandler.HandleEndFrame(GraphicsChainHandler::SwapchainUnitSID);

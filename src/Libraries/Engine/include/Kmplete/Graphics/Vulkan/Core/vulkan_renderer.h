@@ -4,6 +4,7 @@
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Base/pointers.h"
 #include "Kmplete/Base/string_id.h"
+#include "Kmplete/Graphics/renderer.h"
 #include "Kmplete/Graphics/Vulkan/Command/vulkan_command_pool.h"
 #include "Kmplete/Graphics/Vulkan/Command/vulkan_command_buffer.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_queue.h"
@@ -28,19 +29,16 @@ namespace Kmplete
         //! Vulkan API renderer that is responsible for all the rendering-related commands, such as:
         //! beginning/ending rendering (dynamic), drawing, queue submission, 
         //! settings rendering dynamic states values, binding objects, copying buffers
-        class KMP_API VulkanRenderer
+        class KMP_API VulkanRenderer : public Renderer
         {
             KMP_DISABLE_COPY_MOVE(VulkanRenderer)
             KMP_LOG_CLASSNAME(VulkanRenderer)
             KMP_PROFILE_CONSTRUCTOR_DECLARE()
 
         public:
-            VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
+            VulkanRenderer(GraphicsChainHandler& chainHandler, VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
                            const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain);
             ~VulkanRenderer();
-
-            void StartFrame();
-            void EndFrame();
 
             void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments) const;
             void BeginRendering(const VkRect2D& renderArea, const Vector<VkRenderingAttachmentInfo>& colorAttachments, const VkRenderingAttachmentInfo& depthStencilAttachment) const;
@@ -122,6 +120,9 @@ namespace Kmplete
         private:
             void _Initialize(UInt32 graphicsFamilyIndex);
             void _Finalize();
+
+            KMP_NODISCARD bool _StartFrame(float frameTimestep) override;
+            void _EndFrame() override;
 
         private:
             const UInt32& _currentBufferIndex;

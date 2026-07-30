@@ -82,6 +82,7 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/physical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/logical_device.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/swapchain.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/renderer.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/command_pool.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
@@ -97,6 +98,7 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/physical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/logical_device.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/swapchain.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/renderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/image.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/camera.cpp

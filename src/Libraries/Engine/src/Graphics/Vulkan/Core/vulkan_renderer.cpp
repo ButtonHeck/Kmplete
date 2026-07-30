@@ -15,10 +15,11 @@ namespace Kmplete
         using namespace VKBits;
 
 
-        VulkanRenderer::VulkanRenderer(VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
+        VulkanRenderer::VulkanRenderer(GraphicsChainHandler& chainHandler, VkDevice device, const UInt32& currentBufferIndex, const VulkanPipelineManager& pipelineManager,
                                        const VulkanShaderManager& shaderManager, UInt32 graphicsFamilyIndex, const VulkanSwapchain& swapchain)
-            : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
-              _currentBufferIndex(currentBufferIndex)
+            : Renderer(chainHandler)
+              KMP_PROFILE_CONSTRUCTOR_START_DERIVED_CLASS()
+            , _currentBufferIndex(currentBufferIndex)
             , _pipelineManager(pipelineManager)
             , _shaderManager(shaderManager)
             , _swapchain(swapchain)
@@ -36,25 +37,6 @@ namespace Kmplete
         VulkanRenderer::~VulkanRenderer() KMP_PROFILING(ProfileLevelAlways)
         {
             _Finalize();
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::StartFrame() KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentBufferIndex < _drawCommandBuffers.size());
-
-            _drawCommandBuffers[_currentBufferIndex].Reset();
-            _drawCommandBuffers[_currentBufferIndex].Begin();
-            _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
-            KMP_ASSERT(_currentCommandBuffer);
-        }}
-        //--------------------------------------------------------------------------
-
-        void VulkanRenderer::EndFrame() KMP_PROFILING(ProfileLevelMinor)
-        {
-            KMP_ASSERT(_currentBufferIndex < _drawCommandBuffers.size());
-
-            _drawCommandBuffers[_currentBufferIndex].End();
         }}
         //--------------------------------------------------------------------------
 
@@ -730,6 +712,27 @@ namespace Kmplete
             _drawCommandBuffers.clear();
             _commandPool.reset();
         }
+        //--------------------------------------------------------------------------
+
+        bool VulkanRenderer::_StartFrame(float /*frameTimestep*/) KMP_PROFILING(ProfileLevelMinor)
+        {
+            KMP_ASSERT(_currentBufferIndex < _drawCommandBuffers.size());
+
+            _drawCommandBuffers[_currentBufferIndex].Reset();
+            _drawCommandBuffers[_currentBufferIndex].Begin();
+            _currentCommandBuffer = _drawCommandBuffers[_currentBufferIndex].GetVkCommandBuffer();
+            KMP_ASSERT(_currentCommandBuffer);
+
+            return true;
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanRenderer::_EndFrame() KMP_PROFILING(ProfileLevelMinor)
+        {
+            KMP_ASSERT(_currentBufferIndex < _drawCommandBuffers.size());
+
+            _drawCommandBuffers[_currentBufferIndex].End();
+        }}
         //--------------------------------------------------------------------------
     }
 }
