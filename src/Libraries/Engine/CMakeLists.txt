@@ -90,6 +90,7 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/camera.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/orthographic_camera.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/perspective_camera.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/colors.h
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_base.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_backend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/graphics_surface.cpp
@@ -104,6 +105,7 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/camera.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/orthographic_camera.cpp
     ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/perspective_camera.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/src/Graphics/colors.cpp
 )
 AddTargetSourcesGroup(Kmplete "Graphics/Vulkan/Core"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h
