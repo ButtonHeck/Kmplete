@@ -219,6 +219,14 @@ namespace Kmplete
             { { -0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
             { {  0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
             { {  0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+
+            // non-transparent grey 25% quad
+            { {  0.81f, 0.60f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
+            { {  1.01f, 0.60f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
+            { {  0.81f, 0.80f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
+            { {  0.81f, 0.80f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
+            { {  1.01f, 0.60f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
+            { {  1.01f, 0.80f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) }
         };
         const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
@@ -538,7 +546,7 @@ namespace Kmplete
         renderer.SetPolygonMode(VK_Polygon_Fill);
         renderer.SetProvokingVertexMode(VK_ProvokingVertexMode_FirstVertex);
         renderer.SetSampleMask(vulkanDevice.GetMultisampling(), {0xFF});
-        renderer.BindVertexBuffers2(VertexBufferBinding, { vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { 0 }, { 420 }, { sizeof(Vertex) });
+        renderer.BindVertexBuffers2(VertexBufferBinding, { vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { 0 }, { 588 }, { sizeof(Vertex) });
         renderer.BindShaderObjects(
             { VK_ShaderStage_Vertex, VK_ShaderStage_Fragment },
             { VertexShader_SID, FragmentShader_SID }
@@ -547,7 +555,7 @@ namespace Kmplete
 
         // drawing
         renderer.DrawIndexed(_indexCount, 1, 0, 0, 0);
-        renderer.Draw(12, 1, 3, 0);
+        renderer.Draw(18, 1, 3, 0);
         renderer.EndRendering();
     }
     //--------------------------------------------------------------------------
