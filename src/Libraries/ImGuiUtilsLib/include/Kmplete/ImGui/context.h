@@ -12,7 +12,7 @@ namespace Kmplete
         {
             static constexpr auto ConfigurationFileName = "imgui.ini";
 
-            Context(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, float baseScale);
+            Context(void* window, String graphicsBackendType, bool dockingEnabled, bool viewportsEnabled, float baseScale, float fontDensity);
             virtual ~Context() = default;
 
             void* window;
@@ -21,6 +21,7 @@ namespace Kmplete
             bool viewportsEnabled;
             const char* configName = ConfigurationFileName;
             const float baseScale;
+            const float fontDensity;
         };
         //--------------------------------------------------------------------------
     }

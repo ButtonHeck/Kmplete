@@ -78,6 +78,7 @@ namespace Kmplete
             auto& io = ImGui::GetIO();
             const auto fontSizeScaled = fontSize * _context->baseScale;
             ImFontConfig fontConfig;
+            fontConfig.RasterizerDensity = _context->fontDensity;
             fontConfig.FontDataOwnedByAtlas = false;
 
             return io.Fonts->AddFontFromMemoryTTF(
@@ -92,10 +93,12 @@ namespace Kmplete
         {
             auto& io = ImGui::GetIO();
             const auto fontSizeScaled = fontSize * _context->baseScale;
+            ImFontConfig fontConfig;
+            fontConfig.RasterizerDensity = _context->fontDensity;
 
             return io.Fonts->AddFontFromFileTTF(
                 Filesystem::ToGenericString(fontFilepath).c_str(), 
-                fontSizeScaled, nullptr, io.Fonts->GetGlyphRangesCyrillic()
+                fontSizeScaled, &fontConfig, io.Fonts->GetGlyphRangesCyrillic()
             ) != nullptr;
         }}
         //--------------------------------------------------------------------------
@@ -110,6 +113,7 @@ namespace Kmplete
             fontConfig.PixelSnapH = true;
             fontConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
             fontConfig.FontDataOwnedByAtlas = false;
+            fontConfig.RasterizerDensity = _context->fontDensity;
             static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 
             return io.Fonts->AddFontFromMemoryTTF(
@@ -129,6 +133,7 @@ namespace Kmplete
             fontConfig.GlyphMinAdvanceX = fontSizeScaled;
             fontConfig.PixelSnapH = true;
             fontConfig.GlyphOffset = ImVec2(0.0f, 0.0f);
+            fontConfig.RasterizerDensity = _context->fontDensity;
             static const ImWchar iconsRanges[] = { ICON_MIN_FK, ICON_MAX_FK, 0 };
 
             return io.Fonts->AddFontFromFileTTF(
