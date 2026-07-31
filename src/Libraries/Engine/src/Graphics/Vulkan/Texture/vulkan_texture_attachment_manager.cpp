@@ -88,7 +88,8 @@ namespace Kmplete
         //--------------------------------------------------------------------------
 
         VkRenderingAttachmentInfo VulkanTextureAttachmentManager::GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
-                                                                                             VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA /*= false*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
+                                                                                             VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, 
+                                                                                             bool useSwapchainForNonMSAA /*= false*/, bool useSwapchainSRGB /*= true*/) const KMP_PROFILING(ProfileLevelImportantVerbose)
         {
             if (not _textureAttachments.contains(imageViewAttachmentSid))
             {
@@ -99,7 +100,15 @@ namespace Kmplete
             const auto& textureAttachment = _textureAttachments.at(imageViewAttachmentSid);
             if (textureAttachment->GetSamples() == VK_SampleCount_1)
             {
-                preset.imageView = useSwapchainForNonMSAA ? _swapchain.GetCurrentImageViewSRGB() : textureAttachment->GetVkImageView();
+                if (useSwapchainForNonMSAA)
+                {
+                    preset.imageView = useSwapchainSRGB ? _swapchain.GetCurrentImageViewSRGB() : _swapchain.GetCurrentImageViewLinear();
+                }
+                else
+                {
+                    preset.imageView = textureAttachment->GetVkImageView();
+                }
+
                 return preset;
             }
             else
@@ -113,7 +122,7 @@ namespace Kmplete
 
                 if (resolveImageViewAttachmentSid == 0ULL)
                 {
-                    preset.resolveImageView = _swapchain.GetCurrentImageViewSRGB();
+                    preset.resolveImageView = useSwapchainSRGB ? _swapchain.GetCurrentImageViewSRGB() : _swapchain.GetCurrentImageViewLinear();
                 }
                 else
                 {

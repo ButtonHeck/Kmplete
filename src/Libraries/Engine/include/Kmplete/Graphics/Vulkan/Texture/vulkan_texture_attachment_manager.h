@@ -51,7 +51,8 @@ namespace Kmplete
             KMP_NODISCARD OptionalRef<VulkanTextureAttachment> GetTextureAttachment(StringID attachmentSid) const;
 
             KMP_NODISCARD VkRenderingAttachmentInfo GetRenderingAttachmentInfo(VkRenderingAttachmentInfo preset, StringID imageViewAttachmentSid, StringID resolveImageViewAttachmentSid, 
-                                                                               VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, bool useSwapchainForNonMSAA = false) const;
+                                                                               VkResolveModeFlagBits resolveMode, VkImageLayout resolveImageLayout, 
+                                                                               bool useSwapchainForNonMSAA = false, bool useSwapchainSRGB = true) const;
 
             void RecreateTextureAttachmentsWithNewSize(const VkExtent3D& newExtent);
             void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
