@@ -56,10 +56,10 @@ endif()
 
 
 # Dear ImGui
-message("---- Kmplete dependencies: ImGui (forked)")
+message("---- Kmplete dependencies: ImGui")
 FetchContent_Declare(imgui
-    GIT_REPOSITORY https://github.com/ButtonHeck/imgui.git
-    GIT_TAG docking_vulkan_srgb
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.90.7-docking
 )
 FetchContent_GetProperties(imgui)
 

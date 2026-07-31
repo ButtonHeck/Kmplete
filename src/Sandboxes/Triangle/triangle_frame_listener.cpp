@@ -195,38 +195,38 @@ namespace Kmplete
 
         const Vector<Vertex> vertices{
             // main RGB triangle
-            { { -0.95f, -0.97f, 0.2f }, Graphics::Colors::ToLinear(Graphics::Colors::Red) },
-            { {  0.95f, -0.95f, 0.2f }, Graphics::Colors::ToLinear(Graphics::Colors::Green) },
-            { { -0.92f,  0.95f, 0.2f }, Graphics::Colors::ToLinear(Graphics::Colors::Blue) }
+            { { -0.95f, -0.97f, 0.2f }, Graphics::Colors::Red },
+            { {  0.95f, -0.95f, 0.2f }, Graphics::Colors::Green },
+            { { -0.92f,  0.95f, 0.2f }, Graphics::Colors::Blue }
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
         const Vector<Vertex> vertices2{
             // black-to-white triangle above main RGB triangle
             { { -0.50f,  0.90f, 0.1f }, Graphics::Colors::Black },
-            { { -0.75f,  0.25f, 0.1f }, Graphics::Colors::ToLinear(Graphics::Colors::Grey50) },
+            { { -0.75f,  0.25f, 0.1f }, Graphics::Colors::Grey50 },
             { { -0.25f,  0.25f, 0.1f }, Graphics::Colors::White },
 
             // reddish triangle below main RGB triangle
-            { { -0.00f,  0.40f, 0.8f }, Graphics::Colors::ToLinear({ 1.0f, 0.3f, 0.3f, 1.0f }) },
-            { { -0.25f, -0.25f, 0.8f }, Graphics::Colors::ToLinear({ 1.0f, 0.6f, 0.6f, 1.0f }) },
-            { {  0.25f, -0.25f, 0.8f }, Graphics::Colors::ToLinear({ 1.0f, 0.9f, 0.9f, 1.0f }) },
+            { { -0.00f,  0.40f, 0.8f }, { 1.0f, 0.3f, 0.3f, 1.0f } },
+            { { -0.25f, -0.25f, 0.8f }, { 1.0f, 0.6f, 0.6f, 1.0f } },
+            { {  0.25f, -0.25f, 0.8f }, { 1.0f, 0.9f, 0.9f, 1.0f } },
 
             // half-transparent quad above everything
-            { { -0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
-            { {  0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
-            { { -0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
-            { { -0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
-            { {  0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
-            { {  0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+            { { -0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { {  0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { { -0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { { -0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { {  0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { {  0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
 
             // non-transparent grey 25% quad
-            { {  0.81f, 0.60f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
-            { {  1.01f, 0.60f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
-            { {  0.81f, 0.80f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
-            { {  0.81f, 0.80f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
-            { {  1.01f, 0.60f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) },
-            { {  1.01f, 0.80f, 0.0f }, Graphics::Colors::ToLinear({ 0.25f, 0.25f, 0.25f, 1.0f }) }
+            { {  0.81f, 0.60f, 0.0f }, { 0.25f, 0.25f, 0.25f, 1.0f } },
+            { {  1.01f, 0.60f, 0.0f }, { 0.25f, 0.25f, 0.25f, 1.0f } },
+            { {  0.81f, 0.80f, 0.0f }, { 0.25f, 0.25f, 0.25f, 1.0f } },
+            { {  0.81f, 0.80f, 0.0f }, { 0.25f, 0.25f, 0.25f, 1.0f } },
+            { {  1.01f, 0.60f, 0.0f }, { 0.25f, 0.25f, 0.25f, 1.0f } },
+            { {  1.01f, 0.80f, 0.0f }, { 0.25f, 0.25f, 0.25f, 1.0f } }
         };
         const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
@@ -290,7 +290,7 @@ namespace Kmplete
     void TriangleFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatSRGB.format, VK_ImageUsage_TransientAttachment);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatLinear.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
@@ -310,7 +310,7 @@ namespace Kmplete
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatLinear.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
         pipelineParams.AddShaderStages(shaderStages);
 
 #if not TRIANGLE_VULKAN_DYNAMIC_RENDERING
@@ -427,7 +427,7 @@ namespace Kmplete
             initInfo.MSAASamples = logicalDevice.GetMultisampling();
             initInfo.PipelineRenderingCreateInfo = Graphics::VKUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormatSRGB.format;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormatLinear.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, viewportEnabled, contentScale, initInfo);
@@ -476,7 +476,7 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true, "use swapchain SRGB"_false
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,
@@ -603,7 +603,7 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_LoadStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true, "use swapchain SRGB"_false
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_LoadStore,
