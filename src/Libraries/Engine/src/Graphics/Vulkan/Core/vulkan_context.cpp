@@ -50,23 +50,22 @@ namespace Kmplete
 
             defaultDepthFormat = depthFormat;
 
-            surfaceFormat = _FindSurfaceFormat();
+            surfaceFormatSRGB = _FindSurfaceFormatSRGB();
 
             KMP_ASSERT(not supportedSampleCounts.empty());
         }}
         //--------------------------------------------------------------------------
 
-        VkSurfaceFormatKHR VulkanContext::_FindSurfaceFormat() const KMP_PROFILING(ProfileLevelImportant)
+        VkSurfaceFormatKHR VulkanContext::_FindSurfaceFormatSRGB() const KMP_PROFILING(ProfileLevelImportant)
         {
             if (surfaceFormats.empty())
             {
-                KMP_LOG_CRITICAL("unable to get available surface format");
-                throw RuntimeError("VulkanContext: unable to get available surface format");
+                KMP_LOG_CRITICAL("unable to get available surface SRGB format");
+                throw RuntimeError("VulkanContext: unable to get available surface SRGB format");
             }
 
             for (const auto& surfFormat : surfaceFormats)
             {
-                //TODO: add to settings in a future, use default SRGB
                 if (surfFormat.format == VK_Format_BGRA8_SRGB && surfFormat.colorSpace == VK_ColorSpace_SRGB_Nonlinear)
                 {
                     return surfFormat;

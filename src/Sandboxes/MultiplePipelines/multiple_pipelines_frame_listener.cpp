@@ -128,7 +128,7 @@ namespace Kmplete
         auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
 
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_TransientAttachment);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatSRGB.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
@@ -152,7 +152,7 @@ namespace Kmplete
 
         auto pipelineFixedColorFillParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineFixedColorFillParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
+        pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineFixedColorFillParams.AddShaderStages(fixedColorShaderStages);
         pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBufferFixed_SID), VertexBufferBinding);
         pipelineFixedColorFillParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });

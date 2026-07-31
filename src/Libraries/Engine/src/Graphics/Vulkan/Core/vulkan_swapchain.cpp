@@ -32,7 +32,7 @@ namespace Kmplete
             , _imageCreatorDelegate(imageCreatorDelegate)
             , _device(device)
             , _swapchainExtent(swapchainExtent)
-            , _swapchainImageFormat(vulkanContext.surfaceFormat.format)
+            , _swapchainImageFormatSRGB(vulkanContext.surfaceFormatSRGB.format)
             , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
@@ -126,7 +126,7 @@ namespace Kmplete
             _presentCompleteSemaphores = presentCompleteSemaphores;
             _renderCompleteSemaphores = renderCompleteSemaphores;
             _swapchainExtent = swapchainExtent;
-            _swapchainImageFormat = _vulkanContext.surfaceFormat.format;
+            _swapchainImageFormatSRGB = _vulkanContext.surfaceFormatSRGB.format;
 
             _CreateSwapchainObject(vSync);
             _CreateSwapchainImages();
@@ -181,7 +181,7 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainObject(bool vSync) KMP_PROFILING(ProfileLevelImportant)
         {
-            VkFormat swapchainViewFormats[] = { _vulkanContext.surfaceFormat.format, VK_Format_BGRA8_UNorm };
+            VkFormat swapchainViewFormats[] = { _vulkanContext.surfaceFormatSRGB.format, VK_Format_BGRA8_UNorm };
 
             auto imageListCI = VKUtils::InitVkImageFormatListCreateInfo();
             imageListCI.viewFormatCount = 2;
@@ -190,8 +190,8 @@ namespace Kmplete
             auto swapchainCreateInfo = VKUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = _vulkanContext.surface;
             swapchainCreateInfo.minImageCount = _imageCount;
-            swapchainCreateInfo.imageFormat = _vulkanContext.surfaceFormat.format;
-            swapchainCreateInfo.imageColorSpace = _vulkanContext.surfaceFormat.colorSpace;
+            swapchainCreateInfo.imageFormat = _vulkanContext.surfaceFormatSRGB.format;
+            swapchainCreateInfo.imageColorSpace = _vulkanContext.surfaceFormatSRGB.colorSpace;
             swapchainCreateInfo.imageExtent = _swapchainExtent;
             swapchainCreateInfo.imageArrayLayers = 1;
             swapchainCreateInfo.imageUsage = VK_ImageUsage_ColorAttachment;
@@ -245,7 +245,7 @@ namespace Kmplete
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
                 const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormat, subresourceRange);
+                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormatSRGB, subresourceRange);
             }
         }}
         //--------------------------------------------------------------------------

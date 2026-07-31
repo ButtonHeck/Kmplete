@@ -36,14 +36,14 @@ namespace Kmplete
             PriorityQueue<VkSampleCountFlagBits> supportedSampleCounts{};
 
             VkFormat defaultDepthFormat{};
-            VkSurfaceFormatKHR surfaceFormat{};
+            VkSurfaceFormatKHR surfaceFormatSRGB{};
 
         public:
             void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
                           const VkSurfaceCapabilitiesKHR& surfCapabilities, Vector<VkSurfaceFormatKHR>&& surfFormats, Vector<VkPresentModeKHR>&& presentModesParam);
 
         private:
-            KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormat() const;
+            KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormatSRGB() const;
         };
         //--------------------------------------------------------------------------
     }

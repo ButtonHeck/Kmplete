@@ -65,7 +65,7 @@ namespace Kmplete
 
             VkDevice _device;
             VkExtent2D _swapchainExtent;
-            VkFormat _swapchainImageFormat;
+            VkFormat _swapchainImageFormatSRGB;
             UInt32 _imageIndex;
             UInt32 _imageCount;
             VkSwapchainKHR _swapchain;

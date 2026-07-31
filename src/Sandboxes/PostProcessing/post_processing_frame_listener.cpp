@@ -171,8 +171,8 @@ namespace Kmplete
     {
         const auto attachmentsExtent = Graphics::VKUtils::Extent2Dto3D(vulkanDevice.GetCurrentExtent());
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormat.format, VK_ImageUsage_Sampled);
-        textureAttachmentManager.AddTextureColorAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormat.format, attachmentsExtent, VK_SampleCount_1, VK_ImageUsage_Sampled, "fixed samples"_true);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatSRGB.format, VK_ImageUsage_Sampled);
+        textureAttachmentManager.AddTextureColorAttachment(ColorAttachmentResolve, vulkanContext.surfaceFormatSRGB.format, attachmentsExtent, VK_SampleCount_1, VK_ImageUsage_Sampled, "fixed samples"_true);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
         pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { PostProcessingDSLayout_SID });
@@ -196,7 +196,7 @@ namespace Kmplete
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
         pipelineParams.AddShaderStages(shaderStages);
 
         const auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
@@ -210,7 +210,7 @@ namespace Kmplete
 
         auto pipelinePostParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelinePostParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelinePostParams.AddColorAttachmentInfo(vulkanContext.surfaceFormat.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelinePostParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
         pipelinePostParams.AddShaderStages(shaderPostStages);
         pipelinePostParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBufferResolve_SID), VertexBufferBinding);
         pipelinePostParams.AddDynamicState(VK_Dynamic_Viewport);
@@ -265,7 +265,7 @@ namespace Kmplete
             initInfo.MSAASamples = VK_SampleCount_1; // always draw on single sampled attachment
             initInfo.PipelineRenderingCreateInfo = Graphics::VKUtils::InitVkPipelineRenderingCreateInfoKHR();
             initInfo.PipelineRenderingCreateInfo.colorAttachmentCount = 1;
-            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormat.format;
+            initInfo.PipelineRenderingCreateInfo.pColorAttachmentFormats = &physicalDevice.GetVulkanContext().surfaceFormatSRGB.format;
             initInfo.PipelineRenderingCreateInfo.depthAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             initInfo.PipelineRenderingCreateInfo.stencilAttachmentFormat = physicalDevice.GetVulkanContext().defaultDepthFormat;
             context = new ImGuiUtils::ContextVulkan(_mainWindow.GetImplPointer(), Graphics::GraphicsBackendTypeToString(_graphicsBackend.GetType()), "docking"_false, viewportEnabled, contentScale, initInfo);
