@@ -42,7 +42,8 @@ namespace Kmplete
             KMP_NODISCARD UInt32 GetImageIndex() const noexcept;
             KMP_NODISCARD UInt32 GetImageCount() const noexcept;
             KMP_NODISCARD VkImage GetCurrentImage() const;
-            KMP_NODISCARD VkImageView GetCurrentImageView() const;
+            KMP_NODISCARD VkImageView GetCurrentImageViewSRGB() const;
+            KMP_NODISCARD VkImageView GetCurrentImageViewLinear() const;
 
         private:
             void _Initialize(const VkExtent2D& swapchainExtent, bool vSync, const Array<VkSemaphore, NumConcurrentFrames>& presentCompleteSemaphores,
@@ -55,7 +56,8 @@ namespace Kmplete
             KMP_NODISCARD VkPresentModeKHR _ChoosePresentMode(const Vector<VkPresentModeKHR>& presentModes, bool vSync) const;
             void _CreateSwapchainObject(bool vSync);
             void _CreateSwapchainImages();
-            void _CreateSwapchainImageViews();
+            void _CreateSwapchainImageViewsSRGB();
+            void _CreateSwapchainImageViewsLinear();
 
         private:
             const UInt32& _currentBufferIndex;
@@ -66,11 +68,13 @@ namespace Kmplete
             VkDevice _device;
             VkExtent2D _swapchainExtent;
             VkFormat _swapchainImageFormatSRGB;
+            VkFormat _swapchainImageFormatLinear;
             UInt32 _imageIndex;
             UInt32 _imageCount;
             VkSwapchainKHR _swapchain;
             Vector<VkImage> _swapchainImages;
-            Vector<VkImageView> _swapchainImageViews;
+            Vector<VkImageView> _swapchainImageViewsSRGB;
+            Vector<VkImageView> _swapchainImageViewsLinear;
             Array<VkSemaphore, NumConcurrentFrames> _presentCompleteSemaphores;
             Array<VkSemaphore, NumConcurrentFrames> _renderCompleteSemaphores;
         };

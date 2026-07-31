@@ -99,7 +99,7 @@ namespace Kmplete
             const auto& textureAttachment = _textureAttachments.at(imageViewAttachmentSid);
             if (textureAttachment->GetSamples() == VK_SampleCount_1)
             {
-                preset.imageView = useSwapchainForNonMSAA ? _swapchain.GetCurrentImageView() : textureAttachment->GetVkImageView();
+                preset.imageView = useSwapchainForNonMSAA ? _swapchain.GetCurrentImageViewSRGB() : textureAttachment->GetVkImageView();
                 return preset;
             }
             else
@@ -113,7 +113,7 @@ namespace Kmplete
 
                 if (resolveImageViewAttachmentSid == 0ULL)
                 {
-                    preset.resolveImageView = _swapchain.GetCurrentImageView();
+                    preset.resolveImageView = _swapchain.GetCurrentImageViewSRGB();
                 }
                 else
                 {

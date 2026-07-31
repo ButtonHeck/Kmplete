@@ -33,11 +33,13 @@ namespace Kmplete
             , _device(device)
             , _swapchainExtent(swapchainExtent)
             , _swapchainImageFormatSRGB(vulkanContext.surfaceFormatSRGB.format)
+            , _swapchainImageFormatLinear(vulkanContext.surfaceFormatLinear.format)
             , _imageIndex(0)
             , _imageCount(0)
             , _swapchain(VK_NULL_HANDLE)
             , _swapchainImages()
-            , _swapchainImageViews()
+            , _swapchainImageViewsSRGB()
+            , _swapchainImageViewsLinear()
             , _presentCompleteSemaphores()
             , _renderCompleteSemaphores()
         {
@@ -106,11 +108,19 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        VkImageView VulkanSwapchain::GetCurrentImageView() const
+        VkImageView VulkanSwapchain::GetCurrentImageViewSRGB() const
         {
-            KMP_ASSERT(_imageIndex < _swapchainImageViews.size());
+            KMP_ASSERT(_imageIndex < _swapchainImageViewsSRGB.size());
 
-            return _swapchainImageViews[_imageIndex];
+            return _swapchainImageViewsSRGB[_imageIndex];
+        }
+        //--------------------------------------------------------------------------
+
+        VkImageView VulkanSwapchain::GetCurrentImageViewLinear() const
+        {
+            KMP_ASSERT(_imageIndex < _swapchainImageViewsLinear.size());
+
+            return _swapchainImageViewsLinear[_imageIndex];
         }
         //--------------------------------------------------------------------------
 
@@ -127,10 +137,12 @@ namespace Kmplete
             _renderCompleteSemaphores = renderCompleteSemaphores;
             _swapchainExtent = swapchainExtent;
             _swapchainImageFormatSRGB = _vulkanContext.surfaceFormatSRGB.format;
+            _swapchainImageFormatLinear = _vulkanContext.surfaceFormatLinear.format;
 
             _CreateSwapchainObject(vSync);
             _CreateSwapchainImages();
-            _CreateSwapchainImageViews();
+            _CreateSwapchainImageViewsSRGB();
+            _CreateSwapchainImageViewsLinear();
         }
         //--------------------------------------------------------------------------
 
@@ -138,7 +150,13 @@ namespace Kmplete
         {
             KMP_ASSERT(_device && _swapchain);
 
-            for (auto imageView : _swapchainImageViews)
+            for (auto imageView : _swapchainImageViewsSRGB)
+            {
+                KMP_ASSERT(imageView);
+                vkDestroyImageView(_device, imageView, nullptr);
+            }
+
+            for (auto imageView : _swapchainImageViewsLinear)
             {
                 KMP_ASSERT(imageView);
                 vkDestroyImageView(_device, imageView, nullptr);
@@ -239,13 +257,24 @@ namespace Kmplete
         }}
         //--------------------------------------------------------------------------
 
-        void VulkanSwapchain::_CreateSwapchainImageViews() KMP_PROFILING(ProfileLevelImportant)
+        void VulkanSwapchain::_CreateSwapchainImageViewsSRGB() KMP_PROFILING(ProfileLevelImportant)
         {
-            _swapchainImageViews.resize(_swapchainImages.size());
+            _swapchainImageViewsSRGB.resize(_swapchainImages.size());
             for (size_t i = 0; i < _swapchainImages.size(); i++)
             {
                 const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
-                _swapchainImageViews[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormatSRGB, subresourceRange);
+                _swapchainImageViewsSRGB[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormatSRGB, subresourceRange);
+            }
+        }}
+        //--------------------------------------------------------------------------
+
+        void VulkanSwapchain::_CreateSwapchainImageViewsLinear() KMP_PROFILING(ProfileLevelImportant)
+        {
+            _swapchainImageViewsLinear.resize(_swapchainImages.size());
+            for (size_t i = 0; i < _swapchainImages.size(); i++)
+            {
+                const auto& subresourceRange = VKPresets::ImageSubresourceRange_Color_Layer1_Level1;
+                _swapchainImageViewsLinear[i] = _imageCreatorDelegate.CreateVkImageView(_swapchainImages[i], VK_ImageView_2D, _swapchainImageFormatLinear, subresourceRange);
             }
         }}
         //--------------------------------------------------------------------------

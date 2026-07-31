@@ -37,6 +37,7 @@ namespace Kmplete
 
             VkFormat defaultDepthFormat{};
             VkSurfaceFormatKHR surfaceFormatSRGB{};
+            VkSurfaceFormatKHR surfaceFormatLinear{};
 
         public:
             void Populate(VkInstance vkInstance, VkPhysicalDevice physDevice, VkSurfaceKHR surfaceParam, VkFormat depthFormat, UInt32 graphicsIndex, UInt32 presentIndex,
@@ -44,6 +45,7 @@ namespace Kmplete
 
         private:
             KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormatSRGB() const;
+            KMP_NODISCARD VkSurfaceFormatKHR _FindSurfaceFormatLinear() const;
         };
         //--------------------------------------------------------------------------
     }

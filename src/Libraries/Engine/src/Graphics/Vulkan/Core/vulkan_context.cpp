@@ -51,6 +51,7 @@ namespace Kmplete
             defaultDepthFormat = depthFormat;
 
             surfaceFormatSRGB = _FindSurfaceFormatSRGB();
+            surfaceFormatLinear = _FindSurfaceFormatLinear();
 
             KMP_ASSERT(not supportedSampleCounts.empty());
         }}
@@ -67,6 +68,26 @@ namespace Kmplete
             for (const auto& surfFormat : surfaceFormats)
             {
                 if (surfFormat.format == VK_Format_BGRA8_SRGB && surfFormat.colorSpace == VK_ColorSpace_SRGB_Nonlinear)
+                {
+                    return surfFormat;
+                }
+            }
+
+            return surfaceFormats[0];
+        }}
+        //--------------------------------------------------------------------------
+
+        VkSurfaceFormatKHR VulkanContext::_FindSurfaceFormatLinear() const KMP_PROFILING(ProfileLevelImportant)
+        {
+            if (surfaceFormats.empty())
+            {
+                KMP_LOG_CRITICAL("unable to get available surface linear format");
+                throw RuntimeError("VulkanContext: unable to get available surface linear format");
+            }
+
+            for (const auto& surfFormat : surfaceFormats)
+            {
+                if (surfFormat.format == VK_Format_BGRA8_UNorm && surfFormat.colorSpace == VK_ColorSpace_SRGB_Nonlinear)
                 {
                     return surfFormat;
                 }
