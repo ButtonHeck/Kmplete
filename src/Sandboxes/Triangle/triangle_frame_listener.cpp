@@ -2,6 +2,7 @@
 
 #include "Kmplete/Application/application_context.h"
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Graphics/colors.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_logical_device.h"
@@ -61,7 +62,7 @@ namespace Kmplete
         struct Vertex
         {
             float position[3];
-            float color[4];
+            Graphics::Colors::Color color;
         };
         //--------------------------------------------------------------------------
     }
@@ -194,30 +195,30 @@ namespace Kmplete
 
         const Vector<Vertex> vertices{
             // main RGB triangle
-            { { -0.95f, -0.97f, 0.2f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { {  0.95f, -0.95f, 0.2f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { { -0.92f,  0.95f, 0.2f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+            { { -0.95f, -0.97f, 0.2f }, Graphics::Colors::ToLinear(Graphics::Colors::Red) },
+            { {  0.95f, -0.95f, 0.2f }, Graphics::Colors::ToLinear(Graphics::Colors::Green) },
+            { { -0.92f,  0.95f, 0.2f }, Graphics::Colors::ToLinear(Graphics::Colors::Blue) }
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 
         const Vector<Vertex> vertices2{
-            // grey-to-white triangle above main RGB triangle
-            { { -0.50f,  0.90f, 0.1f }, { 0.3f, 0.3f, 0.3f, 1.0f } },
-            { { -0.75f,  0.25f, 0.1f }, { 0.6f, 0.6f, 0.6f, 1.0f } },
-            { { -0.25f,  0.25f, 0.1f }, { 1.0f, 1.0f, 1.0f, 1.0f } },
+            // black-to-white triangle above main RGB triangle
+            { { -0.50f,  0.90f, 0.1f }, Graphics::Colors::Black },
+            { { -0.75f,  0.25f, 0.1f }, Graphics::Colors::ToLinear(Graphics::Colors::Grey50) },
+            { { -0.25f,  0.25f, 0.1f }, Graphics::Colors::White },
 
             // reddish triangle below main RGB triangle
-            { { -0.00f,  0.40f, 0.8f }, { 1.0f, 0.3f, 0.3f, 1.0f } },
-            { { -0.25f, -0.25f, 0.8f }, { 1.0f, 0.6f, 0.6f, 1.0f } },
-            { {  0.25f, -0.25f, 0.8f }, { 1.0f, 0.9f, 0.9f, 1.0f } },
+            { { -0.00f,  0.40f, 0.8f }, Graphics::Colors::ToLinear({ 1.0f, 0.3f, 0.3f, 1.0f }) },
+            { { -0.25f, -0.25f, 0.8f }, Graphics::Colors::ToLinear({ 1.0f, 0.6f, 0.6f, 1.0f }) },
+            { {  0.25f, -0.25f, 0.8f }, Graphics::Colors::ToLinear({ 1.0f, 0.9f, 0.9f, 1.0f }) },
 
             // half-transparent quad above everything
-            { { -0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
-            { {  0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
-            { { -0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
-            { { -0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
-            { {  0.80f, -0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
-            { {  0.80f,  0.80f, 0.0f }, { 1.0f, 1.0f, 1.0f, 0.25f } },
+            { { -0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+            { {  0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+            { { -0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+            { { -0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+            { {  0.80f, -0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
+            { {  0.80f,  0.80f, 0.0f }, Graphics::Colors::ToLinear({ 1.0f, 1.0f, 1.0f, 0.25f }) },
         };
         const auto vertex2BufferSize = UInt32(vertices2.size() * sizeof(Vertex));
 
