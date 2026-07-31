@@ -23,27 +23,27 @@ namespace Kmplete
             static constexpr auto Red20 =       Color(0.2f, 0.0f, 0.0f, 1.0f);
             static constexpr auto Red10 =       Color(0.1f, 0.0f, 0.0f, 1.0f);
 
-            static constexpr auto Blue =        Color(0.0f, 1.0f, 0.0f, 1.0f);
-            static constexpr auto Blue90 =      Color(0.0f, 0.9f, 0.0f, 1.0f);
-            static constexpr auto Blue80 =      Color(0.0f, 0.8f, 0.0f, 1.0f);
-            static constexpr auto Blue70 =      Color(0.0f, 0.7f, 0.0f, 1.0f);
-            static constexpr auto Blue60 =      Color(0.0f, 0.6f, 0.0f, 1.0f);
-            static constexpr auto Blue50 =      Color(0.0f, 0.5f, 0.0f, 1.0f);
-            static constexpr auto Blue40 =      Color(0.0f, 0.4f, 0.0f, 1.0f);
-            static constexpr auto Blue30 =      Color(0.0f, 0.3f, 0.0f, 1.0f);
-            static constexpr auto Blue20 =      Color(0.0f, 0.2f, 0.0f, 1.0f);
-            static constexpr auto Blue10 =      Color(0.0f, 0.1f, 0.0f, 1.0f);
+            static constexpr auto Green =       Color(0.0f, 1.0f, 0.0f, 1.0f);
+            static constexpr auto Green90 =     Color(0.0f, 0.9f, 0.0f, 1.0f);
+            static constexpr auto Green80 =     Color(0.0f, 0.8f, 0.0f, 1.0f);
+            static constexpr auto Green70 =     Color(0.0f, 0.7f, 0.0f, 1.0f);
+            static constexpr auto Green60 =     Color(0.0f, 0.6f, 0.0f, 1.0f);
+            static constexpr auto Green50 =     Color(0.0f, 0.5f, 0.0f, 1.0f);
+            static constexpr auto Green40 =     Color(0.0f, 0.4f, 0.0f, 1.0f);
+            static constexpr auto Green30 =     Color(0.0f, 0.3f, 0.0f, 1.0f);
+            static constexpr auto Green20 =     Color(0.0f, 0.2f, 0.0f, 1.0f);
+            static constexpr auto Green10 =     Color(0.0f, 0.1f, 0.0f, 1.0f);
 
-            static constexpr auto Green =       Color(0.0f, 0.0f, 1.0f, 1.0f);
-            static constexpr auto Green90 =     Color(0.0f, 0.0f, 0.9f, 1.0f);
-            static constexpr auto Green80 =     Color(0.0f, 0.0f, 0.8f, 1.0f);
-            static constexpr auto Green70 =     Color(0.0f, 0.0f, 0.7f, 1.0f);
-            static constexpr auto Green60 =     Color(0.0f, 0.0f, 0.6f, 1.0f);
-            static constexpr auto Green50 =     Color(0.0f, 0.0f, 0.5f, 1.0f);
-            static constexpr auto Green40 =     Color(0.0f, 0.0f, 0.4f, 1.0f);
-            static constexpr auto Green30 =     Color(0.0f, 0.0f, 0.3f, 1.0f);
-            static constexpr auto Green20 =     Color(0.0f, 0.0f, 0.2f, 1.0f);
-            static constexpr auto Green10 =     Color(0.0f, 0.0f, 0.1f, 1.0f);
+            static constexpr auto Blue =        Color(0.0f, 0.0f, 1.0f, 1.0f);
+            static constexpr auto Blue90 =      Color(0.0f, 0.0f, 0.9f, 1.0f);
+            static constexpr auto Blue80 =      Color(0.0f, 0.0f, 0.8f, 1.0f);
+            static constexpr auto Blue70 =      Color(0.0f, 0.0f, 0.7f, 1.0f);
+            static constexpr auto Blue60 =      Color(0.0f, 0.0f, 0.6f, 1.0f);
+            static constexpr auto Blue50 =      Color(0.0f, 0.0f, 0.5f, 1.0f);
+            static constexpr auto Blue40 =      Color(0.0f, 0.0f, 0.4f, 1.0f);
+            static constexpr auto Blue30 =      Color(0.0f, 0.0f, 0.3f, 1.0f);
+            static constexpr auto Blue20 =      Color(0.0f, 0.0f, 0.2f, 1.0f);
+            static constexpr auto Blue10 =      Color(0.0f, 0.0f, 0.1f, 1.0f);
 
             static constexpr auto Cyan =        Color(0.0f, 1.0f, 1.0f, 1.0f);
             static constexpr auto Cyan90 =      Color(0.0f, 0.9f, 0.9f, 1.0f);
