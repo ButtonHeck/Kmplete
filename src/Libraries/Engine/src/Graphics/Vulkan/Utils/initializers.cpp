@@ -432,6 +432,14 @@ namespace Kmplete
             }
             //--------------------------------------------------------------------------
 
+            VkImageFormatListCreateInfo InitVkImageFormatListCreateInfo()
+            {
+                return VkImageFormatListCreateInfo{
+                    .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO
+                };
+            }
+            //--------------------------------------------------------------------------
+
             VkImageMemoryBarrier InitVkImageMemoryBarrier()
             {
                 return VkImageMemoryBarrier{

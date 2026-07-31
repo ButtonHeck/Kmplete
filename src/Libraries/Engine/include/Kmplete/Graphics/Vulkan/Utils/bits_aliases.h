@@ -608,6 +608,11 @@ namespace Kmplete
 
             static constexpr auto VK_ProvokingVertexMode_FirstVertex = VK_PROVOKING_VERTEX_MODE_FIRST_VERTEX_EXT;
             static constexpr auto VK_ProvokingVertexMode_LastVertex = VK_PROVOKING_VERTEX_MODE_LAST_VERTEX_EXT;
+
+            static constexpr auto VK_SwapchainCreate_MutableFormat = VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR;
+            static constexpr auto VK_SwapchainCreate_SplitInstanceBindRegions = VK_SWAPCHAIN_CREATE_SPLIT_INSTANCE_BIND_REGIONS_BIT_KHR;
+            static constexpr auto VK_SwapchainCreate_Protected = VK_SWAPCHAIN_CREATE_PROTECTED_BIT_KHR;
+            static constexpr auto VK_SwapchainCreate_DeferredMemoryAllocation = VK_SWAPCHAIN_CREATE_DEFERRED_MEMORY_ALLOCATION_BIT_EXT;
         }
     }
 }

@@ -181,6 +181,12 @@ namespace Kmplete
 
         void VulkanSwapchain::_CreateSwapchainObject(bool vSync) KMP_PROFILING(ProfileLevelImportant)
         {
+            VkFormat swapchainViewFormats[] = { _vulkanContext.surfaceFormat.format, VK_Format_BGRA8_UNorm };
+
+            auto imageListCI = VKUtils::InitVkImageFormatListCreateInfo();
+            imageListCI.viewFormatCount = 2;
+            imageListCI.pViewFormats = swapchainViewFormats;
+
             auto swapchainCreateInfo = VKUtils::InitVkSwapchainCreateInfoKHR();
             swapchainCreateInfo.surface = _vulkanContext.surface;
             swapchainCreateInfo.minImageCount = _imageCount;
@@ -194,6 +200,8 @@ namespace Kmplete
             swapchainCreateInfo.presentMode = _ChoosePresentMode(_vulkanContext.presentModes, vSync);
             swapchainCreateInfo.clipped = VK_TRUE;
             swapchainCreateInfo.oldSwapchain = VK_NULL_HANDLE;
+            swapchainCreateInfo.flags = VK_SwapchainCreate_MutableFormat;
+            swapchainCreateInfo.pNext = &imageListCI;
 
             UInt32 indicesArray[] = { _vulkanContext.graphicsFamilyIndex, _vulkanContext.presentFamilyIndex };
             if (_vulkanContext.graphicsFamilyIndex != _vulkanContext.presentFamilyIndex)

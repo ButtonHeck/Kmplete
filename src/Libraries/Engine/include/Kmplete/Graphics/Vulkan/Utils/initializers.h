@@ -68,6 +68,7 @@ namespace Kmplete
 
             KMP_NODISCARD KMP_API VkImageCreateInfo InitVkImageCreateInfo();
             KMP_NODISCARD KMP_API VkImageViewCreateInfo InitVkImageViewCreateInfo();
+            KMP_NODISCARD KMP_API VkImageFormatListCreateInfo InitVkImageFormatListCreateInfo();
             KMP_NODISCARD KMP_API VkImageMemoryBarrier InitVkImageMemoryBarrier();
             KMP_NODISCARD KMP_API VkSamplerCreateInfo InitVkSamplerCreateInfo();
 
