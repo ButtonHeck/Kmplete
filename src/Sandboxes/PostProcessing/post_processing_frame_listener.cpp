@@ -2,6 +2,7 @@
 
 #include "Kmplete/Application/application_context.h"
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Graphics/colors.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
@@ -55,7 +56,7 @@ namespace Kmplete
         struct Vertex
         {
             float position[2];
-            float color[4];
+            Graphics::Colors::Color color;
         };
 
         struct VertexResolve
@@ -99,9 +100,9 @@ namespace Kmplete
         const auto& renderer = vulkanDevice.GetRenderer();
 
         const Vector<Vertex> vertices{
-            { { -0.9f,  0.9f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { {  0.9f,  0.9f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { {  0.0f, -0.9f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+            { { -0.9f,  0.9f }, Graphics::Colors::Red },
+            { {  0.9f,  0.9f }, Graphics::Colors::Green },
+            { {  0.0f, -0.9f }, Graphics::Colors::Blue }
         };
         const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
 

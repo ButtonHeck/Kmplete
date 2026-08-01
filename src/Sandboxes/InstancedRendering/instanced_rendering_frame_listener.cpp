@@ -1,6 +1,7 @@
 #include "instanced_rendering_frame_listener.h"
 
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Graphics/colors.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
@@ -41,11 +42,6 @@ namespace Kmplete
         struct Vertex
         {
             float position[2];
-        };
-
-        struct Color
-        {
-            float colors[4];
         };
     }
 
@@ -109,14 +105,14 @@ namespace Kmplete
         };
         const auto vertexInstancedBufferSize = UInt32(verticesInstanced.size() * sizeof(Vertex));
 
-        const Vector<Color> verticesColorsInstanced{
-            { 1.0f, 0.0f, 0.0f, 1.0f },
-            { 0.0f, 1.0f, 0.0f, 1.0f },
-            { 0.0f, 0.0f, 1.0f, 1.0f },
-            { 1.0f, 1.0f, 1.0f, 1.0f },
-            { 0.5f, 0.5f, 0.5f, 1.0f }
+        const Vector<Graphics::Colors::Color> verticesColorsInstanced{
+            Graphics::Colors::Red,
+            Graphics::Colors::Green,
+            Graphics::Colors::Blue,
+            Graphics::Colors::White,
+            Graphics::Colors::Grey50
         };
-        const auto vertexColorsInstancedBufferSize = UInt32(verticesColorsInstanced.size() * sizeof(Color));
+        const auto vertexColorsInstancedBufferSize = UInt32(verticesColorsInstanced.size() * sizeof(Graphics::Colors::Color));
 
         const Vector<UInt32> indices{ 0, 1, 2 };
         _indexCount = UInt32(indices.size());
@@ -163,7 +159,7 @@ namespace Kmplete
     void InstancedRenderingFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatSRGB.format, VK_ImageUsage_TransientAttachment);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatLinear.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
@@ -181,7 +177,7 @@ namespace Kmplete
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatLinear.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBufferPosInstanced_SID), InstancePositionBufferBinding);
@@ -219,7 +215,7 @@ namespace Kmplete
 
         auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true, "use swapchain SRGB"_false
         );
         auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,

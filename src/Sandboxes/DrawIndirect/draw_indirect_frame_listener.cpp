@@ -1,6 +1,7 @@
 #include "draw_indirect_frame_listener.h"
 
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Graphics/colors.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Texture/vulkan_texture_attachment_manager.h"
@@ -43,7 +44,7 @@ namespace Kmplete
         struct InstanceData
         {
             float position[2];
-            float color[4];
+            Graphics::Colors::Color color;
         };
     }
 
@@ -89,24 +90,24 @@ namespace Kmplete
 
         const Vector<InstanceData> instanceData{
             // Top row - 8 items
-            { { -0.8f, -0.4f }, { 1.0f, 0.0f, 0.0f, 1.0f } /*red*/ },
-            { { -0.6f, -0.4f }, { 0.0f, 1.0f, 0.0f, 1.0f } /*green*/},
-            { { -0.4f, -0.4f }, { 0.0f, 0.0f, 1.0f, 1.0f } /*blue*/},
-            { { -0.2f, -0.4f }, { 1.0f, 1.0f, 1.0f, 1.0f } /*white*/},
-            { {  0.0f, -0.4f }, { 1.0f, 1.0f, 0.0f, 1.0f } /*yellow*/},
-            { {  0.2f, -0.4f }, { 1.0f, 0.0f, 1.0f, 1.0f } /*magenta*/},
-            { {  0.4f, -0.4f }, { 0.0f, 1.0f, 1.0f, 1.0f } /*cyan*/},
-            { {  0.6f, -0.4f }, { 0.5f, 0.5f, 0.5f, 1.0f } /*grey*/},
+            { { -0.8f, -0.4f }, Graphics::Colors::Red },
+            { { -0.6f, -0.4f }, Graphics::Colors::Green },
+            { { -0.4f, -0.4f }, Graphics::Colors::Blue },
+            { { -0.2f, -0.4f }, Graphics::Colors::White },
+            { {  0.0f, -0.4f }, Graphics::Colors::Yellow },
+            { {  0.2f, -0.4f }, Graphics::Colors::Magenta },
+            { {  0.4f, -0.4f }, Graphics::Colors::Cyan },
+            { {  0.6f, -0.4f }, Graphics::Colors::Grey50 },
 
             // Bottom row - 8 items
-            { { -0.8f, 0.4f }, { 1.0f, 0.0f, 0.0f, 1.0f } /*red*/ },
-            { { -0.6f, 0.4f }, { 0.0f, 1.0f, 0.0f, 1.0f } /*green*/},
-            { { -0.4f, 0.4f }, { 0.0f, 0.0f, 1.0f, 1.0f } /*blue*/},
-            { { -0.2f, 0.4f }, { 1.0f, 1.0f, 1.0f, 1.0f } /*white*/},
-            { {  0.0f, 0.4f }, { 1.0f, 1.0f, 0.0f, 1.0f } /*yellow*/},
-            { {  0.2f, 0.4f }, { 1.0f, 0.0f, 1.0f, 1.0f } /*magenta*/},
-            { {  0.4f, 0.4f }, { 0.0f, 1.0f, 1.0f, 1.0f } /*cyan*/},
-            { {  0.6f, 0.4f }, { 0.5f, 0.5f, 0.5f, 1.0f } /*grey*/},
+            { { -0.8f, 0.4f }, Graphics::Colors::Red },
+            { { -0.6f, 0.4f }, Graphics::Colors::Green },
+            { { -0.4f, 0.4f }, Graphics::Colors::Blue },
+            { { -0.2f, 0.4f }, Graphics::Colors::White },
+            { {  0.0f, 0.4f }, Graphics::Colors::Yellow },
+            { {  0.2f, 0.4f }, Graphics::Colors::Magenta },
+            { {  0.4f, 0.4f }, Graphics::Colors::Cyan },
+            { {  0.6f, 0.4f }, Graphics::Colors::Grey50 },
         };
         const auto instanceBufferSize = UInt32(instanceData.size() * sizeof(InstanceData));
 
@@ -180,7 +181,7 @@ namespace Kmplete
     void DrawIndirectFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatSRGB.format, VK_ImageUsage_TransientAttachment);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatLinear.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
@@ -207,7 +208,7 @@ namespace Kmplete
 
         auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatLinear.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineParams.AddShaderStages(shaderStages);
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
         pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBufferInstanced_SID), InstanceBufferBinding);
@@ -242,7 +243,7 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true, "use swapchain SRGB"_false
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,

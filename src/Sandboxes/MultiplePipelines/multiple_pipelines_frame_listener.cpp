@@ -1,6 +1,7 @@
 #include "multiple_pipelines_frame_listener.h"
 
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Graphics/colors.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
 #include "Kmplete/Graphics/Vulkan/Utils/bits_aliases.h"
@@ -40,7 +41,7 @@ namespace Kmplete
         struct BufferedColorVertex
         {
             float position[2];
-            float color[4];
+            Graphics::Colors::Color color;
         };
     }
 
@@ -86,14 +87,14 @@ namespace Kmplete
 
         const Vector<BufferedColorVertex> bufferedColorVertices{
             // Top-right
-            { { 0.05f, -0.05f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { { 0.95f, -0.05f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { { 0.05f, -0.95f }, { 0.0f, 0.0f, 1.0f, 1.0f } },
+            { { 0.05f, -0.05f }, Graphics::Colors::Red },
+            { { 0.95f, -0.05f }, Graphics::Colors::Green },
+            { { 0.05f, -0.95f }, Graphics::Colors::Blue },
 
             // Bottom-right
-            { { 0.05f,  0.95f }, { 1.0f, 0.0f, 0.0f, 1.0f } },
-            { { 0.95f,  0.95f }, { 0.0f, 1.0f, 0.0f, 1.0f } },
-            { { 0.05f,  0.05f }, { 0.0f, 0.0f, 1.0f, 1.0f } }
+            { { 0.05f,  0.95f }, Graphics::Colors::Red },
+            { { 0.95f,  0.95f }, Graphics::Colors::Green },
+            { { 0.05f,  0.05f }, Graphics::Colors::Blue }
         };
         const auto bufferedColorBufferSize = UInt32(bufferedColorVertices.size() * sizeof(BufferedColorVertex));
 
@@ -128,7 +129,7 @@ namespace Kmplete
         auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
 
         auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
-        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatSRGB.format, VK_ImageUsage_TransientAttachment);
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatLinear.format, VK_ImageUsage_TransientAttachment);
         textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
 
         auto& pipelineManager = vulkanDevice.GetPipelineManager();
@@ -152,7 +153,7 @@ namespace Kmplete
 
         auto pipelineFixedColorFillParams = Graphics::VulkanGraphicsPipelineParameters();
         pipelineFixedColorFillParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
-        pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatSRGB.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
+        pipelineFixedColorFillParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatLinear.format, Graphics::VKPresets::ColorBlendAttachmentState_NoBlend);
         pipelineFixedColorFillParams.AddShaderStages(fixedColorShaderStages);
         pipelineFixedColorFillParams.AddVertexBufferAttributesBindings(*vulkanBufferManager.GetVertexBuffer(VertexBufferFixed_SID), VertexBufferBinding);
         pipelineFixedColorFillParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
@@ -200,7 +201,7 @@ namespace Kmplete
 
         const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
-            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true, "use swapchain SRGB"_false
         );
         const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
             Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,
