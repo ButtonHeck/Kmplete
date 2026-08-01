@@ -332,6 +332,9 @@ namespace Kmplete
         renderer.BindVertexBuffers(0, { vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, {VkDeviceSize{0}});
         renderer.BindIndexBuffer(*vulkanBufferManager.GetBuffer(IndexBuffer_SID));
 
+        auto colorImageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareWriting;
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment), colorImageBarrierParameters);
+
         auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
         renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment), imageBarrierParameters);
 

@@ -303,6 +303,12 @@ namespace Kmplete
         const auto colorAttachmentMS = vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment);
         const auto colorAttachmentResolve = vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve);
 
+        auto colorImageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareWriting;
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment), colorImageBarrierParameters);
+
+        auto colorResolveImageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareWriting;
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(ColorAttachmentResolve), colorResolveImageBarrierParameters);
+
         renderer.SetViewport(viewport);
         renderer.SetScissor(drawArea);
 
