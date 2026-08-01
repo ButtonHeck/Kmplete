@@ -65,8 +65,6 @@ namespace Kmplete
                 {
                     _position -= _up * moveSpeed;
                 }
-
-                KMP_LOG_DEBUG("position - x:{} y:{} z:{}", int(_position.x), int(_position.y), int(_position.z));
             }
 
             _UpdateViewMatrix();
