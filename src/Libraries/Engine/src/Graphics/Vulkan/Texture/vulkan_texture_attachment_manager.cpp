@@ -100,44 +100,11 @@ namespace Kmplete
             const auto& textureAttachment = _textureAttachments.at(imageViewAttachmentSid);
             if (textureAttachment->GetSamples() == VK_SampleCount_1)
             {
-                if (useSwapchainForNonMSAA)
-                {
-                    preset.imageView = useSwapchainSRGB ? _swapchain.GetCurrentImageViewSRGB() : _swapchain.GetCurrentImageViewLinear();
-                }
-                else
-                {
-                    preset.imageView = textureAttachment->GetVkImageView();
-                }
-
-                return preset;
+                return _GetRenderingAttachmentInfoSingleSampled(preset, textureAttachment, useSwapchainForNonMSAA, useSwapchainSRGB);
             }
             else
             {
-                preset.imageView = textureAttachment->GetVkImageView();
-
-                if (resolveMode == VK_Resolve_None)
-                {
-                    return preset;
-                }
-
-                if (resolveImageViewAttachmentSid == 0ULL)
-                {
-                    preset.resolveImageView = useSwapchainSRGB ? _swapchain.GetCurrentImageViewSRGB() : _swapchain.GetCurrentImageViewLinear();
-                }
-                else
-                {
-                    if (not _textureAttachments.contains(resolveImageViewAttachmentSid))
-                    {
-                        KMP_LOG_ERROR("texture attachment for resolve image view with sid '{}' not found", resolveImageViewAttachmentSid);
-                        return preset;
-                    }
-
-                    preset.resolveImageView = _textureAttachments.at(resolveImageViewAttachmentSid)->GetVkImageView();
-                }
-
-                preset.resolveMode = resolveMode;
-                preset.resolveImageLayout = resolveImageLayout;
-                return preset;
+                return _GetRenderingAttachmentInfoMultiSampled(preset, textureAttachment, resolveImageViewAttachmentSid, resolveMode, resolveImageLayout, useSwapchainSRGB);
             }
         }}
         //--------------------------------------------------------------------------
@@ -184,6 +151,54 @@ namespace Kmplete
                 parameters.samples = _msaaSamples;
                 textureAttachment.reset(new VulkanTextureAttachment(attachmentSid, _device, _imageCreatorDelegate, parameters));
             }
+        }}
+        //--------------------------------------------------------------------------
+
+        VkRenderingAttachmentInfo VulkanTextureAttachmentManager::_GetRenderingAttachmentInfoSingleSampled(VkRenderingAttachmentInfo& preset, const UPtr<VulkanTextureAttachment>& textureAttachment,
+                                                                                                           bool useSwapchainForNonMSAA, bool useSwapchainSRGB) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            if (useSwapchainForNonMSAA)
+            {
+                preset.imageView = useSwapchainSRGB ? _swapchain.GetCurrentImageViewSRGB() : _swapchain.GetCurrentImageViewLinear();
+            }
+            else
+            {
+                preset.imageView = textureAttachment->GetVkImageView();
+            }
+
+            return preset;
+        }}
+        //--------------------------------------------------------------------------
+
+        VkRenderingAttachmentInfo VulkanTextureAttachmentManager::_GetRenderingAttachmentInfoMultiSampled(VkRenderingAttachmentInfo& preset, const UPtr<VulkanTextureAttachment>& textureAttachment,
+                                                                                                          StringID resolveImageViewAttachmentSid, VkResolveModeFlagBits resolveMode, 
+                                                                                                          VkImageLayout resolveImageLayout, bool useSwapchainSRGB) const KMP_PROFILING(ProfileLevelImportantVerbose)
+        {
+            preset.imageView = textureAttachment->GetVkImageView();
+
+            if (resolveMode == VK_Resolve_None)
+            {
+                return preset;
+            }
+
+            if (resolveImageViewAttachmentSid == 0ULL)
+            {
+                preset.resolveImageView = useSwapchainSRGB ? _swapchain.GetCurrentImageViewSRGB() : _swapchain.GetCurrentImageViewLinear();
+            }
+            else
+            {
+                if (not _textureAttachments.contains(resolveImageViewAttachmentSid))
+                {
+                    KMP_LOG_ERROR("texture attachment for resolve image view with sid '{}' not found", resolveImageViewAttachmentSid);
+                    return preset;
+                }
+
+                preset.resolveImageView = _textureAttachments.at(resolveImageViewAttachmentSid)->GetVkImageView();
+            }
+
+            preset.resolveMode = resolveMode;
+            preset.resolveImageLayout = resolveImageLayout;
+            return preset;
         }}
         //--------------------------------------------------------------------------
     }

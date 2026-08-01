@@ -58,6 +58,13 @@ namespace Kmplete
             void RecreateTextureAttachmentsWithNewSamples(VkSampleCountFlagBits newSamples);
 
         private:
+            KMP_NODISCARD VkRenderingAttachmentInfo _GetRenderingAttachmentInfoSingleSampled(VkRenderingAttachmentInfo& preset, const UPtr<VulkanTextureAttachment>& textureAttachment,
+                                                                                             bool useSwapchainForNonMSAA, bool useSwapchainSRGB) const;
+            KMP_NODISCARD VkRenderingAttachmentInfo _GetRenderingAttachmentInfoMultiSampled(VkRenderingAttachmentInfo& preset, const UPtr<VulkanTextureAttachment>& textureAttachment,
+                                                                                            StringID resolveImageViewAttachmentSid, VkResolveModeFlagBits resolveMode, 
+                                                                                            VkImageLayout resolveImageLayout, bool useSwapchainSRGB) const;
+
+        private:
             VkDevice _device;
             const VulkanImageCreatorDelegate& _imageCreatorDelegate;
             VkExtent3D _extent;
