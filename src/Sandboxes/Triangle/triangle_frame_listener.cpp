@@ -472,6 +472,9 @@ namespace Kmplete
         vulkanBufferManager.GetBuffer(UniformBuffersColorMultiplier_SID, currentBufferIndex)->CopyToMappedMemory(0, &_shaderData, sizeof(ShaderData));
         vulkanBufferManager.GetBuffer(UniformBuffersMatrices_SID, currentBufferIndex)->CopyToMappedMemory(0, &_matrixShaderData, sizeof(MatrixShaderData));
 
+        auto colorImageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareWriting;
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment), colorImageBarrierParameters);
+
         auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
         renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment), imageBarrierParameters);
 
