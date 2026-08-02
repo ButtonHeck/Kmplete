@@ -64,14 +64,14 @@ namespace Kmplete
         }
         //--------------------------------------------------------------------------
 
-        template<typename ValueType> requires (IsIntegral<ValueType>::value)
+        template<typename ValueType> requires (IsUnsigned<ValueType>::value)
         KMP_NODISCARD bool IsPowerOf2(ValueType value)
         {
             return (value == 0) || std::popcount(value) == 1;
         }
         //--------------------------------------------------------------------------
 
-        template<typename ValueType> requires (IsIntegral<ValueType>::value)
+        template<typename ValueType> requires (IsUnsigned<ValueType>::value)
         KMP_NODISCARD ValueType NearestPowerOf2(ValueType value)
         {
             if (IsPowerOf2(value))

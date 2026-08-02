@@ -30,6 +30,9 @@ namespace Kmplete
     template<typename T>
     using IsReal = std::is_floating_point<T>;
 
+    template<typename T>
+    using IsUnsigned = std::is_unsigned<T>;
+
 
     template<typename T>
     using IsMoveConstructible = std::is_move_constructible<T>;
