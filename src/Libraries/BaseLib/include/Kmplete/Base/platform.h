@@ -20,7 +20,7 @@
     #define KMP_PLATFORM_WINDOWS
 #elif defined (__LINUX__) || defined(__gnu_linux__) || defined(__linux__)
     #define KMP_PLATFORM_LINUX
-#elif define (__APPLE__)
+#elif defined (__APPLE__)
     #define KMP_PLATFORM_MACOSX
 #else
     #define KMP_PLATFORM_OTHER
