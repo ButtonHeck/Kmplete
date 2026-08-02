@@ -57,7 +57,7 @@ add_subdirectory(dependencies)
 
 
 # Kmplete main targets
-set(KmpleteInstallEditorComponentName KmpleteInstallEditor)
+set(KmpleteInstallEditorComponentName Editor)
 add_subdirectory(src)
 
 

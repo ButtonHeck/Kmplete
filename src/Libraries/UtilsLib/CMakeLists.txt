@@ -45,6 +45,7 @@ endif()
 
 install(TARGETS UtilsLib
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ${KmpleteInstallEditorComponentName}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )

@@ -310,7 +310,8 @@ CreateTranslationHelperTargets(
 # --------------------------
 
 install(TARGETS Kmplete
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ${KmpleteInstallEditorComponentName}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )
@@ -321,11 +322,13 @@ install(DIRECTORY locale
 )
 install(TARGETS glfw
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ${KmpleteInstallEditorComponentName}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )
 install(TARGETS freetype
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+        COMPONENT ${KmpleteInstallEditorComponentName}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
         COMPONENT ${KmpleteInstallEditorComponentName}
 )

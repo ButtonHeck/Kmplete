@@ -59,3 +59,12 @@ add_custom_command(TARGET Translator POST_BUILD
     "${CMAKE_CURRENT_BINARY_DIR}/translator_gettext_paths.json"
     "${exeDir}"
 )
+
+
+# Installation
+# --------------------------
+
+install(TARGETS Translator
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} 
+        COMPONENT ${KmpleteInstallEditorComponentName}
+)
