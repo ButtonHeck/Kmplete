@@ -298,7 +298,7 @@ namespace Kmplete
 
     bool UniformBuffersFrameListener::_OnWindowResizeEvent(Events::WindowResizeEvent& evt)
     {
-        if (evt.GetWidth() > 0 && evt.GetHeight())
+        if (evt.GetWidth() > 0 && evt.GetHeight() > 0)
         {
             _camera.SetAspectRatio(float(evt.GetWidth()) / float(evt.GetHeight()));
         }
