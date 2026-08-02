@@ -23,6 +23,8 @@ namespace Kmplete
         static constexpr auto ProcessorArgumentOutputDirectoryShort = "O";
         static constexpr auto ProcessorArgumentOutputFileName = "output_file_name";
         static constexpr auto ProcessorArgumentOutputFileNameShort = "F";
+        static constexpr auto ProcessorArgumentGettextBinariesJsonPath = "gettext_binaries_paths";
+        static constexpr auto ProcessorArgumentGettextBinariesJsonPathShort = "G";
 
 
         enum ReturnCode
@@ -37,6 +39,7 @@ namespace Kmplete
             OutputDirectoryIsNotSet = -5,
             OutputDirectoryIsNotValid = -51,
             OutputFileNameIsNotSet = -6,
+            GettextBinariesFileNotFound = -7,
 
             ProcessorFilesNotFound = -10,
             ProcessorCreatePotFailed = -11,

@@ -10,6 +10,18 @@ namespace Kmplete
 {
     namespace Translator
     {
+        //! These paths should be provided in "translator_gettext_paths.json" file nearby Translator binary
+        struct GettextBinaries
+        {
+            Filepath xgettextPath;
+            Filepath msgmergePath;
+            Filepath msgfmtPath;
+            Filepath msginitPath;
+            Filepath msgattribPath;
+        };
+        //--------------------------------------------------------------------------
+
+
         //! Representation of the Translator program arguments
         //! --mode [Update/Compile]
         //! --input_directories
@@ -18,6 +30,7 @@ namespace Kmplete
         //! --output_directory
         //! --output_file_name
         //! --logging
+        //! --gettext_binaries_paths
         struct TranslatorParameters
         {
             String workMode;
@@ -27,6 +40,8 @@ namespace Kmplete
             Filepath outputDirectory;
             String outputFileName;
             bool logging = false;
+            Filepath gettextBinariesJsonPath;
+            GettextBinaries gettextBinaries;
         };
         //--------------------------------------------------------------------------
 
@@ -37,10 +52,10 @@ namespace Kmplete
         //! 1) Update mode - recursively gathering all files (with suitable extensions) from source 
         //! directories and creating .po template files
         //! example usage:
-        //! --mode=Update --input_directories "dir1" "dir2" --extensions .cpp .h --recursive --output_directory "path/to/outputDir" --output_file_name "MyTranslations"
+        //! --mode=Update --input_directories "dir1" "dir2" --extensions .cpp .h --recursive --output_directory "path/to/outputDir" --output_file_name "MyTranslations" --gettext_binaries_paths "path_to_binaries.json"
         //! 2) Compile mode - using .po files to create .mo files with translations.
         //! example usage:
-        //! --mode=Compile --output_directory "path/to/outputDir" --output_file_name "MyTranslations"
+        //! --mode=Compile --output_directory "path/to/outputDir" --output_file_name "MyTranslations" --gettext_binaries_paths "path_to_binaries.json"
         //! Between those steps translations must be somehow added in text form.
         //! Overall translation process looks like this:
         //! 1) invoke Translator with --mode=Update --other_params=...

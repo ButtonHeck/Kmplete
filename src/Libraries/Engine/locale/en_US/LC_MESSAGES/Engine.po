@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 09:08+0300\n"
+"POT-Creation-Date: 2026-08-02 15:10+0300\n"
 "PO-Revision-Date: 2025-06-09 09:08+0300\n"
 "Last-Translator: <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -16,10 +16,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Engine/src\Application\application.cpp:142
+#: D:/workspace/My/Kmplete/Kmplete/src/Libraries/Engine/src\Application\application.cpp:178
 msgid "English"
 msgstr "English"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Engine/src\Application\application.cpp:143
+#: D:/workspace/My/Kmplete/Kmplete/src/Libraries/Engine/src\Application\application.cpp:179
 msgid "Russian"
 msgstr "Russian"

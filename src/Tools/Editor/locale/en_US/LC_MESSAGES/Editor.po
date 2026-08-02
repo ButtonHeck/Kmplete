@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-09 09:28+0300\n"
+"POT-Creation-Date: 2026-08-02 15:07+0300\n"
 "PO-Revision-Date: 2025-06-09 09:28+0300\n"
 "Last-Translator: <EMAIL@ADDRESS>\n"
 "Language-Team: English\n"
@@ -16,30 +16,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:284
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:315
 msgid "File"
 msgstr "File"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:285
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:316
 msgid "View"
 msgstr "View"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:286
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:317
 msgid "Quit"
 msgstr "Quit"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:287
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:318
 msgid "Fullscreen"
 msgstr "Fullscreen"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:288
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:319
 msgid "Metrics update period (ms)"
 msgstr "Metrics update period (ms)"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:289
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:320
 msgid "Show fractional"
 msgstr "Show fractional"
 
-#: D:/workspace/My/Kmplete/Kmplete/src/Editor/src\editor_ui_compositor.cpp:290
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:321
 msgid "Change language"
 msgstr "Change language"
+
+#: D:/workspace/My/Kmplete/Kmplete/src/Tools/Editor/src\UI\editor_ui_compositor.cpp:322
+msgid "Always on top"
+msgstr "Always on top"

@@ -3,6 +3,7 @@
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Filesystem/filesystem.h"
 #include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Json/json_document.h"
 
 #include <boost/program_options.hpp>
 
@@ -91,23 +92,25 @@ namespace Kmplete
     {
         bpo::options_description CreateOptionsDescription()
         {
-            const auto loggingArgument =            Utils::Concatenate(ProcessorArgumentLogging, ",", ProcessorArgumentLoggingShort);
-            const auto modeArgument =               Utils::Concatenate(ProcessorArgumentWorkMode, ",", ProcessorArgumentWorkModeShort);
-            const auto inputDirectoriesArgument =   Utils::Concatenate(ProcessorArgumentInputDirectories, ",", ProcessorArgumentInputDirectoriesShort);
-            const auto extensionsArgument =         Utils::Concatenate(ProcessorArgumentExtensions, ",", ProcessorArgumentExtensionsShort);
-            const auto recursiveArgument =          Utils::Concatenate(ProcessorArgumentRecursive, ",", ProcessorArgumentRecursiveShort);
-            const auto outputDirectoryArgument =    Utils::Concatenate(ProcessorArgumentOutputDirectory, ",", ProcessorArgumentOutputDirectoryShort);
-            const auto outputFileNameArgument =     Utils::Concatenate(ProcessorArgumentOutputFileName, ",", ProcessorArgumentOutputFileNameShort);
+            const auto loggingArgument =                Utils::Concatenate(ProcessorArgumentLogging, ",", ProcessorArgumentLoggingShort);
+            const auto modeArgument =                   Utils::Concatenate(ProcessorArgumentWorkMode, ",", ProcessorArgumentWorkModeShort);
+            const auto inputDirectoriesArgument =       Utils::Concatenate(ProcessorArgumentInputDirectories, ",", ProcessorArgumentInputDirectoriesShort);
+            const auto extensionsArgument =             Utils::Concatenate(ProcessorArgumentExtensions, ",", ProcessorArgumentExtensionsShort);
+            const auto recursiveArgument =              Utils::Concatenate(ProcessorArgumentRecursive, ",", ProcessorArgumentRecursiveShort);
+            const auto outputDirectoryArgument =        Utils::Concatenate(ProcessorArgumentOutputDirectory, ",", ProcessorArgumentOutputDirectoryShort);
+            const auto outputFileNameArgument =         Utils::Concatenate(ProcessorArgumentOutputFileName, ",", ProcessorArgumentOutputFileNameShort);
+            const auto gettextBinariesPathArgument =    Utils::Concatenate(ProcessorArgumentGettextBinariesJsonPath, ",", ProcessorArgumentGettextBinariesJsonPathShort);
 
             bpo::options_description optionsDescription("Translator options");
             optionsDescription.add_options()
-                (loggingArgument.c_str(),                                                       "Is logging enabled")
-                (modeArgument.c_str(),              bpo::value<String>(),                       "Working mode (Update, Compile)")
-                (inputDirectoriesArgument.c_str(),  bpo::value<StringVector>()->multitoken(),   "Directories to search files")
-                (extensionsArgument.c_str(),        bpo::value<StringVector>()->multitoken(),   "Files extensions to parse")
-                (recursiveArgument.c_str(),                                                     "Is recursive search in directory")
-                (outputDirectoryArgument.c_str(),   bpo::value<String>(),                       "Output files directory")
-                (outputFileNameArgument.c_str(),    bpo::value<String>(),                       "Output file name");
+                (loggingArgument.c_str(),                                                           "Is logging enabled")
+                (modeArgument.c_str(),                  bpo::value<String>(),                       "Working mode (Update, Compile)")
+                (inputDirectoriesArgument.c_str(),      bpo::value<StringVector>()->multitoken(),   "Directories to search files")
+                (extensionsArgument.c_str(),            bpo::value<StringVector>()->multitoken(),   "Files extensions to parse")
+                (recursiveArgument.c_str(),                                                         "Is recursive search in directory")
+                (outputDirectoryArgument.c_str(),       bpo::value<String>(),                       "Output files directory")
+                (outputFileNameArgument.c_str(),        bpo::value<String>(),                       "Output file name")
+                (gettextBinariesPathArgument.c_str(),   bpo::value<String>(),                       "Gettext binaries paths json file");
 
             return optionsDescription;
         }
@@ -233,6 +236,25 @@ namespace Kmplete
 
             translatorParameters.outputDirectory = outputDirectory;
             translatorParameters.outputFileName = outputFileNameStr;
+
+            // gettext binaries paths json parsing
+            const auto gettextBinariesJsonDefaultPath = Filesystem::GetCurrentFilepath() / "translator_gettext_paths.json";
+            const auto gettextBinariesPathsStr = vm.count(ProcessorArgumentGettextBinariesJsonPath) ? vm[ProcessorArgumentGettextBinariesJsonPath].as<String>() : gettextBinariesJsonDefaultPath;
+            GettextBinaries gettextBinaries;
+            auto gettextBinariesJsonDocument = JsonDocument(gettextBinariesPathsStr);
+            if (gettextBinariesJsonDocument.HasError())
+            {
+                KMP_LOG_ERROR_FN("Translator: 'translator_gettext_paths.json' file not found or has invalid format");
+                PrintUsage(optionsDescription);
+                return ReturnCode::GettextBinariesFileNotFound;
+            }
+
+            gettextBinaries.xgettextPath = gettextBinariesJsonDocument.GetString("XGETTEXT", "");
+            gettextBinaries.msgmergePath = gettextBinariesJsonDocument.GetString("MSGMERGE", "");
+            gettextBinaries.msgfmtPath = gettextBinariesJsonDocument.GetString("MSGFMT", "");
+            gettextBinaries.msginitPath = gettextBinariesJsonDocument.GetString("MSGINIT", "");
+            gettextBinaries.msgattribPath = gettextBinariesJsonDocument.GetString("MSGATTRIB", "");
+            translatorParameters.gettextBinaries = gettextBinaries;
 
             return ReturnCode::Ok;
         }

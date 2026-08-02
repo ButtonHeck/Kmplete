@@ -24,19 +24,12 @@ set_target_properties(Translator PROPERTIES
     FOLDER Kmplete/Tools/Translator
 )
 
-target_compile_definitions(Translator
-    PRIVATE XGETTEXT_EXECUTABLE_PATH=\"${GETTEXT_XGETTEXT_EXECUTABLE}\"
-    PRIVATE MSGMERGE_EXECUTABLE_PATH=\"${GETTEXT_MSGMERGE_EXECUTABLE}\"
-    PRIVATE MSGFMT_EXECUTABLE_PATH=\"${GETTEXT_MSGFMT_EXECUTABLE}\"
-    PRIVATE MSGINIT_EXECUTABLE_PATH=\"${GETTEXT_MSGINIT_EXECUTABLE}\"
-    PRIVATE MSGATTRIB_EXECUTABLE_PATH=\"${GETTEXT_MSGATTRIB_EXECUTABLE}\"
-)
-
 target_link_libraries(Translator
     PUBLIC $<IF:$<CONFIG:Production>,LoggerInterfaceLib,LoggerLib>
 
     PRIVATE BaseLib
     PRIVATE UtilsLib
+    PRIVATE JsonLib
     PRIVATE FilesystemLib
     PRIVATE TranslatorInterfaceLib
 )
@@ -47,3 +40,22 @@ if(MSVC)
     )
     
 endif()
+
+
+# Translator gettext paths generation
+# --------------------------
+set(XGETTEXT_PATH ${GETTEXT_XGETTEXT_EXECUTABLE})
+set(MSGMERGE_PATH ${GETTEXT_MSGMERGE_EXECUTABLE})
+set(MSGFMT_PATH ${GETTEXT_MSGFMT_EXECUTABLE})
+set(MSGINIT_PATH ${GETTEXT_MSGINIT_EXECUTABLE})
+set(MSGATTRIB_PATH ${GETTEXT_MSGATTRIB_EXECUTABLE})
+
+configure_file(translator_gettext_paths.json.in translator_gettext_paths.json @ONLY)
+
+get_target_property(exeDir Translator RUNTIME_OUTPUT_DIRECTORY)
+
+add_custom_command(TARGET Translator POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+    "${CMAKE_CURRENT_BINARY_DIR}/translator_gettext_paths.json"
+    "${exeDir}"
+)

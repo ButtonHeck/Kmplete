@@ -77,7 +77,7 @@ namespace Kmplete
 
                 // 2. invoke xgettext for .pot
                 const auto xgettextCommand = Utils::Concatenate(
-                    XGETTEXT_EXECUTABLE_PATH,
+                    _parameters.gettextBinaries.xgettextPath,
                     " -j -C -n ",
                     "-kTranslate:2,2t -kTranslate:2,3,4t ",
                     "-kTranslateCtx:2,3c,3t -kTranslateCtx:2,3,5c,5t ",
@@ -117,7 +117,7 @@ namespace Kmplete
                 if (not Filesystem::FilepathExists(poFile))
                 {
                     const auto msginitCommand = Utils::Concatenate(
-                        MSGINIT_EXECUTABLE_PATH,
+                        _parameters.gettextBinaries.msginitPath,
                         " -i ",
                         poTemplateFile,
                         " -o ",
@@ -138,7 +138,7 @@ namespace Kmplete
 
                 // 5. invoke msgattrib with --set-obsolete flag
                 auto msgattribCommand = Utils::Concatenate(
-                    MSGATTRIB_EXECUTABLE_PATH,
+                    _parameters.gettextBinaries.msgattribPath,
                     " --set-obsolete --ignore-file=",
                     poTemplateFile,
                     " -o ",
@@ -157,7 +157,7 @@ namespace Kmplete
 
                 // 6. invoke msgattrib with --no-obsolete flag
                 msgattribCommand = Utils::Concatenate(
-                    MSGATTRIB_EXECUTABLE_PATH,
+                    _parameters.gettextBinaries.msgattribPath,
                     " --no-obsolete -o ",
                     poFile,
                     " ",
@@ -174,7 +174,7 @@ namespace Kmplete
 
                 // 7. invoke msgmerge
                 const auto msgmergeCommand = Utils::Concatenate(
-                    MSGMERGE_EXECUTABLE_PATH,
+                    _parameters.gettextBinaries.msgmergePath,
                     " -q -o ",
                     poFile,
                     " ",
@@ -229,7 +229,7 @@ namespace Kmplete
                 moFile /= (_parameters.outputFileName + ".mo");
 
                 const auto msgfmtCommand = Utils::Concatenate(
-                    MSGFMT_EXECUTABLE_PATH,
+                    _parameters.gettextBinaries.msgfmtPath,
                     " -o ",
                     moFile.string(),
                     " ",
