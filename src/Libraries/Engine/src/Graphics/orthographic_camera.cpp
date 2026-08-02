@@ -1,4 +1,5 @@
 #include "Kmplete/Graphics/orthographic_camera.h"
+#include "Kmplete/Core/assertion.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Profile/profiler.h"
 
@@ -115,19 +116,14 @@ namespace Kmplete
 
         void OrthographicCamera::_UpdateProjectionMatrix() KMP_PROFILING(ProfileLevelImportantVerbose)
         {
+            KMP_ASSERT(_aspectRatio != 0.0f);
+
             const auto scaledLeft = _left * _scale;
             const auto scaledRight = _right * _scale;
-            const auto scaledBottom = _bottom * _scale;
-            const auto scaledTop = _top * _scale;
+            const auto scaledBottom = _bottom * _scale / (_applyAspectRatioFix ? _aspectRatio : 1.0f);
+            const auto scaledTop = _top * _scale / (_applyAspectRatioFix ? _aspectRatio : 1.0f);
 
-            if (_applyAspectRatioFix)
-            {
-                _projectionMatrix = glm::orthoLH(scaledLeft, scaledRight, scaledBottom / _aspectRatio, scaledTop / _aspectRatio, _zNear, _zFar);
-            }
-            else
-            {
-                _projectionMatrix = glm::orthoLH(scaledLeft, scaledRight, scaledBottom, scaledTop, _zNear, _zFar);
-            }
+            _projectionMatrix = glm::orthoLH(scaledLeft, scaledRight, scaledBottom, scaledTop, _zNear, _zFar);
         }}
         //--------------------------------------------------------------------------
     }
