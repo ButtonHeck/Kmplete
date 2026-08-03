@@ -7,7 +7,6 @@ project(Triangle LANGUAGES CXX)
 set(Triangle_HEADERS
     ${CMAKE_CURRENT_LIST_DIR}/triangle_application.h
     ${CMAKE_CURRENT_LIST_DIR}/triangle_frame_listener.h
-    ${CMAKE_CURRENT_LIST_DIR}/events.h
 )
 set(Triangle_SOURCES
     ${CMAKE_CURRENT_LIST_DIR}/main.cpp

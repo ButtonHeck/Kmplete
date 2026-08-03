@@ -1,7 +1,5 @@
 #pragma once
 
-#include "events.h"
-
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Application/frame_listener.h"
 #include "Kmplete/Window/window.h"
@@ -12,6 +10,7 @@
 #include "Kmplete/Event/event_handler_guard.h"
 #include "Kmplete/Event/window_events.h"
 #include "Kmplete/Event/mouse_events.h"
+#include "Kmplete/Event/graphics_events.h"
 #include "Kmplete/Input/input_manager.h"
 
 #include <vulkan/vulkan.h>
