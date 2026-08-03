@@ -28,6 +28,9 @@ namespace Kmplete
 
     const PluralityFormDispatcher& GetPluralityDispatcher(const LocaleStr& localeStr) noexcept
     {
+        static constexpr PluralityFormDispatcherEn pluralFormIndexGeneratorEn;
+        static constexpr PluralityFormDispatcherRu pluralFormIndexGeneratorRu;
+
         if (localeStr == LocaleEnUTF8Keyword)
         {
             return pluralFormIndexGeneratorEn;

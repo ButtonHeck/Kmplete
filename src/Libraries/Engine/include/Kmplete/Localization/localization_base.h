@@ -83,9 +83,6 @@ namespace Kmplete
 
     KMP_NODISCARD KMP_API const PluralityFormDispatcher& GetPluralityDispatcher(const LocaleStr& localeStr) noexcept;
 
-    static constexpr PluralityFormDispatcherEn pluralFormIndexGeneratorEn;
-    static constexpr PluralityFormDispatcherRu pluralFormIndexGeneratorRu;
-
 
     //! Source with a context, e.g. word "quit" translation depends on whether it is a noun or a verb,
     //! or a word may have different translations based on what context it is used with
