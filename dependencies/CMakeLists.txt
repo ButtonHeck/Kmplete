@@ -29,7 +29,7 @@ add_subdirectory(icons_fonts)
 include(FetchContent)
 
 # GLFW
-message("---- Kmplete dependencies: GLFW")
+message("---- Kmplete dependencies: GLFW (3.4)")
 FetchContent_Declare(glfw
     GIT_REPOSITORY https://github.com/glfw/glfw.git
     GIT_TAG 3.4
@@ -56,7 +56,7 @@ endif()
 
 
 # Dear ImGui
-message("---- Kmplete dependencies: ImGui")
+message("---- Kmplete dependencies: ImGui (v1.90.7-docking)")
 FetchContent_Declare(imgui
     GIT_REPOSITORY https://github.com/ocornut/imgui.git
     GIT_TAG v1.90.7-docking
@@ -72,7 +72,7 @@ endif()
 
 
 # PFD
-message("---- Kmplete dependencies: pfd")
+message("---- Kmplete dependencies: pfd (7f852d8)")
 FetchContent_Declare(pfd
     GIT_REPOSITORY https://github.com/samhocevar/portable-file-dialogs.git
     GIT_TAG 7f852d88a480020d7f91957cbcefe514fc95000c
@@ -87,10 +87,10 @@ endif()
 
 
 # RapidJSON
-message("---- Kmplete dependencies: RapidJSON")
+message("---- Kmplete dependencies: RapidJSON (ebd87cb)")
 FetchContent_Declare(rapidjson
     GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
-    GIT_TAG ab1842a2dae061284c0a62dca1cc6d5e7e37e346
+    GIT_TAG ebd87cb468fb4cb060b37e579718c4a4125416c1
 )
 FetchContent_GetProperties(rapidjson)
 
@@ -110,7 +110,7 @@ endif()
 
 
 # spdlog
-message("---- Kmplete dependencies: spdlog")
+message("---- Kmplete dependencies: spdlog (v1.14.1)")
 FetchContent_Declare(spdlog
     GIT_REPOSITORY https://github.com/gabime/spdlog.git
     GIT_TAG v1.14.1
@@ -131,7 +131,7 @@ endif()
 
 
 # Catch2
-message("---- Kmplete dependencies: Catch2")
+message("---- Kmplete dependencies: Catch2 (v3.6.0)")
 FetchContent_Declare(catch2
     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
     GIT_TAG v3.6.0
@@ -156,7 +156,7 @@ endif()
 
 
 # glm
-message("---- Kmplete dependencies: glm")
+message("---- Kmplete dependencies: glm (1.0.1)")
 FetchContent_Declare(glm
     GIT_REPOSITORY https://github.com/g-truc/glm.git
     GIT_TAG 1.0.1
@@ -179,7 +179,7 @@ endif()
 
 
 # entt
-message("---- Kmplete dependencies: EnTT")
+message("---- Kmplete dependencies: EnTT (v3.13.2)")
 FetchContent_Declare(entt
     GIT_REPOSITORY https://github.com/skypjack/entt.git
     GIT_TAG v3.13.2
@@ -194,7 +194,7 @@ endif()
 
 
 # GSL
-message("---- Kmplete dependencies: GSL")
+message("---- Kmplete dependencies: GSL (v4.2.1)")
 FetchContent_Declare(GSL
     GIT_REPOSITORY https://github.com/microsoft/GSL.git
     GIT_TAG v4.2.1
@@ -209,7 +209,7 @@ endif()
 
 
 # cpptrace
-message("---- Kmplete dependencies: cpptrace")
+message("---- Kmplete dependencies: cpptrace (v1.0.4)")
 FetchContent_Declare(cpptrace
     GIT_REPOSITORY https://github.com/jeremy-rifkin/cpptrace.git
     GIT_TAG v1.0.4
@@ -234,7 +234,7 @@ endif()
 
 
 # FreeType
-message("---- Kmplete dependencies: FreeType")
+message("---- Kmplete dependencies: FreeType (VER-2-13-2)")
 FetchContent_Declare(freetype
     GIT_REPOSITORY https://github.com/freetype/freetype.git
     GIT_TAG VER-2-13-2
@@ -259,7 +259,7 @@ endif()
 
 
 # HarfBuzz
-message("---- Kmplete dependencies: harfbuzz")
+message("---- Kmplete dependencies: harfbuzz (14.3.0)")
 FetchContent_Declare(harfbuzz
     GIT_REPOSITORY https://github.com/harfbuzz/harfbuzz.git
     GIT_TAG 14.3.0
@@ -286,7 +286,7 @@ endif()
 
 
 # openal-soft
-message("---- Kmplete dependencies: OpenAL-soft")
+message("---- Kmplete dependencies: OpenAL-soft (1.25.2)")
 FetchContent_Declare(openal-soft
     GIT_REPOSITORY https://github.com/kcat/openal-soft.git
     GIT_TAG 1.25.2 
