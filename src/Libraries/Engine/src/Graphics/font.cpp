@@ -7,6 +7,8 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include <hb.h>
+#include <hb-ft.h>
 
 
 namespace Kmplete
@@ -19,6 +21,7 @@ namespace Kmplete
         Font::Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _freetypeFace(nullptr)
+            , _hbFont(nullptr)
             , _fontBuffer(std::move(fontBuffer))
         {
             const auto freetypeFontInitError = FT_New_Memory_Face(&freetypeLib, _fontBuffer.data(), static_cast<FT_Long>(_fontBuffer.size()), 0, &_freetypeFace);
@@ -31,7 +34,13 @@ namespace Kmplete
             _UpdateParameters();
             SetPixelSize(DefaultFontPixelSize);
 
-            KMP_ASSERT(_freetypeFace);
+            _hbFont = hb_ft_font_create(_freetypeFace, nullptr);
+            if (!_hbFont)
+            {
+                KMP_LOG_ERROR("failed to load HarfBuzz font from FreeType face");
+                throw RuntimeError("Font: failed to load HarfBuzz font from FreeType face");
+            }
+
             KMP_PROFILE_CONSTRUCTOR_END()
         }
         //--------------------------------------------------------------------------
@@ -43,7 +52,9 @@ namespace Kmplete
 
         Font::~Font() KMP_PROFILING(ProfileLevelAlways)
         {
-            KMP_ASSERT(_freetypeFace);
+            KMP_ASSERT(_freetypeFace && _hbFont);
+
+            hb_font_destroy(_hbFont);
 
             const auto freetypeFontDoneError = FT_Done_Face(_freetypeFace);
             if (freetypeFontDoneError)

@@ -8,6 +8,7 @@
 
 struct FT_LibraryRec_;
 struct FT_FaceRec_;
+struct hb_font_t;
 
 
 namespace Kmplete
@@ -73,6 +74,7 @@ namespace Kmplete
 
         private:
             FT_FaceRec_* _freetypeFace;
+            hb_font_t* _hbFont;
             BinaryBuffer _fontBuffer;
             Parameters _parameters;
         };
