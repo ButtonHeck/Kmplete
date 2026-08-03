@@ -21,15 +21,15 @@ namespace Kmplete
         static constexpr auto WindowContentScaleEventTypeStr = "WindowContentScaleEvent";
         static constexpr auto WindowScreenModeEventTypeStr = "WindowScreenModeEvent";
 
-        static constexpr auto WindowResizeEventTypeID = "WindowResizeEvent"_sid;
-        static constexpr auto WindowMoveEventTypeID = "WindowMoveEvent"_sid;
-        static constexpr auto WindowCloseEventTypeID = "WindowCloseEvent"_sid;
-        static constexpr auto WindowFocusEventTypeID = "WindowFocusEvent"_sid;
-        static constexpr auto WindowIconifyEventTypeID = "WindowIconifyEvent"_sid;
-        static constexpr auto WindowFramebufferResizeEventTypeID = "WindowFramebufferResizeEvent"_sid;
-        static constexpr auto WindowFramebufferRefreshEventTypeID = "WindowFramebufferRefreshEvent"_sid;
-        static constexpr auto WindowContentScaleEventTypeID = "WindowContentScaleEvent"_sid;
-        static constexpr auto WindowScreenModeEventTypeID = "WindowScreenModeEvent"_sid;
+        static constexpr auto WindowResizeEventTypeID = ToStringID(WindowResizeEventTypeStr);
+        static constexpr auto WindowMoveEventTypeID = ToStringID(WindowMoveEventTypeStr);
+        static constexpr auto WindowCloseEventTypeID = ToStringID(WindowCloseEventTypeStr);
+        static constexpr auto WindowFocusEventTypeID = ToStringID(WindowFocusEventTypeStr);
+        static constexpr auto WindowIconifyEventTypeID = ToStringID(WindowIconifyEventTypeStr);
+        static constexpr auto WindowFramebufferResizeEventTypeID = ToStringID(WindowFramebufferResizeEventTypeStr);
+        static constexpr auto WindowFramebufferRefreshEventTypeID = ToStringID(WindowFramebufferRefreshEventTypeStr);
+        static constexpr auto WindowContentScaleEventTypeID = ToStringID(WindowContentScaleEventTypeStr);
+        static constexpr auto WindowScreenModeEventTypeID = ToStringID(WindowScreenModeEventTypeStr);
 
 
         struct WindowEvent : public Event

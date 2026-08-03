@@ -13,7 +13,7 @@ namespace Kmplete
     {
         static constexpr auto MultisamplingChangeEventTypeStr = "MultisamplingChangeEvent";
 
-        static constexpr auto MultisamplingChangeEventTypeID = "MultisamplingChangeEvent"_sid;
+        static constexpr auto MultisamplingChangeEventTypeID = ToStringID(MultisamplingChangeEventTypeStr);
 
 
         struct GraphicsEvent : public Event

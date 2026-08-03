@@ -16,10 +16,10 @@ namespace Kmplete
         static constexpr auto MouseButtonPressEventTypeStr = "MouseButtonPressEvent";
         static constexpr auto MouseButtonReleaseEventTypeStr = "MouseButtonReleaseEvent";
 
-        static constexpr auto MouseMoveEventTypeID = "MouseMoveEvent"_sid;
-        static constexpr auto MouseScrollEventTypeID = "MouseScrollEvent"_sid;
-        static constexpr auto MouseButtonPressEventTypeID = "MouseButtonPressEvent"_sid;
-        static constexpr auto MouseButtonReleaseEventTypeID = "MouseButtonReleaseEvent"_sid;
+        static constexpr auto MouseMoveEventTypeID = ToStringID(MouseMoveEventTypeStr);
+        static constexpr auto MouseScrollEventTypeID = ToStringID(MouseScrollEventTypeStr);
+        static constexpr auto MouseButtonPressEventTypeID = ToStringID(MouseButtonPressEventTypeStr);
+        static constexpr auto MouseButtonReleaseEventTypeID = ToStringID(MouseButtonReleaseEventTypeStr);
 
 
         struct MouseMoveEvent : public Event

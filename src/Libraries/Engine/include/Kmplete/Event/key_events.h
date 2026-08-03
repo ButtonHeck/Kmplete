@@ -15,9 +15,9 @@ namespace Kmplete
         static constexpr auto KeyReleaseEventTypeStr = "KeyReleaseEvent";
         static constexpr auto KeyCharEventTypeStr = "KeyCharEvent";
 
-        static constexpr auto KeyPressEventTypeID = "KeyPressEvent"_sid;
-        static constexpr auto KeyReleaseEventTypeID = "KeyReleaseEvent"_sid;
-        static constexpr auto KeyCharEventTypeID = "KeyCharEvent"_sid;
+        static constexpr auto KeyPressEventTypeID = ToStringID(KeyPressEventTypeStr);
+        static constexpr auto KeyReleaseEventTypeID = ToStringID(KeyReleaseEventTypeStr);
+        static constexpr auto KeyCharEventTypeID = ToStringID(KeyCharEventTypeStr);
 
 
         struct KeyEvent : public Event
