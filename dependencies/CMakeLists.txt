@@ -244,7 +244,6 @@ FetchContent_GetProperties(freetype)
 if(NOT freetype_POPULATED)
     FetchContent_Populate(freetype)
     
-    set(FT_DISABLE_HARFBUZZ ON CACHE BOOL "" FORCE)
     set(FT_DISABLE_BROTLI ON CACHE BOOL "" FORCE)
     set(FT_DISABLE_PNG ON CACHE BOOL "" FORCE)
     set(FT_DISABLE_ZLIB ON CACHE BOOL "" FORCE)
@@ -254,6 +253,33 @@ if(NOT freetype_POPULATED)
     set_target_properties(freetype PROPERTIES FOLDER Dependencies/FreeType)
     
     target_compile_options(freetype PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
+    )
+endif()
+
+
+# HarfBuzz
+message("---- Kmplete dependencies: harfbuzz")
+FetchContent_Declare(harfbuzz
+    GIT_REPOSITORY https://github.com/harfbuzz/harfbuzz.git
+    GIT_TAG 14.3.0
+)
+FetchContent_GetProperties(harfbuzz)
+
+if(NOT harfbuzz_POPULATED)
+    FetchContent_Populate(harfbuzz)
+    
+    set(HB_HAVE_FREETYPE ON CACHE BOOL "" FORCE)
+    
+    add_subdirectory(${harfbuzz_SOURCE_DIR} ${harfbuzz_BINARY_DIR})
+    
+    set_target_properties(harfbuzz PROPERTIES FOLDER Dependencies/harfbuzz)
+    set_target_properties(harfbuzz-gpu PROPERTIES FOLDER Dependencies/harfbuzz)
+    set_target_properties(harfbuzz-raster PROPERTIES FOLDER Dependencies/harfbuzz)
+    set_target_properties(harfbuzz-subset PROPERTIES FOLDER Dependencies/harfbuzz)
+    set_target_properties(harfbuzz-vector PROPERTIES FOLDER Dependencies/harfbuzz)
+    
+    target_compile_options(harfbuzz PUBLIC
         $<$<CXX_COMPILER_ID:MSVC>:$<$<BOOL:${KMPLETE_MULTIPROCESSOR_BUILD}>:/MP>>
     )
 endif()
@@ -271,6 +297,7 @@ if(NOT openal-soft_POPULATED)
     FetchContent_Populate(openal-soft)
     
     set(ALSOFT_UPDATE_BUILD_VERSION OFF CACHE BOOL "" FORCE)
+    set(ALSOFT_ENABLE_MODULES OFF CACHE BOOL "" FORCE)
     
     add_subdirectory(${openal-soft_SOURCE_DIR} ${openal-soft_BINARY_DIR})
     
