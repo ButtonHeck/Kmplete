@@ -456,7 +456,7 @@ namespace Kmplete
 
     bool PostProcessingFrameListener::_OnMultisamplingChangeEvent(Events::MultisamplingChangeEvent& evt)
     {
-        _graphicsBackend.SetMultisampling(evt.msaaSamples);
+        _graphicsBackend.SetMultisampling(evt.GetSamples());
         _imguiImpl.reset();
         _InitializeImGui();
         return true;
