@@ -2,7 +2,10 @@
 
 #include "Kmplete/Application/application_context.h"
 #include "Kmplete/Localization/localization_manager.h"
+#include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Utils/function_utils.h"
+#include "Kmplete/Utils/string_utils.h"
+#include "Kmplete/Graphics/font.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
@@ -25,6 +28,11 @@
 #include "Kmplete/ImGui/context_vulkan.h"
 #include "Kmplete/ImGui/implementation_glfw_vulkan.h"
 #include "Kmplete/Assets/assets_manager.h"
+#include "Kmplete/Assets/font_asset_manager.h"
+#include "Kmplete/Assets/font_asset.h"
+
+#include <hb.h>
+#include <hb-ft.h>
 
 
 namespace Kmplete
@@ -42,10 +50,10 @@ namespace Kmplete
         , _imguiImpl(nullptr)
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TextRenderingFrameListener::_OnWindowContentScaleEvent))
     {
-        _Initialize();
-
         _FillDictionary();
         _localizationManager.AddLocaleChangedCallback(KMP_BIND(TextRenderingFrameListener::_FillDictionary));
+
+        _Initialize();
     }
     //--------------------------------------------------------------------------
 
@@ -57,6 +65,8 @@ namespace Kmplete
         _InitializeBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
         _InitializeImGui();
+
+        _DebugPrint();
     }
     //--------------------------------------------------------------------------
 
@@ -128,6 +138,38 @@ namespace Kmplete
 
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), 15);
+    }
+    //--------------------------------------------------------------------------
+
+    void TextRenderingFrameListener::_DebugPrint()
+    {
+        const auto domainSid = ToStringID(KMP_TR_DOMAIN_TEXT_RENDERING);
+        const auto& alphabet = _localizationManager.Translation(domainSid, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"_sid);
+
+        const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
+        hb_font_t* hbFont = defaultFontAsset.GetFont().GetHbFont();
+
+        const auto& currentLocale = _localizationManager.GetLocale();
+        const auto hbScript = currentLocale == LocaleEnUTF8Keyword ? HB_SCRIPT_LATIN : HB_SCRIPT_CYRILLIC;
+        const auto hbLanguage = currentLocale == LocaleEnUTF8Keyword ? "en" : "ru";
+
+        hb_buffer_t* alphabetBuffer = hb_buffer_create();
+        hb_buffer_add_utf8(alphabetBuffer, alphabet.c_str(), -1, 0, -1);
+        hb_buffer_set_direction(alphabetBuffer, HB_DIRECTION_LTR);
+        hb_buffer_set_script(alphabetBuffer, hbScript);
+        hb_buffer_set_language(alphabetBuffer, hb_language_from_string(hbLanguage, -1));
+        hb_shape(hbFont, alphabetBuffer, nullptr, 0);
+
+        unsigned int glyphCount = 0;
+        hb_glyph_info_t* glyphInfo = hb_buffer_get_glyph_infos(alphabetBuffer, &glyphCount);
+        hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions(alphabetBuffer, &glyphCount);
+
+        for (unsigned int i = 0; i < glyphCount; i++)
+        {
+            KMP_LOG_INFO_FN("Glyph ID: {} | AdvanceX: {} | AdvanceY: {} | OffsetX: {} | OffsetY: {}", glyphInfo[i].codepoint, glyphPos[i].x_advance, glyphPos[i].y_advance, glyphPos[i].x_offset, glyphPos[i].y_offset);
+        }
+
+        hb_buffer_destroy(alphabetBuffer);
     }
     //--------------------------------------------------------------------------
 

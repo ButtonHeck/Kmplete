@@ -68,6 +68,9 @@ namespace Kmplete
             KMP_NODISCARD const Parameters& GetParameters() const noexcept;
             KMP_NODISCARD bool HasStyle(Parameters::Style flag) const noexcept;
 
+            //TODO: remove
+            KMP_NODISCARD hb_font_t* GetHbFont() const { return _hbFont; }
+
         private:
             void _UpdateParameters() noexcept;
             void _UpdateSizeMetrics() noexcept;

@@ -39,6 +39,7 @@ target_link_libraries(TextRendering
     PRIVATE Kmplete
     PRIVATE ImGuiUtilsLib
     PRIVATE Vulkan::Vulkan
+    PRIVATE harfbuzz
 )
 
 if(MSVC)
