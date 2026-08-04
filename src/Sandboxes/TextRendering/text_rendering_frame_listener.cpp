@@ -305,7 +305,8 @@ namespace Kmplete
     {
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         Graphics::Image atlasImage = GenerateTextureAtlas(defaultFontAsset.GetFont().GetFtFace());
-        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset("font atlas"_sid, atlasImage, Assets::TextureSubTypeMaskBits::RGB);
+        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset("font atlas"_sid, atlasImage, 
+            Assets::TextureSubTypeMaskBits(Assets::TextureSubTypeMaskBits::RGB | Assets::TextureSubTypeMaskBits::NoMipmap));
         KMP_ASSERT(atlasTextureCreated);
     }
     //--------------------------------------------------------------------------

@@ -706,9 +706,10 @@ namespace Kmplete
 
             try
             {
+                const auto noMipmap = subTypeMask & Assets::TextureSubTypeMaskBits::NoMipmap;
                 const auto isSRGB = subTypeMask & Assets::TextureSubTypeMaskBits::SRGB;
                 const auto textureVkFormat = ImageChannelsToVkFormat(ImageChannels(image.GetChannels()), isSRGB);
-                const auto mipLevels = _formatDelegate.IsMipmapCompatible(textureVkFormat) ? image.GetMipLevels() : 1;
+                const auto mipLevels = (_formatDelegate.IsMipmapCompatible(textureVkFormat) && not noMipmap) ? image.GetMipLevels() : 1;
                 auto imageBuffer = _imageCreatorDelegate->CreateStagingImageBuffer(image);
                 const auto extent = VkExtent3D{
                     .width = UInt32(image.GetWidth()),

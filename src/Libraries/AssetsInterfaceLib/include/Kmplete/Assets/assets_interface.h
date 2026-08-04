@@ -23,8 +23,9 @@ namespace Kmplete
 
         enum TextureSubTypeMaskBits : AssetSubTypeMask
         {
-            RGB =   0x0,
-            SRGB =  0x1
+            RGB =       0x0,
+            SRGB =      0x1,
+            NoMipmap =  0x2
         };
         //--------------------------------------------------------------------------
 
