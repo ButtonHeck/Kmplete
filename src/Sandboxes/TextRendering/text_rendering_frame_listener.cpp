@@ -145,6 +145,7 @@ namespace Kmplete
     {
         const auto domainSid = ToStringID(KMP_TR_DOMAIN_TEXT_RENDERING);
         const auto& alphabet = _localizationManager.Translation(domainSid, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"_sid);
+        KMP_MB_UNUSED const auto wideAlphabet = Utils::NarrowToWide(Utils::Utf8ToNarrow(alphabet));
 
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         hb_font_t* hbFont = defaultFontAsset.GetFont().GetHbFont();
