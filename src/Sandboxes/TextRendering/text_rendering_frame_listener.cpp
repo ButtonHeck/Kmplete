@@ -1,6 +1,7 @@
 #include "text_rendering_frame_listener.h"
 
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Localization/localization_manager.h"
 #include "Kmplete/Utils/function_utils.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
@@ -32,15 +33,19 @@ namespace Kmplete
 
 
     TextRenderingFrameListener::TextRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
-                                                           Assets::AssetsManager& assetsManager)
+                                                           Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager)
         : FrameListener(frameListenerManager, "main_frame_listener"_sid, 0)
         , _mainWindow(mainWindow)
         , _graphicsBackend(graphicsBackend)
         , _assetsManager(assetsManager)
+        , _localizationManager(localizationManager)
         , _imguiImpl(nullptr)
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TextRenderingFrameListener::_OnWindowContentScaleEvent))
     {
         _Initialize();
+
+        _FillDictionary();
+        _localizationManager.AddLocaleChangedCallback(KMP_BIND(TextRenderingFrameListener::_FillDictionary));
     }
     //--------------------------------------------------------------------------
 
@@ -149,6 +154,13 @@ namespace Kmplete
         _InitializeImGui();
 
         return true;
+    }
+    //--------------------------------------------------------------------------
+
+    void TextRenderingFrameListener::_FillDictionary()
+    {
+        _localizationManager.Translate(KMP_TR_DOMAIN_TEXT_RENDERING, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+        _localizationManager.Translate(KMP_TR_DOMAIN_TEXT_RENDERING, "0123456789!@#$%^&*()'~`,./<>+-_=;:?");
     }
     //--------------------------------------------------------------------------
 }

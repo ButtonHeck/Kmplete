@@ -46,3 +46,34 @@ if(MSVC)
         VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin/$<CONFIG>
     )
 endif()
+
+
+# Localization
+# --------------------------
+
+set(TextRenderingDomain "TextRendering")
+target_compile_definitions(TextRendering
+    PRIVATE KMP_TR_DOMAIN_TEXT_RENDERING=\"${TextRenderingDomain}\"
+)
+
+get_target_property(exeDir TextRendering RUNTIME_OUTPUT_DIRECTORY)
+add_custom_target(TextRendering_copy_translations
+    COMMAND ${CMAKE_COMMAND} -E echo "Copying translations for TextRendering done"
+)
+add_custom_command(TARGET TextRendering_copy_translations PRE_BUILD
+    COMMAND ${CMAKE_COMMAND}
+    "-D DEST_DIR=${exeDir}" "-D SRC_DIRS=${CMAKE_CURRENT_LIST_DIR}/locale" 
+    -P "${CMAKE_SOURCE_DIR}/cmake/CopyTranslations.cmake"
+    VERBATIM
+)
+set_target_properties(TextRendering_copy_translations PROPERTIES
+    FOLDER Kmplete/Sandboxes/TextRendering
+)
+
+add_dependencies(TextRendering TextRendering_copy_translations)
+
+CreateTranslationHelperTargets(
+    TextRendering Kmplete/Sandboxes/TextRendering
+    "--mode=Update --input_directories=\"${CMAKE_CURRENT_LIST_DIR}\" --extensions=.cpp .h --recursive --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${TextRenderingDomain} --gettext_binaries_paths=\"${CMAKE_BINARY_DIR}/src/Tools/Translator/translator_gettext_paths.json\""
+    "--mode=Compile --output_directory=\"${CMAKE_CURRENT_LIST_DIR}/locale\" --output_file_name=${TextRenderingDomain} --gettext_binaries_paths=\"${CMAKE_BINARY_DIR}/src/Tools/Translator/translator_gettext_paths.json\""
+)

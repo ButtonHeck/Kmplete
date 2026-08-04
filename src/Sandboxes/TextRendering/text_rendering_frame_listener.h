@@ -11,6 +11,8 @@
 
 namespace Kmplete
 {
+    class LocalizationManager;
+
     namespace Assets
     {
         class AssetsManager;
@@ -29,7 +31,7 @@ namespace Kmplete
 
     public:
         TextRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend,
-                                   Assets::AssetsManager& assetsManager);
+                                   Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager);
         ~TextRenderingFrameListener() = default;
 
         void Render() override;
@@ -45,10 +47,13 @@ namespace Kmplete
 
         bool _OnWindowContentScaleEvent(Events::WindowContentScaleEvent& event);
 
+        void _FillDictionary();
+
     private:
         Window& _mainWindow;
         Graphics::GraphicsBackend& _graphicsBackend;
         Assets::AssetsManager& _assetsManager;
+        LocalizationManager& _localizationManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
 
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;

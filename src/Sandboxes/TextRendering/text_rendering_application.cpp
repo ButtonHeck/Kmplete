@@ -25,7 +25,9 @@ namespace Kmplete
         _mainWindow.SetTitle(ApplicationContext::GetApplicationName().c_str());
         _mainWindow.SetSizeLimits(Math::Size2I{ 1366, 768 }, Math::Size2I{});
 
-        _mainFrameListener.reset(new TextRenderingFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get()));
+        _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_TEXT_RENDERING);
+
+        _mainFrameListener.reset(new TextRenderingFrameListener(*_frameListenerManager.get(), _mainWindow, *_graphicsBackend.get(), *_assetsManager.get(), *_localizationManager.get()));
     }
     //--------------------------------------------------------------------------
 
