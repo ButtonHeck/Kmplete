@@ -7,6 +7,7 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Graphics/font.h"
+#include "Kmplete/Graphics/image.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_physical_device.h"
@@ -52,8 +53,117 @@ namespace Kmplete
     };
 
     Map<wchar_t, Character> cyrillicAlphabet;
-    const wchar_t cyrillicStart = 0x0400;
-    const wchar_t cyrillicEnd = 0x04FF;
+    const wchar_t cyrillicStart = 0x0410;
+    const wchar_t cyrillicEnd = 0x044F;
+
+    Graphics::Image GenerateTextureAtlas(FT_FaceRec_* ftFace)
+    {
+        unsigned int atlasWidth = 0;
+        unsigned int atlasHeight = 0;
+        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
+        {
+            if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
+            {
+                continue;
+            }
+
+            atlasWidth += ftFace->glyph->bitmap.width + 1;
+            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
+        }
+        if (not FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER))
+        {
+            atlasWidth += ftFace->glyph->bitmap.width + 1;
+            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
+        }
+        if (not FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER))
+        {
+            atlasWidth += ftFace->glyph->bitmap.width + 1;
+            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
+        }
+
+        Vector<UByte> atlasData(atlasWidth * atlasHeight, 0);
+        unsigned int offsetX = 0;
+        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
+        {
+            if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
+            {
+                continue;
+            }
+
+            FT_Bitmap& bitmap = ftFace->glyph->bitmap;
+            for (unsigned int y = 0; y < bitmap.rows; y++)
+            {
+                for (unsigned int x = 0; x < bitmap.width; x++)
+                {
+                    unsigned int atlasIndex = y * atlasWidth + (offsetX + x);
+                    unsigned int glyphIndex = y * bitmap.width + x;
+                    atlasData[atlasIndex] = bitmap.buffer[glyphIndex];
+                }
+            }
+
+            Character character = {
+                .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
+                .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
+                .size = { int(bitmap.width), int(bitmap.rows) },
+                .bearing = { ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top },
+                .advance = (unsigned int)ftFace->glyph->advance.x
+            };
+
+            cyrillicAlphabet[c] = character;
+            offsetX += bitmap.width + 1;
+        }
+        if (not FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER))
+        {
+            FT_Bitmap& bitmap = ftFace->glyph->bitmap;
+            for (unsigned int y = 0; y < bitmap.rows; y++)
+            {
+                for (unsigned int x = 0; x < bitmap.width; x++)
+                {
+                    unsigned int atlasIndex = y * atlasWidth + (offsetX + x);
+                    unsigned int glyphIndex = y * bitmap.width + x;
+                    atlasData[atlasIndex] = bitmap.buffer[glyphIndex];
+                }
+            }
+
+            Character character = {
+                .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
+                .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
+                .size = { int(bitmap.width), int(bitmap.rows) },
+                .bearing = { ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top },
+                .advance = (unsigned int)ftFace->glyph->advance.x
+            };
+
+            cyrillicAlphabet[0x401] = character;
+            offsetX += bitmap.width + 1;
+        }
+        if (not FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER))
+        {
+            FT_Bitmap& bitmap = ftFace->glyph->bitmap;
+            for (unsigned int y = 0; y < bitmap.rows; y++)
+            {
+                for (unsigned int x = 0; x < bitmap.width; x++)
+                {
+                    unsigned int atlasIndex = y * atlasWidth + (offsetX + x);
+                    unsigned int glyphIndex = y * bitmap.width + x;
+                    atlasData[atlasIndex] = bitmap.buffer[glyphIndex];
+                }
+            }
+
+            Character character = {
+                .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
+                .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
+                .size = { int(bitmap.width), int(bitmap.rows) },
+                .bearing = { ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top },
+                .advance = (unsigned int)ftFace->glyph->advance.x
+            };
+
+            cyrillicAlphabet[0x451] = character;
+            offsetX += bitmap.width + 1;
+        }
+
+        return Graphics::Image(atlasData.data(), int(atlasData.size()), { atlasWidth, atlasHeight }, Graphics::ImageChannels::Grey);
+    }
+    //--------------------------------------------------------------------------
 
 
     TextRenderingFrameListener::TextRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
@@ -194,52 +304,9 @@ namespace Kmplete
     void TextRenderingFrameListener::_TestCreateFontAtlas()
     {
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-
-        unsigned int atlasWidth = 0;
-        unsigned int atlasHeight = 0;
-        auto* ftFace = defaultFontAsset.GetFont().GetFtFace();
-        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
-        {
-            if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
-            {
-                continue;
-            }
-
-            atlasWidth += ftFace->glyph->bitmap.width + 1;
-            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
-        }
-
-        Vector<UByte> atlasData(atlasWidth * atlasHeight, 0);
-        unsigned int offsetX = 0;
-        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
-        {
-            if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
-            {
-                continue;
-            }
-
-            FT_Bitmap& bitmap = ftFace->glyph->bitmap;
-            for (unsigned int y = 0; y < bitmap.rows; y++)
-            {
-                for (unsigned int x = 0; x < bitmap.width; x++)
-                {
-                    unsigned int atlasIndex = y * atlasWidth + (offsetX + x);
-                    unsigned int glyphIndex = y * bitmap.width + x;
-                    atlasData[atlasIndex] = bitmap.buffer[glyphIndex];
-                }
-            }
-
-            Character character = {
-                .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
-                .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
-                .size = { int(bitmap.width), int(bitmap.rows) },
-                .bearing = { ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top },
-                .advance = (unsigned int)ftFace->glyph->advance.x
-            };
-
-            cyrillicAlphabet[c] = character;
-            offsetX += bitmap.width + 1;
-        }
+        Graphics::Image atlasImage = GenerateTextureAtlas(defaultFontAsset.GetFont().GetFtFace());
+        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset("font atlas"_sid, atlasImage, Assets::TextureSubTypeMaskBits::RGB);
+        KMP_ASSERT(atlasTextureCreated);
     }
     //--------------------------------------------------------------------------
 
