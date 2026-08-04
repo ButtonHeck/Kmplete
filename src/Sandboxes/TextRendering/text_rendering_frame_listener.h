@@ -41,7 +41,9 @@ namespace Kmplete
         void _InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice);
         void _InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext);
         void _InitializeImGui();
+
         void _DebugPrint();
+        void _TestCreateFontAtlas();
 
         void _RenderTexts();
         void _RenderImGui();

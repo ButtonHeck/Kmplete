@@ -70,6 +70,7 @@ namespace Kmplete
 
             //TODO: remove
             KMP_NODISCARD hb_font_t* GetHbFont() const { return _hbFont; }
+            KMP_NODISCARD FT_FaceRec_* GetFtFace() const { return _freetypeFace; }
 
         private:
             void _UpdateParameters() noexcept;
