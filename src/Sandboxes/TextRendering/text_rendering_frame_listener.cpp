@@ -41,6 +41,43 @@
 
 namespace Kmplete
 {
+    static constexpr auto FontDSLayout_SID = "FontAtlasLayout_DS"_sid;
+    static constexpr auto FontDS_SID = "FontAtlas_Set"_sid;
+
+    static constexpr auto PipelineLayout_SID = "PipelineLayout"_sid;
+    static constexpr auto Pipeline_SID = "TextRendering_Pipeline"_sid;
+
+    static constexpr auto VertexShader_SID = "TextRendering_vertex"_sid;
+    static constexpr auto FragmentShader_SID = "TextRendering_fragment"_sid;
+
+    static constexpr auto TextureFontAtlas_SID = "texture_font_atlas"_sid;
+
+    static constexpr auto SamplerBindingIndex = 0;
+    static constexpr auto TextureBindingIndex = 1;
+
+    static constexpr auto VertexBufferBinding = 0;
+
+    static constexpr auto VertexPositionAttributeIndex = 0;
+    static constexpr auto VertexUVAttributeIndex = 1;
+
+    static constexpr auto MS_ColorAttachment = "color_attachment_ms"_sid;
+    static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
+
+    static constexpr auto VertexBuffer_SID = "vertex_buffer"_sid;
+    static constexpr auto IndexBuffer_SID = "index_buffer"_sid;
+    static constexpr auto UniformBuffers_SID = "uniform_buffers"_sid;
+
+
+    namespace
+    {
+        struct Vertex
+        {
+            Math::Vec2F position;
+            Math::Vec2F uv;
+        };
+        //--------------------------------------------------------------------------
+    }
+
     using namespace Graphics::VKBits;
 
     struct Character
@@ -188,16 +225,23 @@ namespace Kmplete
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
 
+        _TestCreateFontAtlas();
         _InitializeBuffers(vulkanDevice);
+        _InitializeUniformBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
         _InitializeImGui();
 
         _DebugPrint();
-        _TestCreateFontAtlas();
     }
     //--------------------------------------------------------------------------
 
     void TextRenderingFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
+    {
+        (void)vulkanDevice;
+    }
+    //--------------------------------------------------------------------------
+
+    void TextRenderingFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
         (void)vulkanDevice;
     }
@@ -305,8 +349,8 @@ namespace Kmplete
     {
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         Graphics::Image atlasImage = GenerateTextureAtlas(defaultFontAsset.GetFont().GetFtFace());
-        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset("font atlas"_sid, atlasImage, 
-            Assets::TextureSubTypeMaskBits(Assets::TextureSubTypeMaskBits::RGB | Assets::TextureSubTypeMaskBits::NoMipmap));
+        const auto subTypeMask = Assets::TextureSubTypeMaskBits(Assets::TextureSubTypeMaskBits::RGB | Assets::TextureSubTypeMaskBits::NoMipmap);
+        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset(TextureFontAtlas_SID, atlasImage, subTypeMask);
         KMP_ASSERT(atlasTextureCreated);
     }
     //--------------------------------------------------------------------------
