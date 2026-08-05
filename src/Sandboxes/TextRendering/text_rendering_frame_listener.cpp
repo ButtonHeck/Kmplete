@@ -91,13 +91,11 @@ namespace Kmplete
     const wchar_t cyrillicStart = 0x0410;
     const wchar_t cyrillicEnd = 0x044F;
 
-    Graphics::Image GenerateTextureAtlas(FT_FaceRec_* ftFace)
+    void CalculateAtlasSize(FT_FaceRec_* ftFace, unsigned int& atlasWidth, unsigned int& atlasHeight)
     {
-        unsigned int atlasWidth = 0;
-        unsigned int atlasHeight = 0;
         for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
         {
-            if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
+            if ((FT_Load_Char(ftFace, c, FT_LOAD_RENDER) != FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) != FT_Err_Ok))
             {
                 continue;
             }
@@ -105,22 +103,27 @@ namespace Kmplete
             atlasWidth += ftFace->glyph->bitmap.width + 1;
             atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
         }
-        if (not FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER))
-        {
-            atlasWidth += ftFace->glyph->bitmap.width + 1;
-            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
-        }
-        if (not FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER))
-        {
-            atlasWidth += ftFace->glyph->bitmap.width + 1;
-            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
-        }
 
-        Vector<UByte> atlasData(atlasWidth * atlasHeight, 0);
+        if ((FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
+        {
+            atlasWidth += ftFace->glyph->bitmap.width + 1;
+            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
+        }
+        if ((FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
+        {
+            atlasWidth += ftFace->glyph->bitmap.width + 1;
+            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
+        }
+    }
+    //--------------------------------------------------------------------------
+
+    BinaryBuffer CalculateAtlasData(FT_FaceRec_* ftFace, unsigned int atlasWidth, unsigned int atlasHeight)
+    {
+        BinaryBuffer atlasData(atlasWidth * atlasHeight, 0);
         unsigned int offsetX = 0;
         for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
         {
-            if (FT_Load_Char(ftFace, c, FT_LOAD_RENDER))
+            if ((FT_Load_Char(ftFace, c, FT_LOAD_RENDER) != FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) != FT_Err_Ok))
             {
                 continue;
             }
@@ -147,7 +150,7 @@ namespace Kmplete
             cyrillicAlphabet[c] = character;
             offsetX += bitmap.width + 1;
         }
-        if (not FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER))
+        if ((FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
         {
             FT_Bitmap& bitmap = ftFace->glyph->bitmap;
             for (unsigned int y = 0; y < bitmap.rows; y++)
@@ -171,7 +174,7 @@ namespace Kmplete
             cyrillicAlphabet[0x401] = character;
             offsetX += bitmap.width + 1;
         }
-        if (not FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER))
+        if ((FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER) == FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
         {
             FT_Bitmap& bitmap = ftFace->glyph->bitmap;
             for (unsigned int y = 0; y < bitmap.rows; y++)
@@ -195,6 +198,17 @@ namespace Kmplete
             cyrillicAlphabet[0x451] = character;
             offsetX += bitmap.width + 1;
         }
+
+        return atlasData;
+    }
+    //--------------------------------------------------------------------------
+
+    Graphics::Image GenerateTextureAtlas(FT_FaceRec_* ftFace)
+    {
+        unsigned int atlasWidth = 0;
+        unsigned int atlasHeight = 0;
+        CalculateAtlasSize(ftFace, atlasWidth, atlasHeight);
+        const auto atlasData = CalculateAtlasData(ftFace, atlasWidth, atlasHeight);
 
         return Graphics::Image(atlasData.data(), int(atlasData.size()), { atlasWidth, atlasHeight }, Graphics::ImageChannels::Grey);
     }
