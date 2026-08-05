@@ -276,7 +276,6 @@ target_link_libraries(Kmplete
     PRIVATE stb_image
     PRIVATE freetype
     PRIVATE cpptrace-lib
-    PRIVATE harfbuzz
 )
 
 if(UNIX)

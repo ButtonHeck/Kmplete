@@ -35,8 +35,6 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <hb.h>
-#include <hb-ft.h>
 
 
 namespace Kmplete
@@ -230,8 +228,16 @@ namespace Kmplete
         _InitializeUniformBuffers(vulkanDevice);
         _InitializePipeline(vulkanDevice, vulkanPhysicalDevice.GetVulkanContext());
         _InitializeImGui();
+    }
+    //--------------------------------------------------------------------------
 
-        _DebugPrint();
+    void TextRenderingFrameListener::_TestCreateFontAtlas()
+    {
+        const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
+        Graphics::Image atlasImage = GenerateTextureAtlas(defaultFontAsset.GetFont().GetFtFace());
+        const auto subTypeMask = Assets::TextureSubTypeMaskBits(Assets::TextureSubTypeMaskBits::RGB | Assets::TextureSubTypeMaskBits::NoMipmap);
+        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset(TextureFontAtlas_SID, atlasImage, subTypeMask);
+        KMP_ASSERT(atlasTextureCreated);
     }
     //--------------------------------------------------------------------------
 
@@ -309,49 +315,6 @@ namespace Kmplete
 
         const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
         _imguiImpl->AddFont(defaultFontAsset.GetFont().GetBuffer(), 15);
-    }
-    //--------------------------------------------------------------------------
-
-    void TextRenderingFrameListener::_DebugPrint()
-    {
-        const auto domainSid = ToStringID(KMP_TR_DOMAIN_TEXT_RENDERING);
-        const auto& alphabet = _localizationManager.Translation(domainSid, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"_sid);
-        KMP_MB_UNUSED const auto wideAlphabet = Utils::NarrowToWide(Utils::Utf8ToNarrow(alphabet));
-
-        const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        hb_font_t* hbFont = defaultFontAsset.GetFont().GetHbFont();
-
-        const auto& currentLocale = _localizationManager.GetLocale();
-        const auto hbScript = currentLocale == LocaleEnUTF8Keyword ? HB_SCRIPT_LATIN : HB_SCRIPT_CYRILLIC;
-        const auto hbLanguage = currentLocale == LocaleEnUTF8Keyword ? "en" : "ru";
-
-        hb_buffer_t* alphabetBuffer = hb_buffer_create();
-        hb_buffer_add_utf8(alphabetBuffer, alphabet.c_str(), -1, 0, -1);
-        hb_buffer_set_direction(alphabetBuffer, HB_DIRECTION_LTR);
-        hb_buffer_set_script(alphabetBuffer, hbScript);
-        hb_buffer_set_language(alphabetBuffer, hb_language_from_string(hbLanguage, -1));
-        hb_shape(hbFont, alphabetBuffer, nullptr, 0);
-
-        unsigned int glyphCount = 0;
-        hb_glyph_info_t* glyphInfo = hb_buffer_get_glyph_infos(alphabetBuffer, &glyphCount);
-        hb_glyph_position_t* glyphPos = hb_buffer_get_glyph_positions(alphabetBuffer, &glyphCount);
-
-        for (unsigned int i = 0; i < glyphCount; i++)
-        {
-            KMP_LOG_INFO_FN("Glyph ID: {} | AdvanceX: {} | AdvanceY: {} | OffsetX: {} | OffsetY: {}", glyphInfo[i].codepoint, glyphPos[i].x_advance, glyphPos[i].y_advance, glyphPos[i].x_offset, glyphPos[i].y_offset);
-        }
-
-        hb_buffer_destroy(alphabetBuffer);
-    }
-    //--------------------------------------------------------------------------
-
-    void TextRenderingFrameListener::_TestCreateFontAtlas()
-    {
-        const auto& defaultFontAsset = _assetsManager.GetFontAssetManager().GetAsset(Assets::FontAssetManager::DefaultFontSID);
-        Graphics::Image atlasImage = GenerateTextureAtlas(defaultFontAsset.GetFont().GetFtFace());
-        const auto subTypeMask = Assets::TextureSubTypeMaskBits(Assets::TextureSubTypeMaskBits::RGB | Assets::TextureSubTypeMaskBits::NoMipmap);
-        const auto atlasTextureCreated = _assetsManager.GetTextureAssetManager().CreateAsset(TextureFontAtlas_SID, atlasImage, subTypeMask);
-        KMP_ASSERT(atlasTextureCreated);
     }
     //--------------------------------------------------------------------------
 

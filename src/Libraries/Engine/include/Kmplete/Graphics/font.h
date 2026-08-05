@@ -8,7 +8,6 @@
 
 struct FT_LibraryRec_;
 struct FT_FaceRec_;
-struct hb_font_t;
 
 
 namespace Kmplete
@@ -69,7 +68,6 @@ namespace Kmplete
             KMP_NODISCARD bool HasStyle(Parameters::Style flag) const noexcept;
 
             //TODO: remove
-            KMP_NODISCARD hb_font_t* GetHbFont() const { return _hbFont; }
             KMP_NODISCARD FT_FaceRec_* GetFtFace() const { return _freetypeFace; }
 
         private:
@@ -78,7 +76,6 @@ namespace Kmplete
 
         private:
             FT_FaceRec_* _freetypeFace;
-            hb_font_t* _hbFont;
             BinaryBuffer _fontBuffer;
             Parameters _parameters;
         };
