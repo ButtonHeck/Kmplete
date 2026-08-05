@@ -214,6 +214,47 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
+    Vector<Vertex> GenerateTextVertices(const WString& text, float x, float y, float scale, float screenWidth, float screenHeight)
+    {
+        Vector<Vertex> vertices;
+        vertices.reserve(6);
+
+        for (const auto& c : text)
+        {
+            if (cyrillicAlphabet.find(c) == cyrillicAlphabet.end())
+            {
+                continue;
+            }
+
+            const auto& ch = cyrillicAlphabet[c];
+            float xpos = x + ch.bearing.x * scale;
+            float ypos = y + (ch.size.y - ch.bearing.y) * scale;
+            float w = ch.size.x * scale;
+            float h = ch.size.y * scale;
+
+            auto toNDC = [&](float px, float py) {
+                return Math::Vec2F((px / screenWidth) * 2.0f - 1.0f, (py / screenHeight) * 2.0f - 1.0f);
+            };
+
+            const auto p1 = toNDC(xpos, ypos - h);
+            const auto p2 = toNDC(xpos, ypos);
+            const auto p3 = toNDC(xpos + w, ypos);
+            const auto p4 = toNDC(xpos + w, ypos - h);
+
+            vertices.push_back({ p1, Math::Vec2F(ch.uvMin.x, ch.uvMin.y) });
+            vertices.push_back({ p2, Math::Vec2F(ch.uvMin.x, ch.uvMax.y) });
+            vertices.push_back({ p3, Math::Vec2F(ch.uvMax.x, ch.uvMax.y) });
+
+            vertices.push_back({ p1, Math::Vec2F(ch.uvMin.x, ch.uvMin.y) });
+            vertices.push_back({ p3, Math::Vec2F(ch.uvMax.x, ch.uvMax.y) });
+            vertices.push_back({ p4, Math::Vec2F(ch.uvMax.x, ch.uvMin.y) });
+
+            x += (ch.advance >> 6) * scale;
+        }
+
+        return vertices;
+    }
+
 
     TextRenderingFrameListener::TextRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
                                                            Assets::AssetsManager& assetsManager, LocalizationManager& localizationManager)
