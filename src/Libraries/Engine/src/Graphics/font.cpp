@@ -13,7 +13,7 @@ namespace Kmplete
 {
     namespace Graphics
     {
-        static constexpr auto DefaultFontPixelSize = 18;
+        static constexpr auto DefaultFontPixelSize = 48;
 
 
         Font::Font(FT_LibraryRec_& freetypeLib, BinaryBuffer&& fontBuffer)
