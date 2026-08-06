@@ -3,6 +3,7 @@
 #include "Kmplete/Base/kmplete_api.h"
 #include "Kmplete/Base/types_aliases.h"
 #include "Kmplete/Graphics/graphics_backend.h"
+#include "Kmplete/Localization/localization_base.h"
 #include "Kmplete/Assets/texture_asset_manager.h"
 #include "Kmplete/Assets/font_asset_manager.h"
 #include "Kmplete/Assets/assets_interface.h"
@@ -25,7 +26,7 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(AssetsManager)
 
         public:
-            AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend);
+            AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend, const LocaleStr& currentLocale);
             ~AssetsManager();
 
             KMP_NODISCARD const TextureAssetManager& GetTextureAssetManager() const noexcept;
@@ -52,6 +53,7 @@ namespace Kmplete
 
         private:
             const Filepath& _dataPath;
+            const LocaleStr& _currentLocale;
             Graphics::GraphicsBackend& _graphicsBackend;
             UPtr<TextureAssetManager> _textureAssetManager;
             UPtr<FontAssetManager> _fontAssetManager;

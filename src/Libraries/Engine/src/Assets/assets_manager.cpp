@@ -12,9 +12,10 @@ namespace Kmplete
 {
     namespace Assets
     {
-        AssetsManager::AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend)
+        AssetsManager::AssetsManager(const Filepath& dataPath, Graphics::GraphicsBackend& graphicsBackend, const LocaleStr& currentLocale)
             : KMP_PROFILE_CONSTRUCTOR_START_BASE_CLASS()
               _dataPath(dataPath)
+            , _currentLocale(currentLocale)
             , _graphicsBackend(graphicsBackend)
             , _textureAssetManager(nullptr)
             , _fontAssetManager(nullptr)
