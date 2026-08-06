@@ -62,7 +62,6 @@ namespace Kmplete
     static constexpr auto MS_DepthStencilAttachment = "depth_attachment_ms"_sid;
 
     static constexpr auto VertexBuffer_SID = "vertex_buffer"_sid;
-    static constexpr auto IndexBuffer_SID = "index_buffer"_sid;
     static constexpr auto UniformBuffers_SID = "uniform_buffers"_sid;
 
 
@@ -254,6 +253,7 @@ namespace Kmplete
 
         return vertices;
     }
+    //--------------------------------------------------------------------------
 
 
     TextRenderingFrameListener::TextRenderingFrameListener(FrameListenerManager& frameListenerManager, Window& mainWindow, Graphics::GraphicsBackend& graphicsBackend, 
@@ -264,6 +264,7 @@ namespace Kmplete
         , _assetsManager(assetsManager)
         , _localizationManager(localizationManager)
         , _imguiImpl(nullptr)
+        , _verticesCount(0)
         , _windowContentScaleHandler(_eventDispatcher, KMP_BIND(TextRenderingFrameListener::_OnWindowContentScaleEvent))
     {
         _FillDictionary();
@@ -298,20 +299,87 @@ namespace Kmplete
 
     void TextRenderingFrameListener::_InitializeBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
-        (void)vulkanDevice;
+        const auto domainSid = ToStringID(KMP_TR_DOMAIN_TEXT_RENDERING);
+        const auto& alphabet = _localizationManager.Translation(domainSid, "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"_sid);
+        const auto wideAlphabet = Utils::NarrowToWide(Utils::Utf8ToNarrow(alphabet));
+
+        auto& vulkanBufferManager = vulkanDevice.GetBufferManager();
+        const auto& vulkanRenderer = vulkanDevice.GetRenderer();
+
+        const auto windowFramebufferSize = _mainWindow.GetFramebufferSize();
+        const auto vertices = GenerateTextVertices(wideAlphabet, 100.0f, 100.0f, 1.0f, float(windowFramebufferSize.x), float(windowFramebufferSize.y));
+        const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
+        _verticesCount = UInt32(vertices.size());
+
+        Graphics::VulkanBuffer stagingBuffer = vulkanBufferManager.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize });
+        stagingBuffer.Map();
+        stagingBuffer.CopyToMappedMemory(0, (char*)vertices.data(), vertexBufferSize);
+        stagingBuffer.Unmap("flush"_true);
+
+        vulkanBufferManager.CreateVertexBuffer(VertexBuffer_SID, { VK_BufferUsage_TransferDst, VK_Memory_DeviceLocal, vertexBufferSize });
+        auto vertexBuffer = vulkanBufferManager.GetVertexBuffer(VertexBuffer_SID);
+        vertexBuffer->AddLayout(Graphics::BufferLayout{
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexPositionAttributeIndex },
+            Graphics::BufferElement{ Graphics::ShaderDataType::Float2, VertexUVAttributeIndex }
+        });
+
+        vulkanRenderer.CopyBuffers(stagingBuffer, {
+            { *vertexBuffer, 0, 0, vertexBufferSize }
+        }, vulkanDevice.GetGraphicsQueue());
     }
     //--------------------------------------------------------------------------
 
     void TextRenderingFrameListener::_InitializeUniformBuffers(Graphics::VulkanLogicalDevice& vulkanDevice)
     {
-        (void)vulkanDevice;
+        auto& textureAssetManager = _assetsManager.GetTextureAssetManager();
+        auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
+        const auto& samplersStorage = vulkanDevice.GetSamplersStorage();
+
+        VkDescriptorSetLayoutBinding samplerLayoutBinding{ SamplerBindingIndex, VK_DescriptorType_Sampler, 1, VK_ShaderStage_Fragment };
+        VkDescriptorSetLayoutBinding textureLayoutBinding{ TextureBindingIndex, VK_DescriptorType_SampledImage, 1, VK_ShaderStage_Fragment };
+        const auto fontRenderingLayout = descriptorSetManager.AddDescriptorSetLayout(FontDSLayout_SID, { samplerLayoutBinding, textureLayoutBinding });
+        descriptorSetManager.AllocateDescriptorSets(fontRenderingLayout, FontDS_SID, 1, "per frame"_true);
+
+        for (auto i = 0; i < Graphics::NumConcurrentFrames; i++)
+        {
+            descriptorSetManager.SetSamplerDescriptor(FontDS_SID, 0, "per frame"_true, i, samplersStorage.GetSampler(Graphics::SamplerDefaultLinearSid), SamplerBindingIndex);
+            descriptorSetManager.SetSampledImageDescriptor(
+                FontDS_SID, 0, "per frame"_true, i,
+                dynamic_cast<Graphics::VulkanTexture&>(textureAssetManager.GetAsset(TextureFontAtlas_SID).GetTexture()).GetVkImageView(), TextureBindingIndex
+            );
+        }
     }
     //--------------------------------------------------------------------------
 
     void TextRenderingFrameListener::_InitializePipeline(Graphics::VulkanLogicalDevice& vulkanDevice, const Graphics::VulkanContext& vulkanContext)
     {
-        (void)vulkanDevice;
-        (void)vulkanContext;
+        auto& textureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        textureAttachmentManager.AddTextureColorAttachment(MS_ColorAttachment, vulkanContext.surfaceFormatLinear.format, VK_ImageUsage_TransientAttachment);
+        textureAttachmentManager.AddTextureDepthStencilAttachment(MS_DepthStencilAttachment, vulkanContext.defaultDepthFormat);
+
+        auto& pipelineManager = vulkanDevice.GetPipelineManager();
+        pipelineManager.AddPipelineLayoutWithSetsSids(PipelineLayout_SID, { FontDSLayout_SID });
+
+        auto& shaderManager = vulkanDevice.GetShaderManager();
+        const auto vertexShaderPath = Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/text_rendering.vert.spv");
+        const auto fragmentShaderPath = Filepath(KMP_SANDBOX_RESOURCES_FOLDER).append("spv/text_rendering.frag.spv");
+        shaderManager.AddShaderModules({
+            { VertexShader_SID, vertexShaderPath, Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Vertex },
+            { FragmentShader_SID, fragmentShaderPath, Graphics::ShaderSourceType::BinaryFile, ShaderCompiler::ShaderType::Fragment }
+        });
+        const auto shaderStages = shaderManager.GetShaderStageCreateInfos({
+            { VertexShader_SID, VK_ShaderStage_Vertex, "main" },
+            { FragmentShader_SID, VK_ShaderStage_Fragment, "main" }
+        });
+
+        auto pipelineParams = Graphics::VulkanGraphicsPipelineParameters();
+        pipelineParams.SetRenderingDepthStencilFormats(vulkanContext.defaultDepthFormat, vulkanContext.defaultDepthFormat);
+        pipelineParams.AddColorAttachmentInfo(vulkanContext.surfaceFormatLinear.format, Graphics::VKPresets::ColorBlendAttachmentState_AlphaBlending);
+        pipelineParams.AddShaderStages(shaderStages);
+        pipelineParams.AddVertexBufferAttributesBindings(*vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID), VertexBufferBinding);
+        pipelineParams.AddDynamicStates({ VK_Dynamic_Viewport, VK_Dynamic_Scissor, VK_Dynamic_RasterizationSamples });
+
+        pipelineManager.AddGraphicsPipeline(Pipeline_SID, PipelineLayout_SID, pipelineParams, ApplicationContext::GetApplicationDataPath() / "text_rendering_pipeline_cache.bin");
     }
     //--------------------------------------------------------------------------
 
@@ -382,6 +450,41 @@ namespace Kmplete
 
     void TextRenderingFrameListener::_RenderTexts()
     {
+        auto& vulkanGraphicsBackend = dynamic_cast<Graphics::VulkanGraphicsBackend&>(_graphicsBackend);
+        const auto& vulkanDevice = vulkanGraphicsBackend.GetPhysicalDevice().GetLogicalDevice();
+        const auto& vulkanTextureAttachmentManager = vulkanDevice.GetTextureAttachmentManager();
+        const auto& renderer = vulkanDevice.GetRenderer();
+        const auto drawArea = VkRect2D{ VkOffset2D{.x = 0, .y = 0 }, vulkanDevice.GetCurrentExtent() };
+        const auto viewport = Graphics::VKUtils::CreateViewport(_mainWindow);
+        const auto& descriptorSetManager = vulkanDevice.GetDescriptorSetManager();
+
+        renderer.SetViewport(viewport);
+        renderer.SetScissor(drawArea);
+        renderer.SetRasterizationSamples(vulkanDevice.GetMultisampling());
+        renderer.BindGraphicsPipeline(Pipeline_SID);
+        renderer.BindVertexBuffers(VertexBufferBinding, { vulkanDevice.GetBufferManager().GetVertexBuffer(VertexBuffer_SID)->GetVkBuffer() }, { 0 });
+
+        auto colorImageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_ColorAttachment_PrepareWriting;
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_ColorAttachment), colorImageBarrierParameters);
+
+        auto imageBarrierParameters = Graphics::VKPresets::MemoryBarrierParameters_DepthStencil_PrepareWriting;
+        renderer.InsertImageMemoryBarrier(vulkanTextureAttachmentManager.GetTextureAttachment(MS_DepthStencilAttachment), imageBarrierParameters);
+
+        const auto colorAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
+            Graphics::VKPresets::RenderingAttachmentInfo_Color_ClearStore,
+            MS_ColorAttachment, 0ULL, VK_Resolve_Average, VK_ImageLayout_AttachmentOptimal, "swapchain image for non-MSAA"_true, "use swapchain SRGB"_false
+        );
+        const auto depthStencilAttachmentInfo = vulkanTextureAttachmentManager.GetRenderingAttachmentInfo(
+            Graphics::VKPresets::RenderingAttachmentInfo_DepthStencil_ClearStore,
+            MS_DepthStencilAttachment, 0ULL, VK_Resolve_None, VK_ImageLayout_DontCare
+        );
+
+        renderer.BeginRendering(drawArea, { colorAttachmentInfo }, depthStencilAttachmentInfo);
+        renderer.BindDescriptorSets(PipelineLayout_SID, 0, {
+            descriptorSetManager.GetDescriptorSet(FontDS_SID, 0, "per frame"_true)
+        });
+        renderer.Draw(_verticesCount, 1, 0, 0);
+        renderer.EndRendering();
     }
     //--------------------------------------------------------------------------
 

@@ -57,6 +57,7 @@ namespace Kmplete
         Assets::AssetsManager& _assetsManager;
         LocalizationManager& _localizationManager;
         UPtr<ImGuiUtils::ImGuiImplementation> _imguiImpl;
+        UInt32 _verticesCount;
 
         Events::EventHandlerGuard<Events::WindowContentScaleEvent> _windowContentScaleHandler;
     };
