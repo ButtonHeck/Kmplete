@@ -165,8 +165,6 @@ namespace Kmplete
 
         bool FontAssetManager::_CreateDefaultFontAsset() KMP_PROFILING(ProfileLevelImportant)
         {
-            static constexpr auto DefaultFontSize = 18;
-
             if (_fonts.contains(DefaultFontSID))
             {
                 KMP_LOG_WARN("default font already created");
@@ -182,7 +180,7 @@ namespace Kmplete
             }
 
             const auto fontDescriptor = CreateFont(
-                DefaultFontSize, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
+                Graphics::Font::DefaultFontPixelSize, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
                 DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                 DEFAULT_QUALITY, DEFAULT_PITCH | FF_DONTCARE, "Arial");
 
@@ -228,7 +226,7 @@ namespace Kmplete
 
             auto* pattern = FcPatternCreate();
             FcPatternAddString(pattern, FC_FAMILY, (const FcChar8*)"ubuntu");
-            FcPatternAddInteger(pattern, FC_SIZE, DefaultFontSize);
+            FcPatternAddInteger(pattern, FC_SIZE, Graphics::Font::DefaultFontPixelSize);
 
             auto* config = FcConfigGetCurrent();
 

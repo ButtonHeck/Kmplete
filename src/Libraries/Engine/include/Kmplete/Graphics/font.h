@@ -23,6 +23,9 @@ namespace Kmplete
             KMP_DISABLE_COPY_MOVE(Font)
 
         public:
+            static constexpr auto DefaultFontPixelSize = 48;
+
+        public:
             struct Parameters
             {
                 enum Style : UInt8
