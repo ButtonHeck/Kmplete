@@ -68,32 +68,66 @@ namespace Kmplete
 
     using namespace Graphics::VKBits;
 
-    Map<wchar_t, Graphics::FontCharacter> cyrillicAlphabet;
-    const wchar_t cyrillicStart = 0x0410;
-    const wchar_t cyrillicEnd = 0x044F;
-    const wchar_t cyrillicCapitalIo = 0x0401;
-    const wchar_t cyrillicSmallIo = 0x0451;
+    Map<wchar_t, Graphics::FontCharacter> cyrillicLocaleCharactersMap;
+    Vector<wchar_t> cyrillicLocaleCodes;
+
+    void InitializeCyrillicLocaleCodes()
+    {
+        static constexpr wchar_t cyrillicStart = 0x0410;
+        static constexpr wchar_t cyrillicEnd = 0x044F;
+        static constexpr wchar_t cyrillicCapitalIo = 0x0401;
+        static constexpr wchar_t cyrillicSmallIo = 0x0451;
+
+        static constexpr wchar_t basicLatinSymbolsStart = 0x0020;
+        static constexpr wchar_t basicLatinSymbolsEnd = 0x0040;
+        static constexpr wchar_t basicLatinCapitalLettersStart = 0x0041;
+        static constexpr wchar_t basicLatinCapitalLettersEnd = 0x005A;
+        static constexpr wchar_t basicLatinSmallLettersStart = 0x0061;
+        static constexpr wchar_t basicLatinSmallLettersEnd = 0x007A;
+        static constexpr wchar_t basicLatinSymbols2Start = 0x005B;
+        static constexpr wchar_t basicLatinSymbols2End = 0x0060;
+        static constexpr wchar_t basicLatinSymbols3Start = 0x007B;
+        static constexpr wchar_t basicLatinSymbols3End = 0x007E;
+
+        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
+        {
+            cyrillicLocaleCodes.push_back(c);
+        }
+        cyrillicLocaleCodes.push_back(cyrillicCapitalIo);
+        cyrillicLocaleCodes.push_back(cyrillicSmallIo);
+
+        for (wchar_t c = basicLatinSymbolsStart; c <= basicLatinSymbolsEnd; c++)
+        {
+            cyrillicLocaleCodes.push_back(c);
+        }
+        for (wchar_t c = basicLatinCapitalLettersStart; c <= basicLatinCapitalLettersEnd; c++)
+        {
+            cyrillicLocaleCodes.push_back(c);
+        }
+        for (wchar_t c = basicLatinSmallLettersStart; c <= basicLatinSmallLettersEnd; c++)
+        {
+            cyrillicLocaleCodes.push_back(c);
+        }
+        for (wchar_t c = basicLatinSymbols2Start; c <= basicLatinSymbols2End; c++)
+        {
+            cyrillicLocaleCodes.push_back(c);
+        }
+        for (wchar_t c = basicLatinSymbols3Start; c <= basicLatinSymbols3End; c++)
+        {
+            cyrillicLocaleCodes.push_back(c);
+        }
+    }
+    //--------------------------------------------------------------------------
 
     void CalculateAtlasSize(FT_FaceRec_* ftFace, unsigned int& atlasWidth, unsigned int& atlasHeight)
     {
-        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
+        for (const auto& c : cyrillicLocaleCodes)
         {
             if ((FT_Load_Char(ftFace, c, FT_LOAD_RENDER) != FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) != FT_Err_Ok))
             {
                 continue;
             }
 
-            atlasWidth += ftFace->glyph->bitmap.width + 1;
-            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
-        }
-
-        if ((FT_Load_Char(ftFace, cyrillicCapitalIo, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
-        {
-            atlasWidth += ftFace->glyph->bitmap.width + 1;
-            atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
-        }
-        if ((FT_Load_Char(ftFace, cyrillicSmallIo, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
-        {
             atlasWidth += ftFace->glyph->bitmap.width + 1;
             atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
         }
@@ -104,7 +138,8 @@ namespace Kmplete
     {
         BinaryBuffer atlasData(atlasWidth * atlasHeight, 0);
         unsigned int offsetX = 0;
-        for (wchar_t c = cyrillicStart; c <= cyrillicEnd; c++)
+
+        for (const auto& c : cyrillicLocaleCodes)
         {
             if ((FT_Load_Char(ftFace, c, FT_LOAD_RENDER) != FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) != FT_Err_Ok))
             {
@@ -130,55 +165,7 @@ namespace Kmplete
                 .advance = (unsigned int)ftFace->glyph->advance.x
             };
 
-            cyrillicAlphabet[c] = character;
-            offsetX += bitmap.width + 1;
-        }
-        if ((FT_Load_Char(ftFace, cyrillicCapitalIo, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
-        {
-            FT_Bitmap& bitmap = ftFace->glyph->bitmap;
-            for (unsigned int y = 0; y < bitmap.rows; y++)
-            {
-                for (unsigned int x = 0; x < bitmap.width; x++)
-                {
-                    unsigned int atlasIndex = y * atlasWidth + (offsetX + x);
-                    unsigned int glyphIndex = y * bitmap.width + x;
-                    atlasData[atlasIndex] = bitmap.buffer[glyphIndex];
-                }
-            }
-
-            Graphics::FontCharacter character = {
-                .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
-                .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
-                .size = { int(bitmap.width), int(bitmap.rows) },
-                .bearing = { ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top },
-                .advance = (unsigned int)ftFace->glyph->advance.x
-            };
-
-            cyrillicAlphabet[cyrillicCapitalIo] = character;
-            offsetX += bitmap.width + 1;
-        }
-        if ((FT_Load_Char(ftFace, cyrillicSmallIo, FT_LOAD_RENDER) == FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
-        {
-            FT_Bitmap& bitmap = ftFace->glyph->bitmap;
-            for (unsigned int y = 0; y < bitmap.rows; y++)
-            {
-                for (unsigned int x = 0; x < bitmap.width; x++)
-                {
-                    unsigned int atlasIndex = y * atlasWidth + (offsetX + x);
-                    unsigned int glyphIndex = y * bitmap.width + x;
-                    atlasData[atlasIndex] = bitmap.buffer[glyphIndex];
-                }
-            }
-
-            Graphics::FontCharacter character = {
-                .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
-                .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
-                .size = { int(bitmap.width), int(bitmap.rows) },
-                .bearing = { ftFace->glyph->bitmap_left, ftFace->glyph->bitmap_top },
-                .advance = (unsigned int)ftFace->glyph->advance.x
-            };
-
-            cyrillicAlphabet[cyrillicSmallIo] = character;
+            cyrillicLocaleCharactersMap[c] = character;
             offsetX += bitmap.width + 1;
         }
 
@@ -204,12 +191,12 @@ namespace Kmplete
 
         for (const auto& c : text)
         {
-            if (cyrillicAlphabet.find(c) == cyrillicAlphabet.end())
+            if (cyrillicLocaleCharactersMap.find(c) == cyrillicLocaleCharactersMap.end())
             {
                 continue;
             }
 
-            const auto& ch = cyrillicAlphabet[c];
+            const auto& ch = cyrillicLocaleCharactersMap[c];
             float xpos = x + ch.bearing.x * scale;
             float ypos = y + (ch.size.y - ch.bearing.y) * scale;
             float w = ch.size.x * scale;
@@ -263,6 +250,7 @@ namespace Kmplete
         auto& vulkanPhysicalDevice = dynamic_cast<Graphics::VulkanPhysicalDevice&>(_graphicsBackend.GetPhysicalDevice());
         auto& vulkanDevice = vulkanPhysicalDevice.GetLogicalDevice();
 
+        InitializeCyrillicLocaleCodes();
         _TestCreateFontAtlas();
         _InitializeBuffers(vulkanDevice);
         _InitializeUniformBuffers(vulkanDevice);
