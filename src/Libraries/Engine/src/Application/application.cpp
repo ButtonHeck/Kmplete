@@ -1,5 +1,6 @@
 #include "Kmplete/Application/application.h"
 #include "Kmplete/Application/application_context.h"
+#include "Kmplete/Localization/localization_unicode_map.h"
 #include "Kmplete/Log/log.h"
 #include "Kmplete/Core/settings_document.h"
 #include "Kmplete/Core/assertion.h"
@@ -67,6 +68,9 @@ namespace Kmplete
         _localizationManager->AddMessagesPath(defaultTranslationsPath);
         const auto engineDomainAdded = _localizationManager->AddMessagesDomain(KMP_TR_DOMAIN_ENGINE);
         KMP_ASSERT(engineDomainAdded);
+
+        const auto unicodeMapsInitialized = Localization::UnicodeMap::Initialize();
+        KMP_ASSERT(unicodeMapsInitialized);
 
         _settingsManager = CreateUPtr<SettingsManager>(parameters.settingsFilepath.empty()
             ? applicationPath / parameters.defaultSettingsFileName

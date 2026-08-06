@@ -46,6 +46,9 @@ namespace Kmplete
     using SourceStrSID = StringID;
     using TranslationStrSID = StringID;
 
+    using Codepoint = wchar_t;
+    using CodepointVector = Vector<Codepoint>;
+
 
     //! This defines what form of a word is used (plural or singular),
     //! moreover some languages may have multiple plural form, thus the engine
