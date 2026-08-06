@@ -88,6 +88,7 @@ AddTargetSourcesGroup(Kmplete "Graphics"
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/image.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/texture.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font.h
+    ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/font_character.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/camera.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/orthographic_camera.h
     ${CMAKE_CURRENT_LIST_DIR}/include/Kmplete/Graphics/perspective_camera.h

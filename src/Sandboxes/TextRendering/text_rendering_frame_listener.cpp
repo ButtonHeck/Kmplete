@@ -7,6 +7,7 @@
 #include "Kmplete/Utils/string_utils.h"
 #include "Kmplete/Core/assertion.h"
 #include "Kmplete/Graphics/font.h"
+#include "Kmplete/Graphics/font_character.h"
 #include "Kmplete/Graphics/image.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_base.h"
 #include "Kmplete/Graphics/Vulkan/Core/vulkan_graphics_backend.h"
@@ -65,28 +66,9 @@ namespace Kmplete
     static constexpr auto UniformBuffers_SID = "uniform_buffers"_sid;
 
 
-    namespace
-    {
-        struct Vertex
-        {
-            Math::Vec2F position;
-            Math::Vec2F uv;
-        };
-        //--------------------------------------------------------------------------
-    }
-
     using namespace Graphics::VKBits;
 
-    struct Character
-    {
-        Math::Vec2F uvMin;
-        Math::Vec2F uvMax;
-        Math::Vec2I size;
-        Math::Vec2I bearing;
-        UInt32 advance;
-    };
-
-    Map<wchar_t, Character> cyrillicAlphabet;
+    Map<wchar_t, Graphics::FontCharacter> cyrillicAlphabet;
     const wchar_t cyrillicStart = 0x0410;
     const wchar_t cyrillicEnd = 0x044F;
 
@@ -138,7 +120,7 @@ namespace Kmplete
                 }
             }
 
-            Character character = {
+            Graphics::FontCharacter character = {
                 .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
                 .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
                 .size = { int(bitmap.width), int(bitmap.rows) },
@@ -162,7 +144,7 @@ namespace Kmplete
                 }
             }
 
-            Character character = {
+            Graphics::FontCharacter character = {
                 .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
                 .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
                 .size = { int(bitmap.width), int(bitmap.rows) },
@@ -186,7 +168,7 @@ namespace Kmplete
                 }
             }
 
-            Character character = {
+            Graphics::FontCharacter character = {
                 .uvMin = { float(offsetX) / float(atlasWidth), 0.0f },
                 .uvMax = { float(offsetX + bitmap.width) / float(atlasWidth), float(bitmap.rows) / float(atlasHeight) },
                 .size = { int(bitmap.width), int(bitmap.rows) },
@@ -213,9 +195,9 @@ namespace Kmplete
     }
     //--------------------------------------------------------------------------
 
-    Vector<Vertex> GenerateTextVertices(const WString& text, float x, float y, float scale, float screenWidth, float screenHeight)
+    Vector<Graphics::FontCharacterVertex> GenerateTextVertices(const WString& text, float x, float y, float scale, float screenWidth, float screenHeight)
     {
-        Vector<Vertex> vertices;
+        Vector<Graphics::FontCharacterVertex> vertices;
         vertices.reserve(6);
 
         for (const auto& c : text)
@@ -308,7 +290,7 @@ namespace Kmplete
 
         const auto windowFramebufferSize = _mainWindow.GetFramebufferSize();
         const auto vertices = GenerateTextVertices(wideAlphabet, 100.0f, 100.0f, 1.0f, float(windowFramebufferSize.x), float(windowFramebufferSize.y));
-        const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Vertex));
+        const auto vertexBufferSize = UInt32(vertices.size() * sizeof(Graphics::FontCharacterVertex));
         _verticesCount = UInt32(vertices.size());
 
         Graphics::VulkanBuffer stagingBuffer = vulkanBufferManager.CreateBuffer({ VK_BufferUsage_TransferSrc, VK_Memory_HostVisible, vertexBufferSize });
