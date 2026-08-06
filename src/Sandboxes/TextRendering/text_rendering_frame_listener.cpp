@@ -71,6 +71,8 @@ namespace Kmplete
     Map<wchar_t, Graphics::FontCharacter> cyrillicAlphabet;
     const wchar_t cyrillicStart = 0x0410;
     const wchar_t cyrillicEnd = 0x044F;
+    const wchar_t cyrillicCapitalIo = 0x0401;
+    const wchar_t cyrillicSmallIo = 0x0451;
 
     void CalculateAtlasSize(FT_FaceRec_* ftFace, unsigned int& atlasWidth, unsigned int& atlasHeight)
     {
@@ -85,12 +87,12 @@ namespace Kmplete
             atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
         }
 
-        if ((FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
+        if ((FT_Load_Char(ftFace, cyrillicCapitalIo, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
         {
             atlasWidth += ftFace->glyph->bitmap.width + 1;
             atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
         }
-        if ((FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
+        if ((FT_Load_Char(ftFace, cyrillicSmallIo, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
         {
             atlasWidth += ftFace->glyph->bitmap.width + 1;
             atlasHeight = std::max(atlasHeight, ftFace->glyph->bitmap.rows);
@@ -131,7 +133,7 @@ namespace Kmplete
             cyrillicAlphabet[c] = character;
             offsetX += bitmap.width + 1;
         }
-        if ((FT_Load_Char(ftFace, 0x401, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
+        if ((FT_Load_Char(ftFace, cyrillicCapitalIo, FT_LOAD_RENDER) == FT_Err_Ok) && (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
         {
             FT_Bitmap& bitmap = ftFace->glyph->bitmap;
             for (unsigned int y = 0; y < bitmap.rows; y++)
@@ -152,10 +154,10 @@ namespace Kmplete
                 .advance = (unsigned int)ftFace->glyph->advance.x
             };
 
-            cyrillicAlphabet[0x401] = character;
+            cyrillicAlphabet[cyrillicCapitalIo] = character;
             offsetX += bitmap.width + 1;
         }
-        if ((FT_Load_Char(ftFace, 0x451, FT_LOAD_RENDER) == FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
+        if ((FT_Load_Char(ftFace, cyrillicSmallIo, FT_LOAD_RENDER) == FT_Err_Ok) || (FT_Render_Glyph(ftFace->glyph, FT_RENDER_MODE_SDF) == FT_Err_Ok))
         {
             FT_Bitmap& bitmap = ftFace->glyph->bitmap;
             for (unsigned int y = 0; y < bitmap.rows; y++)
@@ -176,7 +178,7 @@ namespace Kmplete
                 .advance = (unsigned int)ftFace->glyph->advance.x
             };
 
-            cyrillicAlphabet[0x451] = character;
+            cyrillicAlphabet[cyrillicSmallIo] = character;
             offsetX += bitmap.width + 1;
         }
 
